@@ -14,7 +14,7 @@ import com.apocalypse.caerulaarbor.entity.routeshaper.RouteShaperEntity;
 import com.apocalypse.caerulaarbor.entity.warden.OceanizedWardenEntity;
 import com.apocalypse.caerulaarbor.entity.warden.OceanizedWardenisEntity;
 import com.apocalypse.caerulaarbor.entity.wither.OceanizedWitherEntity;
-import com.apocalypse.caerulaarbor.entity.wither.OceannizedWitheriaEntity;
+import com.apocalypse.caerulaarbor.entity.wither.OceanizedWitheriaEntity;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -355,8 +355,8 @@ public class CAEntities {
             .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedWitherEntity(level)).fireImmune().sized(1.1f, 3.5f));
     public static final RegistryObject<EntityType<WitherShootPreEntity>> WITHER_SHOOT_PRE = register("wither_shoot_pre",
             EntityType.Builder.<WitherShootPreEntity>of(WitherShootPreEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new WitherShootPreEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.1f, 0.1f));
-    public static final RegistryObject<EntityType<OceannizedWitheriaEntity>> OCEANIZED_WITHERIA = register("oceanized_witheria", EntityType.Builder.<OceannizedWitheriaEntity>of(OceannizedWitheriaEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceannizedWitheriaEntity(level)).fireImmune().sized(0.7f, 2.5f));
+    public static final RegistryObject<EntityType<OceanizedWitheriaEntity>> OCEANIZED_WITHERIA = register("oceanized_witheria", EntityType.Builder.<OceanizedWitheriaEntity>of(OceanizedWitheriaEntity::new, MobCategory.MONSTER)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedWitheriaEntity(level)).fireImmune().sized(0.7f, 2.5f));
     public static final RegistryObject<EntityType<TheLastKnightEntity>> THE_LAST_KNIGHT = register("the_last_knight", EntityType.Builder.<TheLastKnightEntity>of(TheLastKnightEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
             .setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new TheLastKnightEntity(level)).fireImmune().sized(1f, 3.6f));
     public static final RegistryObject<EntityType<LastKnightAndHorseEntity>> LAST_KNIGHT_AND_HORSE = register("last_knight_and_horse", EntityType.Builder.<LastKnightAndHorseEntity>of(LastKnightAndHorseEntity::new, MobCategory.MONSTER)
@@ -600,7 +600,7 @@ public class CAEntities {
         addAttributeRegistration(OCEANIZED_WARDENIS, OceanizedWardenisEntity::createAttributes);
         addAttributeRegistration(NUCLEIC_MALEFICENT, NucleicMaleficentEntity::createAttributes);
         addAttributeRegistration(OCEANIZED_WITHER, OceanizedWitherEntity::createAttributes);
-        addAttributeRegistration(OCEANIZED_WITHERIA, OceannizedWitheriaEntity::createAttributes);
+        addAttributeRegistration(OCEANIZED_WITHERIA, OceanizedWitheriaEntity::createAttributes);
         addAttributeRegistration(THE_LAST_KNIGHT, TheLastKnightEntity::createAttributes);
         addAttributeRegistration(LAST_KNIGHT_AND_HORSE, LastKnightAndHorseEntity::createAttributes);
         addAttributeRegistration(ROCINANTE, RocinanteEntity::createAttributes);

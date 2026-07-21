@@ -42,14 +42,14 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
-    public static final EntityDataAccessor<Integer> DATA_IDLE_TIME = SynchedEntityData.defineId(OceannizedWitheriaEntity.class, EntityDataSerializers.INT);
+public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
+    public static final EntityDataAccessor<Integer> DATA_IDLE_TIME = SynchedEntityData.defineId(OceanizedWitheriaEntity.class, EntityDataSerializers.INT);
 
-    public OceannizedWitheriaEntity(Level world) {
+    public OceanizedWitheriaEntity(Level world) {
         this(CAEntities.OCEANIZED_WITHERIA.get(), world);
     }
 
-    public OceannizedWitheriaEntity(EntityType<OceannizedWitheriaEntity> type, Level world) {
+    public OceanizedWitheriaEntity(EntityType<OceanizedWitheriaEntity> type, Level world) {
         super(type, world);
     }
 
@@ -102,7 +102,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (!this.level().isClientSide())
             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 95, 9, false, false));
-        if (this instanceof OceannizedWitheriaEntity) {
+        if (this instanceof OceanizedWitheriaEntity) {
             this.setAnimation("animation.oceanzied_witheria.start");
         }
         return retval;
@@ -187,7 +187,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             });
         }
         if (this.tickCount % 10 == 0) {
-            this.witheriaDestroyBlocks();
+            this.destroyBlocks();
         }
         if (idle > 1800) {
             this.entityData.set(DATA_SKILLP, 1800);
@@ -204,7 +204,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         }
     }
 
-    private void witheriaDestroyBlocks() {
+    private void destroyBlocks() {
         LevelAccessor world = this.level();
         if (!WorldUtils.canGrief(world)) {
             return;

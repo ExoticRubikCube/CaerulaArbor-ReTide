@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.client.renderer.entity;
 
 import com.apocalypse.caerulaarbor.client.model.entity.OceannizedWitheriaModel;
 import com.apocalypse.caerulaarbor.client.model.entity.layer.OceannizedWitheriaLayer;
-import com.apocalypse.caerulaarbor.entity.wither.OceannizedWitheriaEntity;
+import com.apocalypse.caerulaarbor.entity.wither.OceanizedWitheriaEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-public class OceannizedWitheriaRenderer extends GeoEntityRenderer<OceannizedWitheriaEntity> {
+public class OceannizedWitheriaRenderer extends GeoEntityRenderer<OceanizedWitheriaEntity> {
 	public OceannizedWitheriaRenderer(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new OceannizedWitheriaModel());
 		this.shadowRadius = 1f;
@@ -21,13 +21,13 @@ public class OceannizedWitheriaRenderer extends GeoEntityRenderer<OceannizedWith
 	}
 
 	@Override
-	public RenderType getRenderType(OceannizedWitheriaEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
+	public RenderType getRenderType(OceanizedWitheriaEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
 		return RenderType.entityTranslucent(getTextureLocation(animatable));
 	}
 
 	@Override
-	public void preRender(PoseStack poseStack, OceannizedWitheriaEntity entity, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red,
-			float green, float blue, float alpha) {
+	public void preRender(PoseStack poseStack, OceanizedWitheriaEntity entity, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red,
+                          float green, float blue, float alpha) {
 		float scale = 1.25f;
 		this.scaleHeight = scale;
 		this.scaleWidth = scale;
@@ -35,7 +35,7 @@ public class OceannizedWitheriaRenderer extends GeoEntityRenderer<OceannizedWith
 	}
 
 	@Override
-	protected float getDeathMaxRotation(OceannizedWitheriaEntity entityLivingBaseIn) {
+	protected float getDeathMaxRotation(OceanizedWitheriaEntity entityLivingBaseIn) {
 		return 0.0F;
 	}
 }

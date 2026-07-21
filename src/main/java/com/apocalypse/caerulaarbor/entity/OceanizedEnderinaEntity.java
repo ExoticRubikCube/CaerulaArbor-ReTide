@@ -81,6 +81,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		super(type, world);
 		xpReward = 128;
 		setNoAi(false);
+		setNoGravity(true);
 		setMaxUpStep(0.6f);
 		setPersistenceRequired();
 		this.moveControl = new FlyingMoveControl(this, 10, true);
@@ -481,7 +482,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			}
 			if (tickCount % 20 == 10) {
 				if (!(target == null) && target.isAlive()) {
-					this.witheriaDestroyBlocks();
+					this.destroyBlocks();
 				}
 			}
 			if (tickCount % 400 == 100) {
@@ -517,7 +518,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		this.refreshDimensions();
 	}
 
-	private void witheriaDestroyBlocks() {
+	private void destroyBlocks() {
 		LevelAccessor world = this.level();
 		if (!WorldUtils.canGrief(world)) {
 			return;
@@ -611,14 +612,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	public void setNoGravity(boolean ignored) {
 		super.setNoGravity(true);
 	}
-
-	public void aiStep() {
-		super.aiStep();
-		this.setNoGravity(true);
-	}
-
 	
-
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.45);
