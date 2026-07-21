@@ -130,6 +130,11 @@ public class CATabs {
                 tabData.accept(CABlocks.GOLDEN_CHALISE.get().asItem());
                 tabData.accept(CABlocks.EMERGENCY_AID_BUILDING.get().asItem());
                 tabData.accept(CABlocks.EMERGENCY_AID_BUILDING_SALVIENTO.get().asItem());
+                tabData.accept(CABlocks.HIGHMORE_DOLL.get().asItem());
+                tabData.accept(CABlocks.MIZUKI_DOLL.get().asItem());
+                tabData.accept(CABlocks.REDSTONIUM_BLOCK.get().asItem());
+                tabData.accept(CABlocks.MOTAR_BASE_BLOCK.get().asItem());
+                tabData.accept(CABlocks.CHEST_FISH_COOKED.get().asItem());
                 tabData.accept(CABlocks.INJECTOR.get().asItem());
                 tabData.accept(CABlocks.CENTRIFUGER.get().asItem());
                 tabData.accept(CABlocks.OPERATION_TABLE.get().asItem());
@@ -418,6 +423,7 @@ public class CATabs {
                 tabData.accept(CAItems.NETHERSEA_PRESERVED_EGG.get());
                 tabData.accept(CAItems.CHITIN_COOKIE_RAW.get());
                 tabData.accept(CAItems.CHITIN_COOKIE_DONE.get());
+                tabData.accept(CABlocks.CHEST_FISH_COOKED.get().asItem());
             }).withTabsBefore(CAERULA_LIVINGS.getId()).build());
 
     public static final RegistryObject<CreativeModeTab> CAERULA_WEAPONS = REGISTRY.register("caerula_weapons",
@@ -544,6 +550,8 @@ public class CATabs {
             tabData.accept(CABlocks.AEGIR_GLASS_DECO.get().asItem());
             tabData.accept(CABlocks.AEGIR_GLASS_BAR.get().asItem());
             tabData.accept(CABlocks.AEGIR_GLASS_ARCH.get().asItem());
+        } else if (tabData.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+            tabData.accept(CABlocks.MOTAR_BASE_BLOCK.get().asItem());
         } else if (tabData.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             tabData.accept(CAItems.BLOODY_RECORD.get());
             tabData.accept(CAItems.RECORD_WHISPER.get());
@@ -552,6 +560,9 @@ public class CATabs {
             tabData.accept(CAItems.RECORD_UNDERTIDES.get());
             tabData.accept(CAItems.RECORD_ISHARMLA.get());
             tabData.accept(CAItems.RECORD_ENDOSPORE.get());
+            tabData.accept(CAItems.RECORD_OCEANWISH.get());
+            tabData.accept(CAItems.RECORD_UNDERDAWN.get());
+            tabData.accept(CAItems.RECORD_MARE_NATUS.get());
             tabData.accept(CAItems.BUCKET_RUNFISH.get());
             tabData.accept(CAItems.BUCKET_SLIDER.get());
             tabData.accept(CAItems.BUCKET_CHISELER.get());

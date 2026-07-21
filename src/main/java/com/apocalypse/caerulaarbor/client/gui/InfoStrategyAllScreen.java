@@ -50,9 +50,8 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		if (StrategyUtils.canEnableSilence(world))
-			if (mouseX > leftPos + -12 && mouseX < leftPos + 12 && mouseY > topPos + -13 && mouseY < topPos + 11) {
-                String result = "\u00A74^&$%!!";
-                double rate = 0;
+			if (mouseX > leftPos + 3 && mouseX < leftPos + 27 && mouseY > topPos + -29 && mouseY < topPos + -5) {
+                String result = "";
                 if (!(MapVariables.get(world).strategy_silence >= 4)) {
                     result = Math.round(MapVariables.get(world).evo_point_silence) + "\u00A7c/"
                             + Math.round(Math.pow(MapVariables.get(world).strategy_silence + 1, 3) * CAConfigs.COEFFICIENT.get() * 8);
@@ -67,6 +66,16 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 			guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.info_strategy_all.tooltip_mig"), mouseX, mouseY);
 		if (mouseX > leftPos + 72 && mouseX < leftPos + 96 && mouseY > topPos + 33 && mouseY < topPos + 57)
 			guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.info_strategy_all.tooltip_subs"), mouseX, mouseY);
+		if (MapVariables.get(world).if_sublimation && mouseX > leftPos + 36 && mouseX < leftPos + 61 && mouseY > topPos + -30 && mouseY < topPos + -5) {
+			String result = "";
+			if (MapVariables.get(world).strategy_sublimation >= 4) {
+				result = "\u00A7dFinished";
+			} else {
+				result = Math.round(MapVariables.get(world).evo_point_sublimation) + "\u00A7c/"
+						+ Math.round(Math.pow(MapVariables.get(world).strategy_sublimation + 1, 3) * CAConfigs.SUBLIMATION_COEFFICIENT.get() * 12);
+			}
+			guiGraphics.renderTooltip(font, Component.literal(result), mouseX, mouseY);
+		}
 	}
 
 	@Override
@@ -77,7 +86,11 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/wetplayer.png"), this.leftPos, this.topPos, 0, 0, 200, 120, 200, 120);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/silence.png"), this.leftPos + -15, this.topPos + -17, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/silence.png"), this.leftPos + 0, this.topPos + -34, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
+
+		if (MapVariables.get(world).if_sublimation) {
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/sublimation.png"), this.leftPos + 35, this.topPos + -33, Mth.clamp((int) MapVariables.get(world).strategy_sublimation * 28, 0, 112), 0, 28, 32, 140, 32);
+		}
 
 		RenderSystem.disableBlend();
 	}
@@ -93,7 +106,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 
 	@Override
 	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_all.label_tide_observation"), 14, -10, -11801895, false);
+		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_all.label_tide_observation"), 0, -1, -11801895, false);
 	}
 
 	@Override

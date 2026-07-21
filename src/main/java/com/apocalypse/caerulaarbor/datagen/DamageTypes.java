@@ -235,6 +235,13 @@ public class DamageTypes {
             0.5f
     );
 
+    public static final ResourceKey<DamageType> OCEAN_REAL = create(
+            "ocean_real",
+            "ocean_real",
+            DamageScaling.NEVER,
+            0f
+    );
+
     public static final ResourceKey<DamageType> PUNCTURE_ATTACK = create(
             "puncture_attack",
             "puncture_attack",

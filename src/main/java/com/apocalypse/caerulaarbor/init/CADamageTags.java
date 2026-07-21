@@ -19,6 +19,7 @@ public interface CADamageTags {
     TagKey<DamageType> IS_MAGIC = create("is_magic");
     TagKey<DamageType> BYPASS_DEFENSE = create("bypass_defense");
     TagKey<DamageType> BYPASS_MISS = create("bypass_miss");
+    TagKey<DamageType> SKIP_SOURCE_CHECK = create("skip_source_check");
     TagKey<DamageType> NEVER_TRIGGER_BOSS_PROTECTION = create("never_trigger_boss_protection");
     TagKey<DamageType> BYPASSES_MIGRATION = create("bypasses_migration");
     TagKey<DamageType> BYPASSES_EVOLUTION = create("bypasses_evolution");

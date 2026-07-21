@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.warden.OceanizedWardenisEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
@@ -17,6 +18,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -45,6 +47,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Team;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -81,7 +85,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 	}
 
 
-	public static boolean spawnRandomEntityFromTag(ServerLevel serverLevel, double x, double y, double z) {
+	public boolean spawnRandomEntityFromTag(ServerLevel serverLevel, double x, double y, double z) {
 		if (serverLevel == null) {
 			return false;
 		}
@@ -103,17 +107,30 @@ public class IzumikOffspringEntity extends SeaMonster {
 		return Optional.of(selected);
 	}
 
-	private static boolean spawnEntity(ServerLevel level, double x, double y, double z) {
+	private boolean spawnEntity(ServerLevel level, double x, double y, double z) {
 		Optional<EntityType<?>> optionalEntityType = randomEntityTypeInTag(level, ENTITY_TAG);
 		if (optionalEntityType.isEmpty()) {
 			return false;
 		}
-		Entity entity = optionalEntityType.get().create(level);
+		Entity entity = optionalEntityType.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 		if (entity != null) {
-			entity.moveTo(x, y, z, level.getRandom().nextFloat() * 360.0F, 0.0F);
-			level.addFreshEntity(entity);
+			entity.setYRot(level.getRandom().nextFloat() * 360.0F);
+			if ((Entity) this instanceof Mob before && entity instanceof Mob after) {
+				Team team = before.getTeam();
+				MinecraftServer server = after.getServer();
+				if (server != null && team instanceof PlayerTeam playerTeam) {
+					server.getScoreboard().addPlayerToTeam(after.getScoreboardName(), playerTeam);
+				}
+			}
+			if (entity instanceof OceanizedWardenisEntity warden) {
+				var mh = warden.getAttribute(Attributes.MAX_HEALTH);
+				if (mh != null) {
+					mh.setBaseValue(mh.getBaseValue() * 0.35);
+				}
+				warden.setHealth(warden.getMaxHealth());
+			}
 		}
-		return true;
+		return entity != null;
 	}
 
 	@Override

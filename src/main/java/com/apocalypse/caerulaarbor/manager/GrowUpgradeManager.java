@@ -42,16 +42,16 @@ public class GrowUpgradeManager {
 				MapVariablesHandler.setEvoPoint(world, StrategyType.GROW, 0);
 				if (stra == 1) {
 					num = "I";
-					prefix = "鎼俻";
+					prefix = "§p";
 				} else if (stra == 2) {
 					num = "II";
-					prefix = "鎼俠";
+					prefix = "§b";
 				} else if (stra == 3) {
 					num = "III";
-					prefix = "鎼?";
+					prefix = "§9";
 				} else if (stra == 4) {
 					num = "IV";
-					prefix = "鎼?";
+					prefix = "§1";
 				}
 				if (CAConfigs.EVOSOUND.get()) {
 					for (Entity entityiterator : new ArrayList<>(world.players())) {

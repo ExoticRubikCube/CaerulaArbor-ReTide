@@ -7,6 +7,7 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SanityInjuryCapability;
+import com.apocalypse.caerulaarbor.entity.IzumikOffspringEntity;
 import com.apocalypse.caerulaarbor.entity.MartusEntity;
 import com.apocalypse.caerulaarbor.entity.SkadiEntity;
 import com.apocalypse.caerulaarbor.init.*;
@@ -68,6 +69,7 @@ public class LivingDeathEventHandler {
         handleLifePoint(event);
         handleBarrierReset(event);
         handleInvulnerableDeath(event);
+        handleSublimationRevival(event);
     }
 
     @SubscribeEvent
@@ -201,6 +203,67 @@ public class LivingDeathEventHandler {
         if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.INVULNERABLE.get()) && !damagesource.is(CADamageTypes.INV_KILLER)) {
             if (event.isCancelable()) {
                 event.setCanceled(true);
+            }
+        }
+    }
+
+    private static void handleSublimationRevival(LivingDeathEvent event) {
+        DamageSource damagesource = event.getSource();
+        Entity entity = event.getEntity();
+        LevelAccessor world = entity.level();
+
+        if (damagesource == null) return;
+
+        if (entity instanceof Player player && player.isCreative()) {
+            return;
+        }
+
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
+            return;
+        }
+
+        if (entity.getPersistentData().getBoolean("caerula.sublimationRevived")) {
+            return;
+        }
+
+        if (entity instanceof IzumikOffspringEntity) {
+            return;
+        }
+
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+            double subl = MapVariables.get(world).strategy_sublimation;
+            if (subl > 0.0) {
+                double finalBreed = Math.min(subl, MapVariables.get(world).strategy_breed);
+                double rate = 0.05 + 0.05 * finalBreed;
+                if (Math.random() < rate) {
+                    if (event.isCancelable()) {
+                        event.setCanceled(true);
+                    }
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), SoundEvents.TOTEM_USE, SoundSource.HOSTILE, 1.5f, 1.0f);
+                    }
+                    if (world instanceof ServerLevel level) {
+                        level.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, entity.getX(), entity.getY() + 1.0, entity.getZ(), 32, 1.0, 1.0, 1.0, 0.15);
+                    }
+                    entity.getPersistentData().putBoolean("caerula.sublimationRevived", true);
+                    double revivalRate = 0.0;
+                    if (finalBreed == 3.0) {
+                        revivalRate = 0.1;
+                    } else if (finalBreed == 4.0) {
+                        revivalRate = 0.2;
+                    }
+                    if (revivalRate > 0.0 && Math.random() < revivalRate && world instanceof ServerLevel level) {
+                        Entity entityToSpawn = CAEntities.CAERULA_OFFSPRING.get().spawn(level, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), MobSpawnType.MOB_SUMMONED);
+                        if (entityToSpawn != null) {
+                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360.0F);
+                        }
+                    }
+                    if (entity instanceof LivingEntity living) {
+                        float health = living.getMaxHealth();
+                        double healthRate = 0.1 + 0.05 * finalBreed;
+                        living.setHealth((float) (health * healthRate));
+                    }
+                }
             }
         }
     }

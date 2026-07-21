@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/highmore_doll",
+  "textures": {
+    "all": "caerula_arbor:block/highmore_doll",
+    "particle": "caerula_arbor:block/highmore_doll",
+    "0": "caerula_arbor:block/highmore_doll"
+  },
+  "render_type": "cutout"
+}

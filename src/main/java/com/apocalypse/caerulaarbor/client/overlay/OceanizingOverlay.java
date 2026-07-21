@@ -27,7 +27,7 @@ public class OceanizingOverlay {
 			} else if (amplifier == 1) {
 				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/transforming1.png");
 			} else if (amplifier > 1) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/transforming3.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/transforming2.png");
 			}
 		}
 		if (texture != null) {

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aaa",
+    "aaa",
+    "aaa"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:redstonium"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:redstonium_block",
+    "count": 1
+  }
+}

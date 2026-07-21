@@ -89,6 +89,8 @@ public class LightShowOverlay {
 
 			int lifeDx = CAConfigs.X_OFFSET_LIFE.get().intValue();
 			int lifeDy = CAConfigs.Y_OFFSET_LIFE.get().intValue() - 16;
+			int shieldDx = lifeDx + CAConfigs.X_OFFSET_SHIELD.get().intValue();
+			int shieldDy = lifeDy + CAConfigs.Y_OFFSET_SHIELD.get().intValue();
 
 			event.getGuiGraphics().blit(LIFE_POINT, 
 				6 + lifeDx, h - 24 + lifeDy, 0, 0, 24, 16, 24, 16);
@@ -97,12 +99,12 @@ public class LightShowOverlay {
             result = entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).player_shield > 0;
             if (result) {
 				event.getGuiGraphics().blit(SHIELD_POINT, 
-					6 + lifeDx, h - 40 + lifeDy, 0, 0, 24, 16, 24, 16);
+					6 + shieldDx, h - 40 + shieldDy, 0, 0, 24, 16, 24, 16);
 				String shield = EntityUtils.getShield(entity);
 				event.getGuiGraphics().drawString(Minecraft.getInstance().font,
-						shield, 21 + lifeDx, h - 36 + lifeDy, -16777216, false);
+						shield, 21 + shieldDx, h - 36 + shieldDy, -16777216, false);
 				event.getGuiGraphics().drawString(Minecraft.getInstance().font,
-						shield, 20 + lifeDx, h - 36 + lifeDy, -1, false);
+						shield, 20 + shieldDx, h - 36 + shieldDy, -1, false);
 			}
 			String light = EntityUtils.getLight(entity);
 			if (isNeat) {

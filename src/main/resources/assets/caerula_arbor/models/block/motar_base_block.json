@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "caerula_arbor:block/mortar_base_block_top",
+    "up": "caerula_arbor:block/mortar_base_block_top",
+    "north": "caerula_arbor:block/mortar_base_block",
+    "east": "caerula_arbor:block/mortar_base_block",
+    "south": "caerula_arbor:block/mortar_base_block",
+    "west": "caerula_arbor:block/mortar_base_block",
+    "particle": "caerula_arbor:block/mortar_base_block_top"
+  },
+  "render_type": "solid"
+}

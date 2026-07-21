@@ -20,6 +20,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -29,11 +31,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -53,7 +57,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
-public class TribunalHealerEntity extends Animal implements RangedAttackMob, GeoEntity, SyncedAnimationEntity {
+public class TribunalHealerEntity extends TamableAnimal implements RangedAttackMob, GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
@@ -231,6 +235,64 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
             this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
         }
 	}
+
+    @Override
+    public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
+        ItemStack itemstack = sourceentity.getItemInHand(hand);
+        InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+        Item item = itemstack.getItem();
+        if (itemstack.getItem() instanceof SpawnEggItem) {
+            retval = super.mobInteract(sourceentity, hand);
+        } else if (this.level().isClientSide()) {
+            retval = this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
+        } else if (this.isTame()) {
+            if (this.isOwnedBy(sourceentity)) {
+                if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                    this.usePlayerItem(sourceentity, hand, itemstack);
+                    this.heal(item.getFoodProperties().getNutrition());
+                    retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+                } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                    this.usePlayerItem(sourceentity, hand, itemstack);
+                    this.heal(4.0f);
+                    retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+                } else {
+                    retval = super.mobInteract(sourceentity, hand);
+                }
+            }
+        } else if (itemstack.is(CAItems.EMERALD_TREATY.get())) {
+            if (!net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, sourceentity)) {
+                this.tame(sourceentity);
+                this.level().broadcastEntityEvent(this, (byte) 7);
+                if (this.level() instanceof ServerLevel) {
+                    ((ServerLevel) this.level()).sendParticles(net.minecraft.core.particles.ParticleTypes.HAPPY_VILLAGER, this.getX(), this.getY() + 0.75, this.getZ(), 16, 0.75, 0.75, 0.75, 0.1);
+                }
+                itemstack.shrink(1);
+                this.setPersistenceRequired();
+                retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+            }
+        } else if (this.isFood(itemstack)) {
+            this.usePlayerItem(sourceentity, hand, itemstack);
+            if (this.random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, sourceentity)) {
+                this.tame(sourceentity);
+                this.level().broadcastEntityEvent(this, (byte) 7);
+            } else {
+                this.level().broadcastEntityEvent(this, (byte) 6);
+            }
+            this.setPersistenceRequired();
+            retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+        } else {
+            retval = super.mobInteract(sourceentity, hand);
+            if (retval == InteractionResult.SUCCESS || retval == InteractionResult.CONSUME) {
+                this.setPersistenceRequired();
+            }
+        }
+        return retval;
+    }
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return false;
+    }
 
     @Override
     public void baseTick() {

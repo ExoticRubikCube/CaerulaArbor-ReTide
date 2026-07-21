@@ -42,7 +42,7 @@ public class IsharmlasSkillBarOverlay {
         Entity corrupted;
         corrupted = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e1 -> true).stream().min(new Object() {
             Comparator<Entity> compareDistOf(double x, double y, double z) {
-                return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
+                return Comparator.comparingDouble(entity -> entity.distanceToSqr(x, y, z));
             }
         }.compareDistOf(x, y, z)).orElse(null);
         if (corrupted != null) {

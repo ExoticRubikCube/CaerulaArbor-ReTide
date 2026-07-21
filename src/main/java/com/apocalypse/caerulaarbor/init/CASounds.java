@@ -25,6 +25,9 @@ public class CASounds {
     public static final RegistryObject<SoundEvent> SILENCE2 = REGISTRY.register("silence2", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "silence2")));
     public static final RegistryObject<SoundEvent> SILENCE3 = REGISTRY.register("silence3", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "silence3")));
     public static final RegistryObject<SoundEvent> SILENCE4 = REGISTRY.register("silence4", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "silence4")));
+    public static final RegistryObject<SoundEvent> SUBLIMATION_1 = REGISTRY.register("sublimation_1", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sublimation_1")));
+    public static final RegistryObject<SoundEvent> SUBLIMATION_2 = REGISTRY.register("sublimation_2", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sublimation_2")));
+    public static final RegistryObject<SoundEvent> SUBLIMATION_TRIGGER = REGISTRY.register("sublimation_trigger", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sublimation_trigger")));
     public static final RegistryObject<SoundEvent> OCARINO = REGISTRY.register("ocarino", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "ocarino")));
     public static final RegistryObject<SoundEvent> SCYTHE_HIGHMORE = REGISTRY.register("scythe_highmore", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "scythe_highmore")));
     public static final RegistryObject<SoundEvent> BLOODY_WOLF = REGISTRY.register("bloody_wolf", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bloody_wolf")));
@@ -177,4 +180,7 @@ public class CASounds {
     public static final RegistryObject<SoundEvent> CASTER_HURT = REGISTRY.register("caster_hurt", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "caster_hurt")));
     public static final RegistryObject<SoundEvent> CASTER_DIE = REGISTRY.register("caster_die", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "caster_die")));
     public static final RegistryObject<SoundEvent> LIVING_BARRIER = REGISTRY.register("living_barrier", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "living_barrier")));
+    public static final RegistryObject<SoundEvent> OCEANWISH_FULLSET = REGISTRY.register("oceanwish_fullset", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanwish_fullset")));
+    public static final RegistryObject<SoundEvent> OPERATION_UNDERDAWN = REGISTRY.register("operation_underdawn", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "operation_underdawn")));
+    public static final RegistryObject<SoundEvent> MARE_NATUS = REGISTRY.register("mare_natus", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "mare_natus")));
 }

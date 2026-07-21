@@ -109,6 +109,14 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
 			guiGraphics.drawString(this.font,
 
 					StrategyUtils.getSilenceBreed(world), 1, 116, -3407872, false);
+		if (MapVariables.get(world).if_sublimation)
+			guiGraphics.drawString(this.font,
+
+					StrategyUtils.getSublimationBreed(world), 1, 132, -26113, false);
+		if (MapVariables.get(world).if_sublimation)
+			guiGraphics.drawString(this.font,
+
+					StrategyUtils.getSublimationBreed1(world), 1, 148, -26113, false);
 	}
 
 	@Override

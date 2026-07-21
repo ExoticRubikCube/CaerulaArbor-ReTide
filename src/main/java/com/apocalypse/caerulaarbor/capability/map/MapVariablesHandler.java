@@ -16,6 +16,7 @@ public class MapVariablesHandler {
             case BREED -> mapVariables.evo_point_breed += point;
             case MIGRATION -> mapVariables.evo_point_migration += point;
             case SILENCE -> mapVariables.evo_point_silence += point;
+            case SUBLIMATION -> mapVariables.evo_point_sublimation += point;
         }
         mapVariables.syncData(world);
     }
@@ -28,6 +29,7 @@ public class MapVariablesHandler {
             case BREED -> mapVariables.evo_point_breed = point;
             case MIGRATION -> mapVariables.evo_point_migration = point;
             case SILENCE -> mapVariables.evo_point_silence = point;
+            case SUBLIMATION -> mapVariables.evo_point_sublimation = point;
         }
         mapVariables.syncData(world);
     }
@@ -40,6 +42,7 @@ public class MapVariablesHandler {
             case BREED -> mapVariables.strategy_breed = level;
             case MIGRATION -> mapVariables.strategy_migration = level;
             case SILENCE -> mapVariables.strategy_silence = level;
+            case SUBLIMATION -> mapVariables.strategy_sublimation = level;
         }
         mapVariables.syncData(world);
     }
@@ -85,6 +88,7 @@ public class MapVariablesHandler {
         SUBSISTING,
         BREED,
         MIGRATION,
-        SILENCE
+        SILENCE,
+        SUBLIMATION
     }
 }

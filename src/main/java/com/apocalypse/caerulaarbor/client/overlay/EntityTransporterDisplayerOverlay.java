@@ -1,4 +1,3 @@
-
 package com.apocalypse.caerulaarbor.client.overlay;
 
 import com.apocalypse.caerulaarbor.init.CAItems;

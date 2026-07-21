@@ -44,7 +44,6 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
 
 	public MizukiStatueBlock() {
 		super(BlockBehaviour.Properties.of()
-
 				.sound(SoundType.AMETHYST).strength(-1, 3600000).lightLevel(s -> (new Object() {
 					public int getLightLevel() {
 						if (s.getValue(BLOCKSTATE) == 1)

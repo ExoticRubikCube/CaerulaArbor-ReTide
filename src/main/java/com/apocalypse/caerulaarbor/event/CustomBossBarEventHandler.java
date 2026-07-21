@@ -6,12 +6,9 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.LerpingBossEvent;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
-import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
@@ -100,7 +97,7 @@ public class CustomBossBarEventHandler {
             event.setCanceled(true);
             ResourceLocation style = context.style;
             int cycle = 0;
-            if(style != null){
+            if(style != null || context.equals(CONTEXT_ENDERINA)){
                 if (CYCLE_MAP.containsKey(bossEvent)) {
                     cycle = CYCLE_MAP.get(bossEvent);
                     CYCLE_MAP.replace(bossEvent, cycle + 1);
@@ -126,13 +123,13 @@ public class CustomBossBarEventHandler {
             gui.blit(style, bx, by,
                     0, VOffset, real_px, context.bar_y, 256, 32);
         } else if (context.equals(CONTEXT_ENDERINA)){
-            Vec2 v2 = getCorWithPlayerSight();
+            int uOffset = (cycle_progress * 5 / 16) % 218;
             int remain_len = real_px - 90;
             gui.blit(ENDERINA_STYLE, bx, by,
-                    v2.x, v2.y, Math.min(90, real_px), context.bar_y, 308, 134);
+                    uOffset, 0, Math.min(90, real_px), context.bar_y, 308, 134);
             if (remain_len > 0){
 	            gui.blit(ENDERINA_STYLE, bx + 90, by,
-	            		 v2.x, v2.y + 67, remain_len, context.bar_y, 308, 134);
+	            			uOffset, 67, remain_len, context.bar_y, 308, 134);
             }
         }
         gui.drawCenteredString(Minecraft.getInstance().font, context.name, context.name_x, context.name_y + context.name_offset_y, pColor);
@@ -210,15 +207,6 @@ public class CustomBossBarEventHandler {
     		if(name.equals(Component.translatable(s).getString())) return true;
     	}
     	return false;
-    }
-
-    private static Vec2 getCorWithPlayerSight(){
-        Minecraft minecraft = Minecraft.getInstance();
-        LocalPlayer player = minecraft.player;
-        if(player == null) return new Vec2(0, 0);
-        float v = player.getYHeadRot() * 0.35556f;
-        float h = player.getXRot() * Mth.DEG_TO_RAD;
-        return new Vec2(v, (float) (32 + 32 * Math.sin(h)));
     }
 
     public static class BossBarRenderContext{

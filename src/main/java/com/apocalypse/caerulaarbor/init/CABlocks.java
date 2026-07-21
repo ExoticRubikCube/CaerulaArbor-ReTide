@@ -113,7 +113,12 @@ public class CABlocks {
     public static final RegistryObject<Block> HIGHMORE_SPAWNING_BLOCK = REGISTRY.register("highmore_spawning_block", HighmoreSpawningBlockBlock::new);
     public static final RegistryObject<Block> GOLDEN_CHALISE = REGISTRY.register("golden_chalise", GoldenChaliseBlock::new);
     public static final RegistryObject<Block> EMERGENCY_AID_BUILDING = REGISTRY.register("emergency_aid_building", EmergencyAidBuildingBlock::new);
-    public static final RegistryObject<Block> EMERGENCY_AID_BUILDING_SALVIENTO = REGISTRY.register("emergency_aid_building_salviento", EmergencyAidBuildingBlock::new);
+    public static final RegistryObject<Block> EMERGENCY_AID_BUILDING_SALVIENTO = REGISTRY.register("emergency_aid_building_salviento", EmergencyAidBuildingSalvientoBlock::new);
+	public static final RegistryObject<Block> HIGHMORE_DOLL = REGISTRY.register("highmore_doll", HighmoreDollBlock::new);
+	public static final RegistryObject<Block> MIZUKI_DOLL = REGISTRY.register("mizuki_doll", MizukiDollBlock::new);
+	public static final RegistryObject<Block> REDSTONIUM_BLOCK = REGISTRY.register("redstonium_block", RedstoniumBlockBlock::new);
+	public static final RegistryObject<Block> MOTAR_BASE_BLOCK = REGISTRY.register("motar_base_block", MotarBaseBlockBlock::new);
+	public static final RegistryObject<Block> CHEST_FISH_COOKED = REGISTRY.register("chest_fish_cooked", ChestFishCookedBlock::new);
     public static final RegistryObject<Block> MIZUKI_STATUE = REGISTRY.register("mizuki_statue", MizukiStatueBlock::new);
     public static final RegistryObject<Block> POCKET_SEA_DOLL = REGISTRY.register("pocket_sea_doll", PocketSeaDollBlock::new);
     public static final RegistryObject<Block> SWARMCALLER_DOLL = REGISTRY.register("swarmcaller_doll", SwarmcallerDollBlock::new);

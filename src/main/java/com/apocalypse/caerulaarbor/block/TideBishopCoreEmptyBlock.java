@@ -40,12 +40,7 @@ public class TideBishopCoreEmptyBlock extends Block {
 		int y = pos.getY();
 		int z = pos.getZ();
         Player player;
-        ItemStack itemStack;
-        if ((Entity) entity instanceof LivingEntity livEnt) {
-            itemStack = livEnt.getMainHandItem();
-        } else {
-            itemStack = ItemStack.EMPTY;
-        }
+        ItemStack itemStack = entity.getMainHandItem();
         if (itemStack.getItem() == CAItems.REPELLER_SHELL.get()) {
             Player player2;
             if (world.getBlockState(BlockPos.containing(x, (double) y + 2.0, z)).canBeReplaced()) {

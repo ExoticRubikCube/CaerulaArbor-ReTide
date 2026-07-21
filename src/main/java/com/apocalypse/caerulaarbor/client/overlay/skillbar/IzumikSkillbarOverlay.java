@@ -42,7 +42,7 @@ public class IzumikSkillbarOverlay {
             double phase;
             ent = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
                 Comparator<Entity> compareDistOf(double x, double y, double z) {
-                    return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
+                    return Comparator.comparingDouble(entity -> entity.distanceToSqr(x, y, z));
                 }
             }.compareDistOf(x, y, z)).orElse(null);
             if (!(ent == null)) {

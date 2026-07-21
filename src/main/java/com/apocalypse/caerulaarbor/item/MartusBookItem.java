@@ -155,17 +155,11 @@ public class MartusBookItem extends Item implements GeoItem, SyncedAnimationItem
                             player.giveExperienceLevels(-(5));
                     }
                     CaerulaArborMod.queueServerWork(10, () -> {
-                        if ((LevelAccessor) world instanceof Level level) {
-                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 2, 1);
-                        }
-                        if ((Entity) entity instanceof LivingEntity livingEntity)
-                            livingEntity.setHealth((float) Math.max(livingEntity.getMaxHealth() * 0.5 + 1, livingEntity.getHealth()));
-                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
-                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
-                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 500, 6, false, false));
+                        world.playSound(null, entity.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 2, 1);
+                        entity.setHealth((float) Math.max(entity.getMaxHealth() * 0.5 + 1, entity.getHealth()));
+                        entity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
+                        entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+                        entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 500, 6, false, false));
                     });
                 }
             }

@@ -285,6 +285,10 @@ public class CAEntities {
             EntityType.Builder.<IzumikOffspringEntity>of(IzumikOffspringEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new IzumikOffspringEntity(level))
 
                     .sized(0.5f, 0.9f));
+    public static final RegistryObject<EntityType<CaerulaOffspringEntity>> CAERULA_OFFSPRING = register("caerula_offspring",
+            EntityType.Builder.<CaerulaOffspringEntity>of(CaerulaOffspringEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new CaerulaOffspringEntity(level))
+
+                    .sized(0.5f, 0.9f));
     public static final RegistryObject<EntityType<IzumikEntity>> IZUMIK = register("izumik",
             EntityType.Builder.<IzumikEntity>of(IzumikEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(21).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new IzumikEntity(level)).fireImmune().sized(3.3f, 9f));
     public static final RegistryObject<EntityType<DivicellularGoEntity>> DIVICELLULAR_GO = register("divicellular_go",
@@ -577,6 +581,7 @@ public class CAEntities {
         addAttributeRegistration(OCEANIZED_RAVAGER, OceanizedRavagerEntity::createAttributes);
         addAttributeRegistration(OCEANIZED_WITCH, OceanziedWitchEntity::createAttributes);
         addAttributeRegistration(IZUMIK_OFFSPRING, IzumikOffspringEntity::createAttributes);
+        addAttributeRegistration(CAERULA_OFFSPRING, CaerulaOffspringEntity::createAttributes);
         addAttributeRegistration(IZUMIK, IzumikEntity::createAttributes);
         addAttributeRegistration(DIVICELLULAR_GO, DivicellularGoEntity::createAttributes);
         addAttributeRegistration(OCEANIZED_EVOKER, OceanizedEvokerEntity::createAttributes);
@@ -921,6 +926,7 @@ public class CAEntities {
             addRenderer(CAEntities.OCEANIZED_WITCH, OceanziedWitchRenderer::new);
             addRenderer(CAEntities.THROWABLE_POTION, ThrownItemRenderer::new);
             addRenderer(CAEntities.IZUMIK_OFFSPRING, IzumikOffspringRenderer::new);
+            addRenderer(CAEntities.CAERULA_OFFSPRING, CaerulaOffspringRenderer::new);
             addRenderer(CAEntities.IZUMIK, IzumikRenderer::new);
             addRenderer(CAEntities.DIVICELLULAR_GO, DivicellularGoRenderer::new);
             addRenderer(CAEntities.OCEANIZED_EVOKER, OceanizedEvokerRenderer::new);

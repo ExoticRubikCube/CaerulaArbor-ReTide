@@ -20,6 +20,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -115,20 +117,14 @@ public class EntityJoinLevelEventHandler {
                 if (n > 0) {
                     n = 1 + 0.01 * n * 2;
                     coef = 1;
-                    for (Entity entityiterator : new ArrayList<>(world.players())) {
-                        if (entityiterator instanceof ServerPlayer plr7 && plr7.level() instanceof ServerLevel
-                                && plr7.getAdvancements().getOrStartProgress(plr7.server.getAdvancements().getAdvancement(ResourceLocation.parse("minecraft:story/iron_tools"))).isDone()) {
-                            coef_cur = 2;
-                            if (entityiterator instanceof ServerPlayer plr8 && plr8.level() instanceof ServerLevel
-                                    && plr8.getAdvancements().getOrStartProgress(plr8.server.getAdvancements().getAdvancement(ResourceLocation.parse("minecraft:story/enter_the_nether"))).isDone()) {
-                                coef_cur = 3;
-                                if (entityiterator instanceof ServerPlayer plr9 && plr9.level() instanceof ServerLevel
-                                        && plr9.getAdvancements().getOrStartProgress(plr9.server.getAdvancements().getAdvancement(ResourceLocation.parse("minecraft:story/enter_the_end"))).isDone()) {
-                                    coef_cur = 4;
-                                    if (entityiterator instanceof ServerPlayer plr10 && plr10.level() instanceof ServerLevel
-                                            && plr10.getAdvancements().getOrStartProgress(plr10.server.getAdvancements().getAdvancement(ResourceLocation.parse("minecraft:end/find_end_city"))).isDone()) {
-                                        coef_cur = 5;
-                                    }
+                    for (Entity playerEntity : new ArrayList<>(world.players())) {
+                        if (entity instanceof ServerPlayer plr) {
+                            coef_cur = 1;
+                            java.util.List<? extends String> entries = CAConfigs.N18_ENTRY.get();
+                            for (int i = 0; i < Math.min(entries.size(), 4); i++) {
+                                ResourceLocation entryAdvancement = ResourceLocation.parse(entries.get(i));
+                                if (plr.getAdvancements().getOrStartProgress(plr.server.getAdvancements().getAdvancement(entryAdvancement)).isDone()) {
+                                    coef_cur = i + 2;
                                 }
                             }
                         }
@@ -167,6 +163,14 @@ public class EntityJoinLevelEventHandler {
                 if (entity instanceof LivingEntity livingEntity28 && livingEntity28.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                     livingEntity28.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                             ((entity instanceof LivingEntity livingEntity27 && livingEntity27.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity27.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * attack_index));
+
+                double subl = MapVariables.get(world).strategy_sublimation;
+                if (subl >= 1.0 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
+                    if (entity instanceof LivingEntity livingEntity30 && livingEntity30.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                        livingEntity30.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                                ((entity instanceof LivingEntity livingEntity29 && livingEntity29.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity29.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * (1.0 + 0.1 * subl)));
+                }
+
                 final double finalX = x;
                 final double finalY = y;
                 final double finalZ = z;
@@ -239,9 +243,114 @@ public class EntityJoinLevelEventHandler {
                     livingEntity58.getAttribute(Attributes.ATTACK_DAMAGE)
                             .setBaseValue(((entity instanceof LivingEntity livingEntity57 && livingEntity57.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity57.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
                                     * (1 + 0.25 * MapVariables.get(world).strategy_grow)));
+                n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)), 18);
+                if (n > 0) {
+                    n = 1 + 0.01 * n * 2;
+                    coef = 1;
+                    for (Entity playerEntity : new ArrayList<>(world.players())) {
+                        if (entity instanceof ServerPlayer plr) {
+                            coef_cur = 1;
+                            java.util.List<? extends String> entries = CAConfigs.N18_ENTRY.get();
+                            for (int i = 0; i < Math.min(entries.size(), 4); i++) {
+                                ResourceLocation entryAdvancement = ResourceLocation.parse(entries.get(i));
+                                if (plr.getAdvancements().getOrStartProgress(plr.server.getAdvancements().getAdvancement(entryAdvancement)).isDone()) {
+                                    coef_cur = i + 2;
+                                }
+                            }
+                        }
+                        if (coef_cur > coef) {
+                            coef = coef_cur;
+                        }
+                    }
+                    n = Math.pow(n, coef);
+                    if (n > 1.0) {
+                        percentage = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+                        if (entity instanceof LivingEntity livingEntity59a && livingEntity59a.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                            livingEntity59a.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                                    ((entity instanceof LivingEntity livingEntity59b && livingEntity59b.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity59b.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * n));
+                        if (entity instanceof LivingEntity livingEntity)
+                            livingEntity.setHealth(
+                                    (float) ((entity instanceof LivingEntity livingEntity59c && livingEntity59c.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity59c.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * percentage));
+                        if (entity instanceof LivingEntity livingEntity59d && livingEntity59d.getAttributes().hasAttribute(Attributes.ARMOR))
+                            livingEntity59d.getAttribute(Attributes.ARMOR)
+                                    .setBaseValue(((entity instanceof LivingEntity livingEntity59e && livingEntity59e.getAttributes().hasAttribute(Attributes.ARMOR) ? livingEntity59e.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * n));
+                        if (entity instanceof LivingEntity livingEntity59f && livingEntity59f.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                            livingEntity59f.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                    .setBaseValue(((entity instanceof LivingEntity livingEntity59g && livingEntity59g.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                            ? livingEntity59g.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                                            : 0) * n));
+                        if (entity instanceof LivingEntity livingEntity59h && livingEntity59h.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
+                            livingEntity59h.getAttribute(Attributes.ARMOR_TOUGHNESS)
+                                    .setBaseValue(((entity instanceof LivingEntity livingEntity59i && livingEntity59i.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS) ? livingEntity59i.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue() : 0) * n));
+                        if (entity instanceof LivingEntity livingEntity59j && livingEntity59j.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                            livingEntity59j.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                    ((entity instanceof LivingEntity livingEntity59k && livingEntity59k.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity59k.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * n));
+                    }
+                }
                 if (entity instanceof LivingEntity livingEntity59 && livingEntity59.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))
                     livingEntity59.getAttribute(CAAttributes.EVOLVED.get()).setBaseValue(1);
             }
+        }
+
+        if ((entity instanceof LivingEntity livingEntity60 && livingEntity60.getAttributes().hasAttribute(CAAttributes.EVOLVED.get())
+                ? livingEntity60.getAttribute(CAAttributes.EVOLVED.get()).getBaseValue()
+                : 0) == 0) {
+            boolean isSeaborn = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")));
+            String extendN18 = CAConfigs.EXTEND_N18.get();
+            if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bypasses_surging_waves")))
+                    && !isSeaborn && !extendN18.equals("off")
+                    && (extendN18.equals("on")
+                    || extendN18.equals("animal_only") && entity instanceof Animal
+                    || extendN18.equals("exclude_monster") && !(entity instanceof Monster)
+                    || extendN18.equals("monster_only") && entity instanceof Monster
+                    || extendN18.equals("exclude_animal") && !(entity instanceof Animal))) {
+                n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)), 18);
+                if (n > 0) {
+                    n = 1 + 0.01 * n * 2;
+                    coef = 1;
+                    for (Entity playerEntity : new ArrayList<>(world.players())) {
+                        if (entity instanceof ServerPlayer plr) {
+                            coef_cur = 1;
+                            java.util.List<? extends String> entries = CAConfigs.N18_ENTRY.get();
+                            for (int i = 0; i < Math.min(entries.size(), 4); i++) {
+                                ResourceLocation entryAdvancement = ResourceLocation.parse(entries.get(i));
+                                if (plr.getAdvancements().getOrStartProgress(plr.server.getAdvancements().getAdvancement(entryAdvancement)).isDone()) {
+                                    coef_cur = i + 2;
+                                }
+                            }
+                        }
+                        if (coef_cur > coef) {
+                            coef = coef_cur;
+                        }
+                    }
+                    n = Math.pow(n, coef);
+                    if (n > 1.0) {
+                        percentage = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+                        if (entity instanceof LivingEntity livingEntity61 && livingEntity61.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                            livingEntity61.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                                    ((entity instanceof LivingEntity livingEntity62 && livingEntity62.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity62.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * n));
+                        if (entity instanceof LivingEntity livingEntity)
+                            livingEntity.setHealth(
+                                    (float) ((entity instanceof LivingEntity livingEntity63 && livingEntity63.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity63.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * percentage));
+                        if (entity instanceof LivingEntity livingEntity64 && livingEntity64.getAttributes().hasAttribute(Attributes.ARMOR))
+                            livingEntity64.getAttribute(Attributes.ARMOR)
+                                    .setBaseValue(((entity instanceof LivingEntity livingEntity65 && livingEntity65.getAttributes().hasAttribute(Attributes.ARMOR) ? livingEntity65.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * n));
+                        if (entity instanceof LivingEntity livingEntity66 && livingEntity66.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                            livingEntity66.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                    .setBaseValue(((entity instanceof LivingEntity livingEntity67 && livingEntity67.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                            ? livingEntity67.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                                            : 0) * n));
+                        if (entity instanceof LivingEntity livingEntity68 && livingEntity68.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
+                            livingEntity68.getAttribute(Attributes.ARMOR_TOUGHNESS)
+                                    .setBaseValue(((entity instanceof LivingEntity livingEntity69 && livingEntity69.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS) ? livingEntity69.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue() : 0) * n));
+                        if (entity instanceof LivingEntity livingEntity70 && livingEntity70.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                            livingEntity70.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                    ((entity instanceof LivingEntity livingEntity71 && livingEntity71.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity71.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * n));
+                    }
+                }
+            }
+            if (entity instanceof LivingEntity livingEntity72 && livingEntity72.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))
+                livingEntity72.getAttribute(CAAttributes.EVOLVED.get()).setBaseValue(1);
         }
     }
 }

@@ -6,15 +6,7 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.entity.BoneFishEntity;
-import com.apocalypse.caerulaarbor.entity.ChitinGolemEntity;
-import com.apocalypse.caerulaarbor.entity.ComplexChitinGolemEntity;
-import com.apocalypse.caerulaarbor.entity.FakeOffspringEntity;
-import com.apocalypse.caerulaarbor.entity.HighmoreEntity;
-import com.apocalypse.caerulaarbor.entity.PredatorAbyssalEntity;
-import com.apocalypse.caerulaarbor.entity.SpikeChestEntity;
-import com.apocalypse.caerulaarbor.entity.TideutantRockSpiderEntity;
-import com.apocalypse.caerulaarbor.entity.TidutantExcrescenceEntity;
+import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.manager.GrowUpgradeManager;
@@ -127,7 +119,14 @@ public class LivingAttackEventHandler {
 
         var missRate = target.getAttribute(CAAttributes.MISSRATE.get());
         if (missRate == null || missRate.getValue() <= 0 || damageSource.is(CADamageTags.BYPASS_MISS)
-                || target.hasEffect(CAMobEffects.MUTE.get()) || target.getRandom().nextDouble() * 100 >= missRate.getValue())
+                || target.hasEffect(CAMobEffects.MUTE.get()))
+            return;
+
+        var sourceEntity = damageSource.getEntity();
+        if (!damageSource.is(CADamageTags.SKIP_SOURCE_CHECK) && sourceEntity == null)
+            return;
+
+        if (target.getRandom().nextDouble() * 100 >= missRate.getValue())
             return;
 
         if (world instanceof ServerLevel level) {
@@ -279,8 +278,19 @@ public class LivingAttackEventHandler {
         if (event.isCanceled()) return;
 
         handleMobHitMigration(world, target, sourceEntity, damageSource);
+        handleOceanOffspringFriendlyFire(event, target, sourceEntity);
+        if (event.isCanceled()) return;
         handleMobHitEvolution(event, world, target, sourceEntity, damageSource, event.getAmount());
         handleMobHitSpecialEffects(world, target, sourceEntity, damageSource, event.getAmount());
+    }
+
+    private static void handleOceanOffspringFriendlyFire(LivingAttackEvent event, LivingEntity target, Entity sourceEntity) {
+        if (sourceEntity.getType().is(OCEAN_OFFSPRING) && target.getType().is(OCEAN_OFFSPRING)) {
+            LivingEntity srcTarget = sourceEntity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+            if (target != srcTarget) {
+                event.setCanceled(true);
+            }
+        }
     }
 
     private static void handleMobHitMigration(LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource) {
@@ -350,11 +360,6 @@ public class LivingAttackEventHandler {
             SilenceUpgradeManager.applySilenceUpgrade(world, subsistingPoints);
         }
 
-        if (sourceEntity.getType().is(OCEAN_OFFSPRING)
-                && (!(sourceEntity instanceof Mob mob) || target != mob.getTarget())) {
-            event.setCanceled(true);
-        }
-
         var evolved = target.getAttribute(CAAttributes.EVOLVED.get());
         if (evolved != null) {
             evolved.setBaseValue(1);
@@ -376,6 +381,17 @@ public class LivingAttackEventHandler {
         }
         if (target instanceof SpikeChestEntity && target.isAlive()) {
             sourceEntity.hurt(CADamageTypes.source(world, CADamageTypes.CHEST_SPIKE), (float) (amount * 0.33));
+        }
+
+        handleSublimationAttack(world, target, sourceEntity);
+    }
+
+    private static void handleSublimationAttack(LevelAccessor world, LivingEntity target, Entity sourceEntity) {
+        double finalGrow = Math.min(MapVariables.get(world).strategy_sublimation, MapVariables.get(world).strategy_grow);
+        if (finalGrow > 0.0 && sourceEntity instanceof LivingEntity livingSource) {
+            double damage = livingSource.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                    ? livingSource.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0.0;
+            target.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_REAL, sourceEntity), (float) (damage * finalGrow * 0.03));
         }
     }
 

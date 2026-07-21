@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.capability.player;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CANetwork;
 import com.apocalypse.caerulaarbor.network.receive.PlayerVariablesSyncMessage;
 import net.minecraft.nbt.CompoundTag;
@@ -17,8 +18,8 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "player_variables");
 
     public double player_light = 100.0;
-    public double player_lives = 6.0;
-    public double player_maxlive = 6.0;
+    public double player_lives = CAConfigs.LP_INIT.get();
+    public double player_maxlive = CAConfigs.LP_LIMIT.get();
     public double player_shield = 0;
     public double disoclusion = 0;
     public boolean show_stats = true;

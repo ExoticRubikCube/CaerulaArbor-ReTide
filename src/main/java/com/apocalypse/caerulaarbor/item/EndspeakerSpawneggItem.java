@@ -1,4 +1,3 @@
-
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.entity.EndspeakerEntity;
@@ -42,26 +41,24 @@ public class EndspeakerSpawneggItem extends ForgeSpawnEggItem {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity != null) {
-            double phase;
-            double tgtX;
-            double tgtY;
-            double tgtZ;
-            phase = item.getOrCreateTag().getDouble("phase");
-            if (entity.isShiftKeyDown()) {
-                item.getOrCreateTag().putDouble("phase", ((phase + 1) % 4));
-                if ((Entity) entity instanceof Player player && !player.level().isClientSide())
-                    player.displayClientMessage(Component.literal(((Component.translatable("item.caerula_arbor.endspeaker_spawnegg.use").getString()).replace("{p}", "" + Math.round(item.getOrCreateTag().getDouble("phase") + 1)))), true);
-            } else {
-                if (!((((LevelAccessor) world).getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.AIR)) {
-                    tgtX = x + 0.5;
-                    tgtY = y + 0.5;
-                    tgtZ = z + 0.5;
-                    if ((LevelAccessor) world instanceof ServerLevel level) {
-                        EndspeakerEntity.spawnForPhase(level, BlockPos.containing(tgtX, tgtY, tgtZ), MobSpawnType.MOB_SUMMONED, (int) phase);
-                    }
-                    item.shrink(1);
+        double phase;
+        double tgtX;
+        double tgtY;
+        double tgtZ;
+        phase = item.getOrCreateTag().getDouble("phase");
+        if (entity.isShiftKeyDown()) {
+            item.getOrCreateTag().putDouble("phase", ((phase + 1) % 4));
+            if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                player.displayClientMessage(Component.literal(((Component.translatable("item.caerula_arbor.endspeaker_spawnegg.use").getString()).replace("{p}", "" + Math.round(item.getOrCreateTag().getDouble("phase") + 1)))), true);
+        } else {
+            if (!((((LevelAccessor) world).getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.AIR)) {
+                tgtX = x + 0.5;
+                tgtY = y + 0.5;
+                tgtZ = z + 0.5;
+                if ((LevelAccessor) world instanceof ServerLevel level) {
+                    EndspeakerEntity.spawnForPhase(level, BlockPos.containing(tgtX, tgtY, tgtZ), MobSpawnType.MOB_SUMMONED, (int) phase);
                 }
+                item.shrink(1);
             }
         }
         return InteractionResultHolder.pass(item);

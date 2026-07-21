@@ -109,6 +109,14 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
 			guiGraphics.drawString(this.font,
 
 					StrategyUtils.getSilenceSubsis(world), 1, 116, -3407872, false);
+		if (MapVariables.get(world).if_sublimation)
+			guiGraphics.drawString(this.font,
+
+					StrategyUtils.getSublimationSubsis(world), 1, 132, -26113, false);
+		if (MapVariables.get(world).if_sublimation)
+			guiGraphics.drawString(this.font,
+
+					StrategyUtils.getSublimationSubsis2(world), 1, 148, -26113, false);
 	}
 
 	@Override

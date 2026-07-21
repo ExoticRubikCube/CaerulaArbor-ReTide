@@ -223,9 +223,8 @@ public class CAItems {
     public static final RegistryObject<Item> COOKED_PEDUNCLE = REGISTRY.register("cooked_peduncle", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(1f).meat().build())) {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
-            ItemStack retval = super.finishUsingItem(itemstack, world, entity);
             ModCapabilities.getSanityInjury(entity).heal(15);
-            return retval;
+            return super.finishUsingItem(itemstack, world, entity);
         }
     });
     public static final RegistryObject<Item> OCEAN_ARROW = REGISTRY.register("ocean_arrow", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
@@ -238,9 +237,8 @@ public class CAItems {
     public static final RegistryObject<Item> BOILED_EGG = REGISTRY.register("boiled_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.5f).alwaysEat().build())) {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
-            ItemStack retval = super.finishUsingItem(itemstack, world, entity);
             ModCapabilities.getSanityInjury(entity).heal(125);
-            return retval;
+            return super.finishUsingItem(itemstack, world, entity);
         }
     });
     public static final RegistryObject<Item> FRIED_EGG = REGISTRY.register("fried_egg", FriedEggItem::new);
@@ -378,6 +376,7 @@ public class CAItems {
     public static final RegistryObject<Item> OCEANIZED_RAVAGER_SPAWN_EGG = REGISTRY.register("oceanized_ravager_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_RAVAGER, -10919578, -6771789, new Item.Properties()));
     public static final RegistryObject<Item> OCEANIZED_WITCH_SPAWN_EGG = REGISTRY.register("oceanized_witch_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_WITCH, -16176318, -12024617, new Item.Properties()));
     public static final RegistryObject<Item> IZUMIK_OFFSPRING_SPAWN_EGG = REGISTRY.register("izumik_offspring_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.IZUMIK_OFFSPRING, -592138, -405009, new Item.Properties()));
+    public static final RegistryObject<Item> CAERULA_OFFSPRING_SPAWN_EGG = REGISTRY.register("caerula_offspring_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.CAERULA_OFFSPRING, -592138, -405009, new Item.Properties()));
     public static final RegistryObject<Item> DEEP_SEAGRASS = block(CABlocks.DEEP_SEAGRASS);
     public static final RegistryObject<Item> SEA_TRAIL_STOP = block(CABlocks.SEA_TRAIL_STOP);
     public static final RegistryObject<Item> QUINTUS_SPAWNEGG = REGISTRY.register("quintus_spawnegg", () -> new ForgeSpawnEggItem(CAEntities.BISHOP_FISH, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
@@ -416,6 +415,7 @@ public class CAItems {
     public static final RegistryObject<Item> GUNMU_SPAWN_EGG = REGISTRY.register("gunmu_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.GUNMU, -1, -1, new Item.Properties()));
     public static final RegistryObject<Item> NETHERSEA_PUMPKIN_PIE = REGISTRY.register("nethersea_pumpkin_pie", NetherseaPumpkinPieItem::new);
     public static final RegistryObject<Item> NETHERSEA_STEW = REGISTRY.register("nethersea_stew", NetherseaStewItem::new);
+    public static final RegistryObject<Item> NETHERSEA_MILK = REGISTRY.register("nethersea_milk", NetherseaMilkItem::new);
     public static final RegistryObject<Item> RECORD_WHISPER = REGISTRY.register("record_whisper", () -> new RecordItem(6, CASounds.WHISPER_ILLUSION, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4480));
     public static final RegistryObject<Item> OCEANIZED_WARDEN_SPAWNEGG = REGISTRY.register("oceanized_warden_spawnegg", OceanizedWardenSpawneggItem::new);
     public static final RegistryObject<Item> MUTAGENISIS_CAPSULE = REGISTRY.register("mutagenisis_capsule", MutagenisisCapsuleItem::new);
@@ -541,6 +541,9 @@ public class CAItems {
     public static final RegistryObject<Item> ISHARMLA_TEAR_SPAWN_EGG = REGISTRY.register("isharmla_tear_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.ISHARMLA_TEAR, -3034976, -328990, new Item.Properties()));
     public static final RegistryObject<Item> LEVIATHAN_ANIMUS = REGISTRY.register("leviathan_animus", LeviathanAnimusItem::new);
     public static final RegistryObject<Item> RECORD_ISHARMLA = REGISTRY.register("record_isharmla", () -> new RecordItem(4, CASounds.CONQUERER, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4020));
+    public static final RegistryObject<Item> RECORD_OCEANWISH = REGISTRY.register("record_oceanwish", () -> new RecordItem(8, CASounds.OCEANWISH_FULLSET, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.RARE), 2720));
+    public static final RegistryObject<Item> RECORD_UNDERDAWN = REGISTRY.register("record_underdawn", () -> new RecordItem(9, CASounds.OPERATION_UNDERDAWN, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 1480));
+    public static final RegistryObject<Item> RECORD_MARE_NATUS = REGISTRY.register("record_mare_natus", () -> new RecordItem(8, CASounds.MARE_NATUS, new Item.Properties().stacksTo(64).rarity(Rarity.RARE), 4000));
     public static final RegistryObject<Item> TEAR_ISHARMLA = REGISTRY.register("tear_isharmla", TearIsharmlaItem::new);
     public static final RegistryObject<Item> ISHARMLA_SCUTE = REGISTRY.register("isharmla_scute", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> ISHARMLA_BRICK = block(CABlocks.ISHARMLA_BRICK);
@@ -578,6 +581,11 @@ public class CAItems {
     public static final RegistryObject<Item> GENE_SAMPLE_UPGRADED = REGISTRY.register("gene_sample_upgraded", GeneSampleUpgradedItem::new);
     public static final RegistryObject<Item> GENE_SAMPLE_SUPERB = REGISTRY.register("gene_sample_superb", GeneSampleSuperbItem::new);
     public static final RegistryObject<Item> NETHERSEA_SAMPLING = block(CABlocks.NETHERSEA_SAMPLING);
+    public static final RegistryObject<Item> HIGHMORE_DOLL = block(CABlocks.HIGHMORE_DOLL);
+    public static final RegistryObject<Item> MIZUKI_DOLL = block(CABlocks.MIZUKI_DOLL);
+    public static final RegistryObject<Item> REDSTONIUM_BLOCK = block(CABlocks.REDSTONIUM_BLOCK);
+    public static final RegistryObject<Item> MOTAR_BASE_BLOCK = block(CABlocks.MOTAR_BASE_BLOCK);
+    public static final RegistryObject<Item> CHEST_FISH_COOKED = block(CABlocks.CHEST_FISH_COOKED);
     public static final RegistryObject<Item> ARCHIVE_SAL_VIENTO = REGISTRY.register("archive_sal_viento", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> ARCHIVE_OF_TIDELINK = REGISTRY.register("archive_of_tidelink", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> ARCHIVE_OF_MARTUS = REGISTRY.register("archive_of_martus", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));

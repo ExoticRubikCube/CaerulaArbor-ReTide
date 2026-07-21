@@ -51,6 +51,7 @@ public class CADamageTypes {
     public static final ResourceKey<DamageType> OCEAN_COUNTER = DamageTypes.OCEAN_COUNTER;
     public static final ResourceKey<DamageType> OCEAN_MAGIC = DamageTypes.OCEAN_MAGIC;
     public static final ResourceKey<DamageType> OCEAN_WITHER = DamageTypes.OCEAN_WITHER;
+    public static final ResourceKey<DamageType> OCEAN_REAL = DamageTypes.OCEAN_REAL;
     public static final ResourceKey<DamageType> PUNCTURE_ATTACK = DamageTypes.PUNCTURE_ATTACK;
     public static final ResourceKey<DamageType> REPELLER_ATTACK = DamageTypes.REPELLER_ATTACK;
     public static final ResourceKey<DamageType> SANITY_BREAK = DamageTypes.SANITY_BREAK;

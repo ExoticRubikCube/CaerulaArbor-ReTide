@@ -217,6 +217,8 @@ public class LivingTickEventHandler {
         if (MapVariables.get(world).strategy_silence > 0) {
             handleSilenceBuffs(world, x, y, z, entity);
         }
+
+        handleSublimationBuffs(world, entity);
     }
 
     private static void handleSilenceBuffs(LevelAccessor world, double x, double y, double z, Entity entity) {
@@ -273,6 +275,55 @@ public class LivingTickEventHandler {
             if (!_mobEnt23.hasEffect(MobEffects.MOVEMENT_SPEED)) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                     _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
+            }
+        }
+    }
+
+    private static void handleSublimationBuffs(LevelAccessor world, Entity entity) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
+            return;
+        }
+        if (world.isClientSide()) return;
+
+        double subl = MapVariables.get(world).strategy_sublimation;
+        double subs = MapVariables.get(world).strategy_subsisting;
+        double migra = MapVariables.get(world).strategy_migration;
+        double finalSubs = Math.min(subs, subl);
+        double finalMigra = Math.min(migra, subl);
+
+        if (entity instanceof LivingEntity living) {
+            double maxHealth = living.getMaxHealth();
+            double notHurtTick = entity.tickCount - entity.getPersistentData().getDouble("caerula.lastHurtByTime");
+
+            if (notHurtTick >= 220.0 - 20.0 * finalSubs) {
+                if (finalSubs > 0.0 && !(entity instanceof AbsorberLimbEntity)) {
+                    living.heal((float) (maxHealth * finalSubs * 0.01 * 0.05));
+                }
+            }
+
+            if (!entity.getPersistentData().getBoolean("sublimationBlessed") && finalMigra >= 3.0) {
+                float currentHealth = living.getHealth();
+                if (currentHealth < maxHealth * 0.3) {
+                    boolean isElite = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanelite")));
+                    boolean isTiny = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "tiny_seaborn")));
+                    entity.getPersistentData().putBoolean("sublimationBlessed", true);
+
+                    if (!isTiny) {
+                        if (finalMigra == 3.0) {
+                            if (isElite) {
+                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 100, 0, false, false));
+                            } else {
+                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 60, 0, false, false));
+                            }
+                        } else if (finalMigra == 4.0) {
+                            if (isElite) {
+                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 200, 0, false, false));
+                            } else {
+                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 100, 0, false, false));
+                            }
+                        }
+                    }
+                }
             }
         }
     }

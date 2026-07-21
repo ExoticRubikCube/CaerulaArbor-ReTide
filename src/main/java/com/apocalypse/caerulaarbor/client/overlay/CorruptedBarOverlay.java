@@ -38,7 +38,7 @@ public class CorruptedBarOverlay {
         Entity corrupted1;
         corrupted1 = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e1 -> true).stream().sorted(new Object() {
             Comparator<Entity> compareDistOf(double x, double y, double z) {
-                return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
+                return Comparator.comparingDouble(entity -> entity.distanceToSqr(x, y, z));
             }
         }.compareDistOf(x, y, z)).findFirst().orElse(null);
         if (corrupted1 != null) {
@@ -53,7 +53,7 @@ public class CorruptedBarOverlay {
             double progress = 0;
             corrupted2 = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e1 -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double x, double y, double z) {
-                    return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
+                    return Comparator.comparingDouble(entity -> entity.distanceToSqr(x, y, z));
                 }
             }.compareDistOf(x, y, z)).findFirst().orElse(null);
             if (corrupted2 != null) {
@@ -73,7 +73,7 @@ public class CorruptedBarOverlay {
             double P;
             corrupted = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double x, double y, double z) {
-                    return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
+                    return Comparator.comparingDouble(entity -> entity.distanceToSqr(x, y, z));
                 }
             }.compareDistOf(x, y, z)).findFirst().orElse(null);
             if (corrupted != null) {
