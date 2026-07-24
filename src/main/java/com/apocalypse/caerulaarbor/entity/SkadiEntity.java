@@ -362,19 +362,17 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                 datEntSetI.getEntityData().set(DATA_SKILLP, (int) sklp);
             GladiiaEntity.healFromGladiia(world, x, y, z, this);
             if (tickCount % 10 == 0) {
-                {
-                    final Vec3 center = new Vec3(x, y, z);
+                final Vec3 center = new Vec3(x, y, z);
                     TagKey<EntityType<?>> huntersTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters"));
                     List<LivingEntity> nearbyHunters = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
                             e -> e.isAlive() && e.getType().is(huntersTag));
                     for (LivingEntity entityiterator : nearbyHunters) {
                         if (!(entityiterator.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get()))) {
                             if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 32768, 0, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), -1, 0, false, false));
                             break;
                         }
                     }
-                }
             }
         }
         this.refreshDimensions();

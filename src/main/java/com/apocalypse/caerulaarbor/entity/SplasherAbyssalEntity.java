@@ -220,7 +220,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		super.baseTick();
         if (!this.hasEffect(CAMobEffects.SPLASHER_ATTACK.get())) {
             if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CAMobEffects.SPLASHER_ATTACK.get(), 10000, 0, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.SPLASHER_ATTACK.get(), -1, 0, false, false));
         }
         this.refreshDimensions();
 	}

@@ -53,18 +53,18 @@ public class DisconcentrationEventHandler {
         double rejectionStage = getRejectionStage(player);
         if (rejectionStage == HAEMOPHILIA_REJECTION_STAGE) {
             if (!player.hasEffect(CAMobEffects.HAEMOPHILIA.get()) && !player.level().isClientSide()) {
-                player.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 10000, 1, false, false));
+                player.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), -1, 1, false, false));
             }
         } else {
             player.removeEffect(CAMobEffects.HAEMOPHILIA.get());
         }
 
         if (rejectionStage == FLESHDEFORMITY_REJECTION_STAGE) {
-            if (!player.level().isClientSide()) {
-                player.addEffect(new MobEffectInstance(CAMobEffects.FLESHDEFORMITY.get(), 999, 1, false, false));
+            if (!player.hasEffect(CAMobEffects.FLESHDEFORMITY.get()) && !player.level().isClientSide()) {
+                player.addEffect(new MobEffectInstance(CAMobEffects.FLESHDEFORMITY.get(), -1, 1, false, false));
             }
         } else if (player.hasEffect(CAMobEffects.FLESHDEFORMITY.get())) {
-            player.removeEffect(CAMobEffects.FADINGSHADOW.get());
+            player.removeEffect(CAMobEffects.FLESHDEFORMITY.get());
         }
     }
 

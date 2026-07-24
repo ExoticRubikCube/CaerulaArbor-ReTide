@@ -327,7 +327,7 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 				for (Mob nearbyEntity : nearbyEntities) {
 					if (nearbyEntity instanceof RouteFractalEntity routeFractal && !routeFractal.hasEffect(CAMobEffects.SEEK_OF_FRACTAL.get())) {
 						if (!routeFractal.level().isClientSide()) {
-							routeFractal.addEffect(new MobEffectInstance(CAMobEffects.SEEK_OF_FRACTAL.get(), 999, 0));
+							routeFractal.addEffect(new MobEffectInstance(CAMobEffects.SEEK_OF_FRACTAL.get(), -1, 0));
 						}
 					}
 				}

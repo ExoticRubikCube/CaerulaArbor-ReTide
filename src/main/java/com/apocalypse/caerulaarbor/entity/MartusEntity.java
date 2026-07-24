@@ -325,7 +325,7 @@ public class MartusEntity extends SeaMonster {
                 }
                 if (!this.hasEffect(CAMobEffects.INVULNERABLE.get())) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 10000, 9, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), -1, 9, false, false));
                 }
                 if (sklp1 > 0) {
                     if ((Entity) this instanceof MartusEntity datEntSetI)

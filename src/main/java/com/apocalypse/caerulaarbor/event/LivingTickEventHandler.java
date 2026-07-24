@@ -194,7 +194,7 @@ public class LivingTickEventHandler {
         if (MapVariables.get(world).strategy_subsisting >= 3) {
             if (!(entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(MobEffects.DAMAGE_RESISTANCE))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 9999, (int) (MapVariables.get(world).strategy_subsisting - 3)));
+                    _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, -1, (int) (MapVariables.get(world).strategy_subsisting - 3)));
             }
         }
 
@@ -211,7 +211,7 @@ public class LivingTickEventHandler {
         if (MapVariables.get(world).strategy_silence >= 3) {
             if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.BOOST_OF_SILENCE.get()))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), -1, (int) (MapVariables.get(world).strategy_silence - 1)));
             }
 
             if (!(entity instanceof LivingEntity livEnt6 && livEnt6.hasEffect(CAMobEffects.STRENGTH_OF_CROWD.get()))) {
@@ -233,14 +233,14 @@ public class LivingTickEventHandler {
 
                 if (amplifi >= 0) {
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.STRENGTH_OF_CROWD.get(), 9999, (int) amplifi, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.STRENGTH_OF_CROWD.get(), -1, (int) amplifi, false, false));
                 }
             }
         } else {
             if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
                 if (!(entity instanceof LivingEntity _livEnt16 && _livEnt16.hasEffect(CAMobEffects.BOOST_OF_SILENCE.get()))) {
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), -1, (int) (MapVariables.get(world).strategy_silence - 1)));
                 }
             } else {
                 if (entity instanceof LivingEntity _entity)
@@ -252,13 +252,13 @@ public class LivingTickEventHandler {
 
         if (!(entity instanceof LivingEntity _livEnt20 && _livEnt20.hasEffect(MobEffects.REGENERATION)) && !(entity instanceof MartusEntity)) {
             if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
+                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1, (int) (MapVariables.get(world).strategy_silence - 1)));
         }
 
         if (entity instanceof Mob _mobEnt23 && _mobEnt23.isAggressive()) {
             if (!_mobEnt23.hasEffect(MobEffects.MOVEMENT_SPEED)) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
+                    _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, -1, (int) (MapVariables.get(world).strategy_silence - 1)));
             }
         }
     }
