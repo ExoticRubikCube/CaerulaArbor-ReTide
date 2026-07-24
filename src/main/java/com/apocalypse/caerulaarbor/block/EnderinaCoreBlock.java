@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.entity.MoistEnderCrystalEntity;
-import com.apocalypse.caerulaarbor.entity.OceanizedEnderinaEntity;
+import com.apocalypse.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;

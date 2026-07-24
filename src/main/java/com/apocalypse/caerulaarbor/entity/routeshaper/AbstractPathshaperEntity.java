@@ -126,10 +126,8 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 		}
 		double nearbyCount = 0;
 		Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-		List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), entity -> true).stream()
-			.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center)))
-			.toList();
-		for (Entity nearbyEntity : nearbyEntities) {
+		List<Mob> nearbyEntities = this.level().getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(32), entity -> true);
+		for (Mob nearbyEntity : nearbyEntities) {
 			if (nearbyEntity instanceof RouteFractalEntity || nearbyEntity instanceof LineringPathshaperEntity) {
 				nearbyCount = nearbyCount + 1;
 			}
@@ -325,10 +323,8 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 		if (this.tickCount % 20 == 7) {
 			if (this instanceof LineringPathshaperEntity || this instanceof RouteShaperEntity routeShaper && routeShaper.getPhase() == 1) {
 				Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-				List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), entity -> true).stream()
-					.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center)))
-					.toList();
-				for (Entity nearbyEntity : nearbyEntities) {
+				List<Mob> nearbyEntities = this.level().getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(32), entity -> true);
+				for (Mob nearbyEntity : nearbyEntities) {
 					if (nearbyEntity instanceof RouteFractalEntity routeFractal && !routeFractal.hasEffect(CAMobEffects.SEEK_OF_FRACTAL.get())) {
 						if (!routeFractal.level().isClientSide()) {
 							routeFractal.addEffect(new MobEffectInstance(CAMobEffects.SEEK_OF_FRACTAL.get(), 999, 0));
@@ -392,8 +388,6 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 		if (compound.contains("Phase"))
 			this.setPhase(compound.getInt("Phase"));
 	}
-
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

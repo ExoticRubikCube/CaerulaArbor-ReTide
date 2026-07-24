@@ -2058,6 +2058,38 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .save(saver, modLoc("trail_of_degeneration"), existingFileHelper);
         advancements.add(trailOfDegeneration);
 
+        /* fifth_touch */
+        var fifthTouch = Advancement.Builder.advancement()
+                .display(display(
+                        "minecraft:heart_of_the_sea",
+                        "advancements.fifth_touch.title",
+                        "advancements.fifth_touch.descr",
+                        null,
+                        FrameType.TASK,
+                        false,
+                        false,
+                        true
+                ))
+                .addCriterion("impossible", impossible())
+                .save(saver, modLoc("fifth_touch"), existingFileHelper);
+        advancements.add(fifthTouch);
+
+        /* absurd_of_evolution */
+        var absurdOfEvolution = Advancement.Builder.advancement()
+                .display(display(
+                        "minecraft:heart_of_the_sea",
+                        "advancements.absurd_of_evolution.title",
+                        "advancements.absurd_of_evolution.descr",
+                        null,
+                        FrameType.TASK,
+                        false,
+                        false,
+                        true
+                ))
+                .addCriterion("impossible", impossible())
+                .save(saver, modLoc("absurd_of_evolution"), existingFileHelper);
+        advancements.add(absurdOfEvolution);
+
     }
 
     private record JsonCriterionTriggerInstance(ResourceLocation trigger,

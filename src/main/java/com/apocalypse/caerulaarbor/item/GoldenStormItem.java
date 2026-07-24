@@ -40,13 +40,11 @@ public class GoldenStormItem extends Item {
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 100, 0));
-		{
-			boolean setval = true;
-			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.relic_util_ORANGE = setval;
-				capability.syncPlayerVariables(entity);
-			});
-		}
+		boolean setval = true;
+		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+			capability.relic_util_ORANGE = setval;
+			capability.syncPlayerVariables(entity);
+		});
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

@@ -318,13 +318,11 @@ public class PlayerEvoButtonMessage {
                     if (add_def < index10 + 1) {
                         quantity_cost = 2 * index10 + 2;
                         if (quantity >= quantity_cost) {
-                            {
-                                double setval = index10 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.PEVO_NODE_worse_break = setval;
-                                    capability.syncPlayerVariables(entity);
-                                });
-                            }
+                            double setval = index10 + 1;
+                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                capability.PEVO_NODE_worse_break = setval;
+                                capability.syncPlayerVariables(entity);
+                            });
                             break;
                         }
                         quantity_cost = 0;
@@ -338,7 +336,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double setval = index11 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_eunectes = setval;
                                     capability.syncPlayerVariables(entity);
                                 });

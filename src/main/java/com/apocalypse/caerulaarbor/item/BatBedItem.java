@@ -51,26 +51,26 @@ public class BatBedItem extends Item {
             level.sendParticles(ParticleTypes.ASH, x, y, z, 72, 1, 1, 1, 0.1);
         {
             boolean setval = true;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.relic_util_BATBED = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         {
-            double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive + 4;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive + 4;
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.player_maxlive = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         {
-            double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives + 4;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives + 4;
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.player_lives = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
-        if (((LevelAccessor) world).isClientSide())
+        if (world.isClientSide())
             Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
         itemstack.shrink(1);
         if ((Entity) entity instanceof Player player) {

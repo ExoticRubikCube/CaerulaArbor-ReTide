@@ -316,53 +316,50 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                     }
                     {
                         final Vec3 center = new Vec3(x, y, z);
-                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                        for (Entity entityiterator : entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "homo_sapiens")))) {
-                                if (!(this == entityiterator)) {
-                                    if ((Entity) this instanceof TribunalHealerEntity datEntSetI)
-                                        datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
-                                    if (this instanceof TribunalHealerEntity) {
-                                        this.setAnimation("animation.tribunal_healer.concentratedheal");
+                        TagKey<EntityType<?>> homoSapiensTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "homo_sapiens"));
+                        List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8),
+                                e -> e != this && e.getType().is(homoSapiensTag));
+                        for (LivingEntity entityiterator : entfound) {
+                            if ((Entity) this instanceof TribunalHealerEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
+                            if (this instanceof TribunalHealerEntity) {
+                                this.setAnimation("animation.tribunal_healer.concentratedheal");
+                            }
+                            CaerulaArborMod.queueServerWork(20, () -> {
+                                if (this.isAlive()) {
+                                    double atk1;
+                                    double count1 = 0;
+                                    atk1 = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                                    if (world instanceof Level level) {
+                                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_STRONG.get(), SoundSource.NEUTRAL, 2, 1);
                                     }
-                                    CaerulaArborMod.queueServerWork(20, () -> {
-                                        if (this.isAlive()) {
-                                            double atk1;
-                                            double count1 = 0;
-                                            atk1 = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                                            if (world instanceof Level level) {
-                                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_STRONG.get(), SoundSource.NEUTRAL, 2, 1);
-                                            }
-                                            final Vec3 center1 = new Vec3(x, y, z);
-                                            List<Entity> entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(center1, center1).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center1))).toList();
-                                            for (Entity entityiterator1 : entfound1) {
-                                                if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))) {
-                                                    if ((entityiterator1 instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
-                                                        if (entityiterator1 instanceof LivingEntity entity && !entity.level().isClientSide())
-                                                            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 1));
-                                                        if ((entityiterator1 instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
-                                                            if ((Entity) this instanceof LivingEntity entity && !entity.level().isClientSide())
-                                                                entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
-                                                            if ((Entity) this instanceof LivingEntity entity && !entity.level().isClientSide())
-                                                                entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
-                                                            EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 20);
-                                                        } else {
-                                                            EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 0);
-                                                        }
-                                                        if (!(this == entityiterator1)) {
-                                                            count1 = count1 + 1;
-                                                            if (count1 >= 7) {
-                                                                break;
-                                                            }
-                                                        }
-                                                    }
-                                                }
+                                    final Vec3 center1 = new Vec3(x, y, z);
+                                    TagKey<EntityType<?>> inquisitionTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition"));
+                                    List<LivingEntity> entfound1 = world.getEntitiesOfClass(LivingEntity.class, new AABB(center1, center1).inflate(9),
+                                            e -> e.getType().is(inquisitionTag) && e.getHealth() < e.getMaxHealth())
+                                            .stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center1))).toList();
+                                    for (LivingEntity entityiterator1 : entfound1) {
+                                        if (!entityiterator1.level().isClientSide())
+                                            entityiterator1.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 1));
+                                        if (entityiterator1.getHealth() < entityiterator1.getMaxHealth() * 0.5) {
+                                            if (!this.level().isClientSide())
+                                                this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+                                            if (!this.level().isClientSide())
+                                                this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+                                            EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 20);
+                                        } else {
+                                            EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 0);
+                                        }
+                                        if (!(this == entityiterator1)) {
+                                            count1 = count1 + 1;
+                                            if (count1 >= 7) {
+                                                break;
                                             }
                                         }
-                                    });
-                                    break;
+                                    }
                                 }
-                            }
+                            });
+                            break;
                         }
                     }
                 }
@@ -387,18 +384,12 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                             }
                             {
                                 final Vec3 center = new Vec3((getX()), (getY()), (getZ()));
-                                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                                for (Entity entityiterator : entfound) {
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
-                                        continue;
-                                    }
-                                    if (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame()) {
-                                        continue;
-                                    }
-                                    if (!(entityiterator instanceof Mob)) {
-                                        continue;
-                                    }
-                                    if (distanceTo(entityiterator) <= 6) {
+                                TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+                                List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(6),
+                                        e -> !e.getType().is(humanSideTag)
+                                                && !(e instanceof TamableAnimal tamEnt && tamEnt.isTame()));
+                                for (Mob entityiterator : entfound) {
+                                    if (distanceToSqr(entityiterator) <= 36) {
                                         vx = entityiterator.getX() - getX();
                                         vz = entityiterator.getZ() - getZ();
                                         if (vx == 0) {
@@ -409,8 +400,8 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                                         }
                                         dist = Math.sqrt(vx * vx + vz * vz);
                                         entityiterator.push((0.85 / Math.max(vx, vx / dist)), 0.25, (0.85 / Math.max(vz, vz / dist)));
-                                        if (entityiterator instanceof LivingEntity entity && !entity.level().isClientSide())
-                                            entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 60, 0, false, false));
+                                        if (!entityiterator.level().isClientSide())
+                                            entityiterator.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 60, 0, false, false));
                                         CaerulaArborMod.queueServerWork(8, () -> {
                                             if (this.isAlive()) {
                                                 entityiterator.hurt(this.damageSources().indirectMagic(this, null),
@@ -452,15 +443,10 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
 
     private boolean hasAggresiveMobAround(LevelAccessor world, double x, double y, double z) {
         Vec3 center = new Vec3(x, y, z);
-        List<Entity> entities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), entity -> true).stream()
-                .sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
-        for (Entity entityIterator : entities) {
-            if (this.distanceTo(entityIterator) <= 4
-                    && ((entityIterator instanceof Mob mob ? mob.getTarget() : null) == this || entityIterator == this.getLastHurtByMob())) {
-                return true;
-            }
-        }
-        return false;
+        List<Mob> entities = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(4),
+                entity -> entity.isAlive()
+                        && (entity.getTarget() == this || entity == this.getLastHurtByMob()));
+        return !entities.isEmpty();
     }
 
     @Override

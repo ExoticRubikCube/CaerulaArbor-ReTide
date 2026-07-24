@@ -35,6 +35,10 @@ public class SublimationUpgradeManger {
                 if (!(entityiterator instanceof ServerPlayer serverPlayer)) continue;
                 _player = serverPlayer;
                 _adv = _player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fifth_touch"));
+                if (_adv == null) {
+                    CaerulaArborMod.LOGGER.error("Missing advancement: {}:fifth_touch", CaerulaArborMod.MODID);
+                    continue;
+                }
                 _ap = _player.getAdvancements().getOrStartProgress(_adv);
                 if (_ap.isDone()) continue;
                 for (String criteria : _ap.getRemainingCriteria()) {
@@ -90,6 +94,10 @@ public class SublimationUpgradeManger {
                     if (!(entityiterator instanceof ServerPlayer)) continue;
                     _player = (ServerPlayer) entityiterator;
                     _adv = _player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "absurd_of_evolution"));
+                    if (_adv == null) {
+                        CaerulaArborMod.LOGGER.error("Missing advancement: {}:absurd_of_evolution", CaerulaArborMod.MODID);
+                        continue;
+                    }
                     _ap = _player.getAdvancements().getOrStartProgress(_adv);
                     if (_ap.isDone()) continue;
                     for (String criteria : _ap.getRemainingCriteria()) {

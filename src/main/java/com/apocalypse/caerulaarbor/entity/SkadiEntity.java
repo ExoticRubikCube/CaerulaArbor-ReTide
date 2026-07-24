@@ -189,26 +189,12 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                     }
                                     double ddd;
                                     ddd = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.25;
-                                    {
-                                        final Vec3 center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
-                                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                                        for (Entity entityiterator : entfound) {
-                                            if (!(entityiterator instanceof LivingEntity)) {
-                                                continue;
-                                            }
-                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
-                                                continue;
-                                            }
-                                            if (!(entityiterator == sourceentity)) {
-                                                continue;
-                                            }
-                                            if (distanceTo(entityiterator) <= 3) {
-                                                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ddd);
-                                                if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
-                                                    this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
-                                                entityiterator.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
-                                            }
-                                        }
+                                    if (sourceentity instanceof LivingEntity && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))
+                                            && distanceTo(sourceentity) <= 3) {
+                                        sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ddd);
+                                        if (!this.level().isClientSide())
+                                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
+                                        sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
                                 }
                             });
@@ -378,16 +364,14 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
             if (tickCount % 10 == 0) {
                 {
                     final Vec3 center = new Vec3(x, y, z);
-                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                    for (Entity entityiterator : entfound) {
-                        if (!entityiterator.isAlive()) {
-                            continue;
-                        }
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters")))) {
-                            if (!(entityiterator instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get()))) {
-                                if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 32768, 0, false, false));
-                            }
+                    TagKey<EntityType<?>> huntersTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters"));
+                    List<LivingEntity> nearbyHunters = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
+                            e -> e.isAlive() && e.getType().is(huntersTag));
+                    for (LivingEntity entityiterator : nearbyHunters) {
+                        if (!(entityiterator.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get()))) {
+                            if (!this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 32768, 0, false, false));
+                            break;
                         }
                     }
                 }
@@ -418,20 +402,13 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         Entity target = this.getTarget();
         double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * damageMultiplier;
         Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-        List<Entity> entities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream()
-                .sorted(Comparator.comparingDouble(e -> e.distanceToSqr(center))).toList();
-        for (Entity entity : entities) {
-            if (!(entity instanceof Monster)) {
-                if (!(entity == target || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == this)) {
-                    continue;
-                }
-            }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
-                if (!(entity == target || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == this)) {
-                    continue;
-                }
-            }
-            if (this.distanceTo(entity) < 3.5) {
+        TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+        List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(3),
+                entity -> entity.isAlive()
+                        && ((entity == target || (entity instanceof Mob mobEnt && mobEnt.getTarget() == this))
+                        || (entity instanceof Monster && !entity.getType().is(humanSideTag))));
+        for (LivingEntity entity : entities) {
+            if (this.distanceToSqr(entity) < 12.25) {
                 entity.hurt(CADamageTypes.source(this.level(), CADamageTypes.HUNTER_ATTACK, this), (float) damage);
             }
         }

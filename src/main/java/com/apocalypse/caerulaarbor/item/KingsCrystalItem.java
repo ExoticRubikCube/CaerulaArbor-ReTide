@@ -84,18 +84,16 @@ public class KingsCrystalItem extends Item {
             return InteractionResult.PASS;
         if (blockstate.getBlock() == Blocks.DEEPSLATE_BRICK_SLAB) {
             world.setBlock(BlockPos.containing(x, y, z), CABlocks.BLOCK_CRYSTAL.get().defaultBlockState(), 3);
-            {
-                Direction dir = ((entity.getDirection()).getOpposite());
-                BlockPos pos = BlockPos.containing(x, y, z);
-                BlockState bs = world.getBlockState(pos);
-                Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
-                if (property instanceof DirectionProperty dp && dp.getPossibleValues().contains(dir)) {
-                    world.setBlock(pos, bs.setValue(dp, dir), 3);
-                } else {
-                    property = bs.getBlock().getStateDefinition().getProperty("axis");
-                    if (property instanceof EnumProperty ap && ap.getPossibleValues().contains(dir.getAxis()))
-                        world.setBlock(pos, bs.setValue(ap, dir.getAxis()), 3);
-                }
+            Direction dir = ((entity.getDirection()).getOpposite());
+            BlockPos pos = BlockPos.containing(x, y, z);
+            BlockState bs = world.getBlockState(pos);
+            Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
+            if (property instanceof DirectionProperty dp && dp.getPossibleValues().contains(dir)) {
+                world.setBlock(pos, bs.setValue(dp, dir), 3);
+            } else {
+                property = bs.getBlock().getStateDefinition().getProperty("axis");
+                if (property instanceof EnumProperty ap && ap.getPossibleValues().contains(dir.getAxis()))
+                    world.setBlock(pos, bs.setValue(ap, dir.getAxis()), 3);
             }
             itemstack.shrink(1);
             return InteractionResult.SUCCESS;

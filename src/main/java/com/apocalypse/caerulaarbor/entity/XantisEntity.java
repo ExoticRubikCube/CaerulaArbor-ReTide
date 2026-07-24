@@ -190,25 +190,25 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
         ItemStack itemstack = sourceentity.getItemInHand(hand);
-        InteractionResult retval;
+        InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
         Item item = itemstack.getItem();
         if (itemstack.getItem() instanceof SpawnEggItem) {
-            super.mobInteract(sourceentity, hand);
+            retval = super.mobInteract(sourceentity, hand);
         } else if (this.level().isClientSide()) {
-            if ((this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack))) {
-                //TODO 可疑，需要对照mcr版代码
-            }
+            retval = (this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack)) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
         } else {
             if (this.isTame()) {
                 if (this.isOwnedBy(sourceentity)) {
                     if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
                         this.heal((float) item.getFoodProperties().getNutrition());
+                        retval = InteractionResult.sidedSuccess(this.level().isClientSide());
                     } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
                         this.heal(4);
+                        retval = InteractionResult.sidedSuccess(this.level().isClientSide());
                     } else {
-                        super.mobInteract(sourceentity, hand);
+                        retval = super.mobInteract(sourceentity, hand);
                     }
                 }
             } else if (this.isFood(itemstack)) {
@@ -220,6 +220,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
                     this.level().broadcastEntityEvent(this, (byte) 6);
                 }
                 this.setPersistenceRequired();
+                retval = InteractionResult.sidedSuccess(this.level().isClientSide());
             } else {
                 retval = super.mobInteract(sourceentity, hand);
                 if (retval == InteractionResult.SUCCESS || retval == InteractionResult.CONSUME)
@@ -256,15 +257,13 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         LevelAccessor world = this.level();
         double tapTick;
         if (tickCount % 40 == 0) {
-            {
-                final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-                List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                for (Mob entityiterator : entfound) {
-                    if (entityiterator instanceof XantisEntity) {
-                        continue;
-                    }
-                    entityiterator.setTarget(this);
+            final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+            List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+            for (Mob entityiterator : entfound) {
+                if (entityiterator instanceof XantisEntity) {
+                    continue;
                 }
+                entityiterator.setTarget(this);
             }
         }
         tapTick = this.getEntityData().get(DATA_TAP_TICK);

@@ -4,6 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
+import com.apocalypse.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -170,7 +171,6 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
             clearFire();
             setAirSupply(20);
         }
-        this.refreshDimensions();
     }
 
     @Override
@@ -197,12 +197,6 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
             }
         }
         return InteractionResult.PASS;
-    }
-
-    @Override
-    public void move(MoverType pType, Vec3 pPos) {
-        super.move(pType, pPos);
-        this.checkInsideBlocks();
     }
 
     @Override

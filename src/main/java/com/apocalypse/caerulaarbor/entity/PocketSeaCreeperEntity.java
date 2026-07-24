@@ -167,7 +167,7 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CREEPER_PRIMED, SoundSource.HOSTILE, 2, 1);
             }
             if (entity instanceof PocketSeaCreeperEntity) {
-                entity.setAnimation("animation.explosivefish.jump");
+                entity.setAnimation("animation.pocket_sea_creeper.jump");
             }
             new Object() {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -216,24 +216,24 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 	private PlayState movementPredicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isVehicle() && !this.isAggressive() && !this.isSprinting()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.explosivefish.move"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.pocket_sea_creeper.move"));
 			}
 			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.explosivefish.die"));
+				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.pocket_sea_creeper.die"));
 			}
 			if (this.isShiftKeyDown()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.explosivefish.move"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.pocket_sea_creeper.move"));
 			}
 			if (this.isSprinting()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.explosivefish.move"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.pocket_sea_creeper.move"));
 			}
 			if (this.isVehicle() && event.isMoving()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.explosivefish.move"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.pocket_sea_creeper.move"));
 			}
 			if (this.isAggressive() && event.isMoving() && !this.isVehicle()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.explosivefish.move"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.pocket_sea_creeper.move"));
 			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.explosivefish.idle"));
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.pocket_sea_creeper.idle"));
 		}
 		return PlayState.STOP;
 	}
@@ -248,7 +248,7 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 		}
 		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.explosivefish.attack"));
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.pocket_sea_creeper.attack"));
 		}
 		return PlayState.CONTINUE;
 	}

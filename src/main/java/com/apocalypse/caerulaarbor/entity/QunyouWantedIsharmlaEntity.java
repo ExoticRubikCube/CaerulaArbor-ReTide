@@ -77,10 +77,10 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        //TODO 可疑的攻击范围 待确认
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
             @Override
             protected double getAttackReachSqr(LivingEntity entity) {
+                // 返回值为攻击距离的平方（Sqr），1024 = 32²，即攻击范围 32 格
                 return 1024;
             }
         });

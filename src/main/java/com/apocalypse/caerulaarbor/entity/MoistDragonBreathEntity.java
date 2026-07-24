@@ -4,6 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
+import com.apocalypse.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAParticles;
@@ -179,7 +180,10 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
             SynchedEntityData data = this.getEntityData();
             Entity target = null;
             if (world instanceof ServerLevel level) {
-                target = level.getEntity(UUID.fromString(data.get(DATA_TARGET)));
+                String targetUuid = data.get(DATA_TARGET);
+                if (targetUuid != null && !targetUuid.isEmpty()) {
+                    target = level.getEntity(UUID.fromString(targetUuid));
+                }
                 level.sendParticles(CAParticles.EDERMAN_PTC.get(), x, y + 0.25, z, 3, 0.1, 0.1, 0.1, 0.1);
             }
             if (target != null && target.isAlive()) {
@@ -382,8 +386,8 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         }
         uuid = entity instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_TARGET) : "";
         uuid1 = entity instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_OWNER) : "";
-        target = world instanceof ServerLevel server ? server.getEntity(UUID.fromString(uuid)) : null;
-        owner = world instanceof ServerLevel server ? server.getEntity(UUID.fromString(uuid1)) : null;
+        target = world instanceof ServerLevel server && uuid != null && !uuid.isEmpty() ? server.getEntity(UUID.fromString(uuid)) : null;
+        owner = world instanceof ServerLevel server && uuid1 != null && !uuid1.isEmpty() ? server.getEntity(UUID.fromString(uuid1)) : null;
         if (!(owner == null) && owner.isAlive()) {
             d = owner instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity8.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
         } else {

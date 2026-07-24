@@ -816,10 +816,8 @@ public class EndspeakerEntity extends SeaMonster {
 		double bestowed = 0;
 		{
 			final Vec3 center = new Vec3(x, y + 24, z);
-			List<Entity> nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), candidate -> true).stream()
-					.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center)))
-					.toList();
-			for (Entity candidate : nearbyEntities) {
+			List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(64), candidate -> true);
+			for (LivingEntity candidate : nearbyEntities) {
 				if (!(candidate instanceof Monster || candidate instanceof Player)) {
 					continue;
 				}
@@ -879,13 +877,8 @@ public class EndspeakerEntity extends SeaMonster {
             level.playSound(null, BlockPos.containing(x, y, z), CASounds.ENDSPEAKER_EAT.get(), SoundSource.HOSTILE, 4, 1);
         }
         final Vec3 center = new Vec3(targetX, targetY, targetZ);
-        List<Entity> affectedEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((2 * radius) / 2d), candidate -> true).stream()
-                .sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center)))
-                .toList();
-        for (Entity candidate : affectedEntities) {
-            if (!(candidate instanceof LivingEntity)) {
-                continue;
-            }
+        List<LivingEntity> affectedEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(2 * radius), candidate -> true);
+        for (LivingEntity candidate : affectedEntities) {
             if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffpsring"))) && candidate instanceof Player) {
                 continue;
             }
@@ -1308,12 +1301,9 @@ public class EndspeakerEntity extends SeaMonster {
 
 	private void executePhaseThreeRangedChop(double x, double y, double z, double attackDamage, Entity target) {
 		Vec3 center = new Vec3(x, y, z);
-		List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), entity -> true).stream()
-			.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center))).toList();
-		for (Entity nearbyEntity : nearbyEntities) {
-			if (!(nearbyEntity instanceof LivingEntity livingTarget)) {
-				continue;
-			}
+		List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8), entity -> true);
+		for (LivingEntity nearbyEntity : nearbyEntities) {
+			LivingEntity livingTarget = nearbyEntity;
 			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 				if (nearbyEntity != target) {
 					continue;
@@ -1322,7 +1312,7 @@ public class EndspeakerEntity extends SeaMonster {
 			if (nearbyEntity == this) {
 				continue;
 			}
-			if (this.distanceTo(nearbyEntity) <= 4) {
+			if (this.distanceToSqr(nearbyEntity) <= 16) {
 				float healthBeforeHit = livingTarget.getHealth();
 				float absorptionBeforeHit = livingTarget.getAbsorptionAmount();
 				if (this.hurtWithEndspeakerAttack(livingTarget, (float) (attackDamage * 0.9))) {
@@ -1362,12 +1352,8 @@ public class EndspeakerEntity extends SeaMonster {
 			remainingTargets -= 1;
 		}
 		Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-		List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(radius / 2d), entity -> true).stream()
-			.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center))).toList();
-		for (Entity nearbyEntity : nearbyEntities) {
-			if (!(nearbyEntity instanceof LivingEntity)) {
-				continue;
-			}
+		List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius / 2d), entity -> true);
+		for (LivingEntity nearbyEntity : nearbyEntities) {
 			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 				if (nearbyEntity != target) {
 					continue;
@@ -1376,11 +1362,11 @@ public class EndspeakerEntity extends SeaMonster {
 			if (nearbyEntity == this) {
 				continue;
 			}
-			if (this.distanceTo(nearbyEntity) <= radius / 2d) {
+			if (this.distanceToSqr(nearbyEntity) <= (radius / 2d) * (radius / 2d)) {
 				if (radius <= 8) {
 					nearbyEntity.push(0, 0.33, 0);
 				}
-				this.hurtWithEndspeakerAttack((LivingEntity) nearbyEntity, (float) (attackDamage * damageMultiplier));
+				this.hurtWithEndspeakerAttack(nearbyEntity, (float) (attackDamage * damageMultiplier));
 				remainingTargets -= 1;
 			}
 			if (remainingTargets <= 0) {

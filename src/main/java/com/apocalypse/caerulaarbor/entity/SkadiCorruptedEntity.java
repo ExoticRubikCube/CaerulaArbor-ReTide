@@ -234,19 +234,15 @@ public class SkadiCorruptedEntity extends SeaMonster {
                 if (this.isAlive() && isCorruptedDurative() && target.isAlive() && this.distanceTo(target) <= 2.25) {
                     double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                     final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-                    List<Entity> foundEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), entity -> true).stream()
-                            .sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
-                    for (Entity entityIterator : foundEntities) {
-                        if (!(entityIterator instanceof LivingEntity)) {
-                            continue;
-                        }
+                    List<LivingEntity> foundEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(6), entity -> true);
+                    for (LivingEntity entityIterator : foundEntities) {
                         if (entityIterator == this) {
                             continue;
                         }
                         if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                             continue;
                         }
-                        if (this.distanceTo(entityIterator) <= 3) {
+                        if (this.distanceToSqr(entityIterator) <= 9) {
                             entityIterator.hurt(
                                     CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) damage);
                             Vec3 pushVec = this.position().vectorTo(entityIterator.position());
@@ -480,11 +476,8 @@ public class SkadiCorruptedEntity extends SeaMonster {
                     enemy1 = this.getTarget();
                     {
                         final Vec3 center = new Vec3(x, y, z);
-                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                        for (Entity entityiterator : entfound) {
-                            if (!(entityiterator instanceof LivingEntity)) {
-                                continue;
-                            }
+                        List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24), e -> true);
+                        for (LivingEntity entityiterator : entfound) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                 if (!(entityiterator == enemy1)) {
                                     continue;
@@ -493,33 +486,10 @@ public class SkadiCorruptedEntity extends SeaMonster {
                             if (entityiterator == this) {
                                 continue;
                             }
-                            if (new Object() {
-                                public boolean checkGamemode(Entity ent) {
-                                    if (ent instanceof ServerPlayer serverPlayer) {
-                                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
-                                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                                    }
-                                    return false;
-                                }
-                            }.checkGamemode(entityiterator)) {
+                            if (entityiterator instanceof Player player && (player.isCreative() || player.isSpectator())) {
                                 continue;
                             }
-                            if (new Object() {
-                                public boolean checkGamemode(Entity ent) {
-                                    if (ent instanceof ServerPlayer serverPlayer) {
-                                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
-                                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
-                                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
-                                    }
-                                    return false;
-                                }
-                            }.checkGamemode(entityiterator)) {
-                                continue;
-                            }
-                            if (distanceTo(entityiterator) <= 12) {
+                            if (distanceToSqr(entityiterator) <= 144) {
                                 entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.SANITY_BREAK),
                                         (float) (ddd * 1.1));
                             }
@@ -565,11 +535,11 @@ public class SkadiCorruptedEntity extends SeaMonster {
                 }
                 {
                     final Vec3 center = new Vec3(x, y, z);
-                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                    for (Entity entityiterator : entfound) {
+                    List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32), e -> true);
+                    for (LivingEntity entityiterator : entfound) {
                         mayBonus = false;
                         isSeaborn = false;
-                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 16) {
+                        if (distanceToSqr(entityiterator) <= 256) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                 mayBonus = true;
                                 isSeaborn = true;
@@ -581,28 +551,28 @@ public class SkadiCorruptedEntity extends SeaMonster {
                             if (entityiterator == this) {
                                 continue;
                             }
-                            if (mayBonus && entityiterator instanceof LivingEntity livingEntity) {
-                                EntityUtils.heal(livingEntity, ddd * healPerc);
+                            if (mayBonus) {
+                                EntityUtils.heal(entityiterator, ddd * healPerc);
                                 if (phase == 1 && !entityiterator.getPersistentData().getBoolean("corruptedBonus1")) {
-                                    if (entityiterator instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                        livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                                ((entityiterator instanceof LivingEntity livingEntity9 && livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
-                                                        + ddd * 0.4));
-                                    if (entityiterator instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                                        livingEntity12.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                                .setBaseValue(((entityiterator instanceof LivingEntity livingEntity11 && livingEntity11.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                                        ? livingEntity11.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
-                                                        : 0) + ddd * 0.4));
+                                    if (entityiterator.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                                        entityiterator.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                                (entityiterator.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entityiterator.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
+                                                        + ddd * 0.4);
+                                    if (entityiterator.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                                        entityiterator.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                                .setBaseValue((entityiterator.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                                        ? entityiterator.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                                                        : 0) + ddd * 0.4);
                                     entityiterator.getPersistentData().putBoolean("corruptedBonus1", true);
                                 }
                                 if (phase == 2 && !entityiterator.getPersistentData().getBoolean("corruptedBonus2")) {
-                                    if (entityiterator instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                        livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                                ((entityiterator instanceof LivingEntity livingEntity15 && livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
-                                                        + ddd));
-                                    if (entityiterator instanceof LivingEntity livingEntity18 && livingEntity18.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                                        livingEntity18.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                                                ((entityiterator instanceof LivingEntity livingEntity17 && livingEntity17.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity17.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) + ddd));
+                                    if (entityiterator.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                                        entityiterator.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                                (entityiterator.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entityiterator.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
+                                                        + ddd);
+                                    if (entityiterator.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                                        entityiterator.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                                                (entityiterator.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? entityiterator.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) + ddd);
                                     entityiterator.getPersistentData().putBoolean("corruptedBonus2", true);
                                 }
                                 if (phase > 0.5 && isSeaborn) {

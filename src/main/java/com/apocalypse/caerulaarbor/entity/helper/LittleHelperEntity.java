@@ -260,7 +260,6 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
         this.updateSwingTime();
     }
 
-
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);

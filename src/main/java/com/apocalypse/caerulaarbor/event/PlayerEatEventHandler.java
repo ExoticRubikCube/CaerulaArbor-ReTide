@@ -66,7 +66,7 @@ public class PlayerEatEventHandler {
 							});
 						}
 						if (!player.level().isClientSide())
-							player.displayClientMessage(Component.literal("\u00A7a" + messageText.replace("{num}", "" + Math.round(lifeGain))), true);
+							player.displayClientMessage(Component.literal("§a" + messageText.replace("{num}", "" + Math.round(lifeGain))), true);
 					}
 				}
 			}

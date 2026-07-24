@@ -70,6 +70,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
         xpReward = 5;
         setNoAi(false);
         setMaxUpStep(0.6f);
+        setNoGravity(true);
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
@@ -98,8 +99,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
         if (!this.level().isClientSide()) {
             CaerulaArborMod.queueServerWork(10, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.6) {
-                    target.hurt(
-                            CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                    target.hurt(CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 }
             });
         }
@@ -251,12 +251,6 @@ public class OceanizedSpiderEntity extends SeaMonster {
         super.setNoGravity(true);
     }
 
-    @Override
-    public void aiStep() {
-        super.aiStep();
-        this.setNoGravity(true);
-    }
-
     private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && this.onGround()) {
@@ -350,7 +344,6 @@ public class OceanizedSpiderEntity extends SeaMonster {
         data.add(new AnimationController<>(this, "attacking", 2, this::attackingPredicate));
         data.add(new AnimationController<>(this, "procedure", 2, this::procedurePredicate));
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

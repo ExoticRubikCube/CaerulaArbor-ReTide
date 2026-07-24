@@ -198,10 +198,8 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		Entity target = this.getTarget();
 		double radius = isSonic ? 4.5 : 3;
 		Vec3 center = new Vec3(x, y, z);
-		List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(radius), entity -> true).stream()
-				.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center)))
-				.toList();
-		for (Entity nearbyEntity : nearbyEntities) {
+		List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius), entity -> true);
+		for (LivingEntity nearbyEntity : nearbyEntities) {
 			if (!(nearbyEntity instanceof Mob) && !(nearbyEntity instanceof Player)) {
 				continue;
 			}
@@ -211,13 +209,11 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			if (nearbyEntity == this) {
 				continue;
 			}
-			if (center.distanceTo(new Vec3(nearbyEntity.getX(), nearbyEntity.getY(), nearbyEntity.getZ())) <= radius) {
+			if (center.distanceToSqr(new Vec3(nearbyEntity.getX(), nearbyEntity.getY(), nearbyEntity.getZ())) <= radius * radius) {
 				double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
 				if (isSonic) {
 					nearbyEntity.hurt(CADamageTypes.wardenSonic(this.level(), this), (float) damage);
-					if (nearbyEntity instanceof LivingEntity livingEntity) {
-						SIHelper.causeSanityInjury(livingEntity, damage * 1.5);
-					}
+					SIHelper.causeSanityInjury(nearbyEntity, damage * 1.5);
 				} else {
 					nearbyEntity.hurt(CADamageTypes.wardenAttack(this.level(), this), (float) damage);
 				}
@@ -354,10 +350,8 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		CaerulaArborMod.queueServerWork(47, () -> {
 			boolean hasSound = false;
 			Vec3 center = new Vec3(x, y, z);
-			List<Entity> nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32), entity -> true).stream()
-					.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center)))
-					.toList();
-			for (Entity nearbyEntity : nearbyEntities) {
+			List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32), entity -> true);
+			for (LivingEntity nearbyEntity : nearbyEntities) {
 				if (!(nearbyEntity instanceof Mob) && !(nearbyEntity instanceof Player)) {
 					continue;
 				}
@@ -413,18 +407,16 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		if (this.isAlive()) {
 			if (this.tickCount % 100 == 0) {
 				Vec3 center = new Vec3(x, y, z);
-				List<Entity> nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(24 / 2D), entity -> true).stream()
-						.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center)))
-						.toList();
-				for (Entity nearbyEntity : nearbyEntities) {
-					if (nearbyEntity instanceof Player player && player.isCreative() || nearbyEntity instanceof Player player1 && player1.isSpectator()) {
+				List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(12), entity -> true);
+				for (LivingEntity nearbyEntity : nearbyEntities) {
+					if (nearbyEntity instanceof Player player && (player.isCreative() || player.isSpectator())) {
 						continue;
 					}
 					if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 						continue;
 					}
-					if (!(nearbyEntity instanceof LivingEntity livingEntity && livingEntity.hasEffect(MobEffects.DARKNESS))) {
-						if (nearbyEntity instanceof LivingEntity && !this.level().isClientSide()) {
+					if (!nearbyEntity.hasEffect(MobEffects.DARKNESS)) {
+						if (!this.level().isClientSide()) {
 							this.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 1200, 0, false, false));
 						}
 					}

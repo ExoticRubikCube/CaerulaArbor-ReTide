@@ -293,12 +293,9 @@ public class MartusEntity extends SeaMonster {
                 }
                 {
                     final Vec3 center = new Vec3(x, y, z);
-                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(96 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                    for (Entity entityiterator : entfound) {
-                        if (!(entityiterator instanceof Mob livEnt1)) {
-                            continue;
-                        }
-                        if (livEnt1.hasEffect(CAMobEffects.GUIDED_EVO.get())) {
+                    List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(48), e -> true);
+                    for (Mob entityiterator : entfound) {
+                        if (entityiterator.hasEffect(CAMobEffects.GUIDED_EVO.get())) {
                             num = num + 1;
                             this.spawnParticleLink(entityiterator);
                             CaerulaArborMod.queueServerWork(3, () -> {
@@ -438,19 +435,16 @@ public class MartusEntity extends SeaMonster {
                         CaerulaArborMod.queueServerWork(10, () -> {
                             {
                                 final Vec3 center = new Vec3(x, y, z);
-                                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                                for (Entity entityiterator : entfound) {
-                                    if (!(entityiterator instanceof Mob)) {
-                                        continue;
-                                    }
+                                List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(32), e -> true);
+                                for (Mob entityiterator : entfound) {
                                     if (!entityiterator.isAlive()) {
                                         continue;
                                     }
                                     if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
                                             && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
-                                        if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
+                                        if (!this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1));
-                                        if (entityiterator instanceof LivingEntity entity && !this.level().isClientSide())
+                                        if (!this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 0));
                                     }
                                     if (world instanceof ServerLevel level)

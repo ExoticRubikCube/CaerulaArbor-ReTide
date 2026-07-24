@@ -167,29 +167,17 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                     this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                             CASounds.ANCHOR_ATTACK.get(), SoundSource.HOSTILE, 2.75F, 1);
                     final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-                    List<Entity> foundEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), entity -> true).stream()
-                            .sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
-                    for (Entity entityIterator : foundEntities) {
-                        if (!(entityIterator instanceof LivingEntity)) {
-                            continue;
-                        }
-                        if (!entityIterator.isAlive()) {
-                            continue;
-                        }
-                        if (entityIterator instanceof ServerPlayer serverPlayer) {
-                            if (serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE || serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR) {
-                                continue;
-                            }
-                        }
-                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != currentTarget) {
-                            continue;
-                        }
-                        if (entityIterator == this) {
-                            continue;
-                        }
-                        if (this.distanceTo(entityIterator) <= 24) {
-                            entityIterator.hurt(
-                                    CADamageTypes.source(this.level(), CADamageTypes.HUNTER_ATTACK, this), (float) damage);
+                    TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+                    List<LivingEntity> foundEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
+                            entity -> entity.isAlive()
+                                    && entity != this
+                                    && !(entity instanceof ServerPlayer serverPlayer
+                                            && (serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE
+                                            || serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR))
+                                    && !(entity.getType().is(oceanOffspringTag) && entity != currentTarget));
+                    for (LivingEntity entityIterator : foundEntities) {
+                        if (this.distanceToSqr(entityIterator) <= 576) {
+                            entityIterator.hurt(CADamageTypes.source(this.level(), CADamageTypes.HUNTER_ATTACK, this), (float) damage);
                             Vec3 pushVec = this.position().vectorTo(entityIterator.position());
                             if (pushVec.lengthSqr() < 0.0001) {
                                 pushVec = new Vec3(0, 0, 1);
@@ -263,25 +251,18 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                 datEntSetI.getEntityData().set(DATA_BONUS, (int) (bns + 1));
             {
                 final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                for (Entity entityiterator : entfound) {
-                    if (!(entityiterator instanceof LivingEntity)) {
-                        continue;
-                    }
-                    if (entityiterator.isAlive()) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters")))) {
-                            perc = (entityiterator instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
-                            if (entityiterator instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                                livingEntity8.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                                        ((entityiterator instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity7.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) + 10));
-                            if (entityiterator instanceof LivingEntity livingEntity)
-                                livingEntity.setHealth((float) ((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc));
-                            if (entityiterator instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                        ((entityiterator instanceof LivingEntity livingEntity11 && livingEntity11.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity11.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
-                                                + 2));
-                        }
-                    }
+                TagKey<EntityType<?>> huntersTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters"));
+                List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
+                        e -> e.isAlive() && e.getType().is(huntersTag));
+                for (LivingEntity entityiterator : entfound) {
+                    perc = entityiterator.getHealth() / entityiterator.getMaxHealth();
+                    if (entityiterator.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                        entityiterator.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                                (entityiterator.getAttribute(Attributes.MAX_HEALTH).getBaseValue() + 10));
+                    entityiterator.setHealth((float) (entityiterator.getMaxHealth() * perc));
+                    if (entityiterator.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                        entityiterator.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                (entityiterator.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() + 2));
                 }
             }
         }
@@ -345,27 +326,15 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 }
                                 {
                                     final Vec3 center = new Vec3((getX()), (getY()), (getZ()));
-                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                                    for (Entity entityiterator : entfound) {
-                                        if (!(entityiterator instanceof LivingEntity)) {
-                                            continue;
-                                        }
-                                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
-                                            if (!(entityiterator == enemy1)) {
-                                                continue;
-                                            }
-                                        }
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
-                                            if (!(entityiterator == enemy1)) {
-                                                continue;
-                                            }
-                                        }
-                                        if (entityiterator == this) {
-                                            continue;
-                                        }
+                                    TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+                                    List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(6),
+                                            e -> e != this
+                                                    && !((e instanceof Player || (e instanceof TamableAnimal tamEnt && tamEnt.isTame())) && e != enemy1)
+                                                    && !(e.getType().is(humanSideTag) && e != enemy1));
+                                    for (LivingEntity entityiterator : entfound) {
                                         d = distanceTo(entityiterator);
                                         if (d <= r && (EntityUtils.getEntityCosine(this, entityiterator) > 0.5 || d <= 3)) {
-                                            if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
+                                            if (!this.level().isClientSide())
                                                 this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
                                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                         }
@@ -379,28 +348,14 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 double r = 4.5;
                                 {
                                     final Vec3 center = new Vec3(x, y, z);
-                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(9 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                                    for (Entity entityiterator : entfound) {
-                                        if (!(entityiterator instanceof LivingEntity)) {
-                                            continue;
-                                        }
-                                        if (!entityiterator.isAlive()) {
-                                            continue;
-                                        }
-                                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
-                                            if (!(entityiterator == enemy1)) {
-                                                continue;
-                                            }
-                                        }
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
-                                            if (!(entityiterator == enemy1)) {
-                                                continue;
-                                            }
-                                        }
-                                        if (entityiterator == this) {
-                                            continue;
-                                        }
-                                        if (distanceTo(entityiterator) <= r && EntityUtils.getEntityCosine(this, entityiterator) > 0.6) {
+                                    TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+                                    List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(4.5),
+                                            e -> e.isAlive()
+                                                    && e != this
+                                                    && !((e instanceof Player || (e instanceof TamableAnimal tamEnt && tamEnt.isTame())) && e != enemy1)
+                                                    && !(e.getType().is(humanSideTag) && e != enemy1));
+                                    for (LivingEntity entityiterator : entfound) {
+                                        if (distanceToSqr(entityiterator) <= r * r && EntityUtils.getEntityCosine(this, entityiterator) > 0.6) {
                                             Vec3 offset = position().add(entityiterator.position().reverse());
                                             if (offset.lengthSqr() <= 0.01) continue;
                                             offset = offset.normalize();
@@ -478,25 +433,16 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 nowZ = getZ();
                                 {
                                     final Vec3 center = new Vec3(noeX, nowY, nowZ);
-                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                                    for (Entity entityiterator : entfound) {
-                                        if (!(entityiterator instanceof LivingEntity)) {
-                                            continue;
-                                        }
-                                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
-                                            continue;
-                                        }
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
-                                            continue;
-                                        }
-                                        if (entityiterator == this) {
-                                            continue;
-                                        }
-                                        if (entityiterator == enemy1) {
-                                            continue;
-                                        }
-                                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6) {
-                                            if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
+                                    TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+                                    List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(6),
+                                            e -> e != this
+                                                    && e != enemy1
+                                                    && !(e instanceof Player)
+                                                    && !(e instanceof TamableAnimal tamEnt && tamEnt.isTame())
+                                                    && !e.getType().is(humanSideTag));
+                                    for (LivingEntity entityiterator : entfound) {
+                                        if (distanceToSqr(entityiterator) <= 36) {
+                                            if (!this.level().isClientSide())
                                                 this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                         }

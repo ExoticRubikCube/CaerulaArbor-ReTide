@@ -378,8 +378,8 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                         level.sendParticles(ParticleTypes.DOLPHIN, (x + range * Math.sin(Math.toRadians(3 * index0))), y, (z + range * Math.cos(Math.toRadians(3 * index0))), 6, 0.15, 0.2, 0.15, 0.1);
                 }
                 final Vec3 center = new Vec3(x, (y + 1.5), z);
-                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((range * 2) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                for (Entity entityiterator : entfound) {
+                List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(range * 2), e -> true);
+                for (LivingEntity entityiterator : entfound) {
                     if (entityiterator == this) {
                         continue;
                     }
@@ -388,24 +388,14 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                             continue;
                         }
                     }
-                    if (new Object() {
-                        public boolean checkGamemode(Entity ent) {
-                            if (ent instanceof ServerPlayer serverPlayer) {
-                                return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                            } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                                return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
-                                        && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                            }
-                            return false;
-                        }
-                    }.checkGamemode(entityiterator)) {
+                    if (entityiterator instanceof Player player && player.isCreative()) {
                         continue;
                     }
-                    if (distanceTo(entityiterator) <= range) {
-                        if (!((Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.FADINGSHADOW.get()))) {
-                            if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
+                    if (distanceToSqr(entityiterator) <= range * range) {
+                        if (!this.hasEffect(CAMobEffects.FADINGSHADOW.get())) {
+                            if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.FADINGSHADOW.get(), 20, (int) lvl, false, false));
-                            if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
+                            if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20, (int) lvl, false, true));
                         }
                     }
@@ -743,8 +733,8 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
     private void highmoreBlast(LevelAccessor world, double x, double y, double z, Entity entity) {
         if (entity != null) {
             final Vec3 center = new Vec3(x, y, z);
-            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-            for (Entity entityiterator : entfound) {
+            List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24), e -> true);
+            for (LivingEntity entityiterator : entfound) {
                 if (entityiterator == entity) {
                     continue;
                 }
@@ -756,7 +746,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                 if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
                     continue;
                 }
-                if (entity.distanceTo(entityiterator) <= 24) {
+                if (entity.distanceToSqr(entityiterator) <= 576) {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HIGHMORE_ATTACK, entity), (float) ((entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity8.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)

@@ -196,32 +196,22 @@ public class IsharmlaEntity extends SeaMonster {
 							break;
 						}
 						final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-						List<Entity> foundEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), entity -> true).stream()
-								.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
-						for (Entity entityIterator : foundEntities) {
+						TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+						List<LivingEntity> foundEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
+								entity -> entity.isAlive()
+										&& entity != this
+										&& !(entity instanceof ServerPlayer serverPlayer
+										&& (serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE
+										|| serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR))
+										&& !(entity.getType().is(oceanOffspringTag) && entity != target))
+								.stream().sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
+						for (LivingEntity entityIterator : foundEntities) {
 							if (count > 5) {
 								break;
 							}
-							if (!(entityIterator instanceof LivingEntity)) {
-								continue;
-							}
-							if (!entityIterator.isAlive()) {
-								continue;
-							}
-							if (entityIterator instanceof ServerPlayer serverPlayer) {
-								if (serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE || serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR) {
-									continue;
-								}
-							}
-							if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != target) {
-								continue;
-							}
-							if (entityIterator == this) {
-								continue;
-							}
-							if (this.distanceTo(entityIterator) <= 24) {
+							if (this.distanceToSqr(entityIterator) <= 576) {
 								count++;
-                                int delayTicks = 2 * count;
+								int delayTicks = 2 * count;
 								CaerulaArborMod.queueServerWork(delayTicks, () -> {
 									isharmlaDroppedAttack(this.level(), entityIterator.getX(), entityIterator.getY(), entityIterator.getZ(), Mth.nextDouble(RandomSource.create(), 1.5, 3), 1);
 								});
@@ -255,16 +245,10 @@ public class IsharmlaEntity extends SeaMonster {
 			level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_ATTACK_HIT.get(), SoundSource.HOSTILE, 2,
 					(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1));
 			Vec3 center = new Vec3(x, y, z);
-			List<Entity> entities = level.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((radius * 2) / 2d), entity -> true).stream()
-					.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
-			for (Entity entityIterator : entities) {
-				if (entityIterator.getType().is(EntityUtils.OCEAN_OFFSPRING) && entityIterator != target) {
-					continue;
-				}
-				if (!(entityIterator instanceof LivingEntity)) {
-					continue;
-				}
-				if (center.distanceTo(new Vec3(entityIterator.getX(), entityIterator.getY(), entityIterator.getZ())) <= radius) {
+			List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius),
+					entity -> !(entity.getType().is(EntityUtils.OCEAN_OFFSPRING) && entity != target));
+			for (LivingEntity entityIterator : entities) {
+				if (center.distanceToSqr(entityIterator.position()) <= radius * radius) {
 					entityIterator.hurt(
 							CADamageTypes.source(world, CADamageTypes.ISHARMLA_ATTACK, this), (float) damage);
 				}
@@ -425,32 +409,21 @@ public class IsharmlaEntity extends SeaMonster {
                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.15;
 				{
 					final Vec3 center = new Vec3(x, y, z);
-					List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-					for (Entity entityiterator : entfound) {
-						if (!(entityiterator instanceof LivingEntity)) {
-							continue;
-						}
-						if (entityiterator instanceof GladiiaWhirlEntity) {
-							continue;
-						}
-						if (entityiterator instanceof Player) {
-							continue;
-						}
-						if (entityiterator instanceof IsharmlaTearEntity) {
-							continue;
-						}
-						if (this == entityiterator) {
-							continue;
-						}
-						if (!entityiterator.isAlive()) {
-							continue;
-						}
+					TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+					TagKey<EntityType<?>> bossOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring"));
+					List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32),
+							e -> e.isAlive()
+									&& e != this
+									&& !(e instanceof GladiiaWhirlEntity)
+									&& !(e instanceof Player)
+									&& !(e instanceof IsharmlaTearEntity));
+					for (LivingEntity entityiterator : entfound) {
 						d = distanceTo(entityiterator);
 						if (d <= 32) {
 							EntityUtils.applyOrbitMotion(entityiterator, this);
-							if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-									&& !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
-								itrHealth = (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.01;
+							if (entityiterator.getType().is(oceanOffspringTag)
+									&& !entityiterator.getType().is(bossOffspringTag)) {
+								itrHealth = entityiterator.getMaxHealth() * 0.01;
 								itrAttack = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 0.01;
 								if (Math.random() < 0.25) {
 									sendLinkParticlesToEntity(world, x - 0.5, y, z - 0.5, entityiterator);
@@ -576,18 +549,19 @@ public class IsharmlaEntity extends SeaMonster {
 						}
 						{
 							final Vec3 center = new Vec3(x, y, z);
-							List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-							for (Entity entityiterator : entfound) {
-								if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-									if (entityiterator instanceof LivingEntity livingEntity && livingEntity.getHealth() < livingEntity.getMaxHealth()) {
-										EntityUtils.heal(livingEntity, atk);
-										if (world instanceof ServerLevel level)
-											level.sendParticles(ParticleTypes.HAPPY_VILLAGER, (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 24, 0.75, 0.75, 0.75, 0.1);
-										if (!(this == entityiterator)) {
-											count = count + 1;
-											if (count >= 6) {
-												break;
-											}
+							TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+							List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8),
+									e -> e.getType().is(oceanOffspringTag) && e.getHealth() < e.getMaxHealth())
+									.stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+							for (LivingEntity entityiterator : entfound) {
+								if (entityiterator.getHealth() < entityiterator.getMaxHealth()) {
+									EntityUtils.heal(entityiterator, atk);
+									if (world instanceof ServerLevel level)
+										level.sendParticles(ParticleTypes.HAPPY_VILLAGER, (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 24, 0.75, 0.75, 0.75, 0.1);
+									if (!(this == entityiterator)) {
+										count = count + 1;
+										if (count >= 6) {
+											break;
 										}
 									}
 								}
@@ -844,20 +818,12 @@ public class IsharmlaEntity extends SeaMonster {
 		}
 
 		final Vec3 center = new Vec3(x, y, z);
-		List<Entity> entities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(radius), e -> true).stream()
-				.sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(center)))
-				.toList();
+		TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+		List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius),
+				e -> !(e.getType().is(oceanOffspringTag) && e != target));
 
-		for (Entity entityiterator : entities) {
-			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-				if (!(entityiterator == target)) {
-					continue;
-				}
-			}
-			if (!(entityiterator instanceof LivingEntity)) {
-				continue;
-			}
-			if (center.distanceTo(entityiterator.position()) <= radius) {
+		for (LivingEntity entityiterator : entities) {
+			if (center.distanceToSqr(entityiterator.position()) <= radius * radius) {
 				entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ISHARMLA_ATTACK, this), (float) damage);
 			}
 		}
@@ -896,15 +862,11 @@ public class IsharmlaEntity extends SeaMonster {
 			this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 99999, 2, false, false));
 
 		final Vec3 center = new Vec3(x, y, z);
-		List<Entity> nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32), e -> true).stream()
-				.sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(center)))
-				.toList();
+		List<IsharmlaTearEntity> nearbyEntities = world.getEntitiesOfClass(IsharmlaTearEntity.class, new AABB(center, center).inflate(32), e -> true);
 
-		for (Entity entityiterator : nearbyEntities) {
-			if (entityiterator instanceof IsharmlaTearEntity) {
-				entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE),
-						114514);
-			}
+		for (IsharmlaTearEntity entityiterator : nearbyEntities) {
+			entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE),
+					114514);
 		}
 	}
 

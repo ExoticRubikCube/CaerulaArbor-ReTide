@@ -32,14 +32,13 @@ public class ImmunosuppressorItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		if (!entity.level().isClientSide()) {
+        if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 800, 3));
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 800, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0));
 			entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 400, 2));
 			entity.addEffect(new MobEffectInstance(MobEffects.POISON, 400, 1));
 		}
-		return retval;
+		return super.finishUsingItem(itemstack, world, entity);
 	}
 }

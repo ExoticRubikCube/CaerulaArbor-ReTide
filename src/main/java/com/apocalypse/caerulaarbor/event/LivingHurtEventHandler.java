@@ -381,7 +381,7 @@ public class LivingHurtEventHandler {
             if (amount > (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) return;
 
             Entity skadiCorrupted = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 32, 32, 32), e -> true).stream()
-                    .sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
+                    .min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
 
             if (skadiCorrupted == null) return;
             if ((skadiCorrupted != null ? entity.distanceTo(skadiCorrupted) : -1) > 16) return;
@@ -626,36 +626,45 @@ public class LivingHurtEventHandler {
                 if (entity1 != null) {
                     if (!(lll <= 0)) {
                         final Vec3 center = new Vec3(x, y1, z);
-                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                        for (Entity entityiterator : entfound) {
-                            if (!(entityiterator instanceof LivingEntity)) continue;
-                            if (entityiterator == entity1) continue;
-                            if (entityiterator instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))
-                                continue;
-                            if (!(entityiterator instanceof Monster)) {
-                                Entity recentVictim = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtMob() : null;
-                                Entity recentAttacker = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtByMob() : null;
-                                if (!((entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity1 || entityiterator == recentVictim || entityiterator == recentAttacker))
-                                    continue;
+                        List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24 / 2d),
+                                e -> e != entity1 && !e.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()));
+                        LivingEntity nextTarget = null;
+                        double minDist = -1.0D;
+                        Entity recentVictim = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtMob() : null;
+                        Entity recentAttacker = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtByMob() : null;
+                        for (LivingEntity entityiterator : entfound) {
+                            boolean isValid = false;
+                            if (entityiterator instanceof Monster) {
+                                isValid = true;
+                            } else {
+                                isValid = (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity1
+                                        || entityiterator == recentVictim
+                                        || entityiterator == recentAttacker;
                             }
-                            if (world instanceof ServerLevel projectileLevel) {
-                                Projectile entityToSpawn = new Object() {
-                                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                                        AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, level);
-                                        entityToSpawn.setOwner(shooter);
-                                        entityToSpawn.setBaseDamage(damage);
-                                        entityToSpawn.setKnockback(knockback);
-                                        entityToSpawn.setCritArrow(true);
-                                        entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-                                        return entityToSpawn;
-                                    }
-                                }.getArrow(projectileLevel, entity1, (float) amount, 0);
-                                entityToSpawn.setPos(x, y1, z);
-                                entityToSpawn.getPersistentData().putDouble("TrailriteLink", lll - 1);
-                                entityToSpawn.shoot((entityiterator.getX() - x), ((entityiterator.getY() + entityiterator.getBbHeight() * 0.9) - y1), (entityiterator.getZ() - z), (float) 1.75, 0);
-                                projectileLevel.addFreshEntity(entityToSpawn);
-                                break;
+                            if (isValid) {
+                                double d = entityiterator.distanceToSqr(x, y1, z);
+                                if (minDist == -1.0D || d < minDist) {
+                                    minDist = d;
+                                    nextTarget = entityiterator;
+                                }
                             }
+                        }
+                        if (nextTarget != null && world instanceof ServerLevel projectileLevel) {
+                            Projectile entityToSpawn = new Object() {
+                                public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
+                                    AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, level);
+                                    entityToSpawn.setOwner(shooter);
+                                    entityToSpawn.setBaseDamage(damage);
+                                    entityToSpawn.setKnockback(knockback);
+                                    entityToSpawn.setCritArrow(true);
+                                    entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                                    return entityToSpawn;
+                                }
+                            }.getArrow(projectileLevel, entity1, (float) amount, 0);
+                            entityToSpawn.setPos(x, y1, z);
+                            entityToSpawn.getPersistentData().putDouble("TrailriteLink", lll - 1);
+                            entityToSpawn.shoot((nextTarget.getX() - x), ((nextTarget.getY() + nextTarget.getBbHeight() * 0.9) - y1), (nextTarget.getZ() - z), (float) 1.75, 0);
+                            projectileLevel.addFreshEntity(entityToSpawn);
                         }
                     }
                 }
@@ -826,24 +835,20 @@ public class LivingHurtEventHandler {
                 rate = 0.5;
             }
             final Vec3 center = new Vec3(x, y, z);
-            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-            for (Entity entityiterator : entfound) {
-                if (entityiterator == entity) continue;
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "phalax")))) {
-                    less = less - 0.06;
-                }
+            List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
+                    e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "phalax"))));
+            for (LivingEntity entityiterator : entfound) {
+                less = less - 0.06;
                 if (less <= 0.4) break;
             }
             event.setAmount((float) (amount * rate * less));
         } else if (entity instanceof IreneEntity) {
             double less = 1;
             final Vec3 center = new Vec3(x, y, z);
-            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-            for (Entity entityiterator : entfound) {
-                if (entityiterator == entity) continue;
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "phalax")))) {
-                    less = less - 0.06;
-                }
+            List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
+                    e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "phalax"))));
+            for (LivingEntity entityiterator : entfound) {
+                less = less - 0.06;
                 if (less <= 0.4) break;
             }
             event.setAmount((float) (amount * less));

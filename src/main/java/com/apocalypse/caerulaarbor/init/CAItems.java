@@ -557,6 +557,7 @@ public class CAItems {
     public static final RegistryObject<Item> ISHARMLA_WALL_GILDED = block(CABlocks.ISHARMLA_WALL_GILDED);
     public static final RegistryObject<Item> COMPASSION_PRAYER_SPAWN_EGG = REGISTRY.register("compassion_prayer_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.COMPASSION_PRAYER, -11571331, -2371137, new Item.Properties()));
     public static final RegistryObject<Item> MOIST_ENDER_CRYSTAL_SPAWN_EGG = REGISTRY.register("moist_ender_crystal_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.MOIST_ENDER_CRYSTAL, -1, -1, new Item.Properties()));
+    public static final RegistryObject<Item> OCEANIZED_ENDER_DRAGON_SPAWNEGG = REGISTRY.register("oceanized_ender_dragon_spawnegg", OceanizedEnderDragonSpawneggItem::new);
     public static final RegistryObject<Item> DRAGON_BRAND = block(CABlocks.DRAGON_BRAND);
     public static final RegistryObject<Item> MOIST_CRYSTAL_ITEM = REGISTRY.register("moist_crystal_item", MoistCrystalItemItem::new);
     public static final RegistryObject<Item> ENDERINA_CORE = block(CABlocks.ENDERINA_CORE);

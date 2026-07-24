@@ -376,14 +376,10 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 								damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 								{
 									final Vec3 center = new Vec3((ene.getX()), (ene.getY()), (ene.getZ()));
-									List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-									for (Entity entityiterator : entfound) {
-										if (!(entityiterator instanceof LivingEntity)) {
-											continue;
-										}
+									List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(4), e -> true);
+									for (LivingEntity entityiterator : entfound) {
 										if (entityiterator instanceof Monster || (entityiterator instanceof Mob mobEnt1 ? (Entity) mobEnt1.getTarget() : null) == this) {
-											d = ene.distanceTo(entityiterator);
-											if (d <= 4) {
+											if (ene.distanceToSqr(entityiterator) <= 16) {
 												EntityUtils.pullToward(entityiterator, this);
 												GladiiaEntity.spawnGladiiaLinkParticles(world, this, entityiterator);
 												this.hurtWithHunterAttack(entityiterator, (float) (damage * 1.8F));

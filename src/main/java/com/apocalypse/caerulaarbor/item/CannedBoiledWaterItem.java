@@ -64,7 +64,7 @@ public class CannedBoiledWaterItem extends Item {
         }
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                entity.hurt(CADamageTypes.source((LevelAccessor) world, CADamageTypes.BOIL_WATER), 4);
+                entity.hurt(CADamageTypes.source(world, CADamageTypes.BOIL_WATER), 4);
                 final int tick2 = ticks;
                 CaerulaArborMod.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {

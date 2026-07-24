@@ -189,25 +189,25 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
         ItemStack itemstack = sourceentity.getItemInHand(hand);
-        InteractionResult retval;
+        InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
         Item item = itemstack.getItem();
         if (itemstack.getItem() instanceof SpawnEggItem) {
-            super.mobInteract(sourceentity, hand);
+            retval = super.mobInteract(sourceentity, hand);
         } else if (this.level().isClientSide()) {
-            if ((this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack))) {
-               //TODO可疑，需要查看mcr版本代码
-            }
+            retval = (this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack)) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
         } else {
             if (this.isTame()) {
                 if (this.isOwnedBy(sourceentity)) {
                     if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
                         this.heal((float) item.getFoodProperties().getNutrition());
+                        retval = InteractionResult.sidedSuccess(this.level().isClientSide());
                     } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
                         this.heal(4);
+                        retval = InteractionResult.sidedSuccess(this.level().isClientSide());
                     } else {
-                        super.mobInteract(sourceentity, hand);
+                        retval = super.mobInteract(sourceentity, hand);
                     }
                 }
             } else if (this.isFood(itemstack)) {
@@ -219,7 +219,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
                     this.level().broadcastEntityEvent(this, (byte) 6);
                 }
                 this.setPersistenceRequired();
-                this.level().isClientSide();
+                retval = InteractionResult.sidedSuccess(this.level().isClientSide());
             } else {
                 retval = super.mobInteract(sourceentity, hand);
                 if (retval == InteractionResult.SUCCESS || retval == InteractionResult.CONSUME)
@@ -377,7 +377,6 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.entity.layer;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.entity.OceanizedEnderinaEntity;
+import com.apocalypse.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedEnderinaLayer extends GeoRenderLayer<OceanizedEnderinaEntity> {
-	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/enderina_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_lit.png");
 
 	public OceanizedEnderinaLayer(GeoRenderer<OceanizedEnderinaEntity> entityRenderer) {
 		super(entityRenderer);

@@ -32,7 +32,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Mod.EventBusSubscriber
@@ -161,9 +160,9 @@ public class PlayerTickEventHandler {
                 double z = entity.getZ();
 
                 final Vec3 center = new Vec3(x, y, z);
-                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                for (Entity entityiterator : entfound) {
-                    if (entityiterator instanceof net.minecraft.world.entity.monster.Monster && entity.distanceTo(entityiterator) < 8) {
+                List<net.minecraft.world.entity.monster.Monster> entfound = world.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, new AABB(center, center).inflate(16 / 2d), e -> true);
+                for (net.minecraft.world.entity.monster.Monster entityiterator : entfound) {
+                    if (entity.distanceToSqr(entityiterator) < 64) {
                         entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.WIPE_MAGIC, entity), (float) (5 * (1 + (entity.hasEffect(MobEffects.REGENERATION) ? entity.getEffect(MobEffects.REGENERATION).getAmplifier() : 0))));
                         if (world instanceof ServerLevel level)
                             level.sendParticles(ParticleTypes.WAX_OFF, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 12, 0.8, 1, 0.8, 0.1);
@@ -362,7 +361,7 @@ public class PlayerTickEventHandler {
             if (mainHandItem.getItem() instanceof PickaxeItem || mainHandItem.is(ItemTags.create(ResourceLocation.parse("minecraft:pickaxes")))) {
                 boolean valid = true;
                 final Vec3 center = new Vec3(x, y, z);
-                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                List<Entity> entfound = world.getEntities(entity, new AABB(center, center).inflate(8 / 2d));
                 for (Entity entityiterator : entfound) {
                     if (entityiterator == entity) continue;
                     if (entityiterator instanceof ServerPlayer || entityiterator instanceof Player || entityiterator instanceof Animal) {

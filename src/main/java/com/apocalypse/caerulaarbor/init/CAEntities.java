@@ -5,6 +5,8 @@ import com.apocalypse.caerulaarbor.client.model.entity.*;
 import com.apocalypse.caerulaarbor.client.renderer.entity.*;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.entity.bullets.*;
+import com.apocalypse.caerulaarbor.entity.enderdragon.OceanizedEnderDragonEntity;
+import com.apocalypse.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.apocalypse.caerulaarbor.entity.helper.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.entity.helper.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.entity.routeshaper.LineringPathshaperEntity;
@@ -486,9 +488,12 @@ public class CAEntities {
 
                     .sized(0.6f, 1.8f));
     public static final RegistryObject<EntityType<OceanizedEnderinaEntity>> OCEANIZED_ENDERINA = register("oceanized_enderina",
-            EntityType.Builder.<OceanizedEnderinaEntity>of(OceanizedEnderinaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedEnderinaEntity(level))
+            EntityType.Builder.<OceanizedEnderinaEntity>of(OceanizedEnderinaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedEnderinaEntity(level)));
 
-                    .sized(0.75f, 1.95f));
+    public static final RegistryObject<EntityType<OceanizedEnderDragonEntity>> OCEANIZED_ENDER_DRAGON = register("oceanized_ender_dragon",
+            EntityType.Builder.<OceanizedEnderDragonEntity>of(OceanizedEnderDragonEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedEnderDragonEntity(level)).fireImmune()
+
+                    .sized(16.0f, 8.0f));
     public static final RegistryObject<EntityType<MoistDragonBreathEntity>> MOIST_DRAGON_BREATH = register("moist_dragon_breath",
             EntityType.Builder.<MoistDragonBreathEntity>of(MoistDragonBreathEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new MoistDragonBreathEntity(level))
 
@@ -636,6 +641,7 @@ public class CAEntities {
         addAttributeRegistration(ISHARMLA_TEAR, IsharmlaTearEntity::createAttributes);
         addAttributeRegistration(COMPASSION_PRAYER, CompassionPrayerEntity::createAttributes);
         addAttributeRegistration(OCEANIZED_ENDERINA, OceanizedEnderinaEntity::createAttributes);
+        addAttributeRegistration(OCEANIZED_ENDER_DRAGON, OceanizedEnderDragonEntity::createAttributes);
         addAttributeRegistration(MOIST_DRAGON_BREATH, MoistDragonBreathEntity::createAttributes);
         addAttributeRegistration(MOIST_ENDER_CRYSTAL, MoistEnderCrystalEntity::createAttributes);
         addAttributeRegistration(THIRSTER, ThirsterEntity::createAttributes);
@@ -986,6 +992,7 @@ public class CAEntities {
             addRenderer(CAEntities.PRAYER_SPLASH, PrayerSplashRenderer::new);
             addRenderer(CAEntities.COMPASSION_PRAYER, CompassionPrayerRenderer::new);
             addRenderer(CAEntities.OCEANIZED_ENDERINA, OceanizedEnderinaRenderer::new);
+            addRenderer(CAEntities.OCEANIZED_ENDER_DRAGON, OceanizedEnderDragonRenderer::new);
             addRenderer(CAEntities.MOIST_DRAGON_BREATH, MoistDragonBreathRenderer::new);
             addRenderer(CAEntities.MOIST_ENDER_CRYSTAL, MoistEnderCrystalRenderer::new);
             addRenderer(CAEntities.THIRSTER, ThirsterRenderer::new);

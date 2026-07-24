@@ -128,40 +128,35 @@ public class MartusBookItem extends Item implements GeoItem, SyncedAnimationItem
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
 		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		ItemStack itemstack = ar.getObject();
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
 
-        if (entity != null) {
-            boolean isCreative;
-            if (!((Entity) entity instanceof Player plrCldCheck1) || !plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) {
-                isCreative = new Object() {
-                    public boolean checkGamemode(Entity ent) {
-                        if (ent instanceof ServerPlayer serverPlayer) {
-                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                        }
-                        return false;
+        boolean isCreative;
+        if (!((Entity) entity instanceof Player plrCldCheck1) || !plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) {
+            isCreative = new Object() {
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
-                }.checkGamemode((Entity) entity);
-                if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 5 || isCreative) {
-                    if ((Entity) entity instanceof Player player)
-                        player.getCooldowns().addCooldown(itemstack.getItem(), 1200);
-                    if (itemstack.getItem() instanceof MartusBookItem)
-                        itemstack.getOrCreateTag().putString("geckoAnim", "animation.martus_book.use");
-                    if (!isCreative) {
-                        if ((Entity) entity instanceof Player player)
-                            player.giveExperienceLevels(-(5));
-                    }
-                    CaerulaArborMod.queueServerWork(10, () -> {
-                        world.playSound(null, entity.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 2, 1);
-                        entity.setHealth((float) Math.max(entity.getMaxHealth() * 0.5 + 1, entity.getHealth()));
-                        entity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
-                        entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
-                        entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 500, 6, false, false));
-                    });
+                    return false;
                 }
+            }.checkGamemode((Entity) entity);
+            if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 5 || isCreative) {
+                if ((Entity) entity instanceof Player player)
+                    player.getCooldowns().addCooldown(itemstack.getItem(), 1200);
+                if (itemstack.getItem() instanceof MartusBookItem)
+                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.martus_book.use");
+                if (!isCreative) {
+                    if ((Entity) entity instanceof Player player)
+                        player.giveExperienceLevels(-(5));
+                }
+                CaerulaArborMod.queueServerWork(10, () -> {
+                    world.playSound(null, entity.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 2, 1);
+                    entity.setHealth((float) Math.max(entity.getMaxHealth() * 0.5 + 1, entity.getHealth()));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+                    entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 500, 6, false, false));
+                });
             }
         }
         return ar;
@@ -173,8 +168,6 @@ public class MartusBookItem extends Item implements GeoItem, SyncedAnimationItem
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         boolean isCreative;
         if (entity instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) {
             return;
@@ -184,12 +177,12 @@ public class MartusBookItem extends Item implements GeoItem, SyncedAnimationItem
         }
         isCreative = new Object() {
             public boolean checkGamemode(Entity ent) {
-                if (ent instanceof ServerPlayer serverPlayer) {
-                    return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                }
-                return false;
+				if (ent instanceof ServerPlayer serverPlayer) {
+					return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+				} else if (ent.level().isClientSide() && ent instanceof Player player) {
+					return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+				}
+				return false;
             }
         }.checkGamemode(entity);
         if ((entity instanceof Player plr ? plr.experienceLevel : 0) < 5 && !isCreative) {
@@ -217,7 +210,6 @@ public class MartusBookItem extends Item implements GeoItem, SyncedAnimationItem
             }
         }
     }
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

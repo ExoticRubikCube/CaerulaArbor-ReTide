@@ -36,13 +36,11 @@ public class BowlSeagrassItem extends Item {
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 200, 0));
-		{
-			boolean setval = true;
-			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.relic_util_SEAGRASS = setval;
-				capability.syncPlayerVariables(entity);
-			});
-		}
+		boolean setval = true;
+		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+			capability.relic_util_SEAGRASS = setval;
+			capability.syncPlayerVariables(entity);
+		});
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

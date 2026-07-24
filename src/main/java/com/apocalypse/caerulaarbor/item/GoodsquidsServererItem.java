@@ -42,7 +42,7 @@ public class GoodsquidsServererItem extends Item {
             itemstack.setDamageValue(Math.min(100 + itemstack.getDamageValue(), 800));
             if (itemstack.getDamageValue() >= 799) {
                 if (Math.random() < 0.2) {
-                    if (((LevelAccessor) world).getLevelData().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+                    if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                         if ((LevelAccessor) world instanceof Level level && !level.isClientSide())
                             level.explode(null, x, y, z, 12, Level.ExplosionInteraction.BLOCK);
                     }

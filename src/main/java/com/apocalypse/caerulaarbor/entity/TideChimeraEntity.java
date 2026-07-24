@@ -208,8 +208,8 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     {
                         final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                        for (Entity entityiterator : entfound) {
+                        List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16), e -> true);
+                        for (LivingEntity entityiterator : entfound) {
                             if (entityiterator == this) {
                                 continue;
                             }

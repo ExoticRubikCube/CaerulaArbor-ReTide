@@ -172,9 +172,9 @@ public class TideDeathrepellerEntity extends SeaMonster {
                         num = 0;
                         {
                             final Vec3 center = new Vec3(x, y, z);
-                            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                            for (Entity entityiterator : entfound) {
-                                if (!(entityiterator == this) && (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) >= 10) {
+                            List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8), e -> true);
+                            for (LivingEntity entityiterator : entfound) {
+                                if (!(entityiterator == this) && entityiterator.getMaxHealth() >= 10) {
                                     num = num + 1;
                                 }
                             }
@@ -192,8 +192,8 @@ public class TideDeathrepellerEntity extends SeaMonster {
                                 }
                                 {
                                     final Vec3 center = new Vec3((x + 1.8 * getLookAngle().x), (y + 1.5), (z + 1.8 * getLookAngle().z));
-                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                                    for (Entity entityiterator : entfound) {
+                                    List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(5), e -> true);
+                                    for (LivingEntity entityiterator : entfound) {
                                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator
                                                 || !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && (entityiterator instanceof Mob || entityiterator instanceof Player)) {
                                             entityiterator.hurt(
@@ -292,10 +292,9 @@ public class TideDeathrepellerEntity extends SeaMonster {
         if (skillCooldown <= 0) {
             double nearbyCount = 0;
             Vec3 center = new Vec3(x, y, z);
-            List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), candidate -> true).stream()
-                    .sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
-            for (Entity nearbyEntity : nearbyEntities) {
-                if (nearbyEntity != this && (nearbyEntity instanceof LivingEntity livingEntity ? livingEntity.getMaxHealth() : -1) >= 10) {
+            List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8), candidate -> true);
+            for (LivingEntity nearbyEntity : nearbyEntities) {
+                if (nearbyEntity != this && nearbyEntity.getMaxHealth() >= 10) {
                     nearbyCount++;
                 }
             }

@@ -150,11 +150,9 @@ public class ReaperFishEntity extends SeaMonster {
                                 hardness = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getDestroySpeed(world, BlockPos.containing(0, 0, 0));
                                 if (hardness <= limithard && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0) {
                                     if (Math.random() < 0.75) {
-                                        {
-                                            BlockPos pos = BlockPos.containing(x + dx, y + dy, z + dz);
-                                            Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x, y, z), null);
-                                            world.destroyBlock(pos, false);
-                                        }
+                                        BlockPos pos = BlockPos.containing(x + dx, y + dy, z + dz);
+										Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x, y, z), null);
+										world.destroyBlock(pos, false);
                                         if (world instanceof Level level)
                                             level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
                                         once = true;
@@ -237,7 +235,7 @@ public class ReaperFishEntity extends SeaMonster {
 						}
 					}
 				}
-                ((Entity) this).hurt(this.damageSources().dryOut(),
+                this.hurt(this.damageSources().dryOut(),
                         (float) ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * 0.01));
             }
         }
@@ -366,7 +364,6 @@ public class ReaperFishEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
 	}
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

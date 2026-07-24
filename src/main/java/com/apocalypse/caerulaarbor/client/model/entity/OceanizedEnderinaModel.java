@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.entity.OceanizedEnderinaEntity;
+import com.apocalypse.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;
@@ -11,7 +11,13 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedEnderinaModel extends GeoModel<OceanizedEnderinaEntity> {
-	private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina.png");
+	private static final ResourceLocation TEXTURE_DEFAULT = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina.png");
+	private static final ResourceLocation TEXTURE_PHASE_1 = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_1.png");
+	private static final ResourceLocation TEXTURE_PHASE_2 = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_2.png");
+	private static final ResourceLocation TEXTURE_PHASE_3 = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_3.png");
+	private static final ResourceLocation TEXTURE_PHASE_4 = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_4.png");
+	private static final ResourceLocation TEXTURE_PHASE_5 = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_5.png");
+	private static final ResourceLocation TEXTURE_NOISE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_noise.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedEnderinaEntity entity) {
@@ -25,7 +31,18 @@ public class OceanizedEnderinaModel extends GeoModel<OceanizedEnderinaEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedEnderinaEntity entity) {
-		return DEFAULT_TEXTURE;
+		if (entity.getDeathTextureTick() > 0) {
+			return TEXTURE_NOISE;
+		}
+		int phase = entity.getEntityData().get(OceanizedEnderinaEntity.DATA_PHASE);
+		return switch (phase) {
+			case 1 -> TEXTURE_PHASE_1;
+			case 2 -> TEXTURE_PHASE_2;
+			case 3 -> TEXTURE_PHASE_3;
+			case 4 -> TEXTURE_PHASE_4;
+			case 5 -> TEXTURE_PHASE_5;
+			default -> TEXTURE_DEFAULT;
+		};
 	}
 
 	@Override

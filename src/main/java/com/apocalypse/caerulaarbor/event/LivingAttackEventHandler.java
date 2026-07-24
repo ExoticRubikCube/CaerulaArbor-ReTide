@@ -48,7 +48,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
@@ -481,12 +481,10 @@ public class LivingAttackEventHandler {
         }
         world.playSound(null, BlockPos.containing(targetPosition), SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.PLAYERS, 3.6F, 1);
 
-        var nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(targetPosition, targetPosition).inflate(2.5), candidate -> true)
-                .stream().sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(targetPosition))).toList();
-        for (var candidate : nearbyEntities) {
-            if (candidate != player && (candidate.getType() == target.getType() || candidate instanceof Monster)) {
-                candidate.hurt(CADamageTypes.source(world, CADamageTypes.HAND_FIREWORK, player), (float) (amount * 3));
-            }
+        List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(targetPosition, targetPosition).inflate(2.5),
+                candidate -> candidate != player && (candidate.getType() == target.getType() || candidate instanceof Monster));
+        for (LivingEntity candidate : nearbyEntities) {
+            candidate.hurt(CADamageTypes.source(world, CADamageTypes.HAND_FIREWORK, player), (float) (amount * 3));
         }
     }
 }

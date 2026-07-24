@@ -46,13 +46,11 @@ public class GuardianStareItem extends Item {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
-            {
-                boolean setval = true;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_util_STARE = setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
+            boolean setval = true;
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                capability.relic_util_STARE = setval;
+                capability.syncPlayerVariables(entity);
+            });
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }

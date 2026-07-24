@@ -73,7 +73,6 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         this.entityData.define(DATA_ANIMATION, "undefined");
     }
 
-
     @Override
     public boolean canCollideWith(Entity entity) {
         return true;

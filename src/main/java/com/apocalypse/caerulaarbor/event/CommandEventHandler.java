@@ -23,7 +23,7 @@ public class CommandEventHandler {
 			return;
 		}
 
-		if (player.level().isClientSide() || commandContext.getSource().getServer() == null || commandContext.getSource().getServer().getDefaultGameType() != GameType.SURVIVAL) {
+		if (player.level().isClientSide() || commandContext.getSource().getServer().getDefaultGameType() != GameType.SURVIVAL) {
 			return;
 		}
 

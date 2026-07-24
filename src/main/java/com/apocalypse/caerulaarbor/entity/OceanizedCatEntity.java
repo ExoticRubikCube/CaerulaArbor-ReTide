@@ -253,8 +253,6 @@ public class OceanizedCatEntity extends SeaMonster {
     }
 
     private PlayState attackingPredicate(AnimationState<?> event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -309,7 +307,6 @@ public class OceanizedCatEntity extends SeaMonster {
         data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
         data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

@@ -37,7 +37,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.List;
@@ -78,17 +77,13 @@ public class EntityUtils {
 		if (obj == null)
 			return null;
 		Entity enemy = null;
-		double minDist;
+		double minDist = -1.0D;
 		double d;
-		minDist = 999;
-		for (Entity entityiterator : world.getEntities(obj, new AABB((x + 4), (y + 4), (z + 4), (x - 4), (y - 4), (z - 4)))) {
-			if (!(entityiterator instanceof LivingEntity)) {
-				continue;
-			}
+		for (LivingEntity entityiterator : world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 4), (y + 4), (z + 4), (x - 4), (y - 4), (z - 4)))) {
 			if (entityiterator instanceof Monster || (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == obj) {
-				d = obj.distanceTo(entityiterator);
-				if (d <= 4) {
-					if (d < minDist) {
+				d = obj.distanceToSqr(entityiterator);
+				if (d <= 16.0D) {
+					if (minDist == -1.0D || d < minDist) {
 						minDist = d;
 						enemy = entityiterator;
 					}
@@ -258,33 +253,25 @@ public class EntityUtils {
 			return 0;
 		double count = 0;
 		final Vec3 searchCenter = new Vec3(x, y, z);
-		List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(searchCenter, searchCenter).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(searchCenter))).toList();
-		for (Entity entityiterator : entfound) {
-			if (entityiterator == center) {
-				continue;
-			}
-			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-				if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
-						|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))))) {
-					count = count + 1;
-				}
-			}
+		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(searchCenter, searchCenter).inflate(32 / 2d),
+				e -> e != center && e.getType().is(OCEAN_OFFSPRING)
+						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
+						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))));
+		for (LivingEntity entityiterator : entfound) {
+			count = count + 1;
 		}
 		return count;
 	}
 
-	// 统计范围内的海嗣数量
 	public static double getSeabornNum(LevelAccessor world, double x, double y, double z) {
 		double count = 0;
 		final Vec3 center = new Vec3(x, y, z);
-		List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-		for (Entity entityiterator : entfound) {
-			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-				if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
-						|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))))) {
-					count = count + 1;
-				}
-			}
+		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d),
+				e -> e.getType().is(OCEAN_OFFSPRING)
+						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
+						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))));
+		for (LivingEntity entityiterator : entfound) {
+			count = count + 1;
 		}
 		return count;
 	}
@@ -355,23 +342,18 @@ public class EntityUtils {
 		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE);
 	}
 
-	// 获取最近的敌对目标
 	public static Entity getNearestEnemy(LevelAccessor world, double x, double y, double z, Entity exception0, Entity exception1, Entity obj) {
 		if (exception0 == null || exception1 == null || obj == null)
 			return null;
 		Entity enemy = null;
-		double minDist;
+		double minDist = -1.0D;
 		double d;
-		minDist = 999;
-		for (Entity entityiterator : world.getEntities(obj, new AABB((x + 42), (y + 40), (z + 42), (x - 42), (y - 40), (z - 42)))) {
-			if (!(entityiterator instanceof LivingEntity)) {
+		for (LivingEntity entityiterator : world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 42), (y + 40), (z + 42), (x - 42), (y - 40), (z - 42)))) {
+			if (entityiterator.getType().is(OCEAN_OFFSPRING)) {
 				continue;
 			}
-			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-				continue;
-			}
-			d = obj.distanceTo(entityiterator);
-			if (d <= 42) {
+			d = obj.distanceToSqr(entityiterator);
+			if (d <= 1764.0D) {
 				if (entityiterator == exception0) {
 					continue;
 				}
@@ -394,7 +376,7 @@ public class EntityUtils {
 				}.checkGamemode(entityiterator)) {
 					continue;
 				}
-				if (d < minDist) {
+				if (minDist == -1.0D || d < minDist) {
 					minDist = d;
 					enemy = entityiterator;
 				}
@@ -410,38 +392,24 @@ public class EntityUtils {
 		return MathUtils.getCosine(B.getX() - A.getX(), B.getZ() - A.getZ(), A.getLookAngle().x, A.getLookAngle().z);
 	}
 
-	// 统计附近友方单位数量
 	public static double getFellowAround(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return 0;
 		double num = 0;
 		{
 			final Vec3 center = new Vec3(x, y, z);
-			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-			for (Entity entityiterator : entfound) {
-				if (entityiterator == entity) {
-					continue;
-				}
-				if ((ForgeRegistries.ENTITY_TYPES.getKey(entityiterator.getType()).toString()).equals(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString())) {
-					num = num + 1;
-				}
+			List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(12 / 2d),
+					e -> e != entity && e.getType() == entity.getType());
+			for (LivingEntity entityiterator : entfound) {
+				num = num + 1;
 			}
 		}
 		return num;
 	}
 
 	public static double getIllusionNum(LevelAccessor world, double x, double y, double z) {
-		double count = 0;
-		{
-			final Vec3 center = new Vec3(x, y, z);
-			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-			for (Entity entityiterator : entfound) {
-				if (entityiterator instanceof OceanIllusionEntity) {
-					count = count + 1;
-				}
-			}
-		}
-		return count;
+		final Vec3 center = new Vec3(x, y, z);
+		return world.getEntitiesOfClass(OceanIllusionEntity.class, new AABB(center, center).inflate(48 / 2d), e -> true).size();
 	}
 
 	public static String getLiveMaxShown(Entity entity) {
@@ -487,12 +455,9 @@ public class EntityUtils {
 		}
 		{
 			final Vec3 center = new Vec3((x + 1.8 * entity.getLookAngle().x), (y + 1.5), (z + 1.8 * entity.getLookAngle().z));
-			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-			for (Entity entityiterator : entfound) {
-				if (!(entityiterator instanceof LivingEntity)) {
-					continue;
-				}
-				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+			List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(5 / 2d), e -> true);
+			for (LivingEntity entityiterator : entfound) {
+				if (entityiterator.getType().is(OCEAN_OFFSPRING)) {
 					if (!((entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)) {
 						continue;
 					}
@@ -633,14 +598,10 @@ public class EntityUtils {
 			if (!(entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.INFANTRY.get()))) {
 				{
 					final Vec3 center = new Vec3(x, y, z);
-					List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-					for (Entity entityiterator : entfound) {
-						if (entityiterator == entity) {
-							continue;
-						}
-						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "phalax")))) {
-							less = less + 1;
-						}
+					List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
+							e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "phalax"))));
+					for (LivingEntity entityiterator : entfound) {
+						less = less + 1;
 						if (less >= 10) {
 							break;
 						}
@@ -654,10 +615,9 @@ public class EntityUtils {
 		}
 	}
 
-	// TODO: 海化玩家附近判定逻辑仍需复核
 	public static boolean isOceanizedPlayerNearby(LevelAccessor world, double x, double y, double z) {
 		final Vec3 center = new Vec3(x, y, z);
-		List<Player> entfound = world.getEntitiesOfClass(Player.class, new AABB(center, center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+		List<Player> entfound = world.getEntitiesOfClass(Player.class, new AABB(center, center).inflate(72 / 2d), e -> true);
 		for (Player entityiterator : entfound) {
 			if ((entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 2.9) {
 				return false;
