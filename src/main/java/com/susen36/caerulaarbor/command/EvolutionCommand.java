@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.command;
 
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
@@ -9,7 +10,6 @@ import com.susen36.caerulaarbor.manager.GrowUpgradeManager;
 import com.susen36.caerulaarbor.manager.MigrationUpgradeManager;
 import com.susen36.caerulaarbor.manager.SubsistingUpgradeManager;
 import com.susen36.caerulaarbor.util.StrategyUtils;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,9 +23,9 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class EvolutionCommand {
 	@SubscribeEvent
 	public static void registerCommand(RegisterCommandsEvent event) {

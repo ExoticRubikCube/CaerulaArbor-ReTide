@@ -5,9 +5,9 @@ import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class FuelsBurnHandler {
     @SubscribeEvent
     public static void furnaceFuelBurnTimeEvent(FurnaceFuelBurnTimeEvent event) {

@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.init;
 
 import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public final class CACompostableItems {
     private CACompostableItems() {

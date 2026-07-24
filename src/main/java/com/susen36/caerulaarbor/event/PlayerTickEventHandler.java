@@ -30,11 +30,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class PlayerTickEventHandler {
 
     @SubscribeEvent

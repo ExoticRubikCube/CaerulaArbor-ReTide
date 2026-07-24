@@ -1,15 +1,23 @@
 package com.susen36.caerulaarbor.network.send;
 
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.menu.InfoStrategyAllMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.function.Supplier;
+public class EvoTreeButtonMessage implements CustomPacketPayload {
+	public static final Type<EvoTreeButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "evo_tree_button"));
+	public static final StreamCodec<FriendlyByteBuf, EvoTreeButtonMessage> STREAM_CODEC = StreamCodec.of(
+			(buf, msg) -> EvoTreeButtonMessage.buffer(msg, buf),
+			EvoTreeButtonMessage::new
+	);
 
-public class EvoTreeButtonMessage {
 	private final int buttonID, x, y, z;
 
 	public EvoTreeButtonMessage(FriendlyByteBuf buffer) {
@@ -33,19 +41,15 @@ public class EvoTreeButtonMessage {
 		buffer.writeInt(message.z);
 	}
 
-	public static void handler(EvoTreeButtonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
+	public static void handle(EvoTreeButtonMessage message, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			Player entity = context.getSender();
+			Player entity = context.player();
 			int buttonID = message.buttonID;
 			int x = message.x;
 			int y = message.y;
 			int z = message.z;
-            if (entity != null) {
-                handleButtonAction(entity, buttonID, x, y, z);
-            }
+            handleButtonAction(entity, buttonID, x, y, z);
         });
-		context.setPacketHandled(true);
 	}
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
@@ -57,5 +61,9 @@ public class EvoTreeButtonMessage {
 			InfoStrategyAllMenu.open(entity, BlockPos.containing(x, y, z));
 		}
 	}
-}
 
+	@Override
+	public Type<? extends CustomPacketPayload> type() {
+		return TYPE;
+	}
+}

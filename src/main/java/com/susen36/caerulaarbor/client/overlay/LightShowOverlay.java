@@ -1,13 +1,13 @@
 package com.susen36.caerulaarbor.client.overlay;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -16,9 +16,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber({Dist.CLIENT})
+@EventBusSubscriber({Dist.CLIENT})
 public class LightShowOverlay {
 	public static final ResourceLocation EXTINGUISH = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light_extinguish.png");
 	public static final ResourceLocation DIM = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light_dim.png");

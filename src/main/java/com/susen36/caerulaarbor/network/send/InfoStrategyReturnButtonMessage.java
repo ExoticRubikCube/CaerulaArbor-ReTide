@@ -1,15 +1,23 @@
 package com.susen36.caerulaarbor.network.send;
 
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.menu.InfoStrategyAllMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.function.Supplier;
+public class InfoStrategyReturnButtonMessage implements CustomPacketPayload {
+	public static final Type<InfoStrategyReturnButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "info_strategy_return_button"));
+	public static final StreamCodec<FriendlyByteBuf, InfoStrategyReturnButtonMessage> STREAM_CODEC = StreamCodec.of(
+			(buf, msg) -> InfoStrategyReturnButtonMessage.buffer(msg, buf),
+			InfoStrategyReturnButtonMessage::new
+	);
 
-public class InfoStrategyReturnButtonMessage {
 	private final int buttonID, x, y, z;
 
 	public InfoStrategyReturnButtonMessage(FriendlyByteBuf buffer) {
@@ -33,19 +41,17 @@ public class InfoStrategyReturnButtonMessage {
 		buffer.writeInt(message.z);
 	}
 
-	public static void handler(InfoStrategyReturnButtonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
+	public static void handle(InfoStrategyReturnButtonMessage message, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			Player entity = context.getSender();
+			Player entity = context.player();
 			int buttonID = message.buttonID;
 			int x = message.x;
 			int y = message.y;
 			int z = message.z;
-            if (entity != null) {
-                handleButtonAction(entity, buttonID, x, y, z);
-            }
-        });
-		context.setPacketHandled(true);
+			if (entity != null) {
+				handleButtonAction(entity, buttonID, x, y, z);
+			}
+		});
 	}
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
@@ -56,5 +62,10 @@ public class InfoStrategyReturnButtonMessage {
 		if (buttonID == 0) {
 			InfoStrategyAllMenu.open(entity, BlockPos.containing(x, y, z));
 		}
+	}
+
+	@Override
+	public Type<? extends CustomPacketPayload> type() {
+		return TYPE;
 	}
 }

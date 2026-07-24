@@ -5,13 +5,14 @@ import com.susen36.caerulaarbor.init.*;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,10 +25,10 @@ public class CaerulaArborMod {
     public static final String MODID = "caerula_arbor";
     private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
 
-    public CaerulaArborMod(IEventBus modEventBus) {
-        CALootModifier.init(FMLJavaModLoadingContext.get());
+    public CaerulaArborMod(IEventBus modEventBus, ModContainer modContainer) {
+        CALootModifier.init(modEventBus);
 
-        FMLJavaModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CAConfigs.SPEC, "caerular_configs.toml");
+        modContainer.registerConfig(ModConfig.Type.COMMON, CAConfigs.SPEC, "caerular_configs.toml");
         NeoForge.EVENT_BUS.register(this);
         CASounds.REGISTRY.register(modEventBus);
         CABlocks.REGISTRY.register(modEventBus);

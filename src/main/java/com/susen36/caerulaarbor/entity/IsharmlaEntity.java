@@ -628,8 +628,6 @@ public class IsharmlaEntity extends SeaMonster {
 		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 	}
 
-	
-
 	@Override
 	public boolean isPushable() {
 		return !isMonster();
@@ -640,7 +638,6 @@ public class IsharmlaEntity extends SeaMonster {
 		if (isMonster()) return;
 		super.doPush(entityIn);
 	}
-
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -866,7 +863,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 		for (IsharmlaTearEntity entityiterator : nearbyEntities) {
 			entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE),
-					114514);
+					114514);//TODO 好臭的伤害
 		}
 	}
 

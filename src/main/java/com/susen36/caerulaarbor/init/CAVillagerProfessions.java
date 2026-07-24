@@ -1,8 +1,9 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.google.common.collect.ImmutableSet;
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -12,12 +13,11 @@ import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,15 +25,15 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class CAVillagerProfessions {
-    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, CaerulaArborMod.MODID);
+    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, CaerulaArborMod.MODID);
     public static final ResourceKey<PoiType> CANNOT_GOODENOUGH_POI = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_goodenough"));
     private static final Map<String, ProfessionPoiType> POI_TYPES = new HashMap<>();
-    public static final RegistryObject<VillagerProfession> CANNOT_GOODENOUGH = registerProfession("cannot_goodenough", CABlocks.BLOCK_RECORDER,
+    public static final DeferredHolder<VillagerProfession, ? extends VillagerProfession> CANNOT_GOODENOUGH = registerProfession("cannot_goodenough", CABlocks.BLOCK_RECORDER,
             () -> SoundEvents.VILLAGER_WORK_CLERIC);
 
-    private static RegistryObject<VillagerProfession> registerProfession(String name, Supplier<Block> block, Supplier<SoundEvent> soundEvent) {
+    private static DeferredHolder<VillagerProfession, ? extends VillagerProfession> registerProfession(String name, Supplier<Block> block, Supplier<SoundEvent> soundEvent) {
         POI_TYPES.put(name, new ProfessionPoiType(block, null));
         return PROFESSIONS.register(name, () -> {
             Predicate<Holder<PoiType>> poiPredicate = poiTypeHolder -> (POI_TYPES.get(name).poiType != null) && (poiTypeHolder.get() == POI_TYPES.get(name).poiType.get());
@@ -43,7 +43,7 @@ public class CAVillagerProfessions {
 
     @SubscribeEvent
     public static void registerProfessionPointsOfInterest(RegisterEvent event) {
-        event.register(ForgeRegistries.Keys.POI_TYPES, registerHelper -> {
+        event.register(Registries.POINT_OF_INTEREST_TYPE, registerHelper -> {
             for (Map.Entry<String, ProfessionPoiType> entry : POI_TYPES.entrySet()) {
                 Block block = entry.getValue().block.get();
                 String name = entry.getKey();
@@ -54,7 +54,8 @@ public class CAVillagerProfessions {
                 }
                 PoiType poiType = new PoiType(ImmutableSet.copyOf(block.getStateDefinition().getPossibleStates()), 1, 1);
                 registerHelper.register(name, poiType);
-                entry.getValue().poiType = ForgeRegistries.POI_TYPES.getHolder(poiType).get();
+                ResourceKey<PoiType> poiKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, name));
+                entry.getValue().poiType = BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolder(poiKey).get();
             }
         });
     }

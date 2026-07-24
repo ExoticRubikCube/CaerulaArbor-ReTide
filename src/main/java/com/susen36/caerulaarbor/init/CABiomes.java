@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Pair;
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -23,14 +23,14 @@ import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
-import net.minecraftforge.event.server.ServerAboutToStartEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class CABiomes {
     public static final ResourceKey<Biome> BRANDED_LAND = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "branded_land"));
 

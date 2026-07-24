@@ -3,19 +3,15 @@ package com.susen36.caerulaarbor.network;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.network.receive.PlayerVariablesSyncMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class ClientPacketHandler {
 
 	private ClientPacketHandler() {
 	}
 
-	public static void handlePlayerVariablesSync(PlayerVariablesSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
-		if (context.getDirection().getReceptionSide() != LogicalSide.CLIENT) {
+	public static void handlePlayerVariablesSync(PlayerVariablesSyncMessage message, IPayloadContext context) {
+		if (!context.flow().isClientbound()) {
 			return;
 		}
 

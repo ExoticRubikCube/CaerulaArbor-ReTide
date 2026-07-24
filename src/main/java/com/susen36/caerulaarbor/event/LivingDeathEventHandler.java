@@ -52,12 +52,12 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Comparator;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class LivingDeathEventHandler {
 
     public static final TagKey<DamageType> BYPASS = CADamageTags.BYPASS_PROTECTION;

@@ -2,18 +2,16 @@ package com.susen36.caerulaarbor.init.animfactory;
 
 import com.susen36.caerulaarbor.item.SyncedAnimationItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class ItemAnimationFactory {
 	@SubscribeEvent
-	public static void animatedItems(TickEvent.PlayerTickEvent event) {
-		if (event.phase == TickEvent.Phase.START) {
-            syncQueuedAnimation(event.player.getMainHandItem(), event.player.level().isClientSide());
-			syncQueuedAnimation(event.player.getOffhandItem(), event.player.level().isClientSide());
-		}
+	public static void animatedItems(PlayerTickEvent.Pre event) {
+		syncQueuedAnimation(event.getEntity().getMainHandItem(), event.getEntity().level().isClientSide());
+		syncQueuedAnimation(event.getEntity().getOffhandItem(), event.getEntity().level().isClientSide());
 	}
 
 	private static void syncQueuedAnimation(ItemStack stack, boolean clientSide) {

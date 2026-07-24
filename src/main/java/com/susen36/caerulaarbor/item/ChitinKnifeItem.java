@@ -57,7 +57,7 @@ public class ChitinKnifeItem extends Item {
                     capability.syncPlayerVariables(entity);
                 });
             }
-            if (((LevelAccessor) world).isClientSide())
+            if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
             if ((LevelAccessor) world instanceof ServerLevel level) {
                 ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.OCEAN_TRIM_TEMPLATE.get()));

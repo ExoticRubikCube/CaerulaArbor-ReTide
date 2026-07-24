@@ -2,8 +2,8 @@ package com.susen36.caerulaarbor.event;
 
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -13,9 +13,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class ShieldEventHandler {
 	@SubscribeEvent
 	public static void whenEntityBlocksWithShield(ShieldBlockEvent event) {

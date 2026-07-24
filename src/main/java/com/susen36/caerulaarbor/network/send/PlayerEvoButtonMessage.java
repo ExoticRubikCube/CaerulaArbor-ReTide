@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.network.send;
 
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -10,6 +11,9 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
@@ -19,13 +23,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.HashMap;
-import java.util.function.Supplier;
 
-public class PlayerEvoButtonMessage {
+public class PlayerEvoButtonMessage implements CustomPacketPayload {
+	public static final Type<PlayerEvoButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "player_evo_button"));
+	public static final StreamCodec<FriendlyByteBuf, PlayerEvoButtonMessage> STREAM_CODEC = StreamCodec.of(
+			(buf, msg) -> PlayerEvoButtonMessage.buffer(msg, buf),
+			PlayerEvoButtonMessage::new
+	);
+
 	private final int buttonID, x, y, z;
 
 	public PlayerEvoButtonMessage(FriendlyByteBuf buffer) {
@@ -49,17 +57,15 @@ public class PlayerEvoButtonMessage {
 		buffer.writeInt(message.z);
 	}
 
-	public static void handler(PlayerEvoButtonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
+	public static void handle(PlayerEvoButtonMessage message, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			Player entity = context.getSender();
+			Player entity = context.player();
 			int buttonID = message.buttonID;
 			int x = message.x;
 			int y = message.y;
 			int z = message.z;
 			handleButtonAction(entity, buttonID, x, y, z);
 		});
-		context.setPacketHandled(true);
 	}
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
@@ -104,7 +110,7 @@ public class PlayerEvoButtonMessage {
             } else if (!PlayerStateUtils.isNexusRegLightsSelected(entity) && (title).equals("nexus.reg_lights") && quality >= 2) {
                 {
                     boolean setval = true;
-                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.PEVO_NEXUS_reg_lights = setval;
                         capability.syncPlayerVariables(entity);
                     });
@@ -380,7 +386,7 @@ public class PlayerEvoButtonMessage {
                 }
                 if ((Entity) entity instanceof ServerPlayer ent) {
                     BlockPos bpos = BlockPos.containing(x, y, z);
-                    NetworkHooks.openScreen(ent, new MenuProvider() {
+                    ent.openMenu(new MenuProvider() {
                         @Override
                         public Component getDisplayName() {
                             return Component.literal("PlayerEvo");
@@ -390,7 +396,7 @@ public class PlayerEvoButtonMessage {
                         public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
                             return new PlayerEvoMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
                         }
-                    }, bpos);
+                    }, buf -> buf.writeBlockPos(bpos));
                 }
             }
             if (quality_cost > 0) {
@@ -404,7 +410,7 @@ public class PlayerEvoButtonMessage {
                 });
                 if (entity instanceof ServerPlayer ent) {
                     BlockPos bpos = BlockPos.containing(x, y, z);
-                    NetworkHooks.openScreen(ent, new MenuProvider() {
+                    ent.openMenu(new MenuProvider() {
                         @Override
                         public Component getDisplayName() {
                             return Component.literal("PlayerEvo");
@@ -414,7 +420,7 @@ public class PlayerEvoButtonMessage {
                         public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
                             return new PlayerEvoMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
                         }
-                    }, bpos);
+                    }, buf -> buf.writeBlockPos(bpos));
                 }
             }
         }
@@ -644,6 +650,11 @@ public class PlayerEvoButtonMessage {
 
 			PlayerStateUtils.setEvoNode(entity, "node.less_armor.4");
 		}
+	}
+
+	@Override
+	public Type<? extends CustomPacketPayload> type() {
+		return TYPE;
 	}
 }
 

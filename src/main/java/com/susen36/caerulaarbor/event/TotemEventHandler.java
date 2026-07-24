@@ -9,9 +9,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingUseTotemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class TotemEventHandler {
 	@SubscribeEvent
 	public static void whenEntityUsesTotem(LivingUseTotemEvent event) {

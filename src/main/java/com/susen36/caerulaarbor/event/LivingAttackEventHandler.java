@@ -45,14 +45,14 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class LivingAttackEventHandler {
 
     private static final TagKey<EntityType<?>> INQUISITION = TagKey.create(Registries.ENTITY_TYPE,

@@ -5,14 +5,14 @@ import com.susen36.caerulaarbor.datagen.tags.TagsProvider;
 import net.minecraftforge.common.data.ForgeAdvancementProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.List;
 
 /**
  * 数据生成器总入口，负责在 {@link GatherDataEvent} 中注册所有 datagen provider
  */
-@Mod.EventBusSubscriber(modid = CaerulaArborMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = CaerulaArborMod.MODID)
 public class DataGenerators {
     /**
      * 注册全部数据生成任务

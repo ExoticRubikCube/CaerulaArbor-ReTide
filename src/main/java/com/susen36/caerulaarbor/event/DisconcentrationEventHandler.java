@@ -33,9 +33,9 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class DisconcentrationEventHandler {
     private static final int NO_REJECTION_STAGE = 0;
     private static final int DISCONCENTRATION_REJECTION_STAGE = 1;
@@ -189,7 +189,7 @@ public class DisconcentrationEventHandler {
         return getPlayerVariables(entity).disoclusion;
     }
 
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+    @EventBusSubscriber(value = Dist.CLIENT)
     public static class ClientEvents {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {

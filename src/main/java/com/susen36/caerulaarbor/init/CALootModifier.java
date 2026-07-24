@@ -1,43 +1,41 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = CaerulaArborMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = CaerulaArborMod.MODID)
 public class CALootModifier {
-    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, "caerula_arbor");
-    public static final RegistryObject<Codec<CaerulaArborModLootTableModifier>> LOOT_MODIFIER = LOOT_MODIFIERS.register("caerula_arbor_loot_modifier", CaerulaArborModLootTableModifier.CODEC);
+    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, "caerula_arbor");
+    public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<CaerulaArborModLootTableModifier>> LOOT_MODIFIER = LOOT_MODIFIERS.register("caerula_arbor_loot_modifier", CaerulaArborModLootTableModifier.CODEC);
 
-    public static FMLJavaModLoadingContext context;
+    public static IEventBus context;
 
-    public static void init(FMLJavaModLoadingContext ctx) {
+    public static void init(IEventBus ctx) {
         context = ctx;
     }
 
     @SubscribeEvent
     public static void register(FMLConstructModEvent event) {
-        IEventBus bus = context.getModEventBus();
-        event.enqueueWork(() -> LOOT_MODIFIERS.register(bus));
+        event.enqueueWork(() -> LOOT_MODIFIERS.register(context));
     }
 
     public static class CaerulaArborModLootTableModifier extends LootModifier {

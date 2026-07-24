@@ -6,16 +6,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class CATabs {
     public static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, CaerulaArborMod.MODID);
-    public static final RegistryObject<CreativeModeTab> CAERULA_ITEMS = REGISTRY.register("caerula_items",
+    public static final DeferredHolder<CreativeModeTab, ? extends CreativeModeTab> CAERULA_ITEMS = REGISTRY.register("caerula_items",
             () -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caerula_items")).icon(() -> new ItemStack(CAItems.CAERULA_RECORDER.get())).displayItems((parameters, tabData) -> {
                 tabData.accept(CAItems.CAERULA_RECORDER.get());
                 tabData.accept(CAItems.TRAIL_MOP.get());
@@ -228,7 +228,7 @@ public class CATabs {
                 tabData.accept(CAItems.ARCHIVE_OF_RAIDER.get());
             }).build());
 
-    public static final RegistryObject<CreativeModeTab> CAECULA_RELICS = REGISTRY.register("caecula_relics",
+    public static final DeferredHolder<CreativeModeTab, ? extends CreativeModeTab> CAECULA_RELICS = REGISTRY.register("caecula_relics",
             () -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caecula_relics")).icon(() -> new ItemStack(CAItems.KETTLE.get())).displayItems((parameters, tabData) -> {
                 tabData.accept(CAItems.RELIC_CURSE_EMELIGHT.get());
                 tabData.accept(CAItems.RELIC_CURSED_GLOWBODY.get());
@@ -280,7 +280,7 @@ public class CATabs {
                 tabData.accept(CAItems.UNRIPE_YEARNING.get());
             }).withTabsBefore(CAERULA_ITEMS.getId()).build());
 
-    public static final RegistryObject<CreativeModeTab> CAERULA_LIVINGS = REGISTRY.register("caerula_livings",
+    public static final DeferredHolder<CreativeModeTab, ? extends CreativeModeTab> CAERULA_LIVINGS = REGISTRY.register("caerula_livings",
             () -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caerula_livings")).icon(() -> new ItemStack(CAItems.BUCKET_FLOATER.get())).displayItems((parameters, tabData) -> {
                 tabData.accept(CAItems.RUN_FISH_SPAWN_EGG.get());
                 tabData.accept(CAItems.SLIDER_FISH_SPAWN_EGG.get());
@@ -371,7 +371,7 @@ public class CATabs {
                 tabData.accept(CAItems.TIDUTANT_EXCRESCENCE_SPAWN_EGG.get());
             }).withTabsBefore(CAECULA_RELICS.getId()).build());
 
-    public static final RegistryObject<CreativeModeTab> SEA_FOOD = REGISTRY.register("sea_food",
+    public static final DeferredHolder<CreativeModeTab, ? extends CreativeModeTab> SEA_FOOD = REGISTRY.register("sea_food",
             () -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.sea_food")).icon(() -> new ItemStack(CAItems.BOILED_EGG.get())).displayItems((parameters, tabData) -> {
                 tabData.accept(CAItems.FLUORE_BERRIES.get());
                 tabData.accept(CAItems.RADIANT_BERRIES.get());
@@ -426,7 +426,7 @@ public class CATabs {
                 tabData.accept(CABlocks.CHEST_FISH_COOKED.get().asItem());
             }).withTabsBefore(CAERULA_LIVINGS.getId()).build());
 
-    public static final RegistryObject<CreativeModeTab> CAERULA_WEAPONS = REGISTRY.register("caerula_weapons",
+    public static final DeferredHolder<CreativeModeTab, ? extends CreativeModeTab> CAERULA_WEAPONS = REGISTRY.register("caerula_weapons",
             () -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caerula_weapons")).icon(() -> new ItemStack(CAItems.COMPLEX_CHITIN_SWORD.get())).displayItems((parameters, tabData) -> {
                 tabData.accept(CAItems.SEALEATHER_HELMET.get());
                 tabData.accept(CAItems.SEALEATHER_CHESTPLATE.get());

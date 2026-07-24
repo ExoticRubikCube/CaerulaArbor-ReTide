@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.event;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,9 +12,9 @@ import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class PlayerAttackEventHandler {
 	@SubscribeEvent
 	public static void onPlayerCriticalHit(CriticalHitEvent event) {

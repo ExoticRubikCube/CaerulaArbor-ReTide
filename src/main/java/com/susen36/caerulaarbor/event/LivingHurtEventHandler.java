@@ -48,13 +48,13 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Comparator;
 import java.util.List;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class LivingHurtEventHandler {
 
     public static final TagKey<DamageType> B_PROTECTION = CADamageTags.BYPASS_PROTECTION;

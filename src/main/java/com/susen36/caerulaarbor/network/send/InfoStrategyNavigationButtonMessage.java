@@ -1,22 +1,28 @@
 package com.susen36.caerulaarbor.network.send;
 
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.menu.*;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.function.Supplier;
+public class InfoStrategyNavigationButtonMessage implements CustomPacketPayload {
+	public static final Type<InfoStrategyNavigationButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "info_strategy_navigation_button"));
+	public static final StreamCodec<FriendlyByteBuf, InfoStrategyNavigationButtonMessage> STREAM_CODEC = StreamCodec.of(
+			(buf, msg) -> InfoStrategyNavigationButtonMessage.buffer(msg, buf),
+			InfoStrategyNavigationButtonMessage::new
+	);
 
-public class InfoStrategyNavigationButtonMessage {
 	private final int buttonID, x, y, z;
 
 	public InfoStrategyNavigationButtonMessage(FriendlyByteBuf buffer) {
@@ -40,23 +46,20 @@ public class InfoStrategyNavigationButtonMessage {
 		buffer.writeInt(message.z);
 	}
 
-	public static void handler(InfoStrategyNavigationButtonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
+	public static void handle(InfoStrategyNavigationButtonMessage message, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			Player entity = context.getSender();
+			Player entity = context.player();
 			int buttonID = message.buttonID;
 			int x = message.x;
 			int y = message.y;
 			int z = message.z;
 			handleButtonAction(entity, buttonID, x, y, z);
 		});
-		context.setPacketHandled(true);
 	}
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
-		Level world = entity.level();
-		// 安全措施：防止任意区块生成
-		if (!world.hasChunkAt(new BlockPos(x, y, z)))
+        // 安全措施：防止任意区块生成
+		if (!entity.level().hasChunkAt(new BlockPos(x, y, z)))
 			return;
 		if (buttonID == 0) {
 			openScreen(entity, x, y, z, "EvoTree", EvoTreeMenu.class);
@@ -79,7 +82,7 @@ public class InfoStrategyNavigationButtonMessage {
 		if (!(entity instanceof ServerPlayer serverPlayer))
 			return;
 		BlockPos blockPos = BlockPos.containing(x, y, z);
-		NetworkHooks.openScreen(serverPlayer, new MenuProvider() {
+		serverPlayer.openMenu(new MenuProvider() {
 			@Override
 			public Component getDisplayName() {
 				return Component.literal(title);
@@ -105,7 +108,11 @@ public class InfoStrategyNavigationButtonMessage {
 				}
 				throw new IllegalArgumentException("Unsupported menu class: " + menuClass.getName());
 			}
-		}, blockPos);
+		}, buf -> buf.writeBlockPos(blockPos));
+	}
+
+	@Override
+	public Type<? extends CustomPacketPayload> type() {
+		return TYPE;
 	}
 }
-

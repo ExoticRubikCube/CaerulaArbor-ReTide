@@ -1,11 +1,11 @@
 
 package com.susen36.caerulaarbor.command;
 
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAConfigs;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.Direction;
@@ -16,9 +16,9 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class SetPlayerLifeCommand {
 	@SubscribeEvent
 	public static void registerCommand(RegisterCommandsEvent event) {

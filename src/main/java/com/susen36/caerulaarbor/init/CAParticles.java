@@ -4,52 +4,52 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.client.particle.*;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class CAParticles {
-    public static final DeferredRegister<ParticleType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, CaerulaArborMod.MODID);
+    public static final DeferredRegister<ParticleType<?>> REGISTRY = DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, CaerulaArborMod.MODID);
 
-    public static final RegistryObject<SimpleParticleType> LIFELOSS = REGISTRY.register("lifeloss", () -> new SimpleParticleType(true));
-    public static final RegistryObject<SimpleParticleType> SHIELDLOSS = REGISTRY.register("shieldloss", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> BLOODOOZE = REGISTRY.register("bloodooze", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> KING_SLAY = REGISTRY.register("king_slay", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> KING_SLAY_RED = REGISTRY.register("king_slay_red", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> ARCHFIEND_KEEP = REGISTRY.register("archfiend_keep", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> ARCHFIEND_RESEV = REGISTRY.register("archfiend_resev", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> DIZZINESS = REGISTRY.register("dizziness", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> KNIFEPTC = REGISTRY.register("knifeptc", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> MISS = REGISTRY.register("miss", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> CRACKER_BUFF_0 = REGISTRY.register("cracker_buff_0", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> CRACKER_BUFF_1 = REGISTRY.register("cracker_buff_1", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> INV_PTC = REGISTRY.register("inv_ptc", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> MUTENESS = REGISTRY.register("muteness", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> INV_PTC_BLUE = REGISTRY.register("inv_ptc_blue", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> INV_PTC_VOILET = REGISTRY.register("inv_ptc_voilet", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> PURPLE_FLAME = REGISTRY.register("purple_flame", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> EDERMAN_PTC = REGISTRY.register("ederman_ptc", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> NUMBNESS = REGISTRY.register("numbness", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> MARTUS_CHARS = REGISTRY.register("martus_chars", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> ENDSPEAKER_PARTICLE = REGISTRY.register("endspeaker_particle", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> ENDSPEAKER_INV = REGISTRY.register("endspeaker_inv", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> SEA_SPLASH = REGISTRY.register("sea_splash", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> SEA_RIPPLE = REGISTRY.register("sea_ripple", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> SPECTER_GLITTER = REGISTRY.register("specter_glitter", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> SPECTER_CHARS = REGISTRY.register("specter_chars", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> IMMORTAL_PTC = REGISTRY.register("immortal_ptc", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> CORRUPTED_FISH = REGISTRY.register("corrupted_fish", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> ISHARMLA_CURSE_PARTICLE = REGISTRY.register("isharmla_curse_particle", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> BULLETS = REGISTRY.register("bullets", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> MOIST_BOOM = REGISTRY.register("moist_boom", () -> new SimpleParticleType(false));
-    public static final RegistryObject<SimpleParticleType> LIVING_BARRIER_SHOW = REGISTRY.register("living_barrier_show", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> LIFELOSS = REGISTRY.register("lifeloss", () -> new SimpleParticleType(true));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> SHIELDLOSS = REGISTRY.register("shieldloss", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> BLOODOOZE = REGISTRY.register("bloodooze", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> KING_SLAY = REGISTRY.register("king_slay", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> KING_SLAY_RED = REGISTRY.register("king_slay_red", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> ARCHFIEND_KEEP = REGISTRY.register("archfiend_keep", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> ARCHFIEND_RESEV = REGISTRY.register("archfiend_resev", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> DIZZINESS = REGISTRY.register("dizziness", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> KNIFEPTC = REGISTRY.register("knifeptc", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> MISS = REGISTRY.register("miss", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> CRACKER_BUFF_0 = REGISTRY.register("cracker_buff_0", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> CRACKER_BUFF_1 = REGISTRY.register("cracker_buff_1", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> INV_PTC = REGISTRY.register("inv_ptc", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> MUTENESS = REGISTRY.register("muteness", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> INV_PTC_BLUE = REGISTRY.register("inv_ptc_blue", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> INV_PTC_VOILET = REGISTRY.register("inv_ptc_voilet", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> PURPLE_FLAME = REGISTRY.register("purple_flame", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> EDERMAN_PTC = REGISTRY.register("ederman_ptc", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> NUMBNESS = REGISTRY.register("numbness", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> MARTUS_CHARS = REGISTRY.register("martus_chars", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> ENDSPEAKER_PARTICLE = REGISTRY.register("endspeaker_particle", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> ENDSPEAKER_INV = REGISTRY.register("endspeaker_inv", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> SEA_SPLASH = REGISTRY.register("sea_splash", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> SEA_RIPPLE = REGISTRY.register("sea_ripple", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> SPECTER_GLITTER = REGISTRY.register("specter_glitter", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> SPECTER_CHARS = REGISTRY.register("specter_chars", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> IMMORTAL_PTC = REGISTRY.register("immortal_ptc", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> CORRUPTED_FISH = REGISTRY.register("corrupted_fish", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> ISHARMLA_CURSE_PARTICLE = REGISTRY.register("isharmla_curse_particle", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> BULLETS = REGISTRY.register("bullets", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> MOIST_BOOM = REGISTRY.register("moist_boom", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<SimpleParticleType, ? extends SimpleParticleType> LIVING_BARRIER_SHOW = REGISTRY.register("living_barrier_show", () -> new SimpleParticleType(false));
 
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(value = Dist.CLIENT)
     public static class CAParticleType {
         @SubscribeEvent
         public static void registerParticles(RegisterParticleProvidersEvent event) {

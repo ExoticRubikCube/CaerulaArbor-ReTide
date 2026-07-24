@@ -1,16 +1,21 @@
 package com.susen36.caerulaarbor.network.receive;
 
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.network.ClientPacketHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.function.Supplier;
-
-public record PlayerVariablesSyncMessage(PlayerVariable data) {
+public record PlayerVariablesSyncMessage(PlayerVariable data) implements CustomPacketPayload {
+	public static final Type<PlayerVariablesSyncMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "player_variables_sync"));
+	public static final StreamCodec<FriendlyByteBuf, PlayerVariablesSyncMessage> STREAM_CODEC = StreamCodec.of(
+			PlayerVariablesSyncMessage::encode,
+			PlayerVariablesSyncMessage::decode
+	);
 
 	public static PlayerVariablesSyncMessage decode(FriendlyByteBuf buffer) {
 		PlayerVariable data = new PlayerVariable();
@@ -18,13 +23,20 @@ public record PlayerVariablesSyncMessage(PlayerVariable data) {
 		return new PlayerVariablesSyncMessage(data);
 	}
 
-	public static void encode(PlayerVariablesSyncMessage message, FriendlyByteBuf buffer) {
+	public static void encode(FriendlyByteBuf buffer, PlayerVariablesSyncMessage message) {
 		buffer.writeNbt((CompoundTag) message.data.writeNBT());
 	}
 
-	public static void handler(PlayerVariablesSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
-		context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientPacketHandler.handlePlayerVariablesSync(message, contextSupplier)));
-		context.setPacketHandled(true);
+	public static void handle(PlayerVariablesSyncMessage message, IPayloadContext context) {
+		context.enqueueWork(() -> {
+			if (context.flow().isClientbound()) {
+				ClientPacketHandler.handlePlayerVariablesSync(message, context);
+			}
+		});
+	}
+
+	@Override
+	public Type<? extends CustomPacketPayload> type() {
+		return TYPE;
 	}
 }

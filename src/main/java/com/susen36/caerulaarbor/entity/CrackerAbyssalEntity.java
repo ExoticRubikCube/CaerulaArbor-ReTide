@@ -3,12 +3,7 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.PolarMountRider;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CAAttributes;
-import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.init.CASounds;
+import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -29,27 +24,15 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.BreakDoorGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
-import net.minecraft.world.entity.monster.Illusioner;
-import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.monster.Vindicator;
-import net.minecraft.world.entity.monster.Witch;
-import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
@@ -268,9 +251,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 
     private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
-            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-            ) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nethersea_reefbreaker.move"));
             }
             if (this.isDeadOrDying()) {

@@ -46,7 +46,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.Comparator;
 import java.util.List;
 
-public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
+public class  CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.INT);

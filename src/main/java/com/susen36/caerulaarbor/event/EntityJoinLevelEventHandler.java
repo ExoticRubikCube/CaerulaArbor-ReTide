@@ -26,12 +26,12 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.ArrayList;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class EntityJoinLevelEventHandler {
 
     @SubscribeEvent

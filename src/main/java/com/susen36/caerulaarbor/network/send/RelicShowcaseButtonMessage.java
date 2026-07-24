@@ -8,8 +8,12 @@ import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
@@ -23,14 +27,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.function.Supplier;
+public class RelicShowcaseButtonMessage implements CustomPacketPayload {
+	public static final Type<RelicShowcaseButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_showcase_button"));
+	public static final StreamCodec<FriendlyByteBuf, RelicShowcaseButtonMessage> STREAM_CODEC = StreamCodec.of(
+			(buf, msg) -> RelicShowcaseButtonMessage.buffer(msg, buf),
+			RelicShowcaseButtonMessage::new
+	);
 
-public class RelicShowcaseButtonMessage {
 	private final int buttonID, x, y, z;
 
 	public RelicShowcaseButtonMessage(FriendlyByteBuf buffer) {
@@ -54,10 +60,9 @@ public class RelicShowcaseButtonMessage {
 		buffer.writeInt(message.z);
 	}
 
-	public static void handler(RelicShowcaseButtonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
+	public static void handle(RelicShowcaseButtonMessage message, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			Player entity = context.getSender();
+			Player entity = context.player();
 			int buttonID = message.buttonID;
 			int x = message.x;
 			int y = message.y;
@@ -66,7 +71,6 @@ public class RelicShowcaseButtonMessage {
                 handleButtonAction(entity, buttonID, x, y, z);
             }
         });
-		context.setPacketHandled(true);
 	}
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
@@ -78,7 +82,7 @@ public class RelicShowcaseButtonMessage {
 
             if ((Entity) entity instanceof ServerPlayer ent) {
                 BlockPos bpos = BlockPos.containing(x, y, z);
-                NetworkHooks.openScreen(ent, new MenuProvider() {
+                ent.openMenu(new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
                         return Component.literal("CaerulaRecordGUI");
@@ -88,11 +92,10 @@ public class RelicShowcaseButtonMessage {
                     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
                         return new CaerulaRecordGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
                     }
-                }, bpos);
+                }, buf -> buf.writeBlockPos(bpos));
             }
         }
 		if (buttonID == 1) {
-
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CROWN) {
@@ -101,7 +104,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -153,7 +156,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -205,7 +208,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -257,7 +260,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -309,7 +312,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -361,7 +364,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -413,7 +416,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -472,7 +475,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -517,7 +520,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -569,7 +572,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -621,7 +624,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -673,7 +676,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -725,7 +728,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -784,7 +787,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -836,7 +839,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -888,7 +891,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -940,7 +943,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -992,7 +995,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -1037,7 +1040,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -1089,7 +1092,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -1148,7 +1151,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -1200,7 +1203,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -1245,7 +1248,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -1304,7 +1307,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -1356,7 +1359,7 @@ public class RelicShowcaseButtonMessage {
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
-                        togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElse(Items.AIR))).copy();
+                        togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))).copy();
                         if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
                             break;
                         }
@@ -1391,6 +1394,11 @@ public class RelicShowcaseButtonMessage {
                 }
             }
         }
+	}
+
+	@Override
+	public Type<? extends CustomPacketPayload> type() {
+		return TYPE;
 	}
 }
 

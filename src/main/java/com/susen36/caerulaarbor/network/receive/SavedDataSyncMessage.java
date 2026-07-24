@@ -1,15 +1,23 @@
 package com.susen36.caerulaarbor.network.receive;
 
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.world.WorldVariables;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import java.util.function.Supplier;
+public class SavedDataSyncMessage implements CustomPacketPayload {
+	public static final Type<SavedDataSyncMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "saved_data_sync"));
+	public static final StreamCodec<FriendlyByteBuf, SavedDataSyncMessage> STREAM_CODEC = StreamCodec.of(
+			SavedDataSyncMessage::encode,
+			SavedDataSyncMessage::decode
+	);
 
-public class SavedDataSyncMessage {
 	private final int type;
 	private final SavedData data;
 
@@ -33,17 +41,16 @@ public class SavedDataSyncMessage {
 		return new SavedDataSyncMessage(type, data);
 	}
 
-	public static void encode(SavedDataSyncMessage message, FriendlyByteBuf buffer) {
+	public static void encode(FriendlyByteBuf buffer, SavedDataSyncMessage message) {
 		buffer.writeInt(message.type);
 		if (message.data != null) {
 			buffer.writeNbt(message.data.save(new CompoundTag()));
 		}
 	}
 
-	public static void handler(SavedDataSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
+	public static void handle(SavedDataSyncMessage message, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			if (context.getDirection().getReceptionSide().isClient() && message.data != null) {
+			if (context.flow().isClientbound() && message.data != null) {
 				if (message.type == 0) {
 					MapVariables.clientSide = (MapVariables) message.data;
 				} else {
@@ -51,6 +58,10 @@ public class SavedDataSyncMessage {
 				}
 			}
 		});
-		context.setPacketHandled(true);
+	}
+
+	@Override
+	public Type<? extends CustomPacketPayload> type() {
+		return TYPE;
 	}
 }

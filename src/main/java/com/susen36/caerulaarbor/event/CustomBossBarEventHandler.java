@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.event;
 
+import com.mojang.datafixers.util.Pair;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CAConfigs;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.LerpingBossEvent;
@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class CustomBossBarEventHandler {
 	public static final Map<BossEvent, BossBarRenderContext> CACHE = new HashMap<>();
 	public static final Set<BossEvent> BLACK_LIST = new HashSet<>();

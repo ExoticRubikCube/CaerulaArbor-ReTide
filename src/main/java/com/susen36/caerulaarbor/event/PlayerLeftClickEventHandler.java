@@ -8,14 +8,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(value = {Dist.CLIENT})
+@EventBusSubscriber(value = {Dist.CLIENT})
 public class PlayerLeftClickEventHandler {
 
     @SubscribeEvent
@@ -34,7 +34,7 @@ public class PlayerLeftClickEventHandler {
         }
     }
 
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber
     public static class HelperLeftClickMessage {
         public HelperLeftClickMessage() {
         }
