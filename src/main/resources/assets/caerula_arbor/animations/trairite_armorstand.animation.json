@@ -1,0 +1,9 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"0": {
+			"animation_length": 0.5
+		}
+	},
+	"geckolib_format_version": 2
+}

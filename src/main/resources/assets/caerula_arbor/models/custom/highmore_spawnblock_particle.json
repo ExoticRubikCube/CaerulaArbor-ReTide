@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/highmore_spawnblock",
+  "textures": {
+    "particle": "caerula_arbor:block/highmore_spawnblock"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/abandoned_sulpture",
+  "textures": {
+    "particle": "caerula_arbor:block/theabandoned_sculpture"
+  }
+}

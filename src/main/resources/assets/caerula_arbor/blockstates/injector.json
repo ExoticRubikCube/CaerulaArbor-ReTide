@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,blockstate=0": {
+      "model": "caerula_arbor:block/injector"
+    },
+    "facing=east,blockstate=0": {
+      "model": "caerula_arbor:block/injector",
+      "y": 90
+    },
+    "facing=south,blockstate=0": {
+      "model": "caerula_arbor:block/injector",
+      "y": 180
+    },
+    "facing=west,blockstate=0": {
+      "model": "caerula_arbor:block/injector",
+      "y": 270
+    },
+    "facing=north,blockstate=1": {
+      "model": "caerula_arbor:block/filled_injector_blockstate_0"
+    },
+    "facing=east,blockstate=1": {
+      "model": "caerula_arbor:block/filled_injector_blockstate_0",
+      "y": 90
+    },
+    "facing=south,blockstate=1": {
+      "model": "caerula_arbor:block/filled_injector_blockstate_0",
+      "y": 180
+    },
+    "facing=west,blockstate=1": {
+      "model": "caerula_arbor:block/filled_injector_blockstate_0",
+      "y": 270
+    }
+  }
+}

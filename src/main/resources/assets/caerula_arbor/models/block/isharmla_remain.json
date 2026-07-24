@@ -1,0 +1,13 @@
+{
+  "parent": "caerula_arbor:custom/isharmla_remain",
+  "textures": {
+    "all": "caerula_arbor:block/isharmla_remain_frame",
+    "particle": "caerula_arbor:block/isharmla_remain_frame",
+    "0": "caerula_arbor:block/isharmla_remain_core_sleep",
+    "1": "caerula_arbor:block/isharmla_remain_frame",
+    "2": "caerula_arbor:block/isharmla_remain_inner",
+    "3": "caerula_arbor:block/isharmla_remain_oppo_sleep",
+    "missing": "caerula_arbor:block/isharmla_remain_inner"
+  },
+  "render_type": "cutout"
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "caerula_arbor:block/oceanglasspane"
+  },
+  "render_type": "translucent"
+}

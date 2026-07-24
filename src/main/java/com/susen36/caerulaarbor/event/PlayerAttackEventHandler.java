@@ -1,0 +1,42 @@
+package com.susen36.caerulaarbor.event;
+
+import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.entity.player.CriticalHitEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber
+public class PlayerAttackEventHandler {
+	@SubscribeEvent
+	public static void onPlayerCriticalHit(CriticalHitEvent event) {
+		Entity attackerEntity = event.getEntity();
+		if (!event.isVanillaCritical() || !(attackerEntity instanceof LivingEntity attacker)) {
+			return;
+		}
+
+		if (!(attacker.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
+				.orElse(new PlayerVariable())).relic_hand_BARREN) {
+			return;
+		}
+
+		ItemStack mainHandItem = attacker.getMainHandItem().copy();
+		if (!(mainHandItem.getItem() instanceof AxeItem) && !mainHandItem.is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))) {
+			return;
+		}
+
+		if (!attacker.level().isClientSide()) {
+			MobEffectInstance currentButchersPower = attacker.getEffect(CAMobEffects.BUTCHERS_POWER.get());
+			int nextAmplifier = currentButchersPower == null ? 0 : Math.min(currentButchersPower.getAmplifier() + 1, 7);
+			attacker.addEffect(new MobEffectInstance(CAMobEffects.BUTCHERS_POWER.get(), 160, nextAmplifier, false, false));
+		}
+	}
+}

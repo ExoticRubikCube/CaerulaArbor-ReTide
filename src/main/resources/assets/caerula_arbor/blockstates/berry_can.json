@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "caerula_arbor:block/berry_can"
+    },
+    "facing=east": {
+      "model": "caerula_arbor:block/berry_can",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "caerula_arbor:block/berry_can",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "caerula_arbor:block/berry_can",
+      "y": 270
+    }
+  }
+}

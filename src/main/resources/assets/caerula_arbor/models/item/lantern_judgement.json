@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/lantern",
+  "textures": {
+    "0": "caerula_arbor:block/lantern_judgement",
+    "particle": "caerula_arbor:item/lantern_judgement"
+  }
+}

@@ -1,0 +1,208 @@
+package com.susen36.caerulaarbor.capability;
+
+import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.capability.anchor.AnchorRecord;
+import com.susen36.caerulaarbor.capability.apoptosis.ApoptosisInjuryCapability;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.capability.sanity.SanityInjuryCapability;
+import com.susen36.caerulaarbor.init.CANetwork;
+import com.susen36.caerulaarbor.network.receive.SavedDataSyncMessage;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = CaerulaArborMod.MODID)
+public class CapabilityEventHandler {
+
+    private CapabilityEventHandler() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
+    @SubscribeEvent
+    public static void attachLevelCapabilities(AttachCapabilitiesEvent<Level> event) {
+        if (event.getObject() instanceof ServerLevel) {
+            LazyOptional<AnchorRecord> optional = LazyOptional.of(AnchorRecord::new);
+            ICapabilityProvider provider = new ICapabilityProvider() {
+                @Override
+                public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+                    return ModCapabilities.ANCHOR_RECORD.orEmpty(cap, optional.cast());
+                }
+            };
+            event.addCapability(AnchorRecord.ID, provider);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedInSyncPlayerVariables(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!event.getEntity().level().isClientSide()) {
+            ModCapabilities.getPlayerVariables(event.getEntity()).syncPlayerVariables(event.getEntity());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawnedSyncPlayerVariables(PlayerEvent.PlayerRespawnEvent event) {
+        if (!event.getEntity().level().isClientSide()) {
+            ModCapabilities.getPlayerVariables(event.getEntity()).syncPlayerVariables(event.getEntity());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerChangedDimensionSyncPlayerVariables(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (!event.getEntity().level().isClientSide()) {
+            ModCapabilities.getPlayerVariables(event.getEntity()).syncPlayerVariables(event.getEntity());
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerCloned(PlayerEvent.Clone event) {
+        Player player = event.getEntity();
+        Player oldPlayer = event.getOriginal();
+        oldPlayer.revive();
+        handleSanityCap(player, oldPlayer);
+        handleApoptosisCap(player, oldPlayer);
+        handlePlayerVariables(player, oldPlayer, event.isWasDeath());
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (!event.getEntity().level().isClientSide()) {
+            SavedData mapData = ModCapabilities.getMapVariables(event.getEntity().level());
+            SavedData worldData = ModCapabilities.getWorldVariables(event.getEntity().level());
+            if (mapData != null) {
+                CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(0, mapData));
+            }
+            if (worldData != null) {
+                CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worldData));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        if (!event.getEntity().level().isClientSide()) {
+            SavedData worldData = ModCapabilities.getWorldVariables(event.getEntity().level());
+            if (worldData != null) {
+                CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worldData));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+        if (!event.getEntity().level().isClientSide()) {
+            ModCapabilities.getSanityInjury(event.getEntity()).tick();
+            ModCapabilities.getApoptosisInjury(event.getEntity()).tick();
+        }
+    }
+
+    @SubscribeEvent
+    public static void registerEntityCapabilities(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof LivingEntity livingEntity) {
+            event.addCapability(SanityInjuryCapability.ID, createProvider(LazyOptional.of(() -> new SanityInjuryCapability(livingEntity)), ModCapabilities.SANITY_INJURY));
+            event.addCapability(ApoptosisInjuryCapability.ID, createProvider(LazyOptional.of(() -> new ApoptosisInjuryCapability(livingEntity)), ModCapabilities.APOPTOSIS_INJURY));
+        }
+        if (event.getObject() instanceof Player && !(event.getObject() instanceof FakePlayer)) {
+            event.addCapability(PlayerVariable.ID, createProvider(LazyOptional.of(PlayerVariable::new), ModCapabilities.PLAYER_VARIABLE));
+        }
+    }
+
+    public static <S extends Tag, T extends INBTSerializable<S>> ICapabilitySerializable<S> createProvider(LazyOptional<T> instance, Capability<T> capability) {
+        return new ICapabilitySerializable<>() {
+            @Override
+            public @NotNull <C> LazyOptional<C> getCapability(@NotNull Capability<C> cap, @Nullable Direction side) {
+                return capability.orEmpty(cap, instance.cast());
+            }
+
+            @Override
+            public S serializeNBT() {
+                return instance.orElseThrow(NullPointerException::new).serializeNBT();
+            }
+
+            @Override
+            public void deserializeNBT(S nbt) {
+                instance.orElseThrow(NullPointerException::new).deserializeNBT(nbt);
+            }
+        };
+    }
+
+    private static void handleSanityCap(Player player, Player oldPlayer) {
+        SanityInjuryCapability oldInjury = ModCapabilities.getSanityInjury(oldPlayer);
+        SanityInjuryCapability newInjury = ModCapabilities.getSanityInjury(player);
+        newInjury.deserializeNBT(oldInjury.serializeNBT());
+    }
+
+    private static void handleApoptosisCap(Player player, Player oldPlayer) {
+        ApoptosisInjuryCapability oldApoptosis = ModCapabilities.getApoptosisInjury(oldPlayer);
+        ApoptosisInjuryCapability newApoptosis = ModCapabilities.getApoptosisInjury(player);
+        newApoptosis.deserializeNBT(oldApoptosis.serializeNBT());
+    }
+
+    private static void handlePlayerVariables(Player player, Player oldPlayer, boolean wasDeath) {
+        PlayerVariable original = ModCapabilities.getPlayerVariables(oldPlayer);
+        PlayerVariable clone = ModCapabilities.getPlayerVariables(player);
+        clone.player_light = original.player_light;
+        clone.player_lives = original.player_lives;
+        clone.player_maxlive = original.player_maxlive;
+        clone.player_shield = original.player_shield;
+        clone.disoclusion = original.disoclusion;
+        clone.show_stats = original.show_stats;
+        clone.kingShowPtc = original.kingShowPtc;
+        clone.player_util_RAINBOW = original.player_util_RAINBOW;
+        clone.player_util_AROMATIC = original.player_util_AROMATIC;
+        clone.player_king_suit = original.player_king_suit;
+        clone.player_demon_suit = original.player_demon_suit;
+        clone.player_oceanization = original.player_oceanization;
+        clone.plauyer_balance = original.plauyer_balance;
+        clone.can_player_evo = original.can_player_evo;
+        clone.reserve_quantity = original.reserve_quantity;
+        clone.reserve_quality = original.reserve_quality;
+        clone.PEVO_NEXUS_no_rejection = original.PEVO_NEXUS_no_rejection;
+        clone.PEVO_NEXUS_reg_sanity = original.PEVO_NEXUS_reg_sanity;
+        clone.PEVO_NODE_add_def = original.PEVO_NODE_add_def;
+        clone.PEVO_NODE_add_resis = original.PEVO_NODE_add_resis;
+        clone.PEVO_NODE_add_speed = original.PEVO_NODE_add_speed;
+        clone.PEVO_NODE_add_sanity = original.PEVO_NODE_add_sanity;
+        clone.PEVO_NEXUS_reg_lights = original.PEVO_NEXUS_reg_lights;
+        clone.PEVO_NODE_add_damage = original.PEVO_NODE_add_damage;
+        clone.PEVO_NODE_less_damage = original.PEVO_NODE_less_damage;
+        clone.PEVO_NODE_living_barrier = original.PEVO_NODE_living_barrier;
+        clone.PEVO_NODE_add_miss = original.PEVO_NODE_add_miss;
+        clone.PEVO_NEXUS_perc_damage = original.PEVO_NEXUS_perc_damage;
+        clone.PEVO_NODE_real_damage = original.PEVO_NODE_real_damage;
+        clone.PEVO_NODE_heal_damage = original.PEVO_NODE_heal_damage;
+        clone.PEVO_NODE_worse_break = original.PEVO_NODE_worse_break;
+        clone.PEVO_NEXUS_expo_shield = original.PEVO_NEXUS_expo_shield;
+        clone.PEVO_NODE_eunectes = original.PEVO_NODE_eunectes;
+        clone.PEVO_NODE_less_armor = original.PEVO_NODE_less_armor;
+        for (Relic relic : Relic.values()) {
+            if (relic.gained(original)) {
+                relic.set(clone, relic.get(original));
+            } else {
+                relic.reset(clone);
+            }
+        }
+        if (!wasDeath) {
+            clone.chitin_knife_selected = original.chitin_knife_selected;
+        }
+    }
+}

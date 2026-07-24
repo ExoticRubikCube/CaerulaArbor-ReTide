@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "blockstate=0": {
+      "model": "caerula_arbor:custom/tideway_cradle_particle"
+    },
+    "blockstate=1": {
+      "model": "caerula_arbor:block/tideway_cradle_blockstate_0"
+    }
+  }
+}

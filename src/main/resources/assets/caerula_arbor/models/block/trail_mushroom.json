@@ -1,0 +1,8 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "caerula_arbor:block/trail_mushroom",
+    "particle": "caerula_arbor:block/trail_mushroom"
+  },
+  "render_type": "cutout"
+}

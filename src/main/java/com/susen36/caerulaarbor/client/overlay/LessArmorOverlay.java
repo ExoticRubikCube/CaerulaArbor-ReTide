@@ -1,0 +1,50 @@
+package com.susen36.caerulaarbor.client.overlay;
+
+import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RenderGuiEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber({Dist.CLIENT})
+public class LessArmorOverlay {
+	@SubscribeEvent(priority = EventPriority.NORMAL)
+	public static void eventHandler(RenderGuiEvent.Pre event) {
+		Player player = Minecraft.getInstance().player;
+		ResourceLocation texture = null;
+		if (player.hasEffect(CAMobEffects.LESS_ARMOR.get())) {
+			int amplifier = player.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier();
+			if (amplifier <= 4) {
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/low_armor_ui.png");
+			} else if (amplifier <= 9) {
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/less_armor_ui.png");
+			} else {
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/least_armor_ui.png");
+			}
+		}
+		if (texture != null) {
+			int width = event.getWindow().getGuiScaledWidth();
+			int height = event.getWindow().getGuiScaledHeight();
+			RenderSystem.disableDepthTest();
+			RenderSystem.depthMask(false);
+			RenderSystem.enableBlend();
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			event.getGuiGraphics().blit(texture, 0, 0, 0, 0, width, height, width, height);
+			RenderSystem.depthMask(true);
+			RenderSystem.defaultBlendFunc();
+			RenderSystem.enableDepthTest();
+			RenderSystem.disableBlend();
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+		}
+	}
+}

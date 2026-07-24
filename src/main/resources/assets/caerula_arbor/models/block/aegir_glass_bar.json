@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "caerula_arbor:block/aegir_glass_top",
+    "up": "caerula_arbor:block/aegir_glass_top",
+    "north": "caerula_arbor:block/aegir_glass_bar_full",
+    "east": "caerula_arbor:block/aegir_glass_bar_full",
+    "south": "caerula_arbor:block/aegir_glass_bar_full",
+    "west": "caerula_arbor:block/aegir_glass_bar_full",
+    "particle": "caerula_arbor:block/aegir_glass_top"
+  },
+  "render_type": "cutout"
+}

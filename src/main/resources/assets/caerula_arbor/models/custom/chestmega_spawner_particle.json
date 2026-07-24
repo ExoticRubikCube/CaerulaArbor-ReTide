@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/chestmega_block",
+  "textures": {
+    "particle": "caerula_arbor:block/item_megachest"
+  }
+}

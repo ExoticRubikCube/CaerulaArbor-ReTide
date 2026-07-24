@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/martus_book",
+  "textures": {
+    "layer0": "caerula_arbor:item/martus_book"
+  }
+}

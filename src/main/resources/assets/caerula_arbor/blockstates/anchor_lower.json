@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "caerula_arbor:block/anchor_lower"
+    },
+    "facing=east": {
+      "model": "caerula_arbor:block/anchor_lower",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "caerula_arbor:block/anchor_lower",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "caerula_arbor:block/anchor_lower",
+      "y": 270
+    }
+  }
+}

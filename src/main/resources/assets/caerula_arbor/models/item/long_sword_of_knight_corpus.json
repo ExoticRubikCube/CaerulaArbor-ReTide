@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/last_knight_long_sword",
+  "textures": {
+    "0": "caerula_arbor:block/last_knight_long_sword",
+    "particle": "caerula_arbor:item/last_knight_long_sword"
+  }
+}

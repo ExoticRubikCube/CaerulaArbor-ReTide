@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/gladiia_lancet",
+  "textures": {
+    "0": "caerula_arbor:block/gladiia_weapon",
+    "particle": "caerula_arbor:item/gladiia_weapon"
+  }
+}

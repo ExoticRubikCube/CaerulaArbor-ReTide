@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/aegir_lancet",
+  "textures": {
+    "1": "caerula_arbor:block/aegir_lancet",
+    "particle": "caerula_arbor:item/aegir_lancet"
+  }
+}

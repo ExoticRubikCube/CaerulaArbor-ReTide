@@ -1,0 +1,9 @@
+{
+  "parent": "block/template_glass_pane_side_alt",
+  "textures": {
+    "particle": "caerula_arbor:block/oceanglasspane",
+    "edge": "caerula_arbor:block/oceanglasspane",
+    "pane": "caerula_arbor:block/oceanglasspane"
+  },
+  "render_type": "translucent"
+}

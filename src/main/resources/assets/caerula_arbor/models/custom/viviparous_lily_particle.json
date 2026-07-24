@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/viviparous_lily",
+  "textures": {
+    "particle": "caerula_arbor:block/vivi_lily"
+  }
+}

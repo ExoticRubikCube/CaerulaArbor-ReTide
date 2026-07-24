@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "caerula_arbor:block/cooked_fibre_block",
+    "particle": "caerula_arbor:block/cooked_fibre_block"
+  },
+  "render_type": "solid"
+}

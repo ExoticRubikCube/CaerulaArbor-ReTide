@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "caerula_arbor:block/nethersea_soul_sand",
+    "particle": "caerula_arbor:block/nethersea_soul_sand"
+  },
+  "render_type": "solid"
+}

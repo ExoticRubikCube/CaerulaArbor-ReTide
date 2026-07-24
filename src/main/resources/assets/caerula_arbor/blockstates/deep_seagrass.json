@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "blockstate=0": {
+      "model": "caerula_arbor:block/deep_seagrass"
+    },
+    "blockstate=1": {
+      "model": "caerula_arbor:block/seagrass_bottom_blockstate_0"
+    }
+  }
+}

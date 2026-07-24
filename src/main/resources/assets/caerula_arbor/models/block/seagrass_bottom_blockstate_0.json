@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/deep_seagrass_motion",
+  "textures": {
+    "all": "caerula_arbor:block/deep_seagrass_bottom",
+    "particle": "caerula_arbor:block/deep_seagrass_bottom",
+    "1": "caerula_arbor:block/deep_seagrass_bottom_m"
+  },
+  "render_type": "cutout"
+}

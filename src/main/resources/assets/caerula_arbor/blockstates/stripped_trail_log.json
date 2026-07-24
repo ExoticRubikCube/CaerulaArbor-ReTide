@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "caerula_arbor:block/stripped_trail_log",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "caerula_arbor:block/stripped_trail_log"
+    },
+    "axis=z": {
+      "model": "caerula_arbor:block/stripped_trail_log",
+      "x": 90
+    }
+  }
+}

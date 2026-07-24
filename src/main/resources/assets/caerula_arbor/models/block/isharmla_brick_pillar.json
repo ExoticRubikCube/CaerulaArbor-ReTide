@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "caerula_arbor:block/isharmla_brick_pillar_top",
+    "up": "caerula_arbor:block/isharmla_brick_pillar_top",
+    "north": "caerula_arbor:block/isharmla_brick_pillar",
+    "east": "caerula_arbor:block/isharmla_brick_pillar",
+    "south": "caerula_arbor:block/isharmla_brick_pillar",
+    "west": "caerula_arbor:block/isharmla_brick_pillar",
+    "particle": "caerula_arbor:block/isharmla_brick_pillar_top"
+  },
+  "render_type": "solid"
+}

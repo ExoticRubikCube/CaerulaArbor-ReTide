@@ -1,0 +1,371 @@
+
+package com.susen36.caerulaarbor.item;
+
+import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.client.renderer.item.PhloemBowItemRenderer;
+import com.susen36.caerulaarbor.init.CAEnchantments;
+import com.susen36.caerulaarbor.init.CAItems;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
+
+import java.util.Map;
+import java.util.function.Consumer;
+
+public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem {
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	public String animationprocedure = "empty";
+
+	public PhloemBowItem() {
+		super(new Item.Properties().durability(768).rarity(Rarity.COMMON));
+	}
+
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return false;
+	}
+
+	@Override
+	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+		super.initializeClient(consumer);
+		consumer.accept(new IClientItemExtensions() {
+			private final BlockEntityWithoutLevelRenderer renderer = new PhloemBowItemRenderer();
+
+			@Override
+			public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+				return renderer;
+			}
+		});
+	}
+
+	private PlayState idlePredicate(AnimationState<?> event) {
+		if (this.animationprocedure.equals("empty")) {
+			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.bluebow.idle"));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+
+	String prevAnim = "empty";
+
+	private PlayState procedurePredicate(AnimationState<?> event) {
+		if (!this.animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+			if (!this.animationprocedure.equals(prevAnim))
+				event.getController().forceAnimationReset();
+			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+				this.animationprocedure = "empty";
+				event.getController().forceAnimationReset();
+			}
+		} else if (this.animationprocedure.equals("empty")) {
+			prevAnim = "empty";
+			return PlayState.STOP;
+		}
+		prevAnim = this.animationprocedure;
+		return PlayState.CONTINUE;
+	}
+
+	@Override
+	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+		AnimationController procedureController = new AnimationController(this, "procedureController", 0, this::procedurePredicate);
+		data.add(procedureController);
+		AnimationController idleController = new AnimationController(this, "idleController", 0, this::idlePredicate);
+		data.add(idleController);
+	}
+
+	@Override
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
+	}
+
+	@Override
+	public UseAnim getUseAnimation(ItemStack itemstack) {
+		return UseAnim.BOW;
+	}
+
+	@Override
+	public boolean hasCraftingRemainingItem() {
+		return true;
+	}
+
+	@Override
+	public ItemStack getCraftingRemainingItem(ItemStack itemstack) {
+		ItemStack retval = new ItemStack(this);
+		retval.setDamageValue(itemstack.getDamageValue() + 1);
+		if (retval.getDamageValue() >= retval.getMaxDamage()) {
+			return ItemStack.EMPTY;
+		}
+		return retval;
+	}
+
+	@Override
+	public boolean isRepairable(ItemStack itemstack) {
+		return false;
+	}
+
+	@Override
+	public int getEnchantmentValue() {
+		return 16;
+	}
+
+	@Override
+	public int getUseDuration(ItemStack itemstack) {
+		return 72000;
+	}
+
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
+		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
+		ItemStack itemstack = ar.getObject();
+		double x = entity.getX();
+		double y = entity.getY();
+		double z = entity.getZ();
+
+        if (entity != null) {
+            boolean valid;
+            valid = true;
+            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
+                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
+                        && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS) > itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())) {
+                    {
+                        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemstack);
+                        if (enchantments.containsKey(CAEnchantments.REFLECTION.get())) {
+                            enchantments.remove(CAEnchantments.REFLECTION.get());
+                            EnchantmentHelper.setEnchantments(enchantments, itemstack);
+                        }
+                    }
+                    itemstack.enchant(CAEnchantments.REFLECTION.get(), ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS));
+                    {
+                        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY));
+                        if (enchantments.containsKey(Enchantments.POWER_ARROWS)) {
+                            enchantments.remove(Enchantments.POWER_ARROWS);
+                            EnchantmentHelper.setEnchantments(enchantments, ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY));
+                        }
+                    }
+                    if ((LevelAccessor) world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 3, 1);
+                    }
+                    valid = false;
+                } else if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
+                        && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) == 0) {
+                    {
+                        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemstack);
+                        if (enchantments.containsKey(CAEnchantments.METABOLISM.get())) {
+                            enchantments.remove(CAEnchantments.METABOLISM.get());
+                            EnchantmentHelper.setEnchantments(enchantments, itemstack);
+                        }
+                    }
+                    itemstack.enchant(CAEnchantments.METABOLISM.get(), 1);
+                    {
+                        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY));
+                        if (enchantments.containsKey(Enchantments.INFINITY_ARROWS)) {
+                            enchantments.remove(Enchantments.INFINITY_ARROWS);
+                            EnchantmentHelper.setEnchantments(enchantments, ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY));
+                        }
+                    }
+                    if ((LevelAccessor) world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 3, 1);
+                    }
+                    valid = false;
+                }
+            }
+            if (valid) {
+                if (!((Entity) entity instanceof Player plrCldCheck32 && plrCldCheck32.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+                    if (((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || new Object() {
+                        public boolean checkGamemode(Entity ent) {
+                            if (ent instanceof ServerPlayer serverPlayer) {
+                                return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                            } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                                return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                        && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                            }
+                            return false;
+                        }
+                    }.checkGamemode((Entity) entity)) {
+						if (entity != null) {
+							CaerulaArborMod.queueServerWork(24, () -> {
+								if ((((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || new Object() {
+									public boolean checkGamemode(Entity ent) {
+										if (ent instanceof ServerPlayer serverPlayer) {
+											return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+										} else if (ent.level().isClientSide() && ent instanceof Player player1) {
+											return Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()) != null
+													&& Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+										}
+										return false;
+									}
+								}.checkGamemode((Entity) entity) || EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) != 0)
+										&& (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()
+										|| ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem())) {
+									if ((LevelAccessor) world instanceof Level level1) {
+											level1.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, (float) 1.8, 1);
+									}
+									if (!(new Object() {
+										public boolean checkGamemode(Entity ent) {
+											if (ent instanceof ServerPlayer serverPlayer) {
+												return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+											} else if (ent.level().isClientSide() && ent instanceof Player player1) {
+												return Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()) != null
+														&& Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+											}
+											return false;
+										}
+									}.checkGamemode((Entity) entity))) {
+										{
+											if (itemstack.hurt(1, RandomSource.create(), null)) {
+												itemstack.shrink(1);
+												itemstack.setDamageValue(0);
+											}
+										}
+									}
+									if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) != 0) {
+										{
+											Entity shootFrom = entity;
+											Level projectileLevel = shootFrom.level();
+											if (!projectileLevel.isClientSide()) {
+												Projectile entityToSpawn = new Object() {
+													public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
+														AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, level);
+														entityToSpawn.setOwner(shooter);
+														entityToSpawn.setBaseDamage(damage);
+														entityToSpawn.setKnockback(knockback);
+														entityToSpawn.setPierceLevel(piercing);
+														entityToSpawn.setCritArrow(true);
+														entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+														return entityToSpawn;
+													}
+												}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
+												entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
+												entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
+												projectileLevel.addFreshEntity(entityToSpawn);
+											}
+										}
+									} else {
+										if (!(new Object() {
+											public boolean checkGamemode(Entity ent) {
+												if (ent instanceof ServerPlayer serverPlayer) {
+													return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+												} else if (ent.level().isClientSide() && ent instanceof Player player1) {
+													return Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()) != null
+															&& Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+												}
+												return false;
+											}
+										}.checkGamemode((Entity) entity))) {
+											if ((Entity) entity instanceof Player player1) {
+												ItemStack stktoremove = new ItemStack(CAItems.OCEAN_ARROW.get());
+												player1.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player1.inventoryMenu.getCraftSlots());
+											}
+											{
+												Entity shootFrom = entity;
+												Level projectileLevel = shootFrom.level();
+												if (!projectileLevel.isClientSide()) {
+													Projectile entityToSpawn = new Object() {
+														public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
+															AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, level);
+															entityToSpawn.setOwner(shooter);
+															entityToSpawn.setBaseDamage(damage);
+															entityToSpawn.setKnockback(knockback);
+															entityToSpawn.setPierceLevel(piercing);
+															entityToSpawn.setCritArrow(true);
+															entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+															return entityToSpawn;
+														}
+													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
+													entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
+													entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
+													projectileLevel.addFreshEntity(entityToSpawn);
+												}
+											}
+										} else {
+											{
+												Entity shootFrom = entity;
+												Level projectileLevel = shootFrom.level();
+												if (!projectileLevel.isClientSide()) {
+													Projectile entityToSpawn = new Object() {
+														public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
+															AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, level);
+															entityToSpawn.setOwner(shooter);
+															entityToSpawn.setBaseDamage(damage);
+															entityToSpawn.setKnockback(knockback);
+															entityToSpawn.setPierceLevel(piercing);
+															entityToSpawn.setCritArrow(true);
+															entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+															return entityToSpawn;
+														}
+													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
+													entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
+													entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
+													projectileLevel.addFreshEntity(entityToSpawn);
+												}
+											}
+										}
+									}
+									if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
+										if ((Entity) entity instanceof LivingEntity livingEntity)
+											livingEntity.swing(InteractionHand.MAIN_HAND, true);
+									} else {
+										if ((Entity) entity instanceof LivingEntity livingEntity)
+											livingEntity.swing(InteractionHand.OFF_HAND, true);
+									}
+								}
+							});
+						}
+						if (itemstack.getItem() instanceof PhloemBowItem)
+                            itemstack.getOrCreateTag().putString("geckoAnim", "animation.bluebow.pull");
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_QUICK_CHARGE_1, SoundSource.NEUTRAL, (float) 1.8, 1);
+                        }
+                        if ((Entity) entity instanceof Player player)
+                            player.getCooldowns().addCooldown(itemstack.getItem(), 30);
+                    }
+                }
+            }
+        }
+        return ar;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
+}

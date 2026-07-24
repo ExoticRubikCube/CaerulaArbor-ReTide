@@ -1,0 +1,637 @@
+package com.susen36.caerulaarbor.entity;
+
+import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.entity.base.RavagerMountRider;
+import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.bullets.ShotOceanArrowEntity;
+import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAGameRules;
+import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.util.EntityUtils;
+import com.susen36.caerulaarbor.util.WorldUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+
+import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+
+public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
+
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SPELL_P = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_MIRROR_P = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
+    private boolean swinging;
+    private long lastSwing;
+    public String animationprocedure = "empty";
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.PROGRESS);
+
+    public OceanizedIllusionerEntity(Level world) {
+        this(CAEntities.OCEANIZED_ILLUSIONER.get(), world);
+    }
+
+    public OceanizedIllusionerEntity(EntityType<OceanizedIllusionerEntity> type, Level world) {
+        super(type, world);
+        xpReward = 64;
+        setNoAi(false);
+        setMaxUpStep(1f);
+        setPersistenceRequired();
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CAItems.CHITIN_BOW.get()));
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SPELL_P, 180);
+        this.entityData.define(DATA_MIRROR_P, 340);
+        this.entityData.define(DATA_DURATION, 0);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, true));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Villager.class, true, true));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, true));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Pillager.class, true, true));
+        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, true));
+        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Witch.class, true, true));
+        this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
+        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
+        this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
+        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+        this.goalSelector.addGoal(14, new OpenDoorGoal(this, false));
+        this.goalSelector.addGoal(15, new OpenDoorGoal(this, true));
+        this.goalSelector.addGoal(16, new RandomStrollGoal(this, 1) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isIllusionerDurative();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isIllusionerDurative();
+            }
+        });
+        this.goalSelector.addGoal(17, new FloatGoal(this));
+        this.goalSelector.addGoal(18, new RandomLookAroundGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isIllusionerDurative();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isIllusionerDurative();
+            }
+        });
+        this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 30, 4f) {
+            @Override
+            public boolean canContinueToUse() {
+                return this.canUse();
+            }
+        });
+    }
+
+    public class RangedAttackGoal extends Goal {
+        private final Mob mob;
+        private final RangedAttackMob rangedAttackMob;
+        @Nullable
+        private LivingEntity target;
+        private int attackTime = -1;
+        private final double speedModifier;
+        private int seeTime;
+        private final int attackIntervalMin;
+        private final int attackIntervalMax;
+        private final float attackRadius;
+        private final float attackRadiusSqr;
+
+        public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
+            this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
+        }
+
+        public RangedAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25775_, int p_25776_, float p_25777_) {
+            if (!(p_25773_ instanceof LivingEntity)) {
+                throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
+            } else {
+                this.rangedAttackMob = p_25773_;
+                this.mob = (Mob) p_25773_;
+                this.speedModifier = p_25774_;
+                this.attackIntervalMin = p_25775_;
+                this.attackIntervalMax = p_25776_;
+                this.attackRadius = p_25777_;
+                this.attackRadiusSqr = p_25777_ * p_25777_;
+                this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+            }
+        }
+
+        public boolean isDurative() {
+            return isIllusionerDurative();
+        }
+
+        public boolean canUse() {
+            LivingEntity livingentity = this.mob.getTarget();
+            if (livingentity != null && livingentity.isAlive()) {
+                this.target = livingentity;
+                return isDurative();
+            } else {
+                return false;
+            }
+        }
+
+        public boolean canContinueToUse() {
+            return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
+        }
+
+        public void stop() {
+            this.target = null;
+            this.seeTime = 0;
+            this.attackTime = -1;
+            ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+        }
+
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        public void tick() {
+            double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+            boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+            if (flag) {
+                ++this.seeTime;
+            } else {
+                this.seeTime = 0;
+            }
+            if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
+                this.mob.getNavigation().stop();
+            } else {
+                this.mob.getNavigation().moveTo(this.target, this.speedModifier);
+            }
+            this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
+            if (--this.attackTime == 0) {
+                if (!flag) {
+                    ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+                    return;
+                }
+                ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
+                float f = (float) Math.sqrt(d0) / this.attackRadius;
+                float f1 = Mth.clamp(f, 0.1F, 1.0F);
+                this.rangedAttackMob.performRangedAttack(this.target, f1);
+                this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
+            } else if (this.attackTime < 0) {
+                this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
+            } else
+                ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+        }
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
+    public SoundEvent getAmbientSound() {
+        return SoundEvents.ILLUSIONER_AMBIENT;
+    }
+
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return SoundEvents.ILLUSIONER_HURT;
+    }
+
+    @Override
+    public SoundEvent getDeathSound() {
+        return SoundEvents.ILLUSIONER_DEATH;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        boolean flag = false;
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        Entity illusion;
+        if (!isPassenger()) {
+            if (Math.random() < 0.75) {
+                illusion = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
+                    Comparator<Entity> compareDistOf(double x, double y, double z) {
+                        return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
+                    }
+                }.compareDistOf(x, y, z)).orElse(null);
+                if (illusion != null) {
+                    if (illusion.isAlive()) {
+                        {
+                            Entity ent = this;
+                            ent.teleportTo((illusion.getX()), (illusion.getY()), (illusion.getZ()));
+                            if (ent instanceof ServerPlayer serverPlayer)
+                                serverPlayer.connection.teleport((illusion.getX()), (illusion.getY()), (illusion.getZ()), ent.getYRot(), ent.getXRot());
+                        }
+                        {
+                            illusion.teleportTo(x, y, z);
+                            if (illusion instanceof ServerPlayer serverPlayer)
+                                serverPlayer.connection.teleport(x, y, z, illusion.getYRot(), illusion.getXRot());
+                        }
+                        if (!world.isClientSide()) {
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.HOSTILE, 1, 1);
+                            }
+                        }
+                        flag = true;
+                    }
+                }
+            }
+        }
+        int num = (int) EntityUtils.getIllusionNum(this.level(), this.getX(), this.getY(), this.getZ());
+        float scale = Math.max(1 - num * 0.1f, 0.2f);
+        if (flag) {
+            return super.hurt(source, amount * scale * 0.5f);
+        }
+        return super.hurt(source, amount * scale);
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        if ((LevelAccessor) world instanceof ServerLevel level) {
+            LivingEntity entityToSpawn = CAEntities.OCEANIZED_RAVAGER.get().spawn(level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
+            if (entityToSpawn != null) {
+                entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                AttributeInstance instance = entityToSpawn.getAttribute(Attributes.MAX_HEALTH);
+                if (instance != null) {
+                    instance.setBaseValue(instance.getBaseValue() * 1.5);
+                }
+                entityToSpawn.setHealth(entityToSpawn.getMaxHealth());
+                startRiding(entityToSpawn);
+            }
+        }
+        return retval;
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("SpellP", this.entityData.get(DATA_SPELL_P));
+        compound.putInt("MirrorP", this.entityData.get(DATA_MIRROR_P));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("SpellP")) {
+            this.entityData.set(DATA_SPELL_P, compound.getInt("SpellP"));
+        }
+        if (compound.contains("MirrorP")) {
+            this.entityData.set(DATA_MIRROR_P, compound.getInt("MirrorP"));
+        }
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
+    }
+
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        Entity target;
+        double sklp1;
+        double sklp2;
+        double dura;
+        if (!this.isAlive()) {
+            this.removeEffect(MobEffects.INVISIBILITY);
+        } else {
+            sklp1 = (Entity) this instanceof OceanizedIllusionerEntity datEntI ? datEntI.getEntityData().get(DATA_SPELL_P) : 0;
+            sklp2 = (Entity) this instanceof OceanizedIllusionerEntity datEntI ? datEntI.getEntityData().get(DATA_MIRROR_P) : 0;
+            dura = (Entity) this instanceof OceanizedIllusionerEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
+            target = this.getTarget();
+            if (dura > 0) {
+                if ((Entity) this instanceof OceanizedIllusionerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+            }
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof OceanizedIllusionerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SPELL_P, (int) (sklp1 - 1));
+                if (sklp1 == 100) {
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_PREPARE_BLINDNESS, SoundSource.HOSTILE, 1, 1);
+                    }
+                }
+            } else if (dura <= 0) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 12) {
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.HOSTILE, 1, 1);
+                        }
+                        if (this instanceof OceanizedIllusionerEntity) {
+                            this.setAnimation("animation.oceanized_illusioner.cast");
+                        }
+                        if (target instanceof LivingEntity && !this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0));
+                        if (target instanceof LivingEntity && !this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 200, 1));
+                        if ((Entity) this instanceof OceanizedIllusionerEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SPELL_P, 180);
+                        if ((Entity) this instanceof OceanizedIllusionerEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_DURATION, 15);
+                        dura = 15;
+                    }
+                }
+            }
+            this.removeEffect(CAMobEffects.DEDUCT_ONE_SANITY.get());
+            this.removeEffect(MobEffects.BLINDNESS);
+            if (sklp2 > 0) {
+                if ((Entity) this instanceof OceanizedIllusionerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_MIRROR_P, (int) (sklp2 - 1));
+                if (sklp2 == 100) {
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_PREPARE_MIRROR, SoundSource.HOSTILE, 1, 1);
+                    }
+                }
+            } else if (dura <= 0) {
+                if (!(target == null) && target.isAlive()) {
+                    if (EntityUtils.getIllusionNum(world, x, y, z) < 8 && EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.HOSTILE, 1, 1);
+                        }
+                        if (this instanceof OceanizedIllusionerEntity) {
+                            this.setAnimation("animation.oceanized_illusioner.fission");
+                        }
+                        for (int index0 = 0; index0 < 5; index0++) {
+                            if (WorldUtils.isValidHumanoidPlace(world, x + 4 - index0, y, z)) {
+                                if (world instanceof ServerLevel level) {
+                                    Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(level, BlockPos.containing(x + 4 - index0, y, z), MobSpawnType.MOB_SUMMONED);
+                                    if (entityToSpawn != null) {
+                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        for (int index1 = 0; index1 < 5; index1++) {
+                            if (WorldUtils.isValidHumanoidPlace(world, x - (4 - index1), y, z)) {
+                                if (world instanceof ServerLevel level) {
+                                    Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(level, BlockPos.containing(x - (4 - index1), y, z), MobSpawnType.MOB_SUMMONED);
+                                    if (entityToSpawn != null) {
+                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        for (int index2 = 0; index2 < 5; index2++) {
+                            if (WorldUtils.isValidHumanoidPlace(world, x, y, z + 4 - index2)) {
+                                if (world instanceof ServerLevel level) {
+                                    Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(level, BlockPos.containing(x, y, z + 4 - index2), MobSpawnType.MOB_SUMMONED);
+                                    if (entityToSpawn != null) {
+                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        for (int index3 = 0; index3 < 5; index3++) {
+                            if (WorldUtils.isValidHumanoidPlace(world, x, y, z - (4 - index3))) {
+                                if (world instanceof ServerLevel level) {
+                                    Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(level, BlockPos.containing(x, y, z - (4 - index3)), MobSpawnType.MOB_SUMMONED);
+                                    if (entityToSpawn != null) {
+                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 0));
+                        CaerulaArborMod.queueServerWork(18, () -> {
+                            if (!isPassenger()) {
+                                if (!this.level().isClientSide())
+                                    this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 2400, 0));
+                            }
+                        });
+                        if ((Entity) this instanceof OceanizedIllusionerEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_MIRROR_P, 340);
+                        if ((Entity) this instanceof OceanizedIllusionerEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_DURATION, 20);
+                    }
+                }
+            }
+        }
+        this.refreshDimensions();
+    }
+
+    @Override
+    public void setHealth(float pHealth) {
+        if (this.isPassenger()) {
+            float curHealth = this.getHealth();
+            float maxHealth = this.getMaxHealth();
+            float deletion = this.getHealth() - pHealth;
+            float newHealth = Math.max(curHealth - 1, curHealth - deletion);
+            if (curHealth >= maxHealth * 0.5) {
+                super.setHealth(Math.max(newHealth, maxHealth * 0.5f));
+            } else {
+                super.setHealth(newHealth);
+            }
+        } else {
+            super.setHealth(pHealth);
+        }
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
+
+    @Override
+    public void performRangedAttack(LivingEntity target, float flval) {
+        ShotOceanArrowEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (2.5 / 9.0));
+    }
+
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
+
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
+
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
+
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
+
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+        builder = builder.add(Attributes.MAX_HEALTH, 108);
+        builder = builder.add(Attributes.ARMOR, 6);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 28);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
+        return builder;
+    }
+
+    private PlayState movementPredicate(AnimationState<?> event) {
+        if (this.animationprocedure.equals("empty")) {
+            if (this.isAttacking() && event.isMoving()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_illusioner.aggre_move"));
+            }
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_illusioner.aggre_move"));
+            }
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_illusioner.die"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_illusioner.idle"));
+        }
+        return PlayState.STOP;
+    }
+
+    private PlayState attackingPredicate(AnimationState<?> event) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 20L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_illusioner.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    String prevAnim = "empty";
+
+    private PlayState procedurePredicate(AnimationState<?> event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime >= 20) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+            Level level = this.level();
+            AABB aabb = new AABB(this.position().add(24, 24, 24), this.position().add(-24, -24, -24));
+            List<OceanIllusionEntity> illusions = level.getEntitiesOfClass(OceanIllusionEntity.class, aabb);
+            illusions.forEach(e -> {
+                e.remove(RemovalReason.DISCARDED);
+            });
+        }
+    }
+
+    public boolean isAttacking() {
+        LivingEntity target = this.getTarget();
+        return target != null && target.isAlive();
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(DATA_ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(DATA_ANIMATION, animation);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
+
+    private boolean isIllusionerDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
+    }
+
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
+}

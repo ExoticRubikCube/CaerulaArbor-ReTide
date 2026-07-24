@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/ovaryblock",
+  "textures": {
+    "all": "caerula_arbor:block/ovaey_red",
+    "particle": "caerula_arbor:block/ovaey_red",
+    "2": "caerula_arbor:block/ovaey_red"
+  },
+  "render_type": "cutout"
+}

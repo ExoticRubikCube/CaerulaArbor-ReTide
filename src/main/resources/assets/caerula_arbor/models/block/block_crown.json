@@ -1,0 +1,10 @@
+{
+  "parent": "caerula_arbor:custom/crownlit",
+  "textures": {
+    "all": "caerula_arbor:block/crowns",
+    "particle": "caerula_arbor:block/relic_crown",
+    "0": "caerula_arbor:block/crowns",
+    "1": "caerula_arbor:block/crowns"
+  },
+  "render_type": "cutout_mipped"
+}

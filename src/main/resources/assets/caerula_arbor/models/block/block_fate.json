@@ -1,0 +1,10 @@
+{
+  "parent": "caerula_arbor:custom/royalfate",
+  "textures": {
+    "all": "caerula_arbor:block/royalfate0",
+    "particle": "caerula_arbor:block/royalfate",
+    "0": "caerula_arbor:block/royalfate0",
+    "missing": "caerula_arbor:block/royalfate0"
+  },
+  "render_type": "cutout_mipped"
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "caerula_arbor:block/sea_trail_burnt_solid"
+    },
+    "facing=east": {
+      "model": "caerula_arbor:block/sea_trail_burnt_solid",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "caerula_arbor:block/sea_trail_burnt_solid",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "caerula_arbor:block/sea_trail_burnt_solid",
+      "y": 270
+    }
+  }
+}

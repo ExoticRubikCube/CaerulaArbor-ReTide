@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/traceblock",
+  "textures": {
+    "all": "caerula_arbor:block/nethersea_brand_0",
+    "particle": "caerula_arbor:block/nethersea_brand_0",
+    "0": "caerula_arbor:block/nethersea_brand_0"
+  },
+  "render_type": "cutout"
+}

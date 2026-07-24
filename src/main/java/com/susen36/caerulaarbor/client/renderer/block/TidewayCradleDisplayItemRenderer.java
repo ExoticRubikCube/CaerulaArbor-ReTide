@@ -1,0 +1,19 @@
+package com.susen36.caerulaarbor.client.renderer.block;
+
+import com.susen36.caerulaarbor.block.item.TidewayCradleDisplayItem;
+import com.susen36.caerulaarbor.client.model.block.TidewayCradleDisplayModel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
+
+public class TidewayCradleDisplayItemRenderer extends GeoItemRenderer<TidewayCradleDisplayItem> {
+	public TidewayCradleDisplayItemRenderer() {
+		super(new TidewayCradleDisplayModel());
+	}
+
+	@Override
+	public RenderType getRenderType(TidewayCradleDisplayItem animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
+}

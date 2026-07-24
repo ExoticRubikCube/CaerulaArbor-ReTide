@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "caerula_arbor:block/bomb_copper"
+    },
+    "facing=east": {
+      "model": "caerula_arbor:block/bomb_copper",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "caerula_arbor:block/bomb_copper",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "caerula_arbor:block/bomb_copper",
+      "y": 270
+    }
+  }
+}

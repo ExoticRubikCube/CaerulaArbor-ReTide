@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/alleystone",
+  "textures": {
+    "all": "caerula_arbor:block/stoenalley",
+    "particle": "caerula_arbor:block/stoenalley",
+    "0": "caerula_arbor:block/stoenalley"
+  },
+  "render_type": "cutout"
+}

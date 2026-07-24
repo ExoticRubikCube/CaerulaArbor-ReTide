@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/dragon_wand",
+  "textures": {
+    "3": "caerula_arbor:block/dragon_wand",
+    "particle": "caerula_arbor:item/dragon_wand"
+  }
+}

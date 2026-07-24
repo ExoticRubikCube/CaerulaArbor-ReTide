@@ -1,0 +1,10 @@
+{
+  "parent": "block/slab_top",
+  "textures": {
+    "particle": "caerula_arbor:block/trailbrick",
+    "bottom": "caerula_arbor:block/trailbrick",
+    "top": "caerula_arbor:block/trailbrick",
+    "side": "caerula_arbor:block/trailbrick"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/spear",
+  "textures": {
+    "all": "caerula_arbor:block/spear",
+    "particle": "caerula_arbor:block/relic_spear",
+    "0": "caerula_arbor:block/spear"
+  },
+  "render_type": "cutout_mipped"
+}

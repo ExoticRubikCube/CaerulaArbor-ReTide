@@ -1,0 +1,25 @@
+package com.susen36.caerulaarbor.event;
+
+import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber
+public class LivingExpDropEventHandler {
+	@SubscribeEvent
+	public static void onLivingDropXp(LivingExperienceDropEvent event) {
+		if (event == null || event.getEntity() == null) return;
+
+		Player sourceentity = event.getAttackingPlayer();
+		if (sourceentity == null)
+			return;
+		if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_EXTENSION) {
+			if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives <= 1) {
+				event.setDroppedExperience((int) (event.getDroppedExperience() * 1.5));
+			}
+		}
+	}
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_glass_pane_noside",
+  "textures": {
+    "particle": "caerula_arbor:block/oceanglasspane",
+    "pane": "caerula_arbor:block/oceanglasspane"
+  },
+  "render_type": "translucent"
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/crisis_table",
+  "textures": {
+    "particle": "caerula_arbor:block/item_crisis_table"
+  }
+}

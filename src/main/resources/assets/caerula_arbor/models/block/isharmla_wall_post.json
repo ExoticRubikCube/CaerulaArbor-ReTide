@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "caerula_arbor:block/isharmla_brick",
+    "particle": "caerula_arbor:block/isharmla_brick"
+  },
+  "render_type": "solid"
+}

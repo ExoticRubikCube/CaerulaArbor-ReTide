@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/reaperegg",
+  "textures": {
+    "all": "caerula_arbor:block/block_reaperegg2",
+    "particle": "caerula_arbor:block/block_reaperegg",
+    "0": "caerula_arbor:block/block_reaperegg2"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,645 @@
+package com.susen36.caerulaarbor.entity;
+
+import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.api.event.SanityEvent;
+import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.manager.SeabornSpawnManager;
+import com.susen36.caerulaarbor.util.EntityUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.item.FallingBlockEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+
+import javax.annotation.Nullable;
+
+public class BishopFishEntity extends SeaMonster {
+
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKLP = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_ENDP = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_LOCX = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_LOCY = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_LOCZ = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SUMMONP = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    private boolean swinging;
+    private long lastSwing;
+    public String animationprocedure = "empty";
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
+
+    public BishopFishEntity(Level world) {
+        this(CAEntities.BISHOP_FISH.get(), world);
+    }
+
+    public BishopFishEntity(EntityType<BishopFishEntity> type, Level world) {
+        super(type, world);
+        xpReward = 64;
+        setNoAi(false);
+        setMaxUpStep(2f);
+        setPersistenceRequired();
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKLP, 200);
+        this.entityData.define(DATA_ENDP, 1200);
+        this.entityData.define(DATA_LOCX, 0);
+        this.entityData.define(DATA_LOCY, 0);
+        this.entityData.define(DATA_LOCZ, 0);
+        this.entityData.define(DATA_SUMMONP, 280);
+        this.entityData.define(DATA_DURATION, 0);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 144;
+            }
+
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isBishopStarted();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isBishopStarted();
+            }
+
+        });
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
+        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
+        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
+        this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
+        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
+        this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
+        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
+        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+        this.goalSelector.addGoal(14, new RandomLookAroundGoal(this));
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
+    public SoundEvent getAmbientSound() {
+        return SoundEvents.ELDER_GUARDIAN_AMBIENT;
+    }
+
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return SoundEvents.ELDER_GUARDIAN_HURT;
+    }
+
+    @Override
+    public SoundEvent getDeathSound() {
+        return SoundEvents.ELDER_GUARDIAN_DEATH;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        double rate = 0;
+        double sklp = 0;
+        double dx;
+        double dz;
+        double yfnl;
+        if (this.isAlive()) {
+            if (((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) <= 0) {
+                if (this instanceof BishopFishEntity) {
+                    this.setAnimation("animation.bishop.skill");
+                }
+                if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DURATION, ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0) + 20);
+                if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.BISHOPFISH_FLAP.get(), SoundSource.HOSTILE, 3, 1);
+                }
+                new Object() {
+                    void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                        for (int index0 = 0; index0 < 180; index0++) {
+                            if (world instanceof ServerLevel level)
+                                level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + timedloopiterator * 2 * Math.sin(Math.toRadians(2 * index0))), (y + 0.5), (z + timedloopiterator * 2 * Math.cos(Math.toRadians(2 * index0))), 16, 0.15, 0.5, 0.15,
+                                        0.1);
+                        }
+                        final int tick2 = ticks;
+                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                            if (timedlooptotal > timedloopiterator + 1) {
+                                timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                            }
+                        });
+                    }
+                }.timedLoop(0, 10, 2);
+                for (Entity entityiterator : world.getEntities(this, new AABB((x + 20), (y - 4), (z + 20), (x - 20), (y + 8), (z - 20)))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        if (!(entityiterator == this.getTarget())) {
+                            continue;
+                        }
+                    }
+                    if (new Object() {
+                        public boolean checkGamemode(Entity ent) {
+                            if (ent instanceof ServerPlayer serverPlayer) {
+                                return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                            } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                                return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                        && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                            }
+                            return false;
+                        }
+                    }.checkGamemode(entityiterator)) {
+                        continue;
+                    }
+                    if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
+                        continue;
+                    }
+                    if (distanceTo(entityiterator) <= 20) {
+                        dx = entityiterator.getX() - getX();
+                        if ((dx) > (0) && (dx) < (1)) {
+                            dx = 1;
+                        } else if ((dx) > ((-1)) && (dx) < (0)) {
+                            dx = -1;
+                        } else if (dx == 0) {
+                            dx = 1;
+                        }
+                        dz = entityiterator.getZ() - getZ();
+                        if ((dz) > (0) && (dz) < (1)) {
+                            dz = 1;
+                        } else if ((dz) > ((-1)) && (dz) < (0)) {
+                            dz = -1;
+                        } else if (dz == 0) {
+                            dz = 1;
+                        }
+                        entityiterator.push((1.5 / dx), 0.25, (1.5 / dz));
+                        entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
+                                (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
+                        if (entityiterator instanceof LivingEntity target) {
+                            SIHelper.causeSanityInjury(target,
+                                    this,
+                                    (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                            * (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())
+                                            ? this.getAttribute(CAAttributes.SANITY_RATE.get()).getValue()
+                                            : 0)
+                                            * 1.5,
+                                    SanityEvent.Hurt.Type.ENTITY);
+                        }
+                        if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 60, 0, false, false));
+                    }
+                }
+                if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
+                    if ((this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get()) ? this.getEffect(CAMobEffects.ANGER_OF_BISHOP.get()).getAmplifier() : 0) >= 1) {
+                        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKLP, 100);
+                    } else {
+                        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKLP, 300);
+                    }
+                } else {
+                    if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKLP, 500);
+                }
+            }
+            if (((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_SUMMONP) : 0) <= 0) {
+                for (Entity entityiterator : world.getEntities(this, new AABB((x - 32), (y - 16), (z - 32), (x + 32), (y + 16), (z + 32)))) {
+                    if (entityiterator instanceof SonsEntity) {
+                        if (distanceTo(entityiterator) <= 6) {
+                            entityiterator.hurt(entityiterator.level().damageSources().fellOutOfWorld(), 99999);
+                        } else {
+                            rate = rate + 1;
+                        }
+                    }
+                }
+                if (rate < 32) {
+                    for (int index1 = 0; index1 < 8; index1++) {
+                        dx = Mth.nextDouble(RandomSource.create(), -22, 22);
+                        dz = Mth.nextDouble(RandomSource.create(), -22, 22);
+                        yfnl = world.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) (x + dx), (int) (z + dz));
+                        if (yfnl > y + 3) {
+                            yfnl = y + 3;
+                        }
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.SONS.get().spawn(level, BlockPos.containing(x + dx, yfnl, z + dz), MobSpawnType.MOB_SUMMONED);
+                            if (entityToSpawn != null) {
+                                entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                            }
+                        }
+                        if (world instanceof ServerLevel level)
+                            level.sendParticles(ParticleTypes.SMOKE, (x + dx), (yfnl + 0.5), (z + dz), 16, 0.5, 0.5, 0.5, 0.2);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), SoundEvents.GUARDIAN_FLOP, SoundSource.HOSTILE, 1, 1);
+                        }
+                    }
+                    if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
+                        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SUMMONP, 360);
+                    } else {
+                        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SUMMONP, 600);
+                    }
+                }
+            }
+        }
+        if (source.is(DamageTypes.FALL))
+            return false;
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        if (source.is(DamageTypes.LIGHTNING_BOLT))
+            return false;
+        if (source.is(DamageTypes.FALLING_ANVIL))
+            return false;
+        return super.hurt(source, amount);
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+            datEntSetI.getEntityData().set(DATA_LOCX, (int) Math.round(x));
+        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+            datEntSetI.getEntityData().set(DATA_LOCY, (int) Math.round(y));
+        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+            datEntSetI.getEntityData().set(DATA_LOCZ, (int) Math.round(z));
+        setNoGravity(true);
+        if (!this.level().isClientSide())
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 1, false, false));
+        if ((LevelAccessor) world instanceof Level level) {
+            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_EMERGE, SoundSource.HOSTILE, 3, 1);
+        }
+        this.setAnimation("animation.bishop.start1");
+        return retval;
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("Sklp", this.entityData.get(DATA_SKLP));
+        compound.putInt("Endp", this.entityData.get(DATA_ENDP));
+        compound.putInt("Locx", this.entityData.get(DATA_LOCX));
+        compound.putInt("Locy", this.entityData.get(DATA_LOCY));
+        compound.putInt("Locz", this.entityData.get(DATA_LOCZ));
+        compound.putInt("Summonp", this.entityData.get(DATA_SUMMONP));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Sklp")) {
+            this.entityData.set(DATA_SKLP, compound.getInt("Sklp"));
+        }
+        if (compound.contains("Endp")) {
+            this.entityData.set(DATA_ENDP, compound.getInt("Endp"));
+        }
+        if (compound.contains("Locx")) {
+            this.entityData.set(DATA_LOCX, compound.getInt("Locx"));
+        }
+        if (compound.contains("Locy")) {
+            this.entityData.set(DATA_LOCY, compound.getInt("Locy"));
+        }
+        if (compound.contains("Locz")) {
+            this.entityData.set(DATA_LOCZ, compound.getInt("Locz"));
+        }
+        if (compound.contains("Summonp")) {
+            this.entityData.set(DATA_SUMMONP, compound.getInt("Summonp"));
+        }
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
+    }
+
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        double skl;
+        double end;
+        double smm;
+        double d;
+        if (this.getHealth() <= this.getMaxHealth() * 0.67) {
+            if (!this.level().isClientSide() && !this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
+                ;
+                if (this.getHealth() <= this.getMaxHealth() * 0.33) {
+                    this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_BISHOP.get(), 20, 1));
+                } else {
+                    this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_BISHOP.get(), 20, 0));
+                }
+            }
+        }
+        skl = (Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0;
+        smm = (Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_SUMMONP) : 0;
+        end = (Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_ENDP) : 0;
+        d = (Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
+        if (d > 0) {
+            if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_DURATION, (int) (d - 1));
+        }
+        if (skl > 0) {
+            if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_SKLP, (int) (skl - 1));
+        }
+        if (smm > 0) {
+            if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_SUMMONP, (int) (smm - 1));
+        }
+        if (end <= 0) {
+            if (EntityUtils.getSeabornAround(world, x, y, z, this) < 32) {
+                if (this instanceof BishopFishEntity) {
+                    this.setAnimation("animation.bishop.blast");
+                }
+                if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DURATION, (int) (d + 40));
+                if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.BISHOPFISH_BLAST.get(), SoundSource.HOSTILE, 4, 1);
+                }
+                if (!this.level().isClientSide())
+                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 0));
+                if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_ENDP, 2400);
+                new Object() {
+                    void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                        double dx1;
+                        double dz1;
+                        double yfnl;
+                        dx1 = Mth.nextInt(RandomSource.create(), -18, 18);
+                        dz1 = Mth.nextInt(RandomSource.create(), -18, 18);
+                        yfnl = world.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) (x + dx1), (int) (z + dz1));
+                        if (yfnl < y - 6) {
+                            yfnl = y;
+                        }
+                        if (yfnl > y + 3) {
+                            yfnl = y + 3;
+                        }
+                        SeabornSpawnManager.summonRandomSeaborn(world, 0.75, x + dx1, yfnl, z + dz1);
+                        if (world instanceof ServerLevel level)
+                            FallingBlockEntity.fall(level, BlockPos.containing(x + dx1, yfnl + 6, z + dz1), CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState());
+                        if (world instanceof ServerLevel level)
+                            level.sendParticles(ParticleTypes.CLOUD, (x + dx1), (yfnl + 1), (z + dz1), 64, 1, 1, 1, 0.1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), SoundEvents.AMBIENT_UNDERWATER_ENTER, SoundSource.NEUTRAL, (float) 1.5, 1);
+                        }
+                        for (Entity entityiterator : world.getEntities(BishopFishEntity.this, new AABB((x + 18), y, (z + 18), (x - 18), (y + 12), (z - 18)))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                if (!(entityiterator == ((Entity) BishopFishEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
+                                    continue;
+                                }
+                            }
+                            if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
+                                continue;
+                            }
+                            if (distanceTo(entityiterator) <= 20) {
+                                entityiterator.hurt(
+                                        CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, BishopFishEntity.this), (float) (((Entity) BishopFishEntity.this instanceof LivingEntity livingEntity25 && livingEntity25.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity25.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3));
+                            }
+                        }
+                        final int tick2 = ticks;
+                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                            if (timedlooptotal > timedloopiterator + 1) {
+                                timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                            }
+                        });
+                    }
+                }.timedLoop(0, 16, 5);
+            }
+        } else {
+            if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_ENDP, (int) (end - 1));
+        }
+        if (tickCount % 10 == 0 && new Vec3(x, y, z).distanceTo(new Vec3(((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCX) : 0),
+                ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCY) : 0), ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCZ) : 0))) >= 3) {
+            setDeltaMovement(new Vec3(0, 0, 0));
+            {
+                Entity ent = this;
+                ent.teleportTo(((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCX) : 0),
+                        ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCY) : 0), ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCZ) : 0));
+                if (ent instanceof ServerPlayer serverPlayer)
+                    serverPlayer.connection.teleport(((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCX) : 0),
+                            ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCY) : 0), ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCZ) : 0),
+                            ent.getYRot(), ent.getXRot());
+            }
+        }
+        for (Entity entityiterator : world.getEntities(this, new AABB((x - 6), (y - 6), (z - 6), (x + 6), (y + 6), (z + 6)))) {
+            if (entityiterator instanceof SonsEntity) {
+                if (distanceTo(entityiterator) <= 6) {
+                    entityiterator.hurt(entityiterator.level().damageSources().fellOutOfWorld(), 99999);
+                }
+            }
+        }
+        this.refreshDimensions();
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 5);
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+
+    @Override
+    protected void doPush(Entity entityIn) {
+    }
+
+    @Override
+    protected void pushEntities() {
+    }
+
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
+
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
+
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
+
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
+
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0);
+        builder = builder.add(Attributes.MAX_HEALTH, 560);
+        builder = builder.add(Attributes.ARMOR, 8);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 64);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 24);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
+        return builder;
+    }
+
+    private PlayState movementPredicate(AnimationState<?> event) {
+        if (this.isDeadOrDying()) {
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.bishop.die"));
+        }
+        if (this.animationprocedure.equals("empty")) {
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.bishop.idle"));
+        }
+        return PlayState.STOP;
+    }
+
+    private PlayState attackingPredicate(AnimationState<?> event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.bishop.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    String prevAnim = "empty";
+
+    private PlayState procedurePredicate(AnimationState<?> event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 40) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+            LevelAccessor world = this.level();
+            if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+                if (!world.isClientSide() && world.getServer() != null) {
+                    for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_bishop"))
+                            .getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
+                        if (world instanceof ServerLevel level) {
+                            ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), itemstackiterator);
+                            entityToSpawn.setPickUpDelay(10);
+                            entityToSpawn.setUnlimitedLifetime();
+                            level.addFreshEntity(entityToSpawn);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(DATA_ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(DATA_ANIMATION, animation);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
+
+    private boolean isBishopStarted() {
+        return this.isAlive() && this.tickCount >= 80 && this.getEntityData().get(DATA_DURATION) <= 0;
+    }
+
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
+}

@@ -1,0 +1,10 @@
+{
+  "parent": "caerula_arbor:custom/blockemelight_land",
+  "textures": {
+    "all": "caerula_arbor:block/cursed_emelight_0",
+    "particle": "caerula_arbor:block/cursed_emelight_0",
+    "0": "caerula_arbor:block/blockemelight",
+    "missing": "caerula_arbor:block/blockemelight"
+  },
+  "render_type": "cutout"
+}

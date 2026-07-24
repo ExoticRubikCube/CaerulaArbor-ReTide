@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/kettle",
+  "textures": {
+    "all": "caerula_arbor:block/kettle",
+    "particle": "caerula_arbor:block/kettle",
+    "0": "caerula_arbor:block/blockkettle"
+  },
+  "render_type": "solid"
+}

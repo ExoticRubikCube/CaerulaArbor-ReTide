@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "minecraft:block/polished_deepslate",
+    "up": "caerula_arbor:block/undertide_table_top",
+    "north": "caerula_arbor:block/undertide_table_side",
+    "east": "caerula_arbor:block/undertide_table_side_rev",
+    "south": "caerula_arbor:block/undertide_table_side",
+    "west": "caerula_arbor:block/undertide_table_side_rev",
+    "particle": "minecraft:block/polished_deepslate"
+  },
+  "render_type": "solid"
+}

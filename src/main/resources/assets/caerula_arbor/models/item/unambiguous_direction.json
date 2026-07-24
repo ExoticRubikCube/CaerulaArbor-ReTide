@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/anchor_52",
+  "textures": {
+    "0": "caerula_arbor:block/weapon_anchor",
+    "particle": "caerula_arbor:item/weapon_anchor"
+  }
+}

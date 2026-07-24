@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "caerula_arbor:item/deep_seagrass_top"
+  },
+  "render_type": "translucent"
+}

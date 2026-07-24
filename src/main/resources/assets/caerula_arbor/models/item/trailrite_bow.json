@@ -1,0 +1,27 @@
+{
+  "parent": "caerula_arbor:custom/trailrite_bow",
+  "textures": {
+    "0": "caerula_arbor:block/trailrite_bow",
+    "particle": "caerula_arbor:item/trailrite_bow"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "caerula_arbor:trailrite_bow_pulling": 1
+      },
+      "model": "caerula_arbor:item/trailrite_bow_0"
+    },
+    {
+      "predicate": {
+        "caerula_arbor:trailrite_bow_pulling": 10
+      },
+      "model": "caerula_arbor:item/trailrite_bow_1"
+    },
+    {
+      "predicate": {
+        "caerula_arbor:trailrite_bow_pulling": 20
+      },
+      "model": "caerula_arbor:item/trailrite_bow_2"
+    }
+  ]
+}

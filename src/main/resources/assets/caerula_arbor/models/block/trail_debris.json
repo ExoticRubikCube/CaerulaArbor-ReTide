@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "minecraft:block/ancient_debris_top",
+    "up": "caerula_arbor:block/trail_debris_top",
+    "north": "caerula_arbor:block/trail_debris_side",
+    "east": "caerula_arbor:block/trail_debris_side",
+    "south": "caerula_arbor:block/trail_debris_side",
+    "west": "caerula_arbor:block/trail_debris_side",
+    "particle": "minecraft:block/ancient_debris_top"
+  },
+  "render_type": "solid"
+}

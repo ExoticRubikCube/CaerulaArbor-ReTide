@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "caerula_arbor:block/kings_armor"
+    },
+    "facing=east": {
+      "model": "caerula_arbor:block/kings_armor",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "caerula_arbor:block/kings_armor",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "caerula_arbor:block/kings_armor",
+      "y": 270
+    }
+  }
+}

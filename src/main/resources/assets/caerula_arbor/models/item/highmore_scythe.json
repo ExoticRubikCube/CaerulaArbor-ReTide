@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/highmorescythe",
+  "textures": {
+    "layer0": "caerula_arbor:item/highmore_scythe_bladed"
+  }
+}

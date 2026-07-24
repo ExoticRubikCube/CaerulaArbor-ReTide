@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/extension",
+  "textures": {
+    "all": "caerula_arbor:block/extension",
+    "particle": "caerula_arbor:block/itenext",
+    "0": "caerula_arbor:block/extension"
+  },
+  "render_type": "cutout_mipped"
+}

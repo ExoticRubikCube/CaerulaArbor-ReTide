@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:ocean_magic",
+    "caerula_arbor:ocean_counter",
+    "caerula_arbor:ocean_real",
+    "explosion",
+    "player_explosion"
+  ]
+}

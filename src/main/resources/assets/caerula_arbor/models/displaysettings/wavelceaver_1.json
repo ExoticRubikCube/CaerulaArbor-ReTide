@@ -1,0 +1,128 @@
+{
+  "credit": "Made with Blockbench",
+  "texture_size": [
+    25,
+    26
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        -2,
+        0.5
+      ],
+      "scale": [
+        1.75,
+        1.75,
+        1.75
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        -2,
+        0.5
+      ],
+      "scale": [
+        1.75,
+        1.75,
+        1.75
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        75,
+        0,
+        0
+      ],
+      "translation": [
+        2.5,
+        -4,
+        0
+      ],
+      "scale": [
+        1.25,
+        1.25,
+        1.25
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        75,
+        0,
+        -15
+      ],
+      "translation": [
+        2.5,
+        -4,
+        0
+      ],
+      "scale": [
+        1.25,
+        1.25,
+        1.25
+      ]
+    },
+    "ground": {
+      "rotation": [
+        45,
+        0,
+        0
+      ]
+    },
+    "gui": {
+      "rotation": [
+        90,
+        -45,
+        90
+      ],
+      "translation": [
+        -3.75,
+        -4,
+        0
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ]
+    },
+    "head": {
+      "rotation": [
+        0,
+        45,
+        90
+      ],
+      "translation": [
+        3,
+        7,
+        3
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        90,
+        45,
+        90
+      ],
+      "translation": [
+        4.5,
+        -3.75,
+        0.25
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/weavecleaver"
+  }
+}

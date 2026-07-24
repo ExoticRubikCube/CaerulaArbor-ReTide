@@ -1,0 +1,10 @@
+{
+  "parent": "caerula_arbor:custom/endspeaker_nest",
+  "textures": {
+    "all": "caerula_arbor:block/endspeaker_nest",
+    "particle": "caerula_arbor:block/endspeaker_nest",
+    "0": "caerula_arbor:block/endspeaker_nest",
+    "1": "caerula_arbor:block/endspeaker_nest_outline"
+  },
+  "render_type": "cutout"
+}

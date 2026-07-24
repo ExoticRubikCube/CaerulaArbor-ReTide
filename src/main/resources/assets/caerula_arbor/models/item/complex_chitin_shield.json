@@ -1,0 +1,15 @@
+{
+  "parent": "caerula_arbor:custom/chitin_shield",
+  "textures": {
+    "1": "caerula_arbor:block/complex_chitin_shield",
+    "particle": "caerula_arbor:item/complex_chitin_shield"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "blocking": 1
+      },
+      "model": "caerula_arbor:item/complex_chitin_shield_0"
+    }
+  ]
+}

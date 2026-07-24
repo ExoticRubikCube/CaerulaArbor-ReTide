@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/caketrail0",
+  "textures": {
+    "all": "caerula_arbor:block/caramelcake",
+    "particle": "caerula_arbor:block/caramelcake",
+    "0": "caerula_arbor:block/caramelcake"
+  },
+  "render_type": "solid"
+}

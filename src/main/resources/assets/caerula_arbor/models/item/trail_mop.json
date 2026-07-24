@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/mop",
+  "textures": {
+    "0": "caerula_arbor:block/mop",
+    "particle": "caerula_arbor:item/mop"
+  }
+}

@@ -1,0 +1,1882 @@
+{
+  "target_damaged": {
+    "sounds": [
+      {
+        "name": "caerula_arbor:damaged",
+        "stream": false
+      }
+    ]
+  },
+  "pceanwish": {
+    "subtitle": "subtitles.pceanwish",
+    "sounds": [
+      {
+        "name": "caerula_arbor:oceanwish",
+        "stream": true
+      }
+    ]
+  },
+  "flutesong": {
+    "subtitle": "subtitles.flutesong",
+    "sounds": [
+      {
+        "name": "caerula_arbor:flutesong",
+        "stream": true
+      }
+    ]
+  },
+  "bloodywolf_openmouth": {
+    "sounds": [
+      {
+        "name": "caerula_arbor:mouthopen",
+        "stream": true
+      }
+    ]
+  },
+  "grow1": {
+    "subtitle": "subtitles.grow1",
+    "sounds": [
+      {
+        "name": "caerula_arbor:grow1",
+        "stream": false
+      }
+    ]
+  },
+  "grow2": {
+    "subtitle": "subtitles.grow2",
+    "sounds": [
+      {
+        "name": "caerula_arbor:grow2",
+        "stream": false
+      }
+    ]
+  },
+  "subsisting1": {
+    "subtitle": "subtitles.subsisting1",
+    "sounds": [
+      {
+        "name": "caerula_arbor:subssiting1",
+        "stream": false
+      }
+    ]
+  },
+  "subsisting2": {
+    "subtitle": "subtitles.subsisting2",
+    "sounds": [
+      {
+        "name": "caerula_arbor:subsisting2",
+        "stream": false
+      }
+    ]
+  },
+  "breed1": {
+    "subtitle": "subtitles.breed1",
+    "sounds": [
+      {
+        "name": "caerula_arbor:breed1",
+        "stream": false
+      }
+    ]
+  },
+  "breed2": {
+    "subtitle": "subtitles.breed2",
+    "sounds": [
+      {
+        "name": "caerula_arbor:breed2",
+        "stream": false
+      }
+    ]
+  },
+  "migration1": {
+    "subtitle": "subtitles.migration1",
+    "sounds": [
+      {
+        "name": "caerula_arbor:migration1",
+        "stream": false
+      }
+    ]
+  },
+  "migration2": {
+    "subtitle": "subtitles.migration2",
+    "sounds": [
+      {
+        "name": "caerula_arbor:migration2",
+        "stream": false
+      }
+    ]
+  },
+  "silence1": {
+    "sounds": [
+      {
+        "name": "caerula_arbor:silence1",
+        "stream": false
+      }
+    ]
+  },
+  "silence2": {
+    "sounds": [
+      {
+        "name": "caerula_arbor:silence2",
+        "stream": false
+      }
+    ]
+  },
+  "silence3": {
+    "sounds": [
+      {
+        "name": "caerula_arbor:silence3",
+        "stream": false
+      }
+    ]
+  },
+  "silence4": {
+    "sounds": [
+      {
+        "name": "caerula_arbor:silence4",
+        "stream": false
+      }
+    ]
+  },
+  "ocarino": {
+    "subtitle": "subtitles.ocarino",
+    "sounds": [
+      {
+        "name": "caerula_arbor:ocarinosong",
+        "stream": false
+      }
+    ]
+  },
+  "scythe_highmore": {
+    "subtitle": "subtitles.scythe_highmore",
+    "sounds": [
+      {
+        "name": "caerula_arbor:scythe_highmore_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:scythe_highmore_2",
+        "stream": false
+      }
+    ]
+  },
+  "bloody_wolf": {
+    "sounds": [
+      {
+        "name": "caerula_arbor:bloodywolf_song",
+        "stream": true
+      }
+    ]
+  },
+  "skadi_hit": {
+    "subtitle": "subtitles.skadi_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:skadi_hit_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:skadi_hit_1",
+        "stream": false
+      }
+    ]
+  },
+  "skadi_died": {
+    "subtitle": "subtitles.skadi_died",
+    "sounds": [
+      {
+        "name": "caerula_arbor:skadi_hit_3",
+        "stream": false
+      }
+    ]
+  },
+  "shallow_sea": {
+    "subtitle": "subtitles.shallow_sea",
+    "sounds": [
+      {
+        "name": "caerula_arbor:shallow_sea",
+        "stream": true
+      }
+    ]
+  },
+  "anchor_attack": {
+    "subtitle": "subtitles.anchor_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:anchor_attack",
+        "stream": false
+      }
+    ]
+  },
+  "anchor_throw": {
+    "subtitle": "subtitles.anchor_throw",
+    "sounds": [
+      {
+        "name": "caerula_arbor:anchor_throw",
+        "stream": false
+      }
+    ]
+  },
+  "anchor_skill": {
+    "subtitle": "subtitles.anchor_skill",
+    "sounds": [
+      {
+        "name": "caerula_arbor:anchor_skillstart",
+        "stream": false
+      }
+    ]
+  },
+  "anchor_skillattack": {
+    "subtitle": "subtitles.anchor_skillattack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:anchor_skillattck",
+        "stream": false
+      }
+    ]
+  },
+  "saw_cut": {
+    "subtitle": "subtitles.saw_cut",
+    "sounds": [
+      {
+        "name": "caerula_arbor:saw_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:saw_0",
+        "stream": false
+      }
+    ]
+  },
+  "piglin_hurt": {
+    "subtitle": "subtitles.piglin_hurt",
+    "sounds": [
+      {
+        "name": "caerula_arbor:piglin_hurt_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:piglin_hurt_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:piglin_hurt_0",
+        "stream": false
+      }
+    ]
+  },
+  "piglin_ambient": {
+    "subtitle": "subtitles.piglin_ambient",
+    "sounds": [
+      {
+        "name": "caerula_arbor:piglin_amb_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:piglin_amb_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:piglin_amb_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:piglin_amb_0",
+        "stream": false
+      }
+    ]
+  },
+  "piglin_death": {
+    "subtitle": "subtitles.piglin_death",
+    "sounds": [
+      {
+        "name": "caerula_arbor:piglin_death",
+        "stream": false
+      }
+    ]
+  },
+  "brute_ambient": {
+    "subtitle": "subtitles.brute_ambient",
+    "sounds": [
+      {
+        "name": "caerula_arbor:brute_amb_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:brute_amb_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:brute_amb_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:brute_amb_0",
+        "stream": false
+      }
+    ]
+  },
+  "brute_hurt": {
+    "subtitle": "subtitles.brute_hurt",
+    "sounds": [
+      {
+        "name": "caerula_arbor:brute_hit_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:brute_hit_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:brute_hit_0",
+        "stream": false
+      }
+    ]
+  },
+  "brute_die": {
+    "subtitle": "subtitles.brute_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:brute_die",
+        "stream": false
+      }
+    ]
+  },
+  "witch_ambient": {
+    "subtitle": "subtitles.witch_ambient",
+    "sounds": [
+      {
+        "name": "caerula_arbor:witch_amb_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:witch_amb_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:witch_amb_0",
+        "stream": false
+      }
+    ]
+  },
+  "witch_hurt": {
+    "subtitle": "subtitles.witch_hurt",
+    "sounds": [
+      {
+        "name": "caerula_arbor:witch_hurt_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:witch_hurt_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:witch_hurt_0",
+        "stream": false
+      }
+    ]
+  },
+  "witch_die": {
+    "subtitle": "subtitles.witch_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:witch_die",
+        "stream": false
+      }
+    ]
+  },
+  "izumik_hit": {
+    "subtitle": "subtitles.izumik_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:izumik_hit_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:izumik_hit_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:izumik_hit_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:izumik_hit_0",
+        "stream": false
+      }
+    ]
+  },
+  "izumik_die": {
+    "subtitle": "subtitles.izumik_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:izumik_die",
+        "stream": false
+      }
+    ]
+  },
+  "izumik_ambient": {
+    "subtitle": "subtitles.izumik_ambient",
+    "sounds": [
+      {
+        "name": "caerula_arbor:izumik_amb_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:izumik_amb_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:izumik_amb_0",
+        "stream": false
+      }
+    ]
+  },
+  "izumik_attack": {
+    "subtitle": "subtitles.izumik_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:izumik_attack",
+        "stream": false
+      }
+    ]
+  },
+  "izumik_learn": {
+    "subtitle": "subtitles.izumik_learn",
+    "sounds": [
+      {
+        "name": "caerula_arbor:izumik_learn_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:izumik_learn_0",
+        "stream": false
+      }
+    ]
+  },
+  "izumik_shock": {
+    "subtitle": "subtitles.izumik_shock",
+    "sounds": [
+      {
+        "name": "caerula_arbor:izumik_shock_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:izumik_shock_0",
+        "stream": false
+      }
+    ]
+  },
+  "start": {
+    "subtitle": "subtitles.start",
+    "sounds": [
+      {
+        "name": "caerula_arbor:start",
+        "stream": false
+      }
+    ]
+  },
+  "notice": {
+    "subtitle": "subtitles.notice",
+    "sounds": [
+      {
+        "name": "caerula_arbor:notice",
+        "stream": false
+      }
+    ]
+  },
+  "quit": {
+    "subtitle": "subtitles.quit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:quit",
+        "stream": false
+      }
+    ]
+  },
+  "alert": {
+    "subtitle": "subtitles.alert",
+    "sounds": [
+      {
+        "name": "caerula_arbor:alert",
+        "stream": false
+      }
+    ]
+  },
+  "tap": {
+    "subtitle": "subtitles.tap",
+    "sounds": [
+      {
+        "name": "caerula_arbor:tap",
+        "stream": false
+      }
+    ]
+  },
+  "skadi_attack": {
+    "subtitle": "subtitles.skadi_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:skadi_attack",
+        "stream": false
+      }
+    ]
+  },
+  "skadi_talk": {
+    "subtitle": "subtitles.skadi_talk",
+    "sounds": [
+      {
+        "name": "caerula_arbor:skadi_talk_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:skadi_talk_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:skadi_talk_0",
+        "stream": false
+      }
+    ]
+  },
+  "medic_normal": {
+    "subtitle": "subtitles.medic_normal",
+    "sounds": [
+      {
+        "name": "caerula_arbor:medic_0",
+        "stream": false
+      }
+    ]
+  },
+  "medic_strong": {
+    "subtitle": "subtitles.medic_strong",
+    "sounds": [
+      {
+        "name": "caerula_arbor:medic_str_0",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:medic_str_1",
+        "stream": false
+      }
+    ]
+  },
+  "medic_blast": {
+    "subtitle": "subtitles.medic_blast",
+    "sounds": [
+      {
+        "name": "caerula_arbor:medic_blast",
+        "stream": false
+      }
+    ]
+  },
+  "medic_attack": {
+    "subtitle": "subtitles.medic_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:medic_attack",
+        "stream": false
+      }
+    ]
+  },
+  "saw_cut_spect": {
+    "subtitle": "subtitles.saw_cut_spect",
+    "sounds": [
+      {
+        "name": "caerula_arbor:saw_spect",
+        "stream": false
+      }
+    ]
+  },
+  "saw_spect_skill": {
+    "subtitle": "subtitles.saw_spect_skill",
+    "sounds": [
+      {
+        "name": "caerula_arbor:saw_skill",
+        "stream": false
+      }
+    ]
+  },
+  "saw_heavy": {
+    "subtitle": "subtitles.saw_heavy",
+    "sounds": [
+      {
+        "name": "caerula_arbor:saw_heavy",
+        "stream": false
+      }
+    ]
+  },
+  "saw_spect_1": {
+    "subtitle": "subtitles.saw_spect_1",
+    "sounds": [
+      {
+        "name": "caerula_arbor:saw_spect_1",
+        "stream": false
+      }
+    ]
+  },
+  "whisper_illusion": {
+    "subtitle": "subtitles.whisper_illusion",
+    "sounds": [
+      {
+        "name": "caerula_arbor:whipser",
+        "stream": true
+      }
+    ]
+  },
+  "seaborn_generic_hit": {
+    "subtitle": "subtitles.seaborn_generic_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:seaborn_hit_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:seaborn_hit_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:seaborn_hit_0",
+        "stream": false
+      }
+    ]
+  },
+  "seaborn_death": {
+    "subtitle": "subtitles.seaborn_death",
+    "sounds": [
+      {
+        "name": "caerula_arbor:seaborn_death",
+        "stream": false
+      }
+    ]
+  },
+  "brandguider_hit": {
+    "subtitle": "subtitles.brandguider_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:brandguider_hit_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:brandguider_hit_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:brandguide_hit_0",
+        "stream": false
+      }
+    ]
+  },
+  "brandguider_death": {
+    "subtitle": "subtitles.brandguider_death",
+    "sounds": [
+      {
+        "name": "caerula_arbor:brandguider_death",
+        "stream": false
+      }
+    ]
+  },
+  "highmore_hit": {
+    "subtitle": "subtitles.highmore_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:highmore_hit_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:highmore_hit",
+        "stream": false
+      }
+    ]
+  },
+  "highmore_death": {
+    "subtitle": "subtitles.highmore_death",
+    "sounds": [
+      {
+        "name": "caerula_arbor:highmore_death",
+        "stream": false
+      }
+    ]
+  },
+  "highmore_preamble": {
+    "subtitle": "subtitles.highmore_preamble",
+    "sounds": [
+      {
+        "name": "caerula_arbor:highmore_preamble",
+        "stream": false
+      }
+    ]
+  },
+  "reefbreaker_attack": {
+    "subtitle": "subtitles.reefbreaker_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:reefbreaker_attack",
+        "stream": false
+      }
+    ]
+  },
+  "wardenis_die": {
+    "subtitle": "subtitles.wardenis_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:wardenis_die_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_die_1",
+        "stream": false
+      }
+    ]
+  },
+  "wardenis_idle": {
+    "subtitle": "subtitles.wardenis_idle",
+    "sounds": [
+      {
+        "name": "caerula_arbor:wardenis_idle_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_4",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_5",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_6",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_7",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_8",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_9",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_10",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_11",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_idle_12",
+        "stream": false
+      }
+    ]
+  },
+  "wardenis_hurt": {
+    "subtitle": "subtitles.wardenis_hurt",
+    "sounds": [
+      {
+        "name": "caerula_arbor:wardenis_hurt_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_hurt_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_hurt_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wardenis_hurt_4",
+        "stream": false
+      }
+    ]
+  },
+  "money_in": {
+    "subtitle": "subtitles.money_in",
+    "sounds": [
+      {
+        "name": "caerula_arbor:money_in",
+        "stream": false
+      }
+    ]
+  },
+  "money_out": {
+    "subtitle": "subtitles.money_out",
+    "sounds": [
+      {
+        "name": "caerula_arbor:money_out",
+        "stream": false
+      }
+    ]
+  },
+  "bell_ring": {
+    "subtitle": "subtitles.bell_ring",
+    "sounds": [
+      {
+        "name": "caerula_arbor:bell_ring",
+        "stream": false
+      }
+    ]
+  },
+  "endospore": {
+    "subtitle": "subtitles.endospore",
+    "sounds": [
+      {
+        "name": "caerula_arbor:endospore",
+        "stream": true
+      }
+    ]
+  },
+  "ocean_wither_hurt": {
+    "subtitle": "subtitles.ocean_wither_hurt",
+    "sounds": [
+      {
+        "name": "caerula_arbor:wither_hurt_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wither_hurt_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wither_hurt_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wither_hurt_4",
+        "stream": false
+      }
+    ]
+  },
+  "ocean_wither_idle": {
+    "subtitle": "subtitles.ocean_wither_idle",
+    "sounds": [
+      {
+        "name": "caerula_arbor:wither_idle_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wither_idle_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wither_idle_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:wither_idle_4",
+        "stream": false
+      }
+    ]
+  },
+  "ocean_wither_die": {
+    "subtitle": "subtitles.ocean_wither_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:wither_die",
+        "stream": false
+      }
+    ]
+  },
+  "ocean_wither_spawn": {
+    "subtitle": "subtitles.ocean_wither_spawn",
+    "sounds": [
+      {
+        "name": "caerula_arbor:wither_spawn",
+        "stream": false
+      }
+    ]
+  },
+  "wither_scythe_pre": {
+    "subtitle": "subtitles.wither_scythe_pre",
+    "sounds": [
+      {
+        "name": "caerula_arbor:wither_scythe_pre",
+        "stream": false
+      }
+    ]
+  },
+  "wither_scythe_attack": {
+    "subtitle": "subtitles.wither_scythe_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:wither_scythe_attack",
+        "stream": false
+      }
+    ]
+  },
+  "only_path_ahead": {
+    "subtitle": "subtitles.only_path_ahead",
+    "sounds": [
+      {
+        "name": "caerula_arbor:only_the_path_ahead",
+        "stream": true
+      }
+    ]
+  },
+  "last_knight_attack": {
+    "subtitle": "subtitles.last_knight_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:last_knight_attack_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:last_knight_attack_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:last_knight_attack_3",
+        "stream": false
+      }
+    ]
+  },
+  "last_knight_hit": {
+    "subtitle": "subtitles.last_knight_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:last_knight_attack_short",
+        "stream": false
+      }
+    ]
+  },
+  "last_jnight_freeze": {
+    "subtitle": "subtitles.last_jnight_freeze",
+    "sounds": [
+      {
+        "name": "caerula_arbor:last_knight_freeze",
+        "stream": false
+      }
+    ]
+  },
+  "nervous_break": {
+    "subtitle": "subtitles.nervous_break",
+    "sounds": [
+      {
+        "name": "caerula_arbor:nervous_break",
+        "stream": false
+      }
+    ]
+  },
+  "apocata_die": {
+    "subtitle": "subtitles.apocata_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:apocat_die_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:apocata_die_1",
+        "stream": false
+      }
+    ]
+  },
+  "apocata_interact": {
+    "subtitle": "subtitles.apocata_interact",
+    "sounds": [
+      {
+        "name": "caerula_arbor:apocata_interact_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:apocata_interact_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:apocata_interact_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:apocata_interact_4",
+        "stream": false
+      }
+    ]
+  },
+  "endspeaker_attack_pre": {
+    "subtitle": "subtitles.endspeaker_attack_pre",
+    "sounds": [
+      {
+        "name": "caerula_arbor:endspeaker_attack_pre",
+        "stream": false
+      }
+    ]
+  },
+  "endspeaker_attack_hit": {
+    "subtitle": "subtitles.endspeaker_attack_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:endspeaker_attack_hit",
+        "stream": false
+      }
+    ]
+  },
+  "endspeaker_eat": {
+    "subtitle": "subtitles.endspeaker_eat",
+    "sounds": [
+      {
+        "name": "caerula_arbor:endspeaker_eat",
+        "stream": false
+      }
+    ]
+  },
+  "clean_bot_move": {
+    "subtitle": "subtitles.clean_bot_move",
+    "sounds": [
+      {
+        "name": "caerula_arbor:clean_bot_move",
+        "stream": false
+      }
+    ]
+  },
+  "clean_bot_start": {
+    "subtitle": "subtitles.clean_bot_start",
+    "sounds": [
+      {
+        "name": "caerula_arbor:clean_bot_start",
+        "stream": false
+      }
+    ]
+  },
+  "al1s_dep": {
+    "subtitle": "subtitles.al1s_dep",
+    "sounds": [
+      {
+        "name": "caerula_arbor:al1s_deploy_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:al1s_deploy_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:al1s_deploy_3",
+        "stream": false
+      }
+    ]
+  },
+  "al1s_break": {
+    "subtitle": "subtitles.al1s_break",
+    "sounds": [
+      {
+        "name": "caerula_arbor:al1s_break_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:al1s_break_2",
+        "stream": false
+      }
+    ]
+  },
+  "al1s_spec": {
+    "subtitle": "subtitles.al1s_spec",
+    "sounds": [
+      {
+        "name": "caerula_arbor:al1s_special_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:al1s_special_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:al1s_special_3",
+        "stream": false
+      }
+    ]
+  },
+  "al1s_work": {
+    "subtitle": "subtitles.al1s_work",
+    "sounds": [
+      {
+        "name": "caerula_arbor:al1s_idle",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:al1s_idle_2",
+        "stream": false
+      }
+    ]
+  },
+  "skill_release": {
+    "subtitle": "subtitles.skill_release",
+    "sounds": [
+      {
+        "name": "caerula_arbor:skill_release",
+        "stream": false
+      }
+    ]
+  },
+  "anchor_pre": {
+    "subtitle": "subtitles.anchor_pre",
+    "sounds": [
+      {
+        "name": "caerula_arbor:anchor_pre",
+        "stream": false
+      }
+    ]
+  },
+  "ulpians_pul_pre": {
+    "subtitle": "subtitles.ulpians_pul_pre",
+    "sounds": [
+      {
+        "name": "caerula_arbor:ulpians_skill_pre",
+        "stream": false
+      }
+    ]
+  },
+  "ulpians_pull_throw": {
+    "subtitle": "subtitles.ulpians_pull_throw",
+    "sounds": [
+      {
+        "name": "caerula_arbor:ulpians_skill_throw",
+        "stream": false
+      }
+    ]
+  },
+  "ulpians_pull_hit": {
+    "subtitle": "subtitles.ulpians_pull_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:ulpians_skill_hit",
+        "stream": false
+      }
+    ]
+  },
+  "ulpians_pull_pull": {
+    "subtitle": "subtitles.ulpians_pull_pull",
+    "sounds": [
+      {
+        "name": "caerula_arbor:ulpians_skill_pull",
+        "stream": false
+      }
+    ]
+  },
+  "ulpians_die": {
+    "subtitle": "subtitles.ulpians_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:ulpians_die",
+        "stream": false
+      }
+    ]
+  },
+  "ulpians_skill": {
+    "subtitle": "subtitles.ulpians_skill",
+    "sounds": [
+      {
+        "name": "caerula_arbor:ulpians_skill_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:ulpians_skill_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:ulpians_skill_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:ulpians_skill_4",
+        "stream": false
+      }
+    ]
+  },
+  "endospore_1": {
+    "subtitle": "subtitles.endospore_1",
+    "sounds": [
+      {
+        "name": "caerula_arbor:endospore",
+        "stream": false
+      }
+    ]
+  },
+  "gladiia_attack_pre": {
+    "subtitle": "subtitles.gladiia_attack_pre",
+    "sounds": [
+      {
+        "name": "caerula_arbor:gladiia_attack_pre",
+        "stream": false
+      }
+    ]
+  },
+  "gladiia_attack_hit": {
+    "subtitle": "subtitles.gladiia_attack_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:gladiia_attack_hit",
+        "stream": false
+      }
+    ]
+  },
+  "gladiia_pull_pre": {
+    "subtitle": "subtitles.gladiia_pull_pre",
+    "sounds": [
+      {
+        "name": "caerula_arbor:gladiia_pull_pre",
+        "stream": false
+      }
+    ]
+  },
+  "gladiia_pull_pull": {
+    "subtitle": "subtitles.gladiia_pull_pull",
+    "sounds": [
+      {
+        "name": "caerula_arbor:gladiia_pull_pull",
+        "stream": false
+      }
+    ]
+  },
+  "gladiia_skill_release": {
+    "subtitle": "subtitles.gladiia_skill_release",
+    "sounds": [
+      {
+        "name": "caerula_arbor:gladiia_skill_release",
+        "stream": false
+      }
+    ]
+  },
+  "gladiia_skill_rim": {
+    "subtitle": "subtitles.gladiia_skill_rim",
+    "sounds": [
+      {
+        "name": "caerula_arbor:gladiia_skill_rim",
+        "stream": false
+      }
+    ]
+  },
+  "gladiia_hurt": {
+    "subtitle": "subtitles.gladiia_hurt",
+    "sounds": [
+      {
+        "name": "caerula_arbor:gladiia_hurt_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:gladiia_hurt_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:gladiia_hurt_3",
+        "stream": false
+      }
+    ]
+  },
+  "gladiia_die": {
+    "subtitle": "subtitles.gladiia_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:gladiia_die",
+        "stream": false
+      }
+    ]
+  },
+  "gladiia_skill": {
+    "subtitle": "subtitles.gladiia_skill",
+    "sounds": [
+      {
+        "name": "caerula_arbor:gladiia_skill_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:gladiia_skill_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:gladiia_skill_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:gladiia_skill_4",
+        "stream": false
+      }
+    ]
+  },
+  "ulpians_hit": {
+    "subtitle": "subtitles.ulpians_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:ulpians_hit_4",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:ulpians_hit_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:ulpians_hit",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:ulpians_hit_2",
+        "stream": false
+      }
+    ]
+  },
+  "flyfish_attack": {
+    "subtitle": "subtitles.flyfish_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:fly_fish_attack",
+        "stream": false
+      }
+    ]
+  },
+  "splasher_attack": {
+    "subtitle": "subtitles.splasher_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:splasher_attack",
+        "stream": false
+      }
+    ]
+  },
+  "puncturefish_attack": {
+    "subtitle": "subtitles.puncturefish_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:puncture_fish_attack",
+        "stream": false
+      }
+    ]
+  },
+  "bishopfish_attack": {
+    "subtitle": "subtitles.bishopfish_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:quintus_attack",
+        "stream": false
+      }
+    ]
+  },
+  "bishopfish_flap": {
+    "subtitle": "subtitles.bishopfish_flap",
+    "sounds": [
+      {
+        "name": "caerula_arbor:quintus_flap",
+        "stream": false
+      }
+    ]
+  },
+  "bishopfish_blast": {
+    "subtitle": "subtitles.bishopfish_blast",
+    "sounds": [
+      {
+        "name": "caerula_arbor:quintus_blast",
+        "stream": false
+      }
+    ]
+  },
+  "firstteller_skill": {
+    "subtitle": "subtitles.firstteller_skill",
+    "sounds": [
+      {
+        "name": "caerula_arbor:first_to_talk_skill",
+        "stream": false
+      }
+    ]
+  },
+  "firstteller_attack": {
+    "subtitle": "subtitles.firstteller_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:firste_to_talk_hit",
+        "stream": false
+      }
+    ]
+  },
+  "firetteller_skill_attack": {
+    "subtitle": "subtitles.firetteller_skill_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:first_to_talk_sattack",
+        "stream": false
+      }
+    ]
+  },
+  "pocket_sea_creeper_explode": {
+    "subtitle": "subtitles.pocket_sea_creeper_explode",
+    "sounds": [
+      {
+        "name": "caerula_arbor:pocket_sea_creeper_explode",
+        "stream": false
+      }
+    ]
+  },
+  "specter_attack": {
+    "subtitle": "subtitles.specter_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:specter_attack",
+        "stream": false
+      }
+    ]
+  },
+  "specter_doll_ambient": {
+    "subtitle": "subtitles.specter_doll_ambient",
+    "sounds": [
+      {
+        "name": "caerula_arbor:specter_doll",
+        "stream": false
+      }
+    ]
+  },
+  "specter_skill_on": {
+    "subtitle": "subtitles.specter_skill_on",
+    "sounds": [
+      {
+        "name": "caerula_arbor:specter_release",
+        "stream": false
+      }
+    ]
+  },
+  "specter_hit": {
+    "subtitle": "subtitles.specter_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:specter_hit_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:specter_hit_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:specter_hit_3",
+        "stream": false
+      }
+    ]
+  },
+  "specter_die": {
+    "subtitle": "subtitles.specter_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:specter_die_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:specter_die_2",
+        "stream": false
+      }
+    ]
+  },
+  "specter_doll_die": {
+    "subtitle": "subtitles.specter_doll_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:specter_doll_die",
+        "stream": false
+      }
+    ]
+  },
+  "specter_skill": {
+    "subtitle": "subtitles.specter_skill",
+    "sounds": [
+      {
+        "name": "caerula_arbor:specter_skill_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:specter_skill_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:specter_skill_3",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:specter_skill_4",
+        "stream": false
+      }
+    ]
+  },
+  "irene_attack": {
+    "subtitle": "subtitles.irene_attack",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_attack",
+        "stream": false
+      }
+    ]
+  },
+  "irene_fly": {
+    "subtitle": "subtitles.irene_fly",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_fly_1",
+        "stream": false
+      }
+    ]
+  },
+  "irene_gun": {
+    "subtitle": "subtitles.irene_gun",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_gun_1",
+        "stream": false
+      }
+    ]
+  },
+  "irene_skill_fly": {
+    "subtitle": "subtitles.irene_skill_fly",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_fly_3",
+        "stream": false
+      }
+    ]
+  },
+  "irene_skill_loop": {
+    "subtitle": "subtitles.irene_skill_loop",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_skill_loop",
+        "stream": false
+      }
+    ]
+  },
+  "irene_skill_gun": {
+    "subtitle": "subtitles.irene_skill_gun",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_gun_3",
+        "stream": false
+      }
+    ]
+  },
+  "irene_reload": {
+    "subtitle": "subtitles.irene_reload",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_reload",
+        "stream": false
+      }
+    ]
+  },
+  "irene_skill": {
+    "subtitle": "subtitles.irene_skill",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_skill_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:irene_skill_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:irene_skill_4",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:irene_skill_3",
+        "stream": false
+      }
+    ]
+  },
+  "irene_interact": {
+    "subtitle": "subtitles.irene_interact",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_interact",
+        "stream": false
+      }
+    ]
+  },
+  "irene_hit": {
+    "subtitle": "subtitles.irene_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_hit_1",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:irene_hit_2",
+        "stream": false
+      },
+      {
+        "name": "caerula_arbor:irene_hit_3",
+        "stream": false
+      }
+    ]
+  },
+  "irene_die": {
+    "subtitle": "subtitles.irene_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:irene_die",
+        "stream": false
+      }
+    ]
+  },
+  "corrupted_convert": {
+    "subtitle": "subtitles.corrupted_convert",
+    "sounds": [
+      {
+        "name": "caerula_arbor:corrupted_convert",
+        "stream": false
+      }
+    ]
+  },
+  "corrupted_corrupt": {
+    "subtitle": "subtitles.corrupted_corrupt",
+    "sounds": [
+      {
+        "name": "caerula_arbor:corrupted_corrupt",
+        "stream": false
+      }
+    ]
+  },
+  "isharmla_tear_hurt_0": {
+    "subtitle": "subtitles.isharmla_tear_hurt_0",
+    "sounds": [
+      {
+        "name": "caerula_arbor:isharmla_tear_hurt_small",
+        "stream": false
+      }
+    ]
+  },
+  "isharmla_tear_hurt_1": {
+    "subtitle": "subtitles.isharmla_tear_hurt_1",
+    "sounds": [
+      {
+        "name": "caerula_arbor:isharmla_tear_hurt_large",
+        "stream": false
+      }
+    ]
+  },
+  "isharmla_tear_place": {
+    "subtitle": "subtitles.isharmla_tear_place",
+    "sounds": [
+      {
+        "name": "caerula_arbor:isharmla_tear_occur",
+        "stream": false
+      }
+    ]
+  },
+  "undertides": {
+    "subtitle": "subtitles.undertides",
+    "sounds": [
+      {
+        "name": "caerula_arbor:undertides",
+        "stream": true
+      }
+    ]
+  },
+  "operation_deepness": {
+    "subtitle": "subtitles.operation_deepness",
+    "sounds": [
+      {
+        "name": "caerula_arbor:operation_deepness",
+        "stream": true
+      }
+    ]
+  },
+  "carmen_melee": {
+    "subtitle": "subtitles.carmen_melee",
+    "sounds": [
+      {
+        "name": "caerula_arbor:carmen_melee",
+        "stream": false
+      }
+    ]
+  },
+  "carmen_shoot": {
+    "subtitle": "subtitles.carmen_shoot",
+    "sounds": [
+      {
+        "name": "caerula_arbor:carmen_shoot",
+        "stream": false
+      }
+    ]
+  },
+  "carmen_big_shoot": {
+    "subtitle": "subtitles.carmen_big_shoot",
+    "sounds": [
+      {
+        "name": "caerula_arbor:carmen_big_shoot",
+        "stream": false
+      }
+    ]
+  },
+  "reaper_angry": {
+    "subtitle": "subtitles.reaper_angry",
+    "sounds": [
+      {
+        "name": "caerula_arbor:reaper_angry",
+        "stream": false
+      }
+    ]
+  },
+  "isharmla_attack_pre": {
+    "subtitle": "subtitles.isharmla_attack_pre",
+    "sounds": [
+      {
+        "name": "caerula_arbor:isharmla_attack_pre",
+        "stream": false
+      }
+    ]
+  },
+  "isharmla_attack_launch": {
+    "subtitle": "subtitles.isharmla_attack_launch",
+    "sounds": [
+      {
+        "name": "caerula_arbor:isharmla_attack_launch",
+        "stream": false
+      }
+    ]
+  },
+  "isharmla_attack_hit": {
+    "subtitle": "subtitles.isharmla_attack_hit",
+    "sounds": [
+      {
+        "name": "caerula_arbor:isharmla_attack_hit",
+        "stream": false
+      }
+    ]
+  },
+  "isharmla_to_human": {
+    "subtitle": "subtitles.isharmla_to_human",
+    "sounds": [
+      {
+        "name": "caerula_arbor:isharmla_to_human",
+        "stream": false
+      }
+    ]
+  },
+  "isharmla_to_monsterr": {
+    "subtitle": "subtitles.isharmla_to_monsterr",
+    "sounds": [
+      {
+        "name": "caerula_arbor:isharmla_to_monster",
+        "stream": false
+      }
+    ]
+  },
+  "isharmla_heal": {
+    "subtitle": "subtitles.isharmla_heal",
+    "sounds": [
+      {
+        "name": "caerula_arbor:isharmla_heal",
+        "stream": false
+      }
+    ]
+  },
+  "conquerer": {
+    "subtitle": "subtitles.conquerer",
+    "sounds": [
+      {
+        "name": "caerula_arbor:conquerer",
+        "stream": true
+      }
+    ]
+  },
+  "oceanwish_fullset": {
+    "subtitle": "subtitles.oceanwish_fullset",
+    "sounds": [
+      {
+        "name": "caerula_arbor:oceanwish_fullset",
+        "stream": true
+      }
+    ]
+  },
+  "operation_underdawn": {
+    "subtitle": "subtitles.operation_underdawn",
+    "sounds": [
+      {
+        "name": "caerula_arbor:operation_underdawn",
+        "stream": true
+      }
+    ]
+  },
+  "mare_natus": {
+    "subtitle": "subtitles.mare_natus",
+    "sounds": [
+      {
+        "name": "caerula_arbor:mare_natus",
+        "stream": true
+      }
+    ]
+  },
+  "caster_pre": {
+    "subtitle": "subtitles.caster_pre",
+    "sounds": [
+      {
+        "name": "caerula_arbor:caster_pre",
+        "stream": false
+      }
+    ]
+  },
+  "caster_cast": {
+    "subtitle": "subtitles.caster_cast",
+    "sounds": [
+      {
+        "name": "caerula_arbor:caster_cast",
+        "stream": false
+      }
+    ]
+  },
+  "caster_skill": {
+    "subtitle": "subtitles.caster_skill",
+    "sounds": [
+      {
+        "name": "caerula_arbor:caster_skill_pre",
+        "stream": false
+      }
+    ]
+  },
+  "caster_explode": {
+    "subtitle": "subtitles.caster_explode",
+    "sounds": [
+      {
+        "name": "caerula_arbor:caster_explode",
+        "stream": false
+      }
+    ]
+  },
+  "caster_crystal_explode": {
+    "subtitle": "subtitles.caster_crystal_explode",
+    "sounds": [
+      {
+        "name": "caerula_arbor:caster_crystal_explode",
+        "stream": false
+      }
+    ]
+  },
+  "caster_hurt": {
+    "subtitle": "subtitles.caster_hurt",
+    "sounds": [
+      {
+        "name": "caerula_arbor:caster_hurt",
+        "stream": false
+      }
+    ]
+  },
+  "caster_die": {
+    "subtitle": "subtitles.caster_die",
+    "sounds": [
+      {
+        "name": "caerula_arbor:caster_die",
+        "stream": false
+      }
+    ]
+  },
+  "living_barrier": {
+    "subtitle": "subtitles.living_barrier",
+    "sounds": [
+      {
+        "name": "caerula_arbor:living_barrier",
+        "stream": false
+      }
+    ]
+  }
+}

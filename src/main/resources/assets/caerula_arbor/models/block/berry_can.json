@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/berrycan",
+  "textures": {
+    "all": "caerula_arbor:block/cannedberry",
+    "particle": "caerula_arbor:block/cherrycan",
+    "0": "caerula_arbor:block/cannedberry"
+  },
+  "render_type": "cutout"
+}

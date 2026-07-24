@@ -1,0 +1,9 @@
+{
+  "parent": "block/door_bottom_right",
+  "textures": {
+    "particle": "caerula_arbor:block/trail_door_lower",
+    "bottom": "caerula_arbor:block/trail_door_lower",
+    "top": "caerula_arbor:block/trail_door_upper"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "blockstate=0": {
+      "model": "caerula_arbor:custom/highmore_spawnblock_particle"
+    },
+    "blockstate=1": {
+      "model": "caerula_arbor:block/highmore_spawnblock_blockstate_0"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,blockstate=0": {
+      "model": "caerula_arbor:block/reaper_egg"
+    },
+    "facing=east,blockstate=0": {
+      "model": "caerula_arbor:block/reaper_egg",
+      "y": 90
+    },
+    "facing=south,blockstate=0": {
+      "model": "caerula_arbor:block/reaper_egg",
+      "y": 180
+    },
+    "facing=west,blockstate=0": {
+      "model": "caerula_arbor:block/reaper_egg",
+      "y": 270
+    },
+    "facing=north,blockstate=1": {
+      "model": "caerula_arbor:block/cracking_reaper_egg_blockstate_0"
+    },
+    "facing=east,blockstate=1": {
+      "model": "caerula_arbor:block/cracking_reaper_egg_blockstate_0",
+      "y": 90
+    },
+    "facing=south,blockstate=1": {
+      "model": "caerula_arbor:block/cracking_reaper_egg_blockstate_0",
+      "y": 180
+    },
+    "facing=west,blockstate=1": {
+      "model": "caerula_arbor:block/cracking_reaper_egg_blockstate_0",
+      "y": 270
+    },
+    "facing=north,blockstate=2": {
+      "model": "caerula_arbor:block/cracking_reaper_egg_blockstate_1"
+    },
+    "facing=east,blockstate=2": {
+      "model": "caerula_arbor:block/cracking_reaper_egg_blockstate_1",
+      "y": 90
+    },
+    "facing=south,blockstate=2": {
+      "model": "caerula_arbor:block/cracking_reaper_egg_blockstate_1",
+      "y": 180
+    },
+    "facing=west,blockstate=2": {
+      "model": "caerula_arbor:block/cracking_reaper_egg_blockstate_1",
+      "y": 270
+    }
+  }
+}

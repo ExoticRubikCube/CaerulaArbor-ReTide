@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "caerula_arbor:custom/viviparous_lily_particle"
+    },
+    "facing=east": {
+      "model": "caerula_arbor:custom/viviparous_lily_particle",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "caerula_arbor:custom/viviparous_lily_particle",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "caerula_arbor:custom/viviparous_lily_particle",
+      "y": 270
+    }
+  }
+}

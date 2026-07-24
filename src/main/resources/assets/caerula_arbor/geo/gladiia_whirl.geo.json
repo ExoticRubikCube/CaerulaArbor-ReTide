@@ -1,0 +1,195 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.gladiia_whirl",
+				"texture_width": 96,
+				"texture_height": 64,
+				"visible_bounds_width": 5,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "axis",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "upper",
+					"parent": "axis",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{
+							"origin": [-16, 3, -16],
+							"size": [32, 18, 32],
+							"uv": {
+								"north": {"uv": [0, 0], "uv_size": [32, 18]},
+								"east": {"uv": [0, 0], "uv_size": [32, 18]},
+								"south": {"uv": [0, 0], "uv_size": [32, 18]},
+								"west": {"uv": [0, 0], "uv_size": [32, 18]},
+								"up": {"uv": [96, 64], "uv_size": [-32, -32]},
+								"down": {"uv": [0, 19], "uv_size": [32, 32]}
+							}
+						},
+						{
+							"origin": [-16, 3, -16],
+							"size": [32, 18, 32],
+							"inflate": 0.25,
+							"uv": {
+								"north": {"uv": [32, 0], "uv_size": [32, 18]},
+								"east": {"uv": [32, 0], "uv_size": [32, 18]},
+								"south": {"uv": [32, 0], "uv_size": [32, 18]},
+								"west": {"uv": [32, 0], "uv_size": [32, 18]}
+							}
+						}
+					]
+				},
+				{
+					"name": "lower",
+					"parent": "upper",
+					"pivot": [0, 1.5, 0],
+					"cubes": [
+						{
+							"origin": [-13, 0, -13],
+							"size": [26, 3, 26],
+							"uv": {
+								"north": {"uv": [38, 34], "uv_size": [26, 3]},
+								"east": {"uv": [38, 34], "uv_size": [26, 3]},
+								"south": {"uv": [38, 34], "uv_size": [26, 3]},
+								"west": {"uv": [38, 34], "uv_size": [26, 3]},
+								"down": {"uv": [38, 38], "uv_size": [26, 26]}
+							}
+						}
+					]
+				},
+				{
+					"name": "ring",
+					"parent": "upper",
+					"pivot": [0, 3.125, 0],
+					"cubes": [
+						{
+							"origin": [-32, 3.25, 0],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [96, 0], "uv_size": [-32, 32]}
+							}
+						},
+						{
+							"origin": [0, 3.25, -32],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [64, 32], "uv_size": [32, -32]}
+							}
+						},
+						{
+							"origin": [0, 3.25, 0],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [64, 0], "uv_size": [32, 32]}
+							}
+						},
+						{
+							"origin": [-32, 3.25, -32],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [96, 32], "uv_size": [-32, -32]}
+							}
+						},
+						{
+							"origin": [-32, 3, 0],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [96, 0], "uv_size": [-32, 32]}
+							}
+						},
+						{
+							"origin": [0, 3, -32],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [64, 32], "uv_size": [32, -32]}
+							}
+						},
+						{
+							"origin": [0, 3, 0],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [64, 0], "uv_size": [32, 32]}
+							}
+						},
+						{
+							"origin": [-32, 3, -32],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [96, 32], "uv_size": [-32, -32]}
+							}
+						}
+					]
+				},
+				{
+					"name": "ring2",
+					"parent": "upper",
+					"pivot": [0, 3.125, 0],
+					"cubes": [
+						{
+							"origin": [-32, 3.25, 0],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [96, 0], "uv_size": [-32, 32]}
+							}
+						},
+						{
+							"origin": [0, 3.25, -32],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [64, 32], "uv_size": [32, -32]}
+							}
+						},
+						{
+							"origin": [0, 3.25, 0],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [64, 0], "uv_size": [32, 32]}
+							}
+						},
+						{
+							"origin": [-32, 3.25, -32],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [96, 32], "uv_size": [-32, -32]}
+							}
+						},
+						{
+							"origin": [-32, 3, 0],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [96, 0], "uv_size": [-32, 32]}
+							}
+						},
+						{
+							"origin": [0, 3, -32],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [64, 32], "uv_size": [32, -32]}
+							}
+						},
+						{
+							"origin": [0, 3, 0],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [64, 0], "uv_size": [32, 32]}
+							}
+						},
+						{
+							"origin": [-32, 3, -32],
+							"size": [32, 0, 32],
+							"uv": {
+								"up": {"uv": [96, 32], "uv_size": [-32, -32]}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

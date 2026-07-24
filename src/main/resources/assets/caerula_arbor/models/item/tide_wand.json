@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/tidewand",
+  "textures": {
+    "0": "caerula_arbor:block/tidewand",
+    "particle": "caerula_arbor:item/tidewand"
+  }
+}

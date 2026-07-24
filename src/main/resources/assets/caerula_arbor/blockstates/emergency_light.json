@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "blockstate=0": {
+      "model": "caerula_arbor:block/emergency_light"
+    },
+    "blockstate=1": {
+      "model": "caerula_arbor:block/emerg_light_wall_blockstate_0"
+    },
+    "blockstate=2": {
+      "model": "caerula_arbor:block/emerg_light_wall_blockstate_1"
+    }
+  }
+}

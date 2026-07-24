@@ -1,0 +1,10 @@
+{
+  "parent": "caerula_arbor:custom/armor",
+  "textures": {
+    "all": "caerula_arbor:block/armor",
+    "particle": "caerula_arbor:block/kingsarmor",
+    "0": "caerula_arbor:block/armor",
+    "missing": "caerula_arbor:block/armor"
+  },
+  "render_type": "cutout_mipped"
+}

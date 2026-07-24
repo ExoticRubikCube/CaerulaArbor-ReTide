@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/morfarmland",
+  "textures": {
+    "all": "caerula_arbor:block/oceanfarmmland",
+    "particle": "caerula_arbor:block/nethersea_block",
+    "0": "caerula_arbor:block/oceanfarmmland"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,290 @@
+package com.susen36.caerulaarbor.entity;
+
+import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
+import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CASounds;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.network.NetworkHooks;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
+
+public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.INT);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private boolean swinging;
+	private long lastSwing;
+	public String animationprocedure = "empty";
+
+	public ApocataEntity(Level world) {
+		this(CAEntities.APOCATA.get(), world);
+	}
+
+	public ApocataEntity(EntityType<ApocataEntity> type, Level world) {
+		super(type, world);
+		xpReward = 0;
+		setNoAi(false);
+		setMaxUpStep(0.6f);
+		setCustomName(Component.literal("哈基玖"));
+		setCustomNameVisible(true);
+		setPersistenceRequired();
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_DURATION, 0);
+	}
+
+	@Override
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(1, new RandomStrollGoal(this, 1) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && isApocataDurative();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && isApocataDurative();
+			}
+		});
+		this.goalSelector.addGoal(2, new FollowMobGoal(this, 1, (float) 24, (float) 16));
+		this.goalSelector.addGoal(3, new ClimbOnTopOfPowderSnowGoal(this, this.level()));
+		this.goalSelector.addGoal(4, new OpenDoorGoal(this, true));
+		this.goalSelector.addGoal(5, new OpenDoorGoal(this, false));
+		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(7, new FloatGoal(this));
+	}
+
+    @Override
+	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+		return false;
+	}
+
+	@Override
+	public SoundEvent getHurtSound(DamageSource ds) {
+		return SoundEvents.GENERIC_HURT;
+	}
+
+	@Override
+	public SoundEvent getDeathSound() {
+		return SoundEvents.GENERIC_DEATH;
+	}
+
+	@Override
+	public void die(DamageSource source) {
+		super.die(source);
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        Entity sourceentity = source.getEntity();
+        if (sourceentity == null)
+            return;
+        String name;
+        if (!world.isClientSide()) {
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.APOCATA_DIE.get(), SoundSource.NEUTRAL, 4, (float) 1.5);
+            }
+        }
+        name = sourceentity.getDisplayName().getString();
+        if (name.contains("goodsquid") || name.contains("Goodsquid")) {
+            if (!level().isClientSide())
+                discard();
+            if (world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.TIDE_CHIMERA.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+            }
+        }
+    }
+
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+	}
+
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
+		if (compound.contains("Duration")) {
+		    this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+		}
+	}
+
+	@Override
+	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
+		super.mobInteract(sourceentity, hand);
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+        if (this.getEntityData().get(DATA_DURATION) > 0) {
+            return InteractionResult.PASS;
+        }
+        if (sourceentity.getMainHandItem().getItem() == Blocks.AIR.asItem() && sourceentity.getOffhandItem().getItem() == Blocks.AIR.asItem()) {
+			if (this instanceof ApocataEntity) {
+				this.setAnimation("animation.apocata.tap");
+			}
+			if (!this.level().isClientSide()) {
+				this.level().playSound(null, BlockPos.containing(x, y, z), CASounds.APOCATA_INTERACT.get(), SoundSource.NEUTRAL, 3, (float) 1.5);
+			}
+			this.getEntityData().set(DATA_DURATION, 20);
+			return InteractionResult.SUCCESS;
+		}
+        return InteractionResult.PASS;
+    }
+
+	@Override
+	public void baseTick() {
+		super.baseTick();
+        double dura;
+        dura = (Entity) this instanceof ApocataEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
+        if (dura > 0) {
+            if ((Entity) this instanceof ApocataEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+        }
+        this.refreshDimensions();
+	}
+
+	@Override
+	public void aiStep() {
+		super.aiStep();
+		this.updateSwingTime();
+	}
+
+	public static AttributeSupplier.Builder createAttributes() {
+		AttributeSupplier.Builder builder = Mob.createMobAttributes();
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+		builder = builder.add(Attributes.MAX_HEALTH, 114);
+		builder = builder.add(Attributes.ARMOR, 5);
+		builder = builder.add(Attributes.ATTACK_DAMAGE, 3);
+		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
+		return builder;
+	}
+
+	private boolean isApocataDurative() {
+		return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
+	}
+
+	private PlayState movementPredicate(AnimationState<?> event) {
+		if (this.animationprocedure.equals("empty")) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+
+			) {
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.apocata.move"));
+			}
+			if (this.isDeadOrDying()) {
+				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.apocata.die"));
+			}
+			if (this.isShiftKeyDown()) {
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.apocata.sit"));
+			}
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.apocata.idle"));
+		}
+		return PlayState.STOP;
+	}
+
+	String prevAnim = "empty";
+
+	private PlayState procedurePredicate(AnimationState<?> event) {
+		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+			if (!this.animationprocedure.equals(prevAnim))
+				event.getController().forceAnimationReset();
+			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+				this.animationprocedure = "empty";
+				event.getController().forceAnimationReset();
+			}
+		} else if (animationprocedure.equals("empty")) {
+			prevAnim = "empty";
+			return PlayState.STOP;
+		}
+		prevAnim = this.animationprocedure;
+		return PlayState.CONTINUE;
+	}
+
+	@Override
+	protected void tickDeath() {
+		++this.deathTime;
+		if (this.deathTime == 40) {
+			this.remove(ApocataEntity.RemovalReason.KILLED);
+			this.dropExperience();
+            LevelAccessor world = this.level();
+            if (world instanceof ServerLevel level) {
+                ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.APOCALYPSE.get()));
+                entityToSpawn.setPickUpDelay(10);
+                entityToSpawn.setUnlimitedLifetime();
+                level.addFreshEntity(entityToSpawn);
+            }
+        }
+	}
+
+	public String getSyncedAnimation() {
+		return this.entityData.get(DATA_ANIMATION);
+	}
+
+	public void setAnimation(String animation) {
+		this.entityData.set(DATA_ANIMATION, animation);
+	}
+
+	@Override
+	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+		data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
+		data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
+	}
+
+	@Override
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
+}

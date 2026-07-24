@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "caerula_arbor:block/trail_log_top",
+    "up": "caerula_arbor:block/trail_log_top",
+    "north": "caerula_arbor:block/trail_log_side",
+    "east": "caerula_arbor:block/trail_log_side",
+    "south": "caerula_arbor:block/trail_log_side",
+    "west": "caerula_arbor:block/trail_log_side",
+    "particle": "caerula_arbor:block/trail_log_top"
+  },
+  "render_type": "solid"
+}

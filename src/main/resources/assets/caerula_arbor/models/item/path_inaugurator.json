@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/poineer",
+  "textures": {
+    "0": "caerula_arbor:block/path_poineer",
+    "particle": "caerula_arbor:item/path_poineer"
+  }
+}

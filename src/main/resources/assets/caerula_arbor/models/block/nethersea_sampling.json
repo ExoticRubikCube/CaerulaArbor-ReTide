@@ -1,0 +1,8 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "caerula_arbor:block/nethersea_sampling",
+    "particle": "caerula_arbor:block/nethersea_sampling"
+  },
+  "render_type": "cutout"
+}

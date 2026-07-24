@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "caerula_arbor:block/block_batbed"
+    },
+    "facing=east": {
+      "model": "caerula_arbor:block/block_batbed",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "caerula_arbor:block/block_batbed",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "caerula_arbor:block/block_batbed",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/trailaxe",
+  "textures": {
+    "0": "caerula_arbor:block/trail_axe",
+    "particle": "caerula_arbor:item/trail_axe"
+  }
+}

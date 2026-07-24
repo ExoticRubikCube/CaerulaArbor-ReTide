@@ -1,0 +1,10 @@
+{
+  "parent": "caerula_arbor:custom/crystal",
+  "textures": {
+    "all": "caerula_arbor:block/crystalblock",
+    "particle": "caerula_arbor:block/kingcrystal",
+    "0": "caerula_arbor:block/crystalblock",
+    "1": "caerula_arbor:block/crystalblock"
+  },
+  "render_type": "cutout_mipped"
+}

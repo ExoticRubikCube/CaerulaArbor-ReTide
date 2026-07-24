@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/spearlong",
+  "textures": {
+    "0": "caerula_arbor:block/longspear",
+    "particle": "caerula_arbor:item/longspear"
+  }
+}

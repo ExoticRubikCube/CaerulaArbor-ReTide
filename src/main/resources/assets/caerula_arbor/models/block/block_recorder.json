@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "caerula_arbor:block/block_recorder_back",
+    "up": "caerula_arbor:block/block_recorder_top",
+    "north": "caerula_arbor:block/block_recorder_front",
+    "east": "caerula_arbor:block/block_recorder_side",
+    "south": "caerula_arbor:block/block_recorder_back",
+    "west": "caerula_arbor:block/block_recorder_side",
+    "particle": "caerula_arbor:block/block_recorder_back"
+  },
+  "render_type": "solid"
+}

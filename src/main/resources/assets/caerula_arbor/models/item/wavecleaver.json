@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/wavelceaver",
+  "textures": {
+    "layer0": "caerula_arbor:item/weavecleaver"
+  }
+}

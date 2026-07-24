@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/skadi_sword",
+  "textures": {
+    "0": "caerula_arbor:block/skadi_sword",
+    "particle": "caerula_arbor:item/skadi_sword"
+  }
+}

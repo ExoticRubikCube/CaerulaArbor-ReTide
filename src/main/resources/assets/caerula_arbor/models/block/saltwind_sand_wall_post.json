@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "caerula_arbor:block/com_saltwind",
+    "particle": "caerula_arbor:block/com_saltwind"
+  },
+  "render_type": "solid"
+}
