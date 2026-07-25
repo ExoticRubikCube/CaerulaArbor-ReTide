@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -16,20 +16,21 @@ import com.susen36.caerulaarbor.init.CAAttributes;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import net.minecraft.resources.ResourceLocation;
 
 public class MagicResisBuffMobEffect extends MobEffect {
     public MagicResisBuffMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -3394561);
-        this.addAttributeModifier(CAAttributes.MAGIC_RESISTANCE.get(), "26fea5e8-5251-3bfc-bd92-46a0eb216a22", 4, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(CAAttributes.MAGIC_RESISTANCE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "magic_resis_buff_magic_resistance"), 4, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 

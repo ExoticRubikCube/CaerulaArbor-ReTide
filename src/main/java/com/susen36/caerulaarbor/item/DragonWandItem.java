@@ -1,12 +1,12 @@
 package com.susen36.caerulaarbor.item;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.susen36.caerulaarbor.entity.MoistDragonBreathEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -97,8 +97,8 @@ public class DragonWandItem extends Item {
             boolean IsCreative;
             boolean ApocataMode = false;
             gap = 30;
-            if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.SYNESTHESIA.get(), itemstack) != 0) {
-                gap = Math.max(gap - itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()) * 4, 10);
+            if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack) != 0) {
+                gap = Math.max(gap - EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack) * 4, 10);
             }
             if ((entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.APOCATA_SWORD.get()) {
                 gap = 2;

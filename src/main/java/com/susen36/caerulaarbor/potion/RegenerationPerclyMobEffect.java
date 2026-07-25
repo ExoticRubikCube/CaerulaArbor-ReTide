@@ -12,12 +12,13 @@ public class RegenerationPerclyMobEffect extends MobEffect {
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entity, int amplifier) {
+	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         EntityUtils.heal(entity, entity.getMaxHealth() * 0.0025 * ((double) amplifier + 1));
+	    return true;
     }
 
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier) {
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
 		return true;
 	}
 }

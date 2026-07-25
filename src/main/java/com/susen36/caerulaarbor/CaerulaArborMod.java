@@ -35,7 +35,6 @@ public class CaerulaArborMod {
         CABlockEntities.REGISTRY.register(modEventBus);
         CAItems.REGISTRY.register(modEventBus);
         CAEntities.REGISTRY.register(modEventBus);
-        CAEnchantments.REGISTRY.register(modEventBus);
         CATabs.REGISTRY.register(modEventBus);
 
         CAMobEffects.REGISTRY.register(modEventBus);

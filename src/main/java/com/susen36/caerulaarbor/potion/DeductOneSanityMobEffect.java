@@ -11,7 +11,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class DeductOneSanityMobEffect extends MobEffect {
 		super(MobEffectCategory.HARMFUL, -6684724);
 	}
 
-	@Override
+	// TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
 	public List<ItemStack> getCurativeItems() {
 		ArrayList<ItemStack> cures = new ArrayList<ItemStack>();
 		cures.add(new ItemStack(Items.MILK_BUCKET));
@@ -31,12 +31,13 @@ public class DeductOneSanityMobEffect extends MobEffect {
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entity, int amplifier) {
+	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         SIHelper.causeSanityInjury(entity, (double) amplifier + 1, SanityEvent.Hurt.Type.POTION);
+	    return true;
     }
 
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier) {
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
 		return true;
 	}
 

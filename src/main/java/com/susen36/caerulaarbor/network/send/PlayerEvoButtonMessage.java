@@ -86,8 +86,8 @@ public class PlayerEvoButtonMessage implements CustomPacketPayload {
             double quantity_cost = 0;
             double quality_cost = 0;
             double add_def;
-            quantity = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quantity;
-            quality = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quality;
+            quantity = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quantity;
+            quality = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quality;
             title = entity.getPersistentData().getString("showcasingEvoNode");
             if (!PlayerStateUtils.isNexusNoRejectionSelected(entity) && (title).equals("nexus.no_rejection") && quality >= 1) {
                 {
@@ -119,7 +119,7 @@ public class PlayerEvoButtonMessage implements CustomPacketPayload {
             } else if (!PlayerStateUtils.isNexusPercDamageSelected(entity) && (title).equals("nexus.perc_damage") && quality >= 3) {
                 {
                     boolean setval = true;
-                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.PEVO_NEXUS_perc_damage = setval;
                         capability.syncPlayerVariables(entity);
                     });

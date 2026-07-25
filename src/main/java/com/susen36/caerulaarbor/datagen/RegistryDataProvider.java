@@ -2,11 +2,12 @@ package com.susen36.caerulaarbor.datagen;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.datagen.worldgen.WorldgenProvider;
+import com.susen36.caerulaarbor.init.CAEnchantments;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -23,6 +24,7 @@ public class RegistryDataProvider extends DatapackBuiltinEntriesProvider {
 
     static {
         BUILDER.add(Registries.DAMAGE_TYPE, DamageTypes::bootstrap);
+        BUILDER.add(Registries.ENCHANTMENT, CAEnchantments::bootstrap);
         WorldgenProvider.init(BUILDER);
     }
 

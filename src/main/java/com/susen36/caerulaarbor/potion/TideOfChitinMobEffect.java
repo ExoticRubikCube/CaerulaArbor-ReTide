@@ -8,6 +8,7 @@ import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -23,7 +24,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +33,11 @@ import java.util.function.Consumer;
 public class TideOfChitinMobEffect extends MobEffect {
     public TideOfChitinMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -13382401);
-        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, "6d392e1f-11d2-3f61-a82f-7dcfd9a507be", 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
-        this.addAttributeModifier(Attributes.MAX_HEALTH, "45591a17-debe-3f82-bab4-0fe652f64fd9", 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "tide_of_chitin_attack_damage"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        this.addAttributeModifier(Attributes.MAX_HEALTH, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "tide_of_chitin_max_health"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
@@ -54,7 +55,7 @@ public class TideOfChitinMobEffect extends MobEffect {
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
@@ -77,10 +78,11 @@ public class TideOfChitinMobEffect extends MobEffect {
             world.addParticle(CAParticles.KNIFEPTC.get(), (x + Mth.nextDouble(RandomSource.create(), -0.45, 0.45)), (y + Mth.nextDouble(RandomSource.create(), 0, entity.getBbHeight() * 0.8)),
                     (z + Mth.nextDouble(RandomSource.create(), -0.45, 0.45)), Math.sin(Mth.nextDouble(RandomSource.create(), 0, 6.283)), 0.1, Math.cos(Mth.nextDouble(RandomSource.create(), 0, 6.283)));
         }
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 

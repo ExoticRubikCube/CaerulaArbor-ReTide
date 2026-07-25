@@ -36,13 +36,13 @@ public class SplasherAttackMobEffect extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, -13421773);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
@@ -101,10 +101,11 @@ public class SplasherAttackMobEffect extends MobEffect {
                 }
             }
         }
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return MathUtils.isMultipleOf(duration, 40);
     }
 }

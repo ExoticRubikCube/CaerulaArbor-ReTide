@@ -22,7 +22,7 @@ public class MuteMobEffect extends MobEffect {
 		super(MobEffectCategory.HARMFUL, -11904668);
 	}
 
-	@Override
+	// TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
 	public List<ItemStack> getCurativeItems() {
 		ArrayList<ItemStack> cures = new ArrayList<>();
 		cures.add(new ItemStack(Items.MILK_BUCKET));
@@ -32,7 +32,7 @@ public class MuteMobEffect extends MobEffect {
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entity, int amplifier) {
+	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         if (world instanceof ServerLevel level)
             level.sendParticles(CAParticles.MUTENESS.get(), entity.getX(), entity.getY(), entity.getZ(), 2, 1, 1, 1, 0.1);
@@ -44,10 +44,11 @@ public class MuteMobEffect extends MobEffect {
             if ((Entity) entity instanceof Creeper creeper)
                 creeper.setSwellDir(0);
         }
+	    return true;
     }
 
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier) {
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
 		return MathUtils.isMultipleOf(duration, 10);
 	}
 }

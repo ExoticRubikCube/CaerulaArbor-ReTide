@@ -19,7 +19,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,13 +31,13 @@ public class WipeDustsMobEffect extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, -6684724);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         if ((Entity) entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(MobEffects.REGENERATION) && ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(Items.BRUSH)))) {
             {
@@ -52,10 +52,11 @@ public class WipeDustsMobEffect extends MobEffect {
                 }
             }
         }
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return MathUtils.isMultipleOf(duration, 20);
     }
 

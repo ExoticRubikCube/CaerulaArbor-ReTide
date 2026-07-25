@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.entity.EndspeakerEntity;
 import com.susen36.caerulaarbor.entity.IzumikEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAParticles;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -18,11 +19,11 @@ import net.minecraft.world.level.LevelAccessor;
 public class InvulnerableMobEffect extends MobEffect {
 	public InvulnerableMobEffect() {
 		super(MobEffectCategory.NEUTRAL, -10092442);
-		this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE.get(), "3b009f60-e661-3e22-bb74-48e815ae0e8b", 100, AttributeModifier.Operation.ADDITION);
+		this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "invulnerable_sanity_resistance"), 100, AttributeModifier.Operation.ADD_VALUE);
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entity, int amplifier) {
+	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
@@ -32,7 +33,7 @@ public class InvulnerableMobEffect extends MobEffect {
         entity.invulnerableTime = 10;
         ang = Mth.nextDouble(RandomSource.create(), 0, 6.283);
         if ((double) amplifier > 4) {
-            return;
+             return true;
         }
         if ((double) amplifier == 0) {
             if (world instanceof ServerLevel level)
@@ -54,10 +55,11 @@ public class InvulnerableMobEffect extends MobEffect {
                     livingEntity.setHealth((float) (livingEntity.getMaxHealth() * (0.4 + phase * 0.15)));
             }
         }
+	    return true;
     }
 
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier) {
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
 		return true;
 	}
 }

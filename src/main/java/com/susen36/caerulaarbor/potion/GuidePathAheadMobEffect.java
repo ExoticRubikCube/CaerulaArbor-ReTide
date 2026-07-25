@@ -8,6 +8,7 @@ import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.MathUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
@@ -30,23 +31,23 @@ import java.util.List;
 public class GuidePathAheadMobEffect extends MobEffect {
     public GuidePathAheadMobEffect() {
         super(MobEffectCategory.NEUTRAL, -13395457);
-        this.addAttributeModifier(Attributes.ARMOR, "6d4b81d9-bed2-396c-918f-891f0ef22012", 12, AttributeModifier.Operation.ADDITION);
-        this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, "97fa89c4-3837-3dcb-a05f-db0233b6a457", 9, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(Attributes.ARMOR, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "guide_path_ahead_armor"), 12, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "guide_path_ahead_armor_toughness"), 9, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
         if (entity == null)
-            return;
+             return true;
         BlockState target;
         if (((Entity) entity).isAlive()) {
             if (WorldUtils.canGrief(world) && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
@@ -93,10 +94,11 @@ public class GuidePathAheadMobEffect extends MobEffect {
                 }
             }
         }
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return MathUtils.isMultipleOf(duration, 10);
     }
 }

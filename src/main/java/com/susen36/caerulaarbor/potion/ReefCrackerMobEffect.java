@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.potion;
 
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CAParticles;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -21,16 +22,16 @@ import java.util.List;
 public class ReefCrackerMobEffect extends MobEffect {
     public ReefCrackerMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -10066177);
-        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, "4bf1ea4a-c7f0-37b3-8940-7ab10737ff32", 0.15, AttributeModifier.Operation.MULTIPLY_BASE);
+        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "reef_cracker_attack_damage"), 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
@@ -41,6 +42,7 @@ public class ReefCrackerMobEffect extends MobEffect {
             if (world instanceof ServerLevel level)
                 level.sendParticles(CAParticles.CRACKER_BUFF_1.get(), x, y, z, 3, 1, 0.5, 1, 0.3);
         }
+        return true;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class ReefCrackerMobEffect extends MobEffect {
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 }

@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.potion;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CAAttributes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,23 +16,24 @@ import java.util.List;
 public class SanityImmueMobEffect extends MobEffect {
     public SanityImmueMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -3342337);
-        this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE.get(), "25ed2265-a53a-32f6-8c94-a83714a7ad23", 200, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sanity_immue_sanity_resistance"), 200, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity.isAlive()) {
             ModCapabilities.getSanityInjury(entity).heal(5);
         }
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 }

@@ -1,38 +1,37 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
-
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.client.gui.GuiGraphics;
-
 import com.susen36.caerulaarbor.init.CAAttributes;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class EndspeaerBrandguideBuffMobEffect extends MobEffect {
     public EndspeaerBrandguideBuffMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -16763956);
-        this.addAttributeModifier(Attributes.ARMOR, "7b0edc10-9817-37cf-89ee-2effc354738e", 4, AttributeModifier.Operation.MULTIPLY_BASE);
-        this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, "8ff8a8b9-1316-3766-ad85-31afa0062e80", 2, AttributeModifier.Operation.MULTIPLY_BASE);
-        this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE.get(), "53665cb1-9b07-3d88-b2b7-a3a4878cee0f", 4, AttributeModifier.Operation.MULTIPLY_BASE);
+        this.addAttributeModifier(Attributes.ARMOR, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "endspeaer_brandguide_buff_armor"), 4, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "endspeaer_brandguide_buff_armor_toughness"), 2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "endspeaer_brandguide_buff_general_defense"), 4, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 

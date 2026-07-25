@@ -48,10 +48,8 @@ public class InfoStrategyReturnButtonMessage implements CustomPacketPayload {
 			int x = message.x;
 			int y = message.y;
 			int z = message.z;
-			if (entity != null) {
-				handleButtonAction(entity, buttonID, x, y, z);
-			}
-		});
+            handleButtonAction(entity, buttonID, x, y, z);
+        });
 	}
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {

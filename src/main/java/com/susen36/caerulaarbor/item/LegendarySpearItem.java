@@ -1,13 +1,13 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.client.renderer.item.LegendarySpearItemRenderer;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.ItemUtils;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
@@ -27,6 +27,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -189,7 +190,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                                     entityiterator.hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                             (float) (((Entity) sourceentity instanceof LivingEntity livingEntity17 && livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                                                     ? livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-                                                    : 0) * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
+                                                    : 0) * (1 + 0.2 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(sourceentity.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack))));
                                 }
                             }
                         }
@@ -208,7 +209,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity livingEntity32 && livingEntity32.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity32.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
+                                            * (1 + 0.2 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(sourceentity.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack))));
                         }
                     }
                 });
@@ -225,7 +226,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity livingEntity46 && livingEntity46.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity46.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
+                                            * (1 + 0.2 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(sourceentity.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack))));
                             entity.push(0, 0.5, 0);
                         }
                     }
@@ -243,7 +244,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity livingEntity60 && livingEntity60.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity60.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
+                                            * (1 + 0.2 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(sourceentity.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack))));
                             entity.push((sourceentity.getLookAngle().x), 0, (sourceentity.getLookAngle().z));
                         }
                     }

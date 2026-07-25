@@ -11,7 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class GuidedEvoMobEffect extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, -5532226);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
@@ -35,7 +35,7 @@ public class GuidedEvoMobEffect extends MobEffect {
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 

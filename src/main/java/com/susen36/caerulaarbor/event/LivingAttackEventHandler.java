@@ -37,6 +37,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -403,7 +404,7 @@ public class LivingAttackEventHandler {
         if (immediateSource == null || sourceEntity == null) return;
 
         var mainHandItem = sourceEntity instanceof LivingEntity livingSource ? livingSource.getMainHandItem() : ItemStack.EMPTY;
-        var muteAttackLevel = mainHandItem.getEnchantmentLevel(CAEnchantments.MUTE_ATTACK.get());
+        var muteAttackLevel = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(sourceEntity.level().registryAccess(), CAEnchantments.MUTE_ATTACK), mainHandItem);
         if (muteAttackLevel > 0 && world.random.nextFloat() < 0.2F * muteAttackLevel && !world.isClientSide()) {
             target.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 30 * muteAttackLevel, 0, false, false));
         }

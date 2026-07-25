@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.potion;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAParticles;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -24,11 +25,11 @@ import java.util.List;
 public class ImmortalMobEffect extends MobEffect {
     public ImmortalMobEffect() {
         super(MobEffectCategory.NEUTRAL, -4648944);
-        this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE.get(), "bcdd0e0f-6ece-3c18-9266-a804849cd8fc", 100, AttributeModifier.Operation.ADDITION);
-        this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, "7626f02f-92bf-3575-935f-e06e87d78bd1", 10, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "immortal_sanity_resistance"), 100, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "immortal_knockback_resistance"), 10, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
@@ -42,10 +43,10 @@ public class ImmortalMobEffect extends MobEffect {
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         if (entity == null)
-            return;
+             return true;
         double ang;
         double phase = 0;
         if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
@@ -58,6 +59,7 @@ public class ImmortalMobEffect extends MobEffect {
         ang = Mth.nextDouble(RandomSource.create(), 0, 6.283);
         if (world instanceof ServerLevel level)
             level.sendParticles(CAParticles.IMMORTAL_PTC.get(), (entity.getX() + 1.5 * Math.sin(ang)), (entity.getY() + 1.25), (entity.getZ() + 1.5 * Math.cos(ang)), 1, 0.1, 2, 0.1, 0.2);
+        return true;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class ImmortalMobEffect extends MobEffect {
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 }

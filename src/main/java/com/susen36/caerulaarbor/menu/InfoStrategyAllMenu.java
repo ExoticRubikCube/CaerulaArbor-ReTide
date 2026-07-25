@@ -18,9 +18,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +71,7 @@ public class InfoStrategyAllMenu extends AbstractContainerMenu implements Suppli
 			return InteractionResult.PASS;
 		}
 		if (entity instanceof ServerPlayer serverPlayer) {
-			NetworkHooks.openScreen(serverPlayer, new MenuProvider() {
+			serverPlayer.openMenu(new MenuProvider() {
 				@Override
 				public Component getDisplayName() {
 					return Component.literal("InfoStrategyAll");
@@ -82,7 +81,7 @@ public class InfoStrategyAllMenu extends AbstractContainerMenu implements Suppli
 				public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
 					return new InfoStrategyAllMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(blockPos));
 				}
-			}, blockPos);
+			}, buf -> buf.writeBlockPos(blockPos));
 		}
 		return InteractionResult.SUCCESS;
 	}

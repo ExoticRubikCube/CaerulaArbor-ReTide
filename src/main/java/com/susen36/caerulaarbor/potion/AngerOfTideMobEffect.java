@@ -21,7 +21,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +32,13 @@ public class AngerOfTideMobEffect extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, -10092544);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
@@ -48,11 +48,11 @@ public class AngerOfTideMobEffect extends MobEffect {
         Entity curEnemy;
         minDist = 999;
         if (entity instanceof IzumikOffspringEntity) {
-            return;
+             return true;
         }
         curEnemy = (Entity) entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
         if (!(curEnemy == null) && curEnemy.isAlive()) {
-            return;
+             return true;
         }
         if (!(entity instanceof MartusEntity)) {
             for (Entity entityiterator : world.getEntities(entity, new AABB((x + 32), (y + 12), (z + 32), (x - 32), (y - 9), (z - 32)))) {
@@ -91,10 +91,11 @@ public class AngerOfTideMobEffect extends MobEffect {
             if (enemy instanceof LivingEntity ent && entity instanceof Mob mob)
                 mob.setTarget(ent);
         }
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return MathUtils.isMultipleOf(duration, 10);
     }
 

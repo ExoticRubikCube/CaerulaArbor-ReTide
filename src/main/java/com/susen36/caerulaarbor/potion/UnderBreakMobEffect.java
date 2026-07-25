@@ -1,17 +1,16 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
-
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class UnderBreakMobEffect extends MobEffect {
@@ -19,13 +18,13 @@ public class UnderBreakMobEffect extends MobEffect {
         super(MobEffectCategory.NEUTRAL, -1);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 

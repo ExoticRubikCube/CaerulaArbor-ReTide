@@ -7,6 +7,7 @@ import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -19,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,16 +30,16 @@ import java.util.function.Consumer;
 public class IzumikShockMobEffect extends MobEffect {
     public IzumikShockMobEffect() {
         super(MobEffectCategory.HARMFUL, -45858);
-        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, "39923994-e8ca-3482-a472-83b3fbefd6ae", -0.5, AttributeModifier.Operation.MULTIPLY_BASE);
+        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "izumik_shock_attack_damage"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
@@ -67,10 +68,11 @@ public class IzumikShockMobEffect extends MobEffect {
                     level.sendParticles(ParticleTypes.FIREWORK, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);
             }
         }
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return MathUtils.isMultipleOf(duration, 20);
     }
 

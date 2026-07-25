@@ -1,33 +1,33 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
-
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AddAttackSpeedTinyMobEffect extends MobEffect {
 	public AddAttackSpeedTinyMobEffect() {
 		super(MobEffectCategory.BENEFICIAL, -1);
-		this.addAttributeModifier(Attributes.ATTACK_SPEED, "85e02b38-80b4-3f1c-8dd1-9dafaec7fe6d", 0.07, AttributeModifier.Operation.ADDITION);
+		this.addAttributeModifier(Attributes.ATTACK_SPEED, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "add_attack_speed_tiny_attack_speed"), 0.07, AttributeModifier.Operation.ADD_VALUE);
 	}
 
-	@Override
+	// TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
 	public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
 	}
 
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier) {
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
 		return true;
 	}
 

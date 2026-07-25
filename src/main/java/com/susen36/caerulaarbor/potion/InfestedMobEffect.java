@@ -37,16 +37,16 @@ public class InfestedMobEffect extends MobEffect {
         super(MobEffectCategory.HARMFUL, -3407668);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         if (entity == null)
-            return;
+             return true;
         double dam;
         if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 3) {
             dam = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * Mth.nextDouble(RandomSource.create(), 0.1, 0.25) * ((double) amplifier + 1);
@@ -85,6 +85,7 @@ public class InfestedMobEffect extends MobEffect {
                 }
             }
         }
+        return true;
     }
 
     @Override
@@ -142,7 +143,7 @@ public class InfestedMobEffect extends MobEffect {
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return MathUtils.isMultipleOf(duration, 40);
     }
 }

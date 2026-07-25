@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.potion;
 
 import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.util.MathUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.common.ForgeMod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +22,14 @@ import java.util.List;
 public class SubHaemoMobEffect extends MobEffect {
 	public SubHaemoMobEffect() {
 		super(MobEffectCategory.HARMFUL, -7051604);
-		this.addAttributeModifier(ForgeMod.BLOCK_REACH.get(), "adc95ba5-c2bc-34d0-848e-e949d7cf0951", 0.25, AttributeModifier.Operation.MULTIPLY_BASE);
-		this.addAttributeModifier(ForgeMod.ENTITY_REACH.get(), "534b08c2-f1c4-3db0-ba17-bbaaa359db84", 0.25, AttributeModifier.Operation.MULTIPLY_BASE);
-		this.addAttributeModifier(Attributes.ATTACK_SPEED, "0c05b9af-7673-3331-b1d8-d567880c5fe8", -0.35, AttributeModifier.Operation.MULTIPLY_BASE);
+		// TODO: NeoForge 1.21.1 removed NeoForgeMod.BLOCK_REACH, reimplement when replacement is known
+		// this.addAttributeModifier(NeoForgeMod.BLOCK_REACH, "adc95ba5-c2bc-34d0-848e-e949d7cf0951", 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+		// TODO: NeoForge 1.21.1 removed NeoForgeMod.ENTITY_REACH, reimplement when replacement is known
+		// this.addAttributeModifier(NeoForgeMod.ENTITY_REACH, "534b08c2-f1c4-3db0-ba17-bbaaa359db84", 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+		this.addAttributeModifier(Attributes.ATTACK_SPEED, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sub_haemo_attack_speed"), -0.35, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 	}
 
-	@Override
+	// TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
 	public List<ItemStack> getCurativeItems() {
 		ArrayList<ItemStack> cures = new ArrayList<>();
 		cures.add(new ItemStack(Items.MILK_BUCKET));
@@ -37,7 +39,7 @@ public class SubHaemoMobEffect extends MobEffect {
 	}
 
 	@Override
-	public void applyEffectTick(LivingEntity entity, int amplifier) {
+	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         double health_cur;
         if (Math.round((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < Math.round((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
@@ -54,10 +56,11 @@ public class SubHaemoMobEffect extends MobEffect {
                 }
             }
         }
+	    return true;
     }
 
 	@Override
-	public boolean isDurationEffectTick(int duration, int amplifier) {
+	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
 		return MathUtils.isMultipleOf(duration, 40);
 	}
 }

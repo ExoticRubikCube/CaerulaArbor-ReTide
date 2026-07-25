@@ -6,6 +6,7 @@ import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAParticles;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
@@ -16,7 +17,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +26,16 @@ import java.util.function.Consumer;
 public class SacreficeMobEffect extends MobEffect {
     public SacreficeMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -3407872);
-        this.addAttributeModifier(Attributes.MAX_HEALTH, "3febc167-27ee-37c3-b059-24127f4bc396", 0.5, AttributeModifier.Operation.MULTIPLY_BASE);
+        this.addAttributeModifier(Attributes.MAX_HEALTH, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sacrefice_max_health"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
@@ -48,10 +49,11 @@ public class SacreficeMobEffect extends MobEffect {
                         (z + Mth.nextDouble(RandomSource.create(), -0.55, 0.55)), Math.sin(Mth.nextDouble(RandomSource.create(), 0, 6.283)), 0.05, Math.cos(Mth.nextDouble(RandomSource.create(), 0, 6.283)));
             }
         }
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 

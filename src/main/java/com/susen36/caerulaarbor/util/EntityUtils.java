@@ -211,8 +211,8 @@ public class EntityUtils {
 			} else if (a3.getItem() == CAItems.TRAILRITE_ARMOR_HELMET.get()) {
 				gap = gap + 2;
 			}
-			if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.NETHERSEA_WALKER.get(), a0) != 0) {
-				lvl = a0.getEnchantmentLevel(CAEnchantments.NETHERSEA_WALKER.get());
+			if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), a0) != 0) {
+				lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), a0);
 				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
 					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 30, (int) lvl, false, false));
 				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
@@ -220,8 +220,8 @@ public class EntityUtils {
 			}
 			if (entity.tickCount % gap == 0 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "immue_to_nethersea_brand")))) {
 				if (entity instanceof Player) {
-					if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.DEPTH_STRIDER, a0) != 0) {
-						lvl1 = a0.getEnchantmentLevel(Enchantments.DEPTH_STRIDER);
+					if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.DEPTH_STRIDER), a0) != 0) {
+						lvl1 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.DEPTH_STRIDER), a0);
 					}
 					if (Math.random() < 0.2 * lvl + 0.05 * lvl1) {
 						return;

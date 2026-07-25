@@ -15,23 +15,24 @@ import net.minecraft.world.level.LevelAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.resources.ResourceLocation;
 
 public class MartusProtectionMobEffect extends MobEffect {
     public MartusProtectionMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -16777063);
-        this.addAttributeModifier(Attributes.LUCK, "a1fe5c70-5eb0-326e-ab95-ca86390674e0", 1, AttributeModifier.Operation.ADDITION);
-        this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE.get(), "39a8533e-a27c-3ff8-b45b-150f72207a18", 9, AttributeModifier.Operation.ADDITION);
-        this.addAttributeModifier(CAAttributes.MAGIC_RESISTANCE.get(), "8b082d27-ef84-3136-8123-1bd5642da4c4", 75, AttributeModifier.Operation.ADDITION);
-        this.addAttributeModifier(CAAttributes.MISSRATE.get(), "7ec16e5d-eb5c-3590-b108-74acf31d12e0", 25, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(Attributes.LUCK, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_luck"), 1, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_general_defense"), 9, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(CAAttributes.MAGIC_RESISTANCE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_magic_resistance"), 75, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(CAAttributes.MISSRATE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_missrate"), 25, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         if (entity.tickCount % 5 == 0) {
             double y = entity.getY();
@@ -50,10 +51,11 @@ public class MartusProtectionMobEffect extends MobEffect {
                 world.addParticle(CAParticles.MARTUS_CHARS.get(), tx, (y + 0.8), yz, 0, (-0.08), 0);
             }
         }
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 }

@@ -1,6 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.client.renderer.item.HighmoreScytheItemRenderer;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -8,8 +10,6 @@ import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.ItemUtils;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -29,6 +29,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -213,7 +214,7 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 				}
 				nearbyEntity.hurt(
 						CADamageTypes.source(level, CADamageTypes.HIGHMORE_ATTACK, attacker),
-						(float) (attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * (1.5F + 0.2F * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
+						(float) (attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * (1.5F + 0.2F * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(attacker.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack))));
 				EntityUtils.giveLessArmor(nearbyEntity, 15);
 			}
 			if (!(attacker instanceof Player player) || !player.getAbilities().instabuild) {

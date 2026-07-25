@@ -696,8 +696,8 @@ public class LivingHurtEventHandler {
         if (entity == null || sourceentity == null) return;
 
         ItemStack mainHandItem = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.SANITY_REAPER.get(), mainHandItem) != 0) {
-            double lvl = mainHandItem.getEnchantmentLevel(CAEnchantments.SANITY_REAPER.get());
+        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_REAPER), mainHandItem) != 0) {
+            double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_REAPER), mainHandItem);
             if (entity instanceof LivingEntity target && sourceentity instanceof LivingEntity attacker) {
                 SIHelper.causeSanityInjury(target, attacker, amount * 2 * lvl, SanityEvent.Hurt.Type.ENTITY);
             }
@@ -718,8 +718,8 @@ public class LivingHurtEventHandler {
         if (entity == null || sourceentity == null) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-                && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.OCEANOSPR_KILLER.get(), (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY)) != 0) {
-            double lvl = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(CAEnchantments.OCEANOSPR_KILLER.get());
+                && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.OCEANOSPR_KILLER), (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY)) != 0) {
+            double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.OCEANOSPR_KILLER), (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY));
             double addition = Math.max(amount * lvl * 0.15, lvl * 5);
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, (y + 0.6), z, 24, 0.6, 0.6, 0.6, 0.1);

@@ -1,25 +1,25 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.item.ItemStack;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EssenceResistanceMobEffect extends MobEffect {
     public EssenceResistanceMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -3041537);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 }

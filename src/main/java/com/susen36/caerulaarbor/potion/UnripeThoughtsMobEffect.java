@@ -1,36 +1,36 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
-
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class UnripeThoughtsMobEffect extends MobEffect {
     public UnripeThoughtsMobEffect() {
         super(MobEffectCategory.NEUTRAL, -16724788);
-        this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, "13b0e6aa-a1e8-36a6-9ab9-284bb3db9661", 0.03, AttributeModifier.Operation.MULTIPLY_BASE);
-        this.addAttributeModifier(Attributes.ARMOR, "926c002a-ebd2-375e-8ef9-dd844e90a014", 0.03, AttributeModifier.Operation.MULTIPLY_BASE);
-        this.addAttributeModifier(Attributes.MAX_HEALTH, "2459079e-d168-34e4-9fd9-5c961c7e8143", 1, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "unripe_thoughts_knockback_resistance"), 0.03, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        this.addAttributeModifier(Attributes.ARMOR, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "unripe_thoughts_armor"), 0.03, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        this.addAttributeModifier(Attributes.MAX_HEALTH, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "unripe_thoughts_max_health"), 1, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 

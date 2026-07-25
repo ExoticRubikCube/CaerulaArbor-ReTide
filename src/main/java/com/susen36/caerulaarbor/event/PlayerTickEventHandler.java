@@ -59,31 +59,31 @@ public class PlayerTickEventHandler {
         ItemStack boot = (entity.getItemBySlot(EquipmentSlot.FEET)).copy();
 
         if (entity.tickCount % 5 == 0) {
-            double lvl = helm.getEnchantmentLevel(CAEnchantments.FLEXIBILITY.get()) + chest.getEnchantmentLevel(CAEnchantments.FLEXIBILITY.get())
-                    + legg.getEnchantmentLevel(CAEnchantments.FLEXIBILITY.get()) + boot.getEnchantmentLevel(CAEnchantments.FLEXIBILITY.get());
+            double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.FLEXIBILITY), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.FLEXIBILITY), chest)
+                    + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.FLEXIBILITY), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.FLEXIBILITY), boot);
             if (lvl > 0) {
                 if (!entity.level().isClientSide())
                     entity.addEffect(new MobEffectInstance(CAMobEffects.FLEXIBILITY_BUFF.get(), 10, (int) Math.min(lvl - 1, 16), false, false));
             }
 
-            lvl = helm.getEnchantmentLevel(CAEnchantments.MAGIC_TOLERANCE.get()) + chest.getEnchantmentLevel(CAEnchantments.MAGIC_TOLERANCE.get())
-                    + legg.getEnchantmentLevel(CAEnchantments.MAGIC_TOLERANCE.get()) + boot.getEnchantmentLevel(CAEnchantments.MAGIC_TOLERANCE.get());
+            lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), chest)
+                    + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), boot);
             if (lvl > 0) {
                 if (!entity.level().isClientSide())
                     entity.addEffect(new MobEffectInstance(CAMobEffects.MAGIC_RESIS_BUFF.get(), 10, (int) Math.min(lvl - 1, 16), false, false));
             }
 
-            lvl = helm.getEnchantmentLevel(CAEnchantments.SANITY_INJURY_CURSE.get()) + chest.getEnchantmentLevel(CAEnchantments.SANITY_INJURY_CURSE.get())
-                    + legg.getEnchantmentLevel(CAEnchantments.SANITY_INJURY_CURSE.get()) + boot.getEnchantmentLevel(CAEnchantments.SANITY_INJURY_CURSE.get());
+            lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), chest)
+                    + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), boot);
             if (lvl > 0) {
                 SIHelper.causeSanityInjury(entity, lvl);
             }
         }
 
-        double lvl0 = helm.getEnchantmentLevel(CAEnchantments.HAZARD_PROTECTION.get());
-        double lvl1 = chest.getEnchantmentLevel(CAEnchantments.HAZARD_PROTECTION.get());
-        double lvl2 = legg.getEnchantmentLevel(CAEnchantments.HAZARD_PROTECTION.get());
-        double lvl3 = boot.getEnchantmentLevel(CAEnchantments.HAZARD_PROTECTION.get());
+        double lvl0 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), helm);
+        double lvl1 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), chest);
+        double lvl2 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), legg);
+        double lvl3 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), boot);
         double lvl = lvl0 + lvl1 + lvl2 + lvl3;
 
         if (lvl > 0) {
@@ -184,8 +184,8 @@ public class PlayerTickEventHandler {
         if (!world.getBlockState(BlockPos.containing(x, y - 0.5, z)).is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "nethersea_walker_functions")))) return;
 
         ItemStack boots = (entity.getItemBySlot(EquipmentSlot.FEET)).copy();
-        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.NETHERSEA_WALKER.get(), boots) != 0) {
-            double lvl = boots.getEnchantmentLevel(CAEnchantments.NETHERSEA_WALKER.get());
+        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), boots) != 0) {
+            double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), boots);
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 30, (int) lvl, false, false));
                 entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 10, 0, false, false));
@@ -444,17 +444,17 @@ public class PlayerTickEventHandler {
 
     private static void handleSanityDefendEnchant(Player entity) {
         double enchant = 0;
-        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.SANITY_DEFEND.get(), entity.getItemBySlot(EquipmentSlot.FEET)) != 0) {
-            enchant = enchant + entity.getItemBySlot(EquipmentSlot.FEET).getEnchantmentLevel(CAEnchantments.SANITY_DEFEND.get());
+        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_DEFEND), entity.getItemBySlot(EquipmentSlot.FEET)) != 0) {
+            enchant = enchant + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_DEFEND), entity.getItemBySlot(EquipmentSlot.FEET));
         }
-        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.SANITY_DEFEND.get(), entity.getItemBySlot(EquipmentSlot.LEGS)) != 0) {
-            enchant = enchant + entity.getItemBySlot(EquipmentSlot.LEGS).getEnchantmentLevel(CAEnchantments.SANITY_DEFEND.get());
+        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_DEFEND), entity.getItemBySlot(EquipmentSlot.LEGS)) != 0) {
+            enchant = enchant + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_DEFEND), entity.getItemBySlot(EquipmentSlot.LEGS));
         }
-        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.SANITY_DEFEND.get(), entity.getItemBySlot(EquipmentSlot.CHEST)) != 0) {
-            enchant = enchant + entity.getItemBySlot(EquipmentSlot.CHEST).getEnchantmentLevel(CAEnchantments.SANITY_DEFEND.get());
+        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_DEFEND), entity.getItemBySlot(EquipmentSlot.CHEST)) != 0) {
+            enchant = enchant + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_DEFEND), entity.getItemBySlot(EquipmentSlot.CHEST));
         }
-        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.SANITY_DEFEND.get(), entity.getItemBySlot(EquipmentSlot.HEAD)) != 0) {
-            enchant = enchant + entity.getItemBySlot(EquipmentSlot.HEAD).getEnchantmentLevel(CAEnchantments.SANITY_DEFEND.get());
+        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_DEFEND), entity.getItemBySlot(EquipmentSlot.HEAD)) != 0) {
+            enchant = enchant + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_DEFEND), entity.getItemBySlot(EquipmentSlot.HEAD));
         }
         if (enchant > 16) enchant = 16;
         if (enchant > 0 && !entity.hasEffect(CAMobEffects.SANIDY_DEFENDER.get()) && !entity.level().isClientSide()) {

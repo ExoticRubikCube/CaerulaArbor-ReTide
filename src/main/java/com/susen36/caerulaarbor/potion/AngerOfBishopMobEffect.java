@@ -1,34 +1,34 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
-
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class AngerOfBishopMobEffect extends MobEffect {
     public AngerOfBishopMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -10092442);
-        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, "cab90241-18f6-3943-8e03-13d4dfd1ac8c", 0.4, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        this.addAttributeModifier(Attributes.ATTACK_DAMAGE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "anger_of_bishop_attack_damage"), 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 

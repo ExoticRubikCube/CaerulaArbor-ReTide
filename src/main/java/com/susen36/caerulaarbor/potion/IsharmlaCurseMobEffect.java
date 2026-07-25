@@ -26,19 +26,19 @@ public class IsharmlaCurseMobEffect extends MobEffect {
         super(MobEffectCategory.HARMFUL, -11580593);
     }
 
-    @Override
+    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<>();
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
         if (entity == null)
-            return;
+             return true;
         double d;
         double t;
         d = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25 * ((double) amplifier + 1);
@@ -51,10 +51,11 @@ public class IsharmlaCurseMobEffect extends MobEffect {
         t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
         if ((Entity) entity instanceof Mob mob)
             mob.getNavigation().moveTo((x + 2 * Math.sin(t)), y, (z + 2 * Math.cos(t)), 1.5);
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return MathUtils.isMultipleOf(duration, 10);
     }
 }

@@ -159,17 +159,19 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
             boolean valid;
             valid = true;
             if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
-                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
-                        && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS) > itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())) {
+                if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.POWER_ARROWS), ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
+                        && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.POWER_ARROWS), ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY)) > EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.REFLECTION), itemstack)) {
                     {
+                        // TODO: 1.21.1 enchantment map API migration
                         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemstack);
                         if (enchantments.containsKey(CAEnchantments.REFLECTION.get())) {
                             enchantments.remove(CAEnchantments.REFLECTION.get());
                             EnchantmentHelper.setEnchantments(enchantments, itemstack);
                         }
                     }
-                    itemstack.enchant(CAEnchantments.REFLECTION.get(), ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS));
+                    itemstack.enchant(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.REFLECTION), EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.POWER_ARROWS), ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY)));
                     {
+                        // TODO: 1.21.1 enchantment map API migration
                         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY));
                         if (enchantments.containsKey(Enchantments.POWER_ARROWS)) {
                             enchantments.remove(Enchantments.POWER_ARROWS);
@@ -182,17 +184,19 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 3, 1);
                     }
                     valid = false;
-                } else if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
-                        && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) == 0) {
+                } else if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.INFINITY_ARROWS), ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
+                        && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.METABOLISM), itemstack) == 0) {
                     {
+                        // TODO: 1.21.1 enchantment map API migration
                         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemstack);
                         if (enchantments.containsKey(CAEnchantments.METABOLISM.get())) {
                             enchantments.remove(CAEnchantments.METABOLISM.get());
                             EnchantmentHelper.setEnchantments(enchantments, itemstack);
                         }
                     }
-                    itemstack.enchant(CAEnchantments.METABOLISM.get(), 1);
+                    itemstack.enchant(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.METABOLISM), 1);
                     {
+                        // TODO: 1.21.1 enchantment map API migration
                         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY));
                         if (enchantments.containsKey(Enchantments.INFINITY_ARROWS)) {
                             enchantments.remove(Enchantments.INFINITY_ARROWS);
@@ -232,7 +236,7 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
 										}
 										return false;
 									}
-								}.checkGamemode((Entity) entity) || EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) != 0)
+								}.checkGamemode((Entity) entity) || EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.METABOLISM), itemstack) != 0)
 										&& (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()
 										|| ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem())) {
 									if ((LevelAccessor) world instanceof Level level1) {
@@ -256,7 +260,7 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
 											}
 										}
 									}
-									if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) != 0) {
+									if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.METABOLISM), itemstack) != 0) {
 										{
 											Entity shootFrom = entity;
 											Level projectileLevel = shootFrom.level();
@@ -272,9 +276,9 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
 														entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 														return entityToSpawn;
 													}
-												}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
+												}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.REFLECTION), itemstack)), (int) 0.5, (byte) 1);
 												entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
-												entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
+												entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.REFLECTION), itemstack)), 0);
 												projectileLevel.addFreshEntity(entityToSpawn);
 											}
 										}
@@ -309,9 +313,9 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
 															entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 															return entityToSpawn;
 														}
-													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
+													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.REFLECTION), itemstack)), (int) 0.5, (byte) 1);
 													entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
-													entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
+													entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.REFLECTION), itemstack)), 0);
 													projectileLevel.addFreshEntity(entityToSpawn);
 												}
 											}
@@ -331,9 +335,9 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
 															entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 															return entityToSpawn;
 														}
-													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
+													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.REFLECTION), itemstack)), (int) 0.5, (byte) 1);
 													entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
-													entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
+													entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.REFLECTION), itemstack)), 0);
 													projectileLevel.addFreshEntity(entityToSpawn);
 												}
 											}
