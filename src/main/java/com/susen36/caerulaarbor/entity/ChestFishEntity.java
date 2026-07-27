@@ -1,11 +1,12 @@
 package com.susen36.caerulaarbor.entity;
 
+
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -39,11 +40,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
 
@@ -63,15 +62,15 @@ public class ChestFishEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 16;
 		setNoAi(false);
-		setMaxUpStep(0.6f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_RELEASE, false);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_RELEASE, false);
 	}
 
 	@Override
@@ -89,11 +88,7 @@ public class ChestFishEntity extends SeaMonster {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, true) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 3.24;
-			}
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1.2, true) {
 
 			@Override
 			public boolean canUse() {
@@ -161,7 +156,7 @@ public class ChestFishEntity extends SeaMonster {
 	public void die(DamageSource source) {
 		super.die(source);
 		if (source.getEntity() instanceof ServerPlayer player) {
-			Advancement advancement = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "treasures"));
+			AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "treasures"));
 			AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
 			if (!progress.isDone()) {
 				for (String criteria : progress.getRemainingCriteria())
@@ -171,8 +166,8 @@ public class ChestFishEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		this.setYRot((float) (90 * Mth.nextInt(RandomSource.create(), 0, 3)));
 		this.setXRot(0);
 		this.setYBodyRot(this.getYRot());
@@ -222,15 +217,15 @@ public class ChestFishEntity extends SeaMonster {
 	}
 
 
-	public static void registerSpawnPlacements() {
-		SpawnPlacements.register(CAEntities.CHEST_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
+	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+		event.register(CAEntities.CHEST_FISH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)), RegisterSpawnPlacementsEvent.Operation.REPLACE);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 18);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
 		builder = builder.add(Attributes.MAX_HEALTH, 120);
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 12);
@@ -239,7 +234,7 @@ public class ChestFishEntity extends SeaMonster {
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.isDeadOrDying()) {
 			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.chest_fish.die"));
 		}
@@ -257,7 +252,7 @@ public class ChestFishEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -274,7 +269,7 @@ public class ChestFishEntity extends SeaMonster {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -296,7 +291,7 @@ public class ChestFishEntity extends SeaMonster {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(ChestFishEntity.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 

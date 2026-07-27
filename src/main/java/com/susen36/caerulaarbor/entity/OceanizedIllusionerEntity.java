@@ -22,6 +22,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -47,11 +48,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -78,19 +79,19 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         super(type, world);
         xpReward = 64;
         setNoAi(false);
-        setMaxUpStep(1f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CAItems.CHITIN_BOW.get()));
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SPELL_P, 180);
-        this.entityData.define(DATA_MIRROR_P, 340);
-        this.entityData.define(DATA_DURATION, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SPELL_P, 180);
+        builder.define(DATA_MIRROR_P, 340);
+        builder.define(DATA_DURATION, 0);
     }
 
     @Override
@@ -234,11 +235,6 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     }
 
     @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
-    }
-
-    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false;
     }
@@ -307,8 +303,8 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         if ((LevelAccessor) world instanceof ServerLevel level) {
             LivingEntity entityToSpawn = CAEntities.OCEANIZED_RAVAGER.get().spawn(level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
@@ -388,7 +384,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         if (target instanceof LivingEntity && !this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0));
                         if (target instanceof LivingEntity && !this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 200, 1));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 200, 1));
                         if ((Entity) this instanceof OceanizedIllusionerEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_SPELL_P, 180);
                         if ((Entity) this instanceof OceanizedIllusionerEntity datEntSetI)
@@ -397,7 +393,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                     }
                 }
             }
-            this.removeEffect(CAMobEffects.DEDUCT_ONE_SANITY.get());
+            this.removeEffect(CAMobEffects.DEDUCT_ONE_SANITY);
             this.removeEffect(MobEffects.BLINDNESS);
             if (sklp2 > 0) {
                 if ((Entity) this instanceof OceanizedIllusionerEntity datEntSetI)
@@ -461,7 +457,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                             }
                         }
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 0));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 20, 0));
                         CaerulaArborMod.queueServerWork(18, () -> {
                             if (!isPassenger()) {
                                 if (!this.level().isClientSide())
@@ -497,17 +493,12 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public void performRangedAttack(LivingEntity target, float flval) {
         ShotOceanArrowEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (2.5 / 9.0));
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -541,7 +532,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if (this.isAttacking() && event.isMoving()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_illusioner.aggre_move"));
@@ -557,7 +548,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -574,7 +565,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -596,7 +587,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         ++this.deathTime;
         if (this.deathTime >= 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             Level level = this.level();
             AABB aabb = new AABB(this.position().add(24, 24, 24), this.position().add(-24, -24, -24));
             List<OceanIllusionEntity> illusions = level.getEntitiesOfClass(OceanIllusionEntity.class, aabb);

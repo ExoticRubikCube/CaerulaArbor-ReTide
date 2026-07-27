@@ -51,11 +51,11 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -79,17 +79,17 @@ public class OceanizedVexEntity extends SeaMonster {
         super(type, world);
         xpReward = 4;
         setNoAi(false);
-        setMaxUpStep(0.6f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_LEFT_SURVIVAL_TICK, 600);
-        this.entityData.define(DATA_SAYER, "");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_LEFT_SURVIVAL_TICK, 600);
+        builder.define(DATA_SAYER, "");
     }
 
     @Override
@@ -101,12 +101,7 @@ public class OceanizedVexEntity extends SeaMonster {
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.5, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 2.25;
-            }
-        });
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.5, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
@@ -129,11 +124,6 @@ public class OceanizedVexEntity extends SeaMonster {
             }
         });
         this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
     }
 
     @Override
@@ -174,9 +164,9 @@ public class OceanizedVexEntity extends SeaMonster {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         this.entityData.set(DATA_LEFT_SURVIVAL_TICK, 600 + Mth.nextInt(RandomSource.create(), 0, 1800));
-        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        return super.finalizeSpawn(world, difficulty, reason, livingdata);
     }
 
     @Override
@@ -252,11 +242,6 @@ public class OceanizedVexEntity extends SeaMonster {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public boolean isPushable() {
         return false;
     }
@@ -296,7 +281,7 @@ public class OceanizedVexEntity extends SeaMonster {
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || Math.abs(event.getLimbSwingAmount()) >= 0.15F) && !this.isAggressive()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_vex.fly"));
@@ -312,7 +297,7 @@ public class OceanizedVexEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -329,7 +314,7 @@ public class OceanizedVexEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -351,7 +336,7 @@ public class OceanizedVexEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime >= 80) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             double x = this.getX();
             double y = this.getY();

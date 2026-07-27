@@ -3,32 +3,24 @@ package com.susen36.caerulaarbor.potion;
 
 import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.util.MathUtils;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
-import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class HaemophiliaMobEffect extends MobEffect {
     public HaemophiliaMobEffect() {
         super(MobEffectCategory.NEUTRAL, -3381505);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
@@ -53,23 +45,4 @@ public class HaemophiliaMobEffect extends MobEffect {
         return MathUtils.isMultipleOf(duration, 40);
     }
 
-    @Override
-    public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
-        consumer.accept(new IClientMobEffectExtensions() {
-            @Override
-            public boolean isVisibleInInventory(MobEffectInstance effect) {
-                return false;
-            }
-
-            @Override
-            public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics guiGraphics, int x, int y, int blitOffset) {
-                return false;
-            }
-
-            @Override
-            public boolean isVisibleInGui(MobEffectInstance effect) {
-                return false;
-            }
-        });
-    }
 }

@@ -19,11 +19,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -47,11 +44,11 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 public class OceanizedCatEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.BOOLEAN);
@@ -71,13 +68,13 @@ public class OceanizedCatEntity extends SeaMonster {
         super(type, world);
         xpReward = 4;
         setNoAi(false);
-        setMaxUpStep(0.6f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 4);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 35);
+        builder = builder.add(CAAttributes.SANITY_RATE, 4);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 35);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
         builder = builder.add(Attributes.MAX_HEALTH, 24);
         builder = builder.add(Attributes.ARMOR, 0);
@@ -88,24 +85,19 @@ public class OceanizedCatEntity extends SeaMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_ACTION_TIME, 0);
-        this.entityData.define(DATA_STATE_SNEAKING, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_ACTION_TIME, 0);
+        builder.define(DATA_STATE_SNEAKING, false);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.6, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 3.24;
-            }
-        });
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.6, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Chicken.class, true, false));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Rabbit.class, true, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Cat.class, true, false));
@@ -229,12 +221,7 @@ public class OceanizedCatEntity extends SeaMonster {
         this.refreshDimensions();
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -252,7 +239,7 @@ public class OceanizedCatEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -267,7 +254,7 @@ public class OceanizedCatEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -289,7 +276,7 @@ public class OceanizedCatEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

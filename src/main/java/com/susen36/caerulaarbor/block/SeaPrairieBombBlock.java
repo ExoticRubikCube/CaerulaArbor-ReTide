@@ -13,10 +13,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -40,14 +41,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.Comparator;
 import java.util.List;
 
+
 public class SeaPrairieBombBlock extends Block {
 	public SeaPrairieBombBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(4.0f, 64.0f).lightLevel(s -> 8).requiresCorrectToolForDrops().noOcclusion());
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, BlockGetter level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("block.caerula_arbor.sea_prairie_bomb.description_0"));
 	}
 
@@ -172,8 +174,8 @@ public class SeaPrairieBombBlock extends Block {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
@@ -195,12 +197,12 @@ public class SeaPrairieBombBlock extends Block {
 					ist.shrink(1);
 					ist.setDamageValue(0);
 				}
-				return InteractionResult.SUCCESS;
+				return ItemInteractionResult.SUCCESS;
 			}
 			if (!entity.level().isClientSide()) {
 				entity.displayClientMessage(Component.translatable("block.caerula_arbor.sea_prairie_bomb.no_func"), true);
 			}
-			return InteractionResult.FAIL;
+			return ItemInteractionResult.FAIL;
 		}
 		if (mainHand.getItem() == Blocks.AIR.asItem()) {
 			ItemStack offHand = (Entity) entity instanceof LivingEntity living ? living.getOffhandItem() : ItemStack.EMPTY;
@@ -208,6 +210,6 @@ public class SeaPrairieBombBlock extends Block {
 				player.displayClientMessage(Component.translatable("block.caerula_arbor.sea_prairie_bomb.note"), true);
 			}
 		}
-		return InteractionResult.PASS;
+		return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 	}
 }

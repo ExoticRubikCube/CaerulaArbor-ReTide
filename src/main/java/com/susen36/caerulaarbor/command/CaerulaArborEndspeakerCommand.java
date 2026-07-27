@@ -7,16 +7,15 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.entity.EndspeakerEntity;
 import net.minecraft.commands.Commands;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 @EventBusSubscriber
 public class CaerulaArborEndspeakerCommand {
@@ -25,14 +24,10 @@ public class CaerulaArborEndspeakerCommand {
 	public static void registerCommand(RegisterCommandsEvent event) {
 		event.getDispatcher().register(Commands.literal("caerula_arbor:endspeaker").requires(s -> s.hasPermission(2)).then(Commands.literal("inquiry").executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
-			Entity entity = arguments.getSource().getEntity();
+            Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             if (entity != null) {
@@ -61,17 +56,12 @@ public class CaerulaArborEndspeakerCommand {
             return 0;
 		})).then(Commands.literal("bestow").then(Commands.literal("all").executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
-			Entity entity = arguments.getSource().getEntity();
+            Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
-            double ind = 0;
             String info;
             for (int index0 = 0; index0 < 6; index0++) {
                 MapVariablesHandler.bestowAbility(world, index0);
@@ -85,14 +75,10 @@ public class CaerulaArborEndspeakerCommand {
             return 0;
 		})).then(Commands.argument("index", DoubleArgumentType.doubleArg(1, 6)).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
-			Entity entity = arguments.getSource().getEntity();
+            Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             String info;
@@ -109,17 +95,12 @@ public class CaerulaArborEndspeakerCommand {
             return 0;
 		}))).then(Commands.literal("revoke").then(Commands.literal("all").executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
-			Entity entity = arguments.getSource().getEntity();
+            Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
-            double ind = 0;
             String info;
             for (int index0 = 0; index0 < 6; index0++) {
                 revokeAbility(world, index0);
@@ -133,14 +114,10 @@ public class CaerulaArborEndspeakerCommand {
             return 0;
 		})).then(Commands.argument("index", DoubleArgumentType.doubleArg(1, 6)).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
-			Entity entity = arguments.getSource().getEntity();
+            Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             String info;
@@ -157,14 +134,10 @@ public class CaerulaArborEndspeakerCommand {
             return 0;
 		}))).then(Commands.literal("can_summon").then(Commands.argument("can", BoolArgumentType.bool()).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
-			Entity entity = arguments.getSource().getEntity();
+            Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             String info;

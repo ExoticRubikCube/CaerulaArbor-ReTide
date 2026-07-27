@@ -25,20 +25,15 @@ import java.util.List;
 public class ImmortalMobEffect extends MobEffect {
     public ImmortalMobEffect() {
         super(MobEffectCategory.NEUTRAL, -4648944);
-        this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "immortal_sanity_resistance"), 100, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "immortal_sanity_resistance"), 100, AttributeModifier.Operation.ADD_VALUE);
         this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "immortal_knockback_resistance"), 10, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
         super.addAttributeModifiers(entity, attributeMap, amplifier);
-        if (entity == null)
-            return;
         entity.getPersistentData().putBoolean("immortalTriggered", false);
     }
 

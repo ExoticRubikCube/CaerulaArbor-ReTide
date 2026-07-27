@@ -10,8 +10,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
@@ -34,9 +34,9 @@ public class PlayerAttackEventHandler {
 		}
 
 		if (!attacker.level().isClientSide()) {
-			MobEffectInstance currentButchersPower = attacker.getEffect(CAMobEffects.BUTCHERS_POWER.get());
+			MobEffectInstance currentButchersPower = attacker.getEffect(CAMobEffects.BUTCHERS_POWER);
 			int nextAmplifier = currentButchersPower == null ? 0 : Math.min(currentButchersPower.getAmplifier() + 1, 7);
-			attacker.addEffect(new MobEffectInstance(CAMobEffects.BUTCHERS_POWER.get(), 160, nextAmplifier, false, false));
+			attacker.addEffect(new MobEffectInstance(CAMobEffects.BUTCHERS_POWER, 160, nextAmplifier, false, false));
 		}
 	}
 }

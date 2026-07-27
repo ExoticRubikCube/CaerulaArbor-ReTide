@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -132,42 +131,37 @@ public class ChestFishCookedBlock extends Block implements SimpleWaterloggedBloc
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public InteractionResult useWithoutItem(BlockState blockstate, Level world, BlockPos pos, Player entity, BlockHitResult hit) {
+		super.useWithoutItem(blockstate, world, pos, entity, hit);
 		if (entity == null) {
 			return InteractionResult.PASS;
 		}
-		ItemStack itemStack = entity.getMainHandItem();
-		ItemStack offhandItem = entity.getOffhandItem();
-		if (itemStack.isEmpty() && offhandItem.isEmpty()) {
-			int bs = blockstate.getValue(BLOCKSTATE);
-			if (bs == 0) {
-				for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 3, 4); ++index0) {
-					if (!(world instanceof ServerLevel serverLevel)) continue;
-					ItemEntity entityToSpawn = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, new ItemStack(CAItems.COOKED_PEDUNCLE.get()));
-					entityToSpawn.setPickUpDelay(5);
-					serverLevel.addFreshEntity(entityToSpawn);
-				}
-				world.setBlock(pos, blockstate.setValue(BLOCKSTATE, 1), 3);
-			} else if (bs == 1) {
-				for (int index1 = 0; index1 < Mth.nextInt(RandomSource.create(), 3, 4); ++index1) {
-					if (!(world instanceof ServerLevel serverLevel)) continue;
-					ItemEntity entityToSpawn = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, new ItemStack(CAItems.COOKED_FIBRE.get()));
-					entityToSpawn.setPickUpDelay(5);
-					serverLevel.addFreshEntity(entityToSpawn);
-				}
-				world.setBlock(pos, blockstate.setValue(BLOCKSTATE, 2), 3);
-			} else if (bs == 2) {
-				for (int index2 = 0; index2 < Mth.nextInt(RandomSource.create(), 2, 4); ++index2) {
-					if (!(world instanceof ServerLevel serverLevel)) continue;
-					ItemEntity entityToSpawn = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, new ItemStack(CAItems.CHITIN_COOKIE_DONE.get()));
-					entityToSpawn.setPickUpDelay(5);
-					serverLevel.addFreshEntity(entityToSpawn);
-				}
-				world.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+		int bs = blockstate.getValue(BLOCKSTATE);
+		if (bs == 0) {
+			for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 3, 4); ++index0) {
+				if (!(world instanceof ServerLevel serverLevel)) continue;
+				ItemEntity entityToSpawn = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, new ItemStack(CAItems.COOKED_PEDUNCLE.get()));
+				entityToSpawn.setPickUpDelay(5);
+				serverLevel.addFreshEntity(entityToSpawn);
 			}
-			return InteractionResult.SUCCESS;
+			world.setBlock(pos, blockstate.setValue(BLOCKSTATE, 1), 3);
+		} else if (bs == 1) {
+			for (int index1 = 0; index1 < Mth.nextInt(RandomSource.create(), 3, 4); ++index1) {
+				if (!(world instanceof ServerLevel serverLevel)) continue;
+				ItemEntity entityToSpawn = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, new ItemStack(CAItems.COOKED_FIBRE.get()));
+				entityToSpawn.setPickUpDelay(5);
+				serverLevel.addFreshEntity(entityToSpawn);
+			}
+			world.setBlock(pos, blockstate.setValue(BLOCKSTATE, 2), 3);
+		} else if (bs == 2) {
+			for (int index2 = 0; index2 < Mth.nextInt(RandomSource.create(), 2, 4); ++index2) {
+				if (!(world instanceof ServerLevel serverLevel)) continue;
+				ItemEntity entityToSpawn = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, new ItemStack(CAItems.CHITIN_COOKIE_DONE.get()));
+				entityToSpawn.setPickUpDelay(5);
+				serverLevel.addFreshEntity(entityToSpawn);
+			}
+			world.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
 		}
-		return InteractionResult.PASS;
+		return InteractionResult.SUCCESS;
 	}
 }

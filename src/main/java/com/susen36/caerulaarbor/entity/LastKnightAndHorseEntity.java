@@ -4,7 +4,7 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,6 +25,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -50,15 +51,14 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
@@ -86,23 +86,18 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         super(type, world);
         xpReward = 64;
         setNoAi(false);
-        setMaxUpStep(1.25f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.25f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_IS_SHOOTING, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_ADDITION, 0);
-        this.entityData.define(DATA_SKILL_COOLDOWN, 140);
-        this.entityData.define(DATA_SKILL_DURATION, 0);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_IS_SHOOTING, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_ADDITION, 0);
+        builder.define(DATA_SKILL_COOLDOWN, 140);
+        builder.define(DATA_SKILL_DURATION, 0);
     }
 
     @Override
@@ -119,11 +114,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                 return super.canContinueToUse() && isLastKnightStarting();
             }
         });
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.33, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 36;
-            }
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1.33, false) {
 
             @Override
             public boolean canUse() {
@@ -205,7 +196,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         if (sourceentity == null)
             return;
         if (sourceentity instanceof ServerPlayer player) {
-            Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "kill_knight_and_horse"));
+            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "kill_knight_and_horse"));
             AdvancementProgress ap;
             if (adv != null) {
                 ap = player.getAdvancements().getOrStartProgress(adv);
@@ -218,8 +209,8 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         this.setAnimation("animation.last_knight_horse.start");
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -237,16 +228,16 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         return retval;
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Addition", this.entityData.get(DATA_ADDITION));
         compound.putInt("SkillCooldown", this.entityData.get(DATA_SKILL_COOLDOWN));
         compound.putInt("SkillDuration", this.entityData.get(DATA_SKILL_DURATION));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Addition"))
             this.entityData.set(DATA_ADDITION, compound.getInt("Addition"));
@@ -254,7 +245,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
             this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("SkillCooldown"));
         if (compound.contains("SkillDuration"))
             this.entityData.set(DATA_SKILL_DURATION, compound.getInt("SkillDuration"));
-	}
+    }
 
     @Override
     public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
@@ -280,8 +271,8 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         double skillp;
         if (this.isAlive()) {
             if (tickCount % 10 == 0) {
-                this.removeEffect(CAMobEffects.DIZZY.get());
-                this.removeEffect(CAMobEffects.FROZEN.get());
+                this.removeEffect(CAMobEffects.DIZZY);
+                this.removeEffect(CAMobEffects.FROZEN);
                 this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0, false, false));
@@ -292,7 +283,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                         if (entityiterator.getTicksFrozen() >= 125 && entityiterator.isAlive()) {
                             entityiterator.setTicksFrozen(200);
                             if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), 20, 0, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.FROZEN, 20, 0, false, false));
                         }
                     }
                 }
@@ -309,9 +300,9 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                 setDeltaMovement(new Vec3(0, 0, 0));
             }
             setTicksFrozen(0);
-            this.removeEffect(CAMobEffects.FROZEN.get());
+            this.removeEffect(CAMobEffects.FROZEN);
             this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-            this.removeEffect(CAMobEffects.DIZZY.get());
+            this.removeEffect(CAMobEffects.DIZZY);
             skillp = this.getEntityData().get(DATA_SKILL_COOLDOWN);
             duration = this.getEntityData().get(DATA_SKILL_DURATION);
             if (duration > 0) {
@@ -326,7 +317,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                         this.getEntityData().set(DATA_SKILL_DURATION, 40);
                         this.getEntityData().set(DATA_SKILL_COOLDOWN, 240);
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 32, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 32, 0, false, false));
                         this.setAnimation("animation.last_knight_horse.skill");
                         CaerulaArborMod.queueServerWork(13, () -> {
                             Entity enemy1;
@@ -361,7 +352,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                                             entityiterator.hurt(
                                                     CADamageTypes.source(world, CADamageTypes.LAST_KNIGHT_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
                                             if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 150, 0, false, false));
+                                                this.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 150, 0, false, false));
                                             entityiterator.push(0, (-1), 0);
                                         });
                                     }
@@ -376,14 +367,9 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         LastKnightAndHorseEntity retval = CAEntities.LAST_KNIGHT_AND_HORSE.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
         return retval;
     }
 
@@ -401,7 +387,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -433,20 +419,20 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
-        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 12);
-        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 20);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 60);
+        builder = builder.add(NeoForgeMod.SWIM_SPEED, 12);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE, 20);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 60);
         builder = builder.add(Attributes.MAX_HEALTH, 400);
         builder = builder.add(Attributes.ARMOR, 24);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 20);
         builder = builder.add(Attributes.FOLLOW_RANGE, 36);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.5);
-        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
+        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -461,7 +447,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -478,7 +464,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -500,7 +486,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         ++this.deathTime;
         if (this.deathTime == 40) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 
@@ -522,13 +508,13 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
             sourceEntity.setTicksFrozen((int) Math.min(frozenTicks + frozenDuration, 200));
             return;
         }
-        if (!(sourceEntity instanceof LivingEntity living) || !living.hasEffect(CAMobEffects.FROZEN.get())) {
+        if (!(sourceEntity instanceof LivingEntity living) || !living.hasEffect(CAMobEffects.FROZEN)) {
             this.level().playSound(null, BlockPos.containing(sourceEntity.getX(), sourceEntity.getY(), sourceEntity.getZ()),
                     CASounds.LAST_JNIGHT_FREEZE.get(), SoundSource.HOSTILE,
                     4, (float) Mth.nextDouble(RandomSource.create(), 1, 1.15));
         }
         if (sourceEntity instanceof LivingEntity living && !living.level().isClientSide()) {
-            living.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), frozenDuration, 0, false, false));
+            living.addEffect(new MobEffectInstance(CAMobEffects.FROZEN, frozenDuration, 0, false, false));
         }
     }
 

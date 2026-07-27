@@ -2,39 +2,26 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.init.CAItems;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.SimpleTier;
 
 public class ChitinAxeItem extends AxeItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+			1220,
+			6f,
+			6.5f,
+			11,
+			() -> Ingredient.of(new ItemStack(CAItems.OCEAN_CHITIN.get()))
+	);
+
 	public ChitinAxeItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 1220;
-			}
-
-			public float getSpeed() {
-				return 6f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 6.5f;
-			}
-
-			public int getLevel() {
-				return 3;
-			}
-
-			public int getEnchantmentValue() {
-				return 11;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.OCEAN_CHITIN.get()));
-			}
-		}, 1, -3f, new Item.Properties());
+		super(TIER, new Item.Properties().attributes(AxeItem.createAttributes(TIER, 1, -3f)));
 	}
 
 	@Override

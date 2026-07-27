@@ -32,7 +32,7 @@ import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -149,11 +149,11 @@ public final class LootTableProviders {
     }
 
     private static Item item(String id) {
-        return Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(id)), "Unknown loot item: " + id);
+        return Objects.requireNonNull(BuiltInRegistries.ITEMS.getValue(ResourceLocation.parse(id)), "Unknown loot item: " + id);
     }
 
     private static Block block(String id) {
-        return Objects.requireNonNull(ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse(id)), "Unknown loot block: " + id);
+        return Objects.requireNonNull(BuiltInRegistries.BLOCKS.getValue(ResourceLocation.parse(id)), "Unknown loot block: " + id);
     }
 
     private static TableDef table(String path, PoolDef... pools) {

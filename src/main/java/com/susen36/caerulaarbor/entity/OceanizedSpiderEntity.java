@@ -44,11 +44,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import java.util.EnumSet;
 
@@ -69,7 +69,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
         super(type, world);
         xpReward = 5;
         setNoAi(false);
-        setMaxUpStep(0.6f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         setNoGravity(true);
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
@@ -87,11 +87,11 @@ public class OceanizedSpiderEntity extends SeaMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_MUTE_TIME, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_MUTE_TIME, 0);
     }
 
     @Override
@@ -115,12 +115,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.5, true) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 3.24;
-            }
-        });
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.5, true));
         this.goalSelector.addGoal(3, new Goal() {
             {
                 this.setFlags(EnumSet.of(Flag.MOVE));
@@ -184,11 +179,6 @@ public class OceanizedSpiderEntity extends SeaMonster {
     }
 
     @Override
-    public MobType getMobType() {
-        return MobType.ARTHROPOD;
-    }
-
-    @Override
     public SoundEvent getAmbientSound() {
         return SoundEvents.SPIDER_AMBIENT;
     }
@@ -238,11 +228,6 @@ public class OceanizedSpiderEntity extends SeaMonster {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -251,7 +236,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
         super.setNoGravity(true);
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && this.onGround()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_spider.walk"));
@@ -264,7 +249,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -279,7 +264,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -301,7 +286,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             double x = this.getX();
             double y = this.getY();

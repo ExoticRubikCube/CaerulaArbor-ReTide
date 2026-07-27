@@ -19,7 +19,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
@@ -36,11 +40,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -58,16 +58,16 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	protected AbstractFractalEntity(EntityType<? extends AbstractFractalEntity> entityType, Level level) {
 		super(entityType, level);
 		setNoAi(false);
-		setMaxUpStep(1f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
 		setPersistenceRequired();
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_ATTACK_SKILLP, 0);
-		this.entityData.define(DATA_OWNER, "null");
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_ATTACK_SKILLP, 0);
+		builder.define(DATA_OWNER, "null");
 	}
 
 	protected abstract EntityType<?> getSummonedFractalType();
@@ -76,12 +76,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.5, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 6.25;
-			}
-		});
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.5, false));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, false, false));
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
@@ -150,7 +145,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		}
 	}
 
-	protected PlayState procedurePredicate(AnimationState<?> event) {
+	protected PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -173,7 +168,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	 * @param event GeckoLib 动画状态
 	 * @return 对应控制器的播放状态
 	 */
-	protected PlayState movementPredicate(AnimationState<?> event) {
+	protected PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isVehicle() && !this.isAggressive() && !this.isSprinting()) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.routeshaper.move"));
@@ -198,7 +193,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	 * @param event GeckoLib 动画状态
 	 * @return 对应控制器的播放状态
 	 */
-	protected PlayState attackingPredicate(AnimationState<?> event) {
+	protected PlayState attackingPredicate(AnimationState event) {
 		if (this.getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = this.level().getGameTime();
@@ -269,8 +264,8 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		world.playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.AXOLOTL_SPLASH, SoundSource.HOSTILE, 0.75F, 1);
 		return retval;
 	}
@@ -280,7 +275,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 

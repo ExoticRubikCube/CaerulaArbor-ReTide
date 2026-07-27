@@ -3,8 +3,6 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -29,14 +27,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
@@ -53,14 +47,15 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 		super(type, world);
 		xpReward = 16;
 		setNoAi(false);
-		setMaxUpStep(0.6f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
+		setNoGravity(true);
 		setPersistenceRequired();
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(TEXTURE, "caerula_offspring");
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(TEXTURE, "caerula_offspring");
 	}
 
 	public void setTexture(String texture) {
@@ -69,10 +64,6 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 
 	public String getTexture() {
 		return this.entityData.get(TEXTURE);
-	}
-
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override
@@ -84,11 +75,7 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false) {
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 1.0;
-			}
-		});
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1.2, false));
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1.0, 20) {
 			protected Vec3 getPosition() {
 				RandomSource random = CaerulaOffspringEntity.this.getRandom();
@@ -100,10 +87,6 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 		});
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(5, new FloatGoal(this));
-	}
-
-	public MobType getMobType() {
-		return MobType.WATER;
 	}
 
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
@@ -125,19 +108,22 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 		return SoundEvents.SQUID_DEATH;
 	}
 
+	@Override
 	public boolean causeFallDamage(float l, float d, DamageSource source) {
 		return false;
 	}
 
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+		return super.finalizeSpawn(world, difficulty, reason, livingdata);
 	}
 
+	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putString("Texture", this.getTexture());
 	}
 
+	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("Texture")) {
@@ -145,26 +131,19 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 		}
 	}
 
+	@Override
 	public void baseTick() {
 		super.baseTick();
 		this.refreshDimensions();
 	}
 
-	public EntityDimensions getDimensions(Pose pPose) {
-		return super.getDimensions(pPose).scale(1.0f);
-	}
-
+	@Override
 	protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
 	}
 
+	@Override
 	public void setNoGravity(boolean ignored) {
 		super.setNoGravity(true);
-	}
-
-	@Override
-	public void aiStep() {
-		super.aiStep();
-		this.setNoGravity(true);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -190,7 +169,7 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(Entity.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 

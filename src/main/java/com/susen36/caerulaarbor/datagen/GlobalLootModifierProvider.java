@@ -4,12 +4,12 @@ import com.susen36.caerulaarbor.init.CALootModifier;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.LootTableIdCondition;
+import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 
 /**
  * 生成全局战利品修改器数据
  */
-public class GlobalLootModifierProvider extends net.minecraftforge.common.data.GlobalLootModifierProvider {
+public class GlobalLootModifierProvider extends net.neoforged.neoforge.common.data.GlobalLootModifierProvider {
     /**
      * 创建全局战利品修改器 provider
      *

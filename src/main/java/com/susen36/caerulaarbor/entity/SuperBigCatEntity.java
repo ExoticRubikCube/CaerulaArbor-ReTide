@@ -44,11 +44,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
@@ -69,27 +69,22 @@ public class SuperBigCatEntity extends SeaMonster {
         super(type, world);
         xpReward = 64;
         setNoAi(false);
-        setMaxUpStep(1.8f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.8f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 100;
-            }
-        });
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Chicken.class, true, false));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Rabbit.class, true, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Cat.class, true, false));
@@ -228,12 +223,7 @@ public class SuperBigCatEntity extends SeaMonster {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -258,8 +248,8 @@ public class SuperBigCatEntity extends SeaMonster {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 4);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 35);
+        builder = builder.add(CAAttributes.SANITY_RATE, 4);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 35);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
         builder = builder.add(Attributes.MAX_HEALTH, 500);
         builder = builder.add(Attributes.ARMOR, 10);
@@ -269,7 +259,7 @@ public class SuperBigCatEntity extends SeaMonster {
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.isDeadOrDying()) {
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_cat.die"));
         }
@@ -287,7 +277,7 @@ public class SuperBigCatEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -304,7 +294,7 @@ public class SuperBigCatEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -326,7 +316,7 @@ public class SuperBigCatEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 60) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             double x = this.getX();
             double y = this.getY();

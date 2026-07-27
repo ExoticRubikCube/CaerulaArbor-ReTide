@@ -20,11 +20,6 @@ public class FadingshadowMobEffect extends MobEffect {
         // this.addAttributeModifier(NeoForgeMod.ENTITY_GRAVITY, "e9e734e4-9030-3c73-9958-539443bf5286", -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
-
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;

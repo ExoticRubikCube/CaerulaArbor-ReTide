@@ -4,61 +4,49 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;
-import java.util.UUID;
+
 
 public class ComplexChitinHoeItem extends HoeItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+			3374,
+			15f,
+			0.5f,
+			18,
+			() -> Ingredient.of(new ItemStack(CAItems.COMPLEX_CHITIN.get()))
+	);
+
 	public ComplexChitinHoeItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 3374;
-			}
-
-			public float getSpeed() {
-				return 15f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 0.5f;
-			}
-
-			public int getLevel() {
-				return 3;
-			}
-
-			public int getEnchantmentValue() {
-				return 18;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.COMPLEX_CHITIN.get()));
-			}
-		}, 0, 0f, new Item.Properties().fireResistant());
+		super(TIER, new Item.Properties().fireResistant().attributes(createAttributes()));
 	}
 
-	@Override
-	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-		Multimap<Attribute, AttributeModifier> map = super.getDefaultAttributeModifiers(equipmentSlot);
-		if (equipmentSlot == EquipmentSlot.MAINHAND) {
-			map = HashMultimap.create(map);
-			map.put(CAAttributes.SANITY_INJURY_DAMAGE.get(),
-					new AttributeModifier(new UUID(equipmentSlot.toString().hashCode(), 0), "caerula_arbor_attribute_modifier", 80, AttributeModifier.Operation.ADDITION));
+	private static ItemAttributeModifiers createAttributes() {
+		ItemAttributeModifiers base = HoeItem.createAttributes(TIER, 0, 0f);
+		ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+		for (ItemAttributeModifiers.Entry entry : base.modifiers()) {
+			builder.add(entry.attribute(), entry.modifier(), entry.slot());
 		}
-		return map;
+		builder.add(CAAttributes.SANITY_INJURY_DAMAGE,
+				new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerulaarbor", "complex_chitin_hoe_sanity_injury_damage"),
+						80.0D, AttributeModifier.Operation.ADD_VALUE),
+				EquipmentSlotGroup.MAINHAND);
+		return builder.build();
 	}
 
 	@Override
@@ -82,8 +70,8 @@ public class ComplexChitinHoeItem extends HoeItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.complex_chitin_hoe.description_0"));
 	}
 
@@ -93,7 +81,7 @@ public class ComplexChitinHoeItem extends HoeItem {
 		if (context.getPlayer() == null) {
 			return InteractionResult.PASS;
 		}
-		// TODO：评估是否为 ComplexChitinHoeItem 与 TrailriteHoeItem 制作共同基类，并将这段共享交互逻辑收口到那里。
+		// TODO锛氳瘎浼版槸鍚︿负 ComplexChitinHoeItem 涓?TrailriteHoeItem 鍒朵綔鍏卞悓鍩虹被锛屽苟灏嗚繖娈靛叡浜氦浜掗€昏緫鏀跺彛鍒伴偅閲屻€?
 		BlockState clickedState = context.getLevel().getBlockState(context.getClickedPos());
 		if (context.getPlayer().isShiftKeyDown() && clickedState.getBlock() == Blocks.FARMLAND) {
 			BlockState oceanFarmlandState = CABlocks.OCEAN_FARMLAND.get().withPropertiesOf(clickedState);

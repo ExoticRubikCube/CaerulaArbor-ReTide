@@ -53,11 +53,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -85,20 +85,20 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		xpReward = 128;
 		setNoAi(false);
 		setNoGravity(true);
-		setMaxUpStep(0.6f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		setPersistenceRequired();
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_REVIVE_TICK, 0);
-		this.entityData.define(DATA_PHASE, 0);
-		this.entityData.define(DATA_SKILL_P, 0);
-		this.entityData.define(DATA_DURATION, 50);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_REVIVE_TICK, 0);
+		builder.define(DATA_PHASE, 0);
+		builder.define(DATA_SKILL_P, 0);
+		builder.define(DATA_DURATION, 50);
 	}
 
 	@Override
@@ -133,7 +133,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		return null;
 	}
 
-	//TODO:需要修改为水晶光束
+	//TODO:闇€瑕佷慨鏀逛负姘存櫠鍏夋潫
 	public static void spawnLinkParticles(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
 		double vx = toX - fromX;
 		double vy = toY - fromY;
@@ -231,11 +231,6 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	}
 
 	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
-
-	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
@@ -279,13 +274,13 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 				this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() * 2);
 			if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
 				this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() * 3);
-			if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-				this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() * 2);
-			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-				this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue() + 20);
+			if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
+				this.getAttribute(CAAttributes.GENERAL_DEFENSE).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue() * 2);
+			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
+				this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue() + 20);
 			if (!this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
-				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 200, 1, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1, false, false));
 			}
 			this.setHealth(this.getMaxHealth());
 			return;
@@ -327,13 +322,13 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		if (this instanceof OceanizedEnderinaEntity) {
 			this.setAnimation("animation.oceanized_enderina.start");
 		}
 		if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 9, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 9, false, false));
 		return retval;
 	}
 
@@ -448,7 +443,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 					if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
 						datEntSetI.getEntityData().set(DATA_DURATION, 70);
 					if (!this.level().isClientSide())
-						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
 					if (world instanceof Level level) {
 						level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_SKILL.get(), SoundSource.HOSTILE, (float) 2.5, 1);
 					}
@@ -573,7 +568,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	}
 
 	@Override
-	public boolean canChangeDimensions() {
+	public boolean canUsePortal(boolean allowVehicles) {
 		return false;
 	}
 
@@ -613,14 +608,14 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		builder = builder.add(Attributes.FOLLOW_RANGE, 36);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
 		builder = builder.add(Attributes.FLYING_SPEED, 0.55);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 85);
-		builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 4);
-		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.0125);
-		builder = builder.add(CAAttributes.SANITY_RESISTANCE.get(), 75);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 85);
+		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
+		builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.0125);
+		builder = builder.add(CAAttributes.SANITY_RESISTANCE, 75);
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (this.isDeadOrDying()) {
 				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_enderina.die"));
@@ -633,7 +628,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -650,7 +645,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -672,7 +667,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		++this.deathTime;
 		if (this.deathTime == 40) {
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 			Level world = this.level();
 			double x = this.getX();
 			double y = this.getY();

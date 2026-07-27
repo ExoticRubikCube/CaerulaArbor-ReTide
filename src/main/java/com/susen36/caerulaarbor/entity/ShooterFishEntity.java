@@ -1,5 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
+
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FishShootEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -16,6 +20,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,11 +40,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -59,14 +64,14 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
-		setMaxUpStep(0.85f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.85f);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
 	}
 
 	@Override
@@ -173,8 +178,8 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		}
 	}
 
-    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
-		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+		super.dropCustomDeathLoot(level, damageSource, recentlyHit);
 		this.spawnAtLocation(new ItemStack(CAItems.OCEAN_FIBRE.get()));
 	}
 
@@ -216,18 +221,18 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		FishShootEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (2.0 / 3.0));
 	}
 
-	public static void registerSpawnPlacements() {
-		SpawnPlacements.register(CAEntities.SHOOTER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+		event.register(CAEntities.SHOOTER_FISH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canCommonSeabornSpawn(world, x, y, z);
-		});
+		}, RegisterSpawnPlacementsEvent.Operation.REPLACE);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 15);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 15);
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.17);
 		builder = builder.add(Attributes.MAX_HEALTH, 14);
 		builder = builder.add(Attributes.ARMOR, 0);
@@ -236,7 +241,7 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -248,7 +253,7 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -265,7 +270,7 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -287,7 +292,7 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(ShooterFishEntity.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 
@@ -312,4 +317,3 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		this.animationprocedure = animation;
 	}
 }
-

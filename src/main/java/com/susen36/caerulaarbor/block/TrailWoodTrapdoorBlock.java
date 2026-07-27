@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 
 public class TrailWoodTrapdoorBlock extends TrapDoorBlock {
 	public TrailWoodTrapdoorBlock() {
-		super(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(3f, 6f).noOcclusion().isRedstoneConductor((bs, br, bp) -> false).dynamicShape(), BlockSetType.OAK);
+		super(BlockSetType.OAK, Properties.of().sound(SoundType.WOOD).strength(3f, 6f).noOcclusion().isRedstoneConductor((bs, br, bp) -> false).dynamicShape());
 	}
 
 	@Override

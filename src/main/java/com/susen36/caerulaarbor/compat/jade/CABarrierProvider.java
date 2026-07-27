@@ -34,7 +34,7 @@ public enum CABarrierProvider implements IEntityComponentProvider {
     }
 
     private double getBarrier(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CAAttributes.LIVING_BARRIER.get());
+        AttributeInstance instance = living.getAttribute(CAAttributes.LIVING_BARRIER);
         if (instance != null) return instance.getValue();
         return 0;
     }

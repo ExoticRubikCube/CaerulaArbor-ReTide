@@ -19,9 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier {
@@ -36,16 +35,11 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public WitherShootPreEntity(EntityType<? extends WitherShootPreEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
+		super(type, world);
 	}
 
 	public WitherShootPreEntity(EntityType<? extends WitherShootPreEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
+		super(type, world);
 	}
 
 	@Override

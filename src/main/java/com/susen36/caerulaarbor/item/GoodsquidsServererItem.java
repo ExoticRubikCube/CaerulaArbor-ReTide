@@ -21,14 +21,15 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
+
 public class GoodsquidsServererItem extends Item {
 	public GoodsquidsServererItem() {
 		super(new Item.Properties().durability(800).rarity(Rarity.EPIC));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.goodsquids_serverer.description_0"));
 	}
 

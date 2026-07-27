@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.api.event;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.eventbus.api.Cancelable;
+
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
 public class SanityEvent extends LivingEvent {
     private double amount;

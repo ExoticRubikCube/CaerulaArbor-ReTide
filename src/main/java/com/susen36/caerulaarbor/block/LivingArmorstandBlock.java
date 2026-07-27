@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -149,15 +150,11 @@ public class LivingArmorstandBlock extends BaseEntityBlock implements SimpleWate
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public InteractionResult useWithoutItem(BlockState blockstate, Level world, BlockPos pos, Player entity, BlockHitResult hit) {
+		super.useWithoutItem(blockstate, world, pos, entity, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
 
 		this.formlivingArmor(world, x, y, z);
 		return InteractionResult.SUCCESS;
@@ -175,5 +172,10 @@ public class LivingArmorstandBlock extends BaseEntityBlock implements SimpleWate
 			Block.dropResources(world.getBlockState(blockPos), world, BlockPos.containing(x, y, z), null);
 			world.destroyBlock(blockPos, false);
 		}
+	}
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return MapCodec.unit(this);
 	}
 }

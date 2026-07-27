@@ -22,17 +22,14 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -46,488 +43,379 @@ import java.util.function.Supplier;
 public class CAEntities {
     public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, CaerulaArborMod.MODID);
     private static final LinkedHashMap<DeferredHolder<? extends EntityType<?>, ? extends EntityType<?>>, EntityRegistrationData> ENTITY_REGISTRATIONS = new LinkedHashMap<>();
-    public static final DeferredHolder<EntityType<RunFishEntity>, ? extends EntityType<RunFishEntity>> RUN_FISH = register("run_fish",
-            EntityType.Builder.<RunFishEntity>of(RunFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new RunFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<RunFishEntity>> RUN_FISH = register("run_fish",
+            EntityType.Builder.<RunFishEntity>of(RunFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.4f, 0.5f));
-    public static final DeferredHolder<EntityType<SliderFishEntity>, ? extends EntityType<SliderFishEntity>> SLIDER_FISH = register("slider_fish",
-            EntityType.Builder.<SliderFishEntity>of(SliderFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SliderFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SliderFishEntity>> SLIDER_FISH = register("slider_fish",
+            EntityType.Builder.<SliderFishEntity>of(SliderFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.5f, 0.8f));
-    public static final DeferredHolder<EntityType<SuperSliderEntity>, ? extends EntityType<SuperSliderEntity>> SUPER_SLIDER = register("super_slider",
-            EntityType.Builder.<SuperSliderEntity>of(SuperSliderEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SuperSliderEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SuperSliderEntity>> SUPER_SLIDER = register("super_slider",
+            EntityType.Builder.<SuperSliderEntity>of(SuperSliderEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.3f, 0.8f));
-    public static final DeferredHolder<EntityType<ShooterFishEntity>, ? extends EntityType<ShooterFishEntity>> SHOOTER_FISH = register("shooter_fish",
-            EntityType.Builder.<ShooterFishEntity>of(ShooterFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ShooterFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ShooterFishEntity>> SHOOTER_FISH = register("shooter_fish",
+            EntityType.Builder.<ShooterFishEntity>of(ShooterFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.2f));
-    public static final DeferredHolder<EntityType<FishShootEntity>, ? extends EntityType<FishShootEntity>> FISH_SHOOT = register("fish_shoot",
-            EntityType.Builder.<FishShootEntity>of(FishShootEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new FishShootEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
-    public static final DeferredHolder<EntityType<FlyFishEntity>, ? extends EntityType<FlyFishEntity>> FLY_FISH = register("fly_fish",
-            EntityType.Builder.<FlyFishEntity>of(FlyFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new FlyFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<FishShootEntity>> FISH_SHOOT = register("fish_shoot",
+            EntityType.Builder.<FishShootEntity>of(FishShootEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
+    public static final DeferredHolder<EntityType<?>, EntityType<FlyFishEntity>> FLY_FISH = register("fly_fish",
+            EntityType.Builder.<FlyFishEntity>of(FlyFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 0.9f));
-    public static final DeferredHolder<EntityType<ReaperFishEntity>, ? extends EntityType<ReaperFishEntity>> REAPER_FISH = register("reaper_fish",
-            EntityType.Builder.<ReaperFishEntity>of(ReaperFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(10).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ReaperFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ReaperFishEntity>> REAPER_FISH = register("reaper_fish",
+            EntityType.Builder.<ReaperFishEntity>of(ReaperFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(10).setUpdateInterval(3)
                     .sized(1.2f, 2.8f));
-    public static final DeferredHolder<EntityType<PocketSeaCreeperEntity>, ? extends EntityType<PocketSeaCreeperEntity>> POCKET_SEA_CREEPER = register("pocket_sea_creeper",
-            EntityType.Builder.<PocketSeaCreeperEntity>of(PocketSeaCreeperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new PocketSeaCreeperEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<PocketSeaCreeperEntity>> POCKET_SEA_CREEPER = register("pocket_sea_creeper",
+            EntityType.Builder.<PocketSeaCreeperEntity>of(PocketSeaCreeperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.8f, 1.5f));
-    public static final DeferredHolder<EntityType<PunctureFishEntity>, ? extends EntityType<PunctureFishEntity>> PUNCTURE_FISH = register("puncture_fish",
-            EntityType.Builder.<PunctureFishEntity>of(PunctureFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new PunctureFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<PunctureFishEntity>> PUNCTURE_FISH = register("puncture_fish",
+            EntityType.Builder.<PunctureFishEntity>of(PunctureFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.9f, 2.7f));
-    public static final DeferredHolder<EntityType<BaselayerAbyssalEntity>, ? extends EntityType<BaselayerAbyssalEntity>> BASELAYER_ABYSSAL = register("baselayer_abyssal",
-            EntityType.Builder.<BaselayerAbyssalEntity>of(BaselayerAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new BaselayerAbyssalEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<BaselayerAbyssalEntity>> BASELAYER_ABYSSAL = register("baselayer_abyssal",
+            EntityType.Builder.<BaselayerAbyssalEntity>of(BaselayerAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.7f, 1.5f));
-    public static final DeferredHolder<EntityType<PredatorAbyssalEntity>, ? extends EntityType<PredatorAbyssalEntity>> PREDATOR_ABYSSAL = register("predator_abyssal",
-            EntityType.Builder.<PredatorAbyssalEntity>of(PredatorAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new PredatorAbyssalEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<PredatorAbyssalEntity>> PREDATOR_ABYSSAL = register("predator_abyssal",
+            EntityType.Builder.<PredatorAbyssalEntity>of(PredatorAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.4f));
-    public static final DeferredHolder<EntityType<GuideAbyssalEntity>, ? extends EntityType<GuideAbyssalEntity>> GUIDE_ABYSSAL = register("guide_abyssal",
-            EntityType.Builder.<GuideAbyssalEntity>of(GuideAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new GuideAbyssalEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<GuideAbyssalEntity>> GUIDE_ABYSSAL = register("guide_abyssal",
+            EntityType.Builder.<GuideAbyssalEntity>of(GuideAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(1f, 2.5f));
-    public static final DeferredHolder<EntityType<SplasherAbyssalEntity>, ? extends EntityType<SplasherAbyssalEntity>> SPLASHER_ABYSSAL = register("splasher_abyssal",
-            EntityType.Builder.<SplasherAbyssalEntity>of(SplasherAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SplasherAbyssalEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SplasherAbyssalEntity>> SPLASHER_ABYSSAL = register("splasher_abyssal",
+            EntityType.Builder.<SplasherAbyssalEntity>of(SplasherAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.1f));
-    public static final DeferredHolder<EntityType<FishSplashEntity>, ? extends EntityType<FishSplashEntity>> FISH_SPLASH = register("fish_splash",
-            EntityType.Builder.<FishSplashEntity>of(FishSplashEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new FishSplashEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
-    public static final DeferredHolder<EntityType<UmbrellaAbyssalEntity>, ? extends EntityType<UmbrellaAbyssalEntity>> UMBRELLA_ABYSSAL = register("umbrella_abyssal",
-            EntityType.Builder.<UmbrellaAbyssalEntity>of(UmbrellaAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new UmbrellaAbyssalEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<FishSplashEntity>> FISH_SPLASH = register("fish_splash",
+            EntityType.Builder.<FishSplashEntity>of(FishSplashEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
+    public static final DeferredHolder<EntityType<?>, EntityType<UmbrellaAbyssalEntity>> UMBRELLA_ABYSSAL = register("umbrella_abyssal",
+            EntityType.Builder.<UmbrellaAbyssalEntity>of(UmbrellaAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.8f, 1.5f));
-    public static final DeferredHolder<EntityType<CrackerAbyssalEntity>, ? extends EntityType<CrackerAbyssalEntity>> CRACKER_ABYSSAL = register("cracker_abyssal",
-            EntityType.Builder.<CrackerAbyssalEntity>of(CrackerAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new CrackerAbyssalEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<CrackerAbyssalEntity>> CRACKER_ABYSSAL = register("cracker_abyssal",
+            EntityType.Builder.<CrackerAbyssalEntity>of(CrackerAbyssalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.7f, 2f));
-    public static final DeferredHolder<EntityType<CollectorProkaryoteEntity>, ? extends EntityType<CollectorProkaryoteEntity>> COLLECTOR_PROKARYOTE = register("collector_prokaryote",
+    public static final DeferredHolder<EntityType<?>, EntityType<CollectorProkaryoteEntity>> COLLECTOR_PROKARYOTE = register("collector_prokaryote",
             EntityType.Builder.<CollectorProkaryoteEntity>of(CollectorProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
-                    .setCustomClientFactory((spawnEntity, level) -> new CollectorProkaryoteEntity(level))
-
                     .sized(0.5f, 0.5f));
-    public static final DeferredHolder<EntityType<BoneFishEntity>, ? extends EntityType<BoneFishEntity>> BONE_FISH = register("bone_fish",
-            EntityType.Builder.<BoneFishEntity>of(BoneFishEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new BoneFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<BoneFishEntity>> BONE_FISH = register("bone_fish",
+            EntityType.Builder.<BoneFishEntity>of(BoneFishEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.7f, 0.7f));
-    public static final DeferredHolder<EntityType<ChiselerFishEntity>, ? extends EntityType<ChiselerFishEntity>> CHISELER_FISH = register("chiseler_fish",
-            EntityType.Builder.<ChiselerFishEntity>of(ChiselerFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ChiselerFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ChiselerFishEntity>> CHISELER_FISH = register("chiseler_fish",
+            EntityType.Builder.<ChiselerFishEntity>of(ChiselerFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 0.6f));
-    public static final DeferredHolder<EntityType<FakerggShootEntity>, ? extends EntityType<FakerggShootEntity>> FAKERGG_SHOOT = register("fakergg_shoot",
-            EntityType.Builder.<FakerggShootEntity>of(FakerggShootEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new FakerggShootEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
-    public static final DeferredHolder<EntityType<PregnantFishEntity>, ? extends EntityType<PregnantFishEntity>> PREGNANT_FISH = register("pregnant_fish",
-            EntityType.Builder.<PregnantFishEntity>of(PregnantFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new PregnantFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<FakerggShootEntity>> FAKERGG_SHOOT = register("fakergg_shoot",
+            EntityType.Builder.<FakerggShootEntity>of(FakerggShootEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
+    public static final DeferredHolder<EntityType<?>, EntityType<PregnantFishEntity>> PREGNANT_FISH = register("pregnant_fish",
+            EntityType.Builder.<PregnantFishEntity>of(PregnantFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.7f, 1.1f));
-    public static final DeferredHolder<EntityType<FakeOffspringEntity>, ? extends EntityType<FakeOffspringEntity>> FAKE_OFFSPRING = register("fake_offspring",
-            EntityType.Builder.<FakeOffspringEntity>of(FakeOffspringEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new FakeOffspringEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<FakeOffspringEntity>> FAKE_OFFSPRING = register("fake_offspring",
+            EntityType.Builder.<FakeOffspringEntity>of(FakeOffspringEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.6f, 0.6f));
-    public static final DeferredHolder<EntityType<FleefishBulletEntity>, ? extends EntityType<FleefishBulletEntity>> FLEEFISH_BULLET = register("fleefish_bullet",
-            EntityType.Builder.<FleefishBulletEntity>of(FleefishBulletEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new FleefishBulletEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
-    public static final DeferredHolder<EntityType<FleeFishEntity>, ? extends EntityType<FleeFishEntity>> FLEE_FISH = register("flee_fish",
-            EntityType.Builder.<FleeFishEntity>of(FleeFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new FleeFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<FleefishBulletEntity>> FLEEFISH_BULLET = register("fleefish_bullet",
+            EntityType.Builder.<FleefishBulletEntity>of(FleefishBulletEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
+    public static final DeferredHolder<EntityType<?>, EntityType<FleeFishEntity>> FLEE_FISH = register("flee_fish",
+            EntityType.Builder.<FleeFishEntity>of(FleeFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.8f, 1.1f));
-    public static final DeferredHolder<EntityType<RouteShaperEntity>, ? extends EntityType<RouteShaperEntity>> ROUTE_SHAPER = register("route_shaper",
-            EntityType.Builder.<RouteShaperEntity>of(RouteShaperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new RouteShaperEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<RouteShaperEntity>> ROUTE_SHAPER = register("route_shaper",
+            EntityType.Builder.<RouteShaperEntity>of(RouteShaperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(1.8f, 4f));
-    public static final DeferredHolder<EntityType<RouteFractalEntity>, ? extends EntityType<RouteFractalEntity>> ROUTE_FRACTAL = register("route_fractal",
-            EntityType.Builder.<RouteFractalEntity>of(RouteFractalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new RouteFractalEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<RouteFractalEntity>> ROUTE_FRACTAL = register("route_fractal",
+            EntityType.Builder.<RouteFractalEntity>of(RouteFractalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.7f, 1.5f));
-    public static final DeferredHolder<EntityType<TellerShotEntity>, ? extends EntityType<TellerShotEntity>> TELLER_SHOT = register("teller_shot",
-            EntityType.Builder.<TellerShotEntity>of(TellerShotEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new TellerShotEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
-    public static final DeferredHolder<EntityType<FirstTellerEntity>, ? extends EntityType<FirstTellerEntity>> FIRST_TO_TALK = register("first_to_talk",
-            EntityType.Builder.<FirstTellerEntity>of(FirstTellerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new FirstTellerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<TellerShotEntity>> TELLER_SHOT = register("teller_shot",
+            EntityType.Builder.<TellerShotEntity>of(TellerShotEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
+    public static final DeferredHolder<EntityType<?>, EntityType<FirstTellerEntity>> FIRST_TO_TALK = register("first_to_talk",
+            EntityType.Builder.<FirstTellerEntity>of(FirstTellerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.9f, 2.7f));
-    public static final DeferredHolder<EntityType<ReaperPetEntity>, ? extends EntityType<ReaperPetEntity>> REAPER_PET = register("reaper_pet",
-            EntityType.Builder.<ReaperPetEntity>of(ReaperPetEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ReaperPetEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ReaperPetEntity>> REAPER_PET = register("reaper_pet",
+            EntityType.Builder.<ReaperPetEntity>of(ReaperPetEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.3f));
-    public static final DeferredHolder<EntityType<BishopFishEntity>, ? extends EntityType<BishopFishEntity>> BISHOP_FISH = register("bishop_fish",
-            EntityType.Builder.<BishopFishEntity>of(BishopFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(18).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new BishopFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<BishopFishEntity>> BISHOP_FISH = register("bishop_fish",
+            EntityType.Builder.<BishopFishEntity>of(BishopFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(18).setUpdateInterval(3)
                     .sized(1.4f, 2.2f));
-    public static final DeferredHolder<EntityType<TideBishopEntity>, ? extends EntityType<TideBishopEntity>> TIDE_BISHOP = register("tide_bishop",
-            EntityType.Builder.<TideBishopEntity>of(TideBishopEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new TideBishopEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<TideBishopEntity>> TIDE_BISHOP = register("tide_bishop",
+            EntityType.Builder.<TideBishopEntity>of(TideBishopEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(1.1f, 2.2f));
-    public static final DeferredHolder<EntityType<SonsEntity>, ? extends EntityType<SonsEntity>> SONS = register("sons",
-            EntityType.Builder.<SonsEntity>of(SonsEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SonsEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SonsEntity>> SONS = register("sons",
+            EntityType.Builder.<SonsEntity>of(SonsEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.5f, 0.5f));
-    public static final DeferredHolder<EntityType<FloaterProkaryoteEntity>, ? extends EntityType<FloaterProkaryoteEntity>> FLOATER_PROKARYOTE = register("floater_prokaryote",
-            EntityType.Builder.<FloaterProkaryoteEntity>of(FloaterProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new FloaterProkaryoteEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<FloaterProkaryoteEntity>> FLOATER_PROKARYOTE = register("floater_prokaryote",
+            EntityType.Builder.<FloaterProkaryoteEntity>of(FloaterProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.5f));
-    public static final DeferredHolder<EntityType<ChitinGolemEntity>, ? extends EntityType<ChitinGolemEntity>> CHITIN_GOLEM = register("chitin_golem",
-            EntityType.Builder.<ChitinGolemEntity>of(ChitinGolemEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ChitinGolemEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ChitinGolemEntity>> CHITIN_GOLEM = register("chitin_golem",
+            EntityType.Builder.<ChitinGolemEntity>of(ChitinGolemEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(1.75f, 4f));
-    public static final DeferredHolder<EntityType<TideDeathrepellerEntity>, ? extends EntityType<TideDeathrepellerEntity>> TIDE_DEATHREPELLER = register("tide_deathrepeller",
-            EntityType.Builder.<TideDeathrepellerEntity>of(TideDeathrepellerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new TideDeathrepellerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<TideDeathrepellerEntity>> TIDE_DEATHREPELLER = register("tide_deathrepeller",
+            EntityType.Builder.<TideDeathrepellerEntity>of(TideDeathrepellerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(1.5f, 2f));
-    public static final DeferredHolder<EntityType<MegaChestEntity>, ? extends EntityType<MegaChestEntity>> MEGA_CHEST = register("mega_chest",
-            EntityType.Builder.<MegaChestEntity>of(MegaChestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(14).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new MegaChestEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<MegaChestEntity>> MEGA_CHEST = register("mega_chest",
+            EntityType.Builder.<MegaChestEntity>of(MegaChestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(14).setUpdateInterval(3)
                     .sized(0.8f, 0.9f));
-    public static final DeferredHolder<EntityType<ApostleProkaryoteEntity>, ? extends EntityType<ApostleProkaryoteEntity>> APOSTLE_PROKARYOTE = register("apostle_prokaryote",
-            EntityType.Builder.<ApostleProkaryoteEntity>of(ApostleProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ApostleProkaryoteEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ApostleProkaryoteEntity>> APOSTLE_PROKARYOTE = register("apostle_prokaryote",
+            EntityType.Builder.<ApostleProkaryoteEntity>of(ApostleProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.7f));
-    public static final DeferredHolder<EntityType<HighmoreShootEntity>, ? extends EntityType<HighmoreShootEntity>> HIGHMORE_SHOOT = register("highmore_shoot",
-            EntityType.Builder.<HighmoreShootEntity>of(HighmoreShootEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new HighmoreShootEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
-    public static final DeferredHolder<EntityType<HighmoreEntity>, ? extends EntityType<HighmoreEntity>> HIGHMORE = register("highmore",
-            EntityType.Builder.<HighmoreEntity>of(HighmoreEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(18).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new HighmoreEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<HighmoreShootEntity>> HIGHMORE_SHOOT = register("highmore_shoot",
+            EntityType.Builder.<HighmoreShootEntity>of(HighmoreShootEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
+    public static final DeferredHolder<EntityType<?>, EntityType<HighmoreEntity>> HIGHMORE = register("highmore",
+            EntityType.Builder.<HighmoreEntity>of(HighmoreEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(18).setUpdateInterval(3)
                     .sized(1.4f, 1.6f));
-    public static final DeferredHolder<EntityType<AccumulatorProkaryoteEntity>, ? extends EntityType<AccumulatorProkaryoteEntity>> ACCUMULATOR_PROKARYOTE = register("accumulator_prokaryote",
+    public static final DeferredHolder<EntityType<?>, EntityType<AccumulatorProkaryoteEntity>> ACCUMULATOR_PROKARYOTE = register("accumulator_prokaryote",
             EntityType.Builder.<AccumulatorProkaryoteEntity>of(AccumulatorProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
-                    .setCustomClientFactory((spawnEntity, level) -> new AccumulatorProkaryoteEntity(level))
-
                     .sized(0.5f, 1f));
-    public static final DeferredHolder<EntityType<AccumulatorCloneEntity>, ? extends EntityType<AccumulatorCloneEntity>> ACCUMULATOR_CLONE = register("accumulator_clone",
-            EntityType.Builder.<AccumulatorCloneEntity>of(AccumulatorCloneEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new AccumulatorCloneEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<AccumulatorCloneEntity>> ACCUMULATOR_CLONE = register("accumulator_clone",
+            EntityType.Builder.<AccumulatorCloneEntity>of(AccumulatorCloneEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.5f, 1f));
-    public static final DeferredHolder<EntityType<FeederProkaryoteEntity>, ? extends EntityType<FeederProkaryoteEntity>> FEEDER_PROKARYOTE = register("feeder_prokaryote",
-            EntityType.Builder.<FeederProkaryoteEntity>of(FeederProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new FeederProkaryoteEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<FeederProkaryoteEntity>> FEEDER_PROKARYOTE = register("feeder_prokaryote",
+            EntityType.Builder.<FeederProkaryoteEntity>of(FeederProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.8f, 1.1f));
-    public static final DeferredHolder<EntityType<ChestFishEntity>, ? extends EntityType<ChestFishEntity>> CHEST_FISH = register("chest_fish",
-            EntityType.Builder.<ChestFishEntity>of(ChestFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ChestFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ChestFishEntity>> CHEST_FISH = register("chest_fish",
+            EntityType.Builder.<ChestFishEntity>of(ChestFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.9f, 0.9f));
-    public static final DeferredHolder<EntityType<SpikeChestEntity>, ? extends EntityType<SpikeChestEntity>> SPIKE_CHEST = register("spike_chest",
-            EntityType.Builder.<SpikeChestEntity>of(SpikeChestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SpikeChestEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SpikeChestEntity>> SPIKE_CHEST = register("spike_chest",
+            EntityType.Builder.<SpikeChestEntity>of(SpikeChestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.9f, 0.9f));
-    public static final DeferredHolder<EntityType<SkadiEntity>, ? extends EntityType<SkadiEntity>> SKADI = register("skadi",
-            EntityType.Builder.<SkadiEntity>of(SkadiEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SkadiEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SkadiEntity>> SKADI = register("skadi",
+            EntityType.Builder.<SkadiEntity>of(SkadiEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<DepositerProkaryoteEntity>, ? extends EntityType<DepositerProkaryoteEntity>> DEPOSITER_PROKARYOTE = register("depositer_prokaryote",
+    public static final DeferredHolder<EntityType<?>, EntityType<DepositerProkaryoteEntity>> DEPOSITER_PROKARYOTE = register("depositer_prokaryote",
             EntityType.Builder.<DepositerProkaryoteEntity>of(DepositerProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
-                    .setCustomClientFactory((spawnEntity, level) -> new DepositerProkaryoteEntity(level))
-
                     .sized(0.625f, 1f));
-    public static final DeferredHolder<EntityType<OceanizedVillagerEntity>, ? extends EntityType<OceanizedVillagerEntity>> OCEANIZED_VILLAGER = register("oceanized_villager",
-            EntityType.Builder.<OceanizedVillagerEntity>of(OceanizedVillagerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedVillagerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedVillagerEntity>> OCEANIZED_VILLAGER = register("oceanized_villager",
+            EntityType.Builder.<OceanizedVillagerEntity>of(OceanizedVillagerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 2f));
-    public static final DeferredHolder<EntityType<OceanizedVindicatorEntity>, ? extends EntityType<OceanizedVindicatorEntity>> OCEANIZED_VINDICATOR = register("oceanized_vindicator",
-            EntityType.Builder.<OceanizedVindicatorEntity>of(OceanizedVindicatorEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedVindicatorEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedVindicatorEntity>> OCEANIZED_VINDICATOR = register("oceanized_vindicator",
+            EntityType.Builder.<OceanizedVindicatorEntity>of(OceanizedVindicatorEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 2f));
-    public static final DeferredHolder<EntityType<ShotOceanArrowEntity>, ? extends EntityType<ShotOceanArrowEntity>> SHOT_OCEAN_ARROW = register("shot_ocean_arrow",
-            EntityType.Builder.<ShotOceanArrowEntity>of(ShotOceanArrowEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new ShotOceanArrowEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.5f, 0.5f));
-    public static final DeferredHolder<EntityType<OceanizedPillagerEntity>, ? extends EntityType<OceanizedPillagerEntity>> OCEANIZED_PILLAGER = register("oceanized_pillager",
-            EntityType.Builder.<OceanizedPillagerEntity>of(OceanizedPillagerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedPillagerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ShotOceanArrowEntity>> SHOT_OCEAN_ARROW = register("shot_ocean_arrow",
+            EntityType.Builder.<ShotOceanArrowEntity>of(ShotOceanArrowEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.5f, 0.5f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedPillagerEntity>> OCEANIZED_PILLAGER = register("oceanized_pillager",
+            EntityType.Builder.<OceanizedPillagerEntity>of(OceanizedPillagerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.9f));
-    public static final DeferredHolder<EntityType<AnchorFlyEntity>, ? extends EntityType<AnchorFlyEntity>> ANCHOR_FLY = register("anchor_fly",
-            EntityType.Builder.<AnchorFlyEntity>of(AnchorFlyEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new AnchorFlyEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.2f, 0.2f));
-    public static final DeferredHolder<EntityType<OceanizedPigEntity>, ? extends EntityType<OceanizedPigEntity>> OCEANIZED_PIG = register("oceanized_pig",
-            EntityType.Builder.<OceanizedPigEntity>of(OceanizedPigEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedPigEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<AnchorFlyEntity>> ANCHOR_FLY = register("anchor_fly",
+            EntityType.Builder.<AnchorFlyEntity>of(AnchorFlyEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.2f, 0.2f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedPigEntity>> OCEANIZED_PIG = register("oceanized_pig",
+            EntityType.Builder.<OceanizedPigEntity>of(OceanizedPigEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.6f, 1f));
-    public static final DeferredHolder<EntityType<OceanizedCowEntity>, ? extends EntityType<OceanizedCowEntity>> OCEANIZED_COW = register("oceanized_cow",
-            EntityType.Builder.<OceanizedCowEntity>of(OceanizedCowEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedCowEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedCowEntity>> OCEANIZED_COW = register("oceanized_cow",
+            EntityType.Builder.<OceanizedCowEntity>of(OceanizedCowEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.6f, 1.375f));
-    public static final DeferredHolder<EntityType<OceanizedSheepEntity>, ? extends EntityType<OceanizedSheepEntity>> OCEANIZED_SHEEP = register("oceanized_sheep",
-            EntityType.Builder.<OceanizedSheepEntity>of(OceanizedSheepEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedSheepEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedSheepEntity>> OCEANIZED_SHEEP = register("oceanized_sheep",
+            EntityType.Builder.<OceanizedSheepEntity>of(OceanizedSheepEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.6f, 1f));
-    public static final DeferredHolder<EntityType<OceanizedHorseEntity>, ? extends EntityType<OceanizedHorseEntity>> OCEANIZED_HORSE = register("oceanized_horse",
-            EntityType.Builder.<OceanizedHorseEntity>of(OceanizedHorseEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedHorseEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedHorseEntity>> OCEANIZED_HORSE = register("oceanized_horse",
+            EntityType.Builder.<OceanizedHorseEntity>of(OceanizedHorseEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(1.25f, 1.8f));
-    public static final DeferredHolder<EntityType<OceanizedPiglinEntity>, ? extends EntityType<OceanizedPiglinEntity>> OCEANIZED_PIGLIN = register("oceanized_piglin", EntityType.Builder.<OceanizedPiglinEntity>of(OceanizedPiglinEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedPiglinEntity(level)).fireImmune().sized(0.6f, 2f));
-    public static final DeferredHolder<EntityType<OceanizedBruteEntity>, ? extends EntityType<OceanizedBruteEntity>> OCEANIZED_BRUTE = register("oceanized_brute", EntityType.Builder.<OceanizedBruteEntity>of(OceanizedBruteEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(10).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedBruteEntity(level)).fireImmune().sized(0.6f, 2f));
-    public static final DeferredHolder<EntityType<OceanizedSpiderEntity>, ? extends EntityType<OceanizedSpiderEntity>> OCEANIZED_SPIDER = register("oceanized_spider",
-            EntityType.Builder.<OceanizedSpiderEntity>of(OceanizedSpiderEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(7).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedSpiderEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedPiglinEntity>> OCEANIZED_PIGLIN = register("oceanized_piglin", EntityType.Builder.<OceanizedPiglinEntity>of(OceanizedPiglinEntity::new, MobCategory.MONSTER)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).fireImmune().sized(0.6f, 2f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedBruteEntity>> OCEANIZED_BRUTE = register("oceanized_brute", EntityType.Builder.<OceanizedBruteEntity>of(OceanizedBruteEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
+            .setTrackingRange(10).setUpdateInterval(3).fireImmune().sized(0.6f, 2f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedSpiderEntity>> OCEANIZED_SPIDER = register("oceanized_spider",
+            EntityType.Builder.<OceanizedSpiderEntity>of(OceanizedSpiderEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(7).setUpdateInterval(3)
                     .sized(0.9f, 0.7f));
-    public static final DeferredHolder<EntityType<OceanizedEndermanEntity>, ? extends EntityType<OceanizedEndermanEntity>> OCEANIZED_ENDERMAN = register("oceanized_enderman",
-            EntityType.Builder.<OceanizedEndermanEntity>of(OceanizedEndermanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(10).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedEndermanEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedEndermanEntity>> OCEANIZED_ENDERMAN = register("oceanized_enderman",
+            EntityType.Builder.<OceanizedEndermanEntity>of(OceanizedEndermanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(10).setUpdateInterval(3)
                     .sized(0.6f, 3f));
-    public static final DeferredHolder<EntityType<OceanizedWolfEntity>, ? extends EntityType<OceanizedWolfEntity>> OCEANIZED_WOLF = register("oceanized_wolf",
-            EntityType.Builder.<OceanizedWolfEntity>of(OceanizedWolfEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(7).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedWolfEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedWolfEntity>> OCEANIZED_WOLF = register("oceanized_wolf",
+            EntityType.Builder.<OceanizedWolfEntity>of(OceanizedWolfEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(7).setUpdateInterval(3)
                     .sized(0.7f, 0.8f));
-    public static final DeferredHolder<EntityType<OceanizedDogEntity>, ? extends EntityType<OceanizedDogEntity>> OCEANIZED_DOG = register("oceanized_dog",
-            EntityType.Builder.<OceanizedDogEntity>of(OceanizedDogEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedDogEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedDogEntity>> OCEANIZED_DOG = register("oceanized_dog",
+            EntityType.Builder.<OceanizedDogEntity>of(OceanizedDogEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.7f, 0.8f));
-    public static final DeferredHolder<EntityType<OceanizedRavagerEntity>, ? extends EntityType<OceanizedRavagerEntity>> OCEANIZED_RAVAGER = register("oceanized_ravager",
-            EntityType.Builder.<OceanizedRavagerEntity>of(OceanizedRavagerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(10).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedRavagerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedRavagerEntity>> OCEANIZED_RAVAGER = register("oceanized_ravager",
+            EntityType.Builder.<OceanizedRavagerEntity>of(OceanizedRavagerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(10).setUpdateInterval(3)
                     .sized(1.9f, 2.5f));
-    public static final DeferredHolder<EntityType<OceanziedWitchEntity>, ? extends EntityType<OceanziedWitchEntity>> OCEANIZED_WITCH = register("oceanized_witch",
-            EntityType.Builder.<OceanziedWitchEntity>of(OceanziedWitchEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanziedWitchEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanziedWitchEntity>> OCEANIZED_WITCH = register("oceanized_witch",
+            EntityType.Builder.<OceanziedWitchEntity>of(OceanziedWitchEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<ThrowablePotionEntity>, ? extends EntityType<ThrowablePotionEntity>> THROWABLE_POTION = register("throwable_potion", EntityType.Builder.<ThrowablePotionEntity>of(ThrowablePotionEntity::new, MobCategory.MISC)
-            .setCustomClientFactory((spawnEntity, level) -> new ThrowablePotionEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.2f, 0.2f));
-    public static final DeferredHolder<EntityType<IzumikOffspringEntity>, ? extends EntityType<IzumikOffspringEntity>> IZUMIK_OFFSPRING = register("izumik_offspring",
-            EntityType.Builder.<IzumikOffspringEntity>of(IzumikOffspringEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new IzumikOffspringEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ThrowablePotionEntity>> THROWABLE_POTION = register("throwable_potion", EntityType.Builder.<ThrowablePotionEntity>of(ThrowablePotionEntity::new, MobCategory.MISC)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.2f, 0.2f));
+    public static final DeferredHolder<EntityType<?>, EntityType<IzumikOffspringEntity>> IZUMIK_OFFSPRING = register("izumik_offspring",
+            EntityType.Builder.<IzumikOffspringEntity>of(IzumikOffspringEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.5f, 0.9f));
-    public static final DeferredHolder<EntityType<CaerulaOffspringEntity>, ? extends EntityType<CaerulaOffspringEntity>> CAERULA_OFFSPRING = register("caerula_offspring",
-            EntityType.Builder.<CaerulaOffspringEntity>of(CaerulaOffspringEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new CaerulaOffspringEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<CaerulaOffspringEntity>> CAERULA_OFFSPRING = register("caerula_offspring",
+            EntityType.Builder.<CaerulaOffspringEntity>of(CaerulaOffspringEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.5f, 0.9f));
-    public static final DeferredHolder<EntityType<IzumikEntity>, ? extends EntityType<IzumikEntity>> IZUMIK = register("izumik",
-            EntityType.Builder.<IzumikEntity>of(IzumikEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(21).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new IzumikEntity(level)).fireImmune().sized(3.3f, 9f));
-    public static final DeferredHolder<EntityType<DivicellularGoEntity>, ? extends EntityType<DivicellularGoEntity>> DIVICELLULAR_GO = register("divicellular_go",
-            EntityType.Builder.<DivicellularGoEntity>of(DivicellularGoEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new DivicellularGoEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<IzumikEntity>> IZUMIK = register("izumik",
+            EntityType.Builder.<IzumikEntity>of(IzumikEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(21).setUpdateInterval(3).fireImmune().sized(3.3f, 9f));
+    public static final DeferredHolder<EntityType<?>, EntityType<DivicellularGoEntity>> DIVICELLULAR_GO = register("divicellular_go",
+            EntityType.Builder.<DivicellularGoEntity>of(DivicellularGoEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.5f, 1f));
-    public static final DeferredHolder<EntityType<OceanizedEvokerEntity>, ? extends EntityType<OceanizedEvokerEntity>> OCEANIZED_EVOKER = register("oceanized_evoker",
-            EntityType.Builder.<OceanizedEvokerEntity>of(OceanizedEvokerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedEvokerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedEvokerEntity>> OCEANIZED_EVOKER = register("oceanized_evoker",
+            EntityType.Builder.<OceanizedEvokerEntity>of(OceanizedEvokerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.9f));
-    public static final DeferredHolder<EntityType<JuniorWarriorPriestEntity>, ? extends EntityType<JuniorWarriorPriestEntity>> JUNIOR_WARRIOR_PRIEST = register("junior_warrior_priest",
-            EntityType.Builder.<JuniorWarriorPriestEntity>of(JuniorWarriorPriestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new JuniorWarriorPriestEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<JuniorWarriorPriestEntity>> JUNIOR_WARRIOR_PRIEST = register("junior_warrior_priest",
+            EntityType.Builder.<JuniorWarriorPriestEntity>of(JuniorWarriorPriestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<WarriorPriestEntity>, ? extends EntityType<WarriorPriestEntity>> WARRIOR_PRIEST = register("warrior_priest",
-            EntityType.Builder.<WarriorPriestEntity>of(WarriorPriestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new WarriorPriestEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<WarriorPriestEntity>> WARRIOR_PRIEST = register("warrior_priest",
+            EntityType.Builder.<WarriorPriestEntity>of(WarriorPriestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<CorrectionalPhalanxyInfantryEntity>, ? extends EntityType<CorrectionalPhalanxyInfantryEntity>> CORRECTIONAL_PHALANXY_INFANTRY = register("correctional_phalanxy_infantry",
+    public static final DeferredHolder<EntityType<?>, EntityType<CorrectionalPhalanxyInfantryEntity>> CORRECTIONAL_PHALANXY_INFANTRY = register("correctional_phalanxy_infantry",
             EntityType.Builder.<CorrectionalPhalanxyInfantryEntity>of(CorrectionalPhalanxyInfantryEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
-                    .setCustomClientFactory((spawnEntity, level) -> new CorrectionalPhalanxyInfantryEntity(level))
-
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<CorrectinalPhalaxVanguardEntity>, ? extends EntityType<CorrectinalPhalaxVanguardEntity>> CORRECTIONAL_PHALAX_VANGUARD = register("correctional_phalax_vanguard",
+    public static final DeferredHolder<EntityType<?>, EntityType<CorrectinalPhalaxVanguardEntity>> CORRECTIONAL_PHALAX_VANGUARD = register("correctional_phalax_vanguard",
             EntityType.Builder.<CorrectinalPhalaxVanguardEntity>of(CorrectinalPhalaxVanguardEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
-                    .setCustomClientFactory((spawnEntity, level) -> new CorrectinalPhalaxVanguardEntity(level))
-
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<TribunalHealerEntity>, ? extends EntityType<TribunalHealerEntity>> TRIBUNAL_HEALER = register("tribunal_healer",
-            EntityType.Builder.<TribunalHealerEntity>of(TribunalHealerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new TribunalHealerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<TribunalHealerEntity>> TRIBUNAL_HEALER = register("tribunal_healer",
+            EntityType.Builder.<TribunalHealerEntity>of(TribunalHealerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<HealBullletEntity>, ? extends EntityType<HealBullletEntity>> HEAL_BULLLET = register("heal_bulllet",
-            EntityType.Builder.<HealBullletEntity>of(HealBullletEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new HealBullletEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.1f, 0.1f));
-    public static final DeferredHolder<EntityType<MartusEntity>, ? extends EntityType<MartusEntity>> MARTUS = register("martus",
-            EntityType.Builder.<MartusEntity>of(MartusEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new MartusEntity(level)).fireImmune().sized(0.7f, 2.8f));
-    public static final DeferredHolder<EntityType<TheAbandonedEntity>, ? extends EntityType<TheAbandonedEntity>> THE_ABANDONED = register("the_abandoned",
-            EntityType.Builder.<TheAbandonedEntity>of(TheAbandonedEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new TheAbandonedEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<HealBullletEntity>> HEAL_BULLLET = register("heal_bulllet",
+            EntityType.Builder.<HealBullletEntity>of(HealBullletEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.1f, 0.1f));
+    public static final DeferredHolder<EntityType<?>, EntityType<MartusEntity>> MARTUS = register("martus",
+            EntityType.Builder.<MartusEntity>of(MartusEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(0.7f, 2.8f));
+    public static final DeferredHolder<EntityType<?>, EntityType<TheAbandonedEntity>> THE_ABANDONED = register("the_abandoned",
+            EntityType.Builder.<TheAbandonedEntity>of(TheAbandonedEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.7f, 2.25f));
-    public static final DeferredHolder<EntityType<AbandonedShootEntity>, ? extends EntityType<AbandonedShootEntity>> ABANDONED_SHOOT = register("abandoned_shoot",
-            EntityType.Builder.<AbandonedShootEntity>of(AbandonedShootEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new AbandonedShootEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
-    public static final DeferredHolder<EntityType<GunmuEntity>, ? extends EntityType<GunmuEntity>> GUNMU = register("gunmu",
-            EntityType.Builder.<GunmuEntity>of(GunmuEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new GunmuEntity(level)).fireImmune().sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<OceanizedWardenEntity>, ? extends EntityType<OceanizedWardenEntity>> OCEANIZED_WARDEN = register("oceanized_warden", EntityType.Builder.<OceanizedWardenEntity>of(OceanizedWardenEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedWardenEntity(level)).fireImmune().sized(1.2f, 3.1f));
-    public static final DeferredHolder<EntityType<OceanizedCatEntity>, ? extends EntityType<OceanizedCatEntity>> OCEANIZED_CAT = register("oceanized_cat",
-            EntityType.Builder.<OceanizedCatEntity>of(OceanizedCatEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedCatEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<AbandonedShootEntity>> ABANDONED_SHOOT = register("abandoned_shoot",
+            EntityType.Builder.<AbandonedShootEntity>of(AbandonedShootEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
+    public static final DeferredHolder<EntityType<?>, EntityType<GunmuEntity>> GUNMU = register("gunmu",
+            EntityType.Builder.<GunmuEntity>of(GunmuEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(0.6f, 1.8f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedWardenEntity>> OCEANIZED_WARDEN = register("oceanized_warden", EntityType.Builder.<OceanizedWardenEntity>of(OceanizedWardenEntity::new, MobCategory.MONSTER)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(1.2f, 3.1f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedCatEntity>> OCEANIZED_CAT = register("oceanized_cat",
+            EntityType.Builder.<OceanizedCatEntity>of(OceanizedCatEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.5f, 0.625f));
-    public static final DeferredHolder<EntityType<SuperBigCatEntity>, ? extends EntityType<SuperBigCatEntity>> SUPER_BIG_CAT = register("super_big_cat",
-            EntityType.Builder.<SuperBigCatEntity>of(SuperBigCatEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SuperBigCatEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SuperBigCatEntity>> SUPER_BIG_CAT = register("super_big_cat",
+            EntityType.Builder.<SuperBigCatEntity>of(SuperBigCatEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(3.5f, 4f));
-    public static final DeferredHolder<EntityType<ComplexChitinGolemEntity>, ? extends EntityType<ComplexChitinGolemEntity>> COMPLEX_CHITIN_GOLEM = register("complex_chitin_golem", EntityType.Builder.<ComplexChitinGolemEntity>of(ComplexChitinGolemEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ComplexChitinGolemEntity(level)).fireImmune().sized(1.75f, 4f));
-    public static final DeferredHolder<EntityType<OceanizedWardenisEntity>, ? extends EntityType<OceanizedWardenisEntity>> OCEANIZED_WARDENIS = register("oceanized_wardenis", EntityType.Builder.<OceanizedWardenisEntity>of(OceanizedWardenisEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedWardenisEntity(level)).fireImmune().sized(0.6f, 1.85f));
-    public static final DeferredHolder<EntityType<NucleicMaleficentEntity>, ? extends EntityType<NucleicMaleficentEntity>> NUCLEIC_MALEFICENT = register("nucleic_maleficent",
-            EntityType.Builder.<NucleicMaleficentEntity>of(NucleicMaleficentEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new NucleicMaleficentEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ComplexChitinGolemEntity>> COMPLEX_CHITIN_GOLEM = register("complex_chitin_golem", EntityType.Builder.<ComplexChitinGolemEntity>of(ComplexChitinGolemEntity::new, MobCategory.MONSTER)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(1.75f, 4f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedWardenisEntity>> OCEANIZED_WARDENIS = register("oceanized_wardenis", EntityType.Builder.<OceanizedWardenisEntity>of(OceanizedWardenisEntity::new, MobCategory.MONSTER)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(0.6f, 1.85f));
+    public static final DeferredHolder<EntityType<?>, EntityType<NucleicMaleficentEntity>> NUCLEIC_MALEFICENT = register("nucleic_maleficent",
+            EntityType.Builder.<NucleicMaleficentEntity>of(NucleicMaleficentEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
                     .sized(0.7f, 1.5f));
-    public static final DeferredHolder<EntityType<OceanizedWitherEntity>, ? extends EntityType<OceanizedWitherEntity>> OCEANIZED_WITHER = register("oceanized_wither", EntityType.Builder.<OceanizedWitherEntity>of(OceanizedWitherEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedWitherEntity(level)).fireImmune().sized(1.1f, 3.5f));
-    public static final DeferredHolder<EntityType<WitherShootPreEntity>, ? extends EntityType<WitherShootPreEntity>> WITHER_SHOOT_PRE = register("wither_shoot_pre",
-            EntityType.Builder.<WitherShootPreEntity>of(WitherShootPreEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new WitherShootPreEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.1f, 0.1f));
-    public static final DeferredHolder<EntityType<OceanizedWitheriaEntity>, ? extends EntityType<OceanizedWitheriaEntity>> OCEANIZED_WITHERIA = register("oceanized_witheria", EntityType.Builder.<OceanizedWitheriaEntity>of(OceanizedWitheriaEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedWitheriaEntity(level)).fireImmune().sized(0.7f, 2.5f));
-    public static final DeferredHolder<EntityType<TheLastKnightEntity>, ? extends EntityType<TheLastKnightEntity>> THE_LAST_KNIGHT = register("the_last_knight", EntityType.Builder.<TheLastKnightEntity>of(TheLastKnightEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new TheLastKnightEntity(level)).fireImmune().sized(1f, 3.6f));
-    public static final DeferredHolder<EntityType<LastKnightAndHorseEntity>, ? extends EntityType<LastKnightAndHorseEntity>> LAST_KNIGHT_AND_HORSE = register("last_knight_and_horse", EntityType.Builder.<LastKnightAndHorseEntity>of(LastKnightAndHorseEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new LastKnightAndHorseEntity(level)).fireImmune().sized(1.2f, 4f));
-    public static final DeferredHolder<EntityType<RocinanteEntity>, ? extends EntityType<RocinanteEntity>> ROCINANTE = register("rocinante",
-            EntityType.Builder.<RocinanteEntity>of(RocinanteEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new RocinanteEntity(level))
-
-                    .sized(1.2f, 3f));
-    public static final DeferredHolder<EntityType<ApocataEntity>, ? extends EntityType<ApocataEntity>> APOCATA = register("apocata",
-            EntityType.Builder.<ApocataEntity>of(ApocataEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ApocataEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedWitherEntity>> OCEANIZED_WITHER = register("oceanized_wither", EntityType.Builder.<OceanizedWitherEntity>of(OceanizedWitherEntity::new, MobCategory.MONSTER)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(1.1f, 3.5f));
+    public static final DeferredHolder<EntityType<?>, EntityType<WitherShootPreEntity>> WITHER_SHOOT_PRE = register("wither_shoot_pre",
+            EntityType.Builder.<WitherShootPreEntity>of(WitherShootPreEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.1f, 0.1f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedWitheriaEntity>> OCEANIZED_WITHERIA = register("oceanized_witheria", EntityType.Builder.<OceanizedWitheriaEntity>of(OceanizedWitheriaEntity::new, MobCategory.MONSTER)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(0.7f, 2.5f));
+    public static final DeferredHolder<EntityType<?>, EntityType<TheLastKnightEntity>> THE_LAST_KNIGHT = register("the_last_knight", EntityType.Builder.<TheLastKnightEntity>of(TheLastKnightEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
+            .setTrackingRange(16).setUpdateInterval(3).fireImmune().sized(1f, 3.6f));
+    public static final DeferredHolder<EntityType<?>, EntityType<LastKnightAndHorseEntity>> LAST_KNIGHT_AND_HORSE = register("last_knight_and_horse", EntityType.Builder.<LastKnightAndHorseEntity>of(LastKnightAndHorseEntity::new, MobCategory.MONSTER)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(1.2f, 4f));
+    public static final DeferredHolder<EntityType<?>, EntityType<RocinanteEntity>> ROCINANTE = register("rocinante",
+            EntityType.Builder.<RocinanteEntity>of(RocinanteEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
+                    .sized(1.2f, 3f).attach(EntityAttachment.PASSENGER, 0f, 2.5f, 0f));
+    public static final DeferredHolder<EntityType<?>, EntityType<ApocataEntity>> APOCATA = register("apocata",
+            EntityType.Builder.<ApocataEntity>of(ApocataEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
                     .sized(0.6f, 1.85f));
-    public static final DeferredHolder<EntityType<OceanizedFoxEntity>, ? extends EntityType<OceanizedFoxEntity>> OCEANIZED_FOX = register("oceanized_fox",
-            EntityType.Builder.<OceanizedFoxEntity>of(OceanizedFoxEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedFoxEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedFoxEntity>> OCEANIZED_FOX = register("oceanized_fox",
+            EntityType.Builder.<OceanizedFoxEntity>of(OceanizedFoxEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 0.7f));
-    public static final DeferredHolder<EntityType<TidutantExcrescenceEntity>, ? extends EntityType<TidutantExcrescenceEntity>> TIDUTANT_EXCRESCENCE = register("tidutant_excrescence",
-            EntityType.Builder.<TidutantExcrescenceEntity>of(TidutantExcrescenceEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new TidutantExcrescenceEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<TidutantExcrescenceEntity>> TIDUTANT_EXCRESCENCE = register("tidutant_excrescence",
+            EntityType.Builder.<TidutantExcrescenceEntity>of(TidutantExcrescenceEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.5f, 0.4f));
-    public static final DeferredHolder<EntityType<OceanizedPolarBearEntity>, ? extends EntityType<OceanizedPolarBearEntity>> OCEANIZED_POLAR_BEAR = register("oceanized_polar_bear",
-            EntityType.Builder.<OceanizedPolarBearEntity>of(OceanizedPolarBearEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedPolarBearEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedPolarBearEntity>> OCEANIZED_POLAR_BEAR = register("oceanized_polar_bear",
+            EntityType.Builder.<OceanizedPolarBearEntity>of(OceanizedPolarBearEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(1f, 1.25f));
-    public static final DeferredHolder<EntityType<TideutantRockSpiderEntity>, ? extends EntityType<TideutantRockSpiderEntity>> TIDUTANT_ROCK_SPIDER = register("tidutant_rock_spider",
-            EntityType.Builder.<TideutantRockSpiderEntity>of(TideutantRockSpiderEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new TideutantRockSpiderEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<TideutantRockSpiderEntity>> TIDUTANT_ROCK_SPIDER = register("tidutant_rock_spider",
+            EntityType.Builder.<TideutantRockSpiderEntity>of(TideutantRockSpiderEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<EndspeakerEntity>, ? extends EntityType<EndspeakerEntity>> ENDSPEAKER = register("endspeaker",
-            EntityType.Builder.<EndspeakerEntity>of(EndspeakerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(14).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new EndspeakerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<EndspeakerEntity>> ENDSPEAKER = register("endspeaker",
+            EntityType.Builder.<EndspeakerEntity>of(EndspeakerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(14).setUpdateInterval(3)
                     .sized(1f, 3.375f));
-    public static final DeferredHolder<EntityType<LineringPathshaperEntity>, ? extends EntityType<LineringPathshaperEntity>> LINGERING_PATHSHAPER = register("lingering_pathshaper",
-            EntityType.Builder.<LineringPathshaperEntity>of(LineringPathshaperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new LineringPathshaperEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<LineringPathshaperEntity>> LINGERING_PATHSHAPER = register("lingering_pathshaper",
+            EntityType.Builder.<LineringPathshaperEntity>of(LineringPathshaperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(1.8f, 4f));
-    public static final DeferredHolder<EntityType<LingeringFractalEntity>, ? extends EntityType<LingeringFractalEntity>> LINGERING_FRACTAL = register("lingering_fractal",
-            EntityType.Builder.<LingeringFractalEntity>of(LingeringFractalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new LingeringFractalEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<LingeringFractalEntity>> LINGERING_FRACTAL = register("lingering_fractal",
+            EntityType.Builder.<LingeringFractalEntity>of(LingeringFractalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.7f, 1.5f));
-    public static final DeferredHolder<EntityType<LittleHelperEntity>, ? extends EntityType<LittleHelperEntity>> LITTLE_HELPER = register("little_helper", EntityType.Builder.<LittleHelperEntity>of(LittleHelperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new LittleHelperEntity(level)).fireImmune().sized(0.875f, 0.2f));
-    public static final DeferredHolder<EntityType<Al1SHelperEntity>, ? extends EntityType<Al1SHelperEntity>> AL_1_S_HELPER = register("al_1_s_helper", EntityType.Builder.<Al1SHelperEntity>of(Al1SHelperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new Al1SHelperEntity(level)).fireImmune().sized(0.875f, 0.2f));
-    public static final DeferredHolder<EntityType<UlpiansEntity>, ? extends EntityType<UlpiansEntity>> ULPIANS = register("ulpians",
-            EntityType.Builder.<UlpiansEntity>of(UlpiansEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new UlpiansEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<LittleHelperEntity>> LITTLE_HELPER = register("little_helper", EntityType.Builder.<LittleHelperEntity>of(LittleHelperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
+            .setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(0.875f, 0.2f).attach(EntityAttachment.PASSENGER, 0f, -0.13f, 0f));
+    public static final DeferredHolder<EntityType<?>, EntityType<Al1SHelperEntity>> AL_1_S_HELPER = register("al_1_s_helper", EntityType.Builder.<Al1SHelperEntity>of(Al1SHelperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
+            .setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(0.875f, 0.2f));
+    public static final DeferredHolder<EntityType<?>, EntityType<UlpiansEntity>> ULPIANS = register("ulpians",
+            EntityType.Builder.<UlpiansEntity>of(UlpiansEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<GladiiaEntity>, ? extends EntityType<GladiiaEntity>> GLADIIA = register("gladiia",
-            EntityType.Builder.<GladiiaEntity>of(GladiiaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new GladiiaEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<GladiiaEntity>> GLADIIA = register("gladiia",
+            EntityType.Builder.<GladiiaEntity>of(GladiiaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<GladiiaWhirlEntity>, ? extends EntityType<GladiiaWhirlEntity>> GLADIIA_WHIRL = register("gladiia_whirl",
-            EntityType.Builder.<GladiiaWhirlEntity>of(GladiiaWhirlEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new GladiiaWhirlEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<GladiiaWhirlEntity>> GLADIIA_WHIRL = register("gladiia_whirl",
+            EntityType.Builder.<GladiiaWhirlEntity>of(GladiiaWhirlEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(2f, 2f));
-    public static final DeferredHolder<EntityType<SpecterEntity>, ? extends EntityType<SpecterEntity>> SPECTER = register("specter",
-            EntityType.Builder.<SpecterEntity>of(SpecterEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SpecterEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SpecterEntity>> SPECTER = register("specter",
+            EntityType.Builder.<SpecterEntity>of(SpecterEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<SpecterDollEntity>, ? extends EntityType<SpecterDollEntity>> SPECTER_DOLL = register("specter_doll",
-            EntityType.Builder.<SpecterDollEntity>of(SpecterDollEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SpecterDollEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SpecterDollEntity>> SPECTER_DOLL = register("specter_doll",
+            EntityType.Builder.<SpecterDollEntity>of(SpecterDollEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<IreneEntity>, ? extends EntityType<IreneEntity>> IRENE = register("irene",
-            EntityType.Builder.<IreneEntity>of(IreneEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new IreneEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<IreneEntity>> IRENE = register("irene",
+            EntityType.Builder.<IreneEntity>of(IreneEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<TideChimeraEntity>, ? extends EntityType<TideChimeraEntity>> TIDE_CHIMERA = register("tide_chimera",
-            EntityType.Builder.<TideChimeraEntity>of(TideChimeraEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new TideChimeraEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<TideChimeraEntity>> TIDE_CHIMERA = register("tide_chimera",
+            EntityType.Builder.<TideChimeraEntity>of(TideChimeraEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(1.8f, 4.65f));
-    public static final DeferredHolder<EntityType<SkadiCorruptedEntity>, ? extends EntityType<SkadiCorruptedEntity>> SKADI_CORRUPTED = register("skadi_corrupted", EntityType.Builder.<SkadiCorruptedEntity>of(SkadiCorruptedEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SkadiCorruptedEntity(level)).fireImmune().sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<OceanizeRabbitEntity>, ? extends EntityType<OceanizeRabbitEntity>> OCEANIZE_RABBIT = register("oceanize_rabbit",
-            EntityType.Builder.<OceanizeRabbitEntity>of(OceanizeRabbitEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizeRabbitEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SkadiCorruptedEntity>> SKADI_CORRUPTED = register("skadi_corrupted", EntityType.Builder.<SkadiCorruptedEntity>of(SkadiCorruptedEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
+            .setTrackingRange(16).setUpdateInterval(3).fireImmune().sized(0.6f, 1.8f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizeRabbitEntity>> OCEANIZE_RABBIT = register("oceanize_rabbit",
+            EntityType.Builder.<OceanizeRabbitEntity>of(OceanizeRabbitEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.4f, 0.5f));
-    public static final DeferredHolder<EntityType<SaintCarmenEntity>, ? extends EntityType<SaintCarmenEntity>> SAINT_CARMEN = register("saint_carmen",
-            EntityType.Builder.<SaintCarmenEntity>of(SaintCarmenEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new SaintCarmenEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<SaintCarmenEntity>> SAINT_CARMEN = register("saint_carmen",
+            EntityType.Builder.<SaintCarmenEntity>of(SaintCarmenEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<CarmenBulletEntity>, ? extends EntityType<CarmenBulletEntity>> CARMEN_BULLET = register("carmen_bullet",
-            EntityType.Builder.<CarmenBulletEntity>of(CarmenBulletEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new CarmenBulletEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
-    public static final DeferredHolder<EntityType<OceanizedIllusionerEntity>, ? extends EntityType<OceanizedIllusionerEntity>> OCEANIZED_ILLUSIONER = register("oceanized_illusioner",
-            EntityType.Builder.<OceanizedIllusionerEntity>of(OceanizedIllusionerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(10).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedIllusionerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<CarmenBulletEntity>> CARMEN_BULLET = register("carmen_bullet",
+            EntityType.Builder.<CarmenBulletEntity>of(CarmenBulletEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedIllusionerEntity>> OCEANIZED_ILLUSIONER = register("oceanized_illusioner",
+            EntityType.Builder.<OceanizedIllusionerEntity>of(OceanizedIllusionerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(10).setUpdateInterval(3)
                     .sized(0.6f, 1.9f));
-    public static final DeferredHolder<EntityType<OceanIllusionEntity>, ? extends EntityType<OceanIllusionEntity>> OCEAN_ILLUSION = register("ocean_illusion",
-            EntityType.Builder.<OceanIllusionEntity>of(OceanIllusionEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanIllusionEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanIllusionEntity>> OCEAN_ILLUSION = register("ocean_illusion",
+            EntityType.Builder.<OceanIllusionEntity>of(OceanIllusionEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3)
                     .sized(0.6f, 1.9f));
-    public static final DeferredHolder<EntityType<FlamarineStatueEntity>, ? extends EntityType<FlamarineStatueEntity>> FLAMARINE_STATUE = register("flamarine_statue", EntityType.Builder.<FlamarineStatueEntity>of(FlamarineStatueEntity::new, MobCategory.MONSTER)
-            .setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new FlamarineStatueEntity(level)).fireImmune().sized(0.7f, 2f));
-    public static final DeferredHolder<EntityType<NautilusHeadhunterEntity>, ? extends EntityType<NautilusHeadhunterEntity>> NAUTILUS_HEADHUNTER = register("nautilus_headhunter",
+    public static final DeferredHolder<EntityType<?>, EntityType<FlamarineStatueEntity>> FLAMARINE_STATUE = register("flamarine_statue", EntityType.Builder.<FlamarineStatueEntity>of(FlamarineStatueEntity::new, MobCategory.MONSTER)
+            .setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3).fireImmune().sized(0.7f, 2f));
+    public static final DeferredHolder<EntityType<?>, EntityType<NautilusHeadhunterEntity>> NAUTILUS_HEADHUNTER = register("nautilus_headhunter",
             EntityType.Builder.<NautilusHeadhunterEntity>of(NautilusHeadhunterEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3)
-                    .setCustomClientFactory((spawnEntity, level) -> new NautilusHeadhunterEntity(level))
-
                     .sized(0.5f, 0.5f));
-    public static final DeferredHolder<EntityType<XantisEntity>, ? extends EntityType<XantisEntity>> XANTIS = register("xantis",
-            EntityType.Builder.<XantisEntity>of(XantisEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new XantisEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<XantisEntity>> XANTIS = register("xantis",
+            EntityType.Builder.<XantisEntity>of(XantisEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(0.5f, 0.68f));
-    public static final DeferredHolder<EntityType<FlamarineGolemEntity>, ? extends EntityType<FlamarineGolemEntity>> FLAMARINE_GOLEM = register("flamarine_golem", EntityType.Builder.<FlamarineGolemEntity>of(FlamarineGolemEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new FlamarineGolemEntity(level)).fireImmune().sized(1f, 2.75f));
-    public static final DeferredHolder<EntityType<OceanizedVexEntity>, ? extends EntityType<OceanizedVexEntity>> OCEANIZED_VEX = register("oceanized_vex",
-            EntityType.Builder.<OceanizedVexEntity>of(OceanizedVexEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedVexEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<FlamarineGolemEntity>> FLAMARINE_GOLEM = register("flamarine_golem", EntityType.Builder.<FlamarineGolemEntity>of(FlamarineGolemEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
+            .setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(1f, 2.75f));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedVexEntity>> OCEANIZED_VEX = register("oceanized_vex",
+            EntityType.Builder.<OceanizedVexEntity>of(OceanizedVexEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.4f, 0.8f));
-    public static final DeferredHolder<EntityType<IsharmlaEntity>, ? extends EntityType<IsharmlaEntity>> ISHARMLA = register("isharmla",
-            EntityType.Builder.<IsharmlaEntity>of(IsharmlaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new IsharmlaEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<IsharmlaEntity>> ISHARMLA = register("isharmla",
+            EntityType.Builder.<IsharmlaEntity>of(IsharmlaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<QunyouWantedIsharmlaEntity>, ? extends EntityType<QunyouWantedIsharmlaEntity>> QUNYOU_WANTED_ISHARMLA = register("qunyou_wanted_isharmla",
+    public static final DeferredHolder<EntityType<?>, EntityType<QunyouWantedIsharmlaEntity>> QUNYOU_WANTED_ISHARMLA = register("qunyou_wanted_isharmla",
             EntityType.Builder.<QunyouWantedIsharmlaEntity>of(QunyouWantedIsharmlaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
-                    .setCustomClientFactory((spawnEntity, level) -> new QunyouWantedIsharmlaEntity(level))
-
                     .sized(20f, 20f));
-    public static final DeferredHolder<EntityType<IsharmlaTearEntity>, ? extends EntityType<IsharmlaTearEntity>> ISHARMLA_TEAR = register("isharmla_tear",
-            EntityType.Builder.<IsharmlaTearEntity>of(IsharmlaTearEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new IsharmlaTearEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<IsharmlaTearEntity>> ISHARMLA_TEAR = register("isharmla_tear",
+            EntityType.Builder.<IsharmlaTearEntity>of(IsharmlaTearEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
                     .sized(1f, 0.5f));
-    public static final DeferredHolder<EntityType<PrayerSplashEntity>, ? extends EntityType<PrayerSplashEntity>> PRAYER_SPLASH = register("prayer_splash",
-            EntityType.Builder.<PrayerSplashEntity>of(PrayerSplashEntity::new, MobCategory.MISC).setCustomClientFactory((spawnEntity, level) -> new PrayerSplashEntity(level)).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
-    public static final DeferredHolder<EntityType<CompassionPrayerEntity>, ? extends EntityType<CompassionPrayerEntity>> COMPASSION_PRAYER = register("compassion_prayer",
-            EntityType.Builder.<CompassionPrayerEntity>of(CompassionPrayerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new CompassionPrayerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<PrayerSplashEntity>> PRAYER_SPLASH = register("prayer_splash",
+            EntityType.Builder.<PrayerSplashEntity>of(PrayerSplashEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
+    public static final DeferredHolder<EntityType<?>, EntityType<CompassionPrayerEntity>> COMPASSION_PRAYER = register("compassion_prayer",
+            EntityType.Builder.<CompassionPrayerEntity>of(CompassionPrayerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3)
                     .sized(0.6f, 1.8f));
-    public static final DeferredHolder<EntityType<OceanizedEnderinaEntity>, ? extends EntityType<OceanizedEnderinaEntity>> OCEANIZED_ENDERINA = register("oceanized_enderina",
-            EntityType.Builder.<OceanizedEnderinaEntity>of(OceanizedEnderinaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedEnderinaEntity(level)));
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedEnderinaEntity>> OCEANIZED_ENDERINA = register("oceanized_enderina",
+            EntityType.Builder.<OceanizedEnderinaEntity>of(OceanizedEnderinaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3));
 
-    public static final DeferredHolder<EntityType<OceanizedEnderDragonEntity>, ? extends EntityType<OceanizedEnderDragonEntity>> OCEANIZED_ENDER_DRAGON = register("oceanized_ender_dragon",
-            EntityType.Builder.<OceanizedEnderDragonEntity>of(OceanizedEnderDragonEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedEnderDragonEntity(level)).fireImmune()
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedEnderDragonEntity>> OCEANIZED_ENDER_DRAGON = register("oceanized_ender_dragon",
+            EntityType.Builder.<OceanizedEnderDragonEntity>of(OceanizedEnderDragonEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).fireImmune()
                     .sized(16.0f, 8.0f));
-    public static final DeferredHolder<EntityType<MoistDragonBreathEntity>, ? extends EntityType<MoistDragonBreathEntity>> MOIST_DRAGON_BREATH = register("moist_dragon_breath",
-            EntityType.Builder.<MoistDragonBreathEntity>of(MoistDragonBreathEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new MoistDragonBreathEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<MoistDragonBreathEntity>> MOIST_DRAGON_BREATH = register("moist_dragon_breath",
+            EntityType.Builder.<MoistDragonBreathEntity>of(MoistDragonBreathEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(0.5f, 0.5f));
-    public static final DeferredHolder<EntityType<MoistEnderCrystalEntity>, ? extends EntityType<MoistEnderCrystalEntity>> MOIST_ENDER_CRYSTAL = register("moist_ender_crystal",
-            EntityType.Builder.<MoistEnderCrystalEntity>of(MoistEnderCrystalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new MoistEnderCrystalEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<MoistEnderCrystalEntity>> MOIST_ENDER_CRYSTAL = register("moist_ender_crystal",
+            EntityType.Builder.<MoistEnderCrystalEntity>of(MoistEnderCrystalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
                     .sized(2f, 2f));
-    public static final DeferredHolder<EntityType<ThirsterEntity>, ? extends EntityType<ThirsterEntity>> THIRSTER = register("thirster",
-            EntityType.Builder.<ThirsterEntity>of(ThirsterEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ThirsterEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ThirsterEntity>> THIRSTER = register("thirster",
+            EntityType.Builder.<ThirsterEntity>of(ThirsterEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(1.5f, 1.75f));
-    public static final DeferredHolder<EntityType<AbsorberLimbEntity>, ? extends EntityType<AbsorberLimbEntity>> ABSORBER_LIMB = register("absorber_limb",
-            EntityType.Builder.<AbsorberLimbEntity>of(AbsorberLimbEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new AbsorberLimbEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<AbsorberLimbEntity>> ABSORBER_LIMB = register("absorber_limb",
+            EntityType.Builder.<AbsorberLimbEntity>of(AbsorberLimbEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(0.4f, 1f));
-    public static final DeferredHolder<EntityType<ScreamChestFishEntity>, ? extends EntityType<ScreamChestFishEntity>> SCREAM_CHEST_FISH = register("scream_chest_fish",
-            EntityType.Builder.<ScreamChestFishEntity>of(ScreamChestFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ScreamChestFishEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<ScreamChestFishEntity>> SCREAM_CHEST_FISH = register("scream_chest_fish",
+            EntityType.Builder.<ScreamChestFishEntity>of(ScreamChestFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
                     .sized(0.9f, 0.9f));
-    public static final DeferredHolder<EntityType<OceanizedChickenEntity>, ? extends EntityType<OceanizedChickenEntity>> OCEANIZED_CHICKEN = register("oceanized_chicken",
-            EntityType.Builder.<OceanizedChickenEntity>of(OceanizedChickenEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedChickenEntity(level))
-
-                    .sized(0.5f, 0.875f));
-    public static final DeferredHolder<EntityType<NetherseaSlimeEntity>, ? extends EntityType<NetherseaSlimeEntity>> NETHERSEA_SLIME = register("nethersea_slime",
-            EntityType.Builder.<NetherseaSlimeEntity>of(NetherseaSlimeEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new NetherseaSlimeEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedChickenEntity>> OCEANIZED_CHICKEN = register("oceanized_chicken",
+            EntityType.Builder.<OceanizedChickenEntity>of(OceanizedChickenEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3)
+                    .sized(0.5f, 0.875f).attach(EntityAttachment.PASSENGER, 0f, 0.675f, 0f));
+    public static final DeferredHolder<EntityType<?>, EntityType<NetherseaSlimeEntity>> NETHERSEA_SLIME = register("nethersea_slime",
+            EntityType.Builder.<NetherseaSlimeEntity>of(NetherseaSlimeEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3)
                     .sized(1f, 1f));
-    public static final DeferredHolder<EntityType<OceanizedShulkerEntity>, ? extends EntityType<OceanizedShulkerEntity>> OCEANIZED_SHULKER = register("oceanized_shulker",
-            EntityType.Builder.<OceanizedShulkerEntity>of(OceanizedShulkerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedShulkerEntity(level))
-
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanizedShulkerEntity>> OCEANIZED_SHULKER = register("oceanized_shulker",
+            EntityType.Builder.<OceanizedShulkerEntity>of(OceanizedShulkerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3)
                     .sized(1f, 1f));
-    private static final List<DeferredHolder<? extends EntityType<? extends LivingEntity>, ? extends EntityType<? extends LivingEntity>>> LIVING_ENTITY_TYPES;
-    private static final List<DeferredHolder<? extends EntityType<? extends LivingEntity>, ? extends EntityType<? extends LivingEntity>>> SUMMONABLE_ENTITY_TYPES;
+    private static final List<DeferredHolder<EntityType<?>, ? extends EntityType<? extends LivingEntity>>> LIVING_ENTITY_TYPES;
+    private static final List<DeferredHolder<EntityType<?>, ? extends EntityType<? extends LivingEntity>>> SUMMONABLE_ENTITY_TYPES;
 
     static {
         addAttributeRegistration(RUN_FISH, RunFishEntity::createAttributes);
@@ -755,25 +643,18 @@ public class CAEntities {
         addSpawnPlacementRegistration(NUCLEIC_MALEFICENT, NucleicMaleficentEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(NAUTILUS_HEADHUNTER, NautilusHeadhunterEntity::registerSpawnPlacements);
 
-        addDungeonMobRegistration(SLIDER_FISH, SliderFishEntity::registerDungeonMob);
-        addDungeonMobRegistration(BASELAYER_ABYSSAL, BaselayerAbyssalEntity::registerDungeonMob);
-        addDungeonMobRegistration(SPLASHER_ABYSSAL, SplasherAbyssalEntity::registerDungeonMob);
-        addDungeonMobRegistration(UMBRELLA_ABYSSAL, UmbrellaAbyssalEntity::registerDungeonMob);
-        addDungeonMobRegistration(FLEE_FISH, FleeFishEntity::registerDungeonMob);
-        addDungeonMobRegistration(NETHERSEA_SLIME, NetherseaSlimeEntity::registerDungeonMob);
-
         LIVING_ENTITY_TYPES = collectLivingEntityTypes(false);
         SUMMONABLE_ENTITY_TYPES = collectLivingEntityTypes(true);
     }
 
-    private static <T extends Entity> DeferredHolder<EntityType<T>, ? extends EntityType<T>> register(String registryName, EntityType.Builder<T> builder) {
-        DeferredHolder<EntityType<T>, ? extends EntityType<T>> entityType = REGISTRY.register(registryName, () -> builder.build(registryName));
+    private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> register(String registryName, EntityType.Builder<T> builder) {
+        DeferredHolder<EntityType<?>, EntityType<T>> entityType = REGISTRY.register(registryName, () -> builder.build(registryName));
         ENTITY_REGISTRATIONS.put(entityType, new EntityRegistrationData());
         return entityType;
     }
 
     private static <T extends LivingEntity> void addAttributeRegistration(
-            DeferredHolder<EntityType<T>, ? extends EntityType<T>> entityType,
+            DeferredHolder<EntityType<?>, EntityType<T>> entityType,
             Supplier<AttributeSupplier.Builder> attributes
     ) {
         EntityRegistrationData data = registrationData(entityType);
@@ -781,16 +662,12 @@ public class CAEntities {
         data.attributeRegistration = event -> event.put(entityType.get(), attributes.get().build());
     }
 
-    private static <T extends LivingEntity> void markSummonable(DeferredHolder<EntityType<T>, ? extends EntityType<T>> entityType) {
+    private static <T extends LivingEntity> void markSummonable(DeferredHolder<EntityType<?>, EntityType<T>> entityType) {
         registrationData(entityType).summonable = true;
     }
 
-    private static void addSpawnPlacementRegistration(DeferredHolder<? extends EntityType<?>, ? extends EntityType<?>> entityType, Runnable registration) {
+    private static void addSpawnPlacementRegistration(DeferredHolder<? extends EntityType<?>, ? extends EntityType<?>> entityType, Consumer<RegisterSpawnPlacementsEvent> registration) {
         registrationData(entityType).spawnPlacementRegistration = registration;
-    }
-
-    private static void addDungeonMobRegistration(DeferredHolder<? extends EntityType<?>, ? extends EntityType<?>> entityType, Runnable registration) {
-        registrationData(entityType).dungeonMobRegistration = registration;
     }
 
     private static EntityRegistrationData registrationData(DeferredHolder<? extends EntityType<?>, ? extends EntityType<?>> entityType) {
@@ -806,7 +683,7 @@ public class CAEntities {
      *
      * @return 按实体注册顺序排列的不可修改列表
      */
-    public static List<DeferredHolder<? extends EntityType<? extends LivingEntity>, ? extends EntityType<? extends LivingEntity>>> getLivingEntityTypes() {
+    public static List<DeferredHolder<EntityType<?>, ? extends EntityType<? extends LivingEntity>>> getLivingEntityTypes() {
         return LIVING_ENTITY_TYPES;
     }
 
@@ -815,12 +692,12 @@ public class CAEntities {
      *
      * @return 按实体注册顺序排列的不可修改列表
      */
-    public static List<DeferredHolder<? extends EntityType<? extends LivingEntity>, ? extends EntityType<? extends LivingEntity>>> getSummonableEntityTypes() {
+    public static List<DeferredHolder<EntityType<?>, ? extends EntityType<? extends LivingEntity>>> getSummonableEntityTypes() {
         return SUMMONABLE_ENTITY_TYPES;
     }
 
-    private static List<DeferredHolder<? extends EntityType<? extends LivingEntity>, ? extends EntityType<? extends LivingEntity>>> collectLivingEntityTypes(boolean summonableOnly) {
-        List<DeferredHolder<? extends EntityType<? extends LivingEntity>, ? extends EntityType<? extends LivingEntity>>> entityTypes = new ArrayList<>();
+    private static List<DeferredHolder<EntityType<?>, ? extends EntityType<? extends LivingEntity>>> collectLivingEntityTypes(boolean summonableOnly) {
+        List<DeferredHolder<EntityType<?>, ? extends EntityType<? extends LivingEntity>>> entityTypes = new ArrayList<>();
         for (EntityRegistrationData data : ENTITY_REGISTRATIONS.values()) {
             if (data.livingEntityType != null && (!summonableOnly || data.summonable)) {
                 entityTypes.add(data.livingEntityType);
@@ -830,19 +707,12 @@ public class CAEntities {
     }
 
     @SubscribeEvent
-    public static void init(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            for (EntityRegistrationData data : ENTITY_REGISTRATIONS.values()) {
-                if (data.spawnPlacementRegistration != null) {
-                    data.spawnPlacementRegistration.run();
-                }
+    public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        for (EntityRegistrationData data : ENTITY_REGISTRATIONS.values()) {
+            if (data.spawnPlacementRegistration != null) {
+                data.spawnPlacementRegistration.accept(event);
             }
-            for (EntityRegistrationData data : ENTITY_REGISTRATIONS.values()) {
-                if (data.dungeonMobRegistration != null) {
-                    data.dungeonMobRegistration.run();
-                }
-            }
-        });
+        }
     }
 
     @SubscribeEvent
@@ -855,10 +725,9 @@ public class CAEntities {
     }
 
     private static final class EntityRegistrationData {
-        private DeferredHolder<? extends EntityType<? extends LivingEntity>, ? extends EntityType<? extends LivingEntity>> livingEntityType;
+        private DeferredHolder<EntityType<?>, ? extends EntityType<? extends LivingEntity>> livingEntityType;
         private Consumer<EntityAttributeCreationEvent> attributeRegistration;
-        private Runnable spawnPlacementRegistration;
-        private Runnable dungeonMobRegistration;
+        private Consumer<RegisterSpawnPlacementsEvent> spawnPlacementRegistration;
         private boolean summonable;
     }
 
@@ -1003,7 +872,7 @@ public class CAEntities {
             addRenderer(CAEntities.OCEANIZED_SHULKER, OceanizedShulkerRenderer::new);
         }
 
-        private static <T extends Entity> void addRenderer(DeferredHolder<EntityType<T>, ? extends EntityType<T>> entityType, EntityRendererProvider<T> renderer) {
+        private static <T extends Entity> void addRenderer(DeferredHolder<EntityType<?>, EntityType<T>> entityType, EntityRendererProvider<T> renderer) {
             RENDERER_REGISTRATIONS.put(entityType, event -> event.registerEntityRenderer(entityType.get(), renderer));
         }
 

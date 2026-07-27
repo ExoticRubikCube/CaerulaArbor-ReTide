@@ -24,12 +24,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeMod;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 public class FlamarineStatueEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FlamarineStatueEntity.class, EntityDataSerializers.BOOLEAN);
@@ -46,34 +46,24 @@ public class FlamarineStatueEntity extends SeaMonster {
         super(type, world);
         xpReward = 25;
         setNoAi(false);
-        setMaxUpStep(1f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 5.0625;
-            }
-        });
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
     }
 
     @Override
@@ -141,11 +131,6 @@ public class FlamarineStatueEntity extends SeaMonster {
         this.refreshDimensions();
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -156,14 +141,14 @@ public class FlamarineStatueEntity extends SeaMonster {
         builder = builder.add(Attributes.FOLLOW_RANGE, 22);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.9);
         builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.15);
-        builder = builder.add(ForgeMod.ENTITY_GRAVITY.get(), 0);
-        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 15);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 80);
-        builder = builder.add(CAAttributes.SANITY_RESISTANCE.get(), 50);
+        builder = builder.add(Attributes.GRAVITY, 0);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE, 15);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 80);
+        builder = builder.add(CAAttributes.SANITY_RESISTANCE, 50);
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.living_armor.move"));
@@ -176,7 +161,7 @@ public class FlamarineStatueEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -193,7 +178,7 @@ public class FlamarineStatueEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -215,7 +200,7 @@ public class FlamarineStatueEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

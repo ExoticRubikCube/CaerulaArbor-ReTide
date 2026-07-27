@@ -45,11 +45,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -73,17 +73,17 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         super(type, world);
         xpReward = 16;
         setNoAi(false);
-        setMaxUpStep(0.8f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.8f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_PHASE, 0);
-        this.entityData.define(DATA_REVIVE_TICK, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_PHASE, 0);
+        builder.define(DATA_REVIVE_TICK, 0);
     }
 
     @Override
@@ -92,15 +92,15 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                //TODO 需要清理mcr残留 :更改为 return super.canUse() && hasEffect(CAMobEffects.FAKE_DEATH.get());
+                //TODO 需要清理mcr残留 :更改为 return super.canUse() && hasEffect(CAMobEffects.FAKE_DEATH);
                 if (!super.canUse()) return false;
-                return hasEffect(CAMobEffects.FAKE_DEATH.get());
+                return hasEffect(CAMobEffects.FAKE_DEATH);
             }
 
             @Override
             public boolean canContinueToUse() {
                 if (!super.canContinueToUse()) return false;
-                return hasEffect(CAMobEffects.FAKE_DEATH.get());
+                return hasEffect(CAMobEffects.FAKE_DEATH);
             }
         });
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
@@ -118,26 +118,26 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
             @Override
             public boolean canUse() {
                 if (!super.canUse()) return false;
-                return hasEffect(CAMobEffects.FAKE_DEATH.get());
+                return hasEffect(CAMobEffects.FAKE_DEATH);
             }
 
             @Override
             public boolean canContinueToUse() {
                 if (!super.canContinueToUse()) return false;
-                return hasEffect(CAMobEffects.FAKE_DEATH.get());
+                return hasEffect(CAMobEffects.FAKE_DEATH);
             }
         });
         this.goalSelector.addGoal(14, new RandomLookAroundGoal(this) {
             @Override
             public boolean canUse() {
                 if (!super.canUse()) return false;
-                return hasEffect(CAMobEffects.FAKE_DEATH.get());
+                return hasEffect(CAMobEffects.FAKE_DEATH);
             }
 
             @Override
             public boolean canContinueToUse() {
                 if (!super.canContinueToUse()) return false;
-                return hasEffect(CAMobEffects.FAKE_DEATH.get());
+                return hasEffect(CAMobEffects.FAKE_DEATH);
             }
         });
         this.goalSelector.addGoal(15, new FloatGoal(this));
@@ -186,7 +186,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
             if (livingentity != null && livingentity.isAlive()) {
                 this.target = livingentity;
                 LivingEntity entity = CompassionPrayerEntity.this;
-                return entity.hasEffect(CAMobEffects.FAKE_DEATH.get());
+                return entity.hasEffect(CAMobEffects.FAKE_DEATH);
             } else {
                 return false;
             }
@@ -271,14 +271,14 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
                 if (nearbyEntity != this && nearbyEntity.isAlive()
                         && nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     if (nearbyEntity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide()) {
-                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 200, 0, false, false));
+                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 200, 0, false, false));
                     }
                 }
             }
             this.getEntityData().set(DATA_REVIVE_TICK, 200);
             if (!this.level().isClientSide()) {
-                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
-                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 200, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1, false, false));
             }
             return;
         }
@@ -342,10 +342,10 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
                                 continue;
                             }
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                if (!(entityiterator instanceof LivingEntity livEnt12 && livEnt12.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY.get()))) {
+                                if (!(entityiterator instanceof LivingEntity livEnt12 && livEnt12.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY))) {
                                     perc = EntityUtils.getHealthPerc(entityiterator);
                                     if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_HEALTH_PERCLY.get(), 32768, 1, false, false));
+                                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_HEALTH_PERCLY, 32768, 1, false, false));
                                     if (entityiterator instanceof LivingEntity livingEntity)
                                         livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
                                 }
@@ -390,11 +390,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public void performRangedAttack(LivingEntity target, float flval) {
         PrayerSplashEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (2.5 / 7.0));
     }
@@ -411,7 +406,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if (this.isDeadOrDying()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.compassion_prayer.die"));
@@ -427,7 +422,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -444,7 +439,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -466,7 +461,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

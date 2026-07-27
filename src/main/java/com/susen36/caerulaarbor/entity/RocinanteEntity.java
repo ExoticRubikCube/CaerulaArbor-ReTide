@@ -33,14 +33,13 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Objects;
@@ -61,16 +60,16 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(2.5f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2.5f);
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
     }
 
     @Override
@@ -82,11 +81,6 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
     public boolean canBeCollidedWith() {
         Entity entity = this;
         return EntityUtils.isAlive(entity);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
@@ -109,16 +103,6 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         });
         this.goalSelector.addGoal(2, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(3, new FloatGoal(this));
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.WATER;
-    }
-
-    @Override
-    public double getPassengersRidingOffset() {
-        return super.getPassengersRidingOffset() - 0.5;
     }
 
     @Override
@@ -187,14 +171,9 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         RocinanteEntity retval = CAEntities.ROCINANTE.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
         return retval;
     }
 
@@ -261,7 +240,7 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isVehicle()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.rocinante.move"));
@@ -279,7 +258,7 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -301,7 +280,7 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

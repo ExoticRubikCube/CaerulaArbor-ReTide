@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.RelicUtils;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -13,34 +14,20 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.SimpleTier;
 
 public class TheSpearItem extends SwordItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+			2299,
+			8f,
+			8f,
+			9,
+            Ingredient::of
+	);
+
 	public TheSpearItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 2299;
-			}
-
-			public float getSpeed() {
-				return 8f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 8f;
-			}
-
-			public int getLevel() {
-				return 3;
-			}
-
-			public int getEnchantmentValue() {
-				return 9;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of();
-			}
-		}, 3, -2.5f, new Item.Properties().fireResistant());
+		super(TIER, new Item.Properties().fireResistant().attributes(SwordItem.createAttributes(TIER, 3, -2.5f)));
 	}
 
 	@Override

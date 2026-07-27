@@ -22,4 +22,3 @@ public class RouteFractalModel extends GeoModel<RouteFractalEntity> {
 	}
 
 }
-

@@ -37,11 +37,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 
@@ -62,27 +62,22 @@ public class OceanizeRabbitEntity extends SeaMonster {
         super(type, world);
         xpReward = 1;
         setNoAi(false);
-        setMaxUpStep(1.4f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.4f);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_VARIANT, 0);
-        this.entityData.define(DATA_SWALLOW_P, 40);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_VARIANT, 0);
+        builder.define(DATA_SWALLOW_P, 40);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 2.25;
-            }
-        });
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this).setAlertOthers());
         this.goalSelector.addGoal(3, new TemptGoal(this, 1, Ingredient.of(Items.CARROT), false));
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
@@ -118,7 +113,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         double variant;
         double rrr;
         double curVar;
@@ -152,7 +147,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
                 }
             }
         }
-        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        return super.finalizeSpawn(world, difficulty, reason, livingdata);
     }
 
     @Override
@@ -188,17 +183,17 @@ public class OceanizeRabbitEntity extends SeaMonster {
                 this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue((livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 10);
             if (livingEntity.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                 livingEntity.getAttribute(Attributes.MAX_HEALTH).setBaseValue((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 10);
-            if (livingEntity.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                livingEntity.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(32.5);
-            if (livingEntity.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-                livingEntity.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(79.9);
+            if (livingEntity.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
+                livingEntity.getAttribute(CAAttributes.GENERAL_DEFENSE).setBaseValue(32.5);
+            if (livingEntity.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
+                livingEntity.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(79.9);
             if (livingEntity.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE))
                 livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
             if (!this.level().isClientSide()) {
                 this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 99999, 2));
                 this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 99999, 2));
                 this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 99999, 0));
-                this.addEffect(new MobEffectInstance(CAMobEffects.SANITY_IMMUE.get(), 99999, 0));
+                this.addEffect(new MobEffectInstance(CAMobEffects.SANITY_IMMUE, 99999, 0));
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 99999, 1));
             }
             livingEntity.setHealth(livingEntity.getMaxHealth());
@@ -232,8 +227,8 @@ public class OceanizeRabbitEntity extends SeaMonster {
                         CaerulaArborMod.queueServerWork(8, () -> {
                             if (this.isAlive()) {
                                 if (this.getTarget() != null) {
-                                    if (((Entity) this.getTarget()).isAlive()) {
-                                        ((Entity) this.getTarget()).hurt(this.damageSources().outOfBorder(),
+                                    if (this.getTarget().isAlive()) {
+                                        this.getTarget().hurt(this.damageSources().outOfBorder(),
                                                 (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 7.99));
                                     }
                                 }
@@ -244,11 +239,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
-    }
-
-    @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
     }
 
 
@@ -263,7 +253,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -275,7 +265,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -292,7 +282,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -314,7 +304,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             double vvv;
             ItemStack coral = ItemStack.EMPTY;

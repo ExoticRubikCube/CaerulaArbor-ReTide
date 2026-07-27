@@ -657,4 +657,3 @@ public class PlayerEvoButtonMessage implements CustomPacketPayload {
 		return TYPE;
 	}
 }
-

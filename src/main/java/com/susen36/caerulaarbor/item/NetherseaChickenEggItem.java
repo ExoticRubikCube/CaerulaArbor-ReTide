@@ -27,15 +27,16 @@ import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
+
 public class NetherseaChickenEggItem extends Item {
 	public NetherseaChickenEggItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
-        double rate = Math.max(itemstack.getOrCreateTag().getDouble("rate") * 0.1, 100);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
+        double rate = Math.max(itemstack.tag().getDouble("rate") * 0.1, 100);
         double offset = Math.max(itemstack.getOrCreateTag().getDouble("offset"), 4);
         String hoverText = Component.translatable("item.caerula_arbor.nethersea_chicken_egg.rate").getString() + new java.text.DecimalFormat("##.##").format(rate) + "%" + "\n"
                 + Component.translatable("item.caerula_arbor.nethersea_chicken_egg.offset").getString() + new java.text.DecimalFormat("##.##").format(offset);

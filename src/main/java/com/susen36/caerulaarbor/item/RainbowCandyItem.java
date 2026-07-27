@@ -21,14 +21,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+
 public class RainbowCandyItem extends Item {
 	public RainbowCandyItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.5f).alwaysEat().build()));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.rainbow_candy.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.rainbow_candy.description_1"));
 	}

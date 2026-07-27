@@ -14,8 +14,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
@@ -23,7 +23,7 @@ public class LivingDamageEventHandler {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent event) {
-        if (event == null || event.getEntity() == null) return;
+        if (event == null) return;
 
         handleReduceLightsWithDamage(event);
         handleSanityRateFunctions(event);
@@ -35,7 +35,7 @@ public class LivingDamageEventHandler {
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getAmount();
 
-        if (entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
         if (event.isCanceled()) return;
         if (entity == sourceentity) return;
 
@@ -61,11 +61,11 @@ public class LivingDamageEventHandler {
         if (!(entity instanceof LivingEntity target) || !(sourceentity instanceof LivingEntity attacker)) return;
         if (event.isCanceled()) return;
 
-        double sanityRate = attacker.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())
-                ? attacker.getAttribute(CAAttributes.SANITY_RATE.get()).getValue()
+        double sanityRate = attacker.getAttributes().hasAttribute(CAAttributes.SANITY_RATE)
+                ? attacker.getAttribute(CAAttributes.SANITY_RATE).getValue()
                 : 0;
-        double sanityInjuryDamage = attacker.getAttributes().hasAttribute(CAAttributes.SANITY_INJURY_DAMAGE.get())
-                ? attacker.getAttribute(CAAttributes.SANITY_INJURY_DAMAGE.get()).getValue()
+        double sanityInjuryDamage = attacker.getAttributes().hasAttribute(CAAttributes.SANITY_INJURY_DAMAGE)
+                ? attacker.getAttribute(CAAttributes.SANITY_INJURY_DAMAGE).getValue()
                 : 0;
         double sanityDamage = sanityInjuryDamage + amount * sanityRate;
 
@@ -100,8 +100,8 @@ public class LivingDamageEventHandler {
 
         if (!(sourceentity instanceof Player attacker) || !EntityUtils.canPlayerEvo(attacker)) return;
 
-        double barrier = attacker.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get())
-                ? attacker.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue()
+        double barrier = attacker.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER)
+                ? attacker.getAttribute(CAAttributes.LIVING_BARRIER).getBaseValue()
                 : 0;
 
         double rate;
@@ -117,8 +117,8 @@ public class LivingDamageEventHandler {
         max = max * attacker.getMaxHealth();
 
         if (barrier < max && rate > 0) {
-            if (attacker.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
-                attacker.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue(Math.min(barrier + event.getAmount() * rate, max));
+            if (attacker.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER))
+                attacker.getAttribute(CAAttributes.LIVING_BARRIER).setBaseValue(Math.min(barrier + event.getAmount() * rate, max));
         }
 
         lvl = NodeUtils.getNodeRealDamage(attacker);

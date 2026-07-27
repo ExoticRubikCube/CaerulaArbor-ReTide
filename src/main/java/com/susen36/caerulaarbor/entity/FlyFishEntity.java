@@ -1,5 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
+
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FishShootEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -17,11 +21,11 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -39,11 +43,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -63,15 +67,15 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
-		setMaxUpStep(0.6f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
 	}
 
 
@@ -195,8 +199,8 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		}
 	}
 
-    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
-		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+		super.dropCustomDeathLoot(level, damageSource, recentlyHit);
 		this.spawnAtLocation(new ItemStack(CAItems.OCEAN_FIBRE.get()));
 	}
 
@@ -254,13 +258,13 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		this.setNoGravity(true);
 	}
 
-	public static void registerSpawnPlacements() {
-		SpawnPlacements.register(CAEntities.FLY_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+		event.register(CAEntities.FLY_FISH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canCommonSeabornSpawn(world, x, y, z);
-		});
+		}, RegisterSpawnPlacementsEvent.Operation.REPLACE);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -272,11 +276,11 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
 		builder = builder.add(Attributes.FLYING_SPEED, 0.25);
-		builder = builder.add(CAAttributes.SANITY_RATE.get(), 12);
+		builder = builder.add(CAAttributes.SANITY_RATE, 12);
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flyfish.idle"));
@@ -286,7 +290,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -303,7 +307,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -325,7 +329,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(FlyFishEntity.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 
@@ -350,4 +354,3 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		this.animationprocedure = animation;
 	}
 }
-

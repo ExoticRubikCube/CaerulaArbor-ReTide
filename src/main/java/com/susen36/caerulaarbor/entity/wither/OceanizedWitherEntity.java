@@ -38,11 +38,11 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -59,9 +59,9 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SPAWN, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SPAWN, 0);
     }
 
     @Override
@@ -181,10 +181,10 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 9, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 100, 9, false, false));
         this.setHealth(1);
         setDeltaMovement(new Vec3(0, (-0.75), 0));
         if ((Entity) this instanceof OceanizedWitherEntity datEntSetI)
@@ -217,7 +217,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
         this.entityData.set(DATA_DURATION, 0);
         this.entityData.set(DATA_SPAWN, 100);
         this.setHealth(this.getMaxHealth());
-        this.removeEffect(CAMobEffects.INVULNERABLE.get());
+        this.removeEffect(CAMobEffects.INVULNERABLE);
         return InteractionResult.SUCCESS;
     }
 
@@ -249,7 +249,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
             this.entityData.set(DATA_DURATION, 40);
             this.entityData.set(DATA_SKILLP, 300);
             if (!this.level().isClientSide()) {
-                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 0, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 20, 0, false, false));
             }
             this.setAnimation("animation.oceanzied_wither.skill");
             CaerulaArborMod.queueServerWork(4, () -> this.rimedWitherShoot(world));
@@ -331,14 +331,14 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
         builder = builder.add(Attributes.FOLLOW_RANGE, 56);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.35);
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.01);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 65);
-        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 5);
+        builder = builder.add(CAAttributes.SANITY_RATE, 10);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.01);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 65);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE, 5);
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if (this.isDeadOrDying()) {
                 return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanzied_wither.die"));
@@ -351,7 +351,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
         return PlayState.STOP;
     }
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

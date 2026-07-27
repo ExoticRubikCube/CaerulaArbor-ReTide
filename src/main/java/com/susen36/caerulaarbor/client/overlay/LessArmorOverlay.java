@@ -8,10 +8,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber({Dist.CLIENT})
@@ -20,8 +21,8 @@ public class LessArmorOverlay {
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		Player player = Minecraft.getInstance().player;
 		ResourceLocation texture = null;
-		if (player.hasEffect(CAMobEffects.LESS_ARMOR.get())) {
-			int amplifier = player.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier();
+		if (player.hasEffect(CAMobEffects.LESS_ARMOR)) {
+			int amplifier = player.getEffect(CAMobEffects.LESS_ARMOR).getAmplifier();
 			if (amplifier <= 4) {
 				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/low_armor_ui.png");
 			} else if (amplifier <= 9) {

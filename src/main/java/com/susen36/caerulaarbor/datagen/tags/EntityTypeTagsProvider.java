@@ -10,8 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -104,6 +104,12 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
         addEntityTypesToTag(FORGE_NETHER_MOBS, EntityType.BLAZE, EntityType.GHAST, EntityType.MAGMA_CUBE, EntityType.PIGLIN, EntityType.PIGLIN_BRUTE, EntityType.WITHER, EntityType.WITHER_SKELETON, EntityType.ZOGLIN, EntityType.ZOMBIFIED_PIGLIN, CAEntities.OCEANIZED_BRUTE, CAEntities.OCEANIZED_PIGLIN, CAEntities.OCEANIZED_WITHER, CAEntities.OCEANIZED_WITHERIA);
 
         addEntityTypesToTag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS, CAEntities.THE_LAST_KNIGHT, CAEntities.MEGA_CHEST, CAEntities.LAST_KNIGHT_AND_HORSE, CAEntities.OCEANIZED_FOX, CAEntities.OCEANIZED_POLAR_BEAR);
+
+        addEntityTypesToTag(EntityTypeTags.UNDEAD, CAEntities.GUNMU, CAEntities.OCEANIZED_WITHER, CAEntities.OCEANIZED_WITHERIA);
+
+        addEntityTypesToTag(EntityTypeTags.ARTHROPOD, CAEntities.OCEANIZED_SPIDER);
+
+        addEntityTypesToTag(EntityTypeTags.AQUATIC, CAEntities.ABSORBER_LIMB, CAEntities.ACCUMULATOR_CLONE, CAEntities.ACCUMULATOR_PROKARYOTE, CAEntities.APOSTLE_PROKARYOTE, CAEntities.BASELAYER_ABYSSAL, CAEntities.BISHOP_FISH, CAEntities.BONE_FISH, CAEntities.CHEST_FISH, CAEntities.CHISELER_FISH, CAEntities.COLLECTOR_PROKARYOTE, CAEntities.COMPASSION_PRAYER, CAEntities.CRACKER_ABYSSAL, CAEntities.DEPOSITER_PROKARYOTE, CAEntities.DIVICELLULAR_GO, CAEntities.ENDSPEAKER, CAEntities.FAKE_OFFSPRING, CAEntities.FEEDER_PROKARYOTE, CAEntities.FIRST_TO_TALK, CAEntities.FLEE_FISH, CAEntities.FLOATER_PROKARYOTE, CAEntities.FLY_FISH, CAEntities.GUIDE_ABYSSAL, CAEntities.HIGHMORE, CAEntities.ISHARMLA, CAEntities.IZUMIK, CAEntities.IZUMIK_OFFSPRING, CAEntities.MARTUS, CAEntities.MEGA_CHEST, CAEntities.NUCLEIC_MALEFICENT, CAEntities.OCEANIZED_BRUTE, CAEntities.OCEANIZED_CAT, CAEntities.OCEANIZED_EVOKER, CAEntities.OCEANIZED_FOX, CAEntities.OCEANIZED_HORSE, CAEntities.OCEANIZED_PIG, CAEntities.OCEANIZED_PIGLIN, CAEntities.OCEANIZED_PILLAGER, CAEntities.OCEANIZED_POLAR_BEAR, CAEntities.OCEANIZED_SPIDER, CAEntities.OCEANIZED_VILLAGER, CAEntities.OCEANIZED_VINDICATOR, CAEntities.OCEANIZED_WITCH, CAEntities.OCEANIZED_WOLF, CAEntities.OCEANIZE_RABBIT, CAEntities.POCKET_SEA_CREEPER, CAEntities.PREDATOR_ABYSSAL, CAEntities.PREGNANT_FISH, CAEntities.PUNCTURE_FISH, CAEntities.REAPER_FISH, CAEntities.RUN_FISH, CAEntities.SCREAM_CHEST_FISH, CAEntities.SHOOTER_FISH, CAEntities.SLIDER_FISH, CAEntities.SONS, CAEntities.SPLASHER_ABYSSAL, CAEntities.SUPER_BIG_CAT, CAEntities.SUPER_SLIDER, CAEntities.THIRSTER, CAEntities.TIDE_CHIMERA, CAEntities.TIDE_DEATHREPELLER, CAEntities.TIDUTANT_EXCRESCENCE, CAEntities.TIDUTANT_ROCK_SPIDER, CAEntities.UMBRELLA_ABYSSAL);
     }
 
     /**
@@ -146,7 +152,7 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
      * @return 实体类型 key
      */
     private static ResourceKey<EntityType<?>> entityTypeKey(Object type) {
-        if (type instanceof RegistryObject<?> registryObject) {
+        if (type instanceof DeferredHolder<?, ?> registryObject) {
             return ResourceKey.create(Registries.ENTITY_TYPE, Objects.requireNonNull(registryObject.getId()));
         }
         if (type instanceof EntityType<?> entityType) {

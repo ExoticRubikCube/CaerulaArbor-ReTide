@@ -45,17 +45,16 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -78,15 +77,15 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         super(type, world);
         xpReward = 6;
         setNoAi(false);
-        setMaxUpStep(1f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SKILLP, 200);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SKILLP, 200);
     }
 
     @Override
@@ -221,7 +220,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
     @Override
     public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
-        if (!this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
+        if (!this.hasEffect(CAMobEffects.COOLDOWN_SINAL)) {
             {
                 final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
@@ -237,7 +236,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                         potion = Mth.nextInt(RandomSource.create(), 0, 4);
                         if (potion == 0) {
                             if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
-                                entity1.addEffect(new MobEffectInstance(CAMobEffects.SANITY_HEAL.get(), 1, 2));
+                                entity1.addEffect(new MobEffectInstance(CAMobEffects.SANITY_HEAL, 1, 2));
                             if (world instanceof ServerLevel projectileLevel) {
                                 Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
@@ -326,26 +325,26 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                 }
             }
             if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 100, 0, false, false));
         }
         if (source.is(DamageTypes.DROWN))
             return false;
         return super.hurt(source, amount);
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Skillp")) {
             this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
         }
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -363,7 +362,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                     if ((Entity) this instanceof OceanziedWitchEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_SKILLP, 250);
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 60, 0, false, false));
                     CaerulaArborMod.queueServerWork(14, this::shootRandomPotion);
                     CaerulaArborMod.queueServerWork(19, this::shootRandomPotion);
                     CaerulaArborMod.queueServerWork(23, this::shootRandomPotion);
@@ -382,11 +381,6 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
             this.removeEffect(MobEffects.WEAKNESS);
         }
         this.refreshDimensions();
-    }
-
-    @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
     }
 
     @Override
@@ -441,7 +435,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 90);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 90);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
         builder = builder.add(Attributes.MAX_HEALTH, 60);
         builder = builder.add(Attributes.ARMOR, 0);
@@ -450,7 +444,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -465,7 +459,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         double d1 = this.getX() - this.xOld;
         double d0 = this.getZ() - this.zOld;
         float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
@@ -485,7 +479,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -507,7 +501,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

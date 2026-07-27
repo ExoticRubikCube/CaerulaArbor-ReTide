@@ -16,7 +16,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -134,9 +134,9 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
-		InteractionResult result = InteractionResult.PASS;
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
+		ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         ItemStack fed = ItemStack.EMPTY;
         if (entity.getMainHandItem().is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fish_food")))) {
             fed = entity.getMainHandItem().copy();
@@ -150,7 +150,7 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
                 world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 0).setValue(OUTPUT, 0), 3);
                 world.playSound(null, pos, SoundEvents.PANDA_EAT, SoundSource.BLOCKS, 0.95F, 1.0F);
                 fed.shrink(1);
-                result = InteractionResult.SUCCESS;
+                result = ItemInteractionResult.SUCCESS;
             }
         }
         return result;

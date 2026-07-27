@@ -1,5 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
+
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -32,11 +36,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 public class GuideAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
@@ -55,28 +59,23 @@ public class GuideAbyssalEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 8;
 		setNoAi(false);
-		setMaxUpStep(1.2f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.2f);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_DELAY, 0);
-		this.entityData.define(DATA_LAYLIMIT, 64);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_DELAY, 0);
+		builder.define(DATA_LAYLIMIT, 64);
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 7.84;
-			}
-		});
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
@@ -151,13 +150,13 @@ public class GuideAbyssalEntity extends SeaMonster {
 		return super.getDimensions(p_33597_).scale((float) 1.1);
 	}
 
-	public static void registerSpawnPlacements() {
-		SpawnPlacements.register(CAEntities.GUIDE_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+		event.register(CAEntities.GUIDE_ABYSSAL.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canDangerSeabornSpawn(world, x, y, z);
-		});
+		}, RegisterSpawnPlacementsEvent.Operation.REPLACE);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -171,7 +170,7 @@ public class GuideAbyssalEntity extends SeaMonster {
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -186,7 +185,7 @@ public class GuideAbyssalEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -203,7 +202,7 @@ public class GuideAbyssalEntity extends SeaMonster {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -225,7 +224,7 @@ public class GuideAbyssalEntity extends SeaMonster {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(GuideAbyssalEntity.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 
@@ -249,4 +248,3 @@ public class GuideAbyssalEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
-

@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class TrailPlankStairBlock extends StairBlock {
 	public TrailPlankStairBlock() {
-		super(() -> Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(3f, 6f).dynamicShape());
+		super(Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(3f, 6f).dynamicShape());
 	}
 
 	@Override

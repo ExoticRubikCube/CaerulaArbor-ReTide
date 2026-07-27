@@ -1,11 +1,11 @@
 package com.susen36.caerulaarbor.datagen;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -78,7 +78,7 @@ public class BiomeModifiersProvider implements DataProvider {
 
         Path root = output.getOutputFolder(PackOutput.Target.DATA_PACK)
                 .resolve(CaerulaArborMod.MODID)
-                .resolve("forge")
+                .resolve("neoforge")
                 .resolve("biome_modifier");
         var futures = ImmutableList.<CompletableFuture<?>>builder();
         modifiers.forEach((name, json) -> futures.add(DataProvider.saveStable(cache, json, root.resolve(name + ".json"))));
@@ -103,7 +103,7 @@ public class BiomeModifiersProvider implements DataProvider {
         spawner.addProperty("minCount", minCount);
         spawner.addProperty("maxCount", maxCount);
 
-        var modifier = baseModifier("forge:add_spawns", biomes);
+        var modifier = baseModifier("neoforge:add_spawns", biomes);
         modifier.add("spawners", spawner);
         modifiers.put(name, modifier);
     }
@@ -118,7 +118,7 @@ public class BiomeModifiersProvider implements DataProvider {
      * @param step      生成阶段
      */
     private static void addFeature(Map<String, JsonObject> modifiers, String name, JsonElement biomes, JsonElement features, String step) {
-        var modifier = baseModifier("forge:add_features", biomes);
+        var modifier = baseModifier("neoforge:add_features", biomes);
         modifier.add("features", features);
         modifier.addProperty("step", step);
         modifiers.put(name, modifier);
@@ -145,7 +145,7 @@ public class BiomeModifiersProvider implements DataProvider {
      */
     private static JsonObject anyBiome() {
         var biomes = new JsonObject();
-        biomes.addProperty("type", "forge:any");
+        biomes.addProperty("type", "neoforge:any");
         return biomes;
     }
 

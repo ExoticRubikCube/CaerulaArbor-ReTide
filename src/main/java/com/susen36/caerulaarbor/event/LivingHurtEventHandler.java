@@ -45,11 +45,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 import java.util.Comparator;
 import java.util.List;
@@ -63,9 +62,7 @@ public class LivingHurtEventHandler {
     private static final TagKey<EntityType<?>> OCEAN_OFFSPRING = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
 
     @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onEntityHurt(LivingHurtEvent event) {
-        if (event == null || event.getEntity() == null) return;
-
+    public static void onEntityHurt(LivingDamageEvent.Pre event) {
         handleNetherseaImmunity(event);
         handleBarrierFunc(event);
         handleMagicResis(event);
@@ -94,11 +91,9 @@ public class LivingHurtEventHandler {
         handleSublimationDamage(event);
     }
 
-    private static void handleKillMuteSelf(LivingHurtEvent event) {
+    private static void handleKillMuteSelf(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
-
-        if (damagesource == null || entity == null) return;
 
         if (damagesource.is(DamageTypes.GENERIC_KILL)) {
             if (entity instanceof BaselayerAbyssalEntity datEntSetI)
@@ -106,12 +101,10 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleSublimationDamage(LivingHurtEvent event) {
+    private static void handleSublimationDamage(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         Entity entity = event.getEntity();
         double amount = event.getAmount();
-
-        if (entity == null) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
             entity.getPersistentData().putDouble("caerula.lastHurtByTime", entity.tickCount);
@@ -120,7 +113,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleNetherseaImmunity(LivingHurtEvent event) {
+    private static void handleNetherseaImmunity(LivingDamageEvent.Pre event) {
         DamageSource damageSource = event.getSource();
         LivingEntity entity = event.getEntity();
         if (damageSource.is(CADamageTypes.TRAIL_DAMAGE) && entity.getType().is(OCEAN_OFFSPRING)) {
@@ -128,7 +121,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleBarrierFunc(LivingHurtEvent event) {
+    private static void handleBarrierFunc(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
@@ -137,25 +130,23 @@ public class LivingHurtEventHandler {
         Entity entity = event.getEntity();
         double amount = event.getAmount();
 
-        if (damagesource == null || entity == null) return;
-
         if (damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || damagesource.is(DamageTypeTags.BYPASSES_EFFECTS))
             return;
 
-        double brr = entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get())
-                ? livingEntity1.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue()
+        double brr = entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER)
+                ? livingEntity1.getAttribute(CAAttributes.LIVING_BARRIER).getBaseValue()
                 : 0;
 
         if (brr > 0) {
             double disp;
             if (brr >= amount) {
-                if (entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
-                    livingEntity2.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue((brr - amount));
+                if (entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER))
+                    livingEntity2.getAttribute(CAAttributes.LIVING_BARRIER).setBaseValue((brr - amount));
                 disp = amount;
                 event.setAmount(0);
             } else {
-                if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
-                    livingEntity4.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue(0);
+                if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER))
+                    livingEntity4.getAttribute(CAAttributes.LIVING_BARRIER).setBaseValue(0);
                 disp = brr;
                 event.setAmount((float) (amount - brr));
             }
@@ -167,27 +158,25 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleMagicResis(LivingHurtEvent event) {
+    private static void handleMagicResis(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         double amount = event.getAmount();
-
-        if (damagesource == null || entity == null) return;
 
         if (damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
         if (damagesource.is(DamageTypeTags.BYPASSES_EFFECTS)) return;
         if (damagesource.is(B_PROTECTION)) return;
 
         if (damagesource.is(IS_MAGIC) && !damagesource.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
-            double mgc_resis = entity instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                    ? livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue()
+            double mgc_resis = entity instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
+                    ? livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE).getValue()
                     : 0;
             if (mgc_resis > 0) {
                 event.setAmount((float) Math.max(amount * 0.01 * (100 - mgc_resis), amount * 0.05));
             }
         } else {
-            double def = entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                    ? livingEntity7.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getValue()
+            double def = entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
+                    ? livingEntity7.getAttribute(CAAttributes.GENERAL_DEFENSE).getValue()
                     : 0;
             if (def > 0 && !damagesource.is(B_DEFENSE)) {
                 event.setAmount((float) Math.max(amount - def, amount * 0.05));
@@ -195,12 +184,10 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleFlamarineHurt(LivingHurtEvent event) {
+    private static void handleFlamarineHurt(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         double amount = event.getAmount();
-
-        if (damagesource == null || entity == null) return;
 
         double gap = entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0);
         double ratie = 1;
@@ -214,28 +201,28 @@ public class LivingHurtEventHandler {
             event.setAmount((float) Math.min(amount * ratie, (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.34));
 
             if (entity instanceof FlamarineStatueEntity) {
-                if (entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                    livingEntity8.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue(Math.max((entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                    ? livingEntity7.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
+                    livingEntity8.getAttribute(CAAttributes.GENERAL_DEFENSE)
+                            .setBaseValue(Math.max((entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
+                                    ? livingEntity7.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
                                     : 0) - 0.5, 1));
-                if (entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-                    livingEntity10.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                            .setBaseValue(Math.max((entity instanceof LivingEntity livingEntity9 && livingEntity9.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                                    ? livingEntity9.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                if (entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
+                    livingEntity10.getAttribute(CAAttributes.MAGIC_RESISTANCE)
+                            .setBaseValue(Math.max((entity instanceof LivingEntity livingEntity9 && livingEntity9.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
+                                    ? livingEntity9.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue()
                                     : 0) - 2, 15));
             } else {
                 double add = entity instanceof FlamarineGolemEntity datEntI ? datEntI.getEntityData().get(FlamarineGolemEntity.DATA_ADDITION) : 0;
                 if (add > 0) {
-                    if (entity instanceof LivingEntity livingEntity13 && livingEntity13.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                        livingEntity13.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                .setBaseValue(((entity instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                        ? livingEntity12.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                    if (entity instanceof LivingEntity livingEntity13 && livingEntity13.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
+                        livingEntity13.getAttribute(CAAttributes.GENERAL_DEFENSE)
+                                .setBaseValue(((entity instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
+                                        ? livingEntity12.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
                                         : 0) + 1));
-                    if (entity instanceof LivingEntity livingEntity15 && livingEntity15.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-                        livingEntity15.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                                .setBaseValue(((entity instanceof LivingEntity livingEntity14 && livingEntity14.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                                        ? livingEntity14.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                    if (entity instanceof LivingEntity livingEntity15 && livingEntity15.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
+                        livingEntity15.getAttribute(CAAttributes.MAGIC_RESISTANCE)
+                                .setBaseValue(((entity instanceof LivingEntity livingEntity14 && livingEntity14.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
+                                        ? livingEntity14.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue()
                                         : 0) + 1.5));
                     if (entity instanceof FlamarineGolemEntity datEntSetI)
                         datEntSetI.getEntityData().set(FlamarineGolemEntity.DATA_ADDITION, (int) (add - 1));
@@ -244,7 +231,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleTrailriteAttackBonus(LivingHurtEvent event) {
+    private static void handleTrailriteAttackBonus(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
@@ -279,7 +266,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleArmorKnight(LivingHurtEvent event) {
+    private static void handleArmorKnight(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
@@ -307,17 +294,17 @@ public class LivingHurtEventHandler {
                     sourceentity.setTicksFrozen((int) Math.min(freeze + 60 * rate, 200));
                 }
             } else {
-                if (!(sourceentity instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.FROZEN.get()))) {
+                if (!(sourceentity instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.FROZEN))) {
                     if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(sourceentity.getX(), sourceentity.getY(), sourceentity.getZ()), CASounds.LAST_JNIGHT_FREEZE.get(), SoundSource.HOSTILE, 4, (float) Mth.nextDouble(RandomSource.create(), 1, 1.15));
                     }
                 }
                 if ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
                     if (sourceentity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), (int) (120 * rate), 0, false, false));
+                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN, (int) (120 * rate), 0, false, false));
                 } else {
                     if (sourceentity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), (int) (60 * rate), 0, false, false));
+                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN, (int) (60 * rate), 0, false, false));
                 }
             }
         }
@@ -329,11 +316,10 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleBossHit(LivingHurtEvent event) {
+    private static void handleBossHit(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
 
-        if (damagesource == null || entity == null) return;
         if (event.isCanceled()) return;
         if (damagesource.is(CADamageTags.NEVER_TRIGGER_BOSS_PROTECTION)) return;
 
@@ -343,13 +329,13 @@ public class LivingHurtEventHandler {
                     if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
                         livingEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 10, 4, false, true));
                     if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 10, 0, false, true));
+                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 10, 0, false, true));
                 }
             }
         }
     }
 
-    private static void handleChimeraKilledByApocata(LivingHurtEvent event) {
+    private static void handleChimeraKilledByApocata(LivingDamageEvent.Pre event) {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getAmount();
@@ -364,7 +350,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleCorruptedBurdenDamage(LivingHurtEvent event) {
+    private static void handleCorruptedBurdenDamage(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
@@ -396,12 +382,10 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleDamageBurdenVeicle(LivingHurtEvent event) {
+    private static void handleDamageBurdenVeicle(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         double amount = event.getAmount();
-
-        if (damagesource == null || entity == null) return;
 
         if (entity.isAlive() && entity.isPassenger()) {
             Entity vehicle = entity.getVehicle();
@@ -419,7 +403,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleCrimsonTreaty(LivingHurtEvent event) {
+    private static void handleCrimsonTreaty(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
@@ -428,7 +412,7 @@ public class LivingHurtEventHandler {
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getAmount();
 
-        if (entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         boolean valid = false;
         String regName;
@@ -460,14 +444,14 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleExtraMagicdamage(LivingHurtEvent event) {
+    private static void handleExtraMagicdamage(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getAmount();
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (MapVariables.get(world).strategy_grow >= 3) {
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
@@ -480,7 +464,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleHandHoeSword(LivingHurtEvent event) {
+    private static void handleHandHoeSword(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
@@ -489,7 +473,7 @@ public class LivingHurtEventHandler {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (sourceentity instanceof Player && damagesource.is(DamageTypes.PLAYER_ATTACK)) {
             ItemStack item_temp = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
@@ -502,12 +486,12 @@ public class LivingHurtEventHandler {
             }
             if (item_temp.getItem() instanceof SwordItem || item_temp.is(ItemTags.create(ResourceLocation.parse("minecraft:swords")))) {
                 if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWORD) {
-                    if (!(entity instanceof LivingEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.ROCK_BREAK.get()))) {
+                    if (!(entity instanceof LivingEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.ROCK_BREAK))) {
                         if (entity instanceof LivingEntity living && !entity.level().isClientSide())
-                            living.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 120, 1));
+                            living.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 120, 1));
                     }
                     if (sourceentity instanceof LivingEntity living && !entity.level().isClientSide()) {
-                        living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 120, 3, false, false));
+                        living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 120, 3, false, false));
                         EntityUtils.heal(living, living.getMaxHealth() * 0.1);
                     }
                 }
@@ -515,20 +499,19 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleHandThorns(LivingHurtEvent event) {
+    private static void handleHandThorns(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (entity instanceof Player && entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0) >= 5) {
             if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_THORNS) {
                 if (!entity.isShiftKeyDown() && sourceentity.isAlive() && entity.isAlive()) {
                     if (!(sourceentity instanceof Player)) {
-                        if (!damagesource.is(CADamageTypes.HAND_SPIKE) && !damagesource.is(DamageTypes.THORNS)
-                                && !damagesource.is(CADamageTypes.GUNMU_DAMAGE) && !(entity == sourceentity)) {
+                        if (!damagesource.is(CADamageTypes.HAND_SPIKE) && !damagesource.is(DamageTypes.THORNS) && !damagesource.is(CADamageTypes.GUNMU_DAMAGE)) {
                             CaerulaArborMod.queueServerWork(2, () -> {
                                 if (!(sourceentity instanceof TamableAnimal tamIsTamedBy && entity instanceof LivingEntity livEnt && tamIsTamedBy.isOwnedBy(livEnt))) {
                                     if (world instanceof ServerLevel level)
@@ -543,7 +526,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleHuntersHit(LivingHurtEvent event) {
+    private static void handleHuntersHit(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
@@ -574,7 +557,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleOnArrowHit(LivingHurtEvent event) {
+    private static void handleOnArrowHit(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
@@ -620,14 +603,14 @@ public class LivingHurtEventHandler {
             double lll = arrow.getPersistentData().getDouble("TrailriteLink");
             if (lll > 0) {
                 if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 20, 0, false, false));
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 20, 0, false, false));
                 double y1 = arrow.getY();
                 Entity entity1 = damagesource.getEntity();
                 if (entity1 != null) {
                     if (!(lll <= 0)) {
                         final Vec3 center = new Vec3(x, y1, z);
                         List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24 / 2d),
-                                e -> e != entity1 && !e.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()));
+                                e -> e != entity1 && !e.hasEffect(CAMobEffects.COOLDOWN_SINAL));
                         LivingEntity nextTarget = null;
                         double minDist = -1.0D;
                         Entity recentVictim = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtMob() : null;
@@ -684,7 +667,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleSanityReaper(LivingHurtEvent event) {
+    private static void handleSanityReaper(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
@@ -706,7 +689,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleSeabornKiller(LivingHurtEvent event) {
+    private static void handleSeabornKiller(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
@@ -715,7 +698,7 @@ public class LivingHurtEventHandler {
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getAmount();
 
-        if (entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
                 && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.OCEANOSPR_KILLER), (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY)) != 0) {
@@ -727,11 +710,9 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleSeabornsGetOffShip(LivingHurtEvent event) {
+    private static void handleSeabornsGetOffShip(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         Entity entity = event.getEntity();
-
-        if (entity == null) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanelite"))) && WorldUtils.canGrief(world)) {
             Entity eee = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
@@ -744,34 +725,30 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleMoreFallDamageEffect(LivingHurtEvent event) {
+    private static void handleMoreFallDamageEffect(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         double amount = event.getAmount();
-
-        if (damagesource == null || entity == null) return;
 
         Entity bullet = damagesource.getDirectEntity();
         if (bullet instanceof ShulkerBullet && bullet.getPersistentData().getBoolean("oceanized")) {
             EntityUtils.giveLessArmor(entity, 8);
             if (entity instanceof LivingEntity living && !living.level().isClientSide())
-                living.addEffect(new MobEffectInstance(CAMobEffects.MORE_FALL_DAMAGE.get(), 300, 0));
+                living.addEffect(new MobEffectInstance(CAMobEffects.MORE_FALL_DAMAGE, 300, 0));
         }
-        if (damagesource.is(DamageTypes.FALL) && entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(CAMobEffects.MORE_FALL_DAMAGE.get())) {
-            double level = livingEntity.getEffect(CAMobEffects.MORE_FALL_DAMAGE.get()).getAmplifier() + 1;
+        if (damagesource.is(DamageTypes.FALL) && entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(CAMobEffects.MORE_FALL_DAMAGE)) {
+            double level = livingEntity.getEffect(CAMobEffects.MORE_FALL_DAMAGE).getAmplifier() + 1;
             event.setAmount((float) (amount * (1 + 0.25 * level)));
         }
     }
 
-    private static void handleSlimeFunc(LivingHurtEvent event) {
+    private static void handleSlimeFunc(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
-
-        if (damagesource == null || entity == null) return;
 
         if (damagesource.is(CADamageTypes.TRAIL_DAMAGE)) {
             if (entity instanceof Slime slime) {
@@ -795,7 +772,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleWarriorTactic(LivingHurtEvent event) {
+    private static void handleWarriorTactic(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
@@ -804,11 +781,11 @@ public class LivingHurtEventHandler {
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getAmount();
 
-        if (entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "warriors")))) {
             if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 100, 0, false, false));
+                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 100, 0, false, false));
         }
 
         if (entity instanceof JuniorWarriorPriestEntity) {
@@ -862,12 +839,10 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handlePlayerEvolutionDamageReduction(LivingHurtEvent event) {
+    private static void handlePlayerEvolutionDamageReduction(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         double amount = event.getAmount();
-
-        if (damagesource == null || entity == null) return;
 
         if (!(entity instanceof Player player) || !EntityUtils.canPlayerEvo(player)) return;
 
@@ -906,13 +881,13 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handlePlayerEvolutionDamageAmplification(LivingHurtEvent event) {
+    private static void handlePlayerEvolutionDamageAmplification(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getAmount();
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (!(sourceentity instanceof Player attacker) || !EntityUtils.canPlayerEvo(attacker)) return;
 
@@ -930,7 +905,7 @@ public class LivingHurtEventHandler {
             finalValue = amount * rate;
         }
 
-        if (entity instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.UNDER_BREAK.get())) {
+        if (entity instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.UNDER_BREAK)) {
             e = NodeUtils.getNodeWorseBreak(attacker);
             if (e >= 4) rate = 2.4;
             else if (e >= 3) rate = 1.9;
@@ -964,7 +939,7 @@ public class LivingHurtEventHandler {
                 EntityUtils.giveLessArmor(entity, lll);
             }
 
-            if ((entity instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR.get()) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) >= lll) {
+            if ((entity instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR).getAmplifier() : 0) >= lll) {
                 if (rate > 1) {
                     finalValue = finalValue * rate;
                 }
@@ -984,7 +959,7 @@ public class LivingHurtEventHandler {
                 attacker.getPersistentData().putDouble("playerEvoHitTime", 0);
             }
 
-            finalValue = Math.min(Math.max(result, finalValue), finalValue * 32);
+            finalValue = Math.clamp(finalValue, result, finalValue * 32);
         }
 
         if (finalValue > amount) {

@@ -15,6 +15,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,8 +35,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
@@ -162,8 +162,8 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
 			}
 		} else {
 			for (String blockId : CAConfigs.BOIL_WATER.get()) {
-				if (ForgeRegistries.BLOCKS.getKey(lower.getBlock()).toString().equals(blockId)) {
-					if (ForgeRegistries.BLOCKS.getKey(lower.getBlock()).toString().equals("create:blaze_burner")) {
+				if (BuiltInRegistries.BLOCKS.getKey(lower.getBlock()).toString().equals(blockId)) {
+					if (BuiltInRegistries.BLOCKS.getKey(lower.getBlock()).toString().equals("create:blaze_burner")) {
 						if (!(lower.getBlock().getStateDefinition().getProperty("blaze") instanceof EnumProperty<?> blazeProperty
 								&& lower.getValue(blazeProperty).toString().equals("smouldering"))) {
 							valid = true;
@@ -187,26 +187,21 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, player, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, player, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
-        InteractionResult result = InteractionResult.PASS;
+        InteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         boolean finished = false;
         if (!(blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty getbp1 && blockstate.getValue(getbp1))) {
-            if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_WATER.get()) {
+            if (((player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_WATER.get())) {
                 {
-                    BlockPos blockPos = BlockPos.containing(x, y, z);
-                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    BlockState bs = world.getBlockState(pos);
                     if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
-                        ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, true), 3);
+                        world.setBlock(pos, bs.setValue(booleanProp, true), 3);
                 }
-                if ((Entity) player instanceof LivingEntity livingEntity) {
+                if (player instanceof LivingEntity livingEntity) {
                     ItemStack setstack = new ItemStack(CAItems.EMPTY_CAN.get()).copy();
                     setstack.setCount(((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getCount());
                     player.setItemInHand(InteractionHand.MAIN_HAND, setstack);
@@ -215,7 +210,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                 if ((LevelAccessor) world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BUCKET_FILL, SoundSource.NEUTRAL, 1, 1);
                 }
-                result = InteractionResult.SUCCESS;
+                result = ItemInteractionResult.SUCCESS;
                 finished = true;
             } else if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.A_CUP_OF_WATER.get()) {
                 {

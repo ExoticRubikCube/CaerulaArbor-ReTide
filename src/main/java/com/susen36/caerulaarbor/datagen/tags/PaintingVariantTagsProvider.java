@@ -7,8 +7,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.PaintingVariantTags;
 import net.minecraft.world.entity.decoration.PaintingVariant;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +39,7 @@ public class PaintingVariantTagsProvider extends TagsProvider.RegistryTagsProvid
      * @param variant 画作变体注册对象
      * @return 画作变体 key
      */
-    private static ResourceKey<PaintingVariant> paintingVariantKey(RegistryObject<PaintingVariant> variant) {
-        return ResourceKey.create(Registries.PAINTING_VARIANT, Objects.requireNonNull(variant.getId()));
+    private static ResourceKey<PaintingVariant> paintingVariantKey(DeferredHolder<PaintingVariant, ?> variant) {
+        return variant.getKey();
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -36,30 +37,24 @@ public class DragonBrandBlock extends Block {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
-        InteractionResult result = InteractionResult.PASS;
-        if (entity != null) {
-            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.GLASS_BOTTLE) {
-                ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.SEA_TRAIL_SOLID.get().defaultBlockState(), 3);
-                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if ((LevelAccessor) world instanceof Level level) {
-                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.BLOCKS, 1, 1);
-                }
-                if ((LevelAccessor) world instanceof ServerLevel level) {
-                    ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), new ItemStack(Items.DRAGON_BREATH));
-                    entityToSpawn.setPickUpDelay(10);
-                    level.addFreshEntity(entityToSpawn);
-                }
-                result = InteractionResult.SUCCESS;
+        ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.GLASS_BOTTLE) {
+            ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.SEA_TRAIL_SOLID.get().defaultBlockState(), 3);
+            ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.BLOCKS, 1, 1);
             }
+            if ((LevelAccessor) world instanceof ServerLevel level) {
+                ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), new ItemStack(Items.DRAGON_BREATH));
+                entityToSpawn.setPickUpDelay(10);
+                level.addFreshEntity(entityToSpawn);
+            }
+            result = ItemInteractionResult.SUCCESS;
         }
         return result;
 	}

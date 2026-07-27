@@ -1,5 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
+
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.warden.OceanizedWardenisEntity;
@@ -49,11 +53,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Team;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
@@ -73,15 +77,15 @@ public class IzumikOffspringEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 0;
 		setNoAi(false);
-		setMaxUpStep(0.6f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
 	}
 
 
@@ -142,12 +146,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 1;
-			}
-		});
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false));
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1, 20) {
 			@Override
 			protected Vec3 getPosition() {
@@ -162,8 +161,8 @@ public class IzumikOffspringEntity extends SeaMonster {
 		this.goalSelector.addGoal(5, new FloatGoal(this));
 	}
 
-    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
-		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+		super.dropCustomDeathLoot(level, damageSource, recentlyHit);
 		this.spawnAtLocation(new ItemStack(CAItems.COLOURFULL_JELLY.get()));
 	}
 
@@ -306,13 +305,13 @@ public class IzumikOffspringEntity extends SeaMonster {
 		this.setNoGravity(true);
 	}
 
-	public static void registerSpawnPlacements() {
-		SpawnPlacements.register(CAEntities.IZUMIK_OFFSPRING.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+		event.register(CAEntities.IZUMIK_OFFSPRING.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canCommonSeabornSpawn(world, x, y, z);
-		});
+		}, RegisterSpawnPlacementsEvent.Operation.REPLACE);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -324,11 +323,11 @@ public class IzumikOffspringEntity extends SeaMonster {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.35);
 		builder = builder.add(Attributes.FLYING_SPEED, 0.4);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 40);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 40);
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (this.isDeadOrDying()) {
 				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.izumik_offspring.die"));
@@ -340,7 +339,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -362,7 +361,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(IzumikOffspringEntity.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 
@@ -386,4 +385,3 @@ public class IzumikOffspringEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
-

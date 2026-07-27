@@ -42,11 +42,11 @@ public class MartusBookItemRenderer extends GeoItemRenderer<MartusBookItem> {
 
 	@Override
 	public void actuallyRender(PoseStack matrixStackIn, MartusBookItem animatable, BakedGeoModel model, RenderType type, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, boolean isRenderer, float partialTicks, int packedLightIn,
-			int packedOverlayIn, float red, float green, float blue, float alpha) {
+			int packedOverlayIn, int color) {
 		this.currentBuffer = renderTypeBuffer;
 		this.renderType = type;
 		this.animatable = animatable;
-		super.actuallyRender(matrixStackIn, animatable, model, type, renderTypeBuffer, vertexBuilder, isRenderer, partialTicks, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		super.actuallyRender(matrixStackIn, animatable, model, type, renderTypeBuffer, vertexBuilder, isRenderer, partialTicks, packedLightIn, packedOverlayIn, color);
 		if (this.renderArms) {
 			this.renderArms = false;
 		}

@@ -19,9 +19,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
+
 
 public class CaerulaRecorderItem extends Item {
 	public CaerulaRecorderItem() {
@@ -29,8 +29,8 @@ public class CaerulaRecorderItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.caerula_recorder.description_0"));
 	}
 
@@ -39,7 +39,7 @@ public class CaerulaRecorderItem extends Item {
 		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
         if ((Entity) entity instanceof ServerPlayer ent) {
             BlockPos bpos = BlockPos.containing(entity.getX(), entity.getY(), entity.getZ());
-            NetworkHooks.openScreen(ent, new MenuProvider() {
+            ent.openMenu(new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
                     return Component.literal("CaerulaRecordGUI");

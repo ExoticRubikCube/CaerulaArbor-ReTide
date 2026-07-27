@@ -11,10 +11,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -38,6 +40,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 
+
 public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 2);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -57,8 +60,8 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, BlockGetter level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("block.caerula_arbor.golden_chalise.description_0"));
 		list.add(Component.translatable("block.caerula_arbor.golden_chalise.description_1"));
 		list.add(Component.translatable("block.caerula_arbor.golden_chalise.description_2"));
@@ -140,8 +143,8 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -149,11 +152,11 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
 		double hitY = hit.getLocation().y;
 		double hitZ = hit.getLocation().z;
 		Direction direction = hit.getDirection();
-        InteractionResult result;
+        ItemInteractionResult result;
         if (direction == null || entity == null) {
-            result = InteractionResult.PASS;
+            result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         } else {
-            InteractionResult res = InteractionResult.PASS;
+            ItemInteractionResult res = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             String output;
             double balance;
             double amount;
@@ -161,7 +164,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
             if (balance >= 131072) {
                 if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                     player.displayClientMessage(Component.literal((Component.translatable("block.golden_chalise.inquiry").getString())), true);
-                res = InteractionResult.PASS;
+                res = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             } else {
                 if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REDSTONE_INGOT.get()) {
                     if (direction == Direction.UP) {
@@ -178,7 +181,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
-                        res = InteractionResult.SUCCESS;
+                        res = ItemInteractionResult.SUCCESS;
                     } else {
                         balance = balance + 1;
                         {
@@ -195,7 +198,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
-                        res = InteractionResult.SUCCESS;
+                        res = ItemInteractionResult.SUCCESS;
                     }
                 } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REDSTONIUM.get()) {
                     if (direction == Direction.UP) {
@@ -212,7 +215,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
-                        res = InteractionResult.SUCCESS;
+                        res = ItemInteractionResult.SUCCESS;
                     } else {
                         balance = Math.min(balance + 9, 131072);
                         {
@@ -229,7 +232,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
-                        res = InteractionResult.SUCCESS;
+                        res = ItemInteractionResult.SUCCESS;
                     }
                 } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == ItemStack.EMPTY.getItem()) {
                     if (entity.isShiftKeyDown()) {
@@ -255,7 +258,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                 if ((LevelAccessor) world instanceof Level level) {
                                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                                 }
-                                res = InteractionResult.SUCCESS;
+                                res = ItemInteractionResult.SUCCESS;
                             } else if (balance >= 1) {
                                 for (int index0 = 0; index0 < (int) balance; index0++) {
                                     if ((LevelAccessor) world instanceof ServerLevel level) {
@@ -275,7 +278,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                 if ((LevelAccessor) world instanceof Level level) {
                                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                                 }
-                                res = InteractionResult.SUCCESS;
+                                res = ItemInteractionResult.SUCCESS;
                             }
                         } else if (!(direction == Direction.DOWN) && balance >= 1) {
                             balance = balance - 1;
@@ -294,7 +297,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                             if ((LevelAccessor) world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                             }
-                            res = InteractionResult.SUCCESS;
+                            res = ItemInteractionResult.SUCCESS;
                         }
                     }
                 }

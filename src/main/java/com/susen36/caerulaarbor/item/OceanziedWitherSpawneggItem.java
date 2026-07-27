@@ -17,18 +17,19 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
 import java.util.List;
 
-public class OceanziedWitherSpawneggItem extends ForgeSpawnEggItem {
+
+public class OceanziedWitherSpawneggItem extends DeferredSpawnEggItem {
 	public OceanziedWitherSpawneggItem() {
 		super(CAEntities.OCEANIZED_WITHER, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.oceanized_wither_spawnegg.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.oceanized_wither_spawnegg.description_1"));
 	}

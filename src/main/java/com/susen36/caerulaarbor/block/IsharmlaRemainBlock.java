@@ -7,7 +7,7 @@ import com.susen36.caerulaarbor.entity.SkadiEntity;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -157,8 +157,8 @@ public class IsharmlaRemainBlock extends Block {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -186,7 +186,7 @@ public class IsharmlaRemainBlock extends Block {
                             result = InteractionResult.FAIL;
                         } else {
                             if (skadi instanceof LivingEntity livingEntity && !entity.level().isClientSide())
-                                entity.addEffect(new MobEffectInstance(CAMobEffects.ISHARMLA_CURSE.get(), 99999, 0));
+                                entity.addEffect(new MobEffectInstance(CAMobEffects.ISHARMLA_CURSE, 99999, 0));
                             IsharmlaEntity.sendLinkParticlesToEntity(world, x, y, z, skadi);
                             if ((LevelAccessor) world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_PLACE.get(), SoundSource.BLOCKS, 3, 1);
@@ -194,7 +194,7 @@ public class IsharmlaRemainBlock extends Block {
                             ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                             ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
                             if ((Entity) entity instanceof ServerPlayer player) {
-                                Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "unlock_calamity"));
+                                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "unlock_calamity"));
                                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                                 if (!ap.isDone()) {
                                     for (String criteria : ap.getRemainingCriteria())

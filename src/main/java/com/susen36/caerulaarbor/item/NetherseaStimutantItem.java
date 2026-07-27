@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class NetherseaStimutantItem extends Item {
 	public NetherseaStimutantItem() {
 		super(new Item.Properties().stacksTo(4).rarity(Rarity.UNCOMMON));
@@ -29,13 +30,13 @@ public class NetherseaStimutantItem extends Item {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 32;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.nethersea_stimutant.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.nethersea_stimutant.description_1"));
 	}
@@ -50,7 +51,7 @@ public class NetherseaStimutantItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
         if (!entity.level().isClientSide()) {
-            entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 280, 3));
+            entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, 280, 3));
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 2));
             entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 300, 3));
             entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 480, 0));
@@ -73,7 +74,7 @@ public class NetherseaStimutantItem extends Item {
             }
         }
         CaerulaArborMod.queueServerWork(240, () -> {
-            if (entity.isAlive() && entity.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get())) {
+            if (entity.isAlive() && entity.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY)) {
                 if (Math.random() < 0.5) {
                     if (!entity.level().isClientSide()) {
                         entity.addEffect(new MobEffectInstance(MobEffects.POISON, 280, 0));

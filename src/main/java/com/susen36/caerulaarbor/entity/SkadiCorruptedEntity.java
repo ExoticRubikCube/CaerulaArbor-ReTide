@@ -44,7 +44,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -64,11 +63,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -97,7 +96,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(1f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
     }
 
@@ -136,34 +135,30 @@ public class SkadiCorruptedEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 15);
         builder = builder.add(Attributes.FOLLOW_RANGE, 36);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.02);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 30);
-        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.02);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 30);
+        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
         return builder;
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_CONVERT_P, 900);
-        this.entityData.define(DATA_MAY_CORRUPT, true);
-        this.entityData.define(DATA_DURATION, 0);
-        this.entityData.define(DATA_CONVERT_TICK, 1000);
-        this.entityData.define(DATA_DEAL, 0);
-        this.entityData.define(DATA_PHASE, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_CONVERT_P, 900);
+        builder.define(DATA_MAY_CORRUPT, true);
+        builder.define(DATA_DURATION, 0);
+        builder.define(DATA_CONVERT_TICK, 1000);
+        builder.define(DATA_DEAL, 0);
+        builder.define(DATA_PHASE, 0);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 4;
-            }
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1, false) {
 
             @Override
             public boolean canUse() {
@@ -202,11 +197,6 @@ public class SkadiCorruptedEntity extends SeaMonster {
                 return super.canContinueToUse() && isCorruptedDurative();
             }
         });
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
     }
 
     @Override
@@ -285,7 +275,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                 }
                 this.setAnimation("animation.skadi_corrupted.convert_in_1");
                 if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 9999, 9, false, false));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 9999, 9, false, false));
                 this.getEntityData().set(DATA_DURATION, 10000);
                 this.getEntityData().set(DATA_CONVERT_TICK, 30);
                 this.getEntityData().set(DATA_CONVERT_P, 10000);
@@ -417,7 +407,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                     if ((Entity) this instanceof SkadiCorruptedEntity datEntSetL)
                         datEntSetL.getEntityData().set(DATA_MAY_CORRUPT, true);
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 9, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 60, 9, false, false));
                     if (!world.isClientSide()) {
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SILENCE3.get(), SoundSource.HOSTILE, 2, 1);
@@ -437,10 +427,10 @@ public class SkadiCorruptedEntity extends SeaMonster {
                         datEntSetI.getEntityData().set(DATA_DEAL, 0);
                     if ((Entity) this instanceof SkadiCorruptedEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_DURATION, 80);
-                    if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-                        this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                                .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                                        ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                    if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
+                        this.getAttribute(CAAttributes.MAGIC_RESISTANCE)
+                                .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
+                                        ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue()
                                         : 0) + 50));
                     if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
@@ -448,7 +438,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                     if ((Entity) this instanceof SkadiCorruptedEntity datEntSetL)
                         datEntSetL.getEntityData().set(DATA_MAY_CORRUPT, true);
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 9, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 80, 9, false, false));
                     if (!world.isClientSide()) {
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SILENCE4.get(), SoundSource.HOSTILE, 2, 1);
@@ -555,10 +545,10 @@ public class SkadiCorruptedEntity extends SeaMonster {
                                         entityiterator.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                                                 (entityiterator.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entityiterator.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
                                                         + ddd * 0.4);
-                                    if (entityiterator.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                                        entityiterator.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                                .setBaseValue((entityiterator.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                                        ? entityiterator.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                                    if (entityiterator.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
+                                        entityiterator.getAttribute(CAAttributes.GENERAL_DEFENSE)
+                                                .setBaseValue((entityiterator.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
+                                                        ? entityiterator.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
                                                         : 0) + ddd * 0.4);
                                     entityiterator.getPersistentData().putBoolean("corruptedBonus1", true);
                                 }
@@ -624,7 +614,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -647,8 +637,8 @@ public class SkadiCorruptedEntity extends SeaMonster {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         double x = this.getX(), y = this.getY(), z = this.getZ();
         if (world instanceof Level level && !level.isClientSide()) {
             level.playSound(
@@ -659,7 +649,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
         return retval;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))
 
@@ -674,7 +664,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -689,7 +679,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -736,7 +726,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 30) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             double x = this.getX();
             double y = this.getY();

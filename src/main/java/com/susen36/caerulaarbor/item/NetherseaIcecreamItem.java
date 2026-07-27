@@ -18,19 +18,20 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class NetherseaIcecreamItem extends Item {
 	public NetherseaIcecreamItem() {
 		super(new Item.Properties().stacksTo(16).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.75f).alwaysEat().build()));
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 24;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.nethersea_icecream.description_0"));
 	}
 
@@ -39,10 +40,10 @@ public class NetherseaIcecreamItem extends Item {
 		ItemStack retval = new ItemStack(CAItems.SHELL_OF_STONECUTTER.get());
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide()) {
-			entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 100, 0, false, false));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 100, 0, false, false));
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 1));
 		}
-		entity.removeEffect(CAMobEffects.FROZEN.get());
+		entity.removeEffect(CAMobEffects.FROZEN);
 		entity.setTicksFrozen(0);
 		EntityUtils.restorePlayerLights(entity, 3);
 		if (itemstack.isEmpty()) {

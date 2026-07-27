@@ -22,14 +22,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
+
 public class ComplexChitinBowItem extends BowItem {
 	public ComplexChitinBowItem() {
 		super(new Item.Properties().durability(4096).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.complex_chitin_bow.description_0"));
 	}
 
@@ -72,7 +73,7 @@ public class ComplexChitinBowItem extends BowItem {
             ItemStack itemstack = player.getProjectile(pStack);
 
             int i = this.getUseDuration(pStack) - pTimeLeft;
-            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(pStack, pLevel, player, i, !itemstack.isEmpty() || flag);
+            i = net.neoforged.neoforge.event.ForgeEventFactory.onArrowLoose(pStack, pLevel, player, i, !itemstack.isEmpty() || flag);
             if (i < 0) return;
 
             if (!itemstack.isEmpty() || flag) {

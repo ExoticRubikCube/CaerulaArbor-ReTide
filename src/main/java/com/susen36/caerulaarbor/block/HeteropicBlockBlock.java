@@ -26,8 +26,8 @@ public class HeteropicBlockBlock extends Block {
 	}
 
 	@Override
-	public float[] getBeaconColorMultiplier(BlockState state, LevelReader world, BlockPos pos, BlockPos beaconPos) {
-		return new float[]{0.6549019608f, 0.9490196078f, 0.9607843137f};
+	public Integer getBeaconColorMultiplier(BlockState state, LevelReader world, BlockPos pos, BlockPos beaconPos) {
+		return 0xFFA7F2F5;
 	}
 
 	@Override

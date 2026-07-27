@@ -1,5 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
+
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -41,11 +45,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 public class PredatorAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(PredatorAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
@@ -62,26 +66,21 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
-		setMaxUpStep(1.2f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.2f);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.5, true) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 4;
-			}
-		});
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.5, true));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
@@ -133,34 +132,34 @@ public class PredatorAbyssalEntity extends SeaMonster {
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 1));
         }
-        if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-            this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(80);
+        if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
+            this.getAttribute(CAAttributes.MISSRATE).setBaseValue(80);
         if (MapVariables.get(world).strategy_subsisting >= 4) {
-            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-                this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(90);
+            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
+                this.getAttribute(CAAttributes.MISSRATE).setBaseValue(90);
         }
         if (isOnFire() && !fireImmune()) {
-            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-                this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
+            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
+                this.getAttribute(CAAttributes.MISSRATE).setBaseValue(0);
         }
-        if ((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(CAMobEffects.DIZZY.get()) || (Entity) this instanceof LivingEntity livEnt10 && livEnt10.hasEffect(CAMobEffects.FROZEN.get())
+        if ((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(CAMobEffects.DIZZY) || (Entity) this instanceof LivingEntity livEnt10 && livEnt10.hasEffect(CAMobEffects.FROZEN)
                 || (Entity) this instanceof LivingEntity livEnt11 && livEnt11.hasEffect(MobEffects.LEVITATION) || (Entity) this instanceof LivingEntity livEnt12 && livEnt12.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
                 || (Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(MobEffects.SLOW_FALLING)) {
-            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-                this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
+            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
+                this.getAttribute(CAAttributes.MISSRATE).setBaseValue(0);
         }
         this.refreshDimensions();
 	}
 
 	
 
-	public static void registerSpawnPlacements() {
-		SpawnPlacements.register(CAEntities.PREDATOR_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+		event.register(CAEntities.PREDATOR_ABYSSAL.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canCommonSeabornSpawn(world, x, y, z);
-		});
+		}, RegisterSpawnPlacementsEvent.Operation.REPLACE);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -170,11 +169,11 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
-		builder = builder.add(CAAttributes.SANITY_RATE.get(), 9);
+		builder = builder.add(CAAttributes.SANITY_RATE, 9);
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -186,7 +185,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -203,7 +202,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -225,7 +224,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(PredatorAbyssalEntity.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 
@@ -250,4 +249,3 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
-

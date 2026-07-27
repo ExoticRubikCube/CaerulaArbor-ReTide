@@ -19,14 +19,15 @@ import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
+
 public class ScoreItem extends RecordItem {
 	public ScoreItem() {
 		super(8, () -> CASounds.BLOODYWOLF_OPENMOUTH.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), 1180);
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
         for (String line : hoverText.split("\n")) {
             list.add(Component.literal(line));

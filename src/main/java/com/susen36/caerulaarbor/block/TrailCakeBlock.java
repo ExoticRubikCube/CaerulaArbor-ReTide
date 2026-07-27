@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -36,7 +37,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 public class TrailCakeBlock extends Block implements SimpleWaterloggedBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 3);
@@ -141,20 +142,15 @@ public class TrailCakeBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public InteractionResult useWithoutItem(BlockState blockstate, Level world, BlockPos pos, Player entity, BlockHitResult hit) {
+		super.useWithoutItem(blockstate, world, pos, entity, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.SUCCESS;
         if (entity == null) {
             result = InteractionResult.PASS;
-        } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
-                && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
+        } else {
             if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip2 ? blockstate.getValue(getip2) : -1) < 3) {
                 {
                     int value = (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip4 ? blockstate.getValue(getip4) : -1) + 1;
@@ -171,7 +167,18 @@ public class TrailCakeBlock extends Block implements SimpleWaterloggedBlock {
                 setstack.setCount(1);
                 ItemHandlerHelper.giveItemToPlayer(player, setstack);
             }
-        } else if ((((Entity) entity instanceof LivingEntity livingEntity) ? livingEntity.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof SwordItem
+        }
+        return result;
+	}
+
+	@Override
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+        ItemInteractionResult result = ItemInteractionResult.SUCCESS;
+        if ((((Entity) entity instanceof LivingEntity livingEntity) ? livingEntity.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof SwordItem
                 || ((Entity) entity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() instanceof SwordItem
                 || (((Entity) entity instanceof LivingEntity livingEntity) ? livingEntity.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
                 || ((Entity) entity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
@@ -189,7 +196,7 @@ public class TrailCakeBlock extends Block implements SimpleWaterloggedBlock {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHEEP_SHEAR, SoundSource.NEUTRAL, 1, 1);
             }
         } else {
-            result = InteractionResult.PASS;
+            result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
         return result;
 	}

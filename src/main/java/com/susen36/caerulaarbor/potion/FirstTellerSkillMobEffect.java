@@ -13,8 +13,6 @@ import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.MathUtils;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -27,7 +25,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -41,22 +38,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 
-public class FirstTellerSkillMobEffect extends MobEffect {
+public class  FirstTellerSkillMobEffect extends MobEffect {
     public FirstTellerSkillMobEffect() {
         super(MobEffectCategory.NEUTRAL, -16751002);
         this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "first_teller_skill_knockback_resistance"), 5, AttributeModifier.Operation.ADD_VALUE);
-    }
-
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
     }
 
     @Override
@@ -97,12 +87,12 @@ public class FirstTellerSkillMobEffect extends MobEffect {
             }.compareDistOf(x, y, z)).orElse(null);
             if (enemy == null) {
                 if ((Entity) entity instanceof LivingEntity livingEntity)
-                    livingEntity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL.get());
+                    livingEntity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL);
                  return true;
             }
             if (!enemy.isAlive()) {
                 if ((Entity) entity instanceof LivingEntity livingEntity)
-                    livingEntity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL.get());
+                    livingEntity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL);
                  return true;
             }
             ayk = enemy instanceof LivingEntity livingEntity13 && livingEntity13.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity13.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
@@ -146,23 +136,4 @@ public class FirstTellerSkillMobEffect extends MobEffect {
         return MathUtils.isMultipleOf(duration, 10);
     }
 
-    @Override
-    public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
-        consumer.accept(new IClientMobEffectExtensions() {
-            @Override
-            public boolean isVisibleInInventory(MobEffectInstance effect) {
-                return false;
-            }
-
-            @Override
-            public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics guiGraphics, int x, int y, int blitOffset) {
-                return false;
-            }
-
-            @Override
-            public boolean isVisibleInGui(MobEffectInstance effect) {
-                return false;
-            }
-        });
-    }
 }

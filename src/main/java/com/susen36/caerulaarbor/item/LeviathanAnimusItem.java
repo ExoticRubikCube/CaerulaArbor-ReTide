@@ -22,6 +22,7 @@ import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
+
 public class LeviathanAnimusItem extends Item {
 	public LeviathanAnimusItem() {
 		super(new Item.Properties().stacksTo(8).fireResistant().rarity(Rarity.EPIC));
@@ -33,13 +34,13 @@ public class LeviathanAnimusItem extends Item {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 30;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.leviathan_animus.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.leviathan_animus.description_1"));
 	}

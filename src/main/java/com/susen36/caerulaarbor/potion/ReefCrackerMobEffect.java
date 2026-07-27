@@ -25,10 +25,7 @@ public class ReefCrackerMobEffect extends MobEffect {
         this.addAttributeModifier(Attributes.ATTACK_DAMAGE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "reef_cracker_attack_damage"), 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
@@ -50,7 +47,7 @@ public class ReefCrackerMobEffect extends MobEffect {
         super.removeAttributeModifiers(entity, attributeMap, amplifier);
         if ((double) amplifier >= 2) {
             if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 60, (int) ((double) amplifier - 2), false, false));
+                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER, 60, (int) ((double) amplifier - 2), false, false));
         }
     }
 

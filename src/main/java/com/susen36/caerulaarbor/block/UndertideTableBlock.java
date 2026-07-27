@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
+import org.jetbrains.annotations.NotNull;
 
 public class UndertideTableBlock extends Block {
 	public UndertideTableBlock() {
@@ -15,7 +16,7 @@ public class UndertideTableBlock extends Block {
 	}
 
 	@Override
-	public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
+	public boolean propagatesSkylightDown(@NotNull BlockState state, BlockGetter reader, BlockPos pos) {
 		return true;
 	}
 

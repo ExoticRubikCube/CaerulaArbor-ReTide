@@ -35,13 +35,13 @@ public enum CAAttributeProvider implements IEntityComponentProvider {
     }
 
     private double getDefense(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CAAttributes.GENERAL_DEFENSE.get());
+        AttributeInstance instance = living.getAttribute(CAAttributes.GENERAL_DEFENSE);
         if (instance != null) return instance.getValue();
         return 0;
     }
 
     private double getResistance(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get());
+        AttributeInstance instance = living.getAttribute(CAAttributes.MAGIC_RESISTANCE);
         if (instance != null) return instance.getValue();
         return 0;
     }

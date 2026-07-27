@@ -15,6 +15,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -117,12 +118,12 @@ public class TrailLogBlock extends Block {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        InteractionResult result = InteractionResult.PASS;
+        ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         if (entity.getMainHandItem().is(ItemTags.create(ResourceLocation.parse("minecraft:axes"))) || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))) {
             world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.TRAIL_LOG.get().defaultBlockState()));
             if ((LevelAccessor) world instanceof Level level) {
@@ -131,7 +132,7 @@ public class TrailLogBlock extends Block {
             BlockPos bp = BlockPos.containing(x, y, z);
             BlockState bs = CABlocks.STRIPPED_TRAIL_LOG.get().withPropertiesOf(blockstate);
             ((LevelAccessor) world).setBlock(bp, bs, 3);
-            result = InteractionResult.SUCCESS;
+            result = ItemInteractionResult.SUCCESS;
         }
         return result;
 	}

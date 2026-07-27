@@ -46,11 +46,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
@@ -73,17 +73,17 @@ public class TideDeathrepellerEntity extends SeaMonster {
         super(type, world);
         xpReward = 6;
         setNoAi(false);
-        setMaxUpStep(1.5f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SKILLP, 100);
-        this.entityData.define(DATA_DURATION, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SKILLP, 100);
+        builder.define(DATA_DURATION, 0);
     }
 
     @Override
@@ -100,11 +100,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
                 return super.canContinueToUse() && TideDeathrepellerEntity.this.isFaking();
             }
         });
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.8, true) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 7.29;
-            }
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  0.8, true) {
 
             @Override
             public boolean canUse() {
@@ -167,7 +163,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             double num;
-            if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()) && !((Entity) this instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.FAKE_DEATH.get()))) {
+            if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL) && !((Entity) this instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.FAKE_DEATH))) {
                     if (distanceTo(sourceentity) <= 6) {
                         num = 0;
                         {
@@ -184,7 +180,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
                                 this.setAnimation("animation.deathrepeller.enchantattack");
                             }
                             if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 60, 0, false, false));
                             this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             CaerulaArborMod.queueServerWork(12, () -> {
                                 if (world instanceof Level level) {
@@ -224,15 +220,15 @@ public class TideDeathrepellerEntity extends SeaMonster {
             Entity bishop = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                     .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
             boolean keepup = bishop != null;
-            if (bishop instanceof LivingEntity bishopLiving && bishopLiving.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+            if (bishop instanceof LivingEntity bishopLiving && bishopLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
                 keepup = false;
             }
             if (keepup) {
                 super.setHealth(Math.max(this.getHealth(), 1.0F));
                 this.setShiftKeyDown(true);
                 if (!this.level().isClientSide()) {
-                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 0, false, false));
-                    this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 200, 0, false, false));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1, false, false));
                 }
                 return;
             }
@@ -270,11 +266,11 @@ public class TideDeathrepellerEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         Entity nearest;
-        if (this.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+        if (this.hasEffect(CAMobEffects.FAKE_DEATH)) {
             nearest = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                     .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
             boolean keepup = nearest != null;
-            if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+            if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
                 keepup = false;
             }
             if (!keepup) {
@@ -304,7 +300,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
                     this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY(), target.getZ()));
                     this.setAnimation("empty");
                     if (!this.level().isClientSide()) {
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
                     }
                     this.setAnimation("animation.deathrepeller.combo");
                     CaerulaArborMod.queueServerWork(17, () -> {
@@ -339,15 +335,15 @@ public class TideDeathrepellerEntity extends SeaMonster {
         }
         nearest = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                 .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
-        if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+        if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
             EntityUtils.spawnLinkParticles(this.level(), this, nearest);
             if (MapVariables.get(this.level()).strategy_silence >= 3) {
-                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
-                    this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(40);
+                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
+                    this.getAttribute(CAAttributes.MISSRATE).setBaseValue(40);
                 }
             } else if (MapVariables.get(this.level()).strategy_subsisting >= 4) {
-                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
-                    this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(20);
+                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
+                    this.getAttribute(CAAttributes.MISSRATE).setBaseValue(20);
                 }
             }
         }
@@ -359,7 +355,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -390,11 +386,11 @@ public class TideDeathrepellerEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 8);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.65);
-        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
+        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -412,7 +408,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -429,7 +425,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -451,7 +447,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 22) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             WorldUtils.dropRelicTidebi(this.level(), this.getX(), this.getY(), this.getZ());
         }
     }
@@ -475,7 +471,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
         if (this.getEntityData().get(TideDeathrepellerEntity.DATA_DURATION) > 0) {
             return false;
         }
-        return !this.hasEffect(CAMobEffects.FAKE_DEATH.get());
+        return !this.hasEffect(CAMobEffects.FAKE_DEATH);
     }
 
     @Override

@@ -20,9 +20,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
@@ -31,14 +32,10 @@ public class EvolutionCommand {
 	public static void registerCommand(RegisterCommandsEvent event) {
 		event.getDispatcher().register(Commands.literal("caerula_arbor:evolution").requires(s -> s.hasPermission(2)).then(Commands.literal("grow").then(Commands.literal("update").executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
-			Entity entity = arguments.getSource().getEntity();
+            Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
 			GrowUpgradeManager.applyGrowthUpgrade(world);
@@ -51,8 +48,7 @@ public class EvolutionCommand {
 			Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             String info;
@@ -79,14 +75,10 @@ public class EvolutionCommand {
             return 0;
 		}))).then(Commands.literal("breed").then(Commands.literal("update").executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
-			Entity entity = arguments.getSource().getEntity();
+            Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
 			BreedUpgradeManager.applyBreedUpgrade(world);
@@ -99,8 +91,7 @@ public class EvolutionCommand {
 			Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             String info;
@@ -127,14 +118,10 @@ public class EvolutionCommand {
             return 0;
 		}))).then(Commands.literal("migration").then(Commands.literal("update").executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
-			Entity entity = arguments.getSource().getEntity();
+            Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
 			MigrationUpgradeManager.applyMigrationUpgrade(world);
@@ -147,8 +134,7 @@ public class EvolutionCommand {
 			Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             String info;
@@ -175,14 +161,10 @@ public class EvolutionCommand {
             return 0;
 		}))).then(Commands.literal("subsisting").then(Commands.literal("update").executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
-			Entity entity = arguments.getSource().getEntity();
+            Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
 			SubsistingUpgradeManager.applySubsistingUpgrade(world);
@@ -195,8 +177,7 @@ public class EvolutionCommand {
 			Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             String info;
@@ -229,8 +210,7 @@ public class EvolutionCommand {
 			Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             if (entity != null) {
@@ -284,8 +264,7 @@ public class EvolutionCommand {
 			Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             if (MapVariables.get(world).if_sublimation) {
@@ -321,8 +300,7 @@ public class EvolutionCommand {
 			Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             MapVariables.get(world).if_sublimation = false;
@@ -342,8 +320,7 @@ public class EvolutionCommand {
 			Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
-			Direction direction = Direction.DOWN;
-			if (entity != null)
+            if (entity != null)
                 entity.getDirection();
 
             if (MapVariables.get(world).if_sublimation) {

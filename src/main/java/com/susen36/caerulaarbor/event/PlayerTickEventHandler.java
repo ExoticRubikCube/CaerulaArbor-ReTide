@@ -28,9 +28,9 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.List;
 
@@ -38,16 +38,15 @@ import java.util.List;
 public class PlayerTickEventHandler {
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && event.player != null) {
-            handleArmorEnchantFunc(event.player);
-            handleBanRelicFunc(event.player);
-            handleEssenceResistanceWithIce(event.player);
-            handleHandSwipeFunc(event.player);
-            handleNetherseaWalkerExtraFunc(event.player);
-            handlePlayerEvolutionTick(event.player);
-            handlePlayerTickFunc(event.player);
-        }
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        handleArmorEnchantFunc(player);
+        handleBanRelicFunc(player);
+        handleEssenceResistanceWithIce(player);
+        handleHandSwipeFunc(player);
+        handleNetherseaWalkerExtraFunc(player);
+        handlePlayerEvolutionTick(player);
+        handlePlayerTickFunc(player);
     }
 
     private static void handleArmorEnchantFunc(Player entity) {
@@ -63,14 +62,14 @@ public class PlayerTickEventHandler {
                     + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.FLEXIBILITY), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.FLEXIBILITY), boot);
             if (lvl > 0) {
                 if (!entity.level().isClientSide())
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.FLEXIBILITY_BUFF.get(), 10, (int) Math.min(lvl - 1, 16), false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.FLEXIBILITY_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
             }
 
             lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), chest)
                     + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), boot);
             if (lvl > 0) {
                 if (!entity.level().isClientSide())
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.MAGIC_RESIS_BUFF.get(), 10, (int) Math.min(lvl - 1, 16), false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.MAGIC_RESIS_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
             }
 
             lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), chest)
@@ -91,7 +90,7 @@ public class PlayerTickEventHandler {
             double maxAmplif = Math.min(Math.max(Math.max(lvl0, lvl1), Math.max(lvl2, lvl3)), 2);
             if (entity.tickCount % gap == 64) {
                 if (!entity.level().isClientSide())
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 260, (int) (maxAmplif - 1), false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 260, (int) (maxAmplif - 1), false, false));
             }
         }
     }
@@ -140,7 +139,7 @@ public class PlayerTickEventHandler {
 
     private static void handleEssenceResistanceWithIce(Player entity) {
         if (entity == null) return;
-        if (entity.tickCount % 2 == 0 && entity.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get())) {
+        if (entity.tickCount % 2 == 0 && entity.hasEffect(CAMobEffects.ESSENCE_RESISTANCE)) {
             if (entity.getTicksFrozen() < 140) entity.setTicksFrozen(Math.max(entity.getTicksFrozen() - 1, 0));
             entity.setRemainingFireTicks(Math.max(entity.getRemainingFireTicks() - 1, 0));
         }
@@ -187,7 +186,7 @@ public class PlayerTickEventHandler {
         if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), boots) != 0) {
             double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), boots);
             if (!entity.level().isClientSide()) {
-                entity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 30, (int) lvl, false, false));
+                entity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 30, (int) lvl, false, false));
                 entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 10, 0, false, false));
             }
         }
@@ -226,58 +225,58 @@ public class PlayerTickEventHandler {
         if (addDef > 0) {
             if (!entity.level().isClientSide()) {
                 if (addDef == 1) {
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY.get(), 20, 0, false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY, 20, 0, false, false));
                 } else if (addDef == 2) {
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY.get(), 20, 2, false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY, 20, 2, false, false));
                 } else if (addDef == 3) {
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY.get(), 20, 5, false, false));
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_PERCLY_TINY.get(), 20, 2, false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY, 20, 5, false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_PERCLY_TINY, 20, 2, false, false));
                 } else if (addDef == 4) {
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY.get(), 20, 9, false, false));
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_PERCLY_TINY.get(), 20, 7, false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY, 20, 9, false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_PERCLY_TINY, 20, 7, false, false));
                 }
             }
         }
 
         addDef = NodeUtils.getNodeAddResis(entity);
         if (addDef > 0 && !entity.level().isClientSide()) {
-            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY.get(), 20, 0, false, false));
-            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY.get(), 20, 2, false, false));
-            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY.get(), 20, 5, false, false));
-            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY.get(), 20, 9, false, false));
+            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY, 20, 0, false, false));
+            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY, 20, 2, false, false));
+            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY, 20, 5, false, false));
+            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY, 20, 9, false, false));
         }
 
         addDef = NodeUtils.getNodeAddSpeed(entity);
         if (addDef > 0 && !entity.level().isClientSide()) {
-            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY.get(), 20, 0, false, false));
-            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY.get(), 20, 2, false, false));
-            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY.get(), 20, 5, false, false));
-            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY.get(), 20, 9, false, false));
+            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY, 20, 0, false, false));
+            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY, 20, 2, false, false));
+            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY, 20, 5, false, false));
+            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY, 20, 9, false, false));
         }
 
         addDef = NodeUtils.getNodeAddSanity(entity);
         if (addDef > 0 && !entity.level().isClientSide()) {
-            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER.get(), 20, 0, false, false));
-            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER.get(), 20, 2, false, false));
-            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER.get(), 20, 5, false, false));
-            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER.get(), 20, 9, false, false));
+            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER, 20, 0, false, false));
+            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER, 20, 2, false, false));
+            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER, 20, 5, false, false));
+            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER, 20, 9, false, false));
         }
 
         addDef = NodeUtils.getNodeAddMiss(entity);
         boolean lowerHealth = EntityUtils.getHealthPerc(entity) <= 0.5;
         if (addDef > 0 && !entity.level().isClientSide()) {
-            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE.get(), 20, 2, false, false));
-            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE.get(), 20, 7, false, false));
-            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE.get(), 20, lowerHealth ? 22 : 14, false, false));
-            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE.get(), 20, lowerHealth ? 41 : 23, false, false));
+            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE, 20, 2, false, false));
+            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE, 20, 7, false, false));
+            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE, 20, lowerHealth ? 22 : 14, false, false));
+            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE, 20, lowerHealth ? 41 : 23, false, false));
         }
 
         addDef = NodeUtils.getNodeEunectes(entity);
         if (addDef > 0 && !lowerHealth && !entity.level().isClientSide()) {
-            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY.get(), 20, 0, false, false));
-            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY.get(), 20, 2, false, false));
-            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY.get(), 20, 5, false, false));
-            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY.get(), 20, 9, false, false));
+            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY, 20, 0, false, false));
+            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY, 20, 2, false, false));
+            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY, 20, 5, false, false));
+            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY, 20, 9, false, false));
         }
     }
 
@@ -312,8 +311,8 @@ public class PlayerTickEventHandler {
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 3) {
             modifi = modifi * 0.33;
         }
-        if (entity.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-            entity.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(modifi);
+        if (entity.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
+            entity.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(modifi);
     }
 
     private static void handleKingSuit(Player entity) {
@@ -323,7 +322,7 @@ public class PlayerTickEventHandler {
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_SPEAR) {
             suitKing = suitKing + 1;
             if (!entity.level().isClientSide())
-                entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BOOST.get(), 20, 1, false, false));
+                entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BOOST, 20, 1, false, false));
         }
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_ARMOR) {
             suitKing = suitKing + 1;
@@ -340,7 +339,7 @@ public class PlayerTickEventHandler {
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CROWN) {
             suitKing = suitKing + 1;
             if (!entity.level().isClientSide()) {
-                entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BREATH.get(), 20, suitKing < 3 ? 0 : 2, false, false));
+                entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BREATH, 20, suitKing < 3 ? 0 : 2, false, false));
             }
             final double suitLevel = suitKing < 3 ? 1 : 2;
             entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
@@ -373,7 +372,7 @@ public class PlayerTickEventHandler {
                     if ((entity.hasEffect(MobEffects.DIG_SPEED) ? entity.getEffect(MobEffects.DIG_SPEED).getAmplifier() : 0) < 2) {
                         entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 2));
                     }
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.HANDS_SPEED.get(), 20, 2));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.HANDS_SPEED, 20, 2));
                 }
             }
         }
@@ -387,17 +386,17 @@ public class PlayerTickEventHandler {
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_FLAG) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide())
-                entity.addEffect(new MobEffectInstance(CAMobEffects.FLAG_SWINGS.get(), 20, 2, false, false));
+                entity.addEffect(new MobEffectInstance(CAMobEffects.FLAG_SWINGS, 20, 2, false, false));
         }
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_BED) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide())
-                entity.addEffect(new MobEffectInstance(CAMobEffects.KEEP_BEDDING.get(), 20, 0, false, false));
+                entity.addEffect(new MobEffectInstance(CAMobEffects.KEEP_BEDDING, 20, 0, false, false));
         }
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_ARTIFACT) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide()) {
-                entity.addEffect(new MobEffectInstance(CAMobEffects.SACREFICE.get(), 20, suitArchfi < 3 ? 0 : 2, false, false));
+                entity.addEffect(new MobEffectInstance(CAMobEffects.SACREFICE, 20, suitArchfi < 3 ? 0 : 2, false, false));
             }
             final double suitLevel = suitArchfi < 3 ? 1 : 2;
             entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
@@ -415,12 +414,12 @@ public class PlayerTickEventHandler {
     private static void handleEngraveAndSurvivor(Player entity) {
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE > 0) {
             if (!entity.level().isClientSide())
-                entity.addEffect(new MobEffectInstance(CAMobEffects.ENGRAVED_TRIUMPH.get(), 20,
+                entity.addEffect(new MobEffectInstance(CAMobEffects.ENGRAVED_TRIUMPH, 20,
                         (int) ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE - 1), false, false));
         }
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR > 0) {
             if (!entity.level().isClientSide())
-                entity.addEffect(new MobEffectInstance(CAMobEffects.SURVIVORS_GUIDE.get(), 20,
+                entity.addEffect(new MobEffectInstance(CAMobEffects.SURVIVORS_GUIDE, 20,
                         (int) ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR - 1), false, false));
         }
     }
@@ -457,8 +456,8 @@ public class PlayerTickEventHandler {
             enchant = enchant + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_DEFEND), entity.getItemBySlot(EquipmentSlot.HEAD));
         }
         if (enchant > 16) enchant = 16;
-        if (enchant > 0 && !entity.hasEffect(CAMobEffects.SANIDY_DEFENDER.get()) && !entity.level().isClientSide()) {
-            entity.addEffect(new MobEffectInstance(CAMobEffects.SANIDY_DEFENDER.get(), 20, (int) (enchant - 1), false, false));
+        if (enchant > 0 && !entity.hasEffect(CAMobEffects.SANIDY_DEFENDER) && !entity.level().isClientSide()) {
+            entity.addEffect(new MobEffectInstance(CAMobEffects.SANIDY_DEFENDER, 20, (int) (enchant - 1), false, false));
         }
     }
 
@@ -474,7 +473,7 @@ public class PlayerTickEventHandler {
     private static void handleRelicHemost(Player entity) {
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_HEMOST) {
             if (!entity.level().isClientSide())
-                entity.addEffect(new MobEffectInstance(CAMobEffects.HEMOSTATIC.get(), 20, 0, false, false));
+                entity.addEffect(new MobEffectInstance(CAMobEffects.HEMOSTATIC, 20, 0, false, false));
         }
     }
 
@@ -483,7 +482,7 @@ public class PlayerTickEventHandler {
             if (!(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() == ItemStack.EMPTY.getItem())) {
                 double amplifi = Math.min(Math.floor(entity.experienceLevel * 0.25), 64);
                 if (amplifi >= 1 && !entity.level().isClientSide()) {
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.UNRIPE_THOUGHTS.get(), 20, (int) amplifi, false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.UNRIPE_THOUGHTS, 20, (int) amplifi, false, false));
                 }
             }
         }

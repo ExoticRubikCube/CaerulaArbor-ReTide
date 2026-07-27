@@ -65,19 +65,19 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
         super(type, world);
         this.xpReward = 512;
         this.setNoAi(false);
-        this.setMaxUpStep(2F);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2F);
         this.setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SKILLP, this.getInitialSkillp());
-        this.entityData.define(DATA_DURATION, this.getInitialDuration());
-        this.entityData.define(DATA_SHELLED, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SKILLP, this.getInitialSkillp());
+        builder.define(DATA_DURATION, this.getInitialDuration());
+        builder.define(DATA_SHELLED, false);
     }
 
     protected abstract int getInitialSkillp();
@@ -97,11 +97,6 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     @Override
     protected PathNavigation createNavigation(Level world) {
         return new FlyingPathNavigation(this, world);
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEAD;
     }
 
     @Override
@@ -275,7 +270,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -327,7 +322,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
             this.tickSubclassBaseTick(world, x, y, z);
             if (this.tickCount % 20 == 0) {
                 this.removeEffect(MobEffects.WITHER);
-                this.removeEffect(CAMobEffects.DIZZY.get());
+                this.removeEffect(CAMobEffects.DIZZY);
 
                 Vec3 center = new Vec3(x, y, z);
                 List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(64 / 2D), entity -> true).stream().sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center)))
@@ -364,9 +359,9 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
                 if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
                     this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.5);
                 }
-                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
-                    this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(
-                            (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()) ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() : 0) * 1.5
+                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)) {
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE).setBaseValue(
+                            (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE) ? this.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue() : 0) * 1.5
                     );
                 }
                 this.entityData.set(DATA_SHELLED, true);
@@ -384,7 +379,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == this.getDeathDuration()) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             double x = this.getX();
             double y = this.getY();
@@ -416,7 +411,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     public void setHealth(float health) {
         float currentHealth = this.getHealth();
         float maxHealth = this.getMaxHealth();
-        if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && health < currentHealth) {
+        if (this.hasEffect(CAMobEffects.INVULNERABLE) && health < currentHealth) {
             return;
         }
         float reduction = currentHealth - health;

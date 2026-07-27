@@ -8,6 +8,7 @@ import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -21,10 +22,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
+
 
 public class RelicCursedGLOWBODYItem extends Item {
 	public RelicCursedGLOWBODYItem() {
@@ -37,13 +40,13 @@ public class RelicCursedGLOWBODYItem extends Item {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 60;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
         String hoverText = ItemUtils.getCursedDescription(itemstack);
         for (String line : hoverText.split("\n")) {
             list.add(Component.literal(line));
@@ -75,27 +78,34 @@ public class RelicCursedGLOWBODYItem extends Item {
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-        double x = entity.getX();
-        double y = entity.getY();
-        double z = entity.getZ();
-        if (!itemstack.getOrCreateTag().getBoolean("used")) {
-            if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_GLOWBODY) {
-                if ((LevelAccessor) world instanceof Level level) {
-                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);
-                }
-                if ((LevelAccessor) world instanceof ServerLevel level)
-                    level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
-                {
-                    boolean setval = true;
-                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_cursed_GLOWBODY = setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
-                if (((LevelAccessor) world).isClientSide())
-                    Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-                itemstack.getOrCreateTag().putBoolean("used", true);
-            }
-        }
-    }
+
+		boolean isUsed = itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
+				.copyTag()
+				.getBoolean("used");
+
+		if (!isUsed) {
+			entity.getCapability(ModCapabilities.PLAYER_VARIABLE).ifPresent(capability -> {
+				if (!capability.relic_cursed_GLOWBODY) {
+					double x = entity.getX();
+					double y = entity.getY();
+					double z = entity.getZ();
+
+					world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2.0F, 1.0F);
+
+					if (world instanceof ServerLevel serverLevel) {
+						serverLevel.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1.0, 1.0, 1.0, 1.0);
+					}
+
+					capability.relic_cursed_GLOWBODY = true;
+					capability.syncPlayerVariables(entity);
+
+					if (world.isClientSide()) {
+						Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
+					}
+
+					CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
+				}
+			});
+		}
+	}
 }

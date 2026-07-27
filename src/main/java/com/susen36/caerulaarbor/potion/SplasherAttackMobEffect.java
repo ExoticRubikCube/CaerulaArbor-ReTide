@@ -36,10 +36,7 @@ public class SplasherAttackMobEffect extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, -13421773);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
@@ -51,7 +48,7 @@ public class SplasherAttackMobEffect extends MobEffect {
         double rand;
         double dama;
         num = 0;
-        if ((Entity) entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
+        if ((Entity) entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.TRAIL_BUFF)) {
             dama = ((Entity) entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity1.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.5;
             for (Entity entityiterator : world.getEntities(entity, new AABB((x + 48), (y + 6), (z + 48), (x - 48), (y - 6), (z - 48)))) {
                 if ((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) < 5) {
@@ -64,7 +61,7 @@ public class SplasherAttackMobEffect extends MobEffect {
                     continue;
                 }
                 rand = Mth.nextDouble(RandomSource.create(), 7, 11);
-                if (entityiterator instanceof LivingEntity livEnt6 && livEnt6.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
+                if (entityiterator instanceof LivingEntity livEnt6 && livEnt6.hasEffect(CAMobEffects.TRAIL_BUFF)) {
                     if (world instanceof ServerLevel projectileLevel) {
                         Projectile entityToSpawn = new Object() {
                             public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {

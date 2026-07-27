@@ -3,14 +3,16 @@ package com.susen36.caerulaarbor.entity.base;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingBreatheEvent;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+@EventBusSubscriber
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -18,19 +20,16 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		super(entityType, level);
 	}
 
+	@SubscribeEvent
+	public static void onLivingBreathe(LivingBreatheEvent event) {
+		if (event.getEntity() instanceof SeaMonster) {
+			event.setCanBreathe(true);
+		}
+	}
+
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override

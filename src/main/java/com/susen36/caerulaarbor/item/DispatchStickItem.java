@@ -25,14 +25,15 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Comparator;
 import java.util.List;
 
+
 public class DispatchStickItem extends Item {
 	public DispatchStickItem() {
 		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.dispatch_stick.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.dispatch_stick.description_1"));
 	}
@@ -44,7 +45,7 @@ public class DispatchStickItem extends Item {
         for (Entity entityiterator : entfound) {
             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                 if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE.get(), 131072, 0, false, true));
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE, 131072, 0, false, true));
             }
         }
         return super.use(world, player, hand);

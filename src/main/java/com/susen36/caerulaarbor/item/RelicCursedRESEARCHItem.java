@@ -21,14 +21,15 @@ import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
+
 public class RelicCursedRESEARCHItem extends Item {
 	public RelicCursedRESEARCHItem() {
 		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		String hoverText = ItemUtils.getCursedDescription(itemstack);
         for (String line : hoverText.split("\n")) {
             list.add(Component.literal(line));

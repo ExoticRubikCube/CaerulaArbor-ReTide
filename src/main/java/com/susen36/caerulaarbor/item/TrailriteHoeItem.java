@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,37 +16,24 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;
 import java.util.function.Consumer;
 
+
 public class TrailriteHoeItem extends HoeItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_NETHERITE_TOOL,
+			7999,
+			19f,
+			0.5f,
+			22,
+			() -> Ingredient.of(new ItemStack(CAItems.TRAILRITE.get()))
+	);
+
 	public TrailriteHoeItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 7999;
-			}
-
-			public float getSpeed() {
-				return 19f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 0.5f;
-			}
-
-			public int getLevel() {
-				return 4;
-			}
-
-			public int getEnchantmentValue() {
-				return 22;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.TRAILRITE.get()));
-			}
-		}, 0, 0.5f, new Item.Properties().fireResistant());
+		super(TIER, new Item.Properties().fireResistant().attributes(HoeItem.createAttributes(TIER, 0, 0.5f)));
 	}
 
 	@Override
@@ -76,8 +64,8 @@ public class TrailriteHoeItem extends HoeItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.trailrite_hoe.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.trailrite_hoe.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.trailrite_hoe.description_2"));
@@ -89,7 +77,7 @@ public class TrailriteHoeItem extends HoeItem {
 		if (context.getPlayer() == null) {
 			return InteractionResult.PASS;
 		}
-		// TODO：评估是否为 ComplexChitinHoeItem 与 TrailriteHoeItem 制作共同基类，并将这段共享交互逻辑收口到那里。
+		// TODO锛氳瘎浼版槸鍚︿负 ComplexChitinHoeItem 涓?TrailriteHoeItem 鍒朵綔鍏卞悓鍩虹被锛屽苟灏嗚繖娈靛叡浜氦浜掗€昏緫鏀跺彛鍒伴偅閲屻€?
 		BlockState clickedState = context.getLevel().getBlockState(context.getClickedPos());
 		if (context.getPlayer().isShiftKeyDown() && clickedState.getBlock() == Blocks.FARMLAND) {
 			BlockState oceanFarmlandState = CABlocks.OCEAN_FARMLAND.get().withPropertiesOf(clickedState);

@@ -42,15 +42,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.List;
 import java.util.Objects;
+import net.minecraft.advancements.AdvancementHolder;
 
 @SuppressWarnings("unused")
 @EventBusSubscriber
@@ -88,7 +87,7 @@ public class LivingAttackEventHandler {
         var target = event.getEntity();
         if (damageSource.is(CADamageTypes.INV_KILLER)) return;
 
-        if (target.hasEffect(CAMobEffects.INVULNERABLE.get())) {
+        if (target.hasEffect(CAMobEffects.INVULNERABLE)) {
             event.setCanceled(true);
         }
     }
@@ -100,7 +99,7 @@ public class LivingAttackEventHandler {
         if (!(sourceEntity instanceof LivingEntity attacker)) return;
         if (event.isCanceled()) return;
 
-        var numbness = attacker.getAttribute(CAAttributes.NUMB.get());
+        var numbness = attacker.getAttribute(CAAttributes.NUMB);
         if (numbness != null && numbness.getBaseValue() > 0) {
             numbness.setBaseValue(numbness.getBaseValue() - 1);
             if (level instanceof ServerLevel serverLevel)
@@ -118,9 +117,9 @@ public class LivingAttackEventHandler {
         var damageSource = event.getSource();
         if (event.isCanceled()) return;
 
-        var missRate = target.getAttribute(CAAttributes.MISSRATE.get());
+        var missRate = target.getAttribute(CAAttributes.MISSRATE);
         if (missRate == null || missRate.getValue() <= 0 || damageSource.is(CADamageTags.BYPASS_MISS)
-                || target.hasEffect(CAMobEffects.MUTE.get()))
+                || target.hasEffect(CAMobEffects.MUTE))
             return;
 
         var sourceEntity = damageSource.getEntity();
@@ -146,7 +145,7 @@ public class LivingAttackEventHandler {
         var damageSource = event.getSource();
         var target = event.getEntity();
         var sourceEntity = damageSource.getEntity();
-        if (sourceEntity == null || !target.hasEffect(CAMobEffects.MARTUS_PROTECTION.get())) return;
+        if (sourceEntity == null || !target.hasEffect(CAMobEffects.MARTUS_PROTECTION)) return;
 
         if (damageSource.is(DamageTypeTags.IS_PROJECTILE) && sourceEntity.distanceTo(target) > 2
                 && event.getAmount() <= target.getMaxHealth() * 2) {
@@ -212,11 +211,11 @@ public class LivingAttackEventHandler {
         if (damagesource == null || entity == null || sourceEntity == null) return;
 
         if (entity instanceof HighmoreEntity livEnt1) {
-            if (livEnt1.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) return;
+            if (livEnt1.hasEffect(CAMobEffects.COOLDOWN_SINAL)) return;
 
             if (!(damagesource.is(CADamageTypes.HAND_SPIKE) || damagesource.is(DamageTypes.THORNS) || sourceEntity instanceof HighmoreEntity)) {
                 if (!livEnt1.level().isClientSide())
-                    livEnt1.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
+                    livEnt1.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 100, 0, false, false));
 
                 double range;
                 if ((entity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 0) {
@@ -343,7 +342,7 @@ public class LivingAttackEventHandler {
         if (!target.getType().is(OCEAN_OFFSPRING)) return;
 
         if (sourceEntity instanceof ServerPlayer player) {
-            var advancement = player.server.getAdvancements().getAdvancement(
+            var advancement = player.server.getAdvancements().get(
                     ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "encounter_from_the_ocean"));
             if (advancement != null) {
                 var progress = player.getAdvancements().getOrStartProgress(advancement);
@@ -361,7 +360,7 @@ public class LivingAttackEventHandler {
             SilenceUpgradeManager.applySilenceUpgrade(world, subsistingPoints);
         }
 
-        var evolved = target.getAttribute(CAAttributes.EVOLVED.get());
+        var evolved = target.getAttribute(CAAttributes.EVOLVED);
         if (evolved != null) {
             evolved.setBaseValue(1);
         }
@@ -406,7 +405,7 @@ public class LivingAttackEventHandler {
         var mainHandItem = sourceEntity instanceof LivingEntity livingSource ? livingSource.getMainHandItem() : ItemStack.EMPTY;
         var muteAttackLevel = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(sourceEntity.level().registryAccess(), CAEnchantments.MUTE_ATTACK), mainHandItem);
         if (muteAttackLevel > 0 && world.random.nextFloat() < 0.2F * muteAttackLevel && !world.isClientSide()) {
-            target.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 30 * muteAttackLevel, 0, false, false));
+            target.addEffect(new MobEffectInstance(CAMobEffects.MUTE, 30 * muteAttackLevel, 0, false, false));
         }
 
         if (event.isCanceled()) return;
@@ -445,7 +444,7 @@ public class LivingAttackEventHandler {
         playerVariables.syncPlayerVariables(player);
         var healthPercent = EntityUtils.getHealthPerc(player);
         if (!world.isClientSide()) {
-            player.addEffect(new MobEffectInstance(CAMobEffects.TIDE_OF_CHITIN.get(), 500, 0, false, false));
+            player.addEffect(new MobEffectInstance(CAMobEffects.TIDE_OF_CHITIN, 500, 0, false, false));
         }
         if (healthPercent > 0) {
             player.setHealth((float) (player.getMaxHealth() * healthPercent));

@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,8 +34,8 @@ public class TideBishopCoreEmptyBlock extends Block {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -60,7 +60,7 @@ public class TideBishopCoreEmptyBlock extends Block {
                         level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.BLOCKS, 2.0f, 1.0f, false);
                     }
                 }
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
             if (entity instanceof Player && !(player2 = entity).level().isClientSide()) {
                 player2.displayClientMessage(Component.literal(Component.translatable("block.caerula_arbor.tidebishop_core_empty.warn").getString()), true);
@@ -68,6 +68,6 @@ public class TideBishopCoreEmptyBlock extends Block {
         } else if (entity instanceof Player && !(player = entity).level().isClientSide()) {
             player.displayClientMessage(Component.literal(Component.translatable("block.caerula_arbor.tidebishop_core_empty.note").getString()), true);
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 	}
 }

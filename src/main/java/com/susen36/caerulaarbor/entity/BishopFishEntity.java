@@ -52,11 +52,8 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
 
@@ -83,32 +80,28 @@ public class BishopFishEntity extends SeaMonster {
         super(type, world);
         xpReward = 64;
         setNoAi(false);
-        setMaxUpStep(2f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SKLP, 200);
-        this.entityData.define(DATA_ENDP, 1200);
-        this.entityData.define(DATA_LOCX, 0);
-        this.entityData.define(DATA_LOCY, 0);
-        this.entityData.define(DATA_LOCZ, 0);
-        this.entityData.define(DATA_SUMMONP, 280);
-        this.entityData.define(DATA_DURATION, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SKLP, 200);
+        builder.define(DATA_ENDP, 1200);
+        builder.define(DATA_LOCX, 0);
+        builder.define(DATA_LOCY, 0);
+        builder.define(DATA_LOCZ, 0);
+        builder.define(DATA_SUMMONP, 280);
+        builder.define(DATA_DURATION, 0);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 144;
-            }
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  0, false) {
 
             @Override
             public boolean canUse() {
@@ -237,18 +230,18 @@ public class BishopFishEntity extends SeaMonster {
                             SIHelper.causeSanityInjury(target,
                                     this,
                                     (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())
-                                            ? this.getAttribute(CAAttributes.SANITY_RATE.get()).getValue()
+                                            * (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE)
+                                            ? this.getAttribute(CAAttributes.SANITY_RATE).getValue()
                                             : 0)
                                             * 1.5,
                                     SanityEvent.Hurt.Type.ENTITY);
                         }
                         if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 60, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 60, 0, false, false));
                     }
                 }
-                if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
-                    if ((this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get()) ? this.getEffect(CAMobEffects.ANGER_OF_BISHOP.get()).getAmplifier() : 0) >= 1) {
+                if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP)) {
+                    if ((this.hasEffect(CAMobEffects.ANGER_OF_BISHOP) ? this.getEffect(CAMobEffects.ANGER_OF_BISHOP).getAmplifier() : 0) >= 1) {
                         if ((Entity) this instanceof BishopFishEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_SKLP, 100);
                     } else {
@@ -290,7 +283,7 @@ public class BishopFishEntity extends SeaMonster {
                             level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), SoundEvents.GUARDIAN_FLOP, SoundSource.HOSTILE, 1, 1);
                         }
                     }
-                    if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
+                    if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP)) {
                         if ((Entity) this instanceof BishopFishEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_SUMMONP, 360);
                     } else {
@@ -312,8 +305,8 @@ public class BishopFishEntity extends SeaMonster {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -325,7 +318,7 @@ public class BishopFishEntity extends SeaMonster {
             datEntSetI.getEntityData().set(DATA_LOCZ, (int) Math.round(z));
         setNoGravity(true);
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 1, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 80, 1, false, false));
         if ((LevelAccessor) world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_EMERGE, SoundSource.HOSTILE, 3, 1);
         }
@@ -383,12 +376,12 @@ public class BishopFishEntity extends SeaMonster {
         double smm;
         double d;
         if (this.getHealth() <= this.getMaxHealth() * 0.67) {
-            if (!this.level().isClientSide() && !this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
+            if (!this.level().isClientSide() && !this.hasEffect(CAMobEffects.ANGER_OF_BISHOP)) {
                 ;
                 if (this.getHealth() <= this.getMaxHealth() * 0.33) {
-                    this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_BISHOP.get(), 20, 1));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_BISHOP, 20, 1));
                 } else {
-                    this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_BISHOP.get(), 20, 0));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_BISHOP, 20, 0));
                 }
             }
         }
@@ -419,7 +412,7 @@ public class BishopFishEntity extends SeaMonster {
                     level.playSound(null, BlockPos.containing(x, y, z), CASounds.BISHOPFISH_BLAST.get(), SoundSource.HOSTILE, 4, 1);
                 }
                 if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 0));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 40, 0));
                 if ((Entity) this instanceof BishopFishEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_ENDP, 2400);
                 new Object() {
@@ -513,7 +506,7 @@ public class BishopFishEntity extends SeaMonster {
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -544,13 +537,13 @@ public class BishopFishEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
         builder = builder.add(Attributes.FOLLOW_RANGE, 64);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 24);
-        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
+        builder = builder.add(CAAttributes.SANITY_RATE, 10);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 24);
+        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.isDeadOrDying()) {
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.bishop.die"));
         }
@@ -560,7 +553,7 @@ public class BishopFishEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         double d1 = this.getX() - this.xOld;
         double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
@@ -579,7 +572,7 @@ public class BishopFishEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -601,7 +594,7 @@ public class BishopFishEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 40) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (!world.isClientSide() && world.getServer() != null) {

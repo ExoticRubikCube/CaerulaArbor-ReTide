@@ -4,8 +4,8 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderDragonEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
-import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 
 public class OceanizedEnderDragonModel extends GeoModel<OceanizedEnderDragonEntity> {
@@ -54,7 +54,7 @@ public class OceanizedEnderDragonModel extends GeoModel<OceanizedEnderDragonEnti
 		// ===== 颈部 5 段 FK：yRot = 蛇形偏航延迟 =====
 		float prevYRot = 0.0F;
 		for (int i = 0; i < 5; i++) {
-			CoreGeoBone bone = this.getAnimationProcessor().getBone("neck" + (i + 1));
+			GeoBone bone = this.getAnimationProcessor().getBone("neck" + (i + 1));
 			if (bone == null) continue;
 
 			double segmentYRot = entity.getLatencyYRot(5 - i, partialTick);
@@ -64,7 +64,7 @@ public class OceanizedEnderDragonModel extends GeoModel<OceanizedEnderDragonEnti
 		}
 
 		// ===== 头部：yRot = 蛇形偏航延迟继承颈部（xRot/zRot 由 json 动画驱动） =====
-		CoreGeoBone head = this.getAnimationProcessor().getBone("head");
+		GeoBone head = this.getAnimationProcessor().getBone("head");
 		if (head != null) {
 			double headYRot = entity.getLatencyYRot(0, partialTick);
 			float absYRot = Mth.wrapDegrees((float) (headYRot - baseYRot)) * ((float) Math.PI / 180F);
@@ -76,7 +76,7 @@ public class OceanizedEnderDragonModel extends GeoModel<OceanizedEnderDragonEnti
 		prevYRot = 0.0F;
 
 		for (int j = 0; j < 12; j++) {
-			CoreGeoBone bone = this.getAnimationProcessor().getBone("tail" + (j + 1));
+			GeoBone bone = this.getAnimationProcessor().getBone("tail" + (j + 1));
 			if (bone == null) continue;
 
 			double segmentYRot = entity.getLatencyYRot(12 + j, partialTick);

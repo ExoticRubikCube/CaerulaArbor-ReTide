@@ -6,7 +6,7 @@ import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CASounds;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -23,7 +23,7 @@ public class SublimationUpgradeManger {
 
     public static void applySublimationUpgrade(LevelAccessor world, double point) {
         AdvancementProgress _ap;
-        Advancement _adv;
+        AdvancementHolder _adv;
         ServerPlayer _player;
         double stra = 0.0;
         String prefix = "";
@@ -34,7 +34,7 @@ public class SublimationUpgradeManger {
             for (Entity entityiterator : new ArrayList<>(world.players())) {
                 if (!(entityiterator instanceof ServerPlayer serverPlayer)) continue;
                 _player = serverPlayer;
-                _adv = _player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fifth_touch"));
+                _adv = _player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fifth_touch"));
                 if (_adv == null) {
                     CaerulaArborMod.LOGGER.error("Missing advancement: {}:fifth_touch", CaerulaArborMod.MODID);
                     continue;
@@ -93,7 +93,7 @@ public class SublimationUpgradeManger {
                 for (Entity entityiterator : new ArrayList<>(world.players())) {
                     if (!(entityiterator instanceof ServerPlayer)) continue;
                     _player = (ServerPlayer) entityiterator;
-                    _adv = _player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "absurd_of_evolution"));
+                    _adv = _player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "absurd_of_evolution"));
                     if (_adv == null) {
                         CaerulaArborMod.LOGGER.error("Missing advancement: {}:absurd_of_evolution", CaerulaArborMod.MODID);
                         continue;

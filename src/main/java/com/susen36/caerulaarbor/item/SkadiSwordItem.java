@@ -7,6 +7,7 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -22,37 +23,24 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.Comparator;
 import java.util.List;
 
+
 public class SkadiSwordItem extends SwordItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_NETHERITE_TOOL,
+			0,
+			16f,
+			20f,
+			12,
+			() -> Ingredient.of()
+	);
+
 	public SkadiSwordItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 0;
-			}
-
-			public float getSpeed() {
-				return 16f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 20f;
-			}
-
-			public int getLevel() {
-				return 4;
-			}
-
-			public int getEnchantmentValue() {
-				return 12;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of();
-			}
-		}, 3, -2.8f, new Item.Properties().fireResistant());
+		super(TIER, new Item.Properties().fireResistant().attributes(SwordItem.createAttributes(TIER, 3, -2.8f)));
 	}
 
 	@Override
@@ -102,8 +90,8 @@ public class SkadiSwordItem extends SwordItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.skadi_sword.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.skadi_sword.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.skadi_sword.description_2"));
@@ -113,11 +101,11 @@ public class SkadiSwordItem extends SwordItem {
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
-            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.BOOST_OF_SILENCE.get()))) {
+            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.BOOST_OF_SILENCE))) {
                 if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), 10, 6, false, false));
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE, 10, 6, false, false));
                 if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 10, 2, false, false));
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 10, 2, false, false));
             }
         }
 	}

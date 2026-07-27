@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 public class OceanglassCupItem extends Item {
 	public OceanglassCupItem() {
@@ -34,7 +34,7 @@ public class OceanglassCupItem extends Item {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         BlockState target;
-        target = (((LevelAccessor) world).getFluidState(BlockPos.containing(x + entity.getLookAngle().x, y + entity.getLookAngle().y + 1.6, z + entity.getLookAngle().z)).createLegacyBlock());
+        target = (world.getFluidState(BlockPos.containing(x + entity.getLookAngle().x, y + entity.getLookAngle().y + 1.6, z + entity.getLookAngle().z)).createLegacyBlock());
         if (Blocks.WATER == target.getBlock()) {
             if ((Entity) entity instanceof Player player) {
                 ItemStack setstack = new ItemStack(CAItems.A_CUP_OF_WATER.get()).copy();

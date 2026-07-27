@@ -42,14 +42,13 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
@@ -73,7 +72,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(0.6f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
@@ -108,18 +107,13 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_TARGET, "");
-        this.entityData.define(DATA_OWNER, "");
-        this.entityData.define(DATA_TYPE, 0);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_TARGET, "");
+        builder.define(DATA_OWNER, "");
+        builder.define(DATA_TYPE, 0);
     }
 
     @Override
@@ -142,16 +136,16 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         return false;
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString("Target", this.entityData.get(DATA_TARGET));
         compound.putString("Owner", this.entityData.get(DATA_OWNER));
         compound.putInt("Type", this.entityData.get(DATA_TYPE));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Target")) {
             this.entityData.set(DATA_TARGET, compound.getString("Target"));
@@ -162,7 +156,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         if (compound.contains("Type")) {
             this.entityData.set(DATA_TYPE, compound.getInt("Type"));
         }
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -229,11 +223,6 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -262,7 +251,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.moist_dragon_breath.idle"));
         }
@@ -271,7 +260,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -293,7 +282,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         ++this.deathTime;
         if (this.deathTime == 5) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

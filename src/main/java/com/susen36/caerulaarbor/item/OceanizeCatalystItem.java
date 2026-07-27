@@ -10,6 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,7 +19,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +46,7 @@ public class OceanizeCatalystItem extends Item {
 			return InteractionResult.PASS;
 		}
 
-		if (target.getType().is(CANNOT_TRANSFORM) || target.getMobType() == MobType.UNDEAD || target.isBaby()) {
+		if (target.getType().is(CANNOT_TRANSFORM) || target.getType().is(EntityTypeTags.UNDEAD) || target.isBaby()) {
 			return InteractionResult.PASS;
 		}
 

@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlockEntities;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -121,8 +122,8 @@ public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWater
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public InteractionResult useWithoutItem(BlockState blockstate, Level world, BlockPos pos, Player entity, BlockHitResult hit) {
+		super.useWithoutItem(blockstate, world, pos, entity, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -132,21 +133,23 @@ public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWater
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
-                    && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
-                if ((LevelAccessor) world instanceof Level level) {
-                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_DEATH, SoundSource.BLOCKS, 1, 1);
-                }
-                {
-                    int value = 1;
-                    BlockPos blockPos = BlockPos.containing(x, y, z);
-                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
-                }
-                result = InteractionResult.SUCCESS;
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_DEATH, SoundSource.BLOCKS, 1, 1);
             }
+            {
+                int value = 1;
+                BlockPos blockPos = BlockPos.containing(x, y, z);
+                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                    ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+            }
+            result = InteractionResult.SUCCESS;
         }
         return result;
+	}
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return MapCodec.unit(this);
 	}
 }

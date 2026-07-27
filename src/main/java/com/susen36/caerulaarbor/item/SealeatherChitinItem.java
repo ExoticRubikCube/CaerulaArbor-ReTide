@@ -1,16 +1,12 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.client.model.entity.ModelSealeatherChitinArmor;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -24,15 +20,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
+
 
 public abstract class SealeatherChitinItem extends ArmorItem {
 	public SealeatherChitinItem(ArmorItem.Type type, Item.Properties properties) {
@@ -80,8 +71,8 @@ public abstract class SealeatherChitinItem extends ArmorItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.sealeather_chitin.desc"));
 	}
 
@@ -89,24 +80,6 @@ public abstract class SealeatherChitinItem extends ArmorItem {
 	public static class Helmet extends SealeatherChitinItem {
 		public Helmet() {
 			super(ArmorItem.Type.HELMET, new Item.Properties());
-		}
-
-		@Override
-		public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-			consumer.accept(new IClientItemExtensions() {
-				@Override
-				public HumanoidModel getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel defaultModel) {
-					HumanoidModel armorModel = new HumanoidModel(new ModelPart(Collections.emptyList(),
-							Map.of("head", new ModelSealeatherChitinArmor(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSealeatherChitinArmor.LAYER_LOCATION)).helmet, "hat",
-									new ModelPart(Collections.emptyList(), Collections.emptyMap()), "body", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "right_arm", new ModelPart(Collections.emptyList(), Collections.emptyMap()),
-									"left_arm", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "right_leg", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "left_leg",
-									new ModelPart(Collections.emptyList(), Collections.emptyMap()))));
-					armorModel.crouching = living.isShiftKeyDown();
-					armorModel.riding = defaultModel.riding;
-					armorModel.young = living.isBaby();
-					return armorModel;
-				}
-			});
 		}
 
 		@Override
@@ -124,7 +97,7 @@ public abstract class SealeatherChitinItem extends ArmorItem {
             map = HashMultimap.create(map);
             map.put(CAAttributes.MISSRATE.get(),
                     new AttributeModifier(uuid, name , 4f, AttributeModifier.Operation.ADDITION));
-            map.put(CAAttributes.SANITY_RESISTANCE.get(),
+            map.put(CAAttributes.SANITY_RESISTANCE,
                     new AttributeModifier(uuid, name , 8f, AttributeModifier.Operation.ADDITION));
         }
         return map;
@@ -136,39 +109,19 @@ public abstract class SealeatherChitinItem extends ArmorItem {
 		}
 
 		@Override
-		public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-			super.appendHoverText(itemstack, level, list, flag);
+		public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+			super.appendHoverText(itemstack, context, list, flag);
 			list.add(Component.translatable("item.caerula_arbor.sealeather_chitin_chestplate.descr"));
-		}
-
-		@Override
-		public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-			consumer.accept(new IClientItemExtensions() {
-				@Override
-				@OnlyIn(Dist.CLIENT)
-				public HumanoidModel getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel defaultModel) {
-					HumanoidModel armorModel = new HumanoidModel(new ModelPart(Collections.emptyList(),
-							Map.of("body", new ModelSealeatherChitinArmor(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSealeatherChitinArmor.LAYER_LOCATION)).chestplt, "left_arm",
-								new ModelSealeatherChitinArmor(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSealeatherChitinArmor.LAYER_LOCATION)).chesarmL, "right_arm",
-								new ModelSealeatherChitinArmor(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSealeatherChitinArmor.LAYER_LOCATION)).chestarmR, "head", new ModelPart(Collections.emptyList(), Collections.emptyMap()),
-									"hat", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "right_leg", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "left_leg",
-									new ModelPart(Collections.emptyList(), Collections.emptyMap()))));
-					armorModel.crouching = living.isShiftKeyDown();
-					armorModel.riding = defaultModel.riding;
-					armorModel.young = living.isBaby();
-					return armorModel;
-				}
-			});
 		}
 
 		@Override
     	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
         	super.inventoryTick(itemstack, world, entity, slot, selected);
         	if (entity instanceof Player player && Iterables.contains(player.getArmorSlots(), itemstack)) {
-        		if (player.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get())) return;
+        		if (player.hasEffect(CAMobEffects.ESSENCE_RESISTANCE)) return;
             	if (player.tickCount % 550 == 64){
                 	player.addEffect(
-                		new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(),
+                		new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE,
                 		400, 0, false, false)
                 		);
             	}
@@ -187,25 +140,6 @@ public abstract class SealeatherChitinItem extends ArmorItem {
 		}
 
 		@Override
-		public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-			consumer.accept(new IClientItemExtensions() {
-				@Override
-				@OnlyIn(Dist.CLIENT)
-				public HumanoidModel getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel defaultModel) {
-					HumanoidModel armorModel = new HumanoidModel(new ModelPart(Collections.emptyList(),
-							Map.of("left_leg", new ModelSealeatherChitinArmor(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSealeatherChitinArmor.LAYER_LOCATION)).legL, "right_leg",
-								new ModelSealeatherChitinArmor(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSealeatherChitinArmor.LAYER_LOCATION)).legR, "head", new ModelPart(Collections.emptyList(), Collections.emptyMap()),
-									"hat", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "body", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "right_arm",
-									new ModelPart(Collections.emptyList(), Collections.emptyMap()), "left_arm", new ModelPart(Collections.emptyList(), Collections.emptyMap()))));
-					armorModel.crouching = living.isShiftKeyDown();
-					armorModel.riding = defaultModel.riding;
-					armorModel.young = living.isBaby();
-					return armorModel;
-				}
-			});
-		}
-
-		@Override
 		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
 			return "caerula_arbor:textures/entities/chitin_pholem.png";
 		}
@@ -214,25 +148,6 @@ public abstract class SealeatherChitinItem extends ArmorItem {
 	public static class Boots extends SealeatherChitinItem {
 		public Boots() {
 			super(ArmorItem.Type.BOOTS, new Item.Properties());
-		}
-
-		@Override
-		public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-			consumer.accept(new IClientItemExtensions() {
-				@Override
-				@OnlyIn(Dist.CLIENT)
-				public HumanoidModel getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel defaultModel) {
-					HumanoidModel armorModel = new HumanoidModel(new ModelPart(Collections.emptyList(),
-							Map.of("left_leg", new ModelSealeatherChitinArmor(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSealeatherChitinArmor.LAYER_LOCATION)).bootL, "right_leg",
-								new ModelSealeatherChitinArmor(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSealeatherChitinArmor.LAYER_LOCATION)).bootR, "head", new ModelPart(Collections.emptyList(), Collections.emptyMap()),
-									"hat", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "body", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "right_arm",
-									new ModelPart(Collections.emptyList(), Collections.emptyMap()), "left_arm", new ModelPart(Collections.emptyList(), Collections.emptyMap()))));
-					armorModel.crouching = living.isShiftKeyDown();
-					armorModel.riding = defaultModel.riding;
-					armorModel.young = living.isBaby();
-					return armorModel;
-				}
-			});
 		}
 
 		@Override

@@ -14,7 +14,7 @@ import net.minecraft.world.level.material.FluidState;
 
 public class TrailStairBlock extends StairBlock {
 	public TrailStairBlock() {
-		super(Blocks.AIR::defaultBlockState, BlockBehaviour.Properties.of().sound(SoundType.SCULK_CATALYST).strength(5f, 12f).requiresCorrectToolForDrops().friction(0.7f).speedFactor(0.9f).dynamicShape());
+		super(Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().sound(SoundType.SCULK_CATALYST).strength(5f, 12f).requiresCorrectToolForDrops().friction(0.7f).speedFactor(0.9f).dynamicShape());
 	}
 
 	@Override

@@ -25,8 +25,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Comparator;
@@ -60,11 +60,11 @@ public class LivingTickEventHandler {
 
         Entity other = null;
 
-        if (enemy instanceof TideDeathrepellerEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+        if (enemy instanceof TideDeathrepellerEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.FAKE_DEATH)) {
             other = world.getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
-        } else if (enemy instanceof TideBishopEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+        } else if (enemy instanceof TideBishopEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.FAKE_DEATH)) {
             other = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
-        } else if (enemy instanceof MartusEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.INVULNERABLE.get())) {
+        } else if (enemy instanceof MartusEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.INVULNERABLE)) {
             Entity tgt_ent = null;
             Entity tgt_blessed = null;
             double max_h = -1.0D;
@@ -85,7 +85,7 @@ public class LivingTickEventHandler {
             }
             other = tgt_blessed != null ? tgt_blessed : tgt_ent;
         } else {
-            if (enemy instanceof EndspeakerEntity endspeaker && endspeaker.getPhase() < 3 && endspeaker.hasEffect(CAMobEffects.INVULNERABLE.get())) {
+            if (enemy instanceof EndspeakerEntity endspeaker && endspeaker.getPhase() < 3 && endspeaker.hasEffect(CAMobEffects.INVULNERABLE)) {
                 other = world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)),
                         e -> e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
                 ).stream().min(Comparator.comparingDouble(e -> e.distanceToSqr(enemy))).orElse(null);
@@ -147,9 +147,9 @@ public class LivingTickEventHandler {
         if (entity instanceof Monster && entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
                 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))
                 && world.getLevelData().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)) {
-            if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.ANGER_OF_TIDE.get()))) {
+            if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.ANGER_OF_TIDE))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE.get(), 20, 0, false, false));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE, 20, 0, false, false));
             }
         }
     }
@@ -198,7 +198,7 @@ public class LivingTickEventHandler {
             }
         }
 
-        if (entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get())) return;
+        if (entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.POWER_OF_ANCHOR)) return;
 
         if (MapVariables.get(world).strategy_silence > 0) {
             handleSilenceBuffs(world, x, y, z, entity);
@@ -209,12 +209,12 @@ public class LivingTickEventHandler {
 
     private static void handleSilenceBuffs(LevelAccessor world, double x, double y, double z, Entity entity) {
         if (MapVariables.get(world).strategy_silence >= 3) {
-            if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.BOOST_OF_SILENCE.get()))) {
+            if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.BOOST_OF_SILENCE))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), -1, (int) (MapVariables.get(world).strategy_silence - 1)));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE, -1, (int) (MapVariables.get(world).strategy_silence - 1)));
             }
 
-            if (!(entity instanceof LivingEntity livEnt6 && livEnt6.hasEffect(CAMobEffects.STRENGTH_OF_CROWD.get()))) {
+            if (!(entity instanceof LivingEntity livEnt6 && livEnt6.hasEffect(CAMobEffects.STRENGTH_OF_CROWD))) {
                 double amplifi = -1;
                 double range = MapVariables.get(world).strategy_silence >= 4 ? 64 : 32;
                 double maxAmp = MapVariables.get(world).strategy_silence >= 4 ? 29 : 9;
@@ -233,21 +233,21 @@ public class LivingTickEventHandler {
 
                 if (amplifi >= 0) {
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.STRENGTH_OF_CROWD.get(), -1, (int) amplifi, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.STRENGTH_OF_CROWD, -1, (int) amplifi, false, false));
                 }
             }
         } else {
             if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-                if (!(entity instanceof LivingEntity _livEnt16 && _livEnt16.hasEffect(CAMobEffects.BOOST_OF_SILENCE.get()))) {
+                if (!(entity instanceof LivingEntity _livEnt16 && _livEnt16.hasEffect(CAMobEffects.BOOST_OF_SILENCE))) {
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), -1, (int) (MapVariables.get(world).strategy_silence - 1)));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE, -1, (int) (MapVariables.get(world).strategy_silence - 1)));
                 }
             } else {
                 if (entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(CAMobEffects.BOOST_OF_SILENCE.get());
+                    _entity.removeEffect(CAMobEffects.BOOST_OF_SILENCE);
             }
             if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CAMobEffects.STRENGTH_OF_CROWD.get());
+                _entity.removeEffect(CAMobEffects.STRENGTH_OF_CROWD);
         }
 
         if (!(entity instanceof LivingEntity _livEnt20 && _livEnt20.hasEffect(MobEffects.REGENERATION)) && !(entity instanceof MartusEntity)) {
@@ -295,15 +295,15 @@ public class LivingTickEventHandler {
                     if (!isTiny) {
                         if (finalMigra == 3.0) {
                             if (isElite) {
-                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 100, 0, false, false));
+                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 100, 0, false, false));
                             } else {
-                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 60, 0, false, false));
+                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 60, 0, false, false));
                             }
                         } else if (finalMigra == 4.0) {
                             if (isElite) {
-                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 200, 0, false, false));
+                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 200, 0, false, false));
                             } else {
-                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 100, 0, false, false));
+                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 100, 0, false, false));
                             }
                         }
                     }

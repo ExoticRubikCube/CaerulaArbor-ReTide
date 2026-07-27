@@ -35,13 +35,13 @@ public enum CAMissNumbProvider implements IEntityComponentProvider {
     }
 
     private double getMiss(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CAAttributes.MISSRATE.get());
+        AttributeInstance instance = living.getAttribute(CAAttributes.MISSRATE);
         if (instance != null) return instance.getValue();
         return 0;
     }
 
     private double getNumb(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CAAttributes.NUMB.get());
+        AttributeInstance instance = living.getAttribute(CAAttributes.NUMB);
         if (instance != null) return instance.getBaseValue();
         return 0;
     }

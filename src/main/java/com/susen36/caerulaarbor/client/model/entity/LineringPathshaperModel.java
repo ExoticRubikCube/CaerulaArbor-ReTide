@@ -22,4 +22,3 @@ public class LineringPathshaperModel extends GeoModel<LineringPathshaperEntity> 
 	}
 
 }
-

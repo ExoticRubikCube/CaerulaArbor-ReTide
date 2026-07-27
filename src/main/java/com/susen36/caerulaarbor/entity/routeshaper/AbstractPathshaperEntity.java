@@ -25,6 +25,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -42,11 +43,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -66,17 +64,17 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	protected AbstractPathshaperEntity(EntityType<? extends AbstractPathshaperEntity> entityType, Level level) {
 		super(entityType, level);
 		setNoAi(false);
-		setMaxUpStep(1.5f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
 		setPersistenceRequired();
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_ATTACK_SKILLP, 0);
-		this.entityData.define(DATA_HURT_SKILLP, 0);
-		this.entityData.define(DATA_PHASE, 0);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_ATTACK_SKILLP, 0);
+		builder.define(DATA_HURT_SKILLP, 0);
+		builder.define(DATA_PHASE, 0);
 	}
 
 	protected abstract int getHurtSummonThreshold();
@@ -112,8 +110,8 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 		if (MapVariables.get(this.level()).strategy_subsisting >= 4 && this.getPhase() == 0) {
 			this.setPhase(1);
 			if (!this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
-				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 200, 1, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1, false, false));
 			}
 			return;
 		}
@@ -146,7 +144,7 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 		}
 	}
 
-	protected PlayState procedurePredicate(AnimationState<?> event) {
+	protected PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -164,9 +162,9 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	/**
-	 * 澶勭悊濉戣矾鑰呮湰浣撶郴瀹炰綋鐨勭Щ鍔ㄣ€佸緟鏈轰笌姝讳骸鍔ㄧ敾銆?	 *
-	 * @param event GeckoLib 鍔ㄧ敾鐘舵€?	 * @return 瀵瑰簲鎺у埗鍣ㄧ殑鎾斁鐘舵€?	 */
-	protected PlayState movementPredicate(AnimationState<?> event) {
+	 * 婢跺嫮鎮婃繅鎴ｇ熅閼板懏婀版担鎾堕兇鐎圭偘缍嬮惃鍕╅崝銊ｂ偓浣哥窡閺堣桨绗屽璁抽閸斻劎鏁鹃妴?	 *
+	 * @param event GeckoLib 閸斻劎鏁鹃悩鑸碘偓?	 * @return 鐎电懓绨查幒褍鍩楅崳銊ф畱閹绢厽鏂侀悩鑸碘偓?	 */
+	protected PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isVehicle() && !this.isAggressive() && !this.isSprinting()) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.routeshaper.move"));
@@ -189,9 +187,9 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	/**
-	 * 澶勭悊濉戣矾鑰呮湰浣撶郴瀹炰綋鐨勬櫘鏀绘尌鍑诲姩鐢汇€?	 *
-	 * @param event GeckoLib 鍔ㄧ敾鐘舵€?	 * @return 瀵瑰簲鎺у埗鍣ㄧ殑鎾斁鐘舵€?	 */
-	protected PlayState attackingPredicate(AnimationState<?> event) {
+	 * 婢跺嫮鎮婃繅鎴ｇ熅閼板懏婀版担鎾堕兇鐎圭偘缍嬮惃鍕珮閺€缁樺皩閸戣濮╅悽姹団偓?	 *
+	 * @param event GeckoLib 閸斻劎鏁鹃悩鑸碘偓?	 * @return 鐎电懓绨查幒褍鍩楅崳銊ф畱閹绢厽鏂侀悩鑸碘偓?	 */
+	protected PlayState attackingPredicate(AnimationState event) {
 		if (this.getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = this.level().getGameTime();
@@ -238,20 +236,16 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 16;
-			}
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1, false) {
 
 			@Override
 			public boolean canUse() {
-				return super.canUse() && !hasEffect(CAMobEffects.FAKE_DEATH.get());
+				return super.canUse() && !hasEffect(CAMobEffects.FAKE_DEATH);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				return super.canUse() && !hasEffect(CAMobEffects.FAKE_DEATH.get());
+				return super.canUse() && !hasEffect(CAMobEffects.FAKE_DEATH);
 			}
 		});
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
@@ -325,9 +319,9 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 				Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
 				List<Mob> nearbyEntities = this.level().getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(32), entity -> true);
 				for (Mob nearbyEntity : nearbyEntities) {
-					if (nearbyEntity instanceof RouteFractalEntity routeFractal && !routeFractal.hasEffect(CAMobEffects.SEEK_OF_FRACTAL.get())) {
+					if (nearbyEntity instanceof RouteFractalEntity routeFractal && !routeFractal.hasEffect(CAMobEffects.SEEK_OF_FRACTAL)) {
 						if (!routeFractal.level().isClientSide()) {
-							routeFractal.addEffect(new MobEffectInstance(CAMobEffects.SEEK_OF_FRACTAL.get(), -1, 0));
+							routeFractal.addEffect(new MobEffectInstance(CAMobEffects.SEEK_OF_FRACTAL, -1, 0));
 						}
 					}
 				}
@@ -337,12 +331,12 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         if (world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(this.getX(), this.getY(), this.getZ()), 16, 16, 16), e -> true).isEmpty()) {
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.GLOWING, 1800, 0, false, false));
         }
-        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        return super.finalizeSpawn(world, difficulty, reason, livingdata);
 	}
 
 	@Override
@@ -400,7 +394,7 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean canChangeDimensions() {
+	public boolean canUsePortal(boolean allowVehicles) {
 		return false;
 	}
 
@@ -409,7 +403,7 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 			WorldUtils.dropRelicRoute(this.level(), this.getX(), this.getY(), this.getZ());
 		}
 	}

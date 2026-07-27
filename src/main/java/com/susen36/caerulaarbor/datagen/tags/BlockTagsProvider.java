@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.datagen.tags;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
@@ -11,9 +12,8 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,7 +78,7 @@ public class BlockTagsProvider extends TagsProvider.RegistryTagsProvider<Block> 
      * @param block 方块注册对象
      * @return 方块 key
      */
-    private static ResourceKey<Block> blockKey(RegistryObject<? extends Block> block) {
+    private static ResourceKey<Block> blockKey(DeferredHolder<Block, ? extends Block> block) {
         return ResourceKey.create(Registries.BLOCK, Objects.requireNonNull(block.getId()));
     }
 
@@ -89,7 +89,7 @@ public class BlockTagsProvider extends TagsProvider.RegistryTagsProvider<Block> 
      * @return 方块 key
      */
     private static ResourceKey<Block> blockKey(Block block) {
-        return ResourceKey.create(Registries.BLOCK, Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)));
+        return ResourceKey.create(Registries.BLOCK, Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block)));
     }
 
     @Override
@@ -151,7 +151,7 @@ public class BlockTagsProvider extends TagsProvider.RegistryTagsProvider<Block> 
      * @param blocks    要加入的方块注册对象
      */
     @SafeVarargs
-    private void addBlocksToTag(TagKey<Block> targetTag, RegistryObject<? extends Block>... blocks) {
+    private void addBlocksToTag(TagKey<Block> targetTag, DeferredHolder<Block, ? extends Block>... blocks) {
         var appender = tag(targetTag);
         for (var block : blocks) {
             appender.add(blockKey(block));

@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 
 public class TrailPlankFencedoorBlock extends FenceGateBlock {
 	public TrailPlankFencedoorBlock() {
-		super(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(3f, 5f).noOcclusion().isRedstoneConductor((bs, br, bp) -> false).dynamicShape().forceSolidOn(), WoodType.OAK);
+		super(WoodType.OAK, Properties.of().sound(SoundType.WOOD).strength(3f, 5f).noOcclusion().isRedstoneConductor((bs, br, bp) -> false).dynamicShape().forceSolidOn());
 	}
 
 	@Override

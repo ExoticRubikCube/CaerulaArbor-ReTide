@@ -21,14 +21,9 @@ public class MartusProtectionMobEffect extends MobEffect {
     public MartusProtectionMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -16777063);
         this.addAttributeModifier(Attributes.LUCK, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_luck"), 1, AttributeModifier.Operation.ADD_VALUE);
-        this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_general_defense"), 9, AttributeModifier.Operation.ADD_VALUE);
-        this.addAttributeModifier(CAAttributes.MAGIC_RESISTANCE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_magic_resistance"), 75, AttributeModifier.Operation.ADD_VALUE);
-        this.addAttributeModifier(CAAttributes.MISSRATE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_missrate"), 25, AttributeModifier.Operation.ADD_VALUE);
-    }
-
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
+        this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_general_defense"), 9, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(CAAttributes.MAGIC_RESISTANCE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_magic_resistance"), 75, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(CAAttributes.MISSRATE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "martus_protection_missrate"), 25, AttributeModifier.Operation.ADD_VALUE);
     }
 
     @Override

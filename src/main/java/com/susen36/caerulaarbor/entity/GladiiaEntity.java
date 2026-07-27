@@ -32,15 +32,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
@@ -65,7 +64,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		super(type, world);
 		xpReward = 0;
 		setNoAi(false);
-		setMaxUpStep(1.2f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.2f);
 		setPersistenceRequired();
 	}
 
@@ -113,27 +112,18 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_SKILL_P, 100);
-		this.entityData.define(DATA_DURATION, 0);
-		this.entityData.define(DATA_SKILL_P2, 200);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_SKILL_P, 100);
+		builder.define(DATA_DURATION, 0);
+		builder.define(DATA_SKILL_P2, 200);
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 2, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 20.25;
-			}
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this,  2, false) {
 
 			@Override
 			public boolean canUse() {
@@ -310,9 +300,9 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 										level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 3, 1);
 									}
 									if (ene instanceof LivingEntity && !this.level().isClientSide())
-										this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
+										this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 40, 0, false, false));
 									if (EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene) instanceof LivingEntity && !this.level().isClientSide())
-										this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
+										this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 40, 0, false, false));
 								});
 							}
 						});
@@ -345,9 +335,9 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 						}
 						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
 						if (!this.level().isClientSide())
-							this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 120, 4, false, false));
+							this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, 120, 4, false, false));
 						if (!this.level().isClientSide())
-							this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 120, 9, false, false));
+							this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 120, 9, false, false));
 						if (target instanceof LivingEntity && !this.level().isClientSide())
 							this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3, false, false));
 						if (world instanceof ServerLevel level) {
@@ -402,7 +392,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
 		GladiiaEntity retval = CAEntities.GLADIIA.get().create(serverWorld);
-		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
 		return retval;
 	}
 
@@ -417,8 +407,8 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
-		builder = builder.add(ForgeMod.SWIM_SPEED.get(), 8);
-		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.33);
+		builder = builder.add(NeoForgeMod.SWIM_SPEED, 8);
+		builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.33);
 		builder = builder.add(Attributes.MAX_HEALTH, 216);
 		builder = builder.add(Attributes.ARMOR, 9);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 27);
@@ -427,7 +417,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -445,7 +435,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -462,7 +452,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -484,7 +474,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		++this.deathTime;
 		if (this.deathTime == 25) {
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 

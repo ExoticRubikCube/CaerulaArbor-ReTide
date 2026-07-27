@@ -40,15 +40,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
@@ -72,33 +71,24 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(1f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_DURATION, 0);
-        this.entityData.define(DATA_SKILLP_1, 80);
-        this.entityData.define(DATA_SKILLP_2, 160);
-        this.entityData.define(DATA_BONUS, 0);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_DURATION, 0);
+        builder.define(DATA_SKILLP_1, 80);
+        builder.define(DATA_SKILLP_2, 160);
+        builder.define(DATA_BONUS, 0);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.1, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 9;
-            }
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this,  1.1, false) {
 
             @Override
             public boolean canUse() {
@@ -171,8 +161,8 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                             entity -> entity.isAlive()
                                     && entity != this
                                     && !(entity instanceof ServerPlayer serverPlayer
-                                            && (serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE
-                                            || serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR))
+                                    && (serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE
+                                    || serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR))
                                     && !(entity.getType().is(oceanOffspringTag) && entity != currentTarget));
                     for (LivingEntity entityIterator : foundEntities) {
                         if (this.distanceToSqr(entityIterator) <= 576) {
@@ -334,7 +324,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                         d = distanceTo(entityiterator);
                                         if (d <= r && (EntityUtils.getEntityCosine(this, entityiterator) > 0.5 || d <= 3)) {
                                             if (!this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
+                                                this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 40, 0, false, false));
                                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                         }
                                     }
@@ -397,7 +387,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         }
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 25, 9, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 25, 9, false, false));
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_SKILL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
                         }
@@ -416,7 +406,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 double nowZ;
                                 perc = ((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
                                 if (!this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, true));
+                                    this.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER, 500, 0, false, true));
                                 this.setHealth((float) (this.getMaxHealth() * perc));
                                 enemy1 = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
                                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5;
@@ -424,7 +414,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                     Entity ent = this;
                                     ent.teleportTo((enemy1.getX()), (enemy1.getY()), (enemy1.getZ()));
                                     if (enemy1 instanceof LivingEntity && !this.level().isClientSide())
-                                        this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
+                                        this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
                                     enemy1.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                 }
                                 noeX = getX();
@@ -442,12 +432,12 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                     for (LivingEntity entityiterator : entfound) {
                                         if (distanceToSqr(entityiterator) <= 36) {
                                             if (!this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
+                                                this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
                                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                         }
                                     }
                                 }
-                                this.removeEffect(CAMobEffects.DIZZY.get());
+                                this.removeEffect(CAMobEffects.DIZZY);
                                 this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                                 this.removeEffect(MobEffects.DIG_SLOWDOWN);
                                 SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(this);
@@ -468,14 +458,11 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         UlpiansEntity retval = CAEntities.ULPIANS.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+        if (retval != null) {
+            retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
+        }
         return retval;
     }
 
@@ -488,8 +475,8 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
-        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 8);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.33);
+        builder = builder.add(NeoForgeMod.SWIM_SPEED, 8);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.33);
         builder = builder.add(Attributes.MAX_HEALTH, 430);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 55);
@@ -501,7 +488,8 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     private boolean isUlpuansDurative() {
         return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
     }
-    private PlayState movementPredicate(AnimationState<?> event) {
+
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -516,7 +504,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -533,7 +521,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -555,7 +543,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

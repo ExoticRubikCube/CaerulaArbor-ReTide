@@ -13,11 +13,6 @@ public class EssenceResistanceMobEffect extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, -3041537);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
-
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;

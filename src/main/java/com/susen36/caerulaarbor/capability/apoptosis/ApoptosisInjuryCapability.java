@@ -68,7 +68,7 @@ public class ApoptosisInjuryCapability implements IApoptosisInjuryCapability {
     @Override
     public void tick() {
         if (recovering) {
-            boolean fast = owner.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get());
+            boolean fast = owner.hasEffect(CAMobEffects.ESSENCE_RESISTANCE);
             double step = 1000.0 / (fast ? 100.0 : 200.0);
             value = Math.min(1000.0, value + step);
             if (value >= 1000.0) {

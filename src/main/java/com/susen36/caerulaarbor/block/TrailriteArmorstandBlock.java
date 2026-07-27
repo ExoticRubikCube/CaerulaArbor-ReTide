@@ -3,15 +3,18 @@ package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -149,8 +152,8 @@ public class TrailriteArmorstandBlock extends BaseEntityBlock implements SimpleW
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -160,7 +163,7 @@ public class TrailriteArmorstandBlock extends BaseEntityBlock implements SimpleW
 		Direction direction = hit.getDirection();
 
 		this.formArmorBoss(world, x, y, z);
-		return InteractionResult.SUCCESS;
+		return ItemInteractionResult.SUCCESS;
 	}
 
 	private void formArmorBoss(LevelAccessor world, double x, double y, double z) {
@@ -175,5 +178,10 @@ public class TrailriteArmorstandBlock extends BaseEntityBlock implements SimpleW
 			Block.dropResources(world.getBlockState(blockPos), world, BlockPos.containing(x, y, z), null);
 			world.destroyBlock(blockPos, false);
 		}
+	}
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return MapCodec.unit(this);
 	}
 }

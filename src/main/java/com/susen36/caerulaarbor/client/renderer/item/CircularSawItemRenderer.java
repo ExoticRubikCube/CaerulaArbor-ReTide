@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.client.renderer.item;
 
-import com.susen36.caerulaarbor.client.model.item.CircularSawItemModel;
-import com.susen36.caerulaarbor.item.CircularSawItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.client.model.item.CircularSawItemModel;
+import com.susen36.caerulaarbor.item.CircularSawItem;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -42,11 +42,11 @@ public class CircularSawItemRenderer extends GeoItemRenderer<CircularSawItem> {
 
 	@Override
 	public void actuallyRender(PoseStack matrixStackIn, CircularSawItem animatable, BakedGeoModel model, RenderType type, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, boolean isRenderer, float partialTicks, int packedLightIn,
-			int packedOverlayIn, float red, float green, float blue, float alpha) {
+			int packedOverlayIn, int color) {
 		this.currentBuffer = renderTypeBuffer;
 		this.renderType = type;
 		this.animatable = animatable;
-		super.actuallyRender(matrixStackIn, animatable, model, type, renderTypeBuffer, vertexBuilder, isRenderer, partialTicks, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		super.actuallyRender(matrixStackIn, animatable, model, type, renderTypeBuffer, vertexBuilder, isRenderer, partialTicks, packedLightIn, packedOverlayIn, color);
 		if (this.renderArms) {
 			this.renderArms = false;
 		}

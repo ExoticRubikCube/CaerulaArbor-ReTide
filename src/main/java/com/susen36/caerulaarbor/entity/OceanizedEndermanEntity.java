@@ -47,11 +47,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
@@ -77,7 +77,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         super(type, world);
         xpReward = 8;
         setNoAi(false);
-        setMaxUpStep(1f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
         this.creeperCharged = false;
     }
@@ -123,7 +123,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 40);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 40);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
         builder = builder.add(Attributes.MAX_HEALTH, 95);
         builder = builder.add(Attributes.ARMOR, 0);
@@ -134,25 +134,20 @@ public class OceanizedEndermanEntity extends SeaMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SKILLP, 150);
-        this.entityData.define(DATA_COOLDOWN, 200);
-        this.entityData.define(DATA_HOLDING_CREEPER, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SKILLP, 150);
+        builder.define(DATA_COOLDOWN, 200);
+        builder.define(DATA_HOLDING_CREEPER, false);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.33, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 6.25;
-            }
-        });
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.33, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Endermite.class, true, false));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
@@ -167,11 +162,6 @@ public class OceanizedEndermanEntity extends SeaMonster {
         this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(16, new FloatGoal(this));
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
     }
 
     @Override
@@ -221,7 +211,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         double validY;
         double tX;
         double tZ;
-        if (!source.is(BYPASSES_ENDERMAN) && !this.hasEffect(CAMobEffects.DIZZY.get()) && !this.hasEffect(CAMobEffects.MUTE.get())) {
+        if (!source.is(BYPASSES_ENDERMAN) && !this.hasEffect(CAMobEffects.DIZZY) && !this.hasEffect(CAMobEffects.MUTE)) {
             Entity directEntity = source.getDirectEntity();
             if (directEntity != sourceentity || !(sourceentity instanceof LivingEntity)) {
                 if (sourceentity instanceof LivingEntity target) {
@@ -245,7 +235,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         }
         if (this.isAlive()) {
             ratio = 0.2;
-            if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
+            if (( this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
                 ratio = 0.45;
             }
             if (random.nextDouble() < ratio) {
@@ -365,7 +355,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         this.setAnimation("animation.oceanzied_enderman.skill");
                     }
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 35, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 35, 0, false, false));
                     if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDERMAN_STARE, SoundSource.HOSTILE, 1, 1);
                     }
@@ -423,12 +413,12 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
                 }
                 if (cool <= 0 && target.isAlive()) {
-                    if (distanceTo(target) >= 8 && !((Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
+                    if (distanceTo(target) >= 8 && !((Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.COOLDOWN_SINAL))) {
                         if ((Entity) this instanceof OceanizedEndermanEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_COOLDOWN, 100);
                         this.teleportTo(x, y, z, target.getX(), target.getY(), target.getZ());
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 100, 0, false, false));
                     }
                 } else {
                     if ((Entity) this instanceof OceanizedEndermanEntity datEntSetI)
@@ -440,7 +430,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
             PocketSeaCreeperEntity targetCreeper;
             if (this.tickCount % 40 == 10 && Math.random() < 0.67) {
                 targetCreeper = world.getEntitiesOfClass(PocketSeaCreeperEntity.class, AABB.ofSize(new Vec3(x, y, z), 48.0, 48.0, 48.0),
-                        e -> e.getDisplayName().getString().equals(e.getType().getDescription().getString()) && checkSameTeam(this, e))
+                                e -> e.getDisplayName().getString().equals(e.getType().getDescription().getString()) && checkSameTeam(this, e))
                         .stream().sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(x, y, z))).findFirst().orElse(null);
                 if (targetCreeper != null && targetCreeper.isAlive()) {
                     this.getNavigation().moveTo(targetCreeper.getX(), targetCreeper.getY(), targetCreeper.getZ(), 1.0);
@@ -448,7 +438,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
             }
             if (this.tickCount % 20 == 10) {
                 targetCreeper = world.getEntitiesOfClass(PocketSeaCreeperEntity.class, AABB.ofSize(new Vec3(x, y, z), 5.0, 5.0, 5.0),
-                        e -> e.getDisplayName().getString().equals(e.getType().getDescription().getString()) && checkSameTeam(this, e))
+                                e -> e.getDisplayName().getString().equals(e.getType().getDescription().getString()) && checkSameTeam(this, e))
                         .stream().sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(x, y, z))).findFirst().orElse(null);
                 if (targetCreeper != null && targetCreeper.isAlive()) {
                     if (!this.level().isClientSide()) {
@@ -482,12 +472,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         return at.isAlliedTo(bt);
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.isDeadOrDying()) {
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanzied_enderman.die"));
         }
@@ -512,7 +497,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -530,7 +515,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -552,7 +537,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             double x = this.getX();
             double y = this.getY();

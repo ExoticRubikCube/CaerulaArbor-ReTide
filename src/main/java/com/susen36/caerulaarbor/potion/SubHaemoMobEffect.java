@@ -8,6 +8,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -15,6 +16,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
+import net.neoforged.neoforge.common.EffectCure;
+import net.neoforged.neoforge.common.EffectCures;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +25,12 @@ import java.util.List;
 public class SubHaemoMobEffect extends MobEffect {
 	public SubHaemoMobEffect() {
 		super(MobEffectCategory.HARMFUL, -7051604);
-		// TODO: NeoForge 1.21.1 removed NeoForgeMod.BLOCK_REACH, reimplement when replacement is known
-		// this.addAttributeModifier(NeoForgeMod.BLOCK_REACH, "adc95ba5-c2bc-34d0-848e-e949d7cf0951", 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
-		// TODO: NeoForge 1.21.1 removed NeoForgeMod.ENTITY_REACH, reimplement when replacement is known
-		// this.addAttributeModifier(NeoForgeMod.ENTITY_REACH, "534b08c2-f1c4-3db0-ba17-bbaaa359db84", 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+		this.addAttributeModifier(Attributes.BLOCK_INTERACTION_RANGE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sub_haemo_block_reach"), 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+		this.addAttributeModifier(Attributes.ENTITY_INTERACTION_RANGE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sub_haemo_entity_reach"), 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 		this.addAttributeModifier(Attributes.ATTACK_SPEED, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sub_haemo_attack_speed"), -0.35, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 	}
 
-	// TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
+	// TODO: 1.21.1 removed MobEffect.getCurativeItems(), 需要迁移为 public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance) {
 	public List<ItemStack> getCurativeItems() {
 		ArrayList<ItemStack> cures = new ArrayList<>();
 		cures.add(new ItemStack(Items.MILK_BUCKET));
@@ -37,6 +38,7 @@ public class SubHaemoMobEffect extends MobEffect {
 		cures.add(new ItemStack(Items.HONEY_BOTTLE));
 		return cures;
 	}
+
 
 	@Override
 	public boolean applyEffectTick(LivingEntity entity, int amplifier) {

@@ -2,39 +2,26 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.init.CAItems;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.SimpleTier;
 
 public class OceanthornShovelItem extends ShovelItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_IRON_TOOL,
+			325,
+			5.5f,
+			5.5f,
+			18,
+			() -> Ingredient.of(new ItemStack(CAItems.OCEAN_CRYSTAL.get()))
+	);
+
 	public OceanthornShovelItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 325;
-			}
-
-			public float getSpeed() {
-				return 5.5f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 5.5f;
-			}
-
-			public int getLevel() {
-				return 2;
-			}
-
-			public int getEnchantmentValue() {
-				return 18;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.OCEAN_CRYSTAL.get()));
-			}
-		}, 1, -3f, new Item.Properties());
+		super(TIER, new Item.Properties().attributes(ShovelItem.createAttributes(TIER, 1, -3f)));
 	}
 
 	@Override

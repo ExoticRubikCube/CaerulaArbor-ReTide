@@ -45,15 +45,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.event.ForgeEventFactory;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
@@ -75,20 +74,15 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		super(type, world);
 		xpReward = 8;
 		setNoAi(false);
-		setMaxUpStep(1f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_STATE, 0);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_STATE, 0);
 	}
 
 	@Override
@@ -127,12 +121,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 				return super.canContinueToUse() && ReaperPetEntity.this.isFollowable();
 			}
 		});
-		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 2, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 4;
-			}
-		});
+		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 2, false));
 		this.goalSelector.addGoal(5, new OpenDoorGoal(this, false));
 		this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
 		this.goalSelector.addGoal(7, new TemptGoal(this, 0.4, Ingredient.of(CAItems.OCEAN_EYE.get()), false) {
@@ -162,13 +151,8 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		this.goalSelector.addGoal(11, new FloatGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
-		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+	protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+		super.dropCustomDeathLoot(level, damageSource, recentlyHit);
 		this.spawnAtLocation(new ItemStack(CAItems.BASE_EGG.get()));
 	}
 
@@ -311,9 +295,9 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		super.baseTick();
 		Entity owner;
 		Entity target;
-		if ((Entity) this instanceof Mob mobEnt0 && mobEnt0.isAggressive() && !((Entity) this instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.PET_REAP.get()))) {
+		if ((Entity) this instanceof Mob mobEnt0 && mobEnt0.isAggressive() && !((Entity) this instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.PET_REAP))) {
 			if (!this.level().isClientSide())
-				this.addEffect(new MobEffectInstance(CAMobEffects.PET_REAP.get(), 100, 0, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.PET_REAP, 100, 0, false, false));
 		}
 		if (((Entity) this instanceof ReaperPetEntity datEntI ? datEntI.getEntityData().get(DATA_STATE) : 0) == 2) {
 			if ((Entity) this instanceof Mob entity)
@@ -333,7 +317,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
 		ReaperPetEntity retval = CAEntities.REAPER_PET.get().create(serverWorld);
-		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
 		return retval;
 	}
 
@@ -357,11 +341,11 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 11);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 30);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 30);
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -376,7 +360,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -393,7 +377,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -415,7 +399,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 

@@ -5,7 +5,7 @@ import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.data.worldgen.placement.MiscOverworldPlacements;
@@ -27,11 +27,11 @@ import java.util.Objects;
 /**
  * 生成 biome 注册表数据
  *
- * <p>新增 biome 时，先在 {@link #bootstrap(BootstapContext)} 获取所需注册表查询器，再用
+ * <p>新增 biome 时，先在 {@link #bootstrap(BootstrapContext)} 获取所需注册表查询器，再用
  * {@code context.register} 绑定 biome key，具体天气、颜色、音效、生成设置放入 {@code brandedLand(...)} 和 {@code generationSettings(...)}
  * <p>示例：
  * <pre>{@code
- * public static void bootstrap(BootstapContext<Biome> context) {
+ * public static void bootstrap(BootstrapContext<Biome> context) {
  *     // 查询 placed feature 注册表，用于 biome 生成设置引用 feature
  *     HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
  *     // 查询 carver 注册表，用于 biome 生成设置引用洞穴和峡谷生成器
@@ -82,7 +82,7 @@ public class BiomeProvider {
      *
      * @param context Mojang 提供的注册表 bootstrap 上下文
      */
-    public static void bootstrap(BootstapContext<Biome> context) {
+    public static void bootstrap(BootstrapContext<Biome> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         HolderGetter<ConfiguredWorldCarver<?>> carvers = context.lookup(Registries.CONFIGURED_CARVER);
         HolderGetter<SoundEvent> soundEvents = context.lookup(Registries.SOUND_EVENT);

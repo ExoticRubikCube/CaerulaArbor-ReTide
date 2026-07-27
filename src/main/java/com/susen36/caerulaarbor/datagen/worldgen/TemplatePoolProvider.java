@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -19,11 +19,11 @@ import java.util.function.Function;
 /**
  * 生成 structure template pool 注册表数据
  *
- * <p>新增 template pool 时，在 {@link #bootstrap(BootstapContext)} 中指定 fallback pool、投影方式和加权元素，
+ * <p>新增 template pool 时，在 {@link #bootstrap(BootstrapContext)} 中指定 fallback pool、投影方式和加权元素，
  * 元素通常通过 {@link #single(String, Holder, int)} 绑定 nbt 结构位置、processor 列表和权重
  * <p>示例：
  * <pre>{@code
- * public static void bootstrap(BootstapContext<StructureTemplatePool> context) {
+ * public static void bootstrap(BootstrapContext<StructureTemplatePool> context) {
  *     // 查询 template pool 注册表，用于解析 fallback pool
  *     HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
  *     // 调用 register(...) 注册模板池，并传入模板池 key、fallback key、投影方式和元素列表
@@ -57,7 +57,7 @@ public final class TemplatePoolProvider {
      *
      * @param context Mojang 提供的注册表 bootstrap 上下文
      */
-    public static void bootstrap(BootstapContext<StructureTemplatePool> context) {
+    public static void bootstrap(BootstrapContext<StructureTemplatePool> context) {
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
         register(context, pools, WorldgenKeys.TemplatePools.ABYSSAL_LAB, WorldgenKeys.TemplatePools.MINECRAFT_EMPTY, StructureTemplatePool.Projection.RIGID, List.of(
                 single("caerula_arbor:abyssal_lab_2", processors(Blocks.STRUCTURE_BLOCK, Blocks.CHERRY_PLANKS), 1)
@@ -228,7 +228,7 @@ public final class TemplatePoolProvider {
      * @param projection 模板投影方式
      * @param elements   加权模板元素
      */
-    private static void register(BootstapContext<StructureTemplatePool> context, HolderGetter<StructureTemplatePool> pools, ResourceKey<StructureTemplatePool> key, ResourceKey<StructureTemplatePool> fallback, StructureTemplatePool.Projection projection, List<Pair<Function<StructureTemplatePool.Projection, ? extends StructurePoolElement>, Integer>> elements) {
+    private static void register(BootstrapContext<StructureTemplatePool> context, HolderGetter<StructureTemplatePool> pools, ResourceKey<StructureTemplatePool> key, ResourceKey<StructureTemplatePool> fallback, StructureTemplatePool.Projection projection, List<Pair<Function<StructureTemplatePool.Projection, ? extends StructurePoolElement>, Integer>> elements) {
         context.register(key, new StructureTemplatePool(pools.getOrThrow(fallback), elements, projection));
     }
 

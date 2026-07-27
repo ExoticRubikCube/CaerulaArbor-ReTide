@@ -1,5 +1,8 @@
 package com.susen36.caerulaarbor.entity;
 
+
+
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.PolarMountRider;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -43,11 +46,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
@@ -68,22 +72,22 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(1.5f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
     }
 
-    public static void registerSpawnPlacements() {
-        SpawnPlacements.register(CAEntities.CRACKER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+    public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(CAEntities.CRACKER_ABYSSAL.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
             int x = pos.getX();
             int y = pos.getY();
             int z = pos.getZ();
             return WorldUtils.canDangerSeabornSpawn(world, x, y, z);
-        });
+        }, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.27);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 18);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
         builder = builder.add(Attributes.MAX_HEALTH, 85);
         builder = builder.add(Attributes.ARMOR, 10);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 13);
@@ -93,10 +97,10 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
     }
 
     @Override
@@ -116,12 +120,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
                 return super.canContinueToUse() && WorldUtils.canGrief(world);
             }
         });
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1, true) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 6.25;
-            }
-        });
+        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1, true));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
         this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
@@ -167,9 +166,9 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
             this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                     CASounds.REEFBREAKER_ATTACK.get(), SoundSource.HOSTILE, 10,
                     (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
-            double amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
+            double amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER) ? this.getEffect(CAMobEffects.REEF_CRACKER).getAmplifier() : -1;
             int nextAmplifier = amplifier < 0 ? 0 : Math.min((int) amplifier + 1, 14);
-            this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 120, nextAmplifier, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER, 120, nextAmplifier, false, false));
             CaerulaArborMod.queueServerWork(12, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
                     target.hurt(
@@ -189,7 +188,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             double num;
-            if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
+            if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL)) {
                 num = 0;
                 {
                     final Vec3 center = new Vec3(x, y, z);
@@ -205,7 +204,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
                         this.setAnimation("animation.nethersea_reefbreaker.spin");
                     }
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 40, 0, false, false));
                     CaerulaArborMod.queueServerWork(10, () -> {
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2, 1);
@@ -249,7 +248,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
         this.refreshDimensions();
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nethersea_reefbreaker.move"));
@@ -262,7 +261,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -277,7 +276,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
         return PlayState.CONTINUE;
     }
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -299,7 +298,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(CrackerAbyssalEntity.RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 
@@ -324,4 +323,3 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
         this.animationprocedure = animation;
     }
 }
-

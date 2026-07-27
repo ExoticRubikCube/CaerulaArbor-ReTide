@@ -14,7 +14,7 @@ public class ShulkerBuffMobEffect extends MobEffect {
 		super(MobEffectCategory.BENEFICIAL, -1);
 		this.addAttributeModifier(Attributes.ARMOR, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "shulker_buff_armor"), 2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 		this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "shulker_buff_armor_toughness"), 5, AttributeModifier.Operation.ADD_VALUE);
-		this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "shulker_buff_general_defense"), 5, AttributeModifier.Operation.ADD_VALUE);
+		this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "shulker_buff_general_defense"), 5, AttributeModifier.Operation.ADD_VALUE);
 	}
 
 	@Override

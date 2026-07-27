@@ -29,6 +29,6 @@ public class SkadiCorruptedLayer extends GeoRenderLayer<SkadiCorruptedEntity> {
 		RenderType glowRenderType = RenderType.eyes(LAYER);
 		if(animatable.getPhase() == 1) glowRenderType = RenderType.eyes(LAYER_1);
 		else if(animatable.getPhase() == 2) glowRenderType = RenderType.eyes(LAYER_2);
-		getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+		getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 	}
 }

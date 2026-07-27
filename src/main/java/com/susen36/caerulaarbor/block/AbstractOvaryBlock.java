@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.manager.SeabornSpawnManager;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -33,6 +34,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public abstract class AbstractOvaryBlock extends Block implements SimpleWaterloggedBlock {
 
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -53,8 +55,8 @@ public abstract class AbstractOvaryBlock extends Block implements SimpleWaterlog
 	protected abstract double getDestroySpawnRate();
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, BlockGetter level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable(getDescriptionKey()));
 	}
 
@@ -115,11 +117,14 @@ public abstract class AbstractOvaryBlock extends Block implements SimpleWaterlog
 	private void grantOvaryAdvancement(LevelAccessor world) {
 		for (Entity entityiterator : new ArrayList<>(world.players())) {
 			if (entityiterator instanceof ServerPlayer player) {
-				Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "extension_of_calamity"));
-				AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
-				if (!ap.isDone()) {
-					for (String criteria : ap.getRemainingCriteria())
-						player.getAdvancements().award(adv, criteria);
+				AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "extension_of_calamity"));
+                AdvancementProgress ap;
+                if (adv != null) {
+					ap = player.getAdvancements().getOrStartProgress(adv);
+					if (!ap.isDone()) {
+						for (String criteria : ap.getRemainingCriteria())
+							player.getAdvancements().award(adv, criteria);
+					}
 				}
 			}
 		}

@@ -5,12 +5,12 @@ import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -234,7 +234,7 @@ public class BlockBatbedBlock extends Block {
             final Vec3 center = new Vec3(x, y, z);
             List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
             for (Entity entityiterator : entfound) {
-                if ((entityiterator instanceof Bat || entityiterator instanceof LivingEntity livEnt1 && livEnt1.getMobType() == MobType.UNDEAD)
+                if ((entityiterator instanceof Bat || entityiterator instanceof LivingEntity livEnt1 && livEnt1.getType().is(EntityTypeTags.UNDEAD))
                         && new Vec3(((double) x + 0.5), ((double) y + 1), ((double) z + 0.5)).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) > 1) {
                     if (Math.random() < 0.2) {
                         if (entityiterator instanceof Mob mob)

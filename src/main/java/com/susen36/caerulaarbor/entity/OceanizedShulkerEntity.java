@@ -7,7 +7,7 @@ import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -48,11 +48,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 
@@ -76,20 +76,20 @@ public class OceanizedShulkerEntity extends SeaMonster {
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(1f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SHOOT_DELAY, 0);
-        this.entityData.define(DATA_DIRECTION, "up");
-        this.entityData.define(DATA_WALKING, false);
-        this.entityData.define(DATA_PEEK_TIME, 0);
-        this.entityData.define(DATA_VARIANT, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SHOOT_DELAY, 0);
+        builder.define(DATA_DIRECTION, "up");
+        builder.define(DATA_WALKING, false);
+        builder.define(DATA_PEEK_TIME, 0);
+        builder.define(DATA_VARIANT, 0);
     }
 
     @Override
@@ -106,11 +106,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 4;
-            }
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this,  1, false) {
 
             @Override
             public boolean canUse() {
@@ -146,11 +142,6 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 return super.canContinueToUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
             }
         });
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
     }
 
     @Override
@@ -197,12 +188,12 @@ public class OceanizedShulkerEntity extends SeaMonster {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         if (((Entity) this instanceof OceanizedShulkerEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0) == 0) {
             if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
                 datEntSetI.getEntityData().set(DATA_VARIANT, Mth.nextInt(RandomSource.create(), 0, 1));
         }
-        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        return super.finalizeSpawn(world, difficulty, reason, livingdata);
     }
 
     @Override
@@ -223,20 +214,20 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 if (this.getAttributes().hasAttribute(Attributes.ARMOR))
                     this.getAttribute(Attributes.ARMOR)
                             .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 1.5));
-                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                    this.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                    ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE)
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
+                                    ? this.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
                                     : 0) + 5));
-                if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-                    this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                                    ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
+                    this.getAttribute(CAAttributes.MAGIC_RESISTANCE)
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
+                                    ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue()
                                     : 0) + 35));
-                if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get()))
-                    this.getAttribute(CAAttributes.SANITY_RESISTANCE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get())
-                                    ? this.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE))
+                    this.getAttribute(CAAttributes.SANITY_RESISTANCE)
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE)
+                                    ? this.getAttribute(CAAttributes.SANITY_RESISTANCE).getBaseValue()
                                     : 0) + 35));
                 player.getMainHandItem().shrink(1);
                 if (world instanceof Level level) {
@@ -248,7 +239,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 }
                 this.setHealth(this.getMaxHealth());
                 if ((Entity) player instanceof ServerPlayer serverPlayer) {
-                    Advancement adv = serverPlayer.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "construction"));
+                    AdvancementHolder adv = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "construction"));
                     AdvancementProgress ap = serverPlayer.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
@@ -256,7 +247,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                     }
                 }
                 ths = InteractionResult.SUCCESS;
-            } else if ( player.getMainHandItem().getItem() == Blocks.BEDROCK.asItem()) {
+            } else if (player.getMainHandItem().getItem() == Blocks.BEDROCK.asItem()) {
                 if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_VARIANT, 3);
                 if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
@@ -265,20 +256,20 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 if (this.getAttributes().hasAttribute(Attributes.ARMOR))
                     this.getAttribute(Attributes.ARMOR)
                             .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 10));
-                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                    this.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                    ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE)
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
+                                    ? this.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
                                     : 0) + 32767));
-                if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-                    this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                                    ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
+                    this.getAttribute(CAAttributes.MAGIC_RESISTANCE)
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
+                                    ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue()
                                     : 0) + 100));
-                if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get()))
-                    this.getAttribute(CAAttributes.SANITY_RESISTANCE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get())
-                                    ? this.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE))
+                    this.getAttribute(CAAttributes.SANITY_RESISTANCE)
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE)
+                                    ? this.getAttribute(CAAttributes.SANITY_RESISTANCE).getBaseValue()
                                     : 0) + 100));
                 player.getMainHandItem().shrink(1);
                 this.setHealth(this.getMaxHealth());
@@ -435,18 +426,18 @@ public class OceanizedShulkerEntity extends SeaMonster {
             if (peekTime <= 0) {
                 if (variant == 2) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF.get(), 5, 2, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF, 5, 2, false, false));
                 } else if (variant == 3) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF.get(), 5, 9, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF, 5, 9, false, false));
                 } else {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF.get(), 5, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF, 5, 0, false, false));
                 }
             } else {
                 if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_PEEK_TIME, (int) (peekTime - 1));
-                this.removeEffect(CAMobEffects.SHULKER_BUFF.get());
+                this.removeEffect(CAMobEffects.SHULKER_BUFF);
             }
             target = this.getTarget();
             if (shootDelay <= 0) {
@@ -487,11 +478,6 @@ public class OceanizedShulkerEntity extends SeaMonster {
         this.refreshDimensions();
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
     public boolean startWalking() {
         if (isWalking())
             return false;
@@ -501,7 +487,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
             this.getAttribute(Attributes.ARMOR).setBaseValue(this.getArmorValue() * 0.4);
         this.setHealth(this.getMaxHealth());
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 9, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 20, 9, false, false));
         if (!this.level().isClientSide())
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false));
         setAnimation("animation.oceanized_shulker.rise");
@@ -537,7 +523,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.isDeadOrDying()) {
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_shulker.die"));
         }
@@ -562,7 +548,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -607,7 +593,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                     }
                 }
             }
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

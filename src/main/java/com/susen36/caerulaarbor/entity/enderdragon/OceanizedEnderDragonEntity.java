@@ -52,11 +52,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -75,7 +75,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	public Set<String> crystals = new HashSet<>();
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
-	// 程序动画驱动数据 - 蛇形偏航延迟缓冲区
+	// 绋嬪簭鍔ㄧ敾椹卞姩鏁版嵁 - 铔囧舰鍋忚埅寤惰繜缂撳啿鍖?
 	public final double[] yRotHistory = new double[64];
 	public int posPointer = -1;
 	public float oFlapTime;
@@ -92,23 +92,23 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		xpReward = 128;
 		setNoAi(false);
 		setNoGravity(true);
-		setMaxUpStep(0.6f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		setPersistenceRequired();
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_REVIVE_TICK, 0);
-		this.entityData.define(DATA_PHASE, 0);
-		this.entityData.define(DATA_SKILL_P, 0);
-		this.entityData.define(DATA_DURATION, 50);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_REVIVE_TICK, 0);
+		builder.define(DATA_PHASE, 0);
+		builder.define(DATA_SKILL_P, 0);
+		builder.define(DATA_DURATION, 50);
 	}
 
-	// 获取延迟index帧的偏航角度（蛇形飞行延迟效果）
+	// 鑾峰彇寤惰繜index甯х殑鍋忚埅瑙掑害锛堣泧褰㈤琛屽欢杩熸晥鏋滐級
 	public double getLatencyYRot(int index, float partialTick) {
 		if (this.isDeadOrDying()) {
 			partialTick = 0.0F;
@@ -237,11 +237,6 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	}
 
 	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
-
-	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
@@ -280,13 +275,13 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
                 this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() * 2);
             if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                 this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() * 3);
-            if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() * 2);
-            if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue() + 20);
+            if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
+                this.getAttribute(CAAttributes.GENERAL_DEFENSE).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue() * 2);
+            if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
+                this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue() + 20);
             if (!this.level().isClientSide()) {
-                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
-                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 200, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1, false, false));
             }
             this.setHealth(this.getMaxHealth());
             return;
@@ -328,10 +323,10 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 9, false, false));
-		return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 9, false, false));
+		return super.finalizeSpawn(world, difficulty, reason, livingdata);
 	}
 
 	@Override
@@ -386,7 +381,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		double deadTime;
 		deadTime = this.deathTime;
 		if (this.isAlive()) {
-			// 移植自原版 EnderDragon - flapTime 和延迟位置缓冲区更新
+			// 绉绘鑷師鐗?EnderDragon - flapTime 鍜屽欢杩熶綅缃紦鍐插尯鏇存柊
 			this.oFlapTime = this.flapTime;
 			if (!this.isDeadOrDying()) {
 				Vec3 velocity = this.getDeltaMovement();
@@ -470,7 +465,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 					if ((Entity) this instanceof OceanizedEnderDragonEntity datEntSetI)
 						datEntSetI.getEntityData().set(DATA_DURATION, 70);
 					if (!this.level().isClientSide())
-						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
 					world.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_SKILL.get(), SoundSource.HOSTILE, (float) 2.5, 1);
 					for (int index0 = 0; index0 < 8; index0++) {
 						CaerulaArborMod.queueServerWork(12 + index0 * 5, () -> {
@@ -591,7 +586,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	}
 
 	@Override
-	public boolean canChangeDimensions() {
+	public boolean canUsePortal(boolean allowVehicles) {
 		return false;
 	}
 
@@ -631,14 +626,14 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		builder = builder.add(Attributes.FOLLOW_RANGE, 64);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
 		builder = builder.add(Attributes.FLYING_SPEED, 0.55);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 85);
-		builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 4);
-		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.0125);
-		builder = builder.add(CAAttributes.SANITY_RESISTANCE.get(), 75);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 85);
+		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
+		builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.0125);
+		builder = builder.add(CAAttributes.SANITY_RESISTANCE, 75);
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (this.isDeadOrDying()) {
 				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_ender_dragon.death"));
@@ -651,7 +646,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -668,7 +663,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -690,7 +685,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		++this.deathTime;
 		if (this.deathTime == 40) {
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 			Level world = this.level();
 			double x = this.getX();
 			double y = this.getY();

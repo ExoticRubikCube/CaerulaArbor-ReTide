@@ -41,14 +41,13 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
@@ -75,37 +74,26 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		super(type, world);
 		xpReward = 0;
 		setNoAi(false);
-		setMaxUpStep(1f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
 		setPersistenceRequired();
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_SKILLP_1, 0);
-		this.entityData.define(DATA_SKILLP_2, 12);
-		this.entityData.define(DATA_DURATION, 0);
-		this.entityData.define(DATA_TAP_TICK, 0);
-	}
-
-
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_SKILLP_1, 0);
+		builder.define(DATA_SKILLP_2, 12);
+		builder.define(DATA_DURATION, 0);
+		builder.define(DATA_TAP_TICK, 0);
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 7.5625;
-			}
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1.25, false) {
 
 			@Override
 			public boolean canUse() {
@@ -158,8 +146,8 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	}
 
 	@Override
-	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
-		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+	protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+		super.dropCustomDeathLoot(level, damageSource, recentlyHit);
 		this.spawnAtLocation(new ItemStack(CAItems.TRAIL_POWDER.get()));
 	}
 
@@ -188,7 +176,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 							CASounds.IRENE_ATTACK.get(), SoundSource.NEUTRAL, 2.5F,
 							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
 					if (target instanceof LivingEntity livingTarget) {
-						livingTarget.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 60, 0, false, false));
+						livingTarget.addEffect(new MobEffectInstance(CAMobEffects.MUTE, 60, 0, false, false));
 					}
 					target.hurt(
 							CADamageTypes.source(this.level(), CADamageTypes.GENERIC_WARRIOR_ATTACK, this), this.applyLaunchPunishBonus(target, attackDamage));
@@ -214,7 +202,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		double y = this.getY();
 		double z = this.getZ();
 		Entity sourceentity = source.getEntity();
-		if (sourceentity instanceof LivingEntity livingSource && (livingSource.hasEffect(MobEffects.SLOW_FALLING) || livingSource.hasEffect(CAMobEffects.MUTE.get()))) {
+		if (sourceentity instanceof LivingEntity livingSource && (livingSource.hasEffect(MobEffects.SLOW_FALLING) || livingSource.hasEffect(CAMobEffects.MUTE))) {
 			amount *= 0.65F;
 		}
 		if (sourceentity != null) {
@@ -242,10 +230,10 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 			if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 				damage *= 1.2F;
 				if (!livingTarget.level().isClientSide()) {
-					livingTarget.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 80, 1));
+					livingTarget.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 80, 1));
 				}
 			} else if (!livingTarget.level().isClientSide()) {
-				livingTarget.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 60, 0));
+				livingTarget.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 60, 0));
 			}
 		}
 		return damage;
@@ -397,7 +385,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 					this.setAnimation("animation.irene.skill_2");
 				}
 				if (!this.level().isClientSide())
-					this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 9, false, false));
+					this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 60, 9, false, false));
 				if (world instanceof Level level) {
 					level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL.get(), SoundSource.NEUTRAL, 3, 1);
 				}
@@ -518,7 +506,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
 		IreneEntity retval = CAEntities.IRENE.get().create(serverWorld);
-		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
 		return retval;
 	}
 
@@ -539,7 +527,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isAggressive()) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.irene.move"));
@@ -555,7 +543,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -572,7 +560,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -594,7 +582,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 

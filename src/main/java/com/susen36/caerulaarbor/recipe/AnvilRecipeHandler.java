@@ -3,9 +3,9 @@ package com.susen36.caerulaarbor.recipe;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.AnvilUpdateEvent;
 
 @EventBusSubscriber
 public class AnvilRecipeHandler {

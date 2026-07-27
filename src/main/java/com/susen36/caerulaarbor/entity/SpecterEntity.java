@@ -7,8 +7,6 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -36,15 +34,14 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
@@ -72,34 +69,24 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(1f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SKILLP_1, 2);
-        this.entityData.define(DATA_SKILLP_2, 240);
-        this.entityData.define(DATA_DURATION, 0);
-    }
-
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SKILLP_1, 2);
+        builder.define(DATA_SKILLP_2, 240);
+        builder.define(DATA_DURATION, 0);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.3, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 12.25;
-            }
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this,  1.3, false) {
 
             @Override
             public boolean canUse() {
@@ -202,7 +189,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -210,19 +197,19 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_SPECT_SKILL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
         }
         this.setAnimation("animation.specter.start");
-        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        return super.finalizeSpawn(world, difficulty, reason, livingdata);
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
         compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
         compound.putInt("Duration", this.entityData.get(DATA_DURATION));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Skillp1")) {
             this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
@@ -233,7 +220,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         if (compound.contains("Duration")) {
             this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
         }
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -261,7 +248,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                         this.getEntityData().set(DATA_SKILLP_1, 0);
                         this.getEntityData().set(DATA_DURATION, (int) (dura + 45));
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 35, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 35, 0, false, false));
                         CaerulaArborMod.queueServerWork(8, () -> {
                             if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_HEAVY.get(), SoundSource.NEUTRAL, 3, 1);
@@ -302,9 +289,9 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                         }
                         this.getEntityData().set(DATA_SKILLP_2, 1000);
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 400, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 400, 0, false, false));
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 400, 5, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, 400, 5, false, false));
                     }
                 }
             }
@@ -319,10 +306,10 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                             continue;
                         }
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters")))) {
-                            if (!(entityiterator instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY.get()))) {
+                            if (!(entityiterator instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY))) {
                                 perc = EntityUtils.getHealthPerc(entityiterator);
                                 if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_HEALTH_PERCLY.get(), 32768, 0, false, false));
+                                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_HEALTH_PERCLY, 32768, 0, false, false));
                                 if (entityiterator instanceof LivingEntity livingEntity)
                                     livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
                             }
@@ -335,14 +322,9 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         SpecterEntity retval = CAEntities.SPECTER.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
         return retval;
     }
 
@@ -362,8 +344,8 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
-        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 8);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.33);
+        builder = builder.add(NeoForgeMod.SWIM_SPEED, 8);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.33);
         builder = builder.add(Attributes.MAX_HEALTH, 218);
         builder = builder.add(Attributes.ARMOR, 4);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 34);
@@ -372,7 +354,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -390,7 +372,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -407,7 +389,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -429,7 +411,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             if (world instanceof ServerLevel level) {
                 Entity entityToSpawn = CAEntities.SPECTER_DOLL.get().spawn(level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);

@@ -33,11 +33,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 
@@ -57,16 +57,16 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         super(type, world);
         xpReward = 256;
         setNoAi(false);
-        setMaxUpStep(1.5f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
     }
 
     @Override
@@ -77,13 +77,7 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                // 返回值为攻击距离的平方（Sqr），1024 = 32²，即攻击范围 32 格
-                return 1024;
-            }
-        });
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false));
         this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1, 20) {
             @Override
             protected Vec3 getPosition() {
@@ -96,11 +90,6 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         });
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(4, new FloatGoal(this));
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
     }
 
     @Override
@@ -135,8 +124,8 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -175,7 +164,7 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -221,12 +210,12 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         builder = builder.add(Attributes.FOLLOW_RANGE, 36);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.6);
-        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 1656);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 90);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE, 1656);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 90);
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.isharmla.idle_monster"));
         }
@@ -235,7 +224,7 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -257,7 +246,7 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

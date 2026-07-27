@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class IsharmlaStairBlock extends StairBlock {
 	public IsharmlaStairBlock() {
-		super(() -> Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(16f, 5000f).requiresCorrectToolForDrops().dynamicShape());
+		super(Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(16f, 5000f).requiresCorrectToolForDrops().dynamicShape());
 	}
 
 	@Override

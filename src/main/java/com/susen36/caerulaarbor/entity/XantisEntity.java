@@ -32,16 +32,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
@@ -67,33 +65,23 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         super(type, world);
         xpReward = 512;
         setNoAi(false);
-        setMaxUpStep(1.25f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.25f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_NIUBI, true);
-        this.entityData.define(DATA_TAP_TICK, 0);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_NIUBI, true);
+        builder.define(DATA_TAP_TICK, 0);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 2.25;
-            }
-        });
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.goalSelector.addGoal(3, new OwnerHurtByTargetGoal(this));
         this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1, (float) 3, (float) 24, false));
@@ -122,11 +110,6 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
             }
         });
         this.goalSelector.addGoal(9, new FloatGoal(this));
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.WATER;
     }
 
     @Override
@@ -169,15 +152,15 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         super.die(pSource);
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Niubi", this.entityData.get(DATA_NIUBI));
         compound.putInt("TapTick", this.entityData.get(DATA_TAP_TICK));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Niubi")) {
             this.entityData.set(DATA_NIUBI, compound.getBoolean("Niubi"));
@@ -185,7 +168,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         if (compound.contains("TapTick")) {
             this.entityData.set(DATA_TAP_TICK, compound.getInt("TapTick"));
         }
-	}
+    }
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
@@ -301,14 +284,9 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         XantisEntity retval = CAEntities.XANTIS.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
         return retval;
     }
 
@@ -335,7 +313,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.xantis.move"));
@@ -348,7 +326,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -365,7 +343,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -392,7 +370,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         ++this.deathTime;
         if (this.deathTime >= 19) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

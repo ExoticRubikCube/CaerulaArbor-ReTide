@@ -13,7 +13,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -293,9 +292,9 @@ public class AnchorMediumBlock extends Block {
                     ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
             }
             for (Entity entityiterator : world.getEntities(null, new AABB(((double) x + 37), ((double) y + 22), ((double) z + 37), ((double) x - 36), ((double) y - 21), ((double) z - 36)))) {
-                if (!(entityiterator instanceof LivingEntity livEnt33 && livEnt33.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
+                if (!(entityiterator instanceof LivingEntity livEnt33 && livEnt33.hasEffect(CAMobEffects.POWER_OF_ANCHOR))) {
                     if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.POWER_OF_ANCHOR.get(), 20, 0, false, false));
+                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.POWER_OF_ANCHOR, 20, 0, false, false));
                 }
             }
         } else {
@@ -311,8 +310,8 @@ public class AnchorMediumBlock extends Block {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public InteractionResult useWithoutItem(BlockState blockstate, Level world, BlockPos pos, Player entity, BlockHitResult hit) {
+		super.useWithoutItem(blockstate, world, pos, entity, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();

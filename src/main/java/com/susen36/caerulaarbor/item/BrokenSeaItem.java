@@ -29,37 +29,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.tags.BlockTags;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.Comparator;
 import java.util.List;
 
+
 public class BrokenSeaItem extends SwordItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+			0,
+			9f,
+			17f,
+			12,
+            Ingredient::of
+	);
+
 	public BrokenSeaItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 0;
-			}
-
-			public float getSpeed() {
-				return 9f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 17f;
-			}
-
-			public int getLevel() {
-				return 3;
-			}
-
-			public int getEnchantmentValue() {
-				return 12;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of();
-			}
-		}, 3, -3f, new Item.Properties().fireResistant());
+		super(TIER, new Item.Properties().fireResistant().attributes(SwordItem.createAttributes(TIER, 3, -3f)));
 	}
 
 	@Override
@@ -75,7 +63,7 @@ public class BrokenSeaItem extends SwordItem {
                     level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_ATTACK_HIT.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 if (!entity.level().isClientSide())
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 260, 1, false, false));
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA, 260, 1, false, false));
             }
         }
         return retval;
@@ -128,7 +116,7 @@ public class BrokenSeaItem extends SwordItem {
                             GladiiaEntity.spawnGladiiaLinkParticles(world, entity, entityiterator);
                             LivingEntity livingEntity = (LivingEntity) entityiterator;
                             if (!livingEntity.level().isClientSide())
-                                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
+                                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 40, 0, false, false));
                             entityiterator.hurt(CADamageTypes.source((LevelAccessor) world, CADamageTypes.HUNTER_ATTACK, entity), (float) (damage * 3));
                             count = count + 1;
                         }
@@ -162,8 +150,8 @@ public class BrokenSeaItem extends SwordItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.broken_sea.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.broken_sea.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.broken_sea.description_2"));

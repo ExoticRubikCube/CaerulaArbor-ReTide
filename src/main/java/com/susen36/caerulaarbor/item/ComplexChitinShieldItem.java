@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class ComplexChitinShieldItem extends ShieldItem {
 	public ComplexChitinShieldItem() {
 		super(new Item.Properties().durability(6883).fireResistant());
@@ -43,8 +44,8 @@ public class ComplexChitinShieldItem extends ShieldItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.complex_chitin_shield.description_0"));
 	}
 }

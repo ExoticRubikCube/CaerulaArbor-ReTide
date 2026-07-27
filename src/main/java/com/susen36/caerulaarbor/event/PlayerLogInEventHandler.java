@@ -4,13 +4,14 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.GameType;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
@@ -22,7 +23,7 @@ public class PlayerLogInEventHandler {
 			ResourceLocation surgingWavesNoticeId = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "surging_waves_notice");
 
 			if (CAConfigs.RELIC_BAN.get()) {
-				Advancement relicBanNoticeAdvancement = serverPlayer.server.getAdvancements().getAdvancement(relicBanNoticeId);
+				Advancement relicBanNoticeAdvancement = serverPlayer.server.getAdvancements().get(relicBanNoticeId);
 				if (relicBanNoticeAdvancement != null) {
 					AdvancementProgress relicBanNoticeProgress = serverPlayer.getAdvancements().getOrStartProgress(relicBanNoticeAdvancement);
 					if (!relicBanNoticeProgress.isDone()) {
@@ -36,7 +37,7 @@ public class PlayerLogInEventHandler {
 				}
 			}
 
-			Advancement surgingWavesNoticeAdvancement = serverPlayer.server.getAdvancements().getAdvancement(surgingWavesNoticeId);
+			Advancement surgingWavesNoticeAdvancement = serverPlayer.server.getAdvancements().get(surgingWavesNoticeId);
 			if (surgingWavesNoticeAdvancement != null) {
 				AdvancementProgress surgingWavesNoticeProgress = serverPlayer.getAdvancements().getOrStartProgress(surgingWavesNoticeAdvancement);
 				if (!surgingWavesNoticeProgress.isDone()) {

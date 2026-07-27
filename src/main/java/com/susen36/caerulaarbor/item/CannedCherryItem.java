@@ -26,14 +26,15 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.List;
 
+
 public class CannedCherryItem extends Item {
 	public CannedCherryItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.1f).alwaysEat().build()));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.canned_cherry.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.canned_cherry.description_1"));
 	}

@@ -20,14 +20,15 @@ import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
+
 public class NurtureGeneSetItem extends Item {
 	public NurtureGeneSetItem() {
 		super(new Item.Properties().stacksTo(8).rarity(Rarity.EPIC));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.nurture_gene_set.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.nurture_gene_set.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.nurture_gene_set.description_2"));

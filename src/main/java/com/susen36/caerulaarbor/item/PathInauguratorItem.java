@@ -20,45 +20,34 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.tags.BlockTags;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;
 import java.util.Map;
 
+
 public class PathInauguratorItem extends AxeItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+			10025,
+			11f,
+			15f,
+			14,
+			() -> Ingredient.of()
+	);
+
 	public PathInauguratorItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 10025;
-			}
-
-			public float getSpeed() {
-				return 11f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 15f;
-			}
-
-			public int getLevel() {
-				return 3;
-			}
-
-			public int getEnchantmentValue() {
-				return 14;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of();
-			}
-		}, 1, -2.5f, new Item.Properties().fireResistant());
+		super(TIER, new Item.Properties().fireResistant().attributes(AxeItem.createAttributes(TIER, 1, -2.5f)));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.path_inaugurator.description_0"));
 	}
 

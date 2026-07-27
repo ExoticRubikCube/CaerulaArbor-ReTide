@@ -35,11 +35,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
@@ -63,30 +63,26 @@ public class OceanizedFoxEntity extends SeaMonster {
         super(type, world);
         xpReward = 8;
         setNoAi(false);
-        setMaxUpStep(0.8f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.8f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SKILLP, 10);
-        this.entityData.define(DATA_SLEEPING, false);
-        this.entityData.define(DATA_ACTION_TIME, 0);
-        this.entityData.define(DATA_DURATION, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SKILLP, 10);
+        builder.define(DATA_SLEEPING, false);
+        builder.define(DATA_ACTION_TIME, 0);
+        builder.define(DATA_DURATION, 0);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 2, false) {
-            @Override
-            protected double getAttackReachSqr(@NotNull LivingEntity entity) {
-                return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
-            }
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  2, false) {
 
             @Override
             public boolean canUse() {
@@ -166,17 +162,17 @@ public class OceanizedFoxEntity extends SeaMonster {
         return super.hurt(source, amount);
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
         compound.putBoolean("Sleeping", this.entityData.get(DATA_SLEEPING));
         compound.putInt("ActionTime", this.entityData.get(DATA_ACTION_TIME));
         compound.putInt("Duration", this.entityData.get(DATA_DURATION));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Skillp")) {
             this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
@@ -190,7 +186,7 @@ public class OceanizedFoxEntity extends SeaMonster {
         if (compound.contains("Duration")) {
             this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
         }
-	}
+    }
 
     @Override
     public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
@@ -258,7 +254,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                             this.setAnimation("animation.oceanized_fox.jump");
                         }
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 25, 9, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 25, 9, false, false));
                         push((getLookAngle().x * 0.25), 0.25, (getLookAngle().z * 0.25));
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (this.isAlive() && !(((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == null)) {
@@ -315,16 +311,10 @@ public class OceanizedFoxEntity extends SeaMonster {
         this.refreshDimensions();
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 30);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 30);
         builder = builder.add(Attributes.MAX_HEALTH, 37);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
@@ -333,7 +323,7 @@ public class OceanizedFoxEntity extends SeaMonster {
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -353,7 +343,7 @@ public class OceanizedFoxEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -375,7 +365,7 @@ public class OceanizedFoxEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

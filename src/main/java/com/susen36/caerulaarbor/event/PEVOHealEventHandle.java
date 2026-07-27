@@ -16,8 +16,8 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.entity.living.LivingHealEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
@@ -25,7 +25,7 @@ public class PEVOHealEventHandle {
 	@SubscribeEvent
 	public static void onEntityHealed(LivingHealEvent event) {
 		Entity entity = event.getEntity();
-		if (event.isCanceled() || entity == null) {
+		if (event.isCanceled()) {
 			return;
 		}
 

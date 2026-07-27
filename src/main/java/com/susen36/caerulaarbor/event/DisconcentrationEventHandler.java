@@ -5,7 +5,7 @@ import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -28,12 +28,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
@@ -53,19 +51,19 @@ public class DisconcentrationEventHandler {
         Player player = event.player;
         double rejectionStage = getRejectionStage(player);
         if (rejectionStage == HAEMOPHILIA_REJECTION_STAGE) {
-            if (!player.hasEffect(CAMobEffects.HAEMOPHILIA.get()) && !player.level().isClientSide()) {
-                player.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), -1, 1, false, false));
+            if (!player.hasEffect(CAMobEffects.HAEMOPHILIA) && !player.level().isClientSide()) {
+                player.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA, -1, 1, false, false));
             }
         } else {
-            player.removeEffect(CAMobEffects.HAEMOPHILIA.get());
+            player.removeEffect(CAMobEffects.HAEMOPHILIA);
         }
 
         if (rejectionStage == FLESHDEFORMITY_REJECTION_STAGE) {
-            if (!player.hasEffect(CAMobEffects.FLESHDEFORMITY.get()) && !player.level().isClientSide()) {
-                player.addEffect(new MobEffectInstance(CAMobEffects.FLESHDEFORMITY.get(), -1, 1, false, false));
+            if (!player.hasEffect(CAMobEffects.FLESHDEFORMITY) && !player.level().isClientSide()) {
+                player.addEffect(new MobEffectInstance(CAMobEffects.FLESHDEFORMITY, -1, 1, false, false));
             }
-        } else if (player.hasEffect(CAMobEffects.FLESHDEFORMITY.get())) {
-            player.removeEffect(CAMobEffects.FLESHDEFORMITY.get());
+        } else if (player.hasEffect(CAMobEffects.FLESHDEFORMITY)) {
+            player.removeEffect(CAMobEffects.FLESHDEFORMITY);
         }
     }
 
@@ -94,7 +92,7 @@ public class DisconcentrationEventHandler {
         }
 
         if (Math.random() < freezeChance && !player.level().isClientSide()) {
-            player.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), freezeDuration, 0, false, false));
+            player.addEffect(new MobEffectInstance(CAMobEffects.FROZEN, freezeDuration, 0, false, false));
         }
     }
 
@@ -155,7 +153,7 @@ public class DisconcentrationEventHandler {
         }
 
         if (player instanceof ServerPlayer serverPlayer) {
-            Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_we_many"));
+            AdvancementHolder advancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_we_many"));
             AdvancementProgress advancementProgress = null;
             if (advancement != null) {
                 advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);

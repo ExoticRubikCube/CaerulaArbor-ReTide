@@ -22,4 +22,3 @@ public class LingeringFractalModel extends GeoModel<LingeringFractalEntity> {
 	}
 
 }
-

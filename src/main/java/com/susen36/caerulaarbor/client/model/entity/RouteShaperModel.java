@@ -22,4 +22,3 @@ public class RouteShaperModel extends GeoModel<RouteShaperEntity> {
 	}
 
 }
-

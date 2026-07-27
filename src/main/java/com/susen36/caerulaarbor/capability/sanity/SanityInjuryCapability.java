@@ -16,7 +16,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class SanityInjuryCapability implements ISanityInjuryCapability {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sanity_injury");
@@ -44,7 +44,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
             return false;
         }
 
-        AttributeInstance sanityResistanceAttribute = owner.getAttribute(CAAttributes.SANITY_RESISTANCE.get());
+        AttributeInstance sanityResistanceAttribute = owner.getAttribute(CAAttributes.SANITY_RESISTANCE);
         double sanityResistance = sanityResistanceAttribute == null ? 0.0 : sanityResistanceAttribute.getValue();
         damage *= 1 - sanityResistance / 100;
         if (damage <= 0) {
@@ -66,7 +66,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
             return;
         }
         SanityEvent.Heal event = new SanityEvent.Heal(owner, amount);
-        if (!MinecraftForge.EVENT_BUS.post(event)) {
+        if (!NeoForge.EVENT_BUS.post(event)) {
             value = Math.min(value + event.getAmount(), getMaxValue());
         }
     }
@@ -74,7 +74,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
     @Override
     public void tick() {
         if (recovering) {
-            boolean fast = owner.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get());
+            boolean fast = owner.hasEffect(CAMobEffects.ESSENCE_RESISTANCE);
             double maxValue = getMaxValue();
             double step = maxValue / (fast ? 100.0 : 200.0);
             value = Math.min(maxValue, value + step);
@@ -92,7 +92,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
     }
 
     public double getMaxValue() {
-        AttributeInstance maxSanityAttribute = owner.getAttribute(CAAttributes.MAX_SANITY.get());
+        AttributeInstance maxSanityAttribute = owner.getAttribute(CAAttributes.MAX_SANITY);
         return Math.max(1.0, maxSanityAttribute == null ? DEFAULT_MAX_SANITY : maxSanityAttribute.getValue());
     }
 
@@ -107,7 +107,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
 
     private void sanityBreak() {
         SanityEvent.Break event = new SanityEvent.Break(owner);
-        if (MinecraftForge.EVENT_BUS.post(event)) {
+        if (NeoForge.EVENT_BUS.post(event)) {
             return;
         }
         if (owner.level().isClientSide()) {
@@ -119,13 +119,13 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
         float baseDamage = CAConfigs.SANITY_BREAK.get().floatValue();
         DamageSource sanityBreakDamage = CADamageTypes.source(owner.level(), CADamageTypes.SANITY_BREAK);
 
-        owner.addEffect(new MobEffectInstance(CAMobEffects.UNDER_BREAK.get(), 200, 0, false, false, true));
+        owner.addEffect(new MobEffectInstance(CAMobEffects.UNDER_BREAK, 200, 0, false, false, true));
         if (owner instanceof Player player) {
-            player.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 200, 0, false, false));
+            player.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 200, 0, false, false));
             player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0, false, true));
             player.hurt(sanityBreakDamage, baseDamage);
         } else {
-            AttributeInstance numbAttribute = owner.getAttribute(CAAttributes.NUMB.get());
+            AttributeInstance numbAttribute = owner.getAttribute(CAAttributes.NUMB);
             if (numbAttribute != null) {
                 numbAttribute.setBaseValue(Math.max(numbAttribute.getBaseValue(), 3));
             }

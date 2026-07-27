@@ -35,10 +35,7 @@ public class GuidePathAheadMobEffect extends MobEffect {
         this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "guide_path_ahead_armor_toughness"), 9, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
@@ -51,7 +48,7 @@ public class GuidePathAheadMobEffect extends MobEffect {
         BlockState target;
         if (((Entity) entity).isAlive()) {
             if (WorldUtils.canGrief(world) && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
-                if (!((Entity) entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.MUTE.get()))) {
+                if (!((Entity) entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.MUTE))) {
                     target = (world.getBlockState(BlockPos.containing(x, y, z)));
                     if (((Entity) entity instanceof GuideAbyssalEntity datEntI ? datEntI.getEntityData().get(GuideAbyssalEntity.DATA_LAYLIMIT) : 0) > 0) {
                         if ((target.canBeReplaced() || !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) && !(target.getBlock() == CABlocks.SEA_TRAIL_GROWN.get())

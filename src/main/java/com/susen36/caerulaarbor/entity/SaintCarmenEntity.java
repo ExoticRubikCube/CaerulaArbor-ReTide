@@ -38,14 +38,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
@@ -70,42 +69,33 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(1f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SKILL_P1, 200);
-        this.entityData.define(DATA_SKILL_P2, 100);
-        this.entityData.define(DATA_SHOOT_P, 80);
-        this.entityData.define(DATA_BULLET, 3);
-        this.entityData.define(DATA_DURATION, 0);
-        this.entityData.define(DATA_RELOAD_P, 500);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SKILL_P1, 200);
+        builder.define(DATA_SKILL_P2, 100);
+        builder.define(DATA_SHOOT_P, 80);
+        builder.define(DATA_BULLET, 3);
+        builder.define(DATA_DURATION, 0);
+        builder.define(DATA_RELOAD_P, 500);
     }
 
 
     @Override
-    protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
-        return 1.7F;
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    public EntityDimensions getDimensions(Pose pose) {
+        return super.getDimensions(pose);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.3, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 6.25;
-            }
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this,  1.3, false) {
 
             @Override
             public boolean canUse() {
@@ -177,12 +167,12 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
 
     private void applyMuteOnHit(Entity target) {
         if (target instanceof LivingEntity livingTarget && !livingTarget.level().isClientSide()) {
-            livingTarget.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 100, 0));
+            livingTarget.addEffect(new MobEffectInstance(CAMobEffects.MUTE, 100, 0));
         }
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("SkillP1", this.entityData.get(DATA_SKILL_P1));
         compound.putInt("SkillP2", this.entityData.get(DATA_SKILL_P2));
@@ -190,10 +180,10 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         compound.putInt("Bullet", this.entityData.get(DATA_BULLET));
         compound.putInt("Duration", this.entityData.get(DATA_DURATION));
         compound.putInt("ReloadP", this.entityData.get(DATA_RELOAD_P));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("SkillP1")) {
             this.entityData.set(DATA_SKILL_P1, compound.getInt("SkillP1"));
@@ -213,7 +203,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         if (compound.contains("ReloadP")) {
             this.entityData.set(DATA_RELOAD_P, compound.getInt("ReloadP"));
         }
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -362,14 +352,9 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         SaintCarmenEntity retval = CAEntities.SAINT_CARMEN.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
         return retval;
     }
 
@@ -397,7 +382,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -415,7 +400,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -432,7 +417,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -454,7 +439,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

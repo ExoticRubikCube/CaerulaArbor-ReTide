@@ -10,6 +10,7 @@ import com.susen36.caerulaarbor.menu.InfoStrategySubsisMenu;
 import com.susen36.caerulaarbor.network.send.InfoStrategyReturnButtonMessage;
 import com.susen36.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.PlainTextButton;
@@ -47,15 +48,14 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics);
+		this.renderBackground(guiGraphics,mouseX,mouseY,partialTicks);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
         if (((Entity) ((LevelAccessor) world instanceof Level level ? new GuideAbyssalEntity(CAEntities.GUIDE_ABYSSAL.get(), level) : null)) instanceof LivingEntity livingEntity) {
 			InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphics, this.leftPos + 29, this.topPos + 96, 20, 0f + (float) Math.atan((this.leftPos + 29 - mouseX) / 40.0), (float) Math.atan((this.topPos + 47 - mouseY) / 40.0), livingEntity);
 		}
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		if (mouseX > leftPos + 244 && mouseX < leftPos + 253 && mouseY > topPos + 20 && mouseY < topPos + 92) {
-            String result = "\u00A7bFinished";
-            double rate = 0;
+            String result = "§bFinished";
             if (!(MapVariables.get(world).strategy_subsisting >= 4)) {
                 result = Math.round(MapVariables.get(world).evo_point_subsisting) + "\u00A7b/"
                         + Math.round(Math.pow(MapVariables.get(world).strategy_subsisting + 1, 3) * CAConfigs.COEFFICIENT.get());
@@ -124,7 +124,7 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
 		super.init();
 		button_return = new PlainTextButton(this.leftPos + 226, this.topPos + 156, 32, 20, Component.translatable("gui.caerula_arbor.info_strategy_subsis.button_return"), e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyReturnButtonMessage(0, x, y, z));
+				PacketDistributor.sendToServer(new InfoStrategyReturnButtonMessage(0, x, y, z));
 				InfoStrategyReturnButtonMessage.handleButtonAction(entity, 0, x, y, z);
 			}
 		}, this.font);
@@ -132,4 +132,3 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
 		this.addRenderableWidget(button_return);
 	}
 }
-

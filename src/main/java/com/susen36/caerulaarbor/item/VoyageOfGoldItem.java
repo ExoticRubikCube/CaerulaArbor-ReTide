@@ -25,14 +25,15 @@ import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
+
 public class VoyageOfGoldItem extends Item {
 	public VoyageOfGoldItem() {
 		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		Entity entity = itemstack.getEntityRepresentation();
         String hoverText;
         String first_two;
@@ -63,7 +64,7 @@ public class VoyageOfGoldItem extends Item {
                     level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
             }
             if (!entity.level().isClientSide())
-                entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 400, 1, false, false));
+                entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 400, 1, false, false));
             {
                 boolean setval = true;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {

@@ -14,8 +14,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class EnchantedTrailGoldenAppleItem extends Item {
 	public EnchantedTrailGoldenAppleItem() {
@@ -23,7 +23,7 @@ public class EnchantedTrailGoldenAppleItem extends Item {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 40;
 	}
 
@@ -45,8 +45,8 @@ public class EnchantedTrailGoldenAppleItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 3));
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 3));
 			entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3600, 0));
-			entity.addEffect(new MobEffectInstance(CAMobEffects.SANITY_IMMUE.get(), 2400, 0));
-			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 3600, 1));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.SANITY_IMMUE, 2400, 0));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 3600, 1));
 		}
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.8, z, 48, 0.5, 1, 0.5, 0.1);

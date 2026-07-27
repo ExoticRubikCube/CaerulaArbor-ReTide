@@ -5,10 +5,10 @@ import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -25,11 +25,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -49,15 +46,15 @@ public class AbsorberLimbEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 0;
 		setNoAi(false);
-		setMaxUpStep(0.6f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		setPersistenceRequired();
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
 	}
 
 	@Override
@@ -71,8 +68,8 @@ public class AbsorberLimbEntity extends SeaMonster {
 		return false;
 	}
 
-	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
-		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+	protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+		super.dropCustomDeathLoot(level, damageSource, recentlyHit);
 		this.spawnAtLocation(new ItemStack(CAItems.NERVOUS_REGENERATION.get()));
 	}
 
@@ -107,25 +104,25 @@ public class AbsorberLimbEntity extends SeaMonster {
 			}
 		}.compareDistOf(x, y, z)).orElse(null);
 		if (!(thirster == null)) {
-			if (thirster instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-				livingEntity3.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-						.setBaseValue(Math.max((thirster instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-								? livingEntity2.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+			if (thirster instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
+				livingEntity3.getAttribute(CAAttributes.GENERAL_DEFENSE)
+						.setBaseValue(Math.max((thirster instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
+								? livingEntity2.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
 								: 0) - 1, 0));
-			if (thirster instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-				livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-						.setBaseValue(Math.max((livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-								? livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+			if (thirster instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
+				livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE)
+						.setBaseValue(Math.max((livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
+								? livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue()
 								: 0) - 5, 0));
 			}
 		}
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         this.setHealth(this.getMaxHealth() * 2 / 3);
 		this.setAnimation("animation.absorber_limb.start");
-		return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+		return super.finalizeSpawn(world, difficulty, reason, livingdata);
 	}
 
 	@Override
@@ -170,7 +167,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 		return super.canBeAffected(pEffectInstance);
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (this.isDeadOrDying()) {
 				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.absorber_limb.die"));
@@ -182,7 +179,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -204,7 +201,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 

@@ -13,13 +13,14 @@ import com.susen36.caerulaarbor.init.CASounds;
 
 import java.util.List;
 
+
 public class ItemHelperAl1sItem extends LittleHelperItem {
 	public ItemHelperAl1sItem() {
 		super(Rarity.RARE);
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		list.add(Component.translatable("item.caerula_arbor.item_helper_al_1s.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.item_helper_al_1s.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.item_helper_al_1s.description_2"));

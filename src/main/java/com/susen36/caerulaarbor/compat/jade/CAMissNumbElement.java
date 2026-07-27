@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.compat.jade;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

@@ -10,18 +10,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
 import java.util.List;
 
-public class CorruptedHeartSpawnerItem extends ForgeSpawnEggItem {
+
+public class CorruptedHeartSpawnerItem extends DeferredSpawnEggItem {
 	public CorruptedHeartSpawnerItem() {
 		super(CAEntities.SKADI_CORRUPTED, -1, -1, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.corrupted_heart_spawner.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.corrupted_heart_spawner.description_1"));
 	}

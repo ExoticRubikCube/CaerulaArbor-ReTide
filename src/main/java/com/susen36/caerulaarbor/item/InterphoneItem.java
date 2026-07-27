@@ -36,14 +36,15 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Comparator;
 import java.util.List;
 
+
 public class InterphoneItem extends Item {
 	public InterphoneItem() {
 		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.interphone.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.interphone.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.interphone.description_2"));
@@ -141,7 +142,7 @@ public class InterphoneItem extends Item {
 			name = chief.getDisplayName().getString();
 			if (world instanceof ServerLevel serverLevel) {
 				for (Entity entityiterator : serverLevel.getAllEntities()) {
-					if (entityiterator instanceof LivingEntity livingEntity && livingEntity.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
+					if (entityiterator instanceof LivingEntity livingEntity && livingEntity.hasEffect(CAMobEffects.COOLDOWN_SINAL)) {
 						continue;
 					}
 					if (entityiterator.level().dimension() != chief.level().dimension()) {
@@ -159,7 +160,7 @@ public class InterphoneItem extends Item {
 								if (entityiterator instanceof ServerPlayer serverPlayer)
 									serverPlayer.connection.teleport(tx + dx, tY, tz + dz, entityiterator.getYRot(), entityiterator.getXRot());
 								if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-									livingEntity.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 300, 0, false, false));
+									livingEntity.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 300, 0, false, false));
 								break;
 							}
 						}

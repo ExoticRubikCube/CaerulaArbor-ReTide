@@ -1,5 +1,10 @@
 package com.susen36.caerulaarbor.entity;
 
+
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.level.pathfinder.PathType;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -40,15 +45,14 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
@@ -69,8 +73,8 @@ public class NucleicMaleficentEntity extends SeaMonster {
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(0.6f);
-        this.setPathfindingMalus(BlockPathTypes.WATER, 0);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
+        this.setPathfindingMalus(PathType.WATER, 0);
         this.moveControl = new MoveControl(this) {
             @Override
             public void tick() {
@@ -105,8 +109,8 @@ public class NucleicMaleficentEntity extends SeaMonster {
         };
     }
 
-    public static void registerSpawnPlacements() {
-        SpawnPlacements.register(CAEntities.NUCLEIC_MALEFICENT.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+    public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(CAEntities.NUCLEIC_MALEFICENT.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
             int x = pos.getX();
             int y = pos.getY();
             int z = pos.getZ();
@@ -117,27 +121,27 @@ public class NucleicMaleficentEntity extends SeaMonster {
                 return world.getDifficulty() != Difficulty.PEACEFUL;
             }
             return false;
-        });
+        }, RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 1.25);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 45);
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 6);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 45);
+        builder = builder.add(CAAttributes.SANITY_RATE, 6);
         builder = builder.add(Attributes.MAX_HEALTH, 120);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 1.25);
+        builder = builder.add(NeoForgeMod.SWIM_SPEED, 1.25);
         return builder;
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
     }
 
     @Override
@@ -149,12 +153,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 2, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 4.84;
-            }
-        });
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 2, false));
         this.goalSelector.addGoal(3, new RandomSwimmingGoal(this, 1, 40));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
     }
@@ -284,9 +283,9 @@ public class NucleicMaleficentEntity extends SeaMonster {
                                 (float) (((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * lose));
                     }
                 }
-                if (!mobEnt4.hasEffect(CAMobEffects.FAST_SWIM.get())) {
+                if (!mobEnt4.hasEffect(CAMobEffects.FAST_SWIM)) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.FAST_SWIM.get(), 20, 2, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.FAST_SWIM, 20, 2, false, false));
                 }
             }
         }
@@ -299,11 +298,6 @@ public class NucleicMaleficentEntity extends SeaMonster {
     }
 
     @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
-
-    @Override
     public boolean checkSpawnObstruction(LevelReader world) {
         return world.isUnobstructed(this);
     }
@@ -313,7 +307,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
         return false;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if (this.isDeadOrDying()) {
                 return event.setAndContinue(RawAnimation.begin().thenPlay("animation.nucleic_maleficent.die"));
@@ -326,7 +320,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         double d1 = this.getX() - this.xOld;
         double d0 = this.getZ() - this.zOld;
         float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
@@ -344,7 +338,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -366,7 +360,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(NucleicMaleficentEntity.RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 
@@ -390,4 +384,3 @@ public class NucleicMaleficentEntity extends SeaMonster {
         this.animationprocedure = animation;
     }
 }
-

@@ -5,7 +5,7 @@ import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -49,11 +49,11 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -86,33 +86,29 @@ public class IsharmlaEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 64;
 		setNoAi(false);
-		setMaxUpStep(1.5f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
 		setPersistenceRequired();
 		IS_ANGERED = false;
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_IS_MONSTER, false);
-		this.entityData.define(DATA_SKILLP_1, 400);
-		this.entityData.define(DATA_SKILLP_2, 240);
-		this.entityData.define(DATA_DURATION, 60);
-		this.entityData.define(DATA_RECORDED_HEALTH, 1000);
-		this.entityData.define(DATA_ABSORPTION, 60);
-		this.entityData.define(DATA_HEAL_P, 60);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_IS_MONSTER, false);
+		builder.define(DATA_SKILLP_1, 400);
+		builder.define(DATA_SKILLP_2, 240);
+		builder.define(DATA_DURATION, 60);
+		builder.define(DATA_RECORDED_HEALTH, 1000);
+		builder.define(DATA_ABSORPTION, 60);
+		builder.define(DATA_HEAL_P, 60);
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 576;
-			}
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this , 1, false) {
 
 			@Override
 			public boolean canUse() {
@@ -290,8 +286,8 @@ public class IsharmlaEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
@@ -299,14 +295,14 @@ public class IsharmlaEntity extends SeaMonster {
 			this.setAnimation("animation.isharmla.start");
 		}
 		if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 9, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 60, 9, false, false));
 		if ((LevelAccessor) world instanceof Level level) {
 			level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TO_HUMAN.get(), SoundSource.HOSTILE, 2, 1);
 		}
 		for (Entity entityiterator : new ArrayList<>(world.players())) {
 			if ((level().dimension()) == (entityiterator.level().dimension())) {
 				if (entityiterator instanceof ServerPlayer player) {
-					Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "we_many_orienting"));
+					AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "we_many_orienting"));
 					AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 					if (!ap.isDone()) {
 						for (String criteria : ap.getRemainingCriteria())
@@ -506,7 +502,7 @@ public class IsharmlaEntity extends SeaMonster {
 							if ((Entity) this instanceof IsharmlaEntity datEntSetI)
 								datEntSetI.getEntityData().set(DATA_DURATION, 40);
 							if (!this.level().isClientSide())
-								this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 9, false, false));
+								this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 30, 9, false, false));
 							CaerulaArborMod.queueServerWork(15, () -> {
 								Entity enemy1;
 								double d;
@@ -588,7 +584,7 @@ public class IsharmlaEntity extends SeaMonster {
 					if ((Entity) this instanceof IsharmlaEntity datEntSetI)
 						datEntSetI.getEntityData().set(DATA_DURATION, 30);
 					if (!this.level().isClientSide())
-						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 9, false, false));
+						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 30, 9, false, false));
 					this.distributeIsharmlaTear(world, x, y, z);
 				}
 				if (tickCount % 400 == 80) {
@@ -606,7 +602,7 @@ public class IsharmlaEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean canChangeDimensions() {
+	public boolean canUsePortal(boolean allowVehicles) {
 		return false;
 	}
 
@@ -647,14 +643,14 @@ public class IsharmlaEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 16);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 64);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
-		builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 4);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 50);
-		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.01);
-		builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
+		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
+		builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.01);
+		builder = builder.add(CAAttributes.MAX_SANITY, 2000);
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		boolean isM3 = isMonster();
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))) {
@@ -670,7 +666,7 @@ public class IsharmlaEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -687,7 +683,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -732,7 +728,7 @@ public class IsharmlaEntity extends SeaMonster {
 				}
 			}
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 
@@ -854,7 +850,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 		this.setHealth((float) maxHealth);
 		if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 40, 9, false, false));
 		if (!this.level().isClientSide())
 			this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 99999, 2, false, false));
 
@@ -863,7 +859,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 		for (IsharmlaTearEntity entityiterator : nearbyEntities) {
 			entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE),
-					114514);//TODO 好臭的伤害
+					114514);//TODO 濂借嚟鐨勪激瀹?
 		}
 	}
 
@@ -894,10 +890,10 @@ public class IsharmlaEntity extends SeaMonster {
 		this.getEntityData().set(DATA_SKILLP_2, 280);
 		this.getEntityData().set(DATA_IS_MONSTER, false);
 
-		this.removeEffect(CAMobEffects.INVULNERABLE.get());
+		this.removeEffect(CAMobEffects.INVULNERABLE);
 		this.setHealth((float) Math.max(maxHealth * Math.min(recordedHealth * 0.001 + 0.03, 1), 1));
 		if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 40, 9, false, false));
 
 		return true;
 	}

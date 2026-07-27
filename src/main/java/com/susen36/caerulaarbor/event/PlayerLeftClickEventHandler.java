@@ -5,11 +5,10 @@ import com.susen36.caerulaarbor.init.CANetwork;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Objects;
@@ -24,7 +23,7 @@ public class PlayerLeftClickEventHandler {
     }
 
     private static void handleHelperLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
-        CANetwork.PACKET_HANDLER.sendToServer(new HelperLeftClickMessage());
+        PacketDistributor.sendToServer(new HelperLeftClickMessage());
         executeHelperLeftClick(event.getEntity());
     }
 

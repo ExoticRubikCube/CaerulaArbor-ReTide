@@ -18,19 +18,20 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class FloureIcecreamItem extends Item {
 	public FloureIcecreamItem() {
 		super(new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.75f).alwaysEat().build()));
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 24;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.fluore_icecream.description_0"));
 	}
 
@@ -40,9 +41,9 @@ public class FloureIcecreamItem extends Item {
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0));
-			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 1200, 0));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 1200, 0));
 		}
-		entity.removeEffect(CAMobEffects.FROZEN.get());
+		entity.removeEffect(CAMobEffects.FROZEN);
 		entity.setTicksFrozen(0);
 		EntityUtils.restorePlayerLights(entity, 12);
 		if (itemstack.isEmpty()) {

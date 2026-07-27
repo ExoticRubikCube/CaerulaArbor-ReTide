@@ -7,42 +7,30 @@ import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;
 
+
 public class TrailedGoldenSwordItem extends SwordItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_WOODEN_TOOL,
+			32,
+			12f,
+			0f,
+			28,
+			() -> Ingredient.of(new ItemStack(Items.GOLD_INGOT))
+	);
+
 	public TrailedGoldenSwordItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 32;
-			}
-
-			public float getSpeed() {
-				return 12f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 0f;
-			}
-
-			public int getLevel() {
-				return 0;
-			}
-
-			public int getEnchantmentValue() {
-				return 28;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(Items.GOLD_INGOT));
-			}
-		}, 3, -2.4f, new Item.Properties());
+		super(TIER, new Item.Properties().attributes(SwordItem.createAttributes(TIER, 3, -2.4f)));
 	}
 
 	@Override
@@ -50,7 +38,12 @@ public class TrailedGoldenSwordItem extends SwordItem {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
         double dam;
-        dam = 85 + 20 * itemstack.getEnchantmentLevel(Enchantments.SHARPNESS);
+        int sharpnessLevel = 0;
+        if (world instanceof Level level) {
+            sharpnessLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SHARPNESS)
+                    .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
+        }
+        dam = 85 + 20 * sharpnessLevel;
         SIHelper.causeSanityInjury(entity, sourceentity, dam, SanityEvent.Hurt.Type.ENTITY);
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -88,8 +81,8 @@ public class TrailedGoldenSwordItem extends SwordItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.trailed_golden_sword.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.trailed_golden_sword.description_1"));
 	}

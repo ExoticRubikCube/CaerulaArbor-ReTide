@@ -16,13 +16,8 @@ import net.minecraft.world.level.material.PushReaction;
 
 public class ResdtoneIrisBlock extends FlowerBlock {
 	public ResdtoneIrisBlock() {
-		super(() -> MobEffects.REGENERATION, 180, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).sound(SoundType.GRASS).instabreak().hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true).lightLevel(s -> 4)
+		super(MobEffects.REGENERATION, 180, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).sound(SoundType.GRASS).instabreak().hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true).lightLevel(s -> 4)
 				.noCollission().offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
-	}
-
-	@Override
-	public int getEffectDuration() {
-		return 180;
 	}
 
 	@Override

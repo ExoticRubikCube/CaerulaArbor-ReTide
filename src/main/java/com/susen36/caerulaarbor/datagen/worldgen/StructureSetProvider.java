@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.datagen.worldgen;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
@@ -12,11 +12,11 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 /**
  * 生成 structure_set 注册表数据
  *
- * <p>新增 structure set 时，在 {@link #bootstrap(BootstapContext)} 中引用已注册的 structure，
+ * <p>新增 structure set 时，在 {@link #bootstrap(BootstrapContext)} 中引用已注册的 structure，
  * 配置权重、间距、最小分离距离和随机 salt，再写入 {@link StructureSet}
  * <p>示例：
  * <pre>{@code
- * public static void bootstrap(BootstapContext<StructureSet> context) {
+ * public static void bootstrap(BootstrapContext<StructureSet> context) {
  *     // 查询 structure 注册表，用于 structure set 引用已注册结构
  *     HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
  *
@@ -54,7 +54,7 @@ public final class StructureSetProvider {
      *
      * @param context Mojang 提供的注册表 bootstrap 上下文
      */
-    public static void bootstrap(BootstapContext<StructureSet> context) {
+    public static void bootstrap(BootstrapContext<StructureSet> context) {
         HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
         register(context, structures, WorldgenKeys.StructureSets.ABYSSAL_LAB, WorldgenKeys.Structures.ABYSSAL_LAB, 1, 56, 28, 983379551);
         register(context, structures, WorldgenKeys.StructureSets.AEGIR_LAB, WorldgenKeys.Structures.AEGIR_LAB, 1, 64, 32, 1001069449);
@@ -115,7 +115,7 @@ public final class StructureSetProvider {
      * @param salt       随机 salt
      */
     @SuppressWarnings("SameParameterValue")
-    private static void register(BootstapContext<StructureSet> context, HolderGetter<Structure> structures, ResourceKey<StructureSet> key, ResourceKey<Structure> structureKey, int weight, int spacing, int separation, int salt) {
+    private static void register(BootstrapContext<StructureSet> context, HolderGetter<Structure> structures, ResourceKey<StructureSet> key, ResourceKey<Structure> structureKey, int weight, int spacing, int separation, int salt) {
         context.register(key, new StructureSet(java.util.List.of(new StructureSet.StructureSelectionEntry(structures.getOrThrow(structureKey), weight)), new RandomSpreadStructurePlacement(spacing, separation, RandomSpreadType.LINEAR, salt)));
     }
 }

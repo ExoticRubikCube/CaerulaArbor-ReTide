@@ -29,14 +29,15 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 import java.util.List;
 
+
 public class OmniKeyItem extends Item {
 	public OmniKeyItem() {
 		super(new Item.Properties().durability(64).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
 		if (hoverText != null) {
 			for (String line : hoverText.split("\n")) {

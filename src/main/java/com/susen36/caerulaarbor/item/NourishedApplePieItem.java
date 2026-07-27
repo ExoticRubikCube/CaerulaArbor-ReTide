@@ -17,19 +17,20 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class NourishedApplePieItem extends Item {
 	public NourishedApplePieItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(8).saturationMod(0.8f).alwaysEat().build()));
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 30;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.nourished_apple_pie.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.nourished_apple_pie.description_1"));
 	}
@@ -42,7 +43,7 @@ public class NourishedApplePieItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 30, 0));
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 800, 2));
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 2));
-			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 3600, 0));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 3600, 0));
 		}
 		entity.setHealth((float) (entity.getHealth() + entity.getMaxHealth() * 0.15));
 		SIHelper.causeSanityInjury(entity, 75, SanityEvent.Hurt.Type.FOOD);

@@ -11,7 +11,7 @@ import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 public class LivingExpDropEventHandler {
 	@SubscribeEvent
 	public static void onLivingDropXp(LivingExperienceDropEvent event) {
-		if (event == null || event.getEntity() == null) return;
+		if (event == null) return;
 
 		Player sourceentity = event.getAttackingPlayer();
 		if (sourceentity == null)

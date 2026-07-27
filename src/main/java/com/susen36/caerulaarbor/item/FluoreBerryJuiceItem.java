@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class FluoreBerryJuiceItem extends Item {
 	public FluoreBerryJuiceItem() {
 		super(new Item.Properties().stacksTo(4).rarity(Rarity.COMMON));
@@ -26,13 +27,13 @@ public class FluoreBerryJuiceItem extends Item {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 32;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.fluore_berry_juice.description_0"));
 	}
 

@@ -10,7 +10,7 @@ import net.minecraft.world.level.material.MapColor;
 
 public class SaltwindStairBlock extends StairBlock {
 	public SaltwindStairBlock() {
-		super(() -> Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).sound(SoundType.STONE).strength(1f, 2f).requiresCorrectToolForDrops().dynamicShape());
+		super(Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).sound(SoundType.STONE).strength(1f, 2f).requiresCorrectToolForDrops().dynamicShape());
 	}
 
 	@Override

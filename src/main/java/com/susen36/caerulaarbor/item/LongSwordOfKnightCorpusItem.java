@@ -8,6 +8,7 @@ import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -16,36 +17,22 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;
 
 public class LongSwordOfKnightCorpusItem extends SwordItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_NETHERITE_TOOL,
+			4000,
+			9f,
+			10f,
+			16,
+			() -> Ingredient.of(new ItemStack(CAItems.KNIGHT_CORPSE.get()))
+	);
+
 	public LongSwordOfKnightCorpusItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 4000;
-			}
-
-			public float getSpeed() {
-				return 9f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 10f;
-			}
-
-			public int getLevel() {
-				return 4;
-			}
-
-			public int getEnchantmentValue() {
-				return 16;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.KNIGHT_CORPSE.get()));
-			}
-		}, 3, -2.9f, new Item.Properties().fireResistant());
+		super(TIER, new Item.Properties().fireResistant().attributes(SwordItem.createAttributes(TIER, 3, -2.9f)));
 	}
 
 	@Override
@@ -69,8 +56,8 @@ public class LongSwordOfKnightCorpusItem extends SwordItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.long_sword_of_knight_corpus.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.long_sword_of_knight_corpus.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.long_sword_of_knight_corpus.description_2"));
@@ -80,9 +67,9 @@ public class LongSwordOfKnightCorpusItem extends SwordItem {
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected) {
-            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
+            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.ADD_REACH))) {
                 if (entity instanceof LivingEntity living && !living.level().isClientSide())
-                    living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 2, false, false));
+                    living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 20, 2, false, false));
             }
         }
 	}

@@ -12,7 +12,7 @@ import net.minecraft.world.level.material.MapColor;
 
 public class SaltwindSmoothStairBlock extends StairBlock {
 	public SaltwindSmoothStairBlock() {
-		super(() -> Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).sound(SoundType.STONE).strength(3f, 8f).requiresCorrectToolForDrops().dynamicShape());
+		super(Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).sound(SoundType.STONE).strength(3f, 8f).requiresCorrectToolForDrops().dynamicShape());
 	}
 
 	@Override

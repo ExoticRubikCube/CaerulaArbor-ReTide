@@ -6,43 +6,30 @@ import com.susen36.caerulaarbor.init.CADamageTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;
 
+
 public class SwordOfLastKnightCorpusItem extends SwordItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+			800,
+			7f,
+			5f,
+			17,
+			() -> Ingredient.of(new ItemStack(Items.IRON_INGOT))
+	);
+
 	public SwordOfLastKnightCorpusItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 800;
-			}
-
-			public float getSpeed() {
-				return 7f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 5f;
-			}
-
-			public int getLevel() {
-				return 3;
-			}
-
-			public int getEnchantmentValue() {
-				return 17;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(Items.IRON_INGOT));
-			}
-		}, 3, -2.6f, new Item.Properties().fireResistant());
+		super(TIER, new Item.Properties().fireResistant().attributes(SwordItem.createAttributes(TIER, 3, -2.6f)));
 	}
 
 	@Override
@@ -66,8 +53,8 @@ public class SwordOfLastKnightCorpusItem extends SwordItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.iron_sword_of_knight_corpus.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.iron_sword_of_knight_corpus.description_1"));
 	}

@@ -1,12 +1,11 @@
 package com.susen36.caerulaarbor.compat.jade;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
-import snownee.jade.api.Identifiers;
 import snownee.jade.api.theme.IThemeHelper;
 import snownee.jade.api.ui.Element;
 import snownee.jade.impl.config.PluginConfig;

@@ -25,7 +25,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -74,7 +74,7 @@ public class TransformManager {
 		if (entity instanceof Player ||getEntityTypeId(entity).contains("touhou_little_maid:maid")) {
 			return false;
 		}
-		if (!(entity instanceof LivingEntity livEnt2 && livEnt2.getMobType() == MobType.UNDEAD || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_transform"))))
+		if (!(entity instanceof LivingEntity livEnt2 && livEnt2.getType().is(EntityTags.UNDEAD) || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_transform"))))
 				&& world.getLevelData().getGameRules().getBoolean(CAGameRules.OCEANIZATION_MODE) && !(entity instanceof LivingEntity livEnt5 && livEnt5.isBaby())) {
 			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CAConfigs.CLONE_NUM.get()) * 2) {
 				return false;
@@ -144,7 +144,7 @@ public class TransformManager {
 	}
 
 	private static String getEntityTypeId(Entity entity) {
-		return ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString();
+		return BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString();
 	}
 
 	private static boolean matchesEntityType(Entity entity, String entityTypeId) {

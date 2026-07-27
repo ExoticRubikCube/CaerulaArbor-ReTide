@@ -14,11 +14,11 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class SeabornSpawnManager {
 	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] WATER_NORMAL_POOL = {
+	private static final DeferredHolder[] WATER_NORMAL_POOL = {
 		CAEntities.COLLECTOR_PROKARYOTE,
 		CAEntities.FLOATER_PROKARYOTE,
 		CAEntities.DEPOSITER_PROKARYOTE,
@@ -28,7 +28,7 @@ public class SeabornSpawnManager {
 	};
 
 	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] LAND_NORMAL_POOL = {
+	private static final DeferredHolder[] LAND_NORMAL_POOL = {
 		CAEntities.CHISELER_FISH,
 		CAEntities.FLY_FISH,
 		CAEntities.PREDATOR_ABYSSAL,
@@ -40,7 +40,7 @@ public class SeabornSpawnManager {
 	};
 
 	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] OCEANIZED_ANIMAL_POOL = {
+	private static final DeferredHolder[] OCEANIZED_ANIMAL_POOL = {
 		CAEntities.OCEANIZED_PIG,
 		CAEntities.OCEANIZED_COW,
 		CAEntities.OCEANIZED_SHEEP,
@@ -57,13 +57,13 @@ public class SeabornSpawnManager {
 	};
 
 	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] WATER_ELITE_POOL = {
+	private static final DeferredHolder[] WATER_ELITE_POOL = {
 		CAEntities.APOSTLE_PROKARYOTE,
 		CAEntities.NUCLEIC_MALEFICENT
 	};
 
 	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] LAND_ELITE_POOL = {
+	private static final DeferredHolder[] LAND_ELITE_POOL = {
 		CAEntities.BASELAYER_ABYSSAL,
 		CAEntities.CRACKER_ABYSSAL,
 		CAEntities.POCKET_SEA_CREEPER,
@@ -77,7 +77,7 @@ public class SeabornSpawnManager {
 	};
 
 	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] OCEANIZED_ELITE_POOL = {
+	private static final DeferredHolder[] OCEANIZED_ELITE_POOL = {
 		CAEntities.OCEANIZED_VINDICATOR,
 		CAEntities.OCEANIZED_EVOKER,
 		CAEntities.OCEANIZED_RAVAGER,

@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.datagen.worldgen;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -28,7 +28,7 @@ import java.util.List;
  * 再用 {@link PlacedFeature} 绑定 configured feature 和 {@link PlacementModifier} 列表
  * <p>示例：
  * <pre>{@code
- * public static void bootstrap(BootstapContext<PlacedFeature> context) {
+ * public static void bootstrap(BootstrapContext<PlacedFeature> context) {
  *     // 查询 configured feature 注册表，用于通过 key 取得要放置的 configured feature
  *     HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
  *
@@ -46,7 +46,7 @@ import java.util.List;
  * }
  *
  * private static void register(
- *         BootstapContext<PlacedFeature> context,
+ *         BootstrapContext<PlacedFeature> context,
  *         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures,
  *         ResourceKey<PlacedFeature> key,
  *         ResourceKey<ConfiguredFeature<?, ?>> configuredFeatureKey,
@@ -74,7 +74,7 @@ public class PlacedFeatureProvider {
      *
      * @param context Mojang 提供的注册表 bootstrap 上下文
      */
-    public static void bootstrap(BootstapContext<PlacedFeature> context) {
+    public static void bootstrap(BootstrapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
         register(context, configuredFeatures, WorldgenKeys.PlacedFeatures.BRANDED_LAND_TREE, WorldgenKeys.ConfiguredFeatures.BRANDED_LAND_TREE, List.of(
                 CountPlacement.of(2),
@@ -124,7 +124,7 @@ public class PlacedFeatureProvider {
      * @param configuredFeatureKey configured feature 注册 key
      * @param modifiers          放置修饰器列表
      */
-    private static void register(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, ResourceKey<PlacedFeature> key, ResourceKey<ConfiguredFeature<?, ?>> configuredFeatureKey, List<PlacementModifier> modifiers) {
+    private static void register(BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, ResourceKey<PlacedFeature> key, ResourceKey<ConfiguredFeature<?, ?>> configuredFeatureKey, List<PlacementModifier> modifiers) {
         context.register(key, new PlacedFeature(
                 configuredFeatures.getOrThrow(configuredFeatureKey),
                 modifiers

@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class NetherseaCoffeItem extends Item {
 	public NetherseaCoffeItem() {
 		super(new Item.Properties().stacksTo(4).rarity(Rarity.COMMON));
@@ -28,13 +29,13 @@ public class NetherseaCoffeItem extends Item {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 32;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.nethersea_coffee.description_0"));
 	}
 
@@ -48,7 +49,7 @@ public class NetherseaCoffeItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
         if (!entity.level().isClientSide()) {
-            entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 400, 1));
+            entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, 400, 1));
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 1));
             entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 400, 2));
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 500, 1));

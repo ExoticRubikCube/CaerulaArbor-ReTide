@@ -8,7 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -35,6 +35,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
 public class ThirstCoralBlock extends Block implements SimpleWaterloggedBlock {
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -45,8 +46,8 @@ public class ThirstCoralBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public float[] getBeaconColorMultiplier(BlockState state, LevelReader world, BlockPos pos, BlockPos beaconPos) {
-		return new float[]{0.4784313725f, 0.537254902f, 0.9176470588f};
+	public @Nullable Integer getBeaconColorMultiplier(BlockState state, LevelReader world, BlockPos pos, BlockPos beaconPos) {
+		return 0xFF7A89EA;
 	}
 
 	@Override
@@ -95,8 +96,8 @@ public class ThirstCoralBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -104,9 +105,9 @@ public class ThirstCoralBlock extends Block implements SimpleWaterloggedBlock {
 		double hitY = hit.getLocation().y;
 		double hitZ = hit.getLocation().z;
 		Direction direction = hit.getDirection();
-        InteractionResult result = InteractionResult.SUCCESS;
+        ItemInteractionResult result = ItemInteractionResult.SUCCESS;
         if (entity == null) {
-            result = InteractionResult.PASS;
+            result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         } else {
             double state = 0;
             if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
@@ -125,7 +126,7 @@ public class ThirstCoralBlock extends Block implements SimpleWaterloggedBlock {
                 if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                     player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.thirst_coral.note").getString())), true);
             } else {
-                result = InteractionResult.PASS;
+                result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
         }
         return result;

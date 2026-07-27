@@ -18,7 +18,7 @@ public class RadiantBerriesItem extends Item {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 40;
 	}
 
@@ -28,7 +28,7 @@ public class RadiantBerriesItem extends Item {
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 3200, 2));
 			entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0));
-			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 3600, 1));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 3600, 1));
 		}
 		entity.removeEffect(MobEffects.BLINDNESS);
 		return super.finishUsingItem(itemstack, world, entity);

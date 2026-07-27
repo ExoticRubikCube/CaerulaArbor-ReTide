@@ -46,11 +46,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 
 import java.util.List;
 
@@ -70,7 +67,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		super(type, world);
 		this.xpReward = 1024;
 		this.setNoAi(false);
-		this.setMaxUpStep(0.6F);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6F);
 		this.setPersistenceRequired();
 	}
 
@@ -87,13 +84,13 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	protected abstract int getInitialHeartbeatGap();
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_SKILL_1, 100);
-		this.entityData.define(DATA_SKILL_2, 120);
-		this.entityData.define(DATA_DURATION, 0);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_SKILL_1, 100);
+		builder.define(DATA_SKILL_2, 120);
+		builder.define(DATA_DURATION, 0);
 	}
 
 	public String getSyncedAnimation() {
@@ -151,11 +148,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(AbstractOceanizedWardenEntity.this, 2, true) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 5.0625;
-			}
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, AbstractOceanizedWardenEntity.this, 2, true) {
 
 			@Override
 			public boolean canUse() {
@@ -437,7 +430,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 					this.entityData.set(DATA_DURATION, 45);
 					this.setAnimation(this.getAnimationPrefix() + ".sonic");
 					if (!this.level().isClientSide()) {
-						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 45, 0, false, false));
+						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 45, 0, false, false));
 						this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 45, 9, false, false));
 					}
 					this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY(), target.getZ()));
@@ -521,7 +514,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean canChangeDimensions() {
+	public boolean canUsePortal(boolean allowVehicles) {
 		return false;
 	}
 
@@ -551,12 +544,12 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 50);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 48);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 75);
-		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.01);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 75);
+		builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.01);
 		return builder;
 	}
 
-	protected PlayState movementPredicate(AnimationState<?> event) {
+	protected PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isAggressive()) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop(this.getAnimationPrefix() + ".move"));
@@ -572,7 +565,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	protected PlayState attackingPredicate(AnimationState<?> event) {
+	protected PlayState attackingPredicate(AnimationState event) {
 		if (this.getAttackAnim(event.getPartialTick()) > 0F && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = this.level().getGameTime();
@@ -587,7 +580,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		return PlayState.CONTINUE;
 	}
 
-	protected PlayState procedurePredicate(AnimationState<?> event) {
+	protected PlayState procedurePredicate(AnimationState event) {
 		if (!this.animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(this.prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(this.prevAnim)) {
 				event.getController().forceAnimationReset();
@@ -610,7 +603,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		++this.deathTime;
 		if (this.deathTime == 50) {
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 			LevelAccessor world = this.level();
 			if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 				for (int index = 0; index < 64; index++) {
@@ -638,7 +631,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	public void setHealth(float health) {
 		float currentHealth = this.getHealth();
 		float maxHealth = this.getMaxHealth();
-		if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && health < currentHealth) {
+		if (this.hasEffect(CAMobEffects.INVULNERABLE) && health < currentHealth) {
 			return;
 		}
 		float reduction = currentHealth - health;

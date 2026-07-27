@@ -4,22 +4,17 @@ package com.susen36.caerulaarbor.potion;
 import com.susen36.caerulaarbor.entity.TideBishopEntity;
 import com.susen36.caerulaarbor.entity.TideDeathrepellerEntity;
 import com.susen36.caerulaarbor.util.MathUtils;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class FakeDeathMobEffect extends MobEffect {
     public FakeDeathMobEffect() {
@@ -31,10 +26,7 @@ public class FakeDeathMobEffect extends MobEffect {
         // this.addAttributeModifier(NeoForgeMod.ENTITY_REACH, "d2ad47ed-30d5-3421-a371-7eb8d9b95037", -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public void addAttributeModifiers(LivingEntity livingEntity, AttributeMap attributeMap, int amplifier) {
@@ -65,23 +57,4 @@ public class FakeDeathMobEffect extends MobEffect {
         return MathUtils.isMultipleOf(duration, 10);
     }
 
-    @Override
-    public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
-        consumer.accept(new IClientMobEffectExtensions() {
-            @Override
-            public boolean isVisibleInInventory(MobEffectInstance effect) {
-                return false;
-            }
-
-            @Override
-            public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics guiGraphics, int x, int y, int blitOffset) {
-                return false;
-            }
-
-            @Override
-            public boolean isVisibleInGui(MobEffectInstance effect) {
-                return false;
-            }
-        });
-    }
 }

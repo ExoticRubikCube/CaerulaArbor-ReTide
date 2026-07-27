@@ -7,8 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -42,14 +40,10 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
@@ -74,35 +68,25 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(1.5f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_ROOT_X, 0);
-        this.entityData.define(DATA_ROOT_Z, 0);
-        this.entityData.define(DATA_ROOTED, false);
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_ROOT_X, 0);
+        builder.define(DATA_ROOT_Z, 0);
+        builder.define(DATA_ROOTED, false);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 12.25;
-            }
-        });
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
@@ -133,7 +117,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         if (sourceentity != null) {
             double num;
             if (this.isAlive()) {
-                if (!this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
+                if (!this.hasEffect(CAMobEffects.COOLDOWN_SINAL)) {
                     num = 0;
                     {
                         final Vec3 center = new Vec3(x, y, z);
@@ -150,7 +134,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                                 this.setAnimation("animation.chitgolem.smash");
                             }
                             if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 60, 0, false, false));
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             CaerulaArborMod.queueServerWork(13, () -> {
                                 if (world instanceof Level level) {
@@ -310,11 +294,6 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public void aiStep() {
         super.aiStep();
         this.updateSwingTime();
@@ -329,13 +308,13 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         builder = builder.add(Attributes.ATTACK_DAMAGE, 17);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.05);
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
-        builder = builder.add(CAAttributes.MISSRATE.get(), 33);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.05);
+        builder = builder.add(CAAttributes.SANITY_RATE, 10);
+        builder = builder.add(CAAttributes.MISSRATE, 33);
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.chitgolem.move"));
@@ -348,7 +327,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -365,7 +344,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -387,7 +366,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         ++this.deathTime;
         if (this.deathTime == 30) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

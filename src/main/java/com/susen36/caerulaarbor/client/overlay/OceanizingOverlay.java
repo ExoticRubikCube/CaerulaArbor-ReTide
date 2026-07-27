@@ -8,10 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber({Dist.CLIENT})
@@ -20,8 +20,8 @@ public class OceanizingOverlay {
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		Player player = Minecraft.getInstance().player;
 		ResourceLocation texture = null;
-		if (player.hasEffect(CAMobEffects.INFESTED.get())) {
-			int amplifier = player.getEffect(CAMobEffects.INFESTED.get()).getAmplifier();
+		if (player.hasEffect(CAMobEffects.INFESTED)) {
+			int amplifier = player.getEffect(CAMobEffects.INFESTED).getAmplifier();
 			if (amplifier == 0) {
 				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/transforming0.png");
 			} else if (amplifier == 1) {

@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class TidelinkedShieldItem extends ShieldItem {
 	public TidelinkedShieldItem() {
 		super(new Item.Properties().durability(3125).fireResistant());
@@ -46,8 +47,8 @@ public class TidelinkedShieldItem extends ShieldItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.tidelinked_shield.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.tidelinked_shield.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.tidelinked_shield.description_2"));
@@ -58,7 +59,7 @@ public class TidelinkedShieldItem extends ShieldItem {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected) {
             if (entity instanceof LivingEntity living)
-				living.removeEffect(CAMobEffects.LESS_ARMOR.get());
+				living.removeEffect(CAMobEffects.LESS_ARMOR);
         }
 	}
 }

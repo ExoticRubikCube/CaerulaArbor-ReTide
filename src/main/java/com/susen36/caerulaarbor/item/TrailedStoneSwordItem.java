@@ -5,9 +5,11 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
@@ -15,36 +17,23 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;
 
+
 public class TrailedStoneSwordItem extends SwordItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_STONE_TOOL,
+			131,
+			4f,
+			1f,
+			7,
+			() -> Ingredient.of(ItemTags.create(ResourceLocation.parse("forge:stone")))
+	);
+
 	public TrailedStoneSwordItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 131;
-			}
-
-			public float getSpeed() {
-				return 4f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 1f;
-			}
-
-			public int getLevel() {
-				return 1;
-			}
-
-			public int getEnchantmentValue() {
-				return 7;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(ItemTags.create(ResourceLocation.parse("forge:stone")));
-			}
-		}, 3, -2.4f, new Item.Properties());
+		super(TIER, new Item.Properties().attributes(SwordItem.createAttributes(TIER, 3, -2.4f)));
 	}
 
 	@Override
@@ -52,7 +41,12 @@ public class TrailedStoneSwordItem extends SwordItem {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
         double dam;
-        dam = 50 + 10 * itemstack.getEnchantmentLevel(Enchantments.SHARPNESS);
+        int sharpnessLevel = 0;
+        if (world instanceof Level level) {
+            sharpnessLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SHARPNESS)
+                    .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
+        }
+        dam = 50 + 10 * sharpnessLevel;
         SIHelper.causeSanityInjury(entity, sourceentity, dam, SanityEvent.Hurt.Type.ENTITY);
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -90,8 +84,8 @@ public class TrailedStoneSwordItem extends SwordItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.trailed_stone_sword.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.trailed_stone_sword.description_1"));
 	}

@@ -4,32 +4,24 @@ package com.susen36.caerulaarbor.potion;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.util.MathUtils;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class PowerOfAnchorMobEffect extends MobEffect {
     public PowerOfAnchorMobEffect() {
         super(MobEffectCategory.NEUTRAL, -6684724);
-        this.addAttributeModifier(CAAttributes.SANITY_MODIFIER.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "power_of_anchor_sanity_modifier"), -0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        this.addAttributeModifier(CAAttributes.SANITY_MODIFIER, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "power_of_anchor_sanity_modifier"), -0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
@@ -46,23 +38,4 @@ public class PowerOfAnchorMobEffect extends MobEffect {
         return MathUtils.isMultipleOf(duration, 10);
     }
 
-    @Override
-    public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
-        consumer.accept(new IClientMobEffectExtensions() {
-            @Override
-            public boolean isVisibleInInventory(MobEffectInstance effect) {
-                return false;
-            }
-
-            @Override
-            public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics guiGraphics, int x, int y, int blitOffset) {
-                return false;
-            }
-
-            @Override
-            public boolean isVisibleInGui(MobEffectInstance effect) {
-                return false;
-            }
-        });
-    }
 }

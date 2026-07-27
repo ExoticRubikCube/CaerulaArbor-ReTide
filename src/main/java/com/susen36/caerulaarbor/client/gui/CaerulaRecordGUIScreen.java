@@ -1,16 +1,15 @@
 package com.susen36.caerulaarbor.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAGameRules;
-import com.susen36.caerulaarbor.init.CANetwork;
 import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.susen36.caerulaarbor.network.send.CaerulaRecordGUIButtonMessage;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.RelicUtils;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -26,6 +25,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
 
@@ -236,7 +236,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		super.init();
 		button_show_on_hud = new PlainTextButton(this.leftPos + 4, this.topPos + 123, 82, 20, Component.translatable("gui.caerula_arbor.caerula_record_gui.button_show_on_hud"), e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new CaerulaRecordGUIButtonMessage(0, x, y, z));
+				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(0, x, y, z));
 				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 0, x, y, z);
 			}
 		}, this.font);
@@ -244,7 +244,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		this.addRenderableWidget(button_show_on_hud);
 		button_show_relic_ptc = new PlainTextButton(this.leftPos + 4, this.topPos + 147, 98, 20, Component.translatable("gui.caerula_arbor.caerula_record_gui.button_show_relic_ptc"), e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new CaerulaRecordGUIButtonMessage(1, x, y, z));
+				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(1, x, y, z));
 				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 1, x, y, z);
 			}
 		}, this.font);
@@ -252,7 +252,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		this.addRenderableWidget(button_show_relic_ptc);
 		imagebutton_relic_icon = new ImageButton(this.leftPos + 6, this.topPos + 99, 16, 16, 0, 0, 16, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_relic_icon.png"), 16, 32, e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new CaerulaRecordGUIButtonMessage(2, x, y, z));
+				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(2, x, y, z));
 				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 2, x, y, z);
 			}
 		});
@@ -260,7 +260,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		this.addRenderableWidget(imagebutton_relic_icon);
 		imagebutton_nurture_gene_set = new ImageButton(this.leftPos + 28, this.topPos + 99, 16, 16, 0, 0, 16, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_nurture_gene_set.png"), 16, 32, e -> {
 			if (PlayerStateUtils.canPlayerEvo(entity)) {
-				CANetwork.PACKET_HANDLER.sendToServer(new CaerulaRecordGUIButtonMessage(3, x, y, z));
+				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(3, x, y, z));
 				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 3, x, y, z);
 			}
 		}) {

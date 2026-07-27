@@ -42,8 +42,8 @@ public class EnderinaCoreBlock extends Block {
 	}
 
 	@Override
-	public float[] getBeaconColorMultiplier(BlockState state, LevelReader world, BlockPos pos, BlockPos beaconPos) {
-		return new float[]{0.7254901961f, 0.2509803922f, 0.9058823529f};
+	public Integer getBeaconColorMultiplier(BlockState state, LevelReader world, BlockPos pos, BlockPos beaconPos) {
+		return 0xFFB940E7;
 	}
 
 	@Override

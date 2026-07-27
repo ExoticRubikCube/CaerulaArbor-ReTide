@@ -16,7 +16,7 @@ import com.susen36.caerulaarbor.manager.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.manager.TransformManager;
 import com.susen36.caerulaarbor.util.CaerulaUtil;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -49,10 +49,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Comparator;
@@ -134,7 +133,7 @@ public class LivingDeathEventHandler {
                     event.setCanceled(true);
                 }
                 if (entity instanceof ServerPlayer player) {
-                    Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "another_breath"));
+                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "another_breath"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
@@ -153,7 +152,7 @@ public class LivingDeathEventHandler {
                     if (!world.isClientSide()) {
                         entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0));
                         entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 4));
-                        entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 0));
+                        entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 100, 0));
                     }
                     entity.setHealth(entity.getMaxHealth());
                 } else {
@@ -187,8 +186,8 @@ public class LivingDeathEventHandler {
         if (entity == null) return;
 
         if (!event.isCanceled()) {
-            if (entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
-                livingEntity1.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue(0);
+            if (entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER))
+                livingEntity1.getAttribute(CAAttributes.LIVING_BARRIER).setBaseValue(0);
             entity.getPersistentData().putDouble("playerEvoHitTime", 0);
         }
     }
@@ -200,7 +199,7 @@ public class LivingDeathEventHandler {
 
         if (damagesource == null || entity == null || sourceentity == null) return;
 
-        if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.INVULNERABLE.get()) && !damagesource.is(CADamageTypes.INV_KILLER)) {
+        if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.INVULNERABLE) && !damagesource.is(CADamageTypes.INV_KILLER)) {
             if (event.isCancelable()) {
                 event.setCanceled(true);
             }
@@ -276,7 +275,7 @@ public class LivingDeathEventHandler {
 
         if (damagesource.is(CADamageTypes.EXTRACTOR_DAMAGE)) {
             if (sourceentity instanceof ServerPlayer player) {
-                Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "little_by_little"));
+                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "little_by_little"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                 if (!ap.isDone()) {
                     for (String criteria : ap.getRemainingCriteria())
@@ -367,7 +366,7 @@ public class LivingDeathEventHandler {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.AMBIENT, 1, 1);
                     }
                     if (world instanceof ServerLevel level) {
-                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "common_relics"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))));
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack((BuiltInRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "common_relics"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))));
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
                         level.addFreshEntity(entityToSpawn);
@@ -378,7 +377,12 @@ public class LivingDeathEventHandler {
 
         if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "self_mendable")))) {
             ItemStack weapon = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-            double dama = weapon.getDamageValue() - Mth.nextInt(RandomSource.create(), 1, 5 + weapon.getEnchantmentLevel(Enchantments.UNBREAKING));
+            int unbreakingLevel = 0;
+            if (entity.level() instanceof ServerLevel serverLevel) {
+                unbreakingLevel = serverLevel.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.UNBREAKING)
+                        .map(h -> weapon.getEnchantmentLevel(h)).orElse(0);
+            }
+            double dama = weapon.getDamageValue() - Mth.nextInt(RandomSource.create(), 1, 5 + unbreakingLevel);
             if (dama <= 0) {
                 (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).setDamageValue(0);
             } else {

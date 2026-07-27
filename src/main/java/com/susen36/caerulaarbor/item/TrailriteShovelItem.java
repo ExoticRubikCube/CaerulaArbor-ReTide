@@ -4,43 +4,31 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;
 import java.util.function.Consumer;
 
+
 public class TrailriteShovelItem extends ShovelItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_NETHERITE_TOOL,
+			7999,
+			19f,
+			8f,
+			22,
+			() -> Ingredient.of(new ItemStack(CAItems.TRAILRITE.get()))
+	);
+
 	public TrailriteShovelItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 7999;
-			}
-
-			public float getSpeed() {
-				return 19f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 8f;
-			}
-
-			public int getLevel() {
-				return 4;
-			}
-
-			public int getEnchantmentValue() {
-				return 22;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.TRAILRITE.get()));
-			}
-		}, 1, -3f, new Item.Properties().fireResistant());
+		super(TIER, new Item.Properties().fireResistant().attributes(ShovelItem.createAttributes(TIER, 1, -3f)));
 	}
 
 	@Override
@@ -71,8 +59,8 @@ public class TrailriteShovelItem extends ShovelItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.trailrite_shovel.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.trailrite_shovel.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.trailrite_shovel.description_2"));

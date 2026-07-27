@@ -35,7 +35,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.network.NetworkHooks;
 
 public class GunmuEntity extends Monster {
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.PROGRESS);
@@ -46,33 +45,18 @@ public class GunmuEntity extends Monster {
 
     public GunmuEntity(EntityType<GunmuEntity> type, Level world) {
         super(type, world);
-        setMaxUpStep(1f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         xpReward = 0;
         setNoAi(false);
         setPersistenceRequired();
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
-
-    @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 4;
-            }
-        });
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false));
         this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEAD;
     }
 
     @Override
@@ -85,8 +69,8 @@ public class GunmuEntity extends Monster {
         return -0.35D;
     }
 
-    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
-        super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, damageSource, recentlyHit);
         this.spawnAtLocation(new ItemStack(CAItems.BANNED_ITEM.get()));
     }
 
@@ -179,8 +163,8 @@ public class GunmuEntity extends Monster {
         if (tickCount % 10 == 0) {
             clearFire();
             this.removeAllEffects();
-            if (this.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
-                this.getAttribute(CAAttributes.NUMB.get()).setBaseValue(0);
+            if (this.getAttributes().hasAttribute(CAAttributes.NUMB))
+                this.getAttribute(CAAttributes.NUMB).setBaseValue(0);
             SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(this);
             sanityInjury.heal(sanityInjury.getMaxValue());
         }
@@ -192,7 +176,7 @@ public class GunmuEntity extends Monster {
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -238,8 +222,8 @@ public class GunmuEntity extends Monster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 750);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 100);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 100);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0);
         return builder;
     }
 }

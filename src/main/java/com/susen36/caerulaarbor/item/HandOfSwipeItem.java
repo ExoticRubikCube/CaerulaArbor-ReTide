@@ -21,14 +21,15 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class HandOfSwipeItem extends Item {
 	public HandOfSwipeItem() {
 		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.hand_of_spotless.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.hand_of_spotless.description_1"));
 	}

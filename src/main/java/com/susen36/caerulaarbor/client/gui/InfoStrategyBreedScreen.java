@@ -10,6 +10,7 @@ import com.susen36.caerulaarbor.menu.InfoStrategyBreedMenu;
 import com.susen36.caerulaarbor.network.send.InfoStrategyReturnButtonMessage;
 import com.susen36.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.PlainTextButton;
@@ -124,7 +125,7 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
 		super.init();
 		button_return = new PlainTextButton(this.leftPos + 226, this.topPos + 156, 36, 20, Component.translatable("gui.caerula_arbor.info_strategy_breed.button_return"), e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyReturnButtonMessage(0, x, y, z));
+				PacketDistributor.sendToServer(new InfoStrategyReturnButtonMessage(0, x, y, z));
 				InfoStrategyReturnButtonMessage.handleButtonAction(entity, 0, x, y, z);
 			}
 		}, this.font);
@@ -132,4 +133,3 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
 		this.addRenderableWidget(button_return);
 	}
 }
-

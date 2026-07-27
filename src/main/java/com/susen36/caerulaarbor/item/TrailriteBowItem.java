@@ -23,14 +23,15 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+
 public class TrailriteBowItem extends BowItem {
 	public TrailriteBowItem() {
 		super(new Item.Properties().durability(10293).rarity(Rarity.RARE));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.trailrite_bow.desc"));
 	}
 
@@ -71,7 +72,7 @@ public class TrailriteBowItem extends BowItem {
             ItemStack itemstack = player.getProjectile(pStack);
 
             int i = this.getUseDuration(pStack) - pTimeLeft;
-            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(pStack, pLevel, player, i, !itemstack.isEmpty() || flag);
+            i = net.neoforged.neoforge.event.ForgeEventFactory.onArrowLoose(pStack, pLevel, player, i, !itemstack.isEmpty() || flag);
             if (i < 0) return;
 
             if (!itemstack.isEmpty() || flag) {

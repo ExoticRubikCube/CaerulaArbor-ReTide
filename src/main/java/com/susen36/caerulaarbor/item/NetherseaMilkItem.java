@@ -16,7 +16,7 @@ public class NetherseaMilkItem extends MilkBucketItem {
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity living) {
 		ItemStack ret = super.finishUsingItem(stack, level, living);
 		if (!level.isClientSide()) {
-			living.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 200, 0, false, false));
+			living.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 200, 0, false, false));
 		}
 		return ret;
 	}

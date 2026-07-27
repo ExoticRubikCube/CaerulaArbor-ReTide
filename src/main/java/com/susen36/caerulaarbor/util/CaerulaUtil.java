@@ -6,7 +6,7 @@ import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAConfigs;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -156,7 +156,7 @@ public class CaerulaUtil {
 			if (world.getBlockState(pos).getDestroySpeed(world, BlockPos.ZERO) >= 0) {
 				for (Entity player : new ArrayList<>(world.players())) {
 					if (player instanceof ServerPlayer serverPlayer) {
-						Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "start_of_calamity"));
+						AdvancementHolder advancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "start_of_calamity"));
 						AdvancementProgress progress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
 						if (!progress.isDone()) {
 							for (String criteria : progress.getRemainingCriteria()) {

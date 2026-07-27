@@ -8,6 +8,7 @@ import com.susen36.caerulaarbor.menu.InfoStrategyAllMenu;
 import com.susen36.caerulaarbor.network.send.InfoStrategyNavigationButtonMessage;
 import com.susen36.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -114,7 +115,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		super.init();
 		button_evolution_tree = new PlainTextButton(this.leftPos + -1, this.topPos + 121, 76, 20, Component.translatable("gui.caerula_arbor.info_strategy_all.button_evolution_tree"), e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(0, x, y, z));
+				PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(0, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 0, x, y, z);
 			}
 		}, this.font);
@@ -122,7 +123,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		this.addRenderableWidget(button_evolution_tree);
 		imagebutton_breed_lit = new ImageButton(this.leftPos + 100, this.topPos + 29, 32, 32, 0, 0, 32, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_breed_lit.png"), 32, 64, e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(1, x, y, z));
+				PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(1, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 1, x, y, z);
 			}
 		});
@@ -130,7 +131,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		this.addRenderableWidget(imagebutton_breed_lit);
 		imagebutton_grow_lit = new ImageButton(this.leftPos + 30, this.topPos + 29, 32, 32, 0, 0, 32, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_grow_lit.png"), 32, 64, e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(2, x, y, z));
+				PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(2, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 2, x, y, z);
 			}
 		});
@@ -138,7 +139,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		this.addRenderableWidget(imagebutton_grow_lit);
 		imagebutton_mig_lit = new ImageButton(this.leftPos + 138, this.topPos + 29, 32, 32, 0, 0, 32, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_mig_lit.png"), 32, 64, e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(3, x, y, z));
+				PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(3, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 3, x, y, z);
 			}
 		});
@@ -146,7 +147,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		this.addRenderableWidget(imagebutton_mig_lit);
 		imagebutton_subs_lit = new ImageButton(this.leftPos + 67, this.topPos + 30, 32, 32, 0, 0, 32, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_subs_lit.png"), 32, 64, e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(4, x, y, z));
+				PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(4, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 4, x, y, z);
 			}
 		});
@@ -154,4 +155,3 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		this.addRenderableWidget(imagebutton_subs_lit);
 	}
 }
-

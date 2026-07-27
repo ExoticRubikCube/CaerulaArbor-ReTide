@@ -6,7 +6,8 @@ import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
-import net.minecraft.advancements.Advancement;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,7 +20,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -182,8 +182,8 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public InteractionResult useWithoutItem(BlockState blockstate, Level world, BlockPos pos, Player entity, BlockHitResult hit) {
+		super.useWithoutItem(blockstate, world, pos, entity, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -326,7 +326,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_4").getString())), false);
                         if ((Entity) entity instanceof ServerPlayer player) {
-                            Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "operation_deepness"));
+                            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "operation_deepness"));
                             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                             if (!ap.isDone()) {
                                 for (String criteria : ap.getRemainingCriteria())
@@ -464,5 +464,10 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 			}
 		}
+	}
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return MapCodec.unit(this);
 	}
 }

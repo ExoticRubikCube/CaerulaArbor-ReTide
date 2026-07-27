@@ -45,11 +45,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -71,18 +71,18 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         super(type, world);
         xpReward = 8;
         setNoAi(false);
-        setMaxUpStep(0.8f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.8f);
         setPersistenceRequired();
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_SKILLP_1, 100);
-        this.entityData.define(DATA_SKILLP_2, 150);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_SKILLP_1, 100);
+        builder.define(DATA_SKILLP_2, 150);
     }
 
     @Override
@@ -227,15 +227,15 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         return super.hurt(source, amount);
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
         compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Skillp1")) {
             this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
@@ -243,7 +243,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         if (compound.contains("Skillp2")) {
             this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
         }
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -443,11 +443,6 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         this.refreshDimensions();
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
     private void spawnLinearFangs(LevelAccessor world, double index) {
         double dist;
         double vx;
@@ -503,7 +498,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -515,7 +510,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -532,7 +527,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -554,7 +549,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

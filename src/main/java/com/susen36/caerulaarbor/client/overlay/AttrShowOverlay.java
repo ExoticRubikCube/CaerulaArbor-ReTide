@@ -12,11 +12,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 @EventBusSubscriber({Dist.CLIENT})
 public class AttrShowOverlay {
@@ -48,7 +48,7 @@ public class AttrShowOverlay {
             String defense = "";
             {
                 double d;
-                d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()) ? livingEntity0.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getValue() : 0;
+                d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE) ? livingEntity0.getAttribute(CAAttributes.GENERAL_DEFENSE).getValue() : 0;
                 if (d > 0) {
                     defense = new java.text.DecimalFormat("##.#").format(d);
                 }
@@ -56,7 +56,7 @@ public class AttrShowOverlay {
             String resis = "";
             if (entity != null) {
                 double d1;
-                d1 = (Entity) entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()) ? livingEntity1.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue() : 0;
+                d1 = (Entity) entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE) ? livingEntity1.getAttribute(CAAttributes.MAGIC_RESISTANCE).getValue() : 0;
                 if (d1 > 0) {
                     resis = new java.text.DecimalFormat("##.#").format(d1);
                 }
@@ -64,7 +64,7 @@ public class AttrShowOverlay {
             String miss = "";
             if (entity != null) {
                 double d;
-                d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()) ? livingEntity0.getAttribute(CAAttributes.MISSRATE.get()).getValue() : 0;
+                d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.MISSRATE) ? livingEntity0.getAttribute(CAAttributes.MISSRATE).getValue() : 0;
                 if (d > 0) {
                     miss = new java.text.DecimalFormat("##.#").format(d);
                 }
@@ -72,7 +72,7 @@ public class AttrShowOverlay {
             String barrier = "";
             if (entity != null) {
                 double d;
-                d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()) ? livingEntity0.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue() : 0;
+                d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER) ? livingEntity0.getAttribute(CAAttributes.LIVING_BARRIER).getBaseValue() : 0;
                 if (d > 0) {
                     barrier = new java.text.DecimalFormat("##.#").format(d);
                 }
@@ -87,7 +87,7 @@ public class AttrShowOverlay {
                 double result = 0;
                 if (entity != null) {
                     double d;
-                    d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()) ? livingEntity0.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue() : 0;
+                    d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE) ? livingEntity0.getAttribute(CAAttributes.MAGIC_RESISTANCE).getValue() : 0;
                     result = d * 0.25;
                 }
                 int len = (int) result;
@@ -109,7 +109,7 @@ public class AttrShowOverlay {
                 } else {
                     double d;
                     double h1;
-                    d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()) ? livingEntity0.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue() : 0;
+                    d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER) ? livingEntity0.getAttribute(CAAttributes.LIVING_BARRIER).getBaseValue() : 0;
                     h1 = (Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1;
                     if (h1 <= 0) {
                         result = 25;

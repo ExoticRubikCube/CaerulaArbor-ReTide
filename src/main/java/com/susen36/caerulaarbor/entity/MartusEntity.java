@@ -24,6 +24,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -51,12 +52,12 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -82,18 +83,18 @@ public class MartusEntity extends SeaMonster {
         super(type, world);
         xpReward = 64;
         setNoAi(false);
-        setMaxUpStep(0.6f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_PHASE, 0);
-        this.entityData.define(DATA_SKILLP_1, 200);
-        this.entityData.define(DATA_SKILLP_2, 200);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_PHASE, 0);
+        builder.define(DATA_SKILLP_1, 200);
+        builder.define(DATA_SKILLP_2, 200);
     }
 
     @Override
@@ -104,12 +105,7 @@ public class MartusEntity extends SeaMonster {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 4;
-            }
-        });
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false));
         this.goalSelector.addGoal(2, new RandomStrollGoal(this, 0.8, 20) {
             @Override
             protected Vec3 getPosition() {
@@ -178,10 +174,10 @@ public class MartusEntity extends SeaMonster {
     @Override
     public void die(DamageSource source) {
         if (this.getEntityData().get(DATA_PHASE) == 0) {
-            this.removeEffect(CAMobEffects.INVULNERABLE.get());
+            this.removeEffect(CAMobEffects.INVULNERABLE);
             if (!this.level().isClientSide()) {
-                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
-                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 200, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1, false, false));
             }
             this.getEntityData().set(DATA_PHASE, 1);
             this.getEntityData().set(DATA_SKILLP_1, 600);
@@ -192,7 +188,7 @@ public class MartusEntity extends SeaMonster {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         LevelAccessor world1 = this.level();
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -242,7 +238,7 @@ public class MartusEntity extends SeaMonster {
                 });
             }
         }.timedLoop(0, 8, 1);
-        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        return super.finalizeSpawn(world, difficulty, reason, livingdata);
     }
 
     @Override
@@ -294,7 +290,7 @@ public class MartusEntity extends SeaMonster {
                     final Vec3 center = new Vec3(x, y, z);
                     List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(48), e -> true);
                     for (Mob entityiterator : entfound) {
-                        if (entityiterator.hasEffect(CAMobEffects.GUIDED_EVO.get())) {
+                        if (entityiterator.hasEffect(CAMobEffects.GUIDED_EVO)) {
                             num = num + 1;
                             this.spawnParticleLink(entityiterator);
                             CaerulaArborMod.queueServerWork(3, () -> {
@@ -322,9 +318,9 @@ public class MartusEntity extends SeaMonster {
                 if (tickCount % 2 == 0) {
                     this.spawnMartusParticleRim();
                 }
-                if (!this.hasEffect(CAMobEffects.INVULNERABLE.get())) {
+                if (!this.hasEffect(CAMobEffects.INVULNERABLE)) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), -1, 9, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, -1, 9, false, false));
                 }
                 if (sklp1 > 0) {
                     if ((Entity) this instanceof MartusEntity datEntSetI)
@@ -383,15 +379,15 @@ public class MartusEntity extends SeaMonster {
                             if (tgt instanceof LivingEntity livingEntity24 && livingEntity24.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                                 livingEntity24.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                                         ((tgt instanceof LivingEntity livingEntity23 && livingEntity23.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity23.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 2.5));
-                            if (tgt instanceof LivingEntity livingEntity26 && livingEntity26.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-                                livingEntity26.getAttribute(CAAttributes.SANITY_RATE.get())
-                                        .setBaseValue(((tgt instanceof LivingEntity livingEntity25 && livingEntity25.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())
-                                                ? livingEntity25.getAttribute(CAAttributes.SANITY_RATE.get()).getBaseValue()
+                            if (tgt instanceof LivingEntity livingEntity26 && livingEntity26.getAttributes().hasAttribute(CAAttributes.SANITY_RATE))
+                                livingEntity26.getAttribute(CAAttributes.SANITY_RATE)
+                                        .setBaseValue(((tgt instanceof LivingEntity livingEntity25 && livingEntity25.getAttributes().hasAttribute(CAAttributes.SANITY_RATE)
+                                                ? livingEntity25.getAttribute(CAAttributes.SANITY_RATE).getBaseValue()
                                                 : 0) + 25));
                             if (tgt instanceof LivingEntity entity)
                                 entity.setHealth((float) ((tgt instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc));
                             if (tgt instanceof LivingEntity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.GUIDED_EVO.get(), -1, 0));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.GUIDED_EVO, -1, 0));
                         }
                     }
                 }
@@ -400,9 +396,9 @@ public class MartusEntity extends SeaMonster {
                 }
             } else {
                 if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.33) {
-                    if (!((Entity) this instanceof LivingEntity livEnt33 && livEnt33.hasEffect(CAMobEffects.INVULNERABLE.get()))) {
+                    if (!((Entity) this instanceof LivingEntity livEnt33 && livEnt33.hasEffect(CAMobEffects.INVULNERABLE))) {
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 9, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 20, 9, false, false));
                     }
                     if (tickCount % 2 == 0) {
                         this.spawnMartusParticleRim();
@@ -442,9 +438,9 @@ public class MartusEntity extends SeaMonster {
                                     if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
                                             && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
                                         if (!this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1));
+                                            this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1));
                                         if (!this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 0));
+                                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 200, 0));
                                     }
                                     if (world instanceof ServerLevel level)
                                         level.sendParticles(ParticleTypes.DOLPHIN, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.85, 0.85, 0.85, 0.1);
@@ -466,10 +462,10 @@ public class MartusEntity extends SeaMonster {
                         Entity tgt_ent;
                         double max_h = 0;
                         tgt_ent = this.getTarget();
-                        if (tgt_ent == null || tgt_ent instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
+                        if (tgt_ent == null || tgt_ent instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.SUB_HAEMO)) {
                             tgt_ent = ((Entity) this instanceof LivingEntity entity) ? entity.getLastHurtByMob() : null;
                         }
-                        if (tgt_ent == null || tgt_ent instanceof LivingEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
+                        if (tgt_ent == null || tgt_ent instanceof LivingEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.SUB_HAEMO)) {
                             for (Entity entityiterator : world.getEntities(this, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
                                 if (!(entityiterator instanceof Mob)) {
                                     continue;
@@ -477,7 +473,7 @@ public class MartusEntity extends SeaMonster {
                                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                     continue;
                                 }
-                                if (entityiterator instanceof LivingEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
+                                if (entityiterator instanceof LivingEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.SUB_HAEMO)) {
                                     continue;
                                 }
                                 if ((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) > max_h) {
@@ -486,9 +482,9 @@ public class MartusEntity extends SeaMonster {
                                 }
                             }
                         }
-                        if (!(tgt_ent == null) && !(tgt_ent instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.SUB_HAEMO.get()))) {
+                        if (!(tgt_ent == null) && !(tgt_ent instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.SUB_HAEMO))) {
                             if (tgt_ent instanceof LivingEntity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.SUB_HAEMO.get(), 800, 0));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.SUB_HAEMO, 800, 0));
                         }
                     });
                 }
@@ -502,16 +498,6 @@ public class MartusEntity extends SeaMonster {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
-
-    @Override
     public boolean checkSpawnObstruction(LevelReader world) {
         return world.isUnobstructed(this);
     }
@@ -522,7 +508,7 @@ public class MartusEntity extends SeaMonster {
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -611,14 +597,14 @@ public class MartusEntity extends SeaMonster {
         builder = builder.add(Attributes.FOLLOW_RANGE, 24);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.5);
-        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 0.5);
-        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 16384);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 100);
-        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
+        builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.5);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE, 16384);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 100);
+        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if (this.isDeadOrDying()) {
                 return event.setAndContinue(RawAnimation.begin().thenPlay("animation.martus.die"));
@@ -628,7 +614,7 @@ public class MartusEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -645,7 +631,7 @@ public class MartusEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -667,7 +653,7 @@ public class MartusEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 25) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 
@@ -691,7 +677,7 @@ public class MartusEntity extends SeaMonster {
     @Override
     public void setHealth(float pHealth) {
         if (this.releaseTime > 0) super.setHealth(pHealth);
-        if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
+        if (this.hasEffect(CAMobEffects.INVULNERABLE) && pHealth < this.getHealth()) return;
         super.setHealth(pHealth);
     }
 

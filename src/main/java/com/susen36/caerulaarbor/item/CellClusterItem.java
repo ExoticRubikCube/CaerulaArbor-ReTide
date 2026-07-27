@@ -17,14 +17,15 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class CellClusterItem extends Item {
 	public CellClusterItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(5).saturationMod(0.2f).meat().build()));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.cell_cluster.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.cell_cluster.description_1"));
 	}

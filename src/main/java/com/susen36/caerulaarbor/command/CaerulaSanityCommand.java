@@ -13,10 +13,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 @EventBusSubscriber
 public class CaerulaSanityCommand {
@@ -24,9 +24,6 @@ public class CaerulaSanityCommand {
 	public static void registerCommand(RegisterCommandsEvent event) {
 		event.getDispatcher().register(Commands.literal("caerula_arbor:sanity").requires(s -> s.hasPermission(2)).then(Commands.literal("check").then(Commands.argument("name", EntityArgument.entity()).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
-			double x = arguments.getSource().getPosition().x();
-			double y = arguments.getSource().getPosition().y();
-			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
 			if (entity == null && world instanceof ServerLevel servLevel)
 				entity = FakePlayerFactory.getMinecraft(servLevel);
@@ -77,7 +74,7 @@ public class CaerulaSanityCommand {
             try {
                 for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                     ent = entityiterator;
-                    if (!(ent == null) && ent instanceof LivingEntity) {
+                    if (ent instanceof LivingEntity) {
                         num = num + 1;
                         CompoundTag sanityData = ModCapabilities.getSanityInjury((LivingEntity) ent).serializeNBT();
                         sanityData.putDouble("SanityInjury", DoubleArgumentType.getDouble(arguments, "amount"));

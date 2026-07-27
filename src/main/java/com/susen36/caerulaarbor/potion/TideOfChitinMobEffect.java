@@ -6,8 +6,6 @@ import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -15,7 +13,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
@@ -24,11 +21,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class TideOfChitinMobEffect extends MobEffect {
     public TideOfChitinMobEffect() {
@@ -37,10 +32,6 @@ public class TideOfChitinMobEffect extends MobEffect {
         this.addAttributeModifier(Attributes.MAX_HEALTH, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "tide_of_chitin_max_health"), 1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
 
     @Override
     public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
@@ -70,7 +61,7 @@ public class TideOfChitinMobEffect extends MobEffect {
             }
             perc = EntityUtils.getHealthPerc(entity);
             if ((Entity) entity instanceof LivingEntity livingEntity)
-                livingEntity.removeEffect(CAMobEffects.TIDE_OF_CHITIN.get());
+                livingEntity.removeEffect(CAMobEffects.TIDE_OF_CHITIN);
             if ((Entity) entity instanceof LivingEntity livingEntity)
                 livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
         }
@@ -86,23 +77,4 @@ public class TideOfChitinMobEffect extends MobEffect {
         return true;
     }
 
-    @Override
-    public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
-        consumer.accept(new IClientMobEffectExtensions() {
-            @Override
-            public boolean isVisibleInInventory(MobEffectInstance effect) {
-                return false;
-            }
-
-            @Override
-            public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics guiGraphics, int x, int y, int blitOffset) {
-                return false;
-            }
-
-            @Override
-            public boolean isVisibleInGui(MobEffectInstance effect) {
-                return false;
-            }
-        });
-    }
 }

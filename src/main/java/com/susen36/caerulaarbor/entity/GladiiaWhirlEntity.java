@@ -30,16 +30,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
@@ -61,20 +60,15 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         super(type, world);
         xpReward = 0;
         setNoAi(true);
-         setNoGravity(true);
-        setMaxUpStep(0f);
+        setNoGravity(true);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0f);
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
     }
 
     @Override
@@ -231,11 +225,6 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public boolean isPushable() {
         return false;
     }
@@ -293,11 +282,11 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         builder = builder.add(Attributes.ATTACK_DAMAGE, 27);
         builder = builder.add(Attributes.FOLLOW_RANGE, 1);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 99);
-        builder = builder.add(ForgeMod.ENTITY_GRAVITY.get(), 0);
+        builder = builder.add(NeoForgeMod.ENTITY_GRAVITY, 0);
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.gladiia_whirl.idle"));
         }
@@ -306,7 +295,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -328,7 +317,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         ++this.deathTime;
         if (this.deathTime == 1) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

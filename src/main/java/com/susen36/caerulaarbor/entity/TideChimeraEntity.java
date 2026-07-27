@@ -25,6 +25,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -51,11 +52,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -82,7 +83,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         super(type, world);
         xpReward = 99;
         setNoAi(false);
-        setMaxUpStep(1.5f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
         setPersistenceRequired();
     }
 
@@ -94,31 +95,27 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
         builder = builder.add(Attributes.FOLLOW_RANGE, 48);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 4);
-        builder = builder.add(CAAttributes.MISSRATE.get(), 50);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 45);
+        builder = builder.add(CAAttributes.SANITY_RATE, 4);
+        builder = builder.add(CAAttributes.MISSRATE, 50);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 45);
         return builder;
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_DURATION, 0);
-        this.entityData.define(DATA_SUMMON_P, 3);
-        this.entityData.define(DATA_SKILL_P, 200);
-        this.entityData.define(DATA_DEAL, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_DURATION, 0);
+        builder.define(DATA_SUMMON_P, 3);
+        builder.define(DATA_SKILL_P, 200);
+        builder.define(DATA_DEAL, 0);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 16;
-            }
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this,  1, false) {
 
             @Override
             public boolean canUse() {
@@ -188,9 +185,9 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                             (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
                     if (target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0))) {
-                        int amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
+                        int amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER) ? this.getEffect(CAMobEffects.REEF_CRACKER).getAmplifier() : -1;
                         int nextAmplifier = amplifier < 0 ? 0 : Math.min(amplifier + 1, 31);
-                        this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 100, nextAmplifier, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER, 100, nextAmplifier, false, false));
                     }
                 }
             });
@@ -239,12 +236,12 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 9, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 100, 9, false, false));
         if (this instanceof TideChimeraEntity) {
             this.setAnimation("animation.super_apocata.start");
         }
@@ -280,7 +277,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 }
             }
         });
-        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        return super.finalizeSpawn(world, difficulty, reason, livingdata);
     }
 
     @Override
@@ -394,7 +391,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 if (perc <= 0.25 && tap >= 1) {
                     maySummon = true;
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 600, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 600, 0, false, false));
                     CaerulaArborMod.queueServerWork(10, () -> {
                         summonRandomChimera(world, x, y, z);
                     });
@@ -411,7 +408,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 }
                 if (maySummon) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 20, 0, false, false));
                     if ((Entity) this instanceof TideChimeraEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_SUMMON_P, (int) (tap - 1));
                     if ((Entity) this instanceof TideChimeraEntity datEntSetI)
@@ -544,11 +541,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public boolean isPushable() {
         return false;
     }
@@ -562,7 +554,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -584,7 +576,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -599,7 +591,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -614,7 +606,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         return PlayState.CONTINUE;
     }
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -636,7 +628,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         ++this.deathTime;
         if (this.deathTime == 40) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             if (world instanceof ServerLevel level) {
                 ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.APOCALYPSE.get()));
@@ -651,7 +643,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     public void setHealth(float pHealth) {
         float hlth = this.getHealth();
         float mhlth = this.getMaxHealth();
-        if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
+        if (this.hasEffect(CAMobEffects.INVULNERABLE) && pHealth < this.getHealth()) return;
         float reduction = hlth - pHealth;
         float finalV = reduction >= mhlth * 0.26f ? hlth - mhlth * 0.26f : hlth - reduction;
         super.setHealth(finalV);

@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.datagen.worldgen;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
-import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -35,12 +35,12 @@ import java.util.List;
 /**
  * 生成 configured_feature 注册表数据
  *
- * <p>新增 configured feature 时，在 {@link #bootstrap(BootstapContext)} 中创建 {@link ConfiguredFeature}，
- * 选择 {@link Feature} 与匹配的配置对象，再通过 {@link #register(BootstapContext, ResourceKey, ConfiguredFeature)} 写入注册表
+ * <p>新增 configured feature 时，在 {@link #bootstrap(BootstrapContext)} 中创建 {@link ConfiguredFeature}，
+ * 选择 {@link Feature} 与匹配的配置对象，再通过 {@link #register(BootstrapContext, ResourceKey, ConfiguredFeature)} 写入注册表
  * 方块状态直接引用 {@link CABlocks} 或 {@link Blocks} 字段，不通过字符串 ID 查询注册表
  * <p>示例：
  * <pre>{@code
- * public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
+ * public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
  *     // 注册一个随机斑块 configured feature，适合花草、蘑菇等简单方块散布
  *     register(context, WorldgenKeys.ConfiguredFeatures.IRIS_DISTRIBUTE, randomPatch(
  *             // 每次放置尝试次数
@@ -93,7 +93,7 @@ public final class ConfiguredFeatureProvider {
      *
      * @param context Mojang 提供的注册表 bootstrap 上下文
      */
-    public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
+    public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         register(context, WorldgenKeys.ConfiguredFeatures.BRANDED_LAND_TREE, new ConfiguredFeature<>(Feature.TREE, brandedLandTree()));
         register(context, WorldgenKeys.ConfiguredFeatures.BURNT_TRAILS, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, burntTrails()));
         register(context, WorldgenKeys.ConfiguredFeatures.IRIS_DISTRIBUTE, randomPatch(2, 2, 2, CABlocks.REDSTONEIRIS_SEEDING.get(), BlockPredicate.allOf(
@@ -201,7 +201,7 @@ public final class ConfiguredFeatureProvider {
      * @param key     configured feature 注册 key
      * @param feature configured feature
      */
-    private static void register(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, ConfiguredFeature<?, ?> feature) {
+    private static void register(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, ConfiguredFeature<?, ?> feature) {
         context.register(key, feature);
     }
 

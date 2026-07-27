@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.capability.apoptosis;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraftforge.common.capabilities.AutoRegisterCapability;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.capabilities.AutoRegisterCapability;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 @AutoRegisterCapability
 public interface IApoptosisInjuryCapability extends INBTSerializable<CompoundTag> {

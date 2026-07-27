@@ -41,6 +41,7 @@ public class CaerulaArborMod {
         CAPotions.REGISTRY.register(modEventBus);
         CAPaintings.REGISTRY.register(modEventBus);
         CAParticles.REGISTRY.register(modEventBus);
+        CAVillagerProfessions.POIS.register(modEventBus);
         CAVillagerProfessions.PROFESSIONS.register(modEventBus);
         CAMenus.REGISTRY.register(modEventBus);
         CAAttributes.REGISTRY.register(modEventBus);

@@ -8,7 +8,7 @@ import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.MathUtils;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -37,10 +37,7 @@ public class InfestedMobEffect extends MobEffect {
         super(MobEffectCategory.HARMFUL, -3407668);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
@@ -50,11 +47,11 @@ public class InfestedMobEffect extends MobEffect {
         double dam;
         if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 3) {
             dam = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * Mth.nextDouble(RandomSource.create(), 0.1, 0.25) * ((double) amplifier + 1);
-            if ((Entity) entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get())) {
+            if ((Entity) entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.POWER_OF_ANCHOR)) {
                 dam = dam * 0.1;
             }
             ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.OCEANIZE_DAMAGE), (float) dam);
-            if (!((Entity) entity instanceof LivingEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
+            if (!((Entity) entity instanceof LivingEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.POWER_OF_ANCHOR))) {
                 if (Math.random() < 0.33) {
                     dam = Mth.nextInt(RandomSource.create(), 0, 7);
                     if (dam == 0) {
@@ -77,10 +74,10 @@ public class InfestedMobEffect extends MobEffect {
                             livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 160, 0));
                     } else if (dam == 6) {
                         if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), 160, 0));
+                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN, 160, 0));
                     } else if (dam == 7) {
                         if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 160, 0));
+                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 160, 0));
                     }
                 }
             }
@@ -112,7 +109,7 @@ public class InfestedMobEffect extends MobEffect {
             }
             SIHelper.causeSanityInjury(entity, 750 * ((double) amplifier + 1), SanityEvent.Hurt.Type.POTION);
             if ((Entity) entity instanceof ServerPlayer player) {
-                Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_welcome"));
+                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_welcome"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                 if (!ap.isDone()) {
                     for (String criteria : ap.getRemainingCriteria())
@@ -121,7 +118,7 @@ public class InfestedMobEffect extends MobEffect {
             }
             if ((double) amplifier >= 2) {
                 if ((Entity) entity instanceof ServerPlayer player) {
-                    Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_pay"));
+                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_pay"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())

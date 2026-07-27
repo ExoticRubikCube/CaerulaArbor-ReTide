@@ -11,8 +11,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.ShieldBlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
@@ -32,8 +31,8 @@ public class ShieldEventHandler {
 			if (blocker.level() instanceof ServerLevel serverLevel)
 				serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, attacker.getX(), attacker.getY() + 0.5, attacker.getZ(), 8, 0.5, 0.5, 0.5, 0.1);
 		} else if (activeItem.getItem() == CAItems.TIDELINKED_SHIELD.get()) {
-			if (attacker instanceof LivingEntity livingAttacker && livingAttacker.hasEffect(CAMobEffects.LESS_ARMOR.get())) {
-				MobEffectInstance lessArmorEffect = livingAttacker.getEffect(CAMobEffects.LESS_ARMOR.get());
+			if (attacker instanceof LivingEntity livingAttacker && livingAttacker.hasEffect(CAMobEffects.LESS_ARMOR)) {
+				MobEffectInstance lessArmorEffect = livingAttacker.getEffect(CAMobEffects.LESS_ARMOR);
 				double lessArmorAmplifier = lessArmorEffect != null ? lessArmorEffect.getAmplifier() + 1 : 0;
 				activeItem.setDamageValue((int) (activeItem.getDamageValue() - lessArmorAmplifier));
 				if (blocker instanceof LivingEntity livingBlocker && blocker.isAlive() && livingBlocker.getHealth() < livingBlocker.getMaxHealth())

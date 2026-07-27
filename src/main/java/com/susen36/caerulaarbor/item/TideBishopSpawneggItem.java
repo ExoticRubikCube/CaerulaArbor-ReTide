@@ -10,18 +10,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
 import java.util.List;
 
-public class TideBishopSpawneggItem extends ForgeSpawnEggItem {
+
+public class TideBishopSpawneggItem extends DeferredSpawnEggItem {
 	public TideBishopSpawneggItem() {
 		super(CAEntities.TIDE_BISHOP, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.tide_bishop_spawnegg.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.tide_bishop_spawnegg.description_1"));
 	}

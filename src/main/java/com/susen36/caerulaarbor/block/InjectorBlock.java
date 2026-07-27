@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -121,73 +122,67 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
-        InteractionResult result = InteractionResult.PASS;
-        if (entity != null) {
-            ItemStack res = ItemStack.EMPTY;
-            ItemStack input;
-            double stats;
-            input = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-            stats = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip2 ? blockstate.getValue(getip2) : -1;
-            if (stats == 0) {
-                if (input.getItem() == CAItems.TARGETED_BASE.get()) {
-                    ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                    if ((LevelAccessor) world instanceof Level level) {
-                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GLOW_ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1, 1);
-                    }
-                    {
-                        int value = 1;
-                        BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
-                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
-                    }
-                    result = InteractionResult.SUCCESS;
-                } else if (input.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gene")))) {
-                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
-                        player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.note").getString())), true);
+        InteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        ItemStack res = ItemStack.EMPTY;
+        ItemStack input;
+        double stats;
+        input = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
+        stats = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip2 ? blockstate.getValue(getip2) : -1;
+        if (stats == 0) {
+            if (input.getItem() == CAItems.TARGETED_BASE.get()) {
+                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GLOW_ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1, 1);
                 }
-            } else if (stats == 1) {
-                if (input.getItem() == CAItems.HUNTER_GENE_SKADI.get()) {
-                    res = new ItemStack(CAItems.TARGETED_TRANSMITTER_SKADI.get()).copy();
-                } else if (input.getItem() == CAItems.HUNTER_GENE_ULPIANS.get()) {
-                    res = new ItemStack(CAItems.TARGETED_TRANSMITTER_ULPIANS.get()).copy();
-                } else if (input.getItem() == CAItems.HUNTER_GENE_GLADIIA.get()) {
-                    res = new ItemStack(CAItems.TARGETED_TRANSMITTER_GLADIIA.get()).copy();
-                } else if (input.getItem() == CAItems.TARGETED_BASE.get()) {
-                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
-                        player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.have").getString())), true);
-                } else if (input.getItem() == CAItems.HUNTER_GENE_SPECTER.get()) {
-                    res = new ItemStack(CAItems.TARGETED_TRANSMITTER_SPECTER.get()).copy();
+                {
+                    int value = 1;
+                    BlockPos blockPos = BlockPos.containing(x, y, z);
+                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
-                if (!(res.getItem() == ItemStack.EMPTY.getItem())) {
-                    ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                    {
-                        int value = 0;
-                        BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
-                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
-                    }
-                    if ((LevelAccessor) world instanceof Level level) {
-                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 2, 1);
-                    }
-                    if ((LevelAccessor) world instanceof ServerLevel level) {
-                        ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), res);
-                        entityToSpawn.setPickUpDelay(10);
-                        entityToSpawn.setUnlimitedLifetime();
-                        level.addFreshEntity(entityToSpawn);
-                    }
-                    result = InteractionResult.SUCCESS;
+                result = ItemInteractionResult.SUCCESS;
+            } else if (input.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gene")))) {
+                if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.note").getString())), true);
+            }
+        } else if (stats == 1) {
+            if (input.getItem() == CAItems.HUNTER_GENE_SKADI.get()) {
+                res = new ItemStack(CAItems.TARGETED_TRANSMITTER_SKADI.get()).copy();
+            } else if (input.getItem() == CAItems.HUNTER_GENE_ULPIANS.get()) {
+                res = new ItemStack(CAItems.TARGETED_TRANSMITTER_ULPIANS.get()).copy();
+            } else if (input.getItem() == CAItems.HUNTER_GENE_GLADIIA.get()) {
+                res = new ItemStack(CAItems.TARGETED_TRANSMITTER_GLADIIA.get()).copy();
+            } else if (input.getItem() == CAItems.TARGETED_BASE.get()) {
+                if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.have").getString())), true);
+            } else if (input.getItem() == CAItems.HUNTER_GENE_SPECTER.get()) {
+                res = new ItemStack(CAItems.TARGETED_TRANSMITTER_SPECTER.get()).copy();
+            }
+            if (!(res.getItem() == ItemStack.EMPTY.getItem())) {
+                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                {
+                    int value = 0;
+                    BlockPos blockPos = BlockPos.containing(x, y, z);
+                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 2, 1);
+                }
+                if ((LevelAccessor) world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), res);
+                    entityToSpawn.setPickUpDelay(10);
+                    entityToSpawn.setUnlimitedLifetime();
+                    level.addFreshEntity(entityToSpawn);
+                }
+                result = InteractionResult.SUCCESS;
             }
         }
         return result;

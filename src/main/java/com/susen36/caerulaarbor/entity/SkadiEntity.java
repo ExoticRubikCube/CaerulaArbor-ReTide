@@ -24,6 +24,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -41,15 +42,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
@@ -77,46 +77,36 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        setMaxUpStep(1.2f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.2f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_RELAX_COOLDOWN, 200);
-        this.entityData.define(DATA_SKILLP, 120);
-        this.entityData.define(DATA_PHASE, 0);
-        this.entityData.define(DATA_SKILLP_2, 0);
-    }
-
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_RELAX_COOLDOWN, 200);
+        builder.define(DATA_SKILLP, 120);
+        builder.define(DATA_PHASE, 0);
+        builder.define(DATA_SKILLP_2, 0);
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.15, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 9;
-            }
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this,  1.15, false) {
 
             @Override
             public boolean canUse() {
                 if (!super.canUse()) return false;
-                return hasEffect(CAMobEffects.FAKE_DEATH.get());
+                return hasEffect(CAMobEffects.FAKE_DEATH);
             }
 
             @Override
             public boolean canContinueToUse() {
                 if (!super.canContinueToUse()) return false;
-                return hasEffect(CAMobEffects.FAKE_DEATH.get());
+                return hasEffect(CAMobEffects.FAKE_DEATH);
             }
 
         });
@@ -160,7 +150,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                 }
             }.checkGamemode(sourceentity)) {
                 boolean result;
-                result = hasEffect(CAMobEffects.FAKE_DEATH.get());
+                result = hasEffect(CAMobEffects.FAKE_DEATH);
                 if (result) {
                     sklp = (Entity) this instanceof SkadiEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
                     if (sklp <= 0 && this.isAlive()) {
@@ -180,7 +170,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                                 CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                         * 2.5));
                                         if (sourceentity instanceof LivingEntity && !this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
+                                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 100, 0, false, false));
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
                                     if (world instanceof Level level) {
@@ -192,7 +182,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                             && distanceTo(sourceentity) <= 3) {
                                         sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ddd);
                                         if (!this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
+                                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 100, 0, false, false));
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
                                 }
@@ -211,7 +201,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
     public void setHealth(float pHealth) {
         float currentHealth = this.getHealth();
         if (pHealth <= 0) {
-            ResourceKey<net.minecraft.world.damagesource.DamageType> cursedDamage = CADamageTypes.ISHARMLA_CURSED;
+            ResourceKey<DamageType> cursedDamage = CADamageTypes.ISHARMLA_CURSED;
             if (this.lastDamageSource == null || !this.lastDamageSource.is(cursedDamage)) {
                 int phase = this.getEntityData().get(DATA_PHASE);
                 if (phase == 0 || phase == 1) {
@@ -220,8 +210,8 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                     this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), CASounds.SKADI_TALK.get(), SoundSource.HOSTILE, 2, 1);
 
                     if (!this.level().isClientSide()) {
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 1, false, false));
-                        this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 100, 3, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 100, 1, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 100, 3, false, false));
                         if (phase == 0) {
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 131071, 1, false, true));
                         }
@@ -247,7 +237,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
     @Override
     public void die(DamageSource source) {
-        ResourceKey<net.minecraft.world.damagesource.DamageType> cursedDamage = CADamageTypes.ISHARMLA_CURSED;
+        ResourceKey<DamageType> cursedDamage = CADamageTypes.ISHARMLA_CURSED;
         if (source.is(cursedDamage)) {
             for (Entity nearbyPlayer : this.level().players()) {
                 if (this.distanceTo(nearbyPlayer) < 32 && nearbyPlayer instanceof Player player && !player.level().isClientSide()) {
@@ -269,17 +259,17 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         super.die(source);
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("RelaxCooldown", this.entityData.get(DATA_RELAX_COOLDOWN));
         compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
         compound.putInt("Phase", this.entityData.get(DATA_PHASE));
         compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("RelaxCooldown")) {
             this.entityData.set(DATA_RELAX_COOLDOWN, compound.getInt("RelaxCooldown"));
@@ -293,7 +283,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         if (compound.contains("Skillp2")) {
             this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
         }
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -331,7 +321,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                             this.setAnimation("animation.skadi.spin");
                         }
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 40, 0, false, false));
                         CaerulaArborMod.queueServerWork(10, () -> {
                             spinAttack(1.5);
                         });
@@ -362,30 +352,27 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
             GladiiaEntity.healFromGladiia(world, x, y, z, this);
             if (tickCount % 10 == 0) {
                 final Vec3 center = new Vec3(x, y, z);
-                    TagKey<EntityType<?>> huntersTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters"));
-                    List<LivingEntity> nearbyHunters = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
-                            e -> e.isAlive() && e.getType().is(huntersTag));
-                    for (LivingEntity entityiterator : nearbyHunters) {
-                        if (!(entityiterator.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get()))) {
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), -1, 0, false, false));
-                            break;
-                        }
+                TagKey<EntityType<?>> huntersTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters"));
+                List<LivingEntity> nearbyHunters = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
+                        e -> e.isAlive() && e.getType().is(huntersTag));
+                for (LivingEntity entityiterator : nearbyHunters) {
+                    if (!(entityiterator.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY))) {
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, -1, 0, false, false));
+                        break;
                     }
+                }
             }
         }
         this.refreshDimensions();
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1);
-    }
-
-    @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         SkadiEntity retval = CAEntities.SKADI.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+        if (retval != null) {
+            retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
+        }
         return retval;
     }
 
@@ -415,8 +402,8 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
-        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 8);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.33);
+        builder = builder.add(NeoForgeMod.SWIM_SPEED, 8);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.33);
         builder = builder.add(Attributes.MAX_HEALTH, 270);
         builder = builder.add(Attributes.ARMOR, 5);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 38);
@@ -425,7 +412,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -443,7 +430,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         double d1 = this.getX() - this.xOld;
         double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
@@ -462,7 +449,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -484,7 +471,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         ++this.deathTime;
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
         }
     }
 

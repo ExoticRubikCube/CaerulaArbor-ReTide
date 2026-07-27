@@ -1,12 +1,10 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.client.renderer.entity.ChitinComplexArmorRenderer;
-import com.susen36.caerulaarbor.init.CAAttributes;
-import com.susen36.caerulaarbor.init.CAItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.client.model.HumanoidModel;
+import com.susen36.caerulaarbor.init.CAAttributes;
+import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -18,22 +16,15 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
+
 
 public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnimationItem {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -84,21 +75,6 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
 	}
 
 	@Override
-	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-		consumer.accept(new IClientItemExtensions() {
-			private GeoArmorRenderer<?> renderer;
-
-			@Override
-			public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
-				if (this.renderer == null)
-					this.renderer = new ChitinComplexArmorRenderer();
-				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
-				return this.renderer;
-			}
-		});
-	}
-
-	@Override
 		public boolean makesPiglinsNeutral(ItemStack itemstack, LivingEntity entity) {
 			return true;
 		}
@@ -110,22 +86,22 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
         UUID uuid = new UUID(slot.toString().hashCode(), 0);
         if (slot == this.getEquipmentSlot()){
             map = HashMultimap.create(map);
-            map.put(CAAttributes.SANITY_RESISTANCE.get(),
+            map.put(CAAttributes.SANITY_RESISTANCE,
                     new AttributeModifier(uuid, name , 15.0f, AttributeModifier.Operation.ADDITION));
             map.put(CAAttributes.SANITY_RATE.get(),
                     new AttributeModifier(uuid, name , 1.0f, AttributeModifier.Operation.ADDITION));
-            map.put(CAAttributes.GENERAL_DEFENSE.get(),
+            map.put(CAAttributes.GENERAL_DEFENSE,
                     new AttributeModifier(uuid, name , 2.5f, AttributeModifier.Operation.ADDITION));
         }
         return map;
     }
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level world, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, world, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 	}
 
-	private PlayState predicate(AnimationState<?> event) {
+	private PlayState predicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.complex_chitin.idle"));
 			Entity entity = event.getData(DataTickets.ENTITY);
@@ -139,7 +115,7 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!this.animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

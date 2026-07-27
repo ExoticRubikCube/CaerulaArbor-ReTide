@@ -7,10 +7,12 @@ import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -22,37 +24,24 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;
 import java.util.function.Consumer;
 
+
 public class TrailriteSwordItem extends SwordItem {
+	private static final Tier TIER = new SimpleTier(
+			BlockTags.INCORRECT_FOR_NETHERITE_TOOL,
+			7999,
+			9f,
+			17f,
+			23,
+			() -> Ingredient.of(new ItemStack(CAItems.TRAILRITE.get()))
+	);
+
 	public TrailriteSwordItem() {
-		super(new Tier() {
-			public int getUses() {
-				return 7999;
-			}
-
-			public float getSpeed() {
-				return 9f;
-			}
-
-			public float getAttackDamageBonus() {
-				return 17f;
-			}
-
-			public int getLevel() {
-				return 4;
-			}
-
-			public int getEnchantmentValue() {
-				return 23;
-			}
-
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.TRAILRITE.get()));
-			}
-		}, 3, -2.4f, new Item.Properties().fireResistant());
+		super(TIER, new Item.Properties().fireResistant().attributes(SwordItem.createAttributes(TIER, 3, -2.4f)));
 	}
 
 	@Override
@@ -66,8 +55,16 @@ public class TrailriteSwordItem extends SwordItem {
         double rate;
         SIHelper.causeSanityInjury(entity, sourceentity, 330, SanityEvent.Hurt.Type.ENTITY);
         if (!(entity instanceof Player)) {
-            if (Math.random() < 0.2 + itemstack.getEnchantmentLevel(Enchantments.MOB_LOOTING) * 0.02) {
-                rate = 0.025 + itemstack.getEnchantmentLevel(Enchantments.SHARPNESS) * 0.005;
+            int lootingLevel = 0;
+            int sharpnessLevel = 0;
+            if (world instanceof Level level) {
+                lootingLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.MOB_LOOTING)
+                        .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
+                sharpnessLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SHARPNESS)
+                        .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
+            }
+            if (Math.random() < 0.2 + lootingLevel * 0.02) {
+                rate = 0.025 + sharpnessLevel * 0.005;
                 if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * rate) {
                     absorp = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * rate;
                     if (absorp > ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
@@ -91,8 +88,8 @@ public class TrailriteSwordItem extends SwordItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.trailrite_sword.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.trailrite_sword.description_1"));
 	}
@@ -101,9 +98,9 @@ public class TrailriteSwordItem extends SwordItem {
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected) {
-            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
+            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.ADD_REACH))) {
                 if (entity instanceof LivingEntity living && !living.level().isClientSide())
-                    living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 2, false, false));
+                    living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 20, 2, false, false));
             }
         }
 	}

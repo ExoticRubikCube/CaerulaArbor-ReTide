@@ -5,8 +5,8 @@ import com.susen36.caerulaarbor.entity.MoistDragonBreathEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
-import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
@@ -30,7 +30,7 @@ public class MoistDragonBreathModel extends GeoModel<MoistDragonBreathEntity> {
 
 	@Override
 	public void setCustomAnimations(MoistDragonBreathEntity animatable, long instanceId, AnimationState<MoistDragonBreathEntity> animationState) {
-		CoreGeoBone head = getAnimationProcessor().getBone("Ball");
+		GeoBone head = getAnimationProcessor().getBone("Ball");
 		if (head != null) {
 			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);

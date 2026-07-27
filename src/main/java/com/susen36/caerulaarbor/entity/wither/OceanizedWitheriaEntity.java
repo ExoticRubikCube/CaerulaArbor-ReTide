@@ -32,11 +32,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -54,9 +54,9 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_IDLE_TIME, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_IDLE_TIME, 0);
     }
 
     @Override
@@ -77,11 +77,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 12.25;
-            }
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1.25, false) {
 
             @Override
             public boolean canUse() {
@@ -98,10 +94,10 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 95, 9, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 95, 9, false, false));
         if (this instanceof OceanizedWitheriaEntity) {
             this.setAnimation("animation.oceanzied_witheria.start");
         }
@@ -143,7 +139,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             this.entityData.set(DATA_DURATION, 65);
             this.entityData.set(DATA_SKILLP, 400);
             if (!this.level().isClientSide()) {
-                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 65, 0, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 65, 0, false, false));
             }
             this.setAnimation("animation.oceanzied_witheria.skill");
             CaerulaArborMod.queueServerWork(20, () -> {
@@ -193,7 +189,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             this.entityData.set(DATA_SKILLP, 1800);
             this.entityData.set(DATA_DURATION, 1800);
             if (!this.level().isClientSide()) {
-                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 999, 9, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 999, 9, false, false));
             }
             this.setAnimation("animation.oceanzied_witheria.byebye");
             CaerulaArborMod.queueServerWork(100, () -> {
@@ -269,14 +265,14 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         builder = builder.add(Attributes.FOLLOW_RANGE, 48);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.45);
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.01);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 65);
-        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 5);
+        builder = builder.add(CAAttributes.SANITY_RATE, 10);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.01);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 65);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE, 5);
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if (this.isDeadOrDying()) {
                 return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanzied_witheria.die"));
@@ -286,7 +282,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         double d1 = this.getX() - this.xOld;
         double d0 = this.getZ() - this.zOld;
         float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
@@ -304,7 +300,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         return PlayState.CONTINUE;
     }
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

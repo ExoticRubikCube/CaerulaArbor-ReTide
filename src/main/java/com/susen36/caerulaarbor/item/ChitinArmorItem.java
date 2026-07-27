@@ -1,10 +1,10 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.init.CAAttributes;
-import com.susen36.caerulaarbor.init.CAItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.susen36.caerulaarbor.init.CAAttributes;
+import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
@@ -71,7 +71,7 @@ public abstract class ChitinArmorItem extends ArmorItem {
         String name = "caerula_arbor_attribute_modifier";
         if (slot == this.getEquipmentSlot()){
             map = HashMultimap.create(map);
-            map.put(CAAttributes.SANITY_RESISTANCE.get(),
+            map.put(CAAttributes.SANITY_RESISTANCE,
                     new AttributeModifier(uuid, name , 7.5f, AttributeModifier.Operation.ADDITION));
         }
         return map;

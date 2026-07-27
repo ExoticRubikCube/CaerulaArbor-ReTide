@@ -26,14 +26,15 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
+
 public class DictationlessChapterItem extends Item {
 	public DictationlessChapterItem() {
 		super(new Item.Properties().stacksTo(8).rarity(Rarity.RARE));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.dictationless_chapter.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.dictationless_chapter.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.dictationless_chapter.description_2"));

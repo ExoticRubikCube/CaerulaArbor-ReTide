@@ -34,12 +34,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.DungeonHooks;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 public class NetherseaSlimeEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.BOOLEAN);
@@ -55,37 +54,25 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 2;
 		setNoAi(false);
-		setMaxUpStep(1f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_SIZE, 4);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_SIZE, 4);
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				NetherseaSlimeEntity slime = NetherseaSlimeEntity.this;
-				int size = Math.max(slime.getEntityData().get(NetherseaSlimeEntity.DATA_SIZE), 1);
-				return 0.5625 * size * size;
-			}
-		});
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false));
 		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1));
 		this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(5, new FloatGoal(this));
-	}
-
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
 	}
 
 	@Override
@@ -169,10 +156,6 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		return super.getDimensions(p_33597_).scale((float) EntityUtils.getSlimeSize(entity));
 	}
 
-	public static void registerDungeonMob() {
-		DungeonHooks.addDungeonMob(CAEntities.NETHERSEA_SLIME.get(), 180);
-	}
-
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.075);
@@ -183,7 +166,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nethersea_slime.move"));
@@ -198,7 +181,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -220,7 +203,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		++this.deathTime;
 		if (this.deathTime >= 14) {
 			this.remove(NetherseaSlimeEntity.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             double x = this.getX();
             double y = this.getY();
@@ -259,7 +242,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		super.push(pEntity);
 		if (pEntity instanceof NetherseaSlimeEntity) return;
 		if (pEntity instanceof LivingEntity entity && !entity.level().isClientSide())
-			entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 70, 0));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 70, 0));
 	}
 
 	public String getSyncedAnimation() {
@@ -281,4 +264,3 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
-

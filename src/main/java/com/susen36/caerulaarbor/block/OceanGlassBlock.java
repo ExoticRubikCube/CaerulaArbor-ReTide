@@ -19,8 +19,8 @@ public class OceanGlassBlock extends Block {
 	}
 
 	@Override
-	public float[] getBeaconColorMultiplier(BlockState state, LevelReader world, BlockPos pos, BlockPos beaconPos) {
-		return new float[]{0.6431372549f, 0.6666666667f, 0.7411764706f};
+	public Integer getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos) {
+		return 0xFFA4AAB2;
 	}
 
 	@Override

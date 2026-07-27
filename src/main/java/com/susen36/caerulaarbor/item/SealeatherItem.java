@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.UUID;
 
+
 public abstract class SealeatherItem extends ArmorItem {
 	public SealeatherItem(ArmorItem.Type type, Item.Properties properties) {
 		super(new ArmorMaterial() {
@@ -86,8 +87,8 @@ public abstract class SealeatherItem extends ArmorItem {
 		}
 
 		@Override
-		public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-			super.appendHoverText(itemstack, level, list, flag);
+		public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+			super.appendHoverText(itemstack, context, list, flag);
 			list.add(Component.translatable("item.caerula_arbor.sealeather_helmet.description_0"));
 		}
 
@@ -103,8 +104,8 @@ public abstract class SealeatherItem extends ArmorItem {
 		}
 
 		@Override
-		public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-			super.appendHoverText(itemstack, level, list, flag);
+		public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+			super.appendHoverText(itemstack, context, list, flag);
 			list.add(Component.translatable("item.caerula_arbor.sealeather_chestplate.description_0"));
 			list.add(Component.translatable("item.caerula_arbor.sealeather_chestplate.description_1"));
 		}
@@ -118,10 +119,10 @@ public abstract class SealeatherItem extends ArmorItem {
     	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 			super.inventoryTick(itemstack, world, entity, slot, selected);
 			if (entity instanceof Player player && Iterables.contains(player.getArmorSlots(), itemstack)) {
-				if (player.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get())) return;
+				if (player.hasEffect(CAMobEffects.ESSENCE_RESISTANCE)) return;
 				if (player.tickCount % 600 == 64) {
 					player.addEffect(
-							new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(),
+							new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE,
 									400, 0, false, false)
 					);
 				}
@@ -135,8 +136,8 @@ public abstract class SealeatherItem extends ArmorItem {
 		}
 
 		@Override
-		public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-			super.appendHoverText(itemstack, level, list, flag);
+		public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+			super.appendHoverText(itemstack, context, list, flag);
 			list.add(Component.translatable("item.caerula_arbor.sealeather_leggings.description_0"));
 		}
 
@@ -152,8 +153,8 @@ public abstract class SealeatherItem extends ArmorItem {
 		}
 
 		@Override
-		public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-			super.appendHoverText(itemstack, level, list, flag);
+		public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+			super.appendHoverText(itemstack, context, list, flag);
 			list.add(Component.translatable("item.caerula_arbor.sealeather_boots.description_0"));
 		}
 

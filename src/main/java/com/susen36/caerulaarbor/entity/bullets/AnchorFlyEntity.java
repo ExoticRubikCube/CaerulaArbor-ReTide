@@ -3,8 +3,6 @@ package com.susen36.caerulaarbor.entity.bullets;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -23,9 +21,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.Comparator;
 import java.util.List;
@@ -48,11 +45,6 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
 
 	public AnchorFlyEntity(EntityType<? extends AnchorFlyEntity> type, LivingEntity entity, Level world) {
 		super(type, entity, world);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	@Override
@@ -87,7 +79,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         if (!(entity == sourceentity)) {
             perc = (sourceentity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
             if (sourceentity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
+                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER, 500, 0, false, false));
             if (sourceentity instanceof LivingEntity livingEntity)
                 livingEntity.setHealth((float) ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc));
             if (world instanceof ServerLevel level)
@@ -109,7 +101,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                         entityiterator.hurt(
                                 CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, sourceentity), (float) ((sourceentity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                         if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
+                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
                     }
                 }
             }
@@ -117,7 +109,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
             if (sourceentity instanceof ServerPlayer serverPlayer)
                 serverPlayer.connection.teleport(x, y, z, sourceentity.getYRot(), sourceentity.getXRot());
             if (sourceentity instanceof LivingEntity livingEntity)
-                livingEntity.removeEffect(CAMobEffects.DIZZY.get());
+                livingEntity.removeEffect(CAMobEffects.DIZZY);
             if (sourceentity instanceof LivingEntity livingEntity)
                 livingEntity.removeEffect(MobEffects.DIG_SLOWDOWN);
             if (sourceentity instanceof LivingEntity livingEntity)
@@ -143,7 +135,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         double perc;
         perc = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
         if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
+            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER, 500, 0, false, false));
         if (entity instanceof LivingEntity livingEntity)
             livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
         if (world instanceof ServerLevel level)
@@ -164,7 +156,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                 if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, entity), (float) ((entity instanceof LivingEntity livingEntity15 && livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                     if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
+                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
                 }
             }
         }
@@ -172,7 +164,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         if (entity instanceof ServerPlayer serverPlayer)
             serverPlayer.connection.teleport((getX()), (getY()), (getZ()), entity.getYRot(), entity.getXRot());
         if (entity instanceof LivingEntity living) {
-            living.removeEffect(CAMobEffects.DIZZY.get());
+            living.removeEffect(CAMobEffects.DIZZY);
             living.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
             living.removeEffect(MobEffects.DIG_SLOWDOWN);
         }
@@ -194,7 +186,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
             if (tickCount >= 160) {
                 perc = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
                 if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER, 500, 0, false, false));
                 if (entity instanceof LivingEntity livingEntity)
                     livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
                 if (world instanceof ServerLevel level)
@@ -218,12 +210,12 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                         if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, entity), (float) ((entity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                             if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
+                                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
                         }
                     }
                 }
         if (entity instanceof LivingEntity livingEntity)
-            livingEntity.removeEffect(CAMobEffects.DIZZY.get());
+            livingEntity.removeEffect(CAMobEffects.DIZZY);
         if (entity instanceof LivingEntity livingEntity)
             livingEntity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
         if (entity instanceof LivingEntity livingEntity)

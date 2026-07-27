@@ -55,12 +55,12 @@ public class OceanizedWardenisEntity extends AbstractOceanizedWardenEntity {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData spawnGroupData = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+		SpawnGroupData spawnGroupData = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		this.setAnimation("animation.oceanized_wardenis.start");
 		this.getEntityData().set(DATA_DURATION, 80);
 		if (!this.level().isClientSide()) {
-			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 5, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 80, 5, false, false));
 		}
 		return spawnGroupData;
 	}

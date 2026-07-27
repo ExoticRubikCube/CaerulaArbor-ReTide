@@ -24,7 +24,7 @@ public record PlayerVariablesSyncMessage(PlayerVariable data) implements CustomP
 	}
 
 	public static void encode(FriendlyByteBuf buffer, PlayerVariablesSyncMessage message) {
-		buffer.writeNbt((CompoundTag) message.data.writeNBT());
+		buffer.writeNbt(message.data.writeNBT());
 	}
 
 	public static void handle(PlayerVariablesSyncMessage message, IPayloadContext context) {

@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -147,7 +148,7 @@ public class EntityUtils {
 				living.setHealth((float) (living.getHealth() + living.getMaxHealth() * 0.001));
 			}
 			if (!living.level().isClientSide()) {
-				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
+				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
 			}
 		} else if (entity instanceof Player && entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).player_oceanization >= 3) {
 			if (mapVars.strategy_silence >= 2) {
@@ -156,7 +157,7 @@ public class EntityUtils {
 				living.heal((float) (living.getMaxHealth() * 0.001));
 			}
 			if (!living.level().isClientSide()) {
-				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
+				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
 				living.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
 			}
 		}
@@ -174,9 +175,9 @@ public class EntityUtils {
 		ItemStack a2;
 		ItemStack a3;
 		if (entity instanceof LivingEntity) {
-			if (!(entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.TRAIL_BUFF.get()))) {
+			if (!(entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.TRAIL_BUFF))) {
 				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF.get(), 10, 0, false, false));
+					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF, 10, 0, false, false));
 			}
 			gap = 20;
 			a0 = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).copy();
@@ -214,7 +215,7 @@ public class EntityUtils {
 			if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), a0) != 0) {
 				lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), a0);
 				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 30, (int) lvl, false, false));
+					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 30, (int) lvl, false, false));
 				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
 					livingEntity.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
 			}
@@ -230,7 +231,7 @@ public class EntityUtils {
 						return;
 					}
 				}
-				if (!(entity instanceof LivingEntity livEnt28 && livEnt28.getMobType() == MobType.UNDEAD)) {
+				if (!(entity instanceof LivingEntity livEnt28 && livEnt28.getType().is(EntityTypeTags.UNDEAD))) {
 					entity.hurt(CADamageTypes.source(world, CADamageTypes.TRAIL_DAMAGE), 2);
 				}
 				if (entity instanceof LivingEntity livingEntity) {
@@ -419,9 +420,9 @@ public class EntityUtils {
 	}
 
 	public static void giveSpearFight(Entity entity) {
-		if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.SPEAR_FIGHT.get()))) {
+		if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.SPEAR_FIGHT))) {
 			if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.SPEAR_FIGHT.get(), 60, 0, false, false));
+				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.SPEAR_FIGHT, 60, 0, false, false));
 		}
 	}
 
@@ -435,15 +436,15 @@ public class EntityUtils {
 	public static void giveLessArmor(Entity obj, double limit) {
 		if (obj == null)
 			return;
-		if (obj instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.LESS_ARMOR.get())) {
-			if ((obj instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR.get()) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) < limit) {
+		if (obj instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.LESS_ARMOR)) {
+			if ((obj instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR).getAmplifier() : 0) < limit) {
 				if (obj instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR.get(), 300,
-                            (obj instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR.get()) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) + 1, false, true));
+					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR, 300,
+                            (obj instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR).getAmplifier() : 0) + 1, false, true));
 			}
 		} else {
 			if (obj instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR.get(), 300, 0, false, true));
+				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR, 300, 0, false, true));
 		}
 	}
 
@@ -475,9 +476,9 @@ public class EntityUtils {
 	public static void gainLessSpeed(Entity entity) {
 		if (entity == null)
 			return;
-		if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
+		if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.ADD_REACH))) {
 			if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 3, false, false));
+				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 20, 3, false, false));
 		}
 	}
 
@@ -485,10 +486,10 @@ public class EntityUtils {
 		if (entity == null)
 			return;
 		if ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
-			if (!(entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.MUTE.get()))) {
-				if (!(entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.GUIDE_PATH_AHEAD.get()))) {
+			if (!(entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.MUTE))) {
+				if (!(entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.GUIDE_PATH_AHEAD))) {
 					if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-						livingEntity.addEffect(new MobEffectInstance(CAMobEffects.GUIDE_PATH_AHEAD.get(), 20, 0));
+						livingEntity.addEffect(new MobEffectInstance(CAMobEffects.GUIDE_PATH_AHEAD, 20, 0));
 				}
 			}
 		}
@@ -509,7 +510,7 @@ public class EntityUtils {
 	public static String getPalsy(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round(entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.NUMB.get()) ? livingEntity0.getAttribute(CAAttributes.NUMB.get()).getBaseValue() : 0);
+		return "" + Math.round(entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.NUMB) ? livingEntity0.getAttribute(CAAttributes.NUMB).getBaseValue() : 0);
 	}
 
 	public static String getHealth(Entity entity) {
@@ -595,7 +596,7 @@ public class EntityUtils {
 			return;
 		double less = 0;
 		if (entity.tickCount % 20 == 10) {
-			if (!(entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.INFANTRY.get()))) {
+			if (!(entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.INFANTRY))) {
 				{
 					final Vec3 center = new Vec3(x, y, z);
 					List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
@@ -609,7 +610,7 @@ public class EntityUtils {
 				}
 				if (less > 0) {
 					if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-						livingEntity.addEffect(new MobEffectInstance(CAMobEffects.INFANTRY.get(), 40, (int) (less - 1)));
+						livingEntity.addEffect(new MobEffectInstance(CAMobEffects.INFANTRY, 40, (int) (less - 1)));
 				}
 			}
 		}

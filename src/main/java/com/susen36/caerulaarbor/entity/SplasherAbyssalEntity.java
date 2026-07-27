@@ -1,5 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
+
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+
 import com.susen36.caerulaarbor.entity.base.PolarMountRider;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FishShootEntity;
@@ -22,7 +26,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -40,12 +43,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.common.DungeonHooks;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -65,14 +67,14 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
-		setMaxUpStep(0.85f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.85f);
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
 	}
 
 	@Override
@@ -218,9 +220,9 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (!this.hasEffect(CAMobEffects.SPLASHER_ATTACK.get())) {
+        if (!this.hasEffect(CAMobEffects.SPLASHER_ATTACK)) {
             if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CAMobEffects.SPLASHER_ATTACK.get(), -1, 0, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.SPLASHER_ATTACK, -1, 0, false, false));
         }
         this.refreshDimensions();
 	}
@@ -230,17 +232,13 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		FishShootEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * 0.2);
 	}
 
-	public static void registerSpawnPlacements() {
-		SpawnPlacements.register(CAEntities.SPLASHER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+		event.register(CAEntities.SPLASHER_ABYSSAL.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canCommonSeabornSpawn(world, x, y, z);
-		});
-	}
-
-	public static void registerDungeonMob() {
-		DungeonHooks.addDungeonMob(CAEntities.SPLASHER_ABYSSAL.get(), 180);
+		}, RegisterSpawnPlacementsEvent.Operation.REPLACE);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -250,12 +248,12 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		builder = builder.add(Attributes.ARMOR, 5);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-		builder = builder.add(CAAttributes.SANITY_RATE.get(), 2);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 27);
+		builder = builder.add(CAAttributes.SANITY_RATE, 2);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 27);
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -267,7 +265,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
+	private PlayState attackingPredicate(AnimationState event) {
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -284,7 +282,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -306,7 +304,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(SplasherAbyssalEntity.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 
@@ -331,4 +329,3 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		this.animationprocedure = animation;
 	}
 }
-

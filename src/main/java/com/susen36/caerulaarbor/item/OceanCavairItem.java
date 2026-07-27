@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class OceanCavairItem extends Item {
 	public OceanCavairItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(9).saturationMod(0.5f).alwaysEat().build()));
@@ -35,8 +36,8 @@ public class OceanCavairItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.ocean_cavair.description_0"));
 	}
 
@@ -45,7 +46,7 @@ public class OceanCavairItem extends Item {
 		ItemStack retval = new ItemStack(CAItems.EMPTY_CAN.get());
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide()) {
-			entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 600, 1));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, 600, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0));
 		}
 		SIHelper.causeSanityInjury(entity, 325, SanityEvent.Hurt.Type.FOOD);

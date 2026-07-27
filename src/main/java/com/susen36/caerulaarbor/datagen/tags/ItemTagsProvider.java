@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.datagen.tags;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
@@ -10,9 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -240,11 +240,11 @@ public class ItemTagsProvider extends TagsProvider.RegistryTagsProvider<Item> {
      * @return 物品 key
      */
     private static ResourceKey<Item> itemKey(Object item) {
-        if (item instanceof RegistryObject<?> registryObject) {
+        if (item instanceof DeferredHolder<?,?> registryObject) {
             return ResourceKey.create(Registries.ITEM, Objects.requireNonNull(registryObject.getId()));
         }
         if (item instanceof Item itemValue) {
-            return ResourceKey.create(Registries.ITEM, Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(itemValue)));
+            return ResourceKey.create(Registries.ITEM, Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(itemValue)));
         }
         throw new IllegalArgumentException("Unsupported item field: " + item);
     }

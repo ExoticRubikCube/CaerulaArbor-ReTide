@@ -10,8 +10,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemStackHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,15 +20,13 @@ public class InfoStrategyGrowMenu extends AbstractContainerMenu implements Suppl
 	public final Level world;
 	public final Player entity;
 	public int x, y, z;
-	private final IItemHandler internal;
-	private final Map<Integer, Slot> customSlots = new HashMap<>();
+    private final Map<Integer, Slot> customSlots = new HashMap<>();
 
 	public InfoStrategyGrowMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
 		super(CAMenus.INFO_STRATEGY_GROW.get(), id);
 		this.entity = inv.player;
 		this.world = inv.player.level();
-		this.internal = new ItemStackHandler(0);
-		BlockPos pos;
+        BlockPos pos;
 		if (extraData != null) {
 			pos = extraData.readBlockPos();
 			this.x = pos.getX();

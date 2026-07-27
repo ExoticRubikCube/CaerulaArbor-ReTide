@@ -16,13 +16,10 @@ import java.util.List;
 public class SanityImmueMobEffect extends MobEffect {
     public SanityImmueMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -3342337);
-        this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE.get(), ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sanity_immue_sanity_resistance"), 200, AttributeModifier.Operation.ADD_VALUE);
+        this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sanity_immue_sanity_resistance"), 200, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {

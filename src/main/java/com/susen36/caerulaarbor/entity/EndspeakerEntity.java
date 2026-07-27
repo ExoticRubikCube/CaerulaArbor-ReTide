@@ -10,7 +10,7 @@ import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.SeabornSpawnManager;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -57,11 +57,11 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -125,7 +125,7 @@ public class EndspeakerEntity extends SeaMonster {
 				.add(Attributes.ATTACK_DAMAGE, 1.0)
 				.add(Attributes.FOLLOW_RANGE, 16.0)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.0)
-				.add(CAAttributes.MAX_SANITY.get(), 2000.0);
+				.add(CAAttributes.MAX_SANITY, 2000.0);
 	}
 
 	protected int getFloatGoalPriority() {
@@ -224,7 +224,7 @@ public class EndspeakerEntity extends SeaMonster {
 			case 3 -> 64;
 			default -> 0;
 		};
-		this.setMaxUpStep(switch (this.getPhase()) {
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(switch (this.getPhase()) {
 			case 2 -> 1.0F;
 			case 3 -> 1.5F;
 			default -> 0.6F;
@@ -290,14 +290,14 @@ public class EndspeakerEntity extends SeaMonster {
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_ANIMATION, "undefined");
-		this.entityData.define(DATA_PHASE, 0);
-		this.entityData.define(DATA_IS_EVOLVING, false);
-		this.entityData.define(DATA_EVOLVE_TIME, 0);
-		this.entityData.define(DATA_DURATION, 0);
-		this.entityData.define(DATA_SKILL_COOLDOWN, 0);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_ANIMATION, "undefined");
+		builder.define(DATA_PHASE, 0);
+		builder.define(DATA_IS_EVOLVING, false);
+		builder.define(DATA_EVOLVE_TIME, 0);
+		builder.define(DATA_DURATION, 0);
+		builder.define(DATA_SKILL_COOLDOWN, 0);
 	}
 
 	@Override
@@ -374,11 +374,7 @@ public class EndspeakerEntity extends SeaMonster {
 				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseOneStarting() && WorldUtils.canGrief(EndspeakerEntity.this.level());
 			}
 		});
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25D, true) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 20.25D;
-			}
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1.25D, true) {
 
 			@Override
 			public boolean canUse() {
@@ -390,11 +386,7 @@ public class EndspeakerEntity extends SeaMonster {
 				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseTwoDurative();
 			}
 		});
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 25.0D;
-			}
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1.0D, true) {
 
 			@Override
 			public boolean canUse() {
@@ -406,11 +398,7 @@ public class EndspeakerEntity extends SeaMonster {
 				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseThreeDurative();
 			}
 		});
-		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 4.0D;
-			}
+		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, this, this, 1.0D, true) {
 
 			@Override
 			public boolean canUse() {
@@ -626,7 +614,7 @@ public class EndspeakerEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean canChangeDimensions() {
+	public boolean canUsePortal(boolean allowVehicles) {
 		return false;
 	}
 
@@ -707,7 +695,7 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 		if (this.hasAbility(3)) {
 			Entity sourceEntity = source.getEntity();
-			if (this.hasEffect(CAMobEffects.TRAIL_BUFF.get()) || sourceEntity instanceof LivingEntity livingSource && livingSource.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
+			if (this.hasEffect(CAMobEffects.TRAIL_BUFF) || sourceEntity instanceof LivingEntity livingSource && livingSource.hasEffect(CAMobEffects.TRAIL_BUFF)) {
 				amount *= 0.65F;
 			}
 		}
@@ -715,16 +703,16 @@ public class EndspeakerEntity extends SeaMonster {
 	}
 
 	private boolean hurtWithEndspeakerAttack(LivingEntity target, float amount) {
-		if (this.hasAbility(3) && target.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
+		if (this.hasAbility(3) && target.hasEffect(CAMobEffects.TRAIL_BUFF)) {
 			amount *= 1.5F;
 		}
 		boolean damaged = target.hurt(
 				CADamageTypes.source(this.level(), CADamageTypes.ENDSPEAKER_ATTACK, this), amount);
 		if (damaged && this.hasAbility(5) && !this.level().isClientSide()) {
-			int amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
+			int amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER) ? this.getEffect(CAMobEffects.REEF_CRACKER).getAmplifier() : -1;
 			int nextAmplifier = amplifier < 0 ? 0 : Math.min(amplifier + 1, 11);
 			int duration = amplifier >= 0 && amplifier < 11 ? 120 : 80;
-			this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), duration, nextAmplifier, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER, duration, nextAmplifier, false, false));
 		}
 		return damaged;
 	}
@@ -772,7 +760,7 @@ public class EndspeakerEntity extends SeaMonster {
 					continue;
 				}
 				if (entity instanceof ServerPlayer player) {
-					Advancement advancement = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "silent_interruption"));
+					AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "silent_interruption"));
 					AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
 					if (!progress.isDone()) {
 						for (String criteria : progress.getRemainingCriteria()) {
@@ -917,9 +905,9 @@ public class EndspeakerEntity extends SeaMonster {
 			prefixes = new StringBuilder(Component.translatable("entity.caerula_arbor.endspeaker.prefix.all").getString());
 		}
 		if (count >= 4) {
-			prefixes.insert(0, "§b");
+			prefixes.insert(0, "搂b");
 		} else if (count >= 2) {
-			prefixes.insert(0, "§e");
+			prefixes.insert(0, "搂e");
 		}
 		if (!prefixes.isEmpty()) {
 			this.setCustomName(Component.literal(prefixes + this.getDisplayName().getString()));
@@ -1030,42 +1018,42 @@ public class EndspeakerEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData spawnData = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+		SpawnGroupData spawnData = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		if (this.getPhase() == 0) {
 			this.setAnimation("animation.endspeaker_0.start");
 		} else if (this.getPhase() == 1) {
 			this.setAnimation("animation.endspeaker_1.start");
-			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-				this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(30);
+			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
+				this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(30);
 			}
-			if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())) {
-				this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(60);
+			if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE)) {
+				this.getAttribute(CAAttributes.SANITY_RATE).setBaseValue(60);
 			}
 			if (!this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 9, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 9, false, false));
 			}
 			this.applySpawnAbilities(world);
 			this.updatePrefixName();
 		} else if (this.getPhase() == 2) {
 			this.setAnimation("animation.endspeaker_2.start");
 			this.setSkillCooldown(100);
-			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-				this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(30);
+			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
+				this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(30);
 			}
 			if (!this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 68, 9, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 68, 9, false, false));
 			}
 			this.applySpawnAbilities(world);
 			this.updatePrefixName();
 		} else if (!this.hasNextPhase()) {
 			this.setAnimation("animation.endspeaker_3.start");
 			this.setSkillCooldown(200);
-			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-				this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(30);
+			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
+				this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(30);
 			}
 			if (!this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 9, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 9, false, false));
 			}
 			this.applySpawnAbilities(world);
 			this.updatePrefixName();
@@ -1074,11 +1062,11 @@ public class EndspeakerEntity extends SeaMonster {
 	}
 
 	private void applySpawnAbilities(LevelAccessor world) {
-		if (hasAbility(world, 0) && this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue() + 40);
+		if (hasAbility(world, 0) && this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
+			this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue() + 40);
 		}
-		if (hasAbility(world, 1) && this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
-			this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(this.getAttribute(CAAttributes.MISSRATE.get()).getBaseValue() + 50);
+		if (hasAbility(world, 1) && this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
+			this.getAttribute(CAAttributes.MISSRATE).setBaseValue(this.getAttribute(CAAttributes.MISSRATE).getBaseValue() + 50);
 		}
 	}
 
@@ -1090,8 +1078,8 @@ public class EndspeakerEntity extends SeaMonster {
 		if (evolveTime > 0) {
 			this.entityData.set(DATA_IS_EVOLVING, true);
 			this.setHealth((float) Math.max(Math.round(this.getMaxHealth() * (300 - evolveTime) * 0.0033333), 1));
-			if (!this.hasEffect(CAMobEffects.INVULNERABLE.get())) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
+			if (!this.hasEffect(CAMobEffects.INVULNERABLE)) {
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 300, 1, false, false));
 			}
 			if (evolveTime <= 260 && !this.hasEffect(MobEffects.INVISIBILITY)) {
 				this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 300, 0, false, false));
@@ -1119,19 +1107,19 @@ public class EndspeakerEntity extends SeaMonster {
 		if (this.hasAbility(2) && this.getHealth() < this.getMaxHealth() * 0.4F) {
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 25, 0, false, false));
-				this.addEffect(new MobEffectInstance(CAMobEffects.ENDSPEAER_BRANDGUIDE_BUFF.get(), 25, 0));
+				this.addEffect(new MobEffectInstance(CAMobEffects.ENDSPEAER_BRANDGUIDE_BUFF, 25, 0));
 			}
 		}
 		if (this.hasAbility(4)) {
 			this.clearFire();
-			this.removeEffect(CAMobEffects.DIZZY.get());
-			this.removeEffect(CAMobEffects.MUTE.get());
+			this.removeEffect(CAMobEffects.DIZZY);
+			this.removeEffect(CAMobEffects.MUTE);
 			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
 			this.removeEffect(MobEffects.WEAKNESS);
-			this.removeEffect(CAMobEffects.FROZEN.get());
+			this.removeEffect(CAMobEffects.FROZEN);
 			this.setTicksFrozen(0);
-			if (this.tickCount % 200 == 0 && !this.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get()) && !this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 180, 2, false, false));
+			if (this.tickCount % 200 == 0 && !this.hasEffect(CAMobEffects.ESSENCE_RESISTANCE) && !this.level().isClientSide()) {
+				this.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 180, 2, false, false));
 			}
 			double movementSpeed = this.getAttributeValue(Attributes.MOVEMENT_SPEED);
 			if (EntityUtils.getSpeed(this) > movementSpeed * 1.25D) {
@@ -1143,15 +1131,15 @@ public class EndspeakerEntity extends SeaMonster {
 			if (this.isOnFire() && !this.fireImmune()) {
 				missRate = 0.0D;
 			}
-			if (this.hasEffect(CAMobEffects.DIZZY.get())
-				|| this.hasEffect(CAMobEffects.FROZEN.get())
+			if (this.hasEffect(CAMobEffects.DIZZY)
+				|| this.hasEffect(CAMobEffects.FROZEN)
 				|| this.hasEffect(MobEffects.LEVITATION)
 				|| this.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
 				|| this.hasEffect(MobEffects.SLOW_FALLING)) {
 				missRate = 0.0D;
 			}
-			if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
-				this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(missRate);
+			if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
+				this.getAttribute(CAAttributes.MISSRATE).setBaseValue(missRate);
 			}
 		}
 	}
@@ -1164,8 +1152,8 @@ public class EndspeakerEntity extends SeaMonster {
 		if (evolveTime > 0) {
 			this.entityData.set(DATA_IS_EVOLVING, true);
 			this.setHealth((float) Math.max(Math.round(this.getMaxHealth() * (300 - evolveTime) * 0.0033333), 1));
-			if (!this.hasEffect(CAMobEffects.INVULNERABLE.get())) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
+			if (!this.hasEffect(CAMobEffects.INVULNERABLE)) {
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 300, 1, false, false));
 			}
 			if (evolveTime <= 260 && !this.hasEffect(MobEffects.INVISIBILITY)) {
 				this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 300, 0, false, false));
@@ -1195,8 +1183,8 @@ public class EndspeakerEntity extends SeaMonster {
 		if (evolveTime > 0) {
 			this.entityData.set(DATA_IS_EVOLVING, true);
 			this.setHealth((float) Math.max(Math.round(this.getMaxHealth() * (300 - evolveTime) * 0.0033333), 1));
-			if (!this.hasEffect(CAMobEffects.INVULNERABLE.get())) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
+			if (!this.hasEffect(CAMobEffects.INVULNERABLE)) {
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 300, 1, false, false));
 			}
 			if (evolveTime <= 260 && !this.hasEffect(MobEffects.INVISIBILITY)) {
 				this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 300, 0, false, false));
@@ -1255,7 +1243,7 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 		if (target != null && target.isAlive() && this.distanceTo(target) <= 24) {
 			this.setAnimation("animation.endspeaker_3.skill");
-			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 9, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 9, false, false));
 			this.setSkillCooldown(280);
 			this.setDuration(60);
 			CaerulaArborMod.queueServerWork(16, this::teleportToTarget);
@@ -1374,7 +1362,7 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 	}
 
-	protected PlayState phaseZeroMovementPredicate(AnimationState<?> event) {
+	protected PlayState phaseZeroMovementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.endspeaker_0.move"));
@@ -1387,7 +1375,7 @@ public class EndspeakerEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	protected PlayState phaseOneMovementPredicate(AnimationState<?> event) {
+	protected PlayState phaseOneMovementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.endspeaker_1.move"));
@@ -1400,7 +1388,7 @@ public class EndspeakerEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	protected PlayState phaseOneAttackingPredicate(AnimationState<?> event) {
+	protected PlayState phaseOneAttackingPredicate(AnimationState event) {
 		if (this.getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = this.level().getGameTime();
@@ -1415,7 +1403,7 @@ public class EndspeakerEntity extends SeaMonster {
 		return PlayState.CONTINUE;
 	}
 
-	protected PlayState phaseTwoMovementPredicate(AnimationState<?> event) {
+	protected PlayState phaseTwoMovementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (this.isDeadOrDying()) {
 				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.endspeaker_2.die"));
@@ -1428,7 +1416,7 @@ public class EndspeakerEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	protected PlayState phaseTwoAttackingPredicate(AnimationState<?> event) {
+	protected PlayState phaseTwoAttackingPredicate(AnimationState event) {
 		if (this.getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = this.level().getGameTime();
@@ -1443,7 +1431,7 @@ public class EndspeakerEntity extends SeaMonster {
 		return PlayState.CONTINUE;
 	}
 
-	protected PlayState phaseThreeMovementPredicate(AnimationState<?> event) {
+	protected PlayState phaseThreeMovementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.endspeaker_3.move"));
@@ -1456,7 +1444,7 @@ public class EndspeakerEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	protected PlayState phaseThreeAttackingPredicate(AnimationState<?> event) {
+	protected PlayState phaseThreeAttackingPredicate(AnimationState event) {
 		if (this.getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = this.level().getGameTime();
@@ -1491,7 +1479,7 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 	}
 
-	protected PlayState procedurePredicate(AnimationState<?> event) {
+	protected PlayState procedurePredicate(AnimationState event) {
 		if (!this.animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED
 			|| (!this.animationprocedure.equals(this.prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(this.prevAnim)) {
@@ -1539,11 +1527,11 @@ public class EndspeakerEntity extends SeaMonster {
 		++this.deathTime;
 		if (!this.level().isClientSide() && this.deathTime == this.getPhaseDeathTickThreshold() && !this.isRemoved()) {
 			this.remove(Mob.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 
-	//TODO 或许可以修改为每级+5
+	//TODO 鎴栬鍙互淇敼涓烘瘡绾?5
 	protected int getPhaseDeathTickThreshold() {
 		return switch (this.getPhase()) {
 			case 1 -> 40;

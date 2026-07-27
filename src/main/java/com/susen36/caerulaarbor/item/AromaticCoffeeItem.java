@@ -16,19 +16,20 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class AromaticCoffeeItem extends Item {
 	public AromaticCoffeeItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(5).saturationMod(3f).alwaysEat().build()));
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 40;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.aromatic_coffee.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.aromatic_coffee.description_1"));
 	}

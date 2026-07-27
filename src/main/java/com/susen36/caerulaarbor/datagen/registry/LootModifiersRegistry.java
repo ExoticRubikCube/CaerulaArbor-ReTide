@@ -3,23 +3,22 @@ package com.susen36.caerulaarbor.datagen.registry;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.datagen.LootTableModifier;
 import com.mojang.serialization.Codec;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 /**
  * 全局战利品修改器序列化器注册表
  */
 public class LootModifiersRegistry {
-    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIER_SERIALIZERS =
-            DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, CaerulaArborMod.MODID);
+    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIER_SERIALIZERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, CaerulaArborMod.MODID);
 
-    public static final RegistryObject<Codec<? extends IGlobalLootModifier>> ADDITEM =
+    public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<LootTableModifier>> ADDITEM =
             LOOT_MODIFIER_SERIALIZERS.register(
                     "additem",
-                    LootTableModifier.CODEC
+                    () -> LootTableModifier.CODEC.get()
             );
 
     /**

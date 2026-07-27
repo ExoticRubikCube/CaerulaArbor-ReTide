@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+
 public class TrailriteShieldItem extends ShieldItem {
     private static final UUID ADD_ARMOR_UUID = UUID.fromString("d8a06f80-7b2c-4e8a-9b8c-1234567890ab");
     private static final UUID ADD_DEFENSE_UUID = UUID.fromString("e9b17991-8c3d-5f9b-0c9d-0987654321ba");
@@ -55,8 +56,8 @@ public class TrailriteShieldItem extends ShieldItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-        super.appendHoverText(itemstack, level, list, flag);
+    public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+        super.appendHoverText(itemstack, context, list, flag);
         list.add(Component.translatable("item.caerula_arbor.trailrite_shield.description_0"));
         list.add(Component.translatable("item.caerula_arbor.trailrite_armor.description"));
         list.add(Component.translatable("item.caerula_arbor.trailrite_shield.description_pre"));
@@ -75,19 +76,12 @@ public class TrailriteShieldItem extends ShieldItem {
     public void setDamage(ItemStack stack, int damage) {
         int max = this.getMaxDamage(stack);
         int v = Math.min(damage, this.getDamage(stack) + 1);
-        if (v >= max - 1) {
-            super.setDamage(stack, max - 1);
-        } else {
-            super.setDamage(stack, v);
-        }
+        super.setDamage(stack, Math.min(v, max - 1));
     }
 
     @Override
-    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
-        if (stack.getDamageValue() >= stack.getMaxDamage() - 1) {
-            return 0;
-        }
-        return 1;
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken) {
+        return stack.getDamageValue() >= stack.getMaxDamage() - 1 ? 0 : 1;
     }
 
     private boolean shouldFunc(ItemStack stack) {
@@ -101,7 +95,7 @@ public class TrailriteShieldItem extends ShieldItem {
             return;
         }
         if (entity instanceof LivingEntity living) {
-            AttributeInstance defenseInstance = living.getAttribute(CAAttributes.GENERAL_DEFENSE.get());
+            AttributeInstance defenseInstance = living.getAttribute(CAAttributes.GENERAL_DEFENSE);
             AttributeInstance armorInstance = living.getAttribute(Attributes.ARMOR);
             if (defenseInstance != null && armorInstance != null) {
                 defenseInstance.removeModifier(this.addDefense);

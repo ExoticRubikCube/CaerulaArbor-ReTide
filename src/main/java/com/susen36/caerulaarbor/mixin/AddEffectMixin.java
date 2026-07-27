@@ -26,7 +26,7 @@ public abstract class AddEffectMixin {
         if (effect.isInstantenous()) return value;
         if (effect.getCategory() == MobEffectCategory.HARMFUL) {
             LivingEntity me = (LivingEntity) (Object) this;
-            MobEffect resist = CAMobEffects.ESSENCE_RESISTANCE.get();
+            MobEffect resist = CAMobEffects.ESSENCE_RESISTANCE;
             if (!me.hasEffect(resist)) return value;
             MobEffectInstance resistInstance = me.getEffect(resist);
             int amplifier = 0;
@@ -48,7 +48,7 @@ public abstract class AddEffectMixin {
     @Inject(method = "setHealth", at = @At("HEAD"), cancellable = true)
     public void immortalSetHealth(float pHealth, CallbackInfo ci) {
         LivingEntity me = (LivingEntity) (Object) this;
-        if (me.hasEffect(CAMobEffects.IMMORTAL.get())) {
+        if (me.hasEffect(CAMobEffects.IMMORTAL)) {
             if (pHealth < 0.5) {
                 ci.cancel();
                 if (me.getMaxHealth() >= 0.5)
@@ -56,7 +56,7 @@ public abstract class AddEffectMixin {
                 me.getPersistentData().putBoolean("immortalTriggered", true);
             }
         }
-        if (me.hasEffect(CAMobEffects.INVULNERABLE.get()) && !(me instanceof MartusEntity)) {
+        if (me.hasEffect(CAMobEffects.INVULNERABLE) && !(me instanceof MartusEntity)) {
             if (pHealth < me.getHealth()) {
                 ci.cancel();
             }
@@ -66,11 +66,11 @@ public abstract class AddEffectMixin {
     @Inject(method = "die", at = @At("HEAD"), cancellable = true)
     public void doNotDie(DamageSource pDamageSource, CallbackInfo ci) {
         LivingEntity me = (LivingEntity) (Object) this;
-        if (me.hasEffect(CAMobEffects.IMMORTAL.get())) {
+        if (me.hasEffect(CAMobEffects.IMMORTAL)) {
             ci.cancel();
             me.getPersistentData().putBoolean("immortalTriggered", true);
         }
-        if (me.hasEffect(CAMobEffects.INVULNERABLE.get()) && !(me instanceof MartusEntity)) {
+        if (me.hasEffect(CAMobEffects.INVULNERABLE) && !(me instanceof MartusEntity)) {
             ci.cancel();
         }
     }

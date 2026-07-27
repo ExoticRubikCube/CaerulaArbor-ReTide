@@ -22,15 +22,13 @@ public class InfoStrategyMigrationMenu extends AbstractContainerMenu implements 
 	public final Level world;
 	public final Player entity;
 	public int x, y, z;
-	private final IItemHandler internal;
-	private final Map<Integer, Slot> customSlots = new HashMap<>();
+    private final Map<Integer, Slot> customSlots = new HashMap<>();
 
 	public InfoStrategyMigrationMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
 		super(CAMenus.INFO_STRATEGY_MIGRATION.get(), id);
 		this.entity = inv.player;
 		this.world = inv.player.level();
-		this.internal = new ItemStackHandler(0);
-		BlockPos pos;
+        BlockPos pos;
 		if (extraData != null) {
 			pos = extraData.readBlockPos();
 			this.x = pos.getX();

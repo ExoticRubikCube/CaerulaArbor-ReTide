@@ -7,33 +7,25 @@ import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.CaerulaUtil;
 import com.susen36.caerulaarbor.util.MathUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class CowBuffMobEffect extends MobEffect {
     public CowBuffMobEffect() {
         super(MobEffectCategory.NEUTRAL, -1);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
@@ -42,7 +34,7 @@ public class CowBuffMobEffect extends MobEffect {
         double y = entity.getY();
         double z = entity.getZ();
         if ((Entity) entity instanceof OceanizedCowEntity datEntL0 && datEntL0.getEntityData().get(OceanizedCowEntity.DATA_SKILL) && entity.isAlive()) {
-            if (!((Entity) entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.MUTE.get()))
+            if (!((Entity) entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.MUTE))
                     && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) <= ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
                 if (WorldUtils.canGrief(world)) {
                     if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
@@ -71,23 +63,4 @@ public class CowBuffMobEffect extends MobEffect {
         return MathUtils.isMultipleOf(duration, 10);
     }
 
-    @Override
-    public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
-        consumer.accept(new IClientMobEffectExtensions() {
-            @Override
-            public boolean isVisibleInInventory(MobEffectInstance effect) {
-                return false;
-            }
-
-            @Override
-            public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics guiGraphics, int x, int y, int blitOffset) {
-                return false;
-            }
-
-            @Override
-            public boolean isVisibleInGui(MobEffectInstance effect) {
-                return false;
-            }
-        });
-    }
 }

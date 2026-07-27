@@ -5,37 +5,25 @@ import com.susen36.caerulaarbor.entity.IzumikOffspringEntity;
 import com.susen36.caerulaarbor.entity.MartusEntity;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.MathUtils;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.EntityTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 
 public class AngerOfTideMobEffect extends MobEffect {
     public AngerOfTideMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -10092544);
     }
 
-    // TODO: 1.21.1 removed MobEffect.getCurativeItems(), curative logic needs migration to ConsumeEffect
-    public List<ItemStack> getCurativeItems() {
-        return new ArrayList<>();
-    }
+    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
@@ -74,7 +62,7 @@ public class AngerOfTideMobEffect extends MobEffect {
                 if (entityiterator instanceof LivingEntity livEnt11 && livEnt11.isBaby()) {
                     continue;
                 }
-                if ((Entity) entity instanceof LivingEntity livEnt12 && livEnt12.getMobType() == MobType.UNDEAD && entityiterator instanceof LivingEntity livEnt13 && livEnt13.getMobType() == MobType.UNDEAD) {
+                if ((Entity) entity instanceof LivingEntity livEnt12 && livEnt12.getType().is(EntityTags.UNDEAD) && entityiterator instanceof LivingEntity livEnt13 && livEnt13.getType().is(EntityTags.UNDEAD)) {
                     continue;
                 }
                 if (entityiterator.getPersistentData().getBoolean("seabornForgive")) {
@@ -99,23 +87,4 @@ public class AngerOfTideMobEffect extends MobEffect {
         return MathUtils.isMultipleOf(duration, 10);
     }
 
-    @Override
-    public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
-        consumer.accept(new IClientMobEffectExtensions() {
-            @Override
-            public boolean isVisibleInInventory(MobEffectInstance effect) {
-                return false;
-            }
-
-            @Override
-            public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics guiGraphics, int x, int y, int blitOffset) {
-                return false;
-            }
-
-            @Override
-            public boolean isVisibleInGui(MobEffectInstance effect) {
-                return false;
-            }
-        });
-    }
 }

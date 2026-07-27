@@ -25,6 +25,7 @@ import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
+
 public class OddFluteItem extends Item {
 	public OddFluteItem() {
 		super(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
@@ -36,13 +37,13 @@ public class OddFluteItem extends Item {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
 		return 40;
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.odd_flute.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.odd_flute.description_1"));
 	}
@@ -65,7 +66,7 @@ public class OddFluteItem extends Item {
                     level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
             }
             if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 300, 0, false, false));
+                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 300, 0, false, false));
             {
                 boolean setval = true;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {

@@ -45,11 +45,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -75,19 +75,19 @@ public class FlamarineGolemEntity extends SeaMonster {
         super(type, world);
         xpReward = 48;
         setNoAi(false);
-        setMaxUpStep(1.5f);
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
         setPersistenceRequired();
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_SHOOT, false);
-        this.entityData.define(DATA_ANIMATION, "undefined");
-        this.entityData.define(DATA_DURATION, 0);
-        this.entityData.define(DATA_SKILL_P1, 6);
-        this.entityData.define(DATA_SKILL_P2, 100);
-        this.entityData.define(DATA_ADDITION, 40);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SHOOT, false);
+        builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_DURATION, 0);
+        builder.define(DATA_SKILL_P1, 6);
+        builder.define(DATA_SKILL_P2, 100);
+        builder.define(DATA_ADDITION, 40);
     }
 
     @Override
@@ -105,10 +105,6 @@ public class FlamarineGolemEntity extends SeaMonster {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 2.25, false) {
-            @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
-                return 20.25;
-            }
 
             @Override
             public boolean canUse() {
@@ -134,11 +130,6 @@ public class FlamarineGolemEntity extends SeaMonster {
                 return super.canContinueToUse() && isFlamarineDurative();
             }
         });
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
     }
 
     @Override
@@ -227,8 +218,8 @@ public class FlamarineGolemEntity extends SeaMonster {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         if (this instanceof FlamarineGolemEntity) {
             this.setAnimation("animation.flamarine_golem.start");
         }
@@ -366,7 +357,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                         if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_DURATION, 60);
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 9, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 30, 9, false, false));
                         CaerulaArborMod.queueServerWork(22, () -> {
                             if (this.isAlive()) {
                                 this.combo(world, x, y, z, 5.75, 2);
@@ -437,7 +428,7 @@ public class FlamarineGolemEntity extends SeaMonster {
     }
 
     @Override
-    public boolean canChangeDimensions() {
+    public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
 
@@ -463,9 +454,9 @@ public class FlamarineGolemEntity extends SeaMonster {
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
-        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 5);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 15);
-        builder = builder.add(CAAttributes.SANITY_RESISTANCE.get(), 60);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE, 5);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 15);
+        builder = builder.add(CAAttributes.SANITY_RESISTANCE, 60);
         builder = builder.add(Attributes.MAX_HEALTH, 270);
         builder = builder.add(Attributes.ARMOR, 23);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
@@ -474,7 +465,7 @@ public class FlamarineGolemEntity extends SeaMonster {
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState<?> event) {
+    private PlayState movementPredicate(AnimationState event) {
         if (this.isDeadOrDying()) {
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.flamarine_golem.die"));
         }
@@ -496,7 +487,7 @@ public class FlamarineGolemEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState<?> event) {
+    private PlayState attackingPredicate(AnimationState event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -513,7 +504,7 @@ public class FlamarineGolemEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState<?> event) {
+    private PlayState procedurePredicate(AnimationState event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -535,7 +526,7 @@ public class FlamarineGolemEntity extends SeaMonster {
         ++this.deathTime;
         if (this.deathTime == 60) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience();
+            this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (world instanceof ServerLevel level) {

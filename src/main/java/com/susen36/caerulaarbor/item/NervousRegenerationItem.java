@@ -16,14 +16,15 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
+
 public class NervousRegenerationItem extends Item {
 	public NervousRegenerationItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.5f).alwaysEat().build()));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, level, list, flag);
+	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.nervous_regeneration.description_0"));
 	}
 
@@ -32,7 +33,7 @@ public class NervousRegenerationItem extends Item {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(entity);
 		sanityInjury.heal(sanityInjury.getMaxValue());
-		entity.removeEffect(CAMobEffects.DIZZY.get());
+		entity.removeEffect(CAMobEffects.DIZZY);
 		entity.removeEffect(MobEffects.BLINDNESS);
 		entity.removeEffect(MobEffects.DARKNESS);
 		return retval;

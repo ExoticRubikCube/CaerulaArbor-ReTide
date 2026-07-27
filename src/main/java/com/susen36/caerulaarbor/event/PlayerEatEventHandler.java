@@ -4,6 +4,7 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAConfigs;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -11,9 +12,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
@@ -22,9 +22,7 @@ public class PlayerEatEventHandler {
 	public static void onUseItemFinish(LivingEntityUseItemEvent.Finish event) {
 		Entity entity = event.getEntity();
 		ItemStack itemStack = event.getItem();
-		if (entity == null)
-			return;
-		String itemId = ForgeRegistries.ITEMS.getKey(itemStack.getItem()).toString();
+        String itemId = BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString();
 		String messageText;
 		double minimumLightGain;
 		double maximumLightGain;

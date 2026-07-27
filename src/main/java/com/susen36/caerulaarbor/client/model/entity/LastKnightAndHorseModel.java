@@ -5,8 +5,8 @@ import com.susen36.caerulaarbor.entity.LastKnightAndHorseEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
-import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
@@ -30,7 +30,7 @@ public class LastKnightAndHorseModel extends GeoModel<LastKnightAndHorseEntity> 
 
 	@Override
 	public void setCustomAnimations(LastKnightAndHorseEntity animatable, long instanceId, AnimationState<LastKnightAndHorseEntity> animationState) {
-		CoreGeoBone head = getAnimationProcessor().getBone("Head2");
+		GeoBone head = getAnimationProcessor().getBone("Head2");
 		if (head != null) {
 			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);

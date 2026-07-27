@@ -40,11 +40,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -63,15 +63,15 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		super(type, world);
 		xpReward = 0;
 		setNoAi(false);
-		setMaxUpStep(0.6f);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		setPersistenceRequired();
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(DATA_SHOOT, false);
+		builder.define(DATA_ANIMATION, "undefined");
 	}
 
 
@@ -191,11 +191,6 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
-
-	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
@@ -223,8 +218,8 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		illusionSmoke(world, this.getX(), this.getY(), this.getZ());
 		return retval;
 	}
@@ -288,11 +283,11 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 				}
 			}
 			if (!finished) {
-				if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-					this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(0);
+				if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
+					this.getAttribute(CAAttributes.GENERAL_DEFENSE).setBaseValue(0);
 			}
 		}
-		if (!this.level().isClientSide() && this.hasEffect(CAMobEffects.MUTE.get())) this.discard();
+		if (!this.level().isClientSide() && this.hasEffect(CAMobEffects.MUTE)) this.discard();
 		this.refreshDimensions();
 	}
 
@@ -316,7 +311,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState<?> event) {
+	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -333,7 +328,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
+	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -355,7 +350,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(this.getKillCredit());
 			LevelAccessor world = this.level();
 			if (Math.random() < 0.6) {
 				OceanizedRavagerEntity.summonFellows(world, this.getX(), this.getY(), this.getZ(), 1);

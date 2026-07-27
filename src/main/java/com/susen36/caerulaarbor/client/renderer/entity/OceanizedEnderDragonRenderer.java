@@ -26,11 +26,10 @@ public class OceanizedEnderDragonRenderer extends GeoEntityRenderer<OceanizedEnd
 	}
 
 	@Override
-	public void preRender(PoseStack poseStack, OceanizedEnderDragonEntity entity, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red,
-			float green, float blue, float alpha) {
+	public void preRender(PoseStack poseStack, OceanizedEnderDragonEntity entity, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
 		this.scaleHeight = 1f;
 		this.scaleWidth = 1f;
-		super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+		super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
+import com.mojang.serialization.MapCodec;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -19,15 +20,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -164,7 +157,7 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
                         if ((LevelAccessor) world instanceof ServerLevel level) {
                             Entity entityToSpawn = CAEntities.THE_ABANDONED.get().spawn(level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
-                                entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                                entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                         break;
@@ -184,9 +177,14 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
         if ((LevelAccessor) world instanceof ServerLevel level) {
             Entity entityToSpawn = CAEntities.THE_ABANDONED.get().spawn(level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
-                entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
             }
         }
         return retval;
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return MapCodec.unit(this);
     }
 }

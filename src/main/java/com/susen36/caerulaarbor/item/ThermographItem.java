@@ -23,8 +23,8 @@ public class ThermographItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
 		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-        if (!((LevelAccessor) world).isClientSide() && ((LevelAccessor) world).getServer() != null)
-            ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal(("Temperature:" + world.getBiome(BlockPos.containing(entity.getX(), entity.getY(), entity.getZ())).value().getBaseTemperature() * 100f)), false);
+        if (!world.isClientSide() && world.getServer() != null)
+            world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(("Temperature:" + world.getBiome(BlockPos.containing(entity.getX(), entity.getY(), entity.getZ())).value().getBaseTemperature() * 100f)), false);
         return ar;
 	}
 
@@ -34,14 +34,14 @@ public class ThermographItem extends Item {
         double def;
         double mgc;
         double snt;
-        def = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                ? livingEntity0.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getValue()
+        def = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
+                ? livingEntity0.getAttribute(CAAttributes.GENERAL_DEFENSE).getValue()
                 : 0)) / Math.pow(10, 2);
-        mgc = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                ? livingEntity2.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue()
+        mgc = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
+                ? livingEntity2.getAttribute(CAAttributes.MAGIC_RESISTANCE).getValue()
                 : 0)) / Math.pow(10, 2);
-        snt = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get())
-                ? livingEntity4.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).getValue()
+        snt = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE)
+                ? livingEntity4.getAttribute(CAAttributes.SANITY_RESISTANCE).getValue()
                 : 0)) / Math.pow(10, 2);
         if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
             player.displayClientMessage(Component.literal(("Defense: " + def)), false);

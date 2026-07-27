@@ -89,7 +89,7 @@ public class BombCopperBlock extends Block {
                 for (int index2 = 0; index2 < 49; index2++) {
                     dy = -7;
                     for (int index3 = 0; index3 < 15; index3++) {
-                        target = (((LevelAccessor) world).getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
+                        target = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
                         if (new Vec3(dx, dy, dz).distanceTo(new Vec3(0, 0, 0)) <= 24) {
                             if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "blow_up")))) {
                                 world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
@@ -101,7 +101,7 @@ public class BombCopperBlock extends Block {
                 }
                 dx = dx + 1;
             }
-            ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.IRON_BLOCK.defaultBlockState(), 3);
+            world.setBlock(BlockPos.containing(x, y, z), Blocks.IRON_BLOCK.defaultBlockState(), 3);
             {
                 final Vec3 center = new Vec3((x + 0.5), (y + 0.5), (z + 0.5));
                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
@@ -109,8 +109,8 @@ public class BombCopperBlock extends Block {
                     if (new Vec3((x + 0.5), (y + 0.5), (z + 0.5)).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) <= 24) {
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
                                 && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
-                            entityiterator.hurt(CADamageTypes.source((LevelAccessor) world, CADamageTypes.BRAND_BOMB),
-                                    (float) Math.min(48, Math.max((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.1, 8)));
+                            entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.BRAND_BOMB),
+                                    (float) Math.clamp((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.1, 8, 48));
                         }
                     }
                 }

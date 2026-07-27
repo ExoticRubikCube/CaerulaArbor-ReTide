@@ -1401,4 +1401,3 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 		return TYPE;
 	}
 }
-

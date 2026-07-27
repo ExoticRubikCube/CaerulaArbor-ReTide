@@ -7,6 +7,7 @@ import com.susen36.caerulaarbor.menu.EvoTreeMenu;
 import com.susen36.caerulaarbor.network.send.EvoTreeButtonMessage;
 import com.susen36.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.PlainTextButton;
@@ -140,7 +141,7 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
 		super.init();
 		button_return = new PlainTextButton(this.leftPos + 218, this.topPos + 203, 38, 20, Component.translatable("gui.caerula_arbor.evo_tree.button_return"), e -> {
 			if (true) {
-				CANetwork.PACKET_HANDLER.sendToServer(new EvoTreeButtonMessage(0, x, y, z));
+				PacketDistributor.sendToServer(new EvoTreeButtonMessage(0, x, y, z));
 				EvoTreeButtonMessage.handleButtonAction(entity, 0, x, y, z);
 			}
 		}, this.font);
@@ -148,4 +149,3 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
 		this.addRenderableWidget(button_return);
 	}
 }
-
