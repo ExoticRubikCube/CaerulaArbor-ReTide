@@ -22,11 +22,11 @@ public abstract class AddEffectMixin {
             at = @At("HEAD"),
             argsOnly = true)
     public MobEffectInstance addShorterEffect(MobEffectInstance value) {
-        MobEffect effect = value.getEffect();
+        MobEffect effect = value.getEffect().value();
         if (effect.isInstantenous()) return value;
         if (effect.getCategory() == MobEffectCategory.HARMFUL) {
             LivingEntity me = (LivingEntity) (Object) this;
-            MobEffect resist = CAMobEffects.ESSENCE_RESISTANCE;
+            MobEffect resist = CAMobEffects.ESSENCE_RESISTANCE.get();
             if (!me.hasEffect(resist)) return value;
             MobEffectInstance resistInstance = me.getEffect(resist);
             int amplifier = 0;

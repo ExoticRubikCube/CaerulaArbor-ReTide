@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.capability.anchor.AnchorRecord;
 import com.susen36.caerulaarbor.capability.apoptosis.ApoptosisInjuryCapability;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SanityInjuryCapability;
+import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CANetwork;
 import com.susen36.caerulaarbor.network.receive.SavedDataSyncMessage;
 import net.minecraft.core.Direction;
@@ -18,6 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.capabilities.Capability;
 import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.common.capabilities.ICapabilitySerializable;
@@ -25,8 +28,8 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +39,41 @@ public class CapabilityEventHandler {
 
     private CapabilityEventHandler() {
         throw new UnsupportedOperationException("Utility class");
+    }
+
+    public static void registerBlockCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.HUGE_LILY.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.CHESTMEGA_SPAWNER.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.CENTRIFUGER.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.ABANDONED_SULPTURE.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.CRISIS_TABLE.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.VIVIPAROUS_LILY.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.TRAILRITE_ARMORSTAND.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.TIDEWAY_CRADLE.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.SWARMCALLER_DOLL.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.STONECUTTER_DOLL.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.POCKET_SEA_DOLL.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.MIZUKI_STATUE.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.LIVING_ARMORSTAND.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.ILLUSIONER_BANNER.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.HIGHMORE_SPAWNING_BLOCK.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.HIGHMORE_SPAWNBLOCK.get(),
+                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
     }
 
     @SubscribeEvent
@@ -108,7 +146,7 @@ public class CapabilityEventHandler {
     }
 
     @SubscribeEvent
-    public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+    public static void onLivingTick(EntityTickEvent.Post event) {
         if (!event.getEntity().level().isClientSide()) {
             ModCapabilities.getSanityInjury(event.getEntity()).tick();
             ModCapabilities.getApoptosisInjury(event.getEntity()).tick();

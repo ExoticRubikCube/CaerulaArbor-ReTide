@@ -14,7 +14,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -131,7 +130,7 @@ public class TrailLogBlock extends Block {
             }
             BlockPos bp = BlockPos.containing(x, y, z);
             BlockState bs = CABlocks.STRIPPED_TRAIL_LOG.get().withPropertiesOf(blockstate);
-            ((LevelAccessor) world).setBlock(bp, bs, 3);
+            world.setBlock(bp, bs, 3);
             result = ItemInteractionResult.SUCCESS;
         }
         return result;

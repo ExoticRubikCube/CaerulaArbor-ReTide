@@ -26,12 +26,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -135,7 +135,7 @@ public class LanternJudgementItem extends Item {
                         entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 200, 0, false, false));
                     if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())
                         entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE, 400, 0, false, false));
-                    entityiterator.hurt(CADamageTypes.source((LevelAccessor) world, CADamageTypes.OCEANKILLER_DAMAGE, entity), (float) Math.max(((Entity) entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.15,
+                    entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE, entity), (float) Math.max(((Entity) entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.15,
                                     15));
                     entityiterator.setSecondsOnFire(5);
                 }

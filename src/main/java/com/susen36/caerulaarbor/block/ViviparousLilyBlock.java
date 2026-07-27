@@ -1,12 +1,12 @@
 
 package com.susen36.caerulaarbor.block;
 
+import com.mojang.serialization.MapCodec;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.WorldUtils;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -51,9 +51,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 	private static final net.minecraft.tags.TagKey<Block> TRAIL_TAG = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail"));
 
 	public ViviparousLilyBlock() {
-		super(BlockBehaviour.Properties.of()
-
-				.sound(SoundType.FUNGUS).instabreak().lightLevel(s -> 1).noCollission().noOcclusion().randomTicks().pushReaction(PushReaction.DESTROY).isRedstoneConductor((bs, br, bp) -> false));
+		super(BlockBehaviour.Properties.of().sound(SoundType.FUNGUS).instabreak().lightLevel(s -> 1).noCollission().noOcclusion().randomTicks().pushReaction(PushReaction.DESTROY).isRedstoneConductor((bs, br, bp) -> false));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
 	}
 

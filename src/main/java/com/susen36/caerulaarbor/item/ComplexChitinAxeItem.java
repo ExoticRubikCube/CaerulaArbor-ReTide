@@ -1,8 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAAttributes;
+import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -11,7 +11,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;

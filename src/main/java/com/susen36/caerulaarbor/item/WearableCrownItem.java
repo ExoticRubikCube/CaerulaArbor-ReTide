@@ -1,27 +1,22 @@
 
 package com.susen36.caerulaarbor.item;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
+import java.util.Map;
 
 
 public class WearableCrownItem extends ArmorItem implements GeoItem, SyncedAnimationItem {
@@ -29,47 +24,20 @@ public class WearableCrownItem extends ArmorItem implements GeoItem, SyncedAnima
 	public String animationprocedure = "empty";
 
 	public WearableCrownItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial() {
-			@Override
-			public int getDurabilityForType(ArmorItem.Type type) {
-				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 45;
-			}
-
-			@Override
-			public int getDefenseForType(ArmorItem.Type type) {
-				return new int[]{2, 5, 6, 5}[type.getSlot().getIndex()];
-			}
-
-			@Override
-			public int getEnchantmentValue() {
-				return 16;
-			}
-
-			@Override
-			public SoundEvent getEquipSound() {
-				return SoundEvents.AMETHYST_BLOCK_RESONATE;
-			}
-
-			@Override
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of();
-			}
-
-			@Override
-			public String getName() {
-				return "wearable_crown";
-			}
-
-			@Override
-			public float getToughness() {
-				return 2.5f;
-			}
-
-			@Override
-			public float getKnockbackResistance() {
-				return 0f;
-			}
-		}, type, properties);
+		super(new ArmorMaterial(
+			Map.of(
+				ArmorItem.Type.HELMET, 5,
+				ArmorItem.Type.CHESTPLATE, 6,
+				ArmorItem.Type.LEGGINGS, 5,
+				ArmorItem.Type.BOOTS, 2
+			),
+			16,
+			BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.AMETHYST_BLOCK_RESONATE),
+			() -> Ingredient.of(),
+			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "wearable_crown"))),
+			2.5f,
+			0f
+		), type, properties);
 	}
 
 	@Override

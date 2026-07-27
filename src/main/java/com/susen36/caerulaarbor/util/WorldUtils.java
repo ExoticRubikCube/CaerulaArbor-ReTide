@@ -7,6 +7,7 @@ import com.susen36.caerulaarbor.init.CAGameRules;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 public class WorldUtils {
@@ -235,16 +237,20 @@ public class WorldUtils {
 
 	//TODO 鍙枒锛屼负浠€涔堜笉鏀惧湪鍏朵粬util
 	public static void dropRelicRoute(LevelAccessor world, double x, double y, double z) {
-		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-			if (!world.isClientSide() && world.getServer() != null) {
-				for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_route"))
-						.getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
-					if (world instanceof ServerLevel level) {
-						ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
-						entityToSpawn.setPickUpDelay(10);
-						entityToSpawn.setUnlimitedLifetime();
-						level.addFreshEntity(entityToSpawn);
-					}
+		if (world instanceof ServerLevel level) {
+			if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+				ResourceKey<LootTable> lootTableKey = ResourceKey.create(
+						Registries.LOOT_TABLE,
+						ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_route")
+				);
+				LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableKey);
+				LootParams lootParams = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
+
+				for (ItemStack itemstackiterator : lootTable.getRandomItems(lootParams)) {
+					ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
+					entityToSpawn.setPickUpDelay(10);
+					entityToSpawn.setUnlimitedLifetime();
+					level.addFreshEntity(entityToSpawn);
 				}
 			}
 		}
@@ -276,16 +282,19 @@ public class WorldUtils {
 
 	//TODO:鎴栬鍙互涓嬫斁
 	public static void dropRelicTidebi(LevelAccessor world, double x, double y, double z) {
-		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-			if (!world.isClientSide() && world.getServer() != null) {
-				for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_tidebi"))
-						.getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
-					if (world instanceof ServerLevel level) {
-						ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
-						entityToSpawn.setPickUpDelay(10);
-						entityToSpawn.setUnlimitedLifetime();
-						level.addFreshEntity(entityToSpawn);
-					}
+		if (world instanceof ServerLevel level) {
+			if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+				ResourceKey<LootTable> lootTableKey = ResourceKey.create(
+						Registries.LOOT_TABLE,
+						ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_tidebi")
+				);
+				LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableKey);
+				LootParams lootParams = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
+				for (ItemStack itemstackiterator : lootTable.getRandomItems(lootParams)) {
+					ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
+					entityToSpawn.setPickUpDelay(10);
+					entityToSpawn.setUnlimitedLifetime();
+					level.addFreshEntity(entityToSpawn);
 				}
 			}
 		}

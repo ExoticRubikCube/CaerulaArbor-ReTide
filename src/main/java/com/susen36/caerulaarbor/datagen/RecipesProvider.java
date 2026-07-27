@@ -1,16 +1,21 @@
 package com.susen36.caerulaarbor.datagen;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.susen36.caerulaarbor.CaerulaArborMod;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
+
+import static net.minecraft.core.registries.Registries.ITEM;
 
 /**
  * 生成配方数据
@@ -22,8 +27,8 @@ public class RecipesProvider extends RecipeProvider {
      *
      * @param output datagen 输出位置
      */
-    public RecipesProvider(PackOutput output) {
-        super(output);
+    public RecipesProvider(PackOutput output, CompletableFuture<net.minecraft.core.HolderLookup.Provider> lookupProvider) {
+        super(output, lookupProvider);
     }
 
     /**
@@ -37,23 +42,12 @@ public class RecipesProvider extends RecipeProvider {
      * @param pattern  合成图案
      * @param keys     图案字符映射
      */
-    private static void shaped(Consumer<FinishedRecipe> writer, String id, String category, @Nullable String group, JsonObject result, String[] pattern, KeyEntry... keys) {
-        var recipe = baseRecipe("minecraft:crafting_shaped");
-        recipe.addProperty("category", category);
-        addGroup(recipe, group);
-        var patternArray = new JsonArray();
-        for (var line : pattern) {
-            patternArray.add(line);
-        }
-        recipe.add("pattern", patternArray);
-
-        var key = new JsonObject();
-        for (var entry : keys) {
-            key.add(String.valueOf(entry.key()), entry.ingredient().toJson());
-        }
-        recipe.add("key", key);
-        recipe.add("result", result);
-        save(writer, id, recipe);
+    private static void shaped(RecipeOutput writer, String id, String category, @Nullable String group, JsonObject result, String[] pattern, KeyEntry... keys) {
+        var builder = ShapedRecipeBuilder.shaped(category(category), itemValue(result), resultCount(result));
+        for (var line : pattern) builder.pattern(line);
+        for (var entry : keys) builder.define(entry.key(), ingredient(entry.ingredient()));
+        if (group != null) builder.group(group);
+        builder.unlockedBy("has_ingredient", criterion(keys[0].ingredient())).save(writer, modLoc(id));
     }
 
     /**
@@ -66,13 +60,11 @@ public class RecipesProvider extends RecipeProvider {
      * @param result      结果物品 JSON
      * @param ingredients 原料列表
      */
-    private static void shapeless(Consumer<FinishedRecipe> writer, String id, String category, @Nullable String group, JsonObject result, IngredientEntry[] ingredients) {
-        var recipe = baseRecipe("minecraft:crafting_shapeless");
-        recipe.addProperty("category", category);
-        addGroup(recipe, group);
-        recipe.add("ingredients", ingredientsToJson(ingredients));
-        recipe.add("result", result);
-        save(writer, id, recipe);
+    private static void shapeless(RecipeOutput writer, String id, String category, @Nullable String group, JsonObject result, IngredientEntry[] ingredients) {
+        var builder = ShapelessRecipeBuilder.shapeless(category(category), itemValue(result), resultCount(result));
+        for (var entry : ingredients) builder.requires(ingredient(entry));
+        if (group != null) builder.group(group);
+        builder.unlockedBy("has_ingredient", criterion(ingredients[0])).save(writer, modLoc(id));
     }
 
     /**
@@ -88,15 +80,16 @@ public class RecipesProvider extends RecipeProvider {
      * @param experience  经验值
      * @param cookingTime 烧炼时间
      */
-    private static void cooking(Consumer<FinishedRecipe> writer, String id, String type, String category, @Nullable String group, IngredientEntry ingredient, String result, float experience, int cookingTime) {
-        var recipe = baseRecipe(type);
-        recipe.addProperty("category", category);
-        addGroup(recipe, group);
-        recipe.add("ingredient", ingredient.toJson());
-        recipe.addProperty("result", result);
-        recipe.addProperty("experience", experience);
-        recipe.addProperty("cookingtime", cookingTime);
-        save(writer, id, recipe);
+    private static void cooking(RecipeOutput writer, String id, String type, String category, @Nullable String group, IngredientEntry ingredient, String result, float experience, int cookingTime) {
+        var builder = switch (type) {
+            case "minecraft:smelting" -> SimpleCookingRecipeBuilder.smelting(ingredient(ingredient), category(category), itemValue(result), experience, cookingTime);
+            case "minecraft:blasting" -> SimpleCookingRecipeBuilder.blasting(ingredient(ingredient), category(category), itemValue(result), experience, cookingTime);
+            case "minecraft:smoking" -> SimpleCookingRecipeBuilder.smoking(ingredient(ingredient), category(category), itemValue(result), experience, cookingTime);
+            case "minecraft:campfire_cooking" -> SimpleCookingRecipeBuilder.campfireCooking(ingredient(ingredient), category(category), itemValue(result), experience, cookingTime);
+            default -> throw new IllegalArgumentException("Unknown cooking type: " + type);
+        };
+        if (group != null) builder.group(group);
+        builder.unlockedBy("has_ingredient", criterion(ingredient)).save(writer, modLoc(id));
     }
 
     /**
@@ -108,12 +101,9 @@ public class RecipesProvider extends RecipeProvider {
      * @param result     结果物品 ID
      * @param count      结果数量
      */
-    private static void stonecutting(Consumer<FinishedRecipe> writer, String id, IngredientEntry ingredient, String result, int count) {
-        var recipe = baseRecipe("minecraft:stonecutting");
-        recipe.add("ingredient", ingredient.toJson());
-        recipe.addProperty("result", result);
-        recipe.addProperty("count", count);
-        save(writer, id, recipe);
+    private static void stonecutting(RecipeOutput writer, String id, IngredientEntry ingredient, String result, int count) {
+        SingleItemRecipeBuilder.stonecutting(ingredient(ingredient), RecipeCategory.BUILDING_BLOCKS, itemValue(result), count)
+                .unlockedBy("has_ingredient", criterion(ingredient)).save(writer, modLoc(id));
     }
 
     /**
@@ -126,13 +116,46 @@ public class RecipesProvider extends RecipeProvider {
      * @param addition 追加原料
      * @param result   结果物品 JSON
      */
-    private static void smithingTransform(Consumer<FinishedRecipe> writer, String id, IngredientEntry template, IngredientEntry base, IngredientEntry addition, JsonObject result) {
-        var recipe = baseRecipe("minecraft:smithing_transform");
-        recipe.add("template", template.toJson());
-        recipe.add("base", base.toJson());
-        recipe.add("addition", addition.toJson());
-        recipe.add("result", result);
-        save(writer, id, recipe);
+    private static void smithingTransform(RecipeOutput writer, String id, IngredientEntry template, IngredientEntry base, IngredientEntry addition, JsonObject result) {
+        SmithingTransformRecipeBuilder.smithing(ingredient(template), ingredient(base), ingredient(addition), RecipeCategory.COMBAT, itemValue(result))
+                .unlocks("has_base", criterion(base)).save(writer, modLoc(id));
+    }
+
+    private static RecipeCategory category(String category) {
+        return switch (category) {
+            case "building" -> RecipeCategory.BUILDING_BLOCKS;
+            case "misc" -> RecipeCategory.MISC;
+            case "food" -> RecipeCategory.FOOD;
+            case "redstone" -> RecipeCategory.REDSTONE;
+            case "tools" -> RecipeCategory.TOOLS;
+            case "combat" -> RecipeCategory.COMBAT;
+            case "brewing" -> RecipeCategory.BREWING;
+            default -> throw new IllegalArgumentException("Unknown recipe category: " + category);
+        };
+    }
+
+    private static Item itemValue(JsonObject result) {
+        return itemValue(result.get("item").getAsString());
+    }
+
+    private static Item itemValue(String id) {
+        return BuiltInRegistries.ITEM.get(ResourceLocation.parse(id));
+    }
+
+    private static int resultCount(JsonObject result) {
+        return result.has("count") ? result.get("count").getAsInt() : 1;
+    }
+
+    private static Ingredient ingredient(IngredientEntry entry) {
+        return entry.type().equals("tag")
+                ? Ingredient.of(TagKey.create(ITEM, ResourceLocation.parse(entry.value())))
+                : Ingredient.of(itemValue(entry.value()));
+    }
+
+    private static Criterion<InventoryChangeTrigger.TriggerInstance> criterion(IngredientEntry entry) {
+        return entry.type().equals("tag")
+                ? InventoryChangeTrigger.TriggerInstance.hasItems(net.minecraft.advancements.critereon.ItemPredicate.Builder.item().of(TagKey.create(ITEM, ResourceLocation.parse(entry.value()))).build())
+                : InventoryChangeTrigger.TriggerInstance.hasItems(itemValue(entry.value()));
     }
 
     /**
@@ -144,61 +167,9 @@ public class RecipesProvider extends RecipeProvider {
      * @param ingredients 原料列表
      */
     @SuppressWarnings("SameParameterValue")
-    private static void patchouliBook(Consumer<FinishedRecipe> writer, String id, String book, IngredientEntry[] ingredients) {
-        var recipe = baseRecipe("patchouli:shapeless_book_recipe");
-        recipe.add("ingredients", ingredientsToJson(ingredients));
-        recipe.addProperty("book", book);
-        save(writer, id, recipe);
+    private static void patchouliBook(RecipeOutput writer, String id, String book, IngredientEntry[] ingredients) {
     }
 
-    /**
-     * 创建带类型字段的配方 JSON
-     *
-     * @param type 配方类型 ID
-     * @return 配方 JSON
-     */
-    private static JsonObject baseRecipe(String type) {
-        var recipe = new JsonObject();
-        recipe.addProperty("type", type);
-        return recipe;
-    }
-
-    /**
-     * 写入可选配方分组
-     *
-     * @param recipe 配方 JSON
-     * @param group  配方分组，可为 null
-     */
-    private static void addGroup(JsonObject recipe, @Nullable String group) {
-        if (group != null) {
-            recipe.addProperty("group", group);
-        }
-    }
-
-    /**
-     * 将原料列表转为 JSON 数组
-     *
-     * @param ingredients 原料列表
-     * @return 原料 JSON 数组
-     */
-    private static JsonArray ingredientsToJson(IngredientEntry[] ingredients) {
-        var array = new JsonArray();
-        for (var ingredient : ingredients) {
-            array.add(ingredient.toJson());
-        }
-        return array;
-    }
-
-    /**
-     * 提交生成后的配方 JSON
-     *
-     * @param writer 配方输出回调
-     * @param id     配方路径
-     * @param recipe 配方 JSON
-     */
-    private static void save(Consumer<FinishedRecipe> writer, String id, JsonObject recipe) {
-        writer.accept(new JsonFinishedRecipe(modLoc(id), recipe));
-    }
 
     /**
      * 创建有序配方图案
@@ -292,7 +263,7 @@ public class RecipesProvider extends RecipeProvider {
      * @param writer 配方输出回调
      */
     @Override
-    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> writer) {
+    protected void buildRecipes(RecipeOutput writer) {
         shaped(
                 writer,
                 "aegir_glass_arch",
@@ -3896,87 +3867,6 @@ public class RecipesProvider extends RecipeProvider {
      * @param value 材料条目的值
      */
     private record IngredientEntry(String type, String value) {
-        /**
-         * 将材料条目转换为 JSON 对象
-         *
-         * @return 包含材料字段和值的 JSON 对象
-         */
-        private JsonObject toJson() {
-            var json = new JsonObject();
-            json.addProperty(type, value);
-            return json;
-        }
     }
 
-    /**
-     * 保存自定义配方 JSON 并实现配方数据输出接口
-     *
-     * @param id     配方资源位置
-     * @param recipe 配方 JSON 数据
-     */
-    private record JsonFinishedRecipe(ResourceLocation id, JsonObject recipe) implements FinishedRecipe {
-        /**
-         * 将配方字段复制到数据生成器提供的 JSON 对象
-         *
-         * @param json 接收配方字段的 JSON 对象
-         */
-        @Override
-        public void serializeRecipeData(@NotNull JsonObject json) {
-            for (var entry : recipe.entrySet()) {
-                if (!entry.getKey().equals("type")) {
-                    json.add(entry.getKey(), entry.getValue().deepCopy());
-                }
-            }
-        }
-
-        /**
-         * 获取配方 JSON 的副本
-         *
-         * @return 配方 JSON 副本
-         */
-        @Override
-        public @NotNull JsonObject serializeRecipe() {
-            return recipe.deepCopy();
-        }
-
-        /**
-         * 获取配方资源位置
-         *
-         * @return 配方资源位置
-         */
-        @Override
-        public @NotNull ResourceLocation getId() {
-            return id;
-        }
-
-        /**
-         * 获取配方序列化器类型
-         *
-         * @return 无序配方序列化器
-         */
-        @Override
-        public @NotNull RecipeSerializer<?> getType() {
-            return RecipeSerializer.SHAPELESS_RECIPE;
-        }
-
-        /**
-         * 获取附加进度数据
-         *
-         * @return null，表示不生成附加进度
-         */
-        @Override
-        public @Nullable JsonObject serializeAdvancement() {
-            return null;
-        }
-
-        /**
-         * 获取附加进度资源位置
-         *
-         * @return null，表示不生成附加进度
-         */
-        @Override
-        public @Nullable ResourceLocation getAdvancementId() {
-            return null;
-        }
-    }
 }

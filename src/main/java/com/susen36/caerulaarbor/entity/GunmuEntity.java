@@ -8,8 +8,6 @@ import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,7 +32,6 @@ import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 public class GunmuEntity extends Monster {
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.PROGRESS);
@@ -91,7 +88,7 @@ public class GunmuEntity extends Monster {
         Entity immediatesourceentity = damagesource.getDirectEntity();
         if (immediatesourceentity == null || sourceentity == null)
             return false;
-        sourceentity.hurt(CADamageTypes.source(((LevelAccessor) world), CADamageTypes.GUNMU_DAMAGE),
+        sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.GUNMU_DAMAGE),
                 sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
         if (!(sourceentity == immediatesourceentity)) {
             return false;

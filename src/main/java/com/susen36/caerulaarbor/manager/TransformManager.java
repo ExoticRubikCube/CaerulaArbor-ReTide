@@ -8,13 +8,18 @@ import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.monster.*;
@@ -25,7 +30,6 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -74,7 +78,7 @@ public class TransformManager {
 		if (entity instanceof Player ||getEntityTypeId(entity).contains("touhou_little_maid:maid")) {
 			return false;
 		}
-		if (!(entity instanceof LivingEntity livEnt2 && livEnt2.getType().is(EntityTags.UNDEAD) || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_transform"))))
+		if (!(entity instanceof LivingEntity livEnt2 && livEnt2.getType().is(EntityTypeTags.UNDEAD) || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_transform"))))
 				&& world.getLevelData().getGameRules().getBoolean(CAGameRules.OCEANIZATION_MODE) && !(entity instanceof LivingEntity livEnt5 && livEnt5.isBaby())) {
 			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CAConfigs.CLONE_NUM.get()) * 2) {
 				return false;

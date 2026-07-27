@@ -34,11 +34,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 public class NetherseaSlimeEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.BOOLEAN);
@@ -151,9 +148,9 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	}
 
 	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
+	public EntityDimensions getDefaultDimensions(Pose p_33597_) {
 		Entity entity = this;
-		return super.getDimensions(p_33597_).scale((float) EntityUtils.getSlimeSize(entity));
+		return super.getDefaultDimensions(p_33597_).scale((float) EntityUtils.getSlimeSize(entity));
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

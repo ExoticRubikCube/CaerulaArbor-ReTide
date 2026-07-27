@@ -1,16 +1,14 @@
 package com.susen36.caerulaarbor.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.PregnantFishEntity;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.init.CANetwork;
 import com.susen36.caerulaarbor.menu.InfoStrategyBreedMenu;
 import com.susen36.caerulaarbor.network.send.InfoStrategyReturnButtonMessage;
 import com.susen36.caerulaarbor.util.StrategyUtils;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.PlainTextButton;
@@ -25,6 +23,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
 
@@ -48,7 +47,7 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics);
+		this.renderBackground(guiGraphics,mouseX,mouseY,partialTicks);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
         if (((Entity) ((LevelAccessor) world instanceof Level level ? new PregnantFishEntity(CAEntities.PREGNANT_FISH.get(), level) : null)) instanceof LivingEntity livingEntity) {
 			InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphics, this.leftPos + 29, this.topPos + 96, 20, 0f + (float) Math.atan((this.leftPos + 29 - mouseX) / 40.0), (float) Math.atan((this.topPos + 47 - mouseY) / 40.0), livingEntity);

@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -193,9 +192,11 @@ public class SeaPrairieBombBlock extends Block {
 					level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 3.0f, 1.0f);
 				}
 				ItemStack ist = entity.getMainHandItem();
-				if (ist.hurt(1, RandomSource.create(), null)) {
+				if (ist.getDamageValue() + 1 >= ist.getMaxDamage()) {
 					ist.shrink(1);
 					ist.setDamageValue(0);
+				} else {
+					ist.setDamageValue(ist.getDamageValue() + 1);
 				}
 				return ItemInteractionResult.SUCCESS;
 			}

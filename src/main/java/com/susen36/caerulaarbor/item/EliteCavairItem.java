@@ -59,14 +59,14 @@ public class EliteCavairItem extends Item {
         }
         {
             double setval = 0;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.disoclusion = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         {
-            double setval = Math.min((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + 10, 100);
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            double setval = Math.min((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + 10, 100);
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.player_light = setval;
                 capability.syncPlayerVariables(entity);
             });

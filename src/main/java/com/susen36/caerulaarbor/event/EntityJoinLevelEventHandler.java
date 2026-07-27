@@ -9,27 +9,27 @@ import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.tags.EntityTags;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.LevelAccessor;
-import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 import java.util.ArrayList;
-import net.minecraft.advancements.AdvancementHolder;
 
 @EventBusSubscriber
 public class EntityJoinLevelEventHandler {
@@ -50,7 +50,7 @@ public class EntityJoinLevelEventHandler {
                 if (entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
                     livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(0.16);
             }
-            if (entity instanceof LivingEntity livEnt3 && livEnt3.getType().is(EntityTags.UNDEAD)) {
+            if (entity instanceof LivingEntity livEnt3 && livEnt3.getType().is(EntityTypeTags.UNDEAD)) {
                 if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
                     livingEntity4.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(0.5);
             }
@@ -100,8 +100,8 @@ public class EntityJoinLevelEventHandler {
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
             if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "marinemobs")))) {
-                if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(NeoForgeMod.SWIM_SPEED.get()))
-                    livingEntity4.getAttribute(NeoForgeMod.SWIM_SPEED.get())
+                if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(NeoForgeMod.SWIM_SPEED))
+                    livingEntity4.getAttribute(NeoForgeMod.SWIM_SPEED)
                             .setBaseValue(((entity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? livingEntity3.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
             }
             if ((entity instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(CAAttributes.EVOLVED) ? livingEntity5.getAttribute(CAAttributes.EVOLVED).getBaseValue() : 0) == 0) {
@@ -184,7 +184,7 @@ public class EntityJoinLevelEventHandler {
                                             finalEntity.getServer().getCommands().performPrefixedCommand(
                                                     new CommandSourceStack(CommandSource.NULL, finalEntity.position(), finalEntity.getRotationVector(), finalEntity.level() instanceof ServerLevel ? (ServerLevel) finalEntity.level() : null, 4, finalEntity.getName().getString(),
                                                             finalEntity.getDisplayName(), finalEntity.level().getServer(), finalEntity),
-                                                    ("summon " + ForgeRegistries.ENTITY_TYPES.getKey(finalEntity.getType()).toString() + " ~" + Mth.nextDouble(RandomSource.create(), -1, 1) + " ~ ~" + Mth.nextDouble(RandomSource.create(), -1, 1)));
+                                                    ("summon " + BuiltInRegistries.ENTITY_TYPE.getKey(finalEntity.getType()) + " ~" + Mth.nextDouble(RandomSource.create(), -1, 1) + " ~ ~" + Mth.nextDouble(RandomSource.create(), -1, 1)));
                                         }
                                     }
                                     if (EntityUtils.getFellowAround(finalWorld, finalX, finalY, finalZ, finalEntity) < 5) {
@@ -194,7 +194,7 @@ public class EntityJoinLevelEventHandler {
                                                     finalEntity.getServer().getCommands().performPrefixedCommand(
                                                             new CommandSourceStack(CommandSource.NULL, finalEntity.position(), finalEntity.getRotationVector(), finalEntity.level() instanceof ServerLevel ? (ServerLevel) finalEntity.level() : null, 4,
                                                                     finalEntity.getName().getString(), finalEntity.getDisplayName(), finalEntity.level().getServer(), finalEntity),
-                                                            ("summon " + ForgeRegistries.ENTITY_TYPES.getKey(finalEntity.getType()).toString() + " ~" + Mth.nextDouble(RandomSource.create(), -1, 1) + " ~ ~"
+                                                            ("summon " + BuiltInRegistries.ENTITY_TYPE.getKey(finalEntity.getType()) + " ~" + Mth.nextDouble(RandomSource.create(), -1, 1) + " ~ ~"
                                                                     + Mth.nextDouble(RandomSource.create(), -1, 1)));
                                                 }
                                             }

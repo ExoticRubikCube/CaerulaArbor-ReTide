@@ -29,10 +29,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber
 public class DisconcentrationEventHandler {
@@ -43,12 +46,11 @@ public class DisconcentrationEventHandler {
     private static final int FLESHDEFORMITY_REJECTION_STAGE = 4;
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || event.player == null || event.player.tickCount % 10 != 0) {
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (player.tickCount % 10 != 0) {
             return;
         }
-
-        Player player = event.player;
         double rejectionStage = getRejectionStage(player);
         if (rejectionStage == HAEMOPHILIA_REJECTION_STAGE) {
             if (!player.hasEffect(CAMobEffects.HAEMOPHILIA) && !player.level().isClientSide()) {
@@ -68,7 +70,7 @@ public class DisconcentrationEventHandler {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onLivingAttack(LivingAttackEvent event) {
+    public static void onLivingAttack(LivingIncomingDamageEvent event) {
         Entity targetEntity = event.getEntity();
         Entity directSourceEntity = event.getSource().getDirectEntity();
         Entity sourceEntity = event.getSource().getEntity();
@@ -97,10 +99,10 @@ public class DisconcentrationEventHandler {
     }
 
     @SubscribeEvent
-    public static void onLivingDamage(LivingDamageEvent event) {
+    public static void onLivingDamage(LivingDamageEvent.Pre event) {
         Entity targetEntity = event.getEntity();
         Entity sourceEntity = event.getSource().getEntity();
-        if (!(targetEntity instanceof Player player) || sourceEntity == null || event.isCanceled()) {
+        if (!(targetEntity instanceof Player player) || sourceEntity == null) {
             return;
         }
 
@@ -118,7 +120,7 @@ public class DisconcentrationEventHandler {
             return;
         }
 
-        double damagePercent = Math.min(event.getAmount() / player.getMaxHealth(), 1.0);
+        double damagePercent = Math.min(event.getNewDamage() / player.getMaxHealth(), 1.0);
         double rejectionChance = 0.0025 + 0.0125 * damagePercent;
         if (playerLight < 1) {
             rejectionChance = rejectionChance * 2;
@@ -191,10 +193,7 @@ public class DisconcentrationEventHandler {
     @EventBusSubscriber(value = Dist.CLIENT)
     public static class ClientEvents {
         @SubscribeEvent
-        public static void onClientTick(TickEvent.ClientTickEvent event) {
-            if (event.phase == TickEvent.Phase.START) {
-                return;
-            }
+        public static void onClientTick(ClientTickEvent.Post event) {
 
             Minecraft minecraft = Minecraft.getInstance();
             LocalPlayer localPlayer = minecraft.player;

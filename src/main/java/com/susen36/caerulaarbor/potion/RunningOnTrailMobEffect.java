@@ -6,11 +6,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForgeMod;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RunningOnTrailMobEffect extends MobEffect {
     public RunningOnTrailMobEffect() {

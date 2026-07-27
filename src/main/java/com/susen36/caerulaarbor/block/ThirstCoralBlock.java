@@ -114,7 +114,7 @@ public class ThirstCoralBlock extends Block implements SimpleWaterloggedBlock {
                 if ((LevelAccessor) world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.THIRSTER.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
                 ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);

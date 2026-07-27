@@ -7,7 +7,7 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.EntityTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -62,7 +62,7 @@ public class AngerOfTideMobEffect extends MobEffect {
                 if (entityiterator instanceof LivingEntity livEnt11 && livEnt11.isBaby()) {
                     continue;
                 }
-                if ((Entity) entity instanceof LivingEntity livEnt12 && livEnt12.getType().is(EntityTags.UNDEAD) && entityiterator instanceof LivingEntity livEnt13 && livEnt13.getType().is(EntityTags.UNDEAD)) {
+                if ((Entity) entity instanceof LivingEntity livEnt12 && livEnt12.getType().is(EntityTypeTags.UNDEAD) && entityiterator instanceof LivingEntity livEnt13 && livEnt13.getType().is(EntityTypeTags.UNDEAD)) {
                     continue;
                 }
                 if (entityiterator.getPersistentData().getBoolean("seabornForgive")) {

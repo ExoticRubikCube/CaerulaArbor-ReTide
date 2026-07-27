@@ -4,6 +4,7 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -53,7 +55,7 @@ public class LancXiaoItem extends SwordItem {
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
-        itemstack.getOrCreateTag().putDouble("sklp", Math.max(itemstack.getOrCreateTag().getDouble("sklp") - 1, 0));
+        CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putDouble("sklp", Math.max(tag.getDouble("sklp") - 1, 0)));
         return retval;
 	}
 
@@ -130,7 +132,7 @@ public class LancXiaoItem extends SwordItem {
                             serverPlayer.connection.teleport(x, y, z, ent.getYRot(), ent.getXRot());
                     }
                 });
-                itemstack.getOrCreateTag().putDouble("sklp", 6);
+                CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putDouble("sklp", 6));
             }
         }
         return ar;
@@ -162,7 +164,7 @@ public class LancXiaoItem extends SwordItem {
 		Entity entity = itemstack.getEntityRepresentation();
         double sklp;
         String prefix;
-        sklp = 6 - itemstack.getOrCreateTag().getDouble("sklp");
+        sklp = 6 - itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getDouble("sklp");
         if (sklp >= 6) {
             prefix = Component.translatable("item.caerula_arbor.lanc_xiao.skill").getString() + "\u00A7b";
         } else {
@@ -182,7 +184,7 @@ public class LancXiaoItem extends SwordItem {
 	}
 
 	private boolean isLancXiaoReady(ItemStack itemstack) {
-		return itemstack.getOrCreateTag().getDouble("sklp") <= 0;
+		return itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getDouble("sklp") <= 0;
 	}
 
 	private static void spawnTeleportLinkParticles(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {

@@ -74,7 +74,7 @@ public class IncandescentAnimaItem extends Item {
             String info;
             String info_raw;
             useTick = MapVariables.get(world).incandescentAnimaUseTick;
-            gameTick = ((LevelAccessor) world).getLevelData().getGameTime();
+            gameTick = world.getLevelData().getGameTime();
             if (useTick > 0 && gameTick - useTick < 24000) {
                 if (!(new Object() {
                     public boolean checkGamemode(Entity ent) {
@@ -109,14 +109,14 @@ public class IncandescentAnimaItem extends Item {
                         stra = Component.translatable("caerula_arbor.strategy.silence").getString();
                         info = info.replace("{stra}", stra);
                         info = info.replace("{p}", "" + (int) maxium_lvl);
-                        if (!((LevelAccessor) world).isClientSide() && ((LevelAccessor) world).getServer() != null)
-                            ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
+                        if (!world.isClientSide() && world.getServer() != null)
+                            world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
                         shouldBroadCast = true;
                     } else {
                         MapVariablesHandler.setSilenceEnabled(world, false);
                         info = Component.translatable("item.caerula_arbor.incandescent_anima.disable").getString();
-                        if (!((LevelAccessor) world).isClientSide() && ((LevelAccessor) world).getServer() != null)
-                            ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
+                        if (!world.isClientSide() && world.getServer() != null)
+                            world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
                         shouldBroadCast = true;
                     }
                 } else {
@@ -144,8 +144,8 @@ public class IncandescentAnimaItem extends Item {
                             stra = Component.translatable("gui.caerula_arbor.evo_tree.label_sreategy_grow").getString();
                             info = info_raw.replace("{stra}", stra);
                             shouldBroadCast = true;
-                            if (!((LevelAccessor) world).isClientSide() && ((LevelAccessor) world).getServer() != null)
-                                ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
+                            if (!world.isClientSide() && world.getServer() != null)
+                                world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
                         }
                         if (lvl2 == maxium_lvl) {
                             MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBSISTING, maxium_lvl - 1);
@@ -153,8 +153,8 @@ public class IncandescentAnimaItem extends Item {
                             stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_subsisting").getString();
                             info = info_raw.replace("{stra}", stra);
                             shouldBroadCast = true;
-                            if (!((LevelAccessor) world).isClientSide() && ((LevelAccessor) world).getServer() != null)
-                                ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
+                            if (!world.isClientSide() && world.getServer() != null)
+                                world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
                         }
                         if (lvl3 == maxium_lvl) {
                             MapVariablesHandler.setStrategyLevel(world, StrategyType.BREED, maxium_lvl - 1);
@@ -162,8 +162,8 @@ public class IncandescentAnimaItem extends Item {
                             stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_breed").getString();
                             info = info_raw.replace("{stra}", stra);
                             shouldBroadCast = true;
-                            if (!((LevelAccessor) world).isClientSide() && ((LevelAccessor) world).getServer() != null)
-                                ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
+                            if (!world.isClientSide() && world.getServer() != null)
+                                world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
                         }
                         if (lvl4 == maxium_lvl) {
                             MapVariablesHandler.setStrategyLevel(world, StrategyType.MIGRATION, maxium_lvl - 1);
@@ -171,8 +171,8 @@ public class IncandescentAnimaItem extends Item {
                             stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_migration").getString();
                             info = info_raw.replace("{stra}", stra);
                             shouldBroadCast = true;
-                            if (!((LevelAccessor) world).isClientSide() && ((LevelAccessor) world).getServer() != null)
-                                ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
+                            if (!world.isClientSide() && world.getServer() != null)
+                                world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(info), false);
                         }
                     }
                 }

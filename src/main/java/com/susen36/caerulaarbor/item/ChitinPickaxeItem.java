@@ -10,7 +10,7 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.SimpleTier;
 
-public class ChitinPickaxeItem extends PickaxeItem {
+public class  ChitinPickaxeItem extends PickaxeItem {
 	private static final Tier TIER = new SimpleTier(
 			BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
 			1220,
@@ -42,5 +42,5 @@ public class ChitinPickaxeItem extends PickaxeItem {
 	@Override
 	public boolean isRepairable(ItemStack itemstack) {
 		return false;
-	}
-}
+
+	}}

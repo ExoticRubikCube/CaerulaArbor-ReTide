@@ -14,15 +14,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
 @EventBusSubscriber
 public class LivingDamageEventHandler {
 
     @SubscribeEvent
-    public static void onLivingDamage(LivingDamageEvent event) {
+    public static void onLivingDamage(LivingDamageEvent.Pre event) {
         if (event == null) return;
 
         handleReduceLightsWithDamage(event);
@@ -30,13 +30,12 @@ public class LivingDamageEventHandler {
         handlePlayerEvolutionDamage(event);
     }
 
-    private static void handleReduceLightsWithDamage(LivingDamageEvent event) {
+    private static void handleReduceLightsWithDamage(LivingDamageEvent.Pre event) {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (sourceentity == null) return;
-        if (event.isCanceled()) return;
         if (entity == sourceentity) return;
 
         if (entity instanceof Player) {
@@ -49,17 +48,16 @@ public class LivingDamageEventHandler {
         }
     }
 
-    private static void handleSanityRateFunctions(LivingDamageEvent event) {
+    private static void handleSanityRateFunctions(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (!(entity instanceof LivingEntity target) || !(sourceentity instanceof LivingEntity attacker)) return;
-        if (event.isCanceled()) return;
 
         double sanityRate = attacker.getAttributes().hasAttribute(CAAttributes.SANITY_RATE)
                 ? attacker.getAttribute(CAAttributes.SANITY_RATE).getValue()
@@ -91,12 +89,12 @@ public class LivingDamageEventHandler {
         }
     }
 
-    private static void handlePlayerEvolutionDamage(LivingDamageEvent event) {
+    private static void handlePlayerEvolutionDamage(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        if (damagesource == null || sourceentity == null) return;
 
         if (!(sourceentity instanceof Player attacker) || !EntityUtils.canPlayerEvo(attacker)) return;
 
@@ -118,7 +116,7 @@ public class LivingDamageEventHandler {
 
         if (barrier < max && rate > 0) {
             if (attacker.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER))
-                attacker.getAttribute(CAAttributes.LIVING_BARRIER).setBaseValue(Math.min(barrier + event.getAmount() * rate, max));
+                attacker.getAttribute(CAAttributes.LIVING_BARRIER).setBaseValue(Math.min(barrier + event.getNewDamage() * rate, max));
         }
 
         lvl = NodeUtils.getNodeRealDamage(attacker);
@@ -136,7 +134,7 @@ public class LivingDamageEventHandler {
             double x = entity.getX();
             double y = entity.getY();
             double z = entity.getZ();
-            double amount = event.getAmount();
+            double amount = event.getNewDamage();
 
             double h = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) - amount;
             double d = Math.min((attacker.getAttributes().hasAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE) ? attacker.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE).getValue() : 0) * rate, h - 1);

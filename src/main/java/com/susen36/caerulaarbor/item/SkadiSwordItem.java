@@ -36,7 +36,7 @@ public class SkadiSwordItem extends SwordItem {
 			16f,
 			20f,
 			12,
-			() -> Ingredient.of()
+            Ingredient::of
 	);
 
 	public SkadiSwordItem() {

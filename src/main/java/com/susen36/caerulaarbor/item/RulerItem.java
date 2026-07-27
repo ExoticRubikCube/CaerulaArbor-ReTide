@@ -13,6 +13,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
+import org.jetbrains.annotations.NotNull;
 
 public class RulerItem extends Item {
 	public RulerItem() {
@@ -20,7 +21,7 @@ public class RulerItem extends Item {
 	}
 
 	@Override
-	public InteractionResult useOn(UseOnContext context) {
+	public InteractionResult useOn(@NotNull UseOnContext context) {
 		super.useOn(context);
         LevelAccessor world = context.getLevel();
         double x = context.getClickedPos().getX();

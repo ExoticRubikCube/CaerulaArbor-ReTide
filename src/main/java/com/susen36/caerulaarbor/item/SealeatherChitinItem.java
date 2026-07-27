@@ -1,19 +1,18 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.init.CAAttributes;
-import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
+import com.susen36.caerulaarbor.init.CAAttributes;
+import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
@@ -22,52 +21,26 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
 public abstract class SealeatherChitinItem extends ArmorItem {
 	public SealeatherChitinItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial() {
-			@Override
-			public int getDurabilityForType(ArmorItem.Type type) {
-				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 25;
-			}
-
-			@Override
-			public int getDefenseForType(ArmorItem.Type type) {
-				return new int[]{3, 6, 7, 3}[type.getSlot().getIndex()];
-			}
-
-			@Override
-			public int getEnchantmentValue() {
-				return 15;
-			}
-
-			@Override
-			public SoundEvent getEquipSound() {
-				return SoundEvents.ARMOR_EQUIP_CHAIN;
-			}
-
-			@Override
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.OCEAN_CHITIN.get()), new ItemStack(CAItems.OCEAN_PHLOEM.get()));
-			}
-
-			@Override
-			public String getName() {
-				return "sealeather_chitin";
-			}
-
-			@Override
-			public float getToughness() {
-				return 0.5f;
-			}
-
-			@Override
-			public float getKnockbackResistance() {
-				return 0f;
-			}
-		}, type, properties);
+		super(new ArmorMaterial(
+			Map.of(
+				ArmorItem.Type.HELMET, 3,
+				ArmorItem.Type.CHESTPLATE, 7,
+				ArmorItem.Type.LEGGINGS, 6,
+				ArmorItem.Type.BOOTS, 3
+			),
+			15,
+			SoundEvents.ARMOR_EQUIP_CHAIN,
+			() -> Ingredient.of(new ItemStack(CAItems.OCEAN_CHITIN.get()), new ItemStack(CAItems.OCEAN_PHLOEM.get())),
+			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "sealeather_chitin"))),
+			0.5f,
+			0f
+		), type, properties);
 	}
 
 	@Override

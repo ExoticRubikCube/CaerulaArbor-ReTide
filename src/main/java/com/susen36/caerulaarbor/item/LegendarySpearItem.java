@@ -7,6 +7,8 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -14,18 +16,16 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -35,11 +35,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
@@ -153,7 +149,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                 && ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
             if (sourceentity.isShiftKeyDown()) {
                 if (itemstack.getItem() instanceof LegendarySpearItem)
-                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.swing2");
+                    CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.lengendspear.swing2"));
                 if ((Entity) sourceentity instanceof Player player)
                     player.getCooldowns().addCooldown(itemstack.getItem(), 25);
                 CaerulaArborMod.queueServerWork(10, () -> {
@@ -177,16 +173,16 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                 });
             } else if (sourceentity.getDeltaMovement().y() < -0.1) {
                 if (itemstack.getItem() instanceof LegendarySpearItem)
-                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.srike");
+                    CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.lengendspear.srike"));
                 if ((Entity) sourceentity instanceof Player player)
                     player.getCooldowns().addCooldown(itemstack.getItem(), 25);
                 CaerulaArborMod.queueServerWork(10, () -> {
-                    if (((Entity) entity).isAlive()) {
+                    if (entity.isAlive()) {
                         if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT_GROUND, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
-                            ((Entity) entity).hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
+                            entity.hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity livingEntity32 && livingEntity32.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity32.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (1 + 0.2 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(sourceentity.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack))));
                         }
@@ -194,16 +190,16 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                 });
             } else if (sourceentity.getDeltaMovement().y() > 0.1) {
                 if (itemstack.getItem() instanceof LegendarySpearItem)
-                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.swing");
+                    CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.lengendspear.swing"));
                 if ((Entity) sourceentity instanceof Player player)
                     player.getCooldowns().addCooldown(itemstack.getItem(), 25);
                 CaerulaArborMod.queueServerWork(10, () -> {
-                    if (((Entity) entity).isAlive()) {
+                    if (entity.isAlive()) {
                         if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_THROW, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
-                            ((Entity) entity).hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
+                            entity.hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity livingEntity46 && livingEntity46.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity46.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (1 + 0.2 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(sourceentity.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack))));
                             entity.push(0, 0.5, 0);
@@ -212,16 +208,16 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                 });
             } else {
                 if (itemstack.getItem() instanceof LegendarySpearItem)
-                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.stab");
+                    CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.lengendspear.stab"));
                 if ((Entity) sourceentity instanceof Player player)
                     player.getCooldowns().addCooldown(itemstack.getItem(), 25);
                 CaerulaArborMod.queueServerWork(10, () -> {
-                    if (((Entity) entity).isAlive()) {
+                    if (entity.isAlive()) {
                         if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
-                            ((Entity) entity).hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
+                            entity.hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity livingEntity60 && livingEntity60.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity60.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (1 + 0.2 * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(sourceentity.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack))));
                             entity.push((sourceentity.getLookAngle().x), 0, (sourceentity.getLookAngle().z));

@@ -146,7 +146,7 @@ public class DragonWandItem extends Item {
                     if (t2 == null) {
                         t2 = t1;
                     }
-                    if (!((LevelAccessor) world).isClientSide()) {
+                    if (!world.isClientSide()) {
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_CAST.get(), SoundSource.PLAYERS, 2,
                                         (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));

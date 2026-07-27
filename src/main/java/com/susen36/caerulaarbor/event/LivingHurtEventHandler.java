@@ -104,7 +104,7 @@ public class LivingHurtEventHandler {
     private static void handleSublimationDamage(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         Entity entity = event.getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
             entity.getPersistentData().putDouble("caerula.lastHurtByTime", entity.tickCount);
@@ -128,7 +128,7 @@ public class LivingHurtEventHandler {
         double z = event.getEntity().getZ();
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || damagesource.is(DamageTypeTags.BYPASSES_EFFECTS))
             return;
@@ -143,12 +143,12 @@ public class LivingHurtEventHandler {
                 if (entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER))
                     livingEntity2.getAttribute(CAAttributes.LIVING_BARRIER).setBaseValue((brr - amount));
                 disp = amount;
-                event.setAmount(0);
+                event.setNewDamage(0);
             } else {
                 if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER))
                     livingEntity4.getAttribute(CAAttributes.LIVING_BARRIER).setBaseValue(0);
                 disp = brr;
-                event.setAmount((float) (amount - brr));
+                event.setNewDamage((float) (amount - brr));
             }
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.LIVING_BARRIER.get(), SoundSource.HOSTILE, 2, (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
@@ -161,7 +161,7 @@ public class LivingHurtEventHandler {
     private static void handleMagicResis(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
         if (damagesource.is(DamageTypeTags.BYPASSES_EFFECTS)) return;
@@ -172,14 +172,14 @@ public class LivingHurtEventHandler {
                     ? livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE).getValue()
                     : 0;
             if (mgc_resis > 0) {
-                event.setAmount((float) Math.max(amount * 0.01 * (100 - mgc_resis), amount * 0.05));
+                event.setNewDamage((float) Math.max(amount * 0.01 * (100 - mgc_resis), amount * 0.05));
             }
         } else {
             double def = entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
                     ? livingEntity7.getAttribute(CAAttributes.GENERAL_DEFENSE).getValue()
                     : 0;
             if (def > 0 && !damagesource.is(B_DEFENSE)) {
-                event.setAmount((float) Math.max(amount - def, amount * 0.05));
+                event.setNewDamage((float) Math.max(amount - def, amount * 0.05));
             }
         }
     }
@@ -187,7 +187,7 @@ public class LivingHurtEventHandler {
     private static void handleFlamarineHurt(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         double gap = entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0);
         double ratie = 1;
@@ -198,7 +198,7 @@ public class LivingHurtEventHandler {
             if (gap < 10) {
                 ratie = Math.max(gap * 0.1, 0.5);
             }
-            event.setAmount((float) Math.min(amount * ratie, (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.34));
+            event.setNewDamage((float) Math.min(amount * ratie, (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.34));
 
             if (entity instanceof FlamarineStatueEntity) {
                 if (entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
@@ -235,7 +235,7 @@ public class LivingHurtEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (damagesource == null || entity == null || sourceentity == null) return;
 
@@ -260,7 +260,7 @@ public class LivingHurtEventHandler {
                 double gap = entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0);
                 double maxH = entity instanceof LivingEntity livingEntity18 && livingEntity18.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity18.getAttribute(Attributes.MAX_HEALTH).getValue() : 0;
                 if (gap < 10) {
-                    event.setAmount((float) Math.min(amount * Math.min(1, Math.max(gap * 0.1, 0.05)), Math.max(maxH * 0.33, 16)));
+                    event.setNewDamage((float) Math.min(amount * Math.min(1, Math.max(gap * 0.1, 0.05)), Math.max(maxH * 0.33, 16)));
                 }
             }
         }
@@ -320,7 +320,6 @@ public class LivingHurtEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
 
-        if (event.isCanceled()) return;
         if (damagesource.is(CADamageTags.NEVER_TRIGGER_BOSS_PROTECTION)) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
@@ -338,14 +337,14 @@ public class LivingHurtEventHandler {
     private static void handleChimeraKilledByApocata(LivingDamageEvent.Pre event) {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (entity == null || sourceentity == null) return;
 
         if (entity instanceof TideChimeraEntity) {
             String name = sourceentity.getDisplayName().getString();
             if (name.contains("apocata") || name.contains("Apocata")) {
-                event.setAmount((float) Math.max(1000000, amount));
+                event.setNewDamage((float) Math.max(1000000, amount));
             }
         }
     }
@@ -358,7 +357,7 @@ public class LivingHurtEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (damagesource == null || entity == null || sourceentity == null) return;
 
@@ -376,7 +375,7 @@ public class LivingHurtEventHandler {
             if (entity == (skadiCorrupted instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null)) return;
 
             if ((skadiCorrupted instanceof SkadiCorruptedEntity datEntI ? datEntI.getEntityData().get(SkadiCorruptedEntity.DATA_PHASE) : 0) < 0.5) {
-                event.setAmount((float) (amount * 0.5));
+                event.setNewDamage((float) (amount * 0.5));
                 skadiCorrupted.hurt(damagesource, (float) (amount * 0.5));
             }
         }
@@ -385,17 +384,17 @@ public class LivingHurtEventHandler {
     private static void handleDamageBurdenVeicle(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (entity.isAlive() && entity.isPassenger()) {
             Entity vehicle = entity.getVehicle();
             if (vehicle != null && vehicle.isAlive()) {
                 if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     if (vehicle instanceof OceanizedRavagerEntity) {
-                        event.setAmount((float) (amount * 0.5));
+                        event.setNewDamage((float) (amount * 0.5));
                         vehicle.hurt(damagesource, (float) (amount * 0.5));
                     } else if (vehicle instanceof OceanizedPolarBearEntity) {
-                        event.setAmount((float) (amount * 0.65));
+                        event.setNewDamage((float) (amount * 0.65));
                         vehicle.hurt(damagesource, (float) (amount * 0.35));
                     }
                 }
@@ -410,7 +409,7 @@ public class LivingHurtEventHandler {
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (sourceentity == null) return;
 
@@ -431,9 +430,9 @@ public class LivingHurtEventHandler {
             }
             if (valid) {
                 if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses")))) {
-                    event.setAmount((float) (amount * 0.5));
+                    event.setNewDamage((float) (amount * 0.5));
                 } else {
-                    event.setAmount((float) (amount * 0.01));
+                    event.setNewDamage((float) (amount * 0.01));
                 }
                 if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 1, (float) Mth.nextDouble(RandomSource.create(), 0.8, 1.2));
@@ -449,7 +448,7 @@ public class LivingHurtEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (sourceentity == null) return;
 
@@ -533,7 +532,7 @@ public class LivingHurtEventHandler {
         double z = event.getEntity().getZ();
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (damagesource == null || entity == null) return;
 
@@ -553,7 +552,7 @@ public class LivingHurtEventHandler {
                     factor = factor * 0.65;
                 }
             }
-            event.setAmount((float) (amount * factor));
+            event.setNewDamage((float) (amount * factor));
         }
     }
 
@@ -564,7 +563,7 @@ public class LivingHurtEventHandler {
         double z = event.getEntity().getZ();
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (damagesource == null || entity == null) return;
         if (world.isClientSide()) return;
@@ -674,7 +673,7 @@ public class LivingHurtEventHandler {
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (entity == null || sourceentity == null) return;
 
@@ -696,7 +695,7 @@ public class LivingHurtEventHandler {
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (sourceentity == null) return;
 
@@ -706,7 +705,7 @@ public class LivingHurtEventHandler {
             double addition = Math.max(amount * lvl * 0.15, lvl * 5);
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, (y + 0.6), z, 24, 0.6, 0.6, 0.6, 0.1);
-            event.setAmount((float) (amount + addition));
+            event.setNewDamage((float) (amount + addition));
         }
     }
 
@@ -728,7 +727,7 @@ public class LivingHurtEventHandler {
     private static void handleMoreFallDamageEffect(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         Entity bullet = damagesource.getDirectEntity();
         if (bullet instanceof ShulkerBullet && bullet.getPersistentData().getBoolean("oceanized")) {
@@ -738,7 +737,7 @@ public class LivingHurtEventHandler {
         }
         if (damagesource.is(DamageTypes.FALL) && entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(CAMobEffects.MORE_FALL_DAMAGE)) {
             double level = livingEntity.getEffect(CAMobEffects.MORE_FALL_DAMAGE).getAmplifier() + 1;
-            event.setAmount((float) (amount * (1 + 0.25 * level)));
+            event.setNewDamage((float) (amount * (1 + 0.25 * level)));
         }
     }
 
@@ -779,7 +778,7 @@ public class LivingHurtEventHandler {
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (sourceentity == null) return;
 
@@ -793,14 +792,14 @@ public class LivingHurtEventHandler {
                 if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
                 }
-                event.setAmount((float) (amount * 0.6));
+                event.setNewDamage((float) (amount * 0.6));
             }
         } else if (entity instanceof WarriorPriestEntity) {
             if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) >= 0.5) {
                 if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
                 }
-                event.setAmount((float) (amount * 0.5));
+                event.setNewDamage((float) (amount * 0.5));
             }
         } else if (entity instanceof CorrectionalPhalanxyInfantryEntity) {
             double rate = 1;
@@ -818,7 +817,7 @@ public class LivingHurtEventHandler {
                 less = less - 0.06;
                 if (less <= 0.4) break;
             }
-            event.setAmount((float) (amount * rate * less));
+            event.setNewDamage((float) (amount * rate * less));
         } else if (entity instanceof IreneEntity) {
             double less = 1;
             final Vec3 center = new Vec3(x, y, z);
@@ -828,13 +827,13 @@ public class LivingHurtEventHandler {
                 less = less - 0.06;
                 if (less <= 0.4) break;
             }
-            event.setAmount((float) (amount * less));
+            event.setNewDamage((float) (amount * less));
         } else if (entity instanceof CorrectinalPhalaxVanguardEntity) {
             if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) <= -0.5) {
                 if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
                 }
-                event.setAmount((float) (amount * 0.5));
+                event.setNewDamage((float) (amount * 0.5));
             }
         }
     }
@@ -842,7 +841,7 @@ public class LivingHurtEventHandler {
     private static void handlePlayerEvolutionDamageReduction(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (!(entity instanceof Player player) || !EntityUtils.canPlayerEvo(player)) return;
 
@@ -877,7 +876,7 @@ public class LivingHurtEventHandler {
         }
 
         if (finalAmount < amount) {
-            event.setAmount((float) finalAmount);
+            event.setNewDamage((float) finalAmount);
         }
     }
 
@@ -885,7 +884,7 @@ public class LivingHurtEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        double amount = event.getNewDamage();
 
         if (sourceentity == null) return;
 
@@ -963,7 +962,7 @@ public class LivingHurtEventHandler {
         }
 
         if (finalValue > amount) {
-            event.setAmount((float) finalValue);
+            event.setNewDamage((float) finalValue);
         }
     }
 }

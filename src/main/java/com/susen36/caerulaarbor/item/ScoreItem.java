@@ -4,6 +4,7 @@ import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -13,7 +14,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -41,9 +46,9 @@ public class ScoreItem extends RecordItem {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!itemstack.getOrCreateTag().getBoolean("used")) {
+        if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             boolean setval = true;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.relic_util_score = setval;
                 capability.syncPlayerVariables(entity);
             });
@@ -54,7 +59,7 @@ public class ScoreItem extends RecordItem {
             }
             if ((LevelAccessor) world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.NOTE, x, y, z, 48, 1, 1, 1, 1);
-            itemstack.getOrCreateTag().putBoolean("used", true);
+            CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
         }
         return ar;
 	}

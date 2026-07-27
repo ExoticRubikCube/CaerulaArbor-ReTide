@@ -13,7 +13,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +20,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -132,13 +132,13 @@ public class OperationTableBlock extends Block {
                     if (!(Math.abs((double) z - hitZ) > 1)) {
                         if (stats == 0) {
                             if (item.getItem() == CAItems.PERSONNEL_TRANSPORTER.get()) {
-                                if ((item.getOrCreateTag().getString("name")).equals("caerula_arbor:the_abandoned")) {
+                                if ((item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("name")).equals("caerula_arbor:the_abandoned")) {
                                     {
                                         int value = 1;
                                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                                        BlockState bs = world.getBlockState(pos);
                                         if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
                                     }
                                     ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                     if ((LevelAccessor) world instanceof Level level) {
@@ -178,14 +178,14 @@ public class OperationTableBlock extends Block {
                                 }
                                 ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                 output = new ItemStack(CAItems.PERSONNEL_TRANSPORTER.get()).copy();
-                                output.getOrCreateTag().putString("name", res);
-                                output.getOrCreateTag().putDouble("perc", 0.5);
+                                CustomData.update(DataComponents.CUSTOM_DATA, output, tag -> tag.putString("name", res));
+                                CustomData.update(DataComponents.CUSTOM_DATA, output, tag -> tag.putDouble("perc", 0.5));
                                 {
                                     int value = 0;
                                     BlockPos blockPos = BlockPos.containing(x, y, z);
-                                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                                    BlockState bs = world.getBlockState(pos);
                                     if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
                                 }
                                 if ((LevelAccessor) world instanceof ServerLevel level) {
                                     ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), output);

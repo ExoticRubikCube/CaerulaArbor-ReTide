@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
+import com.susen36.caerulaarbor.event.PlayerLeftClickEventHandler;
 import com.susen36.caerulaarbor.network.receive.PlayerVariablesSyncMessage;
 import com.susen36.caerulaarbor.network.receive.SavedDataSyncMessage;
 import com.susen36.caerulaarbor.network.send.*;
@@ -25,5 +26,6 @@ public class CANetwork {
 		registrar.playToServer(InfoStrategyReturnButtonMessage.TYPE, InfoStrategyReturnButtonMessage.STREAM_CODEC, InfoStrategyReturnButtonMessage::handle);
 		registrar.playToServer(PlayerEvoButtonMessage.TYPE, PlayerEvoButtonMessage.STREAM_CODEC, PlayerEvoButtonMessage::handle);
 		registrar.playToServer(RelicShowcaseButtonMessage.TYPE, RelicShowcaseButtonMessage.STREAM_CODEC, RelicShowcaseButtonMessage::handle);
+		registrar.playToServer(PlayerLeftClickEventHandler.HelperLeftClickMessage.TYPE, PlayerLeftClickEventHandler.HelperLeftClickMessage.STREAM_CODEC, PlayerLeftClickEventHandler.HelperLeftClickMessage::handle);
 	}
 }

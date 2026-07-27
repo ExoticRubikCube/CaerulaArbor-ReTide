@@ -111,7 +111,7 @@ public class TrailriteShieldItem extends ShieldItem {
     }
 
     @Override
-    public boolean canBeHurtBy(DamageSource pDamageSource) {
+    public boolean canBeHurtBy(ItemStack stack, DamageSource pDamageSource) {
         return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
     }
 }

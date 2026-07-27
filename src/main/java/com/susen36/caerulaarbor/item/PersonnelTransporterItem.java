@@ -6,6 +6,8 @@ import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -23,6 +25,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
@@ -65,16 +68,17 @@ public class PersonnelTransporterItem extends Item {
         InteractionResult pass  = InteractionResult.PASS;
         EntityType<?> type = pTarget.getType();
         if(type.is(HOMO_SAPIENS)){
-            CompoundTag tag = pStack.getOrCreateTag();
+            CompoundTag tag = pStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
             String name = tag.getString(TAG_NAME);
             if (name.isEmpty() || name.equals(emptyNameHolder)){
-                ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(type);
-                if (key == null)return pass;
+                ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(type);
                 String id = key.toString();
                 CaerulaArborMod.LOGGER.info("store {}", id);
                 if(pPlayer.getMainHandItem().getItem() == pStack.getItem()) {
-                    pPlayer.getMainHandItem().getOrCreateTag().putString(TAG_NAME, id);
-                    pPlayer.getMainHandItem().getOrCreateTag().putDouble(TAG_PERC, pTarget.getHealth() / pTarget.getMaxHealth());
+                    CustomData.update(DataComponents.CUSTOM_DATA, pPlayer.getMainHandItem(), tag2 -> {
+                        tag2.putString(TAG_NAME, id);
+                        tag2.putDouble(TAG_PERC, pTarget.getHealth() / pTarget.getMaxHealth());
+                    });
                     pTarget.discard();
                     return InteractionResult.SUCCESS;
                 }
@@ -91,7 +95,7 @@ public class PersonnelTransporterItem extends Item {
         Level level = pContext.getLevel();
         Player player = pContext.getPlayer();
         if (player != null && !player.isShiftKeyDown()) return InteractionResult.PASS;
-        CompoundTag tag = item.getOrCreateTag();
+        CompoundTag tag = item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         EntityType<?> type = getStoredEntityType(item);
         if(type==null) return InteractionResult.PASS;
         if(level instanceof ServerLevel sLevel){
@@ -100,8 +104,10 @@ public class PersonnelTransporterItem extends Item {
             if (toSpawn instanceof LivingEntity living) {
                 living.setHealth((float) (living.getMaxHealth() * perc));
             }
-            tag.putString(TAG_NAME,emptyNameHolder);
-            tag.putDouble(TAG_PERC,0);
+            CustomData.update(DataComponents.CUSTOM_DATA, item, tag2 -> {
+                tag2.putString(TAG_NAME, emptyNameHolder);
+                tag2.putDouble(TAG_PERC, 0);
+            });
         }
         return InteractionResult.PASS;
     }
@@ -109,12 +115,12 @@ public class PersonnelTransporterItem extends Item {
     @Nullable
     public EntityType<?> getStoredEntityType(ItemStack item){
         if(item == null) return null;
-        CompoundTag tag = item.getOrCreateTag();
+        CompoundTag tag = item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if(!tag.contains(TAG_NAME)) return null;
         String name = tag.getString(TAG_NAME);
         if (name.isEmpty() || name.equals(emptyNameHolder))return null;
         ResourceLocation location = ResourceLocation.parse(name);
-        return ForgeRegistries.ENTITY_TYPES.getValue(location);
+        return BuiltInRegistries.ENTITY_TYPE.get(location);
     }
 
     public Component getStoredEntityName(ItemStack itemStack){

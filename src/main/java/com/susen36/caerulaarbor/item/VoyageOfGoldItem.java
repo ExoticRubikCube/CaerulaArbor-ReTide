@@ -4,6 +4,7 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -41,7 +43,7 @@ public class VoyageOfGoldItem extends Item {
         locId = itemstack.getDescriptionId();
         first_two = Component.translatable((locId + ".description_0")).getString() + "\n" + Component.translatable((locId + ".description_1")).getString() + "\n" + Component.translatable((locId + ".description_2")).getString() + "\n"
                 + Component.translatable((locId + ".description_3")).getString();
-        if (itemstack.getOrCreateTag().getBoolean("used")) {
+        if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             hoverText = first_two + "\n" + Component.translatable("item.caerula_arbor.relics.used").getString();
         } else {
             hoverText = first_two;
@@ -58,7 +60,7 @@ public class VoyageOfGoldItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!itemstack.getOrCreateTag().getBoolean("used")) {
+        if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             for (int index0 = 0; index0 < 8; index0++) {
                 if ((LevelAccessor) world instanceof ServerLevel level)
                     level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
@@ -67,7 +69,7 @@ public class VoyageOfGoldItem extends Item {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 400, 1, false, false));
             {
                 boolean setval = true;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.relic_util_VOYGOLD = setval;
                     capability.syncPlayerVariables(entity);
                 });
@@ -75,7 +77,7 @@ public class VoyageOfGoldItem extends Item {
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
-            itemstack.getOrCreateTag().putBoolean("used", true);
+            CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
         }
         return ar;
 	}

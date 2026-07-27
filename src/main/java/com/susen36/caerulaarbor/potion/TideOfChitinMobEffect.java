@@ -22,9 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TideOfChitinMobEffect extends MobEffect {
     public TideOfChitinMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -13382401);
@@ -34,8 +31,13 @@ public class TideOfChitinMobEffect extends MobEffect {
 
 
     @Override
-    public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.addAttributeModifiers(entity, attributeMap, amplifier);
+    public void addAttributeModifiers(AttributeMap attributeMap, int amplifier) {
+        super.addAttributeModifiers(attributeMap, amplifier);
+    }
+
+    @Override
+    public void onEffectAdded(LivingEntity entity, int amplifier) {
+        super.onEffectAdded(entity, amplifier);
         {
             ItemStack setval = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY);
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {

@@ -5,10 +5,9 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,9 +16,8 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -27,6 +25,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
@@ -36,11 +35,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
@@ -186,7 +181,7 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
         double z = entity.getZ();
         if (((Entity) sourceentity instanceof Player plr ? plr.getAttackStrengthScale(0) : 0) >= 0.95) {
             if (itemstack.getItem() instanceof UninishedBeautyItem)
-                itemstack.getOrCreateTag().putString("geckoAnim", "animation.unfinished_beautuy.attack");
+                CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.unfinished_beautuy.attack"));
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT_SPECT.get(), SoundSource.PLAYERS, (float) 2.4, 1);
             }
@@ -196,10 +191,10 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
                 }
                 new Object() {
                     void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                        if (entity.distanceTo(sourceentity) <= 5 && ((Entity) entity).isAlive() && ((Entity) sourceentity).isAlive()) {
+                        if (entity.distanceTo(sourceentity) <= 5 && entity.isAlive() && sourceentity.isAlive()) {
                             if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) >= ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1)
                                     / ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
-                                ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.SAW_CUT, sourceentity), (float) (((Entity) sourceentity instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                entity.hurt(CADamageTypes.source(world, CADamageTypes.SAW_CUT, sourceentity), (float) (((Entity) sourceentity instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                 * 1));
                                 if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
                                     if ((Entity) sourceentity instanceof LivingEntity livingSourceEntity)
@@ -207,7 +202,7 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
                                                 livingSourceEntity.getMaxHealth()));
                                 }
                             } else {
-                                ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.SAW_CUT, sourceentity), (float) (((Entity) sourceentity instanceof LivingEntity livingEntity21 && livingEntity21.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity21.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                entity.hurt(CADamageTypes.source(world, CADamageTypes.SAW_CUT, sourceentity), (float) (((Entity) sourceentity instanceof LivingEntity livingEntity21 && livingEntity21.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity21.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                 * 0.5));
                             }
                         }

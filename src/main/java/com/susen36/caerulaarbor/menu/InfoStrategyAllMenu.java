@@ -58,14 +58,8 @@ public class InfoStrategyAllMenu extends AbstractContainerMenu implements Suppli
 	}
 
 	public static InteractionResult open(Entity entity, BlockPos blockPos) {
-		if (entity == null)
+		if (entity instanceof LivingEntity living && (living.isHolding(CAItems.DICTATIONLESS_CHAPTER.get()) || living.isHolding(CAItems.DICTATION_CHAPTER.get())))
 			return InteractionResult.PASS;
-		if (entity instanceof LivingEntity livingEntity && livingEntity.isHolding(CAItems.DICTATIONLESS_CHAPTER.get())) {
-			return InteractionResult.PASS;
-		}
-		if (entity instanceof LivingEntity livingEntity && livingEntity.isHolding(CAItems.DICTATION_CHAPTER.get())) {
-			return InteractionResult.PASS;
-		}
 		if (entity instanceof ServerPlayer serverPlayer) {
 			serverPlayer.openMenu(new MenuProvider() {
 				@Override

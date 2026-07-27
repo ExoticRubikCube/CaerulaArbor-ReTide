@@ -42,14 +42,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 import java.util.List;
 import java.util.Objects;
-import net.minecraft.advancements.AdvancementHolder;
 
 @SuppressWarnings("unused")
 @EventBusSubscriber
@@ -69,7 +69,7 @@ public class LivingAttackEventHandler {
             ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "ignore_migration"));
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onEntityAttack(LivingAttackEvent event) {
+    public static void onEntityAttack(LivingIncomingDamageEvent event) {
         handleInvulnerable(event);
         handleNumbness(event);
         handleMissRate(event);
@@ -82,7 +82,7 @@ public class LivingAttackEventHandler {
         handlePlayerHit(event);
     }
 
-    private static void handleInvulnerable(LivingAttackEvent event) {
+    private static void handleInvulnerable(LivingIncomingDamageEvent event) {
         var damageSource = event.getSource();
         var target = event.getEntity();
         if (damageSource.is(CADamageTypes.INV_KILLER)) return;
@@ -92,7 +92,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void handleNumbness(LivingAttackEvent event) {
+    private static void handleNumbness(LivingIncomingDamageEvent event) {
         var level = event.getEntity().level();
         var target = event.getEntity();
         var sourceEntity = event.getSource().getEntity();
@@ -111,7 +111,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void handleMissRate(LivingAttackEvent event) {
+    private static void handleMissRate(LivingIncomingDamageEvent event) {
         var world = event.getEntity().level();
         var target = event.getEntity();
         var damageSource = event.getSource();
@@ -141,7 +141,7 @@ public class LivingAttackEventHandler {
         event.setCanceled(true);
     }
 
-    private static void handleMartusArrowImmunity(LivingAttackEvent event) {
+    private static void handleMartusArrowImmunity(LivingIncomingDamageEvent event) {
         var damageSource = event.getSource();
         var target = event.getEntity();
         var sourceEntity = damageSource.getEntity();
@@ -155,7 +155,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void handleInquisitionFriendlyFire(LivingAttackEvent event) {
+    private static void handleInquisitionFriendlyFire(LivingIncomingDamageEvent event) {
         var target = event.getEntity();
         var sourceEntity = event.getSource().getEntity();
         if (sourceEntity != null && target.getType().is(INQUISITION) && sourceEntity.getType().is(INQUISITION)) {
@@ -163,7 +163,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void handleDamagePrevention(LivingAttackEvent event) {
+    private static void handleDamagePrevention(LivingIncomingDamageEvent event) {
         var target = event.getEntity();
         var sourceEntity = event.getSource().getEntity();
         if (sourceEntity == null) return;
@@ -173,7 +173,7 @@ public class LivingAttackEventHandler {
         preventHumanSideFriendlyFire(event, target, sourceEntity);
     }
 
-    private static void preventSameTeamDamage(LivingAttackEvent event, LevelAccessor world, LivingEntity target, Entity sourceEntity) {
+    private static void preventSameTeamDamage(LivingIncomingDamageEvent event, LevelAccessor world, LivingEntity target, Entity sourceEntity) {
         if (target instanceof Player || sourceEntity instanceof Player) return;
 
         if ((world.getLevelData().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)
@@ -183,7 +183,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void preventInquisitionDamage(LivingAttackEvent event, LivingEntity target, Entity sourceEntity) {
+    private static void preventInquisitionDamage(LivingIncomingDamageEvent event, LivingEntity target, Entity sourceEntity) {
         if (!target.getType().is(INQUISITION) || !(sourceEntity instanceof Player player)) return;
 
         if (target.getPersistentData().getString("recentCommander").equals(sourceEntity.getDisplayName().getString())) {
@@ -194,7 +194,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void preventHumanSideFriendlyFire(LivingAttackEvent event, LivingEntity target, Entity sourceEntity) {
+    private static void preventHumanSideFriendlyFire(LivingIncomingDamageEvent event, LivingEntity target, Entity sourceEntity) {
         if (!target.getType().is(HUMAN_SIDE) || !sourceEntity.getType().is(HUMAN_SIDE)
                 || target instanceof Mob mob && sourceEntity == mob.getTarget()) return;
 
@@ -202,7 +202,7 @@ public class LivingAttackEventHandler {
     }
 
     // TODO：Highmore 反击逻辑仍需复核，可能需要下放
-    private static void handleHighmoreCounter(LivingAttackEvent event) {
+    private static void handleHighmoreCounter(LivingIncomingDamageEvent event) {
         LevelAccessor world = event.getEntity().level();
         DamageSource damagesource = event.getSource();
         var entity = event.getEntity();
@@ -256,7 +256,7 @@ public class LivingAttackEventHandler {
     }
 
     // TODO：Midutant 破甲逻辑仍需复核
-    private static void handleTidutantArmorBreak(LivingAttackEvent event) {
+    private static void handleTidutantArmorBreak(LivingIncomingDamageEvent event) {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
@@ -269,7 +269,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void handleMobHit(LivingAttackEvent event) {
+    private static void handleMobHit(LivingIncomingDamageEvent event) {
         var world = event.getEntity().level();
         var target = event.getEntity();
         var damageSource = event.getSource();
@@ -284,7 +284,7 @@ public class LivingAttackEventHandler {
         handleMobHitSpecialEffects(world, target, sourceEntity, damageSource, event.getAmount());
     }
 
-    private static void handleOceanOffspringFriendlyFire(LivingAttackEvent event, LivingEntity target, Entity sourceEntity) {
+    private static void handleOceanOffspringFriendlyFire(LivingIncomingDamageEvent event, LivingEntity target, Entity sourceEntity) {
         if (sourceEntity.getType().is(OCEAN_OFFSPRING) && target.getType().is(OCEAN_OFFSPRING)) {
             LivingEntity srcTarget = sourceEntity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
             if (target != srcTarget) {
@@ -330,7 +330,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void handleMobHitEvolution(LivingAttackEvent event, LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource, double amount) {
+    private static void handleMobHitEvolution(LivingIncomingDamageEvent event, LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource, double amount) {
         if (sourceEntity.getType().is(OCEAN_OFFSPRING)
                 && world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
             var growthPoints = amount * 0.025;
@@ -395,7 +395,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void handlePlayerHit(LivingAttackEvent event) {
+    private static void handlePlayerHit(LivingIncomingDamageEvent event) {
         var world = event.getEntity().level();
         var target = event.getEntity();
         var immediateSource = event.getSource().getDirectEntity();

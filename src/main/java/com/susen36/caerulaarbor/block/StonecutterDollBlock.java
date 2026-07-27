@@ -1,16 +1,13 @@
 
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.mojang.serialization.MapCodec;
+import com.susen36.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -43,9 +40,7 @@ public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWater
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public StonecutterDollBlock() {
-		super(BlockBehaviour.Properties.of()
-
-				.sound(SoundType.WOOL).strength(0.5f, 2f).noOcclusion().isRedstoneConductor((bs, br, bp) -> false));
+		super(BlockBehaviour.Properties.of().sound(SoundType.WOOL).strength(0.5f, 2f).noOcclusion().isRedstoneConductor((bs, br, bp) -> false));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
 	}
 

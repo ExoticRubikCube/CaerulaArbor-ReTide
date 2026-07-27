@@ -5,8 +5,9 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -31,47 +32,20 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
 	public String animationprocedure = "empty";
 
 	public ChitinComplexItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial() {
-			@Override
-			public int getDurabilityForType(ArmorItem.Type type) {
-				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 127;
-			}
-
-			@Override
-			public int getDefenseForType(ArmorItem.Type type) {
-				return new int[]{4, 6, 9, 4}[type.getSlot().getIndex()];
-			}
-
-			@Override
-			public int getEnchantmentValue() {
-				return 22;
-			}
-
-			@Override
-			public SoundEvent getEquipSound() {
-				return SoundEvents.ARMOR_EQUIP_DIAMOND;
-			}
-
-			@Override
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.COMPLEX_CHITIN.get()));
-			}
-
-			@Override
-			public String getName() {
-				return "complexchitin_armor";
-			}
-
-			@Override
-			public float getToughness() {
-				return 4f;
-			}
-
-			@Override
-			public float getKnockbackResistance() {
-				return 0.15f;
-			}
-		}, type, properties);
+		super(new ArmorMaterial(
+			Map.of(
+				ArmorItem.Type.HELMET, 4,
+				ArmorItem.Type.CHESTPLATE, 9,
+				ArmorItem.Type.LEGGINGS, 6,
+				ArmorItem.Type.BOOTS, 4
+			),
+			22,
+			SoundEvents.ARMOR_EQUIP_DIAMOND,
+			() -> Ingredient.of(new ItemStack(CAItems.COMPLEX_CHITIN.get())),
+			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "complexchitin_armor"))),
+			4f,
+			0.15f
+		), type, properties);
 	}
 
 	@Override

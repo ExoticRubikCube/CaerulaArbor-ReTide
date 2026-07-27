@@ -1,10 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import net.minecraft.world.entity.SpawnPlacementTypes;
-import net.minecraft.world.level.pathfinder.PathType;
-import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
-
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -45,14 +41,13 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
@@ -279,7 +274,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
                                 level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1, false);
                             }
                         }
-                        ((Entity) this).hurt(CADamageTypes.source(world, CADamageTypes.SANITY_BREAK),
+                        this.hurt(CADamageTypes.source(world, CADamageTypes.SANITY_BREAK),
                                 (float) (((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * lose));
                     }
                 }
@@ -293,8 +288,8 @@ public class NucleicMaleficentEntity extends SeaMonster {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1.25);
+    public EntityDimensions getDefaultDimensions(Pose p_33597_) {
+        return super.getDefaultDimensions(p_33597_).scale((float) 1.25);
     }
 
     @Override

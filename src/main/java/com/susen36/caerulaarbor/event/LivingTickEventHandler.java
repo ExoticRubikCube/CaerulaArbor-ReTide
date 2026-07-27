@@ -25,9 +25,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import java.util.Comparator;
 import java.util.List;
@@ -36,9 +36,7 @@ import java.util.List;
 public class LivingTickEventHandler {
 
     @SubscribeEvent
-    public static void onEntityTick(LivingEvent.LivingTickEvent event) {
-        if (event.getEntity() == null) return;
-
+    public static void onEntityTick(EntityTickEvent.Post event) {
         handleChangeAttackGoal(event);
         handleDefensiveMode(event);
         handleSeabornAggresive(event);
@@ -46,14 +44,14 @@ public class LivingTickEventHandler {
     }
 
     //TODO 可能需要下放
-    private static void handleChangeAttackGoal(LivingEvent.LivingTickEvent event) {
+    private static void handleChangeAttackGoal(EntityTickEvent.Post event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
 
-        if (entity == null || entity.tickCount % 30 != 1) return;
+        if (entity.tickCount % 30 != 1) return;
 
         Entity enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
         if (enemy == null) return;
@@ -102,14 +100,13 @@ public class LivingTickEventHandler {
         }
     }
 
-    private static void handleDefensiveMode(LivingEvent.LivingTickEvent event) {
+    private static void handleDefensiveMode(EntityTickEvent.Post event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
 
-        if (entity == null) return;
         if (entity.tickCount % 30 != 15) return;
         if (!world.getLevelData().getGameRules().getBoolean(CAGameRules.DEFENSIVE_MODE)) return;
 
@@ -140,7 +137,7 @@ public class LivingTickEventHandler {
             _entity.setTarget(_ent);
     }
 
-    private static void handleSeabornAggresive(LivingEvent.LivingTickEvent event) {
+    private static void handleSeabornAggresive(EntityTickEvent.Post event) {
         LevelAccessor world = event.getEntity().level();
         Entity entity = event.getEntity();
 
@@ -155,14 +152,14 @@ public class LivingTickEventHandler {
     }
 
     //TODO有性能问题
-    private static void handleMobTick(LivingEvent.LivingTickEvent event) {
+    private static void handleMobTick(EntityTickEvent.Post event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
 
-        if (entity != null && entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))))
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))))
         {
             handleMobTargeting(world, x, y, z, entity);
             handleMobBuffs(world, x, y, z, entity);

@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.entity.OceanizedChickenEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -37,7 +39,7 @@ public class NetherseaChickenEggItem extends Item {
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
         double rate = Math.max(itemstack.tag().getDouble("rate") * 0.1, 100);
-        double offset = Math.max(itemstack.getOrCreateTag().getDouble("offset"), 4);
+        double offset = Math.max(itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getDouble("offset"), 4);
         String hoverText = Component.translatable("item.caerula_arbor.nethersea_chicken_egg.rate").getString() + new java.text.DecimalFormat("##.##").format(rate) + "%" + "\n"
                 + Component.translatable("item.caerula_arbor.nethersea_chicken_egg.offset").getString() + new java.text.DecimalFormat("##.##").format(offset);
         for (String line : hoverText.split("\n")) {
@@ -65,8 +67,8 @@ public class NetherseaChickenEggItem extends Item {
             return InteractionResult.FAIL;
         }
         int count = (int) (1 + Math.pow(1.45 * Math.random(), 2));
-        double rrr = Math.max(1, itemstack.getOrCreateTag().getDouble("rate") * 0.001);
-        double ooo = Math.max(4, itemstack.getOrCreateTag().getDouble("offset"));
+        double rrr = Math.max(1, itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getDouble("rate") * 0.001);
+        double ooo = Math.max(4, itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getDouble("offset"));
         if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SNIFFER_EGG_HATCH, SoundSource.PLAYERS, 1, 1);
         }

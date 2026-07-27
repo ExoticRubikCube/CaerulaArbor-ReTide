@@ -1,9 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import net.minecraft.world.entity.SpawnPlacementTypes;
-import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
-
 import com.susen36.caerulaarbor.entity.base.PolarMountRider;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FakerggShootEntity;
@@ -23,7 +20,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -42,11 +39,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import software.bernie.geckolib.animation.*;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;

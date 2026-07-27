@@ -1,8 +1,12 @@
 package com.susen36.caerulaarbor.init;
 
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import net.minecraft.world.level.block.ComposterBlock;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
+@EventBusSubscriber(modid = CaerulaArborMod.MODID, bus = EventBusSubscriber.Bus.MOD)
 public final class CACompostableItems {
     private CACompostableItems() {
     }
@@ -12,6 +16,7 @@ public final class CACompostableItems {
      *
      * @param event 通用设置事件
      */
+    @SubscribeEvent
     public static void addComposterItems(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             ComposterBlock.COMPOSTABLES.put(CAItems.SEA_TRAIL_MOR.get(), 0.2F);

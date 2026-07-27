@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.api.event;
 
 import net.minecraft.world.entity.LivingEntity;
-
+import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
 public class SanityEvent extends LivingEvent {
@@ -20,8 +20,7 @@ public class SanityEvent extends LivingEvent {
         this.amount = amount;
     }
 
-    @Cancelable
-    public static class Hurt extends SanityEvent {
+    public static class Hurt extends SanityEvent implements ICancellableEvent {
         private final Type type;
         private final LivingEntity source;
 
@@ -44,15 +43,13 @@ public class SanityEvent extends LivingEvent {
         }
     }
 
-    @Cancelable
-    public static class Heal extends SanityEvent {
+    public static class Heal extends SanityEvent implements ICancellableEvent {
         public Heal(LivingEntity victim, double amount) {
             super(victim, amount);
         }
     }
 
-    @Cancelable
-    public static class Break extends SanityEvent {
+    public static class Break extends SanityEvent implements ICancellableEvent {
         public Break(LivingEntity victim) {
             super(victim, 0);
         }

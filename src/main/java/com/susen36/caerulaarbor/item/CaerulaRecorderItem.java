@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -37,7 +36,7 @@ public class CaerulaRecorderItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
 		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-        if ((Entity) entity instanceof ServerPlayer ent) {
+        if (entity instanceof ServerPlayer ent) {
             BlockPos bpos = BlockPos.containing(entity.getX(), entity.getY(), entity.getZ());
             ent.openMenu(new MenuProvider() {
                 @Override

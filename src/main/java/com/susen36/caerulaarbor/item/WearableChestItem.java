@@ -1,9 +1,8 @@
-
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.util.RelicUtils;
 import com.google.common.collect.Iterables;
-import net.minecraft.sounds.SoundEvent;
+import com.susen36.caerulaarbor.util.RelicUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,49 +17,25 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+import java.util.List;
+import java.util.Map;
+
 public abstract class WearableChestItem extends ArmorItem {
 	public WearableChestItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial() {
-			@Override
-			public int getDurabilityForType(ArmorItem.Type type) {
-				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 18;
-			}
-
-			@Override
-			public int getDefenseForType(ArmorItem.Type type) {
-				return new int[]{2, 5, 11, 2}[type.getSlot().getIndex()];
-			}
-
-			@Override
-			public int getEnchantmentValue() {
-				return 16;
-			}
-
-			@Override
-			public SoundEvent getEquipSound() {
-				return SoundEvents.ARMOR_EQUIP_NETHERITE;
-			}
-
-			@Override
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of();
-			}
-
-			@Override
-			public String getName() {
-				return "wearable_chest";
-			}
-
-			@Override
-			public float getToughness() {
-				return 2.5f;
-			}
-
-			@Override
-			public float getKnockbackResistance() {
-				return 0.2f;
-			}
-		}, type, properties);
+		super(new ArmorMaterial(
+			Map.of(
+				ArmorItem.Type.HELMET, 2,
+				ArmorItem.Type.CHESTPLATE, 11,
+				ArmorItem.Type.LEGGINGS, 5,
+				ArmorItem.Type.BOOTS, 2
+			),
+			16,
+			SoundEvents.ARMOR_EQUIP_NETHERITE,
+			() -> Ingredient.of(),
+			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "wearable_chest"))),
+			2.5f,
+			0.2f
+		), type, properties);
 	}
 
 	public static class Chestplate extends WearableChestItem {

@@ -49,11 +49,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -596,9 +593,9 @@ public class IsharmlaEntity extends SeaMonster {
 	}
 
 	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		if (isMonster()) return super.getDimensions(p_33597_).scale(10, 4f);
-		return super.getDimensions(p_33597_);
+	public EntityDimensions getDefaultDimensions(Pose p_33597_) {
+		if (isMonster()) return super.getDefaultDimensions(p_33597_).scale(10, 4f);
+		return super.getDefaultDimensions(p_33597_);
 	}
 
 	@Override

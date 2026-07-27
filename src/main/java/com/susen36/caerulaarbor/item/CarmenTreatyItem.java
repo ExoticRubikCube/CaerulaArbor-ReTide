@@ -19,6 +19,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class CarmenTreatyItem extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+	public void appendHoverText(ItemStack itemstack, @NotNull TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.carmen_treaty.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.carmen_treaty.description_1"));

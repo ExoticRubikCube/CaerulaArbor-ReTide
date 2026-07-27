@@ -1,9 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import net.minecraft.world.entity.SpawnPlacementTypes;
-import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
-
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -41,11 +38,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 public class FeederProkaryoteEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FeederProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);

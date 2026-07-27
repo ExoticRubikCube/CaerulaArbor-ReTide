@@ -7,15 +7,15 @@ import com.susen36.caerulaarbor.entity.OceanizedEvokerEntity;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.event.entity.living.LivingUseTotemEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingUseTotemEvent;
 
 @EventBusSubscriber
 public class TotemEventHandler {
 	@SubscribeEvent
 	public static void whenEntityUsesTotem(LivingUseTotemEvent event) {
-		if (event == null || event.getEntity() == null) {
+		if (event == null) {
 			return;
 		}
 

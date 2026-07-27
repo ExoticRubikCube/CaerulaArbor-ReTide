@@ -7,14 +7,11 @@ import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FakeDeathMobEffect extends MobEffect {
     public FakeDeathMobEffect() {
@@ -29,20 +26,25 @@ public class FakeDeathMobEffect extends MobEffect {
     
 
     @Override
-    public void addAttributeModifiers(LivingEntity livingEntity, AttributeMap attributeMap, int amplifier) {
-        super.addAttributeModifiers(livingEntity, attributeMap, amplifier);
+    public void addAttributeModifiers(AttributeMap attributeMap, int amplifier) {
+        super.addAttributeModifiers(attributeMap, amplifier);
+    }
+
+    @Override
+    public void onEffectAdded(LivingEntity livingEntity, int amplifier) {
+        super.onEffectAdded(livingEntity, amplifier);
             livingEntity.setHealth(1);
     }
 
     @Override
-    public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity livingEntity, int amplifier) {
             livingEntity.setHealth((float) (livingEntity.getHealth() + livingEntity.getMaxHealth() * 0.025 * ((double) amplifier + 1)));
         return true;
     }
 
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.removeAttributeModifiers(entity, attributeMap, amplifier);
+    public void onMobRemoved(LivingEntity entity, int amplifier, Entity.RemovalReason reason) {
+        super.onMobRemoved(entity, amplifier, reason);
         if (entity instanceof TideBishopEntity tideBishop) {
             tideBishop.setAnimation("animation.tidebishop.die_idle");
         }

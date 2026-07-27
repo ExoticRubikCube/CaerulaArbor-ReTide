@@ -13,19 +13,13 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class IsharmlaCurseMobEffect extends MobEffect {
     public IsharmlaCurseMobEffect() {
         super(MobEffectCategory.HARMFUL, -11580593);
     }
-
-    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {

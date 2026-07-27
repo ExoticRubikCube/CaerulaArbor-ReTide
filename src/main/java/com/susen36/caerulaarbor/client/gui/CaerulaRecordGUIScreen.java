@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.PlainTextButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
@@ -52,7 +53,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics);
+		this.renderBackground(guiGraphics,mouseX,mouseY,partialTicks);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
         Entity result1 = null;
         if (entity != null) {
@@ -146,9 +147,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		}
 
         double result = 0;
-        if (entity != null) {
-            result = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
-        }
+        result = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
         guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/oceanize_icon.png"), this.leftPos + 137, this.topPos + 7, Mth.clamp((int) result * 24, 0, 72), 0, 24, 20, 96, 20);
 
 		RenderSystem.disableBlend();
@@ -250,7 +249,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		}, this.font);
 		guistate.put("button:button_show_relic_ptc", button_show_relic_ptc);
 		this.addRenderableWidget(button_show_relic_ptc);
-		imagebutton_relic_icon = new ImageButton(this.leftPos + 6, this.topPos + 99, 16, 16, 0, 0, 16, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_relic_icon.png"), 16, 32, e -> {
+		imagebutton_relic_icon = new ImageButton(this.leftPos + 6, this.topPos + 99, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_relic_icon"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_relic_icon_highlighted")), e -> {
 			if (true) {
 				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(2, x, y, z));
 				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 2, x, y, z);
@@ -258,7 +257,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		});
 		guistate.put("button:imagebutton_relic_icon", imagebutton_relic_icon);
 		this.addRenderableWidget(imagebutton_relic_icon);
-		imagebutton_nurture_gene_set = new ImageButton(this.leftPos + 28, this.topPos + 99, 16, 16, 0, 0, 16, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_nurture_gene_set.png"), 16, 32, e -> {
+		imagebutton_nurture_gene_set = new ImageButton(this.leftPos + 28, this.topPos + 99, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_nurture_gene_set"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_nurture_gene_set_highlighted")), e -> {
 			if (PlayerStateUtils.canPlayerEvo(entity)) {
 				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(3, x, y, z));
 				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 3, x, y, z);

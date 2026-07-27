@@ -6,6 +6,7 @@ import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -60,7 +62,7 @@ public class OddFluteItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (!itemstack.getOrCreateTag().getBoolean("used")) {
+        if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             for (int index0 = 0; index0 < 7; index0++) {
                 if ((LevelAccessor) world instanceof ServerLevel level)
                     level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
@@ -69,14 +71,14 @@ public class OddFluteItem extends Item {
                 livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 300, 0, false, false));
             {
                 boolean setval = true;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.relic_util_FLUTE = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
-            itemstack.getOrCreateTag().putBoolean("used", true);
+            CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
         }
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.FLUTESONG.get(), SoundSource.NEUTRAL, 2, 1);
         }
         new Object() {

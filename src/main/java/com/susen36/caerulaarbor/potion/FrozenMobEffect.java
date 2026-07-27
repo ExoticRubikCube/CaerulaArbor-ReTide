@@ -15,12 +15,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.MagmaCube;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.neoforge.common.NeoForgeMod;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FrozenMobEffect extends MobEffect {
     public FrozenMobEffect() {
@@ -30,9 +26,7 @@ public class FrozenMobEffect extends MobEffect {
         this.addAttributeModifier(Attributes.ATTACK_SPEED, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "frozen_attack_speed"), -1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         this.addAttributeModifier(Attributes.JUMP_STRENGTH, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "frozen_jump_strength"), -1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "frozen_knockback_resistance"), 0.5, AttributeModifier.Operation.ADD_VALUE);
-        // TODO: NeoForge 1.21.1 removed NeoForgeMod.STEP_HEIGHT_ADDITION, reimplement when replacement is known
-        // this.addAttributeModifier(NeoForgeMod.STEP_HEIGHT_ADDITION, "e8fabb9b-c39f-30f3-b4d4-73429435aea6", -1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
-        this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "frozen_armor_toughness"), -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        this.addAttributeModifier(Attributes.STEP_HEIGHT, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "frozen_step_height"), -1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "frozen_armor_toughness"), -1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         this.addAttributeModifier(Attributes.ARMOR, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "frozen_armor"), -0.4, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         this.addAttributeModifier(Attributes.ATTACK_DAMAGE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "frozen_attack_damage"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }

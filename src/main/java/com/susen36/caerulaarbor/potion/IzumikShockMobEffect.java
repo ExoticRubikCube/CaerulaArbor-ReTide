@@ -13,22 +13,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class IzumikShockMobEffect extends MobEffect {
     public IzumikShockMobEffect() {
         super(MobEffectCategory.HARMFUL, -45858);
         this.addAttributeModifier(Attributes.ATTACK_DAMAGE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "izumik_shock_attack_damage"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
-
-    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {

@@ -11,10 +11,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 import java.util.Comparator;
 
@@ -71,11 +71,11 @@ public class CorruptedBarOverlay {
             double result = 0;
             Entity corrupted;
             double P;
-            corrupted = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
+            corrupted = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
                 Comparator<Entity> compareDistOf(double x, double y, double z) {
                     return Comparator.comparingDouble(entity -> entity.distanceToSqr(x, y, z));
                 }
-            }.compareDistOf(x, y, z)).findFirst().orElse(null);
+            }.compareDistOf(x, y, z)).orElse(null);
             if (corrupted != null) {
                 P = corrupted instanceof SkadiCorruptedEntity datEntI ? datEntI.getEntityData().get(SkadiCorruptedEntity.DATA_PHASE) : 0;
                 if (!(P < 0.5)) {

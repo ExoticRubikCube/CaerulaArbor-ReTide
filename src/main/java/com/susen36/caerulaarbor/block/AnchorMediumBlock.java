@@ -154,15 +154,15 @@ public class AnchorMediumBlock extends Block {
                     {
                         int value = 1;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                        BlockState bs = world.getBlockState(blockPos);
                         if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
                     }
                     {
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                        BlockState bs = world.getBlockState(blockPos);
                         if (bs.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty booleanProp)
-                            ((LevelAccessor) world).setBlock(blockPos, bs.setValue(booleanProp, true), 3);
+                            world.setBlock(blockPos, bs.setValue(booleanProp, true), 3);
                     }
                 }
             }

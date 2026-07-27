@@ -10,7 +10,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.List;
@@ -67,12 +66,12 @@ public class TrailriteShovelItem extends ShovelItem {
 	}
 
 	@Override
-	public boolean canBeHurtBy(DamageSource pDamageSource) {
+	public boolean canBeHurtBy(ItemStack stack, DamageSource pDamageSource) {
 		return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
 	}
 
 	@Override
-	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken) {
 		return Math.min(amount, 1);
 	}
 }

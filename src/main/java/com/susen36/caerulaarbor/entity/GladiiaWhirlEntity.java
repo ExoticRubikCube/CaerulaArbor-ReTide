@@ -9,8 +9,6 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -30,15 +28,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
@@ -282,7 +276,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         builder = builder.add(Attributes.ATTACK_DAMAGE, 27);
         builder = builder.add(Attributes.FOLLOW_RANGE, 1);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 99);
-        builder = builder.add(NeoForgeMod.ENTITY_GRAVITY, 0);
+        builder = builder.add(Attributes.GRAVITY, 0);
         return builder;
     }
 

@@ -109,7 +109,7 @@ public class BlockExtensionBlock extends Block implements SimpleWaterloggedBlock
             level.addFreshEntity(entityToSpawn);
         }
         world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.BLOCK_EXTENSION.get().defaultBlockState()));
-        ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.DEEPSLATE_BRICK_SLAB.defaultBlockState(), 3);
+        world.setBlock(BlockPos.containing(x, y, z), Blocks.DEEPSLATE_BRICK_SLAB.defaultBlockState(), 3);
         InteractionResult result = InteractionResult.SUCCESS;
 		return result;
 	}

@@ -61,39 +61,39 @@ public class RoyalFateItem extends Item {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         double lives_left;
-        if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive > 1) {
+        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive > 1) {
             if ((LevelAccessor) world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_DEATH, SoundSource.NEUTRAL, 2, 1);
             }
             if ((LevelAccessor) world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.END_ROD, x, y, z, 72, 1, 1, 1, 1);
-            if (((LevelAccessor) world).isClientSide())
+            if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-            lives_left = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive;
+            lives_left = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive;
             {
                 double setval = 1;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.player_maxlive = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             {
                 double setval = 1;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.player_lives = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             {
-                double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + lives_left;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + lives_left;
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.player_shield = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             {
-                double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 3;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 3;
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.player_shield = setval;
                     capability.syncPlayerVariables(entity);
                 });
@@ -102,7 +102,7 @@ public class RoyalFateItem extends Item {
         }
         {
             boolean setval = true;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.relic_archifi_RYLFATE = setval;
                 capability.syncPlayerVariables(entity);
             });

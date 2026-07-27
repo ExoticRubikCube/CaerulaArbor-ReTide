@@ -10,14 +10,9 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ReefCrackerMobEffect extends MobEffect {
     public ReefCrackerMobEffect() {
@@ -43,8 +38,8 @@ public class ReefCrackerMobEffect extends MobEffect {
     }
 
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.removeAttributeModifiers(entity, attributeMap, amplifier);
+    public void onMobRemoved(LivingEntity entity, int amplifier, Entity.RemovalReason reason) {
+        super.onMobRemoved(entity, amplifier, reason);
         if ((double) amplifier >= 2) {
             if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
                 livingEntity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER, 60, (int) ((double) amplifier - 2), false, false));

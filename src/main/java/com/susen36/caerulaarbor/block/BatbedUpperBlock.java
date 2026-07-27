@@ -1,4 +1,3 @@
-
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlocks;

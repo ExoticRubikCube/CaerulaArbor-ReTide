@@ -5,6 +5,7 @@ import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider.SubProviderEntry;
 import net.minecraft.data.loot.LootTableSubProvider;
@@ -17,22 +18,12 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
-import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
-import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -149,11 +140,11 @@ public final class LootTableProviders {
     }
 
     private static Item item(String id) {
-        return Objects.requireNonNull(BuiltInRegistries.ITEMS.getValue(ResourceLocation.parse(id)), "Unknown loot item: " + id);
+        return Objects.requireNonNull(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(id)), "Unknown loot item: " + id);
     }
 
     private static Block block(String id) {
-        return Objects.requireNonNull(BuiltInRegistries.BLOCKS.getValue(ResourceLocation.parse(id)), "Unknown loot block: " + id);
+        return Objects.requireNonNull(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(id)), "Unknown loot block: " + id);
     }
 
     private static TableDef table(String path, PoolDef... pools) {

@@ -57,11 +57,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -604,7 +601,7 @@ public class EndspeakerEntity extends SeaMonster {
 	}
 
 	@Override
-	public EntityDimensions getDimensions(Pose pose) {
+	public EntityDimensions getDefaultDimensions(Pose pose) {
 		return switch (this.getPhase()) {
 			case 1 -> EntityDimensions.scalable(0.75F, 1.5F);
 			case 2 -> EntityDimensions.scalable(1.2F, 2.8F);

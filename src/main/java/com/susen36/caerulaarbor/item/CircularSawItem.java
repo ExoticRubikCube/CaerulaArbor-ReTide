@@ -6,6 +6,7 @@ import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
@@ -175,46 +177,44 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity != null && sourceentity != null) {
-            if (((Entity) sourceentity instanceof Player plr ? plr.getAttackStrengthScale(0) : 0) >= 0.95) {
-                if (itemstack.getItem() instanceof CircularSawItem)
-                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.circular_saw.saw");
-                if (world instanceof Level level) {
-                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT.get(), SoundSource.PLAYERS, 2, 1);
-                }
-                CaerulaArborMod.queueServerWork(7, () -> {
-                    new Object() {
-                        void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                            if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 3.5) {
-                                ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.SAW_CUT, sourceentity), (float) (((Entity) sourceentity instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity5.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                                * 0.35));
-                            }
-                            final int tick2 = ticks;
-                            CaerulaArborMod.queueServerWork(tick2, () -> {
-                                if (timedlooptotal > timedloopiterator + 1) {
-                                    timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                                }
-                            });
-                        }
-                    }.timedLoop(0, 7, 2);
-                });
+        if (((Entity) sourceentity instanceof Player plr ? plr.getAttackStrengthScale(0) : 0) >= 0.95) {
+            if (itemstack.getItem() instanceof CircularSawItem)
+                CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.circular_saw.saw"));
+            if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT.get(), SoundSource.PLAYERS, 2, 1);
             }
-            if (!(new Object() {
-                public boolean checkGamemode(Entity ent) {
-                    if (ent instanceof ServerPlayer serverPlayer) {
-                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+            CaerulaArborMod.queueServerWork(7, () -> {
+                new Object() {
+                    void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                        if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 3.5) {
+                            entity.hurt(CADamageTypes.source(world, CADamageTypes.SAW_CUT, sourceentity), (float) (((Entity) sourceentity instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity5.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                    * 0.35));
+                        }
+                        final int tick2 = ticks;
+                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                            if (timedlooptotal > timedloopiterator + 1) {
+                                timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                            }
+                        });
                     }
-                    return false;
+                }.timedLoop(0, 7, 2);
+            });
+        }
+        if (!(new Object() {
+            public boolean checkGamemode(Entity ent) {
+                if (ent instanceof ServerPlayer serverPlayer) {
+                    return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                 }
-            }.checkGamemode((Entity) entity))) {
-                {
-                    ItemStack ist = itemstack;
-                    if (ist.hurt(1, RandomSource.create(), null)) {
-                        ist.shrink(1);
-                        ist.setDamageValue(0);
-                    }
+                return false;
+            }
+        }.checkGamemode((Entity) entity))) {
+            {
+                ItemStack ist = itemstack;
+                if (ist.hurt(1, RandomSource.create(), null)) {
+                    ist.shrink(1);
+                    ist.setDamageValue(0);
                 }
             }
         }

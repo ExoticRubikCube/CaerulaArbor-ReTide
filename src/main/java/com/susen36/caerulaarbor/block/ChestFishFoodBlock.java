@@ -156,10 +156,7 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
-		if (entity == null) {
-			return InteractionResult.PASS;
-		}
-		int bs = -1;
+        int bs = -1;
 		IntegerProperty blockstateProp = (IntegerProperty) blockstate.getBlock().getStateDefinition().getProperty("blockstate");
 		if (blockstateProp != null) {
 			bs = blockstate.getValue(blockstateProp);

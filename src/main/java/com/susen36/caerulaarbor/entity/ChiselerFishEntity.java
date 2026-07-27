@@ -300,8 +300,8 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 	}
 
 	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1.2);
+	public EntityDimensions getDefaultDimensions(Pose p_33597_) {
+		return super.getDefaultDimensions(p_33597_).scale((float) 1.2);
 	}
 
 	@Override

@@ -50,9 +50,7 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public AbandonedSulptureBlock() {
-        super(BlockBehaviour.Properties.of()
-
-                .sound(SoundType.DEEPSLATE).strength(16f, 75f).requiresCorrectToolForDrops().noOcclusion().pushReaction(PushReaction.BLOCK).isRedstoneConductor((bs, br, bp) -> false));
+        super(BlockBehaviour.Properties.of() .sound(SoundType.DEEPSLATE).strength(16f, 75f).requiresCorrectToolForDrops().noOcclusion().pushReaction(PushReaction.BLOCK).isRedstoneConductor((bs, br, bp) -> false));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
 

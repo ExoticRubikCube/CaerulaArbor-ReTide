@@ -21,7 +21,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -115,7 +114,7 @@ public class CaerulaBookShelfBlock extends Block {
                     for (int index3 = 0; index3 < 3; index3++) {
                         for (int index4 = 0; index4 < 3; index4++) {
                             for (int index5 = 0; index5 < 3; index5++) {
-                                tgt = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + index3 - 1, (double) y + index4 - 1, (double) z + index5 - 1)));
+                                tgt = (world.getBlockState(BlockPos.containing((double) x + index3 - 1, (double) y + index4 - 1, (double) z + index5 - 1)));
                                 if (tgt.getBlock() == CABlocks.CAERULA_BOOK_SHELF.get()) {
                                     world.destroyBlock(BlockPos.containing((double) x + index3 - 1, (double) y + index4 - 1, (double) z + index5 - 1), false);
                                     num--;

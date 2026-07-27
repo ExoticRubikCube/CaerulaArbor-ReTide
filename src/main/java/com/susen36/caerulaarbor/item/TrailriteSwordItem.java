@@ -58,7 +58,7 @@ public class TrailriteSwordItem extends SwordItem {
             int lootingLevel = 0;
             int sharpnessLevel = 0;
             if (world instanceof Level level) {
-                lootingLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.MOB_LOOTING)
+                lootingLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.LOOTING)
                         .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
                 sharpnessLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SHARPNESS)
                         .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
@@ -106,12 +106,12 @@ public class TrailriteSwordItem extends SwordItem {
 	}
 
 	@Override
-	public boolean canBeHurtBy(DamageSource pDamageSource) {
+	public boolean canBeHurtBy(ItemStack stack, DamageSource pDamageSource) {
 		return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
 	}
 
 	@Override
-	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken) {
 		return Math.min(amount, 1);
 	}
 }

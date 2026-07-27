@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -41,7 +42,7 @@ public class TrailedGoldenSwordItem extends SwordItem {
         int sharpnessLevel = 0;
         if (world instanceof Level level) {
             sharpnessLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SHARPNESS)
-                    .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
+                    .map(itemstack::getEnchantmentLevel).orElse(0);
         }
         dam = 85 + 20 * sharpnessLevel;
         SIHelper.causeSanityInjury(entity, sourceentity, dam, SanityEvent.Hurt.Type.ENTITY);

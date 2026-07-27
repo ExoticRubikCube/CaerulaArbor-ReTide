@@ -64,12 +64,12 @@ public class UndertideSpawnBlock extends Block implements SimpleWaterloggedBlock
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CABlocks.OCEAN_OVARY.get() || (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CABlocks.RED_OVARY.get()) {
+        if ((world.getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CABlocks.OCEAN_OVARY.get() || (world.getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CABlocks.RED_OVARY.get()) {
             world.destroyBlock(BlockPos.containing(x, y + 1, z), false);
             {
                 BlockPos bp = BlockPos.containing(x, y, z);
                 BlockState bs = CABlocks.UNDERTIDE_TABLE.get().withPropertiesOf(blockstate);
-                ((LevelAccessor) world).setBlock(bp, bs, 3);
+                world.setBlock(bp, bs, 3);
             }
         }
     }

@@ -6,6 +6,7 @@ import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -36,17 +37,15 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -265,6 +264,7 @@ public class OceanizedChickenEntity extends SeaMonster {
         double grow;
         boolean is_child;
         is_child = (Entity) this instanceof OceanizedChickenEntity datEntL0 && datEntL0.getEntityData().get(DATA_IS_CHILD);
+        this.getAttribute(Attributes.SCALE).setBaseValue(is_child ? 0.5 : 1.0);
         if (is_child) {
             grow = (Entity) this instanceof OceanizedChickenEntity datEntI ? datEntI.getEntityData().get(DATA_GROW_TIME) : 0;
             if (grow > 0) {
@@ -309,8 +309,10 @@ public class OceanizedChickenEntity extends SeaMonster {
                                 ooo = ooo + 1;
                             }
                         }
-                        egg.getOrCreateTag().putDouble("rate", rrr);
-                        egg.getOrCreateTag().putDouble("offset", ooo);
+                        CustomData.update(DataComponents.CUSTOM_DATA, egg, tag -> {
+                            tag.putDouble("rate", rrr);
+                            tag.putDouble("offset", ooo);
+                        });
                         result = egg;
                         ItemEntity entityToSpawn = new ItemEntity(level, (getX()), (getY()), (getZ()), result);
                         entityToSpawn.setPickUpDelay(10);
@@ -320,16 +322,6 @@ public class OceanizedChickenEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
-    }
-
-    @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        Entity entity = this;
-        double result = 1;
-        if (entity instanceof OceanizedChickenEntity datEntL0 && datEntL0.getEntityData().get(DATA_IS_CHILD)) {
-            result = 0.5;
-        }
-        return super.getDimensions(p_33597_).scale((float) result);
     }
 
     @Override
@@ -355,6 +347,7 @@ public class OceanizedChickenEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
         builder = builder.add(Attributes.FOLLOW_RANGE, 22);
         builder = builder.add(Attributes.FLYING_SPEED, 0.3);
+        builder = builder.add(Attributes.SCALE, 1.0);
         return builder;
     }
 

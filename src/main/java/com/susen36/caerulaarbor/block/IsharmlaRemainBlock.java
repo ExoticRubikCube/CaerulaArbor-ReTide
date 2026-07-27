@@ -20,6 +20,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -162,91 +163,85 @@ public class IsharmlaRemainBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
-        if (entity != null) {
-            double stat;
-            Entity skadi;
-            if (world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
-                stat = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1;
-                if (stat == 0) {
-                    if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()
-                            && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.CAERULA_HEART.get()) {
-                        skadi = world.getEntitiesOfClass(SkadiEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
-                            Comparator<Entity> compareDistOf(double x, double y, double z) {
-                                return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
+        double stat;
+        Entity skadi;
+        if (world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
+            stat = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1;
+            if (stat == 0) {
+                if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()
+                        && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.CAERULA_HEART.get()) {
+                    skadi = world.getEntitiesOfClass(SkadiEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
+                        Comparator<Entity> compareDistOf(double x, double y, double z) {
+                            return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
+                        }
+                    }.compareDistOf((double) x, (double) y, (double) z)).findFirst().orElse(null);
+                    if (skadi == null) {
+                        if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                            player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.isharmla_remain.fail").getString())), true);
+                        result = InteractionResult.FAIL;
+                    } else {
+                        if (skadi instanceof LivingEntity livingEntity && !entity.level().isClientSide())
+                            entity.addEffect(new MobEffectInstance(CAMobEffects.ISHARMLA_CURSE, 99999, 0));
+                        IsharmlaEntity.sendLinkParticlesToEntity(world, x, y, z, skadi);
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_PLACE.get(), SoundSource.BLOCKS, 3, 1);
+                        }
+                        ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                        ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
+                        if ((Entity) entity instanceof ServerPlayer player) {
+                            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "unlock_calamity"));
+                            AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                            if (!ap.isDone()) {
+                                for (String criteria : ap.getRemainingCriteria())
+                                    player.getAdvancements().award(adv, criteria);
                             }
-                        }.compareDistOf((double) x, (double) y, (double) z)).findFirst().orElse(null);
-                        if (skadi == null) {
-                            if ((Entity) entity instanceof Player player && !player.level().isClientSide())
-                                player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.isharmla_remain.fail").getString())), true);
-                            result = InteractionResult.FAIL;
-                        } else {
-                            if (skadi instanceof LivingEntity livingEntity && !entity.level().isClientSide())
-                                entity.addEffect(new MobEffectInstance(CAMobEffects.ISHARMLA_CURSE, 99999, 0));
-                            IsharmlaEntity.sendLinkParticlesToEntity(world, x, y, z, skadi);
-                            if ((LevelAccessor) world instanceof Level level) {
-                                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_PLACE.get(), SoundSource.BLOCKS, 3, 1);
-                            }
-                            ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                            ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
-                            if ((Entity) entity instanceof ServerPlayer player) {
-                                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "unlock_calamity"));
-                                AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
-                                if (!ap.isDone()) {
-                                    for (String criteria : ap.getRemainingCriteria())
-                                        player.getAdvancements().award(adv, criteria);
-                                }
-                            }
-                            for (int index0 = 0; index0 < 3; index0++) {
-                                for (int index1 = 0; index1 < 3; index1++) {
-                                    for (int index2 = 0; index2 < 3; index2++) {
-                                        {
-                                            int value = 1;
-                                            BlockPos blockPos = BlockPos.containing((double) x + index0 - 1, (double) y + index1 - 1, (double) z + index2 - 1);
-                                            BlockState bs = ((LevelAccessor) world).getBlockState(pos);
-                                            if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                                                ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
-                                        }
+                        }
+                        for (int index0 = 0; index0 < 3; index0++) {
+                            for (int index1 = 0; index1 < 3; index1++) {
+                                for (int index2 = 0; index2 < 3; index2++) {
+                                    {
+                                        int value = 1;
+                                        BlockPos blockPos = BlockPos.containing((double) x + index0 - 1, (double) y + index1 - 1, (double) z + index2 - 1);
+                                        BlockState bs = world.getBlockState(pos);
+                                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
                                     }
                                 }
                             }
-                            result = InteractionResult.SUCCESS;
                         }
-                    } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
-                            && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
-                        if ((Entity) entity instanceof Player player && !player.level().isClientSide())
-                            player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.isharmla_remain.notice").getString())), true);
+                        result = InteractionResult.SUCCESS;
                     }
-                } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.TEAR_ISHARMLA.get()) {
-                    if ((LevelAccessor) world instanceof Level level) {
-                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.BLOCKS, 3, 1);
-                    }
-                    ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                    if ((LevelAccessor) world instanceof ServerLevel level)
-                        level.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 24, 1, 1, 1, 0.1);
-                    for (int index3 = 0; index3 < 3; index3++) {
-                        for (int index4 = 0; index4 < 3; index4++) {
-                            for (int index5 = 0; index5 < 3; index5++) {
-                                {
-                                    int value = 0;
-                                    BlockPos blockPos = BlockPos.containing((double) x + index3 - 1, (double) y + index4 - 1, (double) z + index5 - 1);
-                                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
-                                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
-                                }
-                            }
-                        }
-                    }
-                    result = InteractionResult.SUCCESS;
                 } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
                         && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
                     if ((Entity) entity instanceof Player player && !player.level().isClientSide())
-                        player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.isharmla_remain.reset").getString())), true);
+                        player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.isharmla_remain.notice").getString())), true);
                 }
+            } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.TEAR_ISHARMLA.get()) {
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.BLOCKS, 3, 1);
+                }
+                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 24, 1, 1, 1, 0.1);
+                for (int index3 = 0; index3 < 3; index3++) {
+                    for (int index4 = 0; index4 < 3; index4++) {
+                        for (int index5 = 0; index5 < 3; index5++) {
+                            {
+                                int value = 0;
+                                BlockPos blockPos = BlockPos.containing((double) x + index3 - 1, (double) y + index4 - 1, (double) z + index5 - 1);
+                                BlockState bs = world.getBlockState(pos);
+                                if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                                    world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                            }
+                        }
+                    }
+                }
+                result = InteractionResult.SUCCESS;
+            } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
+                    && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
+                if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.isharmla_remain.reset").getString())), true);
             }
         }
         return result;

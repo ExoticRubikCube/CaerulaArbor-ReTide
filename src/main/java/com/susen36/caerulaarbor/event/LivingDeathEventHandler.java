@@ -49,10 +49,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
 import java.util.Comparator;
 
@@ -63,7 +63,7 @@ public class LivingDeathEventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onEntityDeath(LivingDeathEvent event) {
-        if (event == null || event.getEntity() == null) return;
+        if (event == null) return;
 
         handleLifePoint(event);
         handleBarrierReset(event);
@@ -73,7 +73,7 @@ public class LivingDeathEventHandler {
 
     @SubscribeEvent
     public static void onEntityDeathNormal(LivingDeathEvent event) {
-        if (event == null || event.getEntity() == null) return;
+        if (event == null) return;
 
         handleExtractorAdv(event);
         handleGeneSampleDrop(event);
@@ -88,11 +88,9 @@ public class LivingDeathEventHandler {
 
     private static void handleLifePoint(LivingDeathEvent event) {
         LivingEntity entity = event.getEntity();
-        if (entity == null) return;
 
         LevelAccessor world = entity.level();
         DamageSource damagesource = event.getSource();
-        if (damagesource == null) return;
 
         double x = entity.getX();
         double y = entity.getY();
@@ -183,7 +181,6 @@ public class LivingDeathEventHandler {
 
     private static void handleBarrierReset(LivingDeathEvent event) {
         Entity entity = event.getEntity();
-        if (entity == null) return;
 
         if (!event.isCanceled()) {
             if (entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER))
@@ -197,7 +194,7 @@ public class LivingDeathEventHandler {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.INVULNERABLE) && !damagesource.is(CADamageTypes.INV_KILLER)) {
             if (event.isCancelable()) {

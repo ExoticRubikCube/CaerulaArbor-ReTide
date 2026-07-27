@@ -1,8 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
 
-
-import net.minecraft.world.entity.SpawnPlacementTypes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.PolarMountRider;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -47,11 +45,8 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;

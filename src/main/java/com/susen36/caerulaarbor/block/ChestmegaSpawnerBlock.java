@@ -46,9 +46,7 @@ public class ChestmegaSpawnerBlock extends BaseEntityBlock implements SimpleWate
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public ChestmegaSpawnerBlock() {
-		super(BlockBehaviour.Properties.of()
-
-				.sound(SoundType.METAL).strength(-1, 3600000).lightLevel(s -> (new Object() {
+		super(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(-1, 3600000).lightLevel(s -> (new Object() {
 					public int getLightLevel() {
 						if (s.getValue(BLOCKSTATE) == 1)
 							return 0;

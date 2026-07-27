@@ -25,7 +25,7 @@ public class SublimationUpgradeManger {
         AdvancementProgress _ap;
         AdvancementHolder _adv;
         ServerPlayer _player;
-        double stra = 0.0;
+        double stra;
         String prefix = "";
         String num = "";
         stra = MapVariables.get(world).strategy_sublimation;

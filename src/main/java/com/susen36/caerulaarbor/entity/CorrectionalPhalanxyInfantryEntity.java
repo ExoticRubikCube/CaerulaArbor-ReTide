@@ -7,8 +7,6 @@ import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -35,11 +33,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
@@ -186,7 +181,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
                         if (this instanceof CorrectionalPhalanxyInfantryEntity) {
                             this.setAnimation("animation.correctional_phalanx _infantry.swing");
                         }
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY()), (target.getZ())));
+                        this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY()), (target.getZ())));
                         CaerulaArborMod.queueServerWork(16, () -> {
                             if (this.isAlive()) {
                                 final Vec3 center = new Vec3((this.getX() + 2 * getLookAngle().x), (this.getY() + 2 * getLookAngle().y), (this.getZ() + 2 * getLookAngle().z));

@@ -2,8 +2,6 @@ package com.susen36.caerulaarbor.entity.bullets;
 
 import com.susen36.caerulaarbor.entity.OceanziedWitchEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

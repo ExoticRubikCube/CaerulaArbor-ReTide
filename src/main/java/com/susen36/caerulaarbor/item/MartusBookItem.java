@@ -25,11 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
@@ -117,7 +113,7 @@ public class MartusBookItem extends Item implements GeoItem, SyncedAnimationItem
                 if ((Entity) entity instanceof Player player)
                     player.getCooldowns().addCooldown(itemstack.getItem(), 1200);
                 if (itemstack.getItem() instanceof MartusBookItem)
-                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.martus_book.use");
+                    CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.martus_book.use"));
                 if (!isCreative) {
                     if ((Entity) entity instanceof Player player)
                         player.giveExperienceLevels(-(5));

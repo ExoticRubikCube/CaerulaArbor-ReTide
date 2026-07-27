@@ -6,12 +6,12 @@ import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -33,11 +33,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Map;
@@ -337,7 +333,7 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
 							});
 						}
 						if (itemstack.getItem() instanceof PhloemBowItem)
-                            itemstack.getOrCreateTag().putString("geckoAnim", "animation.bluebow.pull");
+                            CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.bluebow.pull"));
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_QUICK_CHARGE_1, SoundSource.NEUTRAL, (float) 1.8, 1);
                         }

@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor;
 
 import com.mojang.logging.LogUtils;
+import com.susen36.caerulaarbor.capability.CapabilityEventHandler;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -8,7 +9,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class CaerulaArborMod {
         CAVillagerProfessions.PROFESSIONS.register(modEventBus);
         CAMenus.REGISTRY.register(modEventBus);
         CAAttributes.REGISTRY.register(modEventBus);
-        modEventBus.addListener(this::onCommonSetup);
+        modEventBus.addListener(CapabilityEventHandler::registerBlockCapabilities);
     }
 
     public static void queueServerWork(int tick, Runnable action) {
@@ -55,11 +55,6 @@ public class CaerulaArborMod {
     public static ResourceLocation ModLoc(String path) {
         var patchedPath = path.toLowerCase();
         return ResourceLocation.fromNamespaceAndPath(MODID, patchedPath);
-    }
-
-    private void onCommonSetup(final FMLCommonSetupEvent event) {
-        CANetwork.register();
-        CACompostableItems.addComposterItems(event);
     }
 
     @SubscribeEvent

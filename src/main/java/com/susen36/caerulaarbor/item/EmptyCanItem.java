@@ -33,7 +33,7 @@ public class EmptyCanItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        BlockState target = (((LevelAccessor) world).getFluidState(BlockPos.containing(x + entity.getLookAngle().x, y + entity.getLookAngle().y + 1.6, z + entity.getLookAngle().z)).createLegacyBlock());
+        BlockState target = (world.getFluidState(BlockPos.containing(x + entity.getLookAngle().x, y + entity.getLookAngle().y + 1.6, z + entity.getLookAngle().z)).createLegacyBlock());
         if (Blocks.WATER == target.getBlock()) {
             if ((Entity) entity instanceof Player player) {
                 ItemStack setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();

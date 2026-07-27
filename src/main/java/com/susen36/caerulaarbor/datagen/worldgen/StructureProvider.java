@@ -20,7 +20,6 @@ import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * 生成 structure 注册表数据

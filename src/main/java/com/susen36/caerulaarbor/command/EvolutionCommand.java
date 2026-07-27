@@ -12,7 +12,6 @@ import com.susen36.caerulaarbor.manager.SubsistingUpgradeManager;
 import com.susen36.caerulaarbor.util.StrategyUtils;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -24,7 +23,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
 public class EvolutionCommand {

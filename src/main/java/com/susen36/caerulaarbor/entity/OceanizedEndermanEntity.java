@@ -47,11 +47,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
@@ -363,7 +360,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         Entity enemy1;
                         enemy1 = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
                         if (!(enemy1 == null)) {
-                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy1.getX()), (enemy1.getY()), (enemy1.getZ())));
+                            this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy1.getX()), (enemy1.getY()), (enemy1.getZ())));
                         }
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {

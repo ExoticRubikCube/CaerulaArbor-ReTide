@@ -1,6 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 
 public interface SyncedAnimationItem {
 	String GECKO_ANIMATION_KEY = "geckoAnim";
@@ -8,9 +10,9 @@ public interface SyncedAnimationItem {
 	void setAnimationProcedure(String animation);
 
 	default String consumeQueuedAnimation(ItemStack stack) {
-		String animation = stack.getOrCreateTag().getString(GECKO_ANIMATION_KEY);
+		String animation = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString(GECKO_ANIMATION_KEY);
 		if (!animation.isEmpty()) {
-			stack.getOrCreateTag().putString(GECKO_ANIMATION_KEY, "");
+			CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.putString(GECKO_ANIMATION_KEY, ""));
 		}
 		return animation;
 	}

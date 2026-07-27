@@ -4,6 +4,7 @@ import com.susen36.caerulaarbor.block.CentrifugerBlock;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -17,9 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.ForgeCapabilities;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
@@ -33,7 +31,14 @@ import java.util.stream.IntStream;
 public class CentrifugerTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
-	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
+	private final IItemHandler[] handlers = new IItemHandler[]{
+			new SidedInvWrapper(this, Direction.DOWN),
+			new SidedInvWrapper(this, Direction.UP),
+			new SidedInvWrapper(this, Direction.NORTH),
+			new SidedInvWrapper(this, Direction.SOUTH),
+			new SidedInvWrapper(this, Direction.WEST),
+			new SidedInvWrapper(this, Direction.EAST)
+	};
 
 	public CentrifugerTileEntity(BlockPos pos, BlockState state) {
 		super(CABlockEntities.CENTRIFUGER.get(), pos, state);
@@ -80,18 +85,18 @@ public class CentrifugerTileEntity extends RandomizableContainerBlockEntity impl
 	}
 
 	@Override
-	public void load(CompoundTag compound) {
-		super.load(compound);
+	public void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+		super.loadAdditional(compound, registries);
 		if (!this.tryLoadLootTable(compound))
 			this.stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-		ContainerHelper.loadAllItems(compound, this.stacks);
+		ContainerHelper.loadAllItems(compound, this.stacks, registries);
 	}
 
 	@Override
-	public void saveAdditional(CompoundTag compound) {
-		super.saveAdditional(compound);
+	public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+		super.saveAdditional(compound, registries);
 		if (!this.trySaveLootTable(compound)) {
-			ContainerHelper.saveAllItems(compound, this.stacks);
+			ContainerHelper.saveAllItems(compound, this.stacks, registries);
 		}
 	}
 
@@ -101,8 +106,8 @@ public class CentrifugerTileEntity extends RandomizableContainerBlockEntity impl
 	}
 
 	@Override
-	public CompoundTag getUpdateTag() {
-		return this.saveWithFullMetadata();
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+		return this.saveWithFullMetadata(registries);
 	}
 
 	@Override
@@ -168,17 +173,7 @@ public class CentrifugerTileEntity extends RandomizableContainerBlockEntity impl
 		return true;
 	}
 
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (!this.remove && facing != null && capability == ForgeCapabilities.ITEM_HANDLER)
-			return handlers[facing.ordinal()].cast();
-		return super.getCapability(capability, facing);
-	}
-
-	@Override
-	public void setRemoved() {
-		super.setRemoved();
-		for (LazyOptional<? extends IItemHandler> handler : handlers)
-			handler.invalidate();
+	public IItemHandler getItemHandler(Direction side) {
+		return this.handlers[side.ordinal()];
 	}
 }

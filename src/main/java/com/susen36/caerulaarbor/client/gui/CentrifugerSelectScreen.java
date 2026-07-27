@@ -11,6 +11,7 @@ import com.susen36.caerulaarbor.menu.CentrifugerSelectMenu;
 import com.susen36.caerulaarbor.network.send.CentrifugerSelectButtonMessage;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
@@ -25,6 +26,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
 
+// TODO: 新增了 textures/gui/sprites/overlay/atlas/ 目录下的 sprite 文件。原来的 textures/overlay/atlas/ 目录中的纹理文件可以保留（其他地方可能还在使用），也可以后续清理
 public class CentrifugerSelectScreen extends AbstractContainerScreen<CentrifugerSelectMenu> {
 	private final static HashMap<String, Object> guistate = CentrifugerSelectMenu.guistate;
 	private final Level world;
@@ -49,7 +51,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics);
+		this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
         Entity result;
         if (entity == null) {
@@ -105,7 +107,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 	@Override
 	public void init() {
 		super.init();
-		imagebutton_cent_button_skadi_0 = new ImageButton(this.leftPos + 36, this.topPos + 40, 26, 18, 0, 0, 18, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_skadi_0.png"), 26, 36, e -> {
+		imagebutton_cent_button_skadi_0 = new ImageButton(this.leftPos + 36, this.topPos + 40, 26, 18, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cent_button_skadi_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cent_button_skadi_0_highlighted")), e -> {
 			if (true) {
 				PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(0, x, y, z));
 				CentrifugerSelectButtonMessage.handleButtonAction(entity, 0, x, y, z);
@@ -113,7 +115,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		});
 		guistate.put("button:imagebutton_cent_button_skadi_0", imagebutton_cent_button_skadi_0);
 		this.addRenderableWidget(imagebutton_cent_button_skadi_0);
-		imagebutton_cent_button_ulpians_0 = new ImageButton(this.leftPos + 68, this.topPos + 40, 26, 18, 0, 0, 18, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_ulpians_0.png"), 26, 36, e -> {
+		imagebutton_cent_button_ulpians_0 = new ImageButton(this.leftPos + 68, this.topPos + 40, 26, 18, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cent_button_ulpians_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cent_button_ulpians_0_highlighted")), e -> {
 			if (true) {
 				PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(1, x, y, z));
 				CentrifugerSelectButtonMessage.handleButtonAction(entity, 1, x, y, z);
@@ -121,7 +123,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		});
 		guistate.put("button:imagebutton_cent_button_ulpians_0", imagebutton_cent_button_ulpians_0);
 		this.addRenderableWidget(imagebutton_cent_button_ulpians_0);
-		imagebutton_cent_button_gladiia_0 = new ImageButton(this.leftPos + 36, this.topPos + 72, 26, 18, 0, 0, 18, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_gladiia_0.png"), 26, 36, e -> {
+		imagebutton_cent_button_gladiia_0 = new ImageButton(this.leftPos + 36, this.topPos + 72, 26, 18, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cent_button_gladiia_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cent_button_gladiia_0_highlighted")), e -> {
 			if (true) {
 				PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(2, x, y, z));
 				CentrifugerSelectButtonMessage.handleButtonAction(entity, 2, x, y, z);
@@ -129,7 +131,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		});
 		guistate.put("button:imagebutton_cent_button_gladiia_0", imagebutton_cent_button_gladiia_0);
 		this.addRenderableWidget(imagebutton_cent_button_gladiia_0);
-		imagebutton_cent_button_done_0 = new ImageButton(this.leftPos + 116, this.topPos + 104, 26, 18, 0, 0, 18, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_done_0.png"), 26, 36, e -> {
+		imagebutton_cent_button_done_0 = new ImageButton(this.leftPos + 116, this.topPos + 104, 26, 18, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cent_button_done_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cent_button_done_0_highlighted")), e -> {
 			if (true) {
 				PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(3, x, y, z));
 				CentrifugerSelectButtonMessage.handleButtonAction(entity, 3, x, y, z);
@@ -137,7 +139,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		});
 		guistate.put("button:imagebutton_cent_button_done_0", imagebutton_cent_button_done_0);
 		this.addRenderableWidget(imagebutton_cent_button_done_0);
-		imagebutton_cen_button_specter_0 = new ImageButton(this.leftPos + 68, this.topPos + 72, 26, 18, 0, 0, 18, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cen_button_specter_0.png"), 26, 36, e -> {
+		imagebutton_cen_button_specter_0 = new ImageButton(this.leftPos + 68, this.topPos + 72, 26, 18, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cen_button_specter_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cen_button_specter_0_highlighted")), e -> {
 			if (true) {
 				PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(4, x, y, z));
 				CentrifugerSelectButtonMessage.handleButtonAction(entity, 4, x, y, z);

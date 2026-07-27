@@ -16,11 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ImmortalMobEffect extends MobEffect {
     public ImmortalMobEffect() {
@@ -29,11 +25,14 @@ public class ImmortalMobEffect extends MobEffect {
         this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "immortal_knockback_resistance"), 10, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    
+    @Override
+    public void addAttributeModifiers(AttributeMap attributeMap, int amplifier) {
+        super.addAttributeModifiers(attributeMap, amplifier);
+    }
 
     @Override
-    public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.addAttributeModifiers(entity, attributeMap, amplifier);
+    public void onEffectAdded(LivingEntity entity, int amplifier) {
+        super.onEffectAdded(entity, amplifier);
         entity.getPersistentData().putBoolean("immortalTriggered", false);
     }
 
@@ -58,8 +57,8 @@ public class ImmortalMobEffect extends MobEffect {
     }
 
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.removeAttributeModifiers(entity, attributeMap, amplifier);
+    public void onMobRemoved(LivingEntity entity, int amplifier, Entity.RemovalReason reason) {
+        super.onMobRemoved(entity, amplifier, reason);
         LevelAccessor world = entity.level();
         if (entity == null)
             return;

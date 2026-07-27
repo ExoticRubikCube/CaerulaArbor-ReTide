@@ -41,11 +41,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
@@ -452,8 +449,8 @@ public class ThirsterEntity extends SeaMonster {
     }
 
     @Override
-    public @NotNull EntityDimensions getDimensions(@NotNull Pose pose) {
-        return super.getDimensions(pose).scale((float) 1.2);
+    public @NotNull EntityDimensions getDefaultDimensions(@NotNull Pose pose) {
+        return super.getDefaultDimensions(pose).scale((float) 1.2);
     }
 
     @Override

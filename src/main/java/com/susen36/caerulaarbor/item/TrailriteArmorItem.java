@@ -1,13 +1,13 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.init.CAAttributes;
-import com.susen36.caerulaarbor.init.CAItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.susen36.caerulaarbor.init.CAAttributes;
+import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -19,19 +19,15 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 
 public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnimationItem {
@@ -39,47 +35,20 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
 	public String animationprocedure = "empty";
 
 	public TrailriteArmorItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial() {
-			@Override
-			public int getDurabilityForType(ArmorItem.Type type) {
-				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 256;
-			}
-
-			@Override
-			public int getDefenseForType(ArmorItem.Type type) {
-				return new int[]{5, 9, 10, 6}[type.getSlot().getIndex()];
-			}
-
-			@Override
-			public int getEnchantmentValue() {
-				return 22;
-			}
-
-			@Override
-			public SoundEvent getEquipSound() {
-				return SoundEvents.ARMOR_EQUIP_NETHERITE;
-			}
-
-			@Override
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.TRAILRITE.get()));
-			}
-
-			@Override
-			public String getName() {
-				return "trailrite_armor";
-			}
-
-			@Override
-			public float getToughness() {
-				return 6f;
-			}
-
-			@Override
-			public float getKnockbackResistance() {
-				return 0.2f;
-			}
-		}, type, properties);
+		super(new ArmorMaterial(
+			Map.of(
+				ArmorItem.Type.HELMET, 6,
+				ArmorItem.Type.CHESTPLATE, 10,
+				ArmorItem.Type.LEGGINGS, 9,
+				ArmorItem.Type.BOOTS, 5
+			),
+			22,
+			SoundEvents.ARMOR_EQUIP_NETHERITE,
+			() -> Ingredient.of(new ItemStack(CAItems.TRAILRITE.get())),
+			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_armor"))),
+			6f,
+			0.2f
+		), type, properties);
 	}
 
 	@Override
@@ -104,12 +73,12 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
     }
 
 	@Override
-	public boolean canBeHurtBy(DamageSource pDamageSource) {
+	public boolean canBeHurtBy(ItemStack stack, DamageSource pDamageSource) {
 		return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
 	}
 
 	@Override
-	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken) {
 		return Math.min(amount, 1);
 	}
 

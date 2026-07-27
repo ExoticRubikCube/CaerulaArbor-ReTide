@@ -1,8 +1,8 @@
 
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.mojang.serialization.MapCodec;
+import com.susen36.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -34,9 +34,7 @@ public class HighmoreSpawnblockBlock extends BaseEntityBlock implements SimpleWa
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public HighmoreSpawnblockBlock() {
-		super(BlockBehaviour.Properties.of()
-
-				.sound(SoundType.BASALT).strength(-1, 3600000).lightLevel(s -> (new Object() {
+		super(BlockBehaviour.Properties.of().sound(SoundType.BASALT).strength(-1, 3600000).lightLevel(s -> (new Object() {
 					public int getLightLevel() {
 						if (s.getValue(BLOCKSTATE) == 1)
 							return 8;

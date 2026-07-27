@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class RedstoneirisSeedingBlock extends FlowerBlock implements BonemealableBlock {
 	public RedstoneirisSeedingBlock() {
-		super(() -> MobEffects.REGENERATION, 80, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).sound(SoundType.GRASS).instabreak().noCollission().offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
+		super(MobEffects.REGENERATION, 80, BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).sound(SoundType.GRASS).instabreak().noCollission().offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
 	}
 
 	@Override

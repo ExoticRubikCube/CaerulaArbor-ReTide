@@ -1,17 +1,16 @@
 package com.susen36.caerulaarbor.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.CANetwork;
 import com.susen36.caerulaarbor.menu.PlayerEvoMenu;
 import com.susen36.caerulaarbor.network.send.PlayerEvoButtonMessage;
 import com.susen36.caerulaarbor.util.NodeUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
 
@@ -99,7 +99,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics);
+		this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
         boolean result = false;
@@ -421,7 +421,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 	@Override
 	public void init() {
 		super.init();
-		imagebutton_player_evo_nexus_no_rejection = new ImageButton(this.leftPos + 10, this.topPos + 44, 16, 16, 0, 0, 16, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_nexus_no_rejection.png"), 16, 32, e -> {
+		imagebutton_player_evo_nexus_no_rejection = new ImageButton(this.leftPos + 10, this.topPos + 44, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_nexus_no_rejection"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_nexus_no_rejection_highlighted")), e -> {
 			if (true) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(0, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 0, x, y, z);
@@ -429,7 +429,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		});
 		guistate.put("button:imagebutton_player_evo_nexus_no_rejection", imagebutton_player_evo_nexus_no_rejection);
 		this.addRenderableWidget(imagebutton_player_evo_nexus_no_rejection);
-		imagebutton_player_evo_checkbox = new ImageButton(this.leftPos + 270, this.topPos + 176, 26, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_checkbox.png"), 26, 24, e -> {
+		imagebutton_player_evo_checkbox = new ImageButton(this.leftPos + 270, this.topPos + 176, 26, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_checkbox"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_checkbox_highlighted")), e -> {
 			if (true) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(1, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 1, x, y, z);
@@ -437,7 +437,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		});
 		guistate.put("button:imagebutton_player_evo_checkbox", imagebutton_player_evo_checkbox);
 		this.addRenderableWidget(imagebutton_player_evo_checkbox);
-		imagebutton_player_evo_nexus_regnr_sanity = new ImageButton(this.leftPos + 38, this.topPos + 44, 16, 16, 0, 0, 16, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_nexus_regnr_sanity.png"), 16, 32, e -> {
+		imagebutton_player_evo_nexus_regnr_sanity = new ImageButton(this.leftPos + 38, this.topPos + 44, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_nexus_regnr_sanity"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_nexus_regnr_sanity_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusNoRejectionSelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(2, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 2, x, y, z);
@@ -451,7 +451,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_nexus_regnr_sanity", imagebutton_player_evo_nexus_regnr_sanity);
 		this.addRenderableWidget(imagebutton_player_evo_nexus_regnr_sanity);
-		imagebutton_player_evo_node_add_def = new ImageButton(this.leftPos + 71, this.topPos + 10, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_def.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_def = new ImageButton(this.leftPos + 71, this.topPos + 10, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_def"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_def_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusRegSanitySelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(3, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 3, x, y, z);
@@ -465,7 +465,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_def", imagebutton_player_evo_node_add_def);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_def);
-		imagebutton_player_evo_node_add_def1 = new ImageButton(this.leftPos + 93, this.topPos + 10, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_def1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_def1 = new ImageButton(this.leftPos + 93, this.topPos + 10, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_def1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_def1_highlighted")), e -> {
 			if (NodeUtils.isNodeAddDefAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(4, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 4, x, y, z);
@@ -479,7 +479,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_def1", imagebutton_player_evo_node_add_def1);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_def1);
-		imagebutton_player_evo_node_add_def2 = new ImageButton(this.leftPos + 115, this.topPos + 10, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_def2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_def2 = new ImageButton(this.leftPos + 115, this.topPos + 10, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_def2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_def2_highlighted")), e -> {
 			if (NodeUtils.isNodeAddDefAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(5, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 5, x, y, z);
@@ -493,7 +493,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_def2", imagebutton_player_evo_node_add_def2);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_def2);
-		imagebutton_player_evo_node_add_def3 = new ImageButton(this.leftPos + 137, this.topPos + 10, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_def3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_def3 = new ImageButton(this.leftPos + 137, this.topPos + 10, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_def3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_def3_highlighted")), e -> {
 			if (NodeUtils.isNodeAddDefAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(6, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 6, x, y, z);
@@ -507,7 +507,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_def3", imagebutton_player_evo_node_add_def3);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_def3);
-		imagebutton_player_evo_node_add_resis = new ImageButton(this.leftPos + 71, this.topPos + 34, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_resis.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_resis = new ImageButton(this.leftPos + 71, this.topPos + 34, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_resis"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_resis_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusRegSanitySelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(7, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 7, x, y, z);
@@ -521,7 +521,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_resis", imagebutton_player_evo_node_add_resis);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_resis);
-		imagebutton_player_evo_node_add_resis1 = new ImageButton(this.leftPos + 93, this.topPos + 34, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_resis1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_resis1 = new ImageButton(this.leftPos + 93, this.topPos + 34, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_resis1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_resis1_highlighted")), e -> {
 			if (NodeUtils.isNodeAddResisAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(8, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 8, x, y, z);
@@ -535,7 +535,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_resis1", imagebutton_player_evo_node_add_resis1);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_resis1);
-		imagebutton_player_evo_node_add_resis2 = new ImageButton(this.leftPos + 115, this.topPos + 34, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_resis2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_resis2 = new ImageButton(this.leftPos + 115, this.topPos + 34, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_resis2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_resis2_highlighted")), e -> {
 			if (NodeUtils.isNodeAddResisAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(9, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 9, x, y, z);
@@ -549,7 +549,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_resis2", imagebutton_player_evo_node_add_resis2);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_resis2);
-		imagebutton_player_evo_node_add_resis3 = new ImageButton(this.leftPos + 137, this.topPos + 34, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_resis3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_resis3 = new ImageButton(this.leftPos + 137, this.topPos + 34, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_resis3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_resis3_highlighted")), e -> {
 			if (NodeUtils.isNodeAddResisAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(10, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 10, x, y, z);
@@ -563,7 +563,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_resis3", imagebutton_player_evo_node_add_resis3);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_resis3);
-		imagebutton_player_evo_node_add_speed = new ImageButton(this.leftPos + 71, this.topPos + 58, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_speed.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_speed = new ImageButton(this.leftPos + 71, this.topPos + 58, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_speed"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_speed_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusRegSanitySelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(11, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 11, x, y, z);
@@ -577,7 +577,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_speed", imagebutton_player_evo_node_add_speed);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_speed);
-		imagebutton_player_evo_node_add_speed1 = new ImageButton(this.leftPos + 93, this.topPos + 58, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_speed1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_speed1 = new ImageButton(this.leftPos + 93, this.topPos + 58, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_speed1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_speed1_highlighted")), e -> {
 			if (NodeUtils.isNodeAddSpeedAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(12, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 12, x, y, z);
@@ -591,7 +591,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_speed1", imagebutton_player_evo_node_add_speed1);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_speed1);
-		imagebutton_player_evo_node_add_speed2 = new ImageButton(this.leftPos + 115, this.topPos + 58, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_speed2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_speed2 = new ImageButton(this.leftPos + 115, this.topPos + 58, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_speed2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_speed2_highlighted")), e -> {
 			if (NodeUtils.isNodeAddSpeedAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(13, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 13, x, y, z);
@@ -605,7 +605,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_speed2", imagebutton_player_evo_node_add_speed2);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_speed2);
-		imagebutton_player_evo_node_add_speed3 = new ImageButton(this.leftPos + 137, this.topPos + 58, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_speed3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_speed3 = new ImageButton(this.leftPos + 137, this.topPos + 58, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_speed3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_speed3_highlighted")), e -> {
 			if (NodeUtils.isNodeAddSpeedAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(14, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 14, x, y, z);
@@ -619,7 +619,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_speed3", imagebutton_player_evo_node_add_speed3);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_speed3);
-		imagebutton_player_evo_node_add_nervous = new ImageButton(this.leftPos + 71, this.topPos + 82, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_nervous.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_nervous = new ImageButton(this.leftPos + 71, this.topPos + 82, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_nervous"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_nervous_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusRegSanitySelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(15, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 15, x, y, z);
@@ -633,7 +633,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_nervous", imagebutton_player_evo_node_add_nervous);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_nervous);
-		imagebutton_player_evo_node_add_nervous1 = new ImageButton(this.leftPos + 93, this.topPos + 82, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_nervous1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_nervous1 = new ImageButton(this.leftPos + 93, this.topPos + 82, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_nervous1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_nervous1_highlighted")), e -> {
 			if (NodeUtils.isNodeAddSanityAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(16, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 16, x, y, z);
@@ -647,7 +647,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_nervous1", imagebutton_player_evo_node_add_nervous1);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_nervous1);
-		imagebutton_player_evo_node_add_nervous2 = new ImageButton(this.leftPos + 115, this.topPos + 82, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_nervous2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_nervous2 = new ImageButton(this.leftPos + 115, this.topPos + 82, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_nervous2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_nervous2_highlighted")), e -> {
 			if (NodeUtils.isNodeAddSanityAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(17, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 17, x, y, z);
@@ -661,7 +661,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_nervous2", imagebutton_player_evo_node_add_nervous2);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_nervous2);
-		imagebutton_player_evo_node_add_nervous3 = new ImageButton(this.leftPos + 137, this.topPos + 82, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_nervous3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_nervous3 = new ImageButton(this.leftPos + 137, this.topPos + 82, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_nervous3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_nervous3_highlighted")), e -> {
 			if (NodeUtils.isNodeAddSanityAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(18, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 18, x, y, z);
@@ -675,7 +675,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_nervous3", imagebutton_player_evo_node_add_nervous3);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_nervous3);
-		imagebutton_player_evo_nexus_regnr_lights = new ImageButton(this.leftPos + 166, this.topPos + 45, 16, 16, 0, 0, 16, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_nexus_regnr_lights.png"), 16, 32, e -> {
+		imagebutton_player_evo_nexus_regnr_lights = new ImageButton(this.leftPos + 166, this.topPos + 45, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_nexus_regnr_lights"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_nexus_regnr_lights_highlighted")), e -> {
 			if (NodeUtils.isNodeSet1Done(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(19, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 19, x, y, z);
@@ -689,7 +689,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_nexus_regnr_lights", imagebutton_player_evo_nexus_regnr_lights);
 		this.addRenderableWidget(imagebutton_player_evo_nexus_regnr_lights);
-		imagebutton_player_evo_node_add_damage = new ImageButton(this.leftPos + 199, this.topPos + 10, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_damage.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_damage = new ImageButton(this.leftPos + 199, this.topPos + 10, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_damage"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_damage_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusRegLightsSelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(20, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 20, x, y, z);
@@ -703,7 +703,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_damage", imagebutton_player_evo_node_add_damage);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_damage);
-		imagebutton_player_evo_node_add_damage1 = new ImageButton(this.leftPos + 221, this.topPos + 10, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_damage1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_damage1 = new ImageButton(this.leftPos + 221, this.topPos + 10, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_damage1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_damage1_highlighted")), e -> {
 			if (NodeUtils.isNodeAddDamageAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(21, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 21, x, y, z);
@@ -717,7 +717,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_damage1", imagebutton_player_evo_node_add_damage1);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_damage1);
-		imagebutton_player_evo_node_add_damage2 = new ImageButton(this.leftPos + 243, this.topPos + 10, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_damage2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_damage2 = new ImageButton(this.leftPos + 243, this.topPos + 10, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_damage2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_damage2_highlighted")), e -> {
 			if (NodeUtils.isNodeAddDamageAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(22, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 22, x, y, z);
@@ -731,7 +731,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_damage2", imagebutton_player_evo_node_add_damage2);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_damage2);
-		imagebutton_player_evo_node_add_damage3 = new ImageButton(this.leftPos + 265, this.topPos + 10, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_damage3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_damage3 = new ImageButton(this.leftPos + 265, this.topPos + 10, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_damage3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_damage3_highlighted")), e -> {
 			if (NodeUtils.isNodeAddDamageAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(23, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 23, x, y, z);
@@ -745,7 +745,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_damage3", imagebutton_player_evo_node_add_damage3);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_damage3);
-		imagebutton_player_evo_node_less_damage = new ImageButton(this.leftPos + 199, this.topPos + 34, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_less_damage.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_less_damage = new ImageButton(this.leftPos + 199, this.topPos + 34, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_less_damage"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_less_damage_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusRegLightsSelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(24, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 24, x, y, z);
@@ -759,7 +759,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_less_damage", imagebutton_player_evo_node_less_damage);
 		this.addRenderableWidget(imagebutton_player_evo_node_less_damage);
-		imagebutton_player_evo_node_less_damage1 = new ImageButton(this.leftPos + 221, this.topPos + 34, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_less_damage1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_less_damage1 = new ImageButton(this.leftPos + 221, this.topPos + 34, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_less_damage1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_less_damage1_highlighted")), e -> {
 			if (NodeUtils.isNodeLessDamageAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(25, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 25, x, y, z);
@@ -773,7 +773,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_less_damage1", imagebutton_player_evo_node_less_damage1);
 		this.addRenderableWidget(imagebutton_player_evo_node_less_damage1);
-		imagebutton_player_evo_node_less_damage2 = new ImageButton(this.leftPos + 243, this.topPos + 34, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_less_damage2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_less_damage2 = new ImageButton(this.leftPos + 243, this.topPos + 34, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_less_damage2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_less_damage2_highlighted")), e -> {
 			if (NodeUtils.isNodeLessDamageAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(26, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 26, x, y, z);
@@ -787,7 +787,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_less_damage2", imagebutton_player_evo_node_less_damage2);
 		this.addRenderableWidget(imagebutton_player_evo_node_less_damage2);
-		imagebutton_player_evo_node_less_damage3 = new ImageButton(this.leftPos + 265, this.topPos + 34, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_less_damage3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_less_damage3 = new ImageButton(this.leftPos + 265, this.topPos + 34, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_less_damage3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_less_damage3_highlighted")), e -> {
 			if (NodeUtils.isNodeLessDamageAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(27, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 27, x, y, z);
@@ -801,7 +801,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_less_damage3", imagebutton_player_evo_node_less_damage3);
 		this.addRenderableWidget(imagebutton_player_evo_node_less_damage3);
-		imagebutton_player_evo_node_living_barrier = new ImageButton(this.leftPos + 199, this.topPos + 58, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_living_barrier.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_living_barrier = new ImageButton(this.leftPos + 199, this.topPos + 58, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_living_barrier"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_living_barrier_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusRegLightsSelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(28, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 28, x, y, z);
@@ -815,7 +815,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_living_barrier", imagebutton_player_evo_node_living_barrier);
 		this.addRenderableWidget(imagebutton_player_evo_node_living_barrier);
-		imagebutton_player_evo_node_living_barrier1 = new ImageButton(this.leftPos + 221, this.topPos + 58, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_living_barrier1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_living_barrier1 = new ImageButton(this.leftPos + 221, this.topPos + 58, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_living_barrier1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_living_barrier1_highlighted")), e -> {
 			if (NodeUtils.isNodeLivingBarrierAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(29, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 29, x, y, z);
@@ -829,7 +829,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_living_barrier1", imagebutton_player_evo_node_living_barrier1);
 		this.addRenderableWidget(imagebutton_player_evo_node_living_barrier1);
-		imagebutton_player_evo_node_living_barrier2 = new ImageButton(this.leftPos + 243, this.topPos + 58, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_living_barrier2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_living_barrier2 = new ImageButton(this.leftPos + 243, this.topPos + 58, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_living_barrier2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_living_barrier2_highlighted")), e -> {
 			if (NodeUtils.isNodeLivingBarrierAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(30, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 30, x, y, z);
@@ -843,7 +843,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_living_barrier2", imagebutton_player_evo_node_living_barrier2);
 		this.addRenderableWidget(imagebutton_player_evo_node_living_barrier2);
-		imagebutton_player_evo_node_living_barrier3 = new ImageButton(this.leftPos + 265, this.topPos + 58, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_living_barrier3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_living_barrier3 = new ImageButton(this.leftPos + 265, this.topPos + 58, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_living_barrier3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_living_barrier3_highlighted")), e -> {
 			if (NodeUtils.isNodeLivingBarrierAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(31, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 31, x, y, z);
@@ -857,7 +857,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_living_barrier3", imagebutton_player_evo_node_living_barrier3);
 		this.addRenderableWidget(imagebutton_player_evo_node_living_barrier3);
-		imagebutton_player_evo_node_add_miss = new ImageButton(this.leftPos + 199, this.topPos + 82, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_miss.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_miss = new ImageButton(this.leftPos + 199, this.topPos + 82, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_miss"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_miss_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusRegLightsSelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(32, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 32, x, y, z);
@@ -871,7 +871,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_miss", imagebutton_player_evo_node_add_miss);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_miss);
-		imagebutton_player_evo_node_add_miss1 = new ImageButton(this.leftPos + 221, this.topPos + 82, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_miss1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_miss1 = new ImageButton(this.leftPos + 221, this.topPos + 82, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_miss1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_miss1_highlighted")), e -> {
 			if (NodeUtils.isNodeAddMissAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(33, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 33, x, y, z);
@@ -885,7 +885,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_miss1", imagebutton_player_evo_node_add_miss1);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_miss1);
-		imagebutton_player_evo_node_add_miss2 = new ImageButton(this.leftPos + 243, this.topPos + 82, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_miss2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_miss2 = new ImageButton(this.leftPos + 243, this.topPos + 82, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_miss2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_miss2_highlighted")), e -> {
 			if (NodeUtils.isNodeAddMissAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(34, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 34, x, y, z);
@@ -899,7 +899,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_miss2", imagebutton_player_evo_node_add_miss2);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_miss2);
-		imagebutton_player_evo_node_add_miss3 = new ImageButton(this.leftPos + 265, this.topPos + 82, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_add_miss3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_add_miss3 = new ImageButton(this.leftPos + 265, this.topPos + 82, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_miss3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_add_miss3_highlighted")), e -> {
 			if (NodeUtils.isNodeAddMissAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(35, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 35, x, y, z);
@@ -913,7 +913,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_add_miss3", imagebutton_player_evo_node_add_miss3);
 		this.addRenderableWidget(imagebutton_player_evo_node_add_miss3);
-		imagebutton_player_evo_nexus_perc_attack = new ImageButton(this.leftPos + 22, this.topPos + 128, 16, 16, 0, 0, 16, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_nexus_perc_attack.png"), 16, 32, e -> {
+		imagebutton_player_evo_nexus_perc_attack = new ImageButton(this.leftPos + 22, this.topPos + 128, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_nexus_perc_attack"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_nexus_perc_attack_highlighted")), e -> {
 			if (NodeUtils.isNodeSet2Done(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(36, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 36, x, y, z);
@@ -927,7 +927,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_nexus_perc_attack", imagebutton_player_evo_nexus_perc_attack);
 		this.addRenderableWidget(imagebutton_player_evo_nexus_perc_attack);
-		imagebutton_player_evo_node_real_damage = new ImageButton(this.leftPos + 55, this.topPos + 106, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_real_damage.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_real_damage = new ImageButton(this.leftPos + 55, this.topPos + 106, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_real_damage"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_real_damage_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusPercDamageSelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(37, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 37, x, y, z);
@@ -941,7 +941,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_real_damage", imagebutton_player_evo_node_real_damage);
 		this.addRenderableWidget(imagebutton_player_evo_node_real_damage);
-		imagebutton_player_evo_node_real_damage1 = new ImageButton(this.leftPos + 77, this.topPos + 106, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_real_damage1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_real_damage1 = new ImageButton(this.leftPos + 77, this.topPos + 106, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_real_damage1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_real_damage1_highlighted")), e -> {
 			if (NodeUtils.isNodeRealDamageAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(38, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 38, x, y, z);
@@ -955,7 +955,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_real_damage1", imagebutton_player_evo_node_real_damage1);
 		this.addRenderableWidget(imagebutton_player_evo_node_real_damage1);
-		imagebutton_player_evo_node_real_damage2 = new ImageButton(this.leftPos + 99, this.topPos + 106, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_real_damage2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_real_damage2 = new ImageButton(this.leftPos + 99, this.topPos + 106, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_real_damage2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_real_damage2_highlighted")), e -> {
 			if (NodeUtils.isNodeRealDamageAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(39, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 39, x, y, z);
@@ -969,7 +969,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_real_damage2", imagebutton_player_evo_node_real_damage2);
 		this.addRenderableWidget(imagebutton_player_evo_node_real_damage2);
-		imagebutton_player_evo_node_real_damage3 = new ImageButton(this.leftPos + 121, this.topPos + 106, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_real_damage3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_real_damage3 = new ImageButton(this.leftPos + 121, this.topPos + 106, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_real_damage3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_real_damage3_highlighted")), e -> {
 			if (NodeUtils.isNodeRealDamageAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(40, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 40, x, y, z);
@@ -983,7 +983,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_real_damage3", imagebutton_player_evo_node_real_damage3);
 		this.addRenderableWidget(imagebutton_player_evo_node_real_damage3);
-		imagebutton_player_evo_node_heal_damage = new ImageButton(this.leftPos + 55, this.topPos + 130, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_heal_damage.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_heal_damage = new ImageButton(this.leftPos + 55, this.topPos + 130, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_heal_damage"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_heal_damage_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusPercDamageSelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(41, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 41, x, y, z);
@@ -997,7 +997,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_heal_damage", imagebutton_player_evo_node_heal_damage);
 		this.addRenderableWidget(imagebutton_player_evo_node_heal_damage);
-		imagebutton_player_evo_node_heal_damage1 = new ImageButton(this.leftPos + 77, this.topPos + 130, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_heal_damage1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_heal_damage1 = new ImageButton(this.leftPos + 77, this.topPos + 130, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_heal_damage1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_heal_damage1_highlighted")), e -> {
 			if (NodeUtils.isNodeHealDamageAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(42, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 42, x, y, z);
@@ -1011,7 +1011,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_heal_damage1", imagebutton_player_evo_node_heal_damage1);
 		this.addRenderableWidget(imagebutton_player_evo_node_heal_damage1);
-		imagebutton_player_evo_node_heal_damage2 = new ImageButton(this.leftPos + 99, this.topPos + 130, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_heal_damage2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_heal_damage2 = new ImageButton(this.leftPos + 99, this.topPos + 130, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_heal_damage2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_heal_damage2_highlighted")), e -> {
 			if (NodeUtils.isNodeHealDamageAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(43, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 43, x, y, z);
@@ -1025,7 +1025,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_heal_damage2", imagebutton_player_evo_node_heal_damage2);
 		this.addRenderableWidget(imagebutton_player_evo_node_heal_damage2);
-		imagebutton_player_evo_node_heal_damage3 = new ImageButton(this.leftPos + 121, this.topPos + 130, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_heal_damage3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_heal_damage3 = new ImageButton(this.leftPos + 121, this.topPos + 130, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_heal_damage3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_heal_damage3_highlighted")), e -> {
 			if (NodeUtils.isNodeHealDamageAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(44, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 44, x, y, z);
@@ -1039,7 +1039,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_heal_damage3", imagebutton_player_evo_node_heal_damage3);
 		this.addRenderableWidget(imagebutton_player_evo_node_heal_damage3);
-		imagebutton_player_evo_node_worse_break = new ImageButton(this.leftPos + 55, this.topPos + 154, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_worse_break.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_worse_break = new ImageButton(this.leftPos + 55, this.topPos + 154, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_worse_break"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_worse_break_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusPercDamageSelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(45, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 45, x, y, z);
@@ -1053,7 +1053,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_worse_break", imagebutton_player_evo_node_worse_break);
 		this.addRenderableWidget(imagebutton_player_evo_node_worse_break);
-		imagebutton_player_evo_node_worse_break1 = new ImageButton(this.leftPos + 77, this.topPos + 154, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_worse_break1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_worse_break1 = new ImageButton(this.leftPos + 77, this.topPos + 154, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_worse_break1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_worse_break1_highlighted")), e -> {
 			if (NodeUtils.isNodeWorseBreakAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(46, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 46, x, y, z);
@@ -1067,7 +1067,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_worse_break1", imagebutton_player_evo_node_worse_break1);
 		this.addRenderableWidget(imagebutton_player_evo_node_worse_break1);
-		imagebutton_player_evo_node_worse_break2 = new ImageButton(this.leftPos + 99, this.topPos + 154, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_worse_break2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_worse_break2 = new ImageButton(this.leftPos + 99, this.topPos + 154, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_worse_break2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_worse_break2_highlighted")), e -> {
 			if (NodeUtils.isNodeWorseBreakAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(47, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 47, x, y, z);
@@ -1081,7 +1081,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_worse_break2", imagebutton_player_evo_node_worse_break2);
 		this.addRenderableWidget(imagebutton_player_evo_node_worse_break2);
-		imagebutton_player_evo_node_worse_break3 = new ImageButton(this.leftPos + 121, this.topPos + 154, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_worse_break3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_worse_break3 = new ImageButton(this.leftPos + 121, this.topPos + 154, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_worse_break3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_worse_break3_highlighted")), e -> {
 			if (NodeUtils.isNodeWorseBreakAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(48, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 48, x, y, z);
@@ -1095,7 +1095,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_worse_break3", imagebutton_player_evo_node_worse_break3);
 		this.addRenderableWidget(imagebutton_player_evo_node_worse_break3);
-		imagebutton_player_evo_nexus_expo_shield = new ImageButton(this.leftPos + 150, this.topPos + 130, 16, 16, 0, 0, 16, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_nexus_expo_shield.png"), 16, 32, e -> {
+		imagebutton_player_evo_nexus_expo_shield = new ImageButton(this.leftPos + 150, this.topPos + 130, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_nexus_expo_shield"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_nexus_expo_shield_highlighted")), e -> {
 			if (NodeUtils.isNodeSet3Done(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(49, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 49, x, y, z);
@@ -1109,7 +1109,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_nexus_expo_shield", imagebutton_player_evo_nexus_expo_shield);
 		this.addRenderableWidget(imagebutton_player_evo_nexus_expo_shield);
-		imagebutton_player_evo_talent_eunectes = new ImageButton(this.leftPos + 183, this.topPos + 119, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_talent_eunectes.png"), 12, 24, e -> {
+		imagebutton_player_evo_talent_eunectes = new ImageButton(this.leftPos + 183, this.topPos + 119, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_talent_eunectes"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_talent_eunectes_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusExpoShieldSelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(50, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 50, x, y, z);
@@ -1123,7 +1123,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_talent_eunectes", imagebutton_player_evo_talent_eunectes);
 		this.addRenderableWidget(imagebutton_player_evo_talent_eunectes);
-		imagebutton_player_evo_talent_eunectes1 = new ImageButton(this.leftPos + 205, this.topPos + 119, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_talent_eunectes1.png"), 12, 24, e -> {
+		imagebutton_player_evo_talent_eunectes1 = new ImageButton(this.leftPos + 205, this.topPos + 119, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_talent_eunectes1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_talent_eunectes1_highlighted")), e -> {
 			if (NodeUtils.isNodeEunectesAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(51, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 51, x, y, z);
@@ -1137,7 +1137,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_talent_eunectes1", imagebutton_player_evo_talent_eunectes1);
 		this.addRenderableWidget(imagebutton_player_evo_talent_eunectes1);
-		imagebutton_player_evo_talent_eunectes2 = new ImageButton(this.leftPos + 227, this.topPos + 119, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_talent_eunectes2.png"), 12, 24, e -> {
+		imagebutton_player_evo_talent_eunectes2 = new ImageButton(this.leftPos + 227, this.topPos + 119, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_talent_eunectes2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_talent_eunectes2_highlighted")), e -> {
 			if (NodeUtils.isNodeEunectesAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(52, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 52, x, y, z);
@@ -1151,7 +1151,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_talent_eunectes2", imagebutton_player_evo_talent_eunectes2);
 		this.addRenderableWidget(imagebutton_player_evo_talent_eunectes2);
-		imagebutton_player_evo_talent_eunectes3 = new ImageButton(this.leftPos + 249, this.topPos + 119, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_talent_eunectes3.png"), 12, 24, e -> {
+		imagebutton_player_evo_talent_eunectes3 = new ImageButton(this.leftPos + 249, this.topPos + 119, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_talent_eunectes3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_talent_eunectes3_highlighted")), e -> {
 			if (NodeUtils.isNodeEunectesAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(53, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 53, x, y, z);
@@ -1165,7 +1165,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_talent_eunectes3", imagebutton_player_evo_talent_eunectes3);
 		this.addRenderableWidget(imagebutton_player_evo_talent_eunectes3);
-		imagebutton_player_evo_node_reduce_armor = new ImageButton(this.leftPos + 183, this.topPos + 143, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_reduce_armor.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_reduce_armor = new ImageButton(this.leftPos + 183, this.topPos + 143, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_reduce_armor"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_reduce_armor_highlighted")), e -> {
 			if (PlayerStateUtils.isNexusExpoShieldSelected(entity)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(54, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 54, x, y, z);
@@ -1179,7 +1179,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_reduce_armor", imagebutton_player_evo_node_reduce_armor);
 		this.addRenderableWidget(imagebutton_player_evo_node_reduce_armor);
-		imagebutton_player_evo_node_reduce_armor1 = new ImageButton(this.leftPos + 205, this.topPos + 143, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_reduce_armor1.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_reduce_armor1 = new ImageButton(this.leftPos + 205, this.topPos + 143, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_reduce_armor1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_reduce_armor1_highlighted")), e -> {
 			if (NodeUtils.isNodeLessArmorAtLeast(entity, 1)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(55, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 55, x, y, z);
@@ -1193,7 +1193,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_reduce_armor1", imagebutton_player_evo_node_reduce_armor1);
 		this.addRenderableWidget(imagebutton_player_evo_node_reduce_armor1);
-		imagebutton_player_evo_node_reduce_armor2 = new ImageButton(this.leftPos + 227, this.topPos + 143, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_reduce_armor2.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_reduce_armor2 = new ImageButton(this.leftPos + 227, this.topPos + 143, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_reduce_armor2"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_reduce_armor2_highlighted")), e -> {
 			if (NodeUtils.isNodeLessArmorAtLeast(entity, 2)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(56, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 56, x, y, z);
@@ -1207,7 +1207,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		};
 		guistate.put("button:imagebutton_player_evo_node_reduce_armor2", imagebutton_player_evo_node_reduce_armor2);
 		this.addRenderableWidget(imagebutton_player_evo_node_reduce_armor2);
-		imagebutton_player_evo_node_reduce_armor3 = new ImageButton(this.leftPos + 249, this.topPos + 143, 12, 12, 0, 0, 12, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_player_evo_node_reduce_armor3.png"), 12, 24, e -> {
+		imagebutton_player_evo_node_reduce_armor3 = new ImageButton(this.leftPos + 249, this.topPos + 143, 12, 12, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_reduce_armor3"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_player_evo_node_reduce_armor3_highlighted")), e -> {
 			if (NodeUtils.isNodeLessArmorAtLeast(entity, 3)) {
 				PacketDistributor.sendToServer(new PlayerEvoButtonMessage(57, x, y, z));
 				PlayerEvoButtonMessage.handleButtonAction(entity, 57, x, y, z);

@@ -36,7 +36,7 @@ public class ApocalypseItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(CAItems.GUNMU_SPAWN_EGG.get());
 		super.finishUsingItem(itemstack, world, entity);
-        ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.INV_KILLER), 32);
+        entity.hurt(CADamageTypes.source(world, CADamageTypes.INV_KILLER), 32);
         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
             player.displayClientMessage(Component.literal("NOOOOOO"), false);
         if (itemstack.isEmpty()) {

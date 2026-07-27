@@ -1,9 +1,9 @@
 
 package com.susen36.caerulaarbor.block;
 
+import com.mojang.serialization.MapCodec;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -152,9 +152,9 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
             {
                 int value = 0;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                BlockState bs = world.getBlockState(pos);
                 if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                    world.setBlock(pos, bs.setValue(integerProp, value), 3);
             }
         }
     }

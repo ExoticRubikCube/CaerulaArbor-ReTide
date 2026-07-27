@@ -1,23 +1,21 @@
 
 package com.susen36.caerulaarbor.block;
 
+import com.mojang.serialization.MapCodec;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
-
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
@@ -52,9 +50,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public HighmoreSpawningBlockBlock() {
-		super(BlockBehaviour.Properties.of()
-
-				.sound(SoundType.BASALT).strength(-1, 3600000).lightLevel(s -> (new Object() {
+		super(BlockBehaviour.Properties.of().sound(SoundType.BASALT).strength(-1, 3600000).lightLevel(s -> (new Object() {
 					public int getLightLevel() {
 						if (s.getValue(BLOCKSTATE) == 1)
 							return 1;
@@ -194,9 +190,11 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
                     for (int index0 = 0; index0 < 16; index0++) {
                         {
                             ItemStack ist = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY);
-                            if (ist.hurt(64, RandomSource.create(), null)) {
+                            if (ist.getDamageValue() + 64 >= ist.getMaxDamage()) {
                                 ist.shrink(1);
                                 ist.setDamageValue(0);
+                            } else {
+                                ist.setDamageValue(ist.getDamageValue() + 64);
                             }
                         }
                     }

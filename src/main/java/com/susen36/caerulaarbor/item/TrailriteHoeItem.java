@@ -13,7 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.SimpleTier;
@@ -87,12 +86,12 @@ public class TrailriteHoeItem extends HoeItem {
 	}
 
 	@Override
-	public boolean canBeHurtBy(DamageSource pDamageSource) {
+	public boolean canBeHurtBy(ItemStack stack, DamageSource pDamageSource) {
 		return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
 	}
 
 	@Override
-	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken) {
 		return Math.min(amount, 1);
 	}
 }

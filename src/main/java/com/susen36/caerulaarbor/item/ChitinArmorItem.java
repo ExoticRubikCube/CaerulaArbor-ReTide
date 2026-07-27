@@ -5,7 +5,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,51 +18,26 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public abstract class ChitinArmorItem extends ArmorItem {
 	public ChitinArmorItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial() {
-			@Override
-			public int getDurabilityForType(ArmorItem.Type type) {
-				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 29;
-			}
-
-			@Override
-			public int getDefenseForType(ArmorItem.Type type) {
-				return new int[]{2, 5, 7, 3}[type.getSlot().getIndex()];
-			}
-
-			@Override
-			public int getEnchantmentValue() {
-				return 11;
-			}
-
-			@Override
-			public SoundEvent getEquipSound() {
-				return SoundEvents.ARMOR_EQUIP_IRON;
-			}
-
-			@Override
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.OCEAN_CHITIN.get()));
-			}
-
-			@Override
-			public String getName() {
-				return "chitin_armor";
-			}
-
-			@Override
-			public float getToughness() {
-				return 1.5f;
-			}
-
-			@Override
-			public float getKnockbackResistance() {
-				return 0.15f;
-			}
-		}, type, properties);
+		super(new ArmorMaterial(
+			Map.of(
+				ArmorItem.Type.HELMET, 3,
+				ArmorItem.Type.CHESTPLATE, 7,
+				ArmorItem.Type.LEGGINGS, 5,
+				ArmorItem.Type.BOOTS, 2
+			),
+			11,
+			SoundEvents.ARMOR_EQUIP_IRON,
+			() -> Ingredient.of(new ItemStack(CAItems.OCEAN_CHITIN.get())),
+			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "chitin_armor"))),
+			1.5f,
+			0.15f
+		), type, properties);
 	}
 
 	@Override

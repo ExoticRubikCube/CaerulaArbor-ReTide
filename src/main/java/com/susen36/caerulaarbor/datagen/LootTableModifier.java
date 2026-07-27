@@ -2,7 +2,6 @@ package com.susen36.caerulaarbor.datagen;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;

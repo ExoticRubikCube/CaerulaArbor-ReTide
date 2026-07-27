@@ -56,7 +56,7 @@ public class TrailriteAxeItem extends AxeItem {
         if (world instanceof Level level) {
             silkTouchLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SILK_TOUCH)
                     .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
-            efficiencyLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.BLOCK_EFFICIENCY)
+            efficiencyLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.EFFICIENCY)
                     .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
             sharpnessLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SHARPNESS)
                     .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
@@ -92,12 +92,12 @@ public class TrailriteAxeItem extends AxeItem {
 	}
 
 	@Override
-	public boolean canBeHurtBy(DamageSource pDamageSource) {
+	public boolean canBeHurtBy(ItemStack stack, DamageSource pDamageSource) {
 		return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
 	}
 
 	@Override
-	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<Item> onBroken) {
 		return Math.min(amount, 1);
 	}
 }

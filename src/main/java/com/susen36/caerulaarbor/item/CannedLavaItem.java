@@ -37,7 +37,7 @@ public class CannedLavaItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
         entity.hurt(entity.level().damageSources().lava(), 27);
-        entity.setSecondsOnFire(12);
+        entity.igniteForSeconds(12);
         if (!(entity instanceof Player)) {
             resultStack.shrink(1);
             ItemStack emptyCan = new ItemStack(CAItems.EMPTY_CAN.get());

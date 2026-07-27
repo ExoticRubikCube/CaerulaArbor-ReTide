@@ -9,11 +9,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HaemophiliaMobEffect extends MobEffect {
     public HaemophiliaMobEffect() {

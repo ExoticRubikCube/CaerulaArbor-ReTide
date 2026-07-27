@@ -64,8 +64,8 @@ public class LeviathanAnimusItem extends Item {
             }
             if ((LevelAccessor) world instanceof ServerLevel level)
                 level.sendParticles(CAParticles.MOIST_BOOM.get(), x, (y + 2), z, 32, 2, 2, 2, 0.33);
-            if (!((LevelAccessor) world).isClientSide() && ((LevelAccessor) world).getServer() != null)
-                ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_14").getString())), false);
+            if (!world.isClientSide() && world.getServer() != null)
+                world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_14").getString())), false);
             itemstack.shrink(1);
         } else {
             if (MapVariables.get(world).strategy_silence < 4 && StrategyUtils.canEnableSilence(world)) {

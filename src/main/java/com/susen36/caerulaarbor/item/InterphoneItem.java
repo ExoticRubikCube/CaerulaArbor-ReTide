@@ -74,8 +74,7 @@ public class InterphoneItem extends Item {
 		double num = 0;
 		double tX;
 		double tZ;
-		double rand = 0;
-		double tY;
+        double tY;
 		String log;
 		String name;
 		if (!(chief instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {

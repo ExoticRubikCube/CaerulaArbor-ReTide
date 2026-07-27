@@ -4,8 +4,6 @@ import com.susen36.caerulaarbor.entity.wither.AbstractOceanizedWitherEntity;
 import com.susen36.caerulaarbor.entity.wither.OceanizedWitherEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;

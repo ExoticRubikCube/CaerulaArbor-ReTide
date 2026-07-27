@@ -1,18 +1,16 @@
 
 package com.susen36.caerulaarbor.block;
 
+import com.mojang.serialization.MapCodec;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,9 +46,7 @@ public class TidewayCradleBlock extends BaseEntityBlock implements SimpleWaterlo
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public TidewayCradleBlock() {
-		super(BlockBehaviour.Properties.of()
-
-				.sound(SoundType.LODESTONE).strength(-1, 3600000).lightLevel(s -> (new Object() {
+		super(BlockBehaviour.Properties.of().sound(SoundType.LODESTONE).strength(-1, 3600000).lightLevel(s -> (new Object() {
 					public int getLightLevel() {
 						if (s.getValue(BLOCKSTATE) == 1)
 							return 0;
@@ -141,16 +137,18 @@ public class TidewayCradleBlock extends BaseEntityBlock implements SimpleWaterlo
                 {
                     int value = 0;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
-                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    BlockState bs = world.getBlockState(pos);
                     if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
                 for (int index0 = 0; index0 < 16; index0++) {
                     {
                         ItemStack ist = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY);
-                        if (ist.hurt(256, RandomSource.create(), null)) {
+                        if (ist.getDamageValue() + 256 >= ist.getMaxDamage()) {
                             ist.shrink(1);
                             ist.setDamageValue(0);
+                        } else {
+                            ist.setDamageValue(ist.getDamageValue() + 256);
                         }
                     }
                 }

@@ -5,10 +5,10 @@ import com.google.gson.JsonObject;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import net.minecraft.advancements.*;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -19,9 +19,9 @@ import java.util.function.Consumer;
  * 生成进度数据
  */
 @SuppressWarnings("SameParameterValue")
-public class AdvancementProvider implements ForgeAdvancementProvider.AdvancementGenerator {
+public class AdvancementProvider implements AdvancementSubProvider {
 
-    public static ArrayList<Advancement> advancements = new ArrayList<>();
+    public static ArrayList<AdvancementHolder> advancements = new ArrayList<>();
 
     /**
      * 创建进度显示信息
@@ -36,7 +36,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
      * @param hidden         是否隐藏
      * @return 显示信息
      */
-    private static DisplayInfo display(String icon, String title, String description, String background, FrameType frame, boolean showToast, boolean announceToChat, boolean hidden) {
+    private static DisplayInfo display(String icon, String title, String description, String background, AdvancementType frame, boolean showToast, boolean announceToChat, boolean hidden) {
         return new DisplayInfo(
                 item(icon),
                 Component.translatable(title),
@@ -218,13 +218,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
     }
 
     /**
-     * 创建 caerula_arbor 命名空间资源 ID
+     * 创建 caerula_arbor 命名空间资源 ID 字符串
      *
      * @param path 资源路径
-     * @return 资源 ID
+     * @return 资源 ID 字符串（格式：namespace:path）
      */
-    private static ResourceLocation modLoc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path);
+    private static String modLoc(String path) {
+        return CaerulaArborMod.MODID + ":" + path;
     }
 
     /**
@@ -251,10 +251,9 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
      *
      * @param registries         注册表查询 provider
      * @param saver              进度输出回调
-     * @param existingFileHelper 已有资源检查器
      */
     @Override
-    public void generate(HolderLookup.@NotNull Provider registries, @NotNull Consumer<Advancement> saver, @NotNull ExistingFileHelper existingFileHelper) {
+    public void generate(HolderLookup.@NotNull Provider registries, @NotNull Consumer<AdvancementHolder> saver) {
         advancements.clear();
 
         /* encounter_from_the_ocean (root) */
@@ -264,7 +263,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.encounter_from_the_ocean.title",
                         "advancements.encounter_from_the_ocean.descr",
                         "caerula_arbor:textures/overlay/adv_bg.png",
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         false,
                         false
@@ -372,7 +371,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:brew_perc_regene",
                         "caerula_arbor:craft_patchouli_book"
                 ))
-                .save(saver, modLoc("encounter_from_the_ocean"), existingFileHelper);
+                .save(saver, modLoc("encounter_from_the_ocean"));
         advancements.add(encounterFromTheOcean);
 
         /* another_breath (caerula_arbor:encounter_from_the_ocean) */
@@ -383,7 +382,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.another_breath.title",
                         "advancements.another_breath.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -398,7 +397,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_golden_chalise",
                         "caerula_arbor:nourished_apple_pie_craft"
                 ))
-                .save(saver, modLoc("another_breath"), existingFileHelper);
+                .save(saver, modLoc("another_breath"));
         advancements.add(anotherBreath);
 
         /* start_of_calamity (caerula_arbor:encounter_from_the_ocean) */
@@ -409,7 +408,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.start_of_calamity.title",
                         "advancements.start_of_calamity.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -447,7 +446,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_enderina_core",
                         "caerula_arbor:moist_crystal"
                 ))
-                .save(saver, modLoc("start_of_calamity"), existingFileHelper);
+                .save(saver, modLoc("start_of_calamity"));
         advancements.add(startOfCalamity);
 
         /* another_start (caerula_arbor:start_of_calamity) */
@@ -458,13 +457,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.another_start.title",
                         "advancements.another_start.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("another_start_0", placedBlock("caerula_arbor:enderina_core"))
-                .save(saver, modLoc("another_start"), existingFileHelper);
+                .save(saver, modLoc("another_start"));
         advancements.add(anotherStart);
 
         /* tranquil_heights (caerula_arbor:start_of_calamity) */
@@ -475,13 +474,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.tranquil_heights.title",
                         "advancements.tranquil_heights.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("tranquil_heights_0", impossible())
-                .save(saver, modLoc("tranquil_heights"), existingFileHelper);
+                .save(saver, modLoc("tranquil_heights"));
         advancements.add(tranquilHeights);
 
         /* withered_tranquiliy (caerula_arbor:tranquil_heights) */
@@ -492,7 +491,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.withered_tranquiliy.title",
                         "advancements.withered_tranquiliy.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -511,7 +510,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_circular_saw",
                         "caerula_arbor:craft_lancet"
                 ))
-                .save(saver, modLoc("withered_tranquiliy"), existingFileHelper);
+                .save(saver, modLoc("withered_tranquiliy"));
         advancements.add(witheredTranquiliy);
 
         /* aurgelmir (caerula_arbor:withered_tranquiliy) */
@@ -522,7 +521,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.aurgelmir.title",
                         "advancements.aurgelmir.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -542,14 +541,14 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_trail_axe",
                         "caerula_arbor:craft_trail_sword"
                 ))
-                .save(saver, modLoc("aurgelmir"), existingFileHelper);
+                .save(saver, modLoc("aurgelmir"));
         advancements.add(aurgelmir);
 
         /* ban_relic_notice (caerula_arbor:encounter_from_the_ocean) */
         var banRelicNotice = Advancement.Builder.advancement()
                 .parent(encounterFromTheOcean)
                 .addCriterion("ban_relic_notice_0", impossible())
-                .save(saver, modLoc("ban_relic_notice"), existingFileHelper);
+                .save(saver, modLoc("ban_relic_notice"));
         advancements.add(banRelicNotice);
 
         /* extension_of_calamity (caerula_arbor:start_of_calamity) */
@@ -560,7 +559,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.extension_of_calamity.title",
                         "advancements.extension_of_calamity.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -574,7 +573,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:smith_anchor",
                         "caerula_arbor:craft_unfinished_beauty"
                 ))
-                .save(saver, modLoc("extension_of_calamity"), existingFileHelper);
+                .save(saver, modLoc("extension_of_calamity"));
         advancements.add(extensionOfCalamity);
 
         /* whirling_whisper (caerula_arbor:extension_of_calamity) */
@@ -585,7 +584,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.whirling_whisper.title",
                         "advancements.whirling_whisper.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -595,7 +594,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_ocarino",
                         "caerula_arbor:craft_nurture_gene"
                 ))
-                .save(saver, modLoc("whirling_whisper"), existingFileHelper);
+                .save(saver, modLoc("whirling_whisper"));
         advancements.add(whirlingWhisper);
 
         /* musician_we_many (caerula_arbor:whirling_whisper) */
@@ -606,13 +605,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.musician_we_many.title",
                         "advancements.musician_we_many.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("musician_we_many_0", inventoryChanged("caerula_arbor:ocarina", 1, 999))
-                .save(saver, modLoc("musician_we_many"), existingFileHelper);
+                .save(saver, modLoc("musician_we_many"));
         advancements.add(musicianWeMany);
 
         /* boiling_sea (caerula_arbor:musician_we_many) */
@@ -623,13 +622,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.boiling_sea.title",
                         "advancements.boiling_sea.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         true
                 ))
                 .addCriterion("boiling_sea_0", entityHurtPlayer("caerula_arbor:izumik", 0, 9999, true))
-                .save(saver, modLoc("boiling_sea"), existingFileHelper);
+                .save(saver, modLoc("boiling_sea"));
         advancements.add(boilingSea);
 
         /* to_we_many (caerula_arbor:encounter_from_the_ocean) */
@@ -640,13 +639,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.to_we_many.title",
                         "advancements.to_we_many.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("to_we_many_0", impossible())
-                .save(saver, modLoc("to_we_many"), existingFileHelper);
+                .save(saver, modLoc("to_we_many"));
         advancements.add(toWeMany);
 
         /* but_i_refuse (caerula_arbor:to_we_many) */
@@ -657,13 +656,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.but_i_refuse.title",
                         "advancements.but_i_refuse.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("but_i_refuse_0", impossible())
-                .save(saver, modLoc("but_i_refuse"), existingFileHelper);
+                .save(saver, modLoc("but_i_refuse"));
         advancements.add(butIRefuse);
 
         /* sinking_love (caerula_arbor:withered_tranquiliy) */
@@ -674,7 +673,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.sinking_love.title",
                         "advancements.sinking_love.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         false
@@ -695,7 +694,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:dessemble_trail_ingot",
                         "caerula_arbor:assemble_trail_ingot"
                 ))
-                .save(saver, modLoc("sinking_love"), existingFileHelper);
+                .save(saver, modLoc("sinking_love"));
         advancements.add(sinkingLove);
 
         /* combination_of_paradox (caerula_arbor:sinking_love) */
@@ -706,7 +705,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.combination_of_paradox.title",
                         "advancements.combination_of_paradox.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -718,7 +717,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .rewards(experienceRewards(
                         32
                 ))
-                .save(saver, modLoc("combination_of_paradox"), existingFileHelper);
+                .save(saver, modLoc("combination_of_paradox"));
         advancements.add(combinationOfParadox);
 
         /* to_burden_catastrophy (caerula_arbor:encounter_from_the_ocean) */
@@ -729,7 +728,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.to_burden_catastrophy.title",
                         "advancements.to_burden_catastrophy.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -755,7 +754,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_chitin_ingot",
                         "caerula_arbor:chitin_bow"
                 ))
-                .save(saver, modLoc("to_burden_catastrophy"), existingFileHelper);
+                .save(saver, modLoc("to_burden_catastrophy"));
         advancements.add(toBurdenCatastrophy);
 
         /* im_watching_you (caerula_arbor:to_burden_catastrophy) */
@@ -766,7 +765,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.im_watching_you.title",
                         "advancements.im_watching_you.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -778,7 +777,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:trail_bomb",
                         "caerula_arbor:craft_copper_bomb"
                 ))
-                .save(saver, modLoc("im_watching_you"), existingFileHelper);
+                .save(saver, modLoc("im_watching_you"));
         advancements.add(imWatchingYou);
 
         /* enthusiast_of_chitin (caerula_arbor:im_watching_you) */
@@ -789,7 +788,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.enthusiast_of_chitin.title",
                         "advancements.enthusiast_of_chitin.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -810,7 +809,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:smith_complexc_boot",
                         "caerula_arbor:craft_complex_chitin_shield"
                 ))
-                .save(saver, modLoc("enthusiast_of_chitin"), existingFileHelper);
+                .save(saver, modLoc("enthusiast_of_chitin"));
         advancements.add(enthusiastOfChitin);
 
         /* construction (caerula_arbor:enthusiast_of_chitin) */
@@ -821,13 +820,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.construction.title",
                         "advancements.construction.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("construction_0", impossible())
-                .save(saver, modLoc("construction"), existingFileHelper);
+                .save(saver, modLoc("construction"));
         advancements.add(construction);
 
         /* treasures (caerula_arbor:encounter_from_the_ocean) */
@@ -838,13 +837,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.treasures.title",
                         "advancements.treasures.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("treasures_0", impossible())
-                .save(saver, modLoc("treasures"), existingFileHelper);
+                .save(saver, modLoc("treasures"));
         advancements.add(treasures);
 
         /* costly_treasures (caerula_arbor:treasures) */
@@ -855,13 +854,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.costly_treasures.title",
                         "advancements.costly_treasures.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("costly_treasures_0", impossible())
-                .save(saver, modLoc("costly_treasures"), existingFileHelper);
+                .save(saver, modLoc("costly_treasures"));
         advancements.add(costlyTreasures);
 
         /* embrace_the_sea (caerula_arbor:enthusiast_of_chitin) */
@@ -872,7 +871,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.embrace_the_sea.title",
                         "advancements.embrace_the_sea.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -881,7 +880,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .addCriterion("embrace_the_sea_1", inventoryChanged("caerula_arbor:complexchitin_armor_chestplate", 1, 999))
                 .addCriterion("embrace_the_sea_2", inventoryChanged("caerula_arbor:complexchitin_armor_leggings", 1, 999))
                 .addCriterion("embrace_the_sea_3", inventoryChanged("caerula_arbor:complexchitin_armor_boots", 1, 999))
-                .save(saver, modLoc("embrace_the_sea"), existingFileHelper);
+                .save(saver, modLoc("embrace_the_sea"));
         advancements.add(embraceTheSea);
 
         /* infinite_growth (caerula_arbor:encounter_from_the_ocean) */
@@ -892,7 +891,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.infinite_growth.title",
                         "advancements.infinite_growth.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -916,7 +915,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:change_cell",
                         "caerula_arbor:dictationless_chapter"
                 ))
-                .save(saver, modLoc("infinite_growth"), existingFileHelper);
+                .save(saver, modLoc("infinite_growth"));
         advancements.add(infiniteGrowth);
 
         /* they_shall_welcome (caerula_arbor:infinite_growth) */
@@ -927,7 +926,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.they_shall_welcome.title",
                         "advancements.they_shall_welcome.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -960,7 +959,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_oil",
                         "caerula_arbor:craft_immunosupp"
                 ))
-                .save(saver, modLoc("they_shall_welcome"), existingFileHelper);
+                .save(saver, modLoc("they_shall_welcome"));
         advancements.add(theyShallWelcome);
 
         /* they_shall_pay (caerula_arbor:they_shall_welcome) */
@@ -971,7 +970,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.they_shall_pay.title",
                         "advancements.they_shall_pay.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -985,7 +984,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_capsule",
                         "caerula_arbor:craft_catalyst"
                 ))
-                .save(saver, modLoc("they_shall_pay"), existingFileHelper);
+                .save(saver, modLoc("they_shall_pay"));
         advancements.add(theyShallPay);
 
         /* start_player_evo (caerula_arbor:they_shall_pay) */
@@ -996,13 +995,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.start_player_evo.title",
                         "advancements.start_player_evo.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("start_player_evo_0", inventoryChanged("caerula_arbor:nurture_gene_set", 1, 999))
-                .save(saver, modLoc("start_player_evo"), existingFileHelper);
+                .save(saver, modLoc("start_player_evo"));
         advancements.add(startPlayerEvo);
 
         /* end_player_evo (caerula_arbor:start_player_evo) */
@@ -1013,7 +1012,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.end_player_evo.title",
                         "advancements.end_player_evo.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -1022,7 +1021,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .rewards(experienceRewards(
                         8
                 ))
-                .save(saver, modLoc("end_player_evo"), existingFileHelper);
+                .save(saver, modLoc("end_player_evo"));
         advancements.add(endPlayerEvo);
 
         /* eternal_anger (caerula_arbor:encounter_from_the_ocean) */
@@ -1033,7 +1032,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.eternal_anger.title",
                         "advancements.eternal_anger.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         false
@@ -1042,7 +1041,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .rewards(experienceRewards(
                         8
                 ))
-                .save(saver, modLoc("eternal_anger"), existingFileHelper);
+                .save(saver, modLoc("eternal_anger"));
         advancements.add(eternalAnger);
 
         /* flamarine_dedication (caerula_arbor:sinking_love) */
@@ -1053,13 +1052,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.flamarine_dedication.title",
                         "advancements.flamarine_dedication.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("flamarine_dedication_0", inventoryChanged("caerula_arbor:trailrite_hoe", 1, 999))
-                .save(saver, modLoc("flamarine_dedication"), existingFileHelper);
+                .save(saver, modLoc("flamarine_dedication"));
         advancements.add(flamarineDedication);
 
         /* forced_welcome (caerula_arbor:infinite_growth) */
@@ -1070,13 +1069,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.forced_welcome.title",
                         "advancements.forced_welcome.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("forced_welcome_0", inventoryChanged("caerula_arbor:mutagenisis_capsule", 1, 999))
-                .save(saver, modLoc("forced_welcome"), existingFileHelper);
+                .save(saver, modLoc("forced_welcome"));
         advancements.add(forcedWelcome);
 
         /* gain_hunter_gene (caerula_arbor:encounter_from_the_ocean) */
@@ -1087,7 +1086,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.gain_hunter_gene.title",
                         "advancements.gain_hunter_gene.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -1107,7 +1106,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:smith_skadi_sword",
                         "caerula_arbor:craft_moist_bag"
                 ))
-                .save(saver, modLoc("gain_hunter_gene"), existingFileHelper);
+                .save(saver, modLoc("gain_hunter_gene"));
         advancements.add(gainHunterGene);
 
         /* sparkling_shell (caerula_arbor:encounter_from_the_ocean) */
@@ -1118,7 +1117,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.sparkling_shell.title",
                         "advancements.sparkling_shell.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -1139,7 +1138,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_nethersea_stimutant",
                         "caerula_arbor:craft_fluore_juice"
                 ))
-                .save(saver, modLoc("sparkling_shell"), existingFileHelper);
+                .save(saver, modLoc("sparkling_shell"));
         advancements.add(sparklingShell);
 
         /* to_witness_the_tide (caerula_arbor:sparkling_shell) */
@@ -1150,7 +1149,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.to_witness_the_tide.title",
                         "advancements.to_witness_the_tide.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -1174,7 +1173,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_hand_anchor",
                         "caerula_arbor:craft_tidelinked_shield"
                 ))
-                .save(saver, modLoc("to_witness_the_tide"), existingFileHelper);
+                .save(saver, modLoc("to_witness_the_tide"));
         advancements.add(toWitnessTheTide);
 
         /* to_experience_evolution (caerula_arbor:to_witness_the_tide) */
@@ -1185,13 +1184,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.to_experience_evolution.title",
                         "advancements.to_experience_evolution.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("to_experience_evolution_0", impossible())
-                .save(saver, modLoc("to_experience_evolution"), existingFileHelper);
+                .save(saver, modLoc("to_experience_evolution"));
         advancements.add(toExperienceEvolution);
 
         /* to_terminate_evolution (caerula_arbor:to_experience_evolution) */
@@ -1202,7 +1201,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.to_terminate_evolution.title",
                         "advancements.to_terminate_evolution.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         false
@@ -1216,7 +1215,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:smith_trident",
                         "caerula_arbor:cream_smithed"
                 ))
-                .save(saver, modLoc("to_terminate_evolution"), existingFileHelper);
+                .save(saver, modLoc("to_terminate_evolution"));
         advancements.add(toTerminateEvolution);
 
         /* she_coming (caerula_arbor:to_terminate_evolution) */
@@ -1227,7 +1226,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.she_coming.title",
                         "advancements.she_coming.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -1472,7 +1471,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:smelt_redstine_ingot",
                         "caerula_arbor:smelt_redstoninium"
                 ))
-                .save(saver, modLoc("she_coming"), existingFileHelper);
+                .save(saver, modLoc("she_coming"));
         advancements.add(sheComing);
 
         /* hymn_of_land (caerula_arbor:she_coming) */
@@ -1483,7 +1482,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.hymn_of_land.title",
                         "advancements.hymn_of_land.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -1492,7 +1491,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .rewards(experienceRewards(
                         32
                 ))
-                .save(saver, modLoc("hymn_of_land"), existingFileHelper);
+                .save(saver, modLoc("hymn_of_land"));
         advancements.add(hymnOfLand);
 
         /* i_scream (caerula_arbor:treasures) */
@@ -1503,13 +1502,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.i_scream.title",
                         "advancements.i_scream.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("i_scream_0", impossible())
-                .save(saver, modLoc("i_scream"), existingFileHelper);
+                .save(saver, modLoc("i_scream"));
         advancements.add(iScream);
 
         /* its_deal (caerula_arbor:to_witness_the_tide) */
@@ -1520,7 +1519,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.its_deal.title",
                         "advancements.its_deal.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -1530,7 +1529,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:made_redstonium",
                         "caerula_arbor:dessemble_redstonium"
                 ))
-                .save(saver, modLoc("its_deal"), existingFileHelper);
+                .save(saver, modLoc("its_deal"));
         advancements.add(itsDeal);
 
         /* kill_brute (caerula_arbor:forced_welcome) */
@@ -1541,7 +1540,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.kill_brute.title",
                         "advancements.kill_brute.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         true
@@ -1550,7 +1549,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .rewards(experienceRewards(
                         4
                 ))
-                .save(saver, modLoc("kill_brute"), existingFileHelper);
+                .save(saver, modLoc("kill_brute"));
         advancements.add(killBrute);
 
         /* kill_knight (caerula_arbor:encounter_from_the_ocean) */
@@ -1561,7 +1560,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.kill_knight.title",
                         "advancements.kill_knight.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         false
@@ -1572,7 +1571,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_rocinante_injector",
                         "caerula_arbor:craft_tide_hunt_template"
                 ))
-                .save(saver, modLoc("kill_knight"), existingFileHelper);
+                .save(saver, modLoc("kill_knight"));
         advancements.add(killKnight);
 
         /* kill_knight_and_horse (caerula_arbor:kill_knight) */
@@ -1583,7 +1582,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.kill_knight_and_horse.title",
                         "advancements.kill_knight_and_horse.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -1595,7 +1594,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                                 "caerula_arbor:gameplay/mere_geen_sample"
                         )
                 ))
-                .save(saver, modLoc("kill_knight_and_horse"), existingFileHelper);
+                .save(saver, modLoc("kill_knight_and_horse"));
         advancements.add(killKnightAndHorse);
 
         /* little_by_little (caerula_arbor:enthusiast_of_chitin) */
@@ -1606,7 +1605,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.little_by_little.title",
                         "advancements.little_by_little.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         true
@@ -1623,7 +1622,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:smokefakegg",
                         "caerula_arbor:campfire_fakeegg"
                 ))
-                .save(saver, modLoc("little_by_little"), existingFileHelper);
+                .save(saver, modLoc("little_by_little"));
         advancements.add(littleByLittle);
 
         /* marine_dedication (caerula_arbor:enthusiast_of_chitin) */
@@ -1634,7 +1633,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.marine_dedication.title",
                         "advancements.marine_dedication.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         true
@@ -1643,7 +1642,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .rewards(experienceRewards(
                         32
                 ))
-                .save(saver, modLoc("marine_dedication"), existingFileHelper);
+                .save(saver, modLoc("marine_dedication"));
         advancements.add(marineDedication);
 
         /* operation_deepness (caerula_arbor:encounter_from_the_ocean) */
@@ -1654,7 +1653,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.operation_deepness.title",
                         "advancements.operation_deepness.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -1666,7 +1665,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                                 "caerula_arbor:gameplay/trigger_crisis_table"
                         )
                 ))
-                .save(saver, modLoc("operation_deepness"), existingFileHelper);
+                .save(saver, modLoc("operation_deepness"));
         advancements.add(operationDeepness);
 
         /* pave_the_way (caerula_arbor:musician_we_many) */
@@ -1677,13 +1676,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.pave_the_way.title",
                         "advancements.pave_the_way.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("pave_the_way_0", inventoryChanged("caerula_arbor:path_inaugurator", 1, 9999))
-                .save(saver, modLoc("pave_the_way"), existingFileHelper);
+                .save(saver, modLoc("pave_the_way"));
         advancements.add(paveTheWay);
 
         /* speechless_break (caerula_arbor:musician_we_many) */
@@ -1694,13 +1693,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.speechless_break.title",
                         "advancements.speechless_break.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         true
                 ))
                 .addCriterion("speechless_break_0", entityHurtPlayer("caerula_arbor:highmore", 0, 9999, true))
-                .save(saver, modLoc("speechless_break"), existingFileHelper);
+                .save(saver, modLoc("speechless_break"));
         advancements.add(speechlessBreak);
 
         /* precious_days (caerula_arbor:speechless_break) */
@@ -1711,7 +1710,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.precious_days.title",
                         "advancements.precious_days.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         true
@@ -1723,7 +1722,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                                 "caerula_arbor:gameplay/mere_geen_sample"
                         )
                 ))
-                .save(saver, modLoc("precious_days"), existingFileHelper);
+                .save(saver, modLoc("precious_days"));
         advancements.add(preciousDays);
 
         /* unlock_calamity (caerula_arbor:whirling_whisper) */
@@ -1734,13 +1733,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.unlock_calamity.title",
                         "advancements.unlock_calamity.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("unlock_calamity_0", impossible())
-                .save(saver, modLoc("unlock_calamity"), existingFileHelper);
+                .save(saver, modLoc("unlock_calamity"));
         advancements.add(unlockCalamity);
 
         /* we_many_orienting (caerula_arbor:unlock_calamity) */
@@ -1751,13 +1750,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.we_many_orienting.title",
                         "advancements.we_many_orienting.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("we_many_orienting_0", impossible())
-                .save(saver, modLoc("we_many_orienting"), existingFileHelper);
+                .save(saver, modLoc("we_many_orienting"));
         advancements.add(weManyOrienting);
 
         /* price_of_peace (caerula_arbor:we_many_orienting) */
@@ -1768,7 +1767,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.price_of_peace.title",
                         "advancements.price_of_peace.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -1782,7 +1781,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:reverse_caerula_heart",
                         "caerula_arbor:brew_perc_regene"
                 ))
-                .save(saver, modLoc("price_of_peace"), existingFileHelper);
+                .save(saver, modLoc("price_of_peace"));
         advancements.add(priceOfPeace);
 
         /* shining_pieces (caerula_arbor:encounter_from_the_ocean) */
@@ -1793,7 +1792,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.shining_pieces.title",
                         "advancements.shining_pieces.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -1807,7 +1806,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_book_shelf",
                         "caerula_arbor:vraft_breath_tide"
                 ))
-                .save(saver, modLoc("shining_pieces"), existingFileHelper);
+                .save(saver, modLoc("shining_pieces"));
         advancements.add(shiningPieces);
 
         /* silent_interruption (caerula_arbor:musician_we_many) */
@@ -1818,7 +1817,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.silent_interruption.title",
                         "advancements.silent_interruption.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -1827,7 +1826,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .rewards(recipeRewards(
                         "caerula_arbor:craft_lanc_xiao"
                 ))
-                .save(saver, modLoc("silent_interruption"), existingFileHelper);
+                .save(saver, modLoc("silent_interruption"));
         advancements.add(silentInterruption);
 
         /* stella_caerula (caerula_arbor:boiling_sea) */
@@ -1838,7 +1837,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.stella_caerula.title",
                         "advancements.stella_caerula.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         true
@@ -1850,14 +1849,14 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                                 "caerula_arbor:gameplay/mere_geen_sample"
                         )
                 ))
-                .save(saver, modLoc("stella_caerula"), existingFileHelper);
+                .save(saver, modLoc("stella_caerula"));
         advancements.add(stellaCaerula);
 
         /* surging_waves_notice (caerula_arbor:encounter_from_the_ocean) */
         var surgingWavesNotice = Advancement.Builder.advancement()
                 .parent(encounterFromTheOcean)
                 .addCriterion("surging_waves_notice_0", impossible())
-                .save(saver, modLoc("surging_waves_notice"), existingFileHelper);
+                .save(saver, modLoc("surging_waves_notice"));
         advancements.add(surgingWavesNotice);
 
         /* take_her_eye (caerula_arbor:forced_welcome) */
@@ -1868,7 +1867,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.take_her_eye.title",
                         "advancements.take_her_eye.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -1877,7 +1876,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .rewards(experienceRewards(
                         32
                 ))
-                .save(saver, modLoc("take_her_eye"), existingFileHelper);
+                .save(saver, modLoc("take_her_eye"));
         advancements.add(takeHerEye);
 
         /* terror_of_knowing (caerula_arbor:encounter_from_the_ocean) */
@@ -1888,7 +1887,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.terror_of_knowing.title",
                         "advancements.terror_of_knowing.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -1906,7 +1905,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_golden_chalise",
                         "caerula_arbor:craft_sal_eme_build"
                 ))
-                .save(saver, modLoc("terror_of_knowing"), existingFileHelper);
+                .save(saver, modLoc("terror_of_knowing"));
         advancements.add(terrorOfKnowing);
 
         /* terror_of_collapsing (caerula_arbor:terror_of_knowing) */
@@ -1917,7 +1916,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.terror_of_collapsing.title",
                         "advancements.terror_of_collapsing.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         false
@@ -1928,7 +1927,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:craft_goldenapple",
                         "caerula_arbor:brand_apple"
                 ))
-                .save(saver, modLoc("terror_of_collapsing"), existingFileHelper);
+                .save(saver, modLoc("terror_of_collapsing"));
         advancements.add(terrorOfCollapsing);
 
         /* tidelinked_life (caerula_arbor:musician_we_many) */
@@ -1939,14 +1938,14 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.tidelinked_life.title",
                         "advancements.tidelinked_life.descr",
                         null,
-                        FrameType.GOAL,
+                        AdvancementType.GOAL,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("tidelinked_life_0", inventoryChanged("caerula_arbor:tide_wand", 1, 999))
                 .addCriterion("tidelinked_life_1", inventoryChanged("caerula_arbor:repeller_shell", 1, 999))
-                .save(saver, modLoc("tidelinked_life"), existingFileHelper);
+                .save(saver, modLoc("tidelinked_life"));
         advancements.add(tidelinkedLife);
 
         /* voyage_across_the_end (caerula_arbor:another_start) */
@@ -1957,7 +1956,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.voyage_across_the_end.title",
                         "advancements.voyage_across_the_end.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -1966,7 +1965,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .rewards(recipeRewards(
                         "caerula_arbor:craft_wand"
                 ))
-                .save(saver, modLoc("voyage_across_the_end"), existingFileHelper);
+                .save(saver, modLoc("voyage_across_the_end"));
         advancements.add(voyageAcrossTheEnd);
 
         /* to_listen_dragon_breath (caerula_arbor:voyage_across_the_end) */
@@ -1977,13 +1976,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.to_listen_dragon_breath.title",
                         "advancements.to_listen_dragon_breath.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
                 ))
                 .addCriterion("to_listen_dragon_breath_0", inventoryChanged("caerula_arbor:dragon_wand", 1, 999))
-                .save(saver, modLoc("to_listen_dragon_breath"), existingFileHelper);
+                .save(saver, modLoc("to_listen_dragon_breath"));
         advancements.add(toListenDragonBreath);
 
         /* to_observe_evolution (caerula_arbor:to_experience_evolution) */
@@ -1994,7 +1993,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.to_observe_evolution.title",
                         "advancements.to_observe_evolution.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         true,
                         true,
                         false
@@ -2004,7 +2003,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "caerula_arbor:smith_trident",
                         "caerula_arbor:cream_smithed"
                 ))
-                .save(saver, modLoc("to_observe_evolution"), existingFileHelper);
+                .save(saver, modLoc("to_observe_evolution"));
         advancements.add(toObserveEvolution);
 
         /* to_slain_the_sea (caerula_arbor:gain_hunter_gene) */
@@ -2015,7 +2014,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.to_slain_the_sea.title",
                         "advancements.to_slain_the_sea.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -2024,7 +2023,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 .rewards(experienceRewards(
                         32
                 ))
-                .save(saver, modLoc("to_slain_the_sea"), existingFileHelper);
+                .save(saver, modLoc("to_slain_the_sea"));
         advancements.add(toSlainTheSea);
 
         /* trail_of_degeneration (caerula_arbor:unlock_calamity) */
@@ -2035,7 +2034,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.trail_of_degeneration.title",
                         "advancements.trail_of_degeneration.descr",
                         null,
-                        FrameType.CHALLENGE,
+                        AdvancementType.CHALLENGE,
                         true,
                         true,
                         false
@@ -2047,7 +2046,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                                 "caerula_arbor:gameplay/mere_geen_sample"
                         )
                 ))
-                .save(saver, modLoc("trail_of_degeneration"), existingFileHelper);
+                .save(saver, modLoc("trail_of_degeneration"));
         advancements.add(trailOfDegeneration);
 
         /* fifth_touch */
@@ -2057,13 +2056,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.fifth_touch.title",
                         "advancements.fifth_touch.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         false,
                         false,
                         true
                 ))
                 .addCriterion("impossible", impossible())
-                .save(saver, modLoc("fifth_touch"), existingFileHelper);
+                .save(saver, modLoc("fifth_touch"));
         advancements.add(fifthTouch);
 
         /* absurd_of_evolution */
@@ -2073,13 +2072,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                         "advancements.absurd_of_evolution.title",
                         "advancements.absurd_of_evolution.descr",
                         null,
-                        FrameType.TASK,
+                        AdvancementType.TASK,
                         false,
                         false,
                         true
                 ))
                 .addCriterion("impossible", impossible())
-                .save(saver, modLoc("absurd_of_evolution"), existingFileHelper);
+                .save(saver, modLoc("absurd_of_evolution"));
         advancements.add(absurdOfEvolution);
 
     }

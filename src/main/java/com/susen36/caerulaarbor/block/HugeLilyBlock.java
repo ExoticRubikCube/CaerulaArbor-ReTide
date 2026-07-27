@@ -1,10 +1,10 @@
 package com.susen36.caerulaarbor.block;
 
+import com.mojang.serialization.MapCodec;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.WorldUtils;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -47,9 +47,7 @@ public class HugeLilyBlock extends BaseEntityBlock implements SimpleWaterloggedB
 	private static final net.minecraft.tags.TagKey<Block> TRAIL_TAG = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail"));
 
 	public HugeLilyBlock() {
-		super(BlockBehaviour.Properties.of()
-
-				.sound(SoundType.FUNGUS).strength(24f, 64f).lightLevel(s -> 2).noOcclusion().randomTicks().pushReaction(PushReaction.BLOCK).isRedstoneConductor((bs, br, bp) -> false));
+		super(BlockBehaviour.Properties.of().sound(SoundType.FUNGUS).strength(24f, 64f).lightLevel(s -> 2).noOcclusion().randomTicks().pushReaction(PushReaction.BLOCK).isRedstoneConductor((bs, br, bp) -> false));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
 	}
 

@@ -252,8 +252,8 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return super.getDimensions(pose).scale(1F);
+    public EntityDimensions getDefaultDimensions(Pose pose) {
+        return super.getDefaultDimensions(pose).scale(1F);
     }
 
     @Override

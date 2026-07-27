@@ -4,18 +4,19 @@ import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 @EventBusSubscriber({Dist.CLIENT})
 public class EntityTransporterDisplayerOverlay {
@@ -39,7 +40,7 @@ public class EntityTransporterDisplayerOverlay {
             String name;
             transp = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (ItemUtils.isFilledwithPersonnel(transp)) {
-                name = transp.getOrCreateTag().getString("name");
+                name = transp.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("name");
                 if (name.isEmpty() || name.equals(emptyNameHolder)) {
                     result1 = entity;
                 } else {

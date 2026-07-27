@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -151,9 +150,9 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
                 {
                     int value = (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1) + 1;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
-                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    BlockState bs = world.getBlockState(pos);
                     if (bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
             }
         }
@@ -161,16 +160,16 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
             {
                 int value = (blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty getip8 ? blockstate.getValue(getip8) : -1) + 1;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                BlockState bs = world.getBlockState(pos);
                 if (bs.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                    world.setBlock(pos, bs.setValue(integerProp, value), 3);
             }
             {
                 int value = 0;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                BlockState bs = world.getBlockState(pos);
                 if (bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                    world.setBlock(pos, bs.setValue(integerProp, value), 3);
             }
             if ((LevelAccessor) world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_EGG_CRACK, SoundSource.BLOCKS, 1, 1);
@@ -182,7 +181,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
             if ((LevelAccessor) world instanceof ServerLevel level) {
                 Entity entityToSpawn = CAEntities.REAPER_PET.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
-                    entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
             }
             if ((LevelAccessor) world instanceof Level level) {
@@ -192,9 +191,9 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
         {
             int value = blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty getip20 ? blockstate.getValue(getip20) : -1;
             BlockPos blockPos = BlockPos.containing(x, y, z);
-            BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+            BlockState bs = world.getBlockState(pos);
             if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                world.setBlock(pos, bs.setValue(integerProp, value), 3);
         }
         world.scheduleTick(pos, this, 20);
 	}
@@ -226,18 +225,18 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
                     {
                         int value = (blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty getip4 ? blockstate.getValue(getip4) : -1) + 1;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                        BlockState bs = world.getBlockState(blockPos);
                         if (bs.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
                     }
                     ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 } else {
                     {
                         int value = (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty getip9 ? blockstate.getValue(getip9) : -1) + 1;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                        BlockState bs = world.getBlockState(blockPos);
                         if (bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
                     }
                     ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 }

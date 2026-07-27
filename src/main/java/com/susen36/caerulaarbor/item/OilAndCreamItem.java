@@ -54,19 +54,19 @@ public class OilAndCreamItem extends Item {
 		double z = entity.getZ();
         {
             double setval = 0;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.disoclusion = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         {
-            double setval = Math.max((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - 30, 0);
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            double setval = Math.max((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - 30, 0);
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.player_light = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
-        ((Entity) entity).hurt(entity.level().damageSources().inFire(), 12);
+        entity.hurt(entity.level().damageSources().inFire(), 12);
         if (!entity.level().isClientSide()) {
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2));
             entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0));

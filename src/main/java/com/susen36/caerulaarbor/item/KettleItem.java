@@ -48,7 +48,7 @@ public class KettleItem extends Item {
         ItemStack itemstack = ar.getObject();
         {
             boolean setval = true;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.relic_util_KETTLE = setval;
                 capability.syncPlayerVariables(entity);
             });
@@ -58,18 +58,18 @@ public class KettleItem extends Item {
         }
         if ((LevelAccessor) world instanceof ServerLevel level)
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 0.75, 1, 0.75, 1);
-        if (((LevelAccessor) world).isClientSide())
+        if (world.isClientSide())
             Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
         {
-            double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive + 1;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive + 1;
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.player_maxlive = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         {
-            double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives + 1;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives + 1;
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.player_lives = setval;
                 capability.syncPlayerVariables(entity);
             });

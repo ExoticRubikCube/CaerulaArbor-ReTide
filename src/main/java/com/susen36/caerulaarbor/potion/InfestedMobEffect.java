@@ -23,14 +23,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class InfestedMobEffect extends MobEffect {
     public InfestedMobEffect() {
@@ -86,14 +81,12 @@ public class InfestedMobEffect extends MobEffect {
     }
 
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.removeAttributeModifiers(entity, attributeMap, amplifier);
+    public void onMobRemoved(LivingEntity entity, int amplifier, Entity.RemovalReason reason) {
+        super.onMobRemoved(entity, amplifier, reason);
         LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         double ampli;
         if (entity instanceof Player) {
             ampli = amplifier;
@@ -102,7 +95,7 @@ public class InfestedMobEffect extends MobEffect {
             }
             {
                 double setval = ampli + 1;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.player_oceanization = setval;
                     capability.syncPlayerVariables(entity);
                 });

@@ -4,6 +4,7 @@ import com.susen36.caerulaarbor.entity.EndspeakerEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -46,13 +48,13 @@ public class EndspeakerSpawneggItem extends DeferredSpawnEggItem {
         double tgtX;
         double tgtY;
         double tgtZ;
-        phase = item.getOrCreateTag().getDouble("phase");
+        phase = item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getDouble("phase");
         if (entity.isShiftKeyDown()) {
-            item.getOrCreateTag().putDouble("phase", ((phase + 1) % 4));
+            CustomData.update(DataComponents.CUSTOM_DATA, item, tag -> tag.putDouble("phase", ((phase + 1) % 4)));
             if ((Entity) entity instanceof Player player && !player.level().isClientSide())
-                player.displayClientMessage(Component.literal(((Component.translatable("item.caerula_arbor.endspeaker_spawnegg.use").getString()).replace("{p}", "" + Math.round(item.getOrCreateTag().getDouble("phase") + 1)))), true);
+                player.displayClientMessage(Component.literal(((Component.translatable("item.caerula_arbor.endspeaker_spawnegg.use").getString()).replace("{p}", "" + Math.round(item.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getDouble("phase") + 1)))), true);
         } else {
-            if (!((((LevelAccessor) world).getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.AIR)) {
+            if (!((world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.AIR)) {
                 tgtX = x + 0.5;
                 tgtY = y + 0.5;
                 tgtZ = z + 0.5;
@@ -82,7 +84,7 @@ public class EndspeakerSpawneggItem extends DeferredSpawnEggItem {
         tgtX = x + direction.getStepX() + 0.5;
         tgtY = y + direction.getStepY() + 0.5;
         tgtZ = z + direction.getStepZ() + 0.5;
-        phase = itemstack.getOrCreateTag().getDouble("phase");
+        phase = itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getDouble("phase");
         if (world instanceof ServerLevel level) {
             EndspeakerEntity.spawnForPhase(level, BlockPos.containing(tgtX, tgtY, tgtZ), MobSpawnType.MOB_SUMMONED, (int) phase);
         }

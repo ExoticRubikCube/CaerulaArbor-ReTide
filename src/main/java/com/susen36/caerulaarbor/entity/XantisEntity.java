@@ -3,10 +3,9 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -35,11 +34,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
@@ -84,7 +80,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.goalSelector.addGoal(3, new OwnerHurtByTargetGoal(this));
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1, (float) 3, (float) 24, false));
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1, (float) 3, (float) 24));
         this.targetSelector.addGoal(5, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(6, new FollowMobGoal(this, 1, (float) 16, (float) 12));
         this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1) {
@@ -182,7 +178,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         } else {
             if (this.isTame()) {
                 if (this.isOwnedBy(sourceentity)) {
-                    if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                    if (item.components().has(DataComponents.FOOD) && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
                         this.heal((float) item.getFoodProperties().getNutrition());
                         retval = InteractionResult.sidedSuccess(this.level().isClientSide());

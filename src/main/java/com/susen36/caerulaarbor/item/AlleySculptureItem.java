@@ -52,26 +52,26 @@ public class AlleySculptureItem extends Item {
             level.sendParticles(ParticleTypes.RAIN, x, y, z, 72, 1, 1, 1, 0.1);
         {
             boolean setval = true;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.relic_util_ALLEY = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         {
-            double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive + 3;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive + 3;
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.player_maxlive = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         {
-            double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives + 3;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+            double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives + 3;
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.player_lives = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
-        if (((LevelAccessor) world).isClientSide())
+        if (world.isClientSide())
             Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
         if ((Entity) entity instanceof Player player) {
             ItemStack setstack = new ItemStack(CABlocks.ALLAY_BLOCK.get()).copy();

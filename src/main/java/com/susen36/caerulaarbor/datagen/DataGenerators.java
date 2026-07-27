@@ -2,10 +2,9 @@ package com.susen36.caerulaarbor.datagen;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.datagen.tags.TagsProvider;
-import net.neoforged.neoforge.common.data.ForgeAdvancementProvider;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.List;
 
@@ -32,10 +31,9 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), datapackProvider);
 
         // advancements
-        generator.addProvider(event.includeServer(), new ForgeAdvancementProvider(
+        generator.addProvider(event.includeServer(), new net.minecraft.data.advancements.AdvancementProvider(
                 output,
                 lookupProvider,
-                existingFileHelper,
                 List.of(new AdvancementProvider())
         ));
 
@@ -55,6 +53,6 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), new BiomeModifiersProvider(output));
 
         // recipes
-        generator.addProvider(event.includeServer(), new RecipesProvider(output));
+        generator.addProvider(event.includeServer(), new RecipesProvider(output, lookupProvider));
     }
 }

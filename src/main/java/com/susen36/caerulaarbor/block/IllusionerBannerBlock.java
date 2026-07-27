@@ -1,16 +1,15 @@
 
 package com.susen36.caerulaarbor.block;
 
+import com.mojang.serialization.MapCodec;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -49,9 +48,7 @@ public class IllusionerBannerBlock extends BaseEntityBlock implements SimpleWate
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public IllusionerBannerBlock() {
-		super(BlockBehaviour.Properties.of()
-
-				.sound(SoundType.WOOD).strength(-1, 3600000).lightLevel(s -> (new Object() {
+		super(BlockBehaviour.Properties.of().sound(SoundType.WOOD).strength(-1, 3600000).lightLevel(s -> (new Object() {
 					public int getLightLevel() {
 						if (s.getValue(BLOCKSTATE) == 1)
 							return 0;
@@ -156,23 +153,23 @@ public class IllusionerBannerBlock extends BaseEntityBlock implements SimpleWate
                 if ((LevelAccessor) world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.OCEANIZED_ILLUSIONER.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
                 ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 {
                     int value = 1;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
-                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    BlockState bs = world.getBlockState(pos);
                     if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
                 {
                     int value = 1;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
-                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    BlockState bs = world.getBlockState(pos);
                     if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
                 result = ItemInteractionResult.SUCCESS;
             } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()

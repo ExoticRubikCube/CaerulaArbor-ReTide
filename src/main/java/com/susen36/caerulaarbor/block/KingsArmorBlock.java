@@ -6,7 +6,6 @@ import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -109,7 +108,7 @@ public class KingsArmorBlock extends Block implements SimpleWaterloggedBlock {
             level.addFreshEntity(entityToSpawn);
         }
         world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.KINGS_ARMOR.get().defaultBlockState()));
-        ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.DEEPSLATE_BRICK_SLAB.defaultBlockState(), 3);
+        world.setBlock(BlockPos.containing(x, y, z), Blocks.DEEPSLATE_BRICK_SLAB.defaultBlockState(), 3);
         InteractionResult result = InteractionResult.SUCCESS;
 		return result;
 	}

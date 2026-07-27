@@ -8,6 +8,7 @@ import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -65,7 +67,7 @@ public class RelicCurseEMELIGHTItem extends Item {
         double tZ;
         boolean wattered;
         BlockState toPlace;
-        if (!itemstack.getOrCreateTag().getBoolean("used")) {
+        if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             return InteractionResult.PASS;
         }
         tX = x + direction.getStepX();
@@ -118,7 +120,7 @@ public class RelicCurseEMELIGHTItem extends Item {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (!itemstack.getOrCreateTag().getBoolean("used")) {
+        if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_EMELIGHT) {
                 {
                     boolean setval = true;
@@ -134,7 +136,7 @@ public class RelicCurseEMELIGHTItem extends Item {
                     level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
                 if (world.isClientSide())
                     Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-                itemstack.getOrCreateTag().putBoolean("used", true);
+                CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
             }
         }
     }

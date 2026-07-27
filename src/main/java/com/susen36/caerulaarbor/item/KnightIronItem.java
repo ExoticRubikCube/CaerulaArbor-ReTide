@@ -5,18 +5,17 @@ import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -36,47 +35,20 @@ public class KnightIronItem extends ArmorItem implements GeoItem, SyncedAnimatio
 	public String animationprocedure = "empty";
 
 	public KnightIronItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial() {
-			@Override
-			public int getDurabilityForType(ArmorItem.Type type) {
-				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 64;
-			}
-
-			@Override
-			public int getDefenseForType(ArmorItem.Type type) {
-				return new int[]{3, 6, 7, 4}[type.getSlot().getIndex()];
-			}
-
-			@Override
-			public int getEnchantmentValue() {
-				return 9;
-			}
-
-			@Override
-			public SoundEvent getEquipSound() {
-				return SoundEvents.ARMOR_EQUIP_IRON;
-			}
-
-			@Override
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CAItems.KNIGHT_CORPSE.get()));
-			}
-
-			@Override
-			public String getName() {
-				return "knight_iron";
-			}
-
-			@Override
-			public float getToughness() {
-				return 4.5f;
-			}
-
-			@Override
-			public float getKnockbackResistance() {
-				return 0.33f;
-			}
-		}, type, properties);
+		super(new ArmorMaterial(
+			Map.of(
+				ArmorItem.Type.HELMET, 4,
+				ArmorItem.Type.CHESTPLATE, 7,
+				ArmorItem.Type.LEGGINGS, 6,
+				ArmorItem.Type.BOOTS, 3
+			),
+			9,
+			SoundEvents.ARMOR_EQUIP_IRON,
+			() -> Ingredient.of(new ItemStack(CAItems.KNIGHT_CORPSE.get())),
+			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "knight_iron"))),
+			4.5f,
+			0.33f
+		), type, properties);
 	}
 
 	@Override

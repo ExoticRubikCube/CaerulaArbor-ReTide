@@ -56,7 +56,7 @@ public class GoodsquidsServererItem extends Item {
                     }
                     if ((LevelAccessor) world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 6, 4, 4, 4, 0);
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 3, 1);
                     }
                     itemstack.shrink(1);

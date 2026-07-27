@@ -8,6 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class CollectorMeatItem extends Item {
 	public CollectorMeatItem() {
@@ -15,7 +16,7 @@ public class CollectorMeatItem extends Item {
 	}
 
 	@Override
-	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
+	public ItemStack finishUsingItem(@NotNull ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		EntityUtils.giveLessArmor(entity, 0);
         return retval;

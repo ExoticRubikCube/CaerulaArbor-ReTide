@@ -8,10 +8,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraft.world.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GuidedEvoMobEffect extends MobEffect {
     public GuidedEvoMobEffect() {
@@ -21,8 +17,13 @@ public class GuidedEvoMobEffect extends MobEffect {
     
 
     @Override
-    public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.addAttributeModifiers(entity, attributeMap, amplifier);
+    public void addAttributeModifiers(AttributeMap attributeMap, int amplifier) {
+        super.addAttributeModifiers(attributeMap, amplifier);
+    }
+
+    @Override
+    public void onEffectAdded(LivingEntity entity, int amplifier) {
+        super.onEffectAdded(entity, amplifier);
         if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
             livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, -1, 0, false, false));
     }

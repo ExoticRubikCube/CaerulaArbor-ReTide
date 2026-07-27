@@ -6,6 +6,7 @@ import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -162,8 +163,8 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
 			}
 		} else {
 			for (String blockId : CAConfigs.BOIL_WATER.get()) {
-				if (BuiltInRegistries.BLOCKS.getKey(lower.getBlock()).toString().equals(blockId)) {
-					if (BuiltInRegistries.BLOCKS.getKey(lower.getBlock()).toString().equals("create:blaze_burner")) {
+				if (BuiltInRegistries.BLOCK.getKey(lower.getBlock()).toString().equals(blockId)) {
+					if (BuiltInRegistries.BLOCK.getKey(lower.getBlock()).toString().equals("create:blaze_burner")) {
 						if (!(lower.getBlock().getStateDefinition().getProperty("blaze") instanceof EnumProperty<?> blazeProperty
 								&& lower.getValue(blazeProperty).toString().equals("smouldering"))) {
 							valid = true;

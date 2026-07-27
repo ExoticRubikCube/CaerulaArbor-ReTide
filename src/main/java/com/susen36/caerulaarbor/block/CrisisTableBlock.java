@@ -1,12 +1,12 @@
 
 package com.susen36.caerulaarbor.block;
 
+import com.mojang.serialization.MapCodec;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -59,9 +59,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public CrisisTableBlock() {
-		super(BlockBehaviour.Properties.of()
-
-				.sound(SoundType.METAL).strength(256f, 32f).lightLevel(s -> (new Object() {
+		super(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(256f, 32f).lightLevel(s -> (new Object() {
 					public int getLightLevel() {
 						if (s.getValue(BLOCKSTATE) == 1)
 							return 0;

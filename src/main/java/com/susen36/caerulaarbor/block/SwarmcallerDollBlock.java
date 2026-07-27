@@ -1,8 +1,8 @@
 
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.mojang.serialization.MapCodec;
+import com.susen36.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -32,9 +32,7 @@ public class SwarmcallerDollBlock extends BaseEntityBlock implements SimpleWater
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public SwarmcallerDollBlock() {
-		super(BlockBehaviour.Properties.of()
-
-				.sound(SoundType.WOOL).strength(0.5f, 2f).lightLevel(s -> 13).noOcclusion().isRedstoneConductor((bs, br, bp) -> false));
+		super(BlockBehaviour.Properties.of().sound(SoundType.WOOL).strength(0.5f, 2f).lightLevel(s -> 13).noOcclusion().isRedstoneConductor((bs, br, bp) -> false));
 		this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
 	}
 

@@ -1,18 +1,19 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.helper.LittleHelperEntity;
-import com.susen36.caerulaarbor.init.CANetwork;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-
-import java.util.Objects;
-import java.util.function.Supplier;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 @EventBusSubscriber(value = {Dist.CLIENT})
 public class PlayerLeftClickEventHandler {
@@ -33,31 +34,30 @@ public class PlayerLeftClickEventHandler {
         }
     }
 
-    @EventBusSubscriber
-    public static class HelperLeftClickMessage {
+    public static class HelperLeftClickMessage implements CustomPacketPayload {
+        public static final Type<HelperLeftClickMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "helper_left_click"));
+        public static final StreamCodec<FriendlyByteBuf, HelperLeftClickMessage> STREAM_CODEC = StreamCodec.of(
+                (buf, msg) -> {
+                },
+                buf -> new HelperLeftClickMessage()
+        );
+
         public HelperLeftClickMessage() {
         }
 
-        public HelperLeftClickMessage(FriendlyByteBuf buffer) {
-        }
-
-        public static void buffer(HelperLeftClickMessage message, FriendlyByteBuf buffer) {
-        }
-
-        public static void handler(HelperLeftClickMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-            NetworkEvent.Context context = contextSupplier.get();
+        public static void handle(HelperLeftClickMessage message, IPayloadContext context) {
             context.enqueueWork(() -> {
-                if (!Objects.requireNonNull(context.getSender()).level().hasChunkAt(context.getSender().blockPosition()))
+                Player sender = context.player();
+                if (sender == null || !sender.level().hasChunkAt(sender.blockPosition())) {
                     return;
-                executeHelperLeftClick(context.getSender());
+                }
+                executeHelperLeftClick(sender);
             });
-            context.setPacketHandled(true);
         }
 
-        @SubscribeEvent
-        public static void registerMessage(FMLCommonSetupEvent event) {
-            CANetwork.addNetworkMessage(HelperLeftClickMessage.class, HelperLeftClickMessage::buffer, HelperLeftClickMessage::new, HelperLeftClickMessage::handler);
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
         }
     }
-
 }

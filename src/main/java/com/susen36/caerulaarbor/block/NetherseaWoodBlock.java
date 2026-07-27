@@ -10,9 +10,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
@@ -90,21 +89,19 @@ public class NetherseaWoodBlock extends Block {
 		double hitZ = hit.getLocation().z;
 		Direction direction = hit.getDirection();
         ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        if (entity != null) {
-            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
-                    || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))
-                    || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))) {
-                world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.NETHERSEA_WOOD.get().defaultBlockState()));
-                if ((LevelAccessor) world instanceof Level level) {
-                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
-                }
-                {
-                    BlockPos bp = BlockPos.containing(x, y, z);
-                    BlockState bs = CABlocks.STRIPPED_NETHERSEA_WOOD.get().withPropertiesOf(blockstate);
-                    ((LevelAccessor) world).setBlock(bp, bs, 3);
-                }
-                result = ItemInteractionResult.SUCCESS;
+        if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
+                || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))
+                || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))) {
+            world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.NETHERSEA_WOOD.get().defaultBlockState()));
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
             }
+            {
+                BlockPos bp = BlockPos.containing(x, y, z);
+                BlockState bs = CABlocks.STRIPPED_NETHERSEA_WOOD.get().withPropertiesOf(blockstate);
+                ((LevelAccessor) world).setBlock(bp, bs, 3);
+            }
+            result = ItemInteractionResult.SUCCESS;
         }
         return result;
 	}

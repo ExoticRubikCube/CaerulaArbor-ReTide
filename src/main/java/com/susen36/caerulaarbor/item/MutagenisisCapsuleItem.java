@@ -21,7 +21,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
@@ -42,18 +41,18 @@ public class MutagenisisCapsuleItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
         double ocean;
-        ocean = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
+        ocean = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
         if (ocean < 2.9) {
             SIHelper.causeSanityInjury(entity, (ocean + 1) * 40, SanityEvent.Hurt.Type.FOOD);
-            ((Entity) entity).hurt(CADamageTypes.source((LevelAccessor) world, CADamageTypes.OCEANIZE_DAMAGE), (float) (3 * (ocean + 1)));
+            entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEANIZE_DAMAGE), (float) (3 * (ocean + 1)));
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 2400, (int) ocean));
                 entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, (int) ocean));
             }
-            if (((Entity) entity).isAlive()) {
+            if (entity.isAlive()) {
                 {
                     double setval = ocean + 1;
-                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.player_oceanization = setval;
                         capability.syncPlayerVariables(entity);
                     });

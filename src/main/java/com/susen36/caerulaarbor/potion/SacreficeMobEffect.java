@@ -12,19 +12,13 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SacreficeMobEffect extends MobEffect {
     public SacreficeMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -3407872);
         this.addAttributeModifier(Attributes.MAX_HEALTH, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sacrefice_max_health"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
-
-    
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
