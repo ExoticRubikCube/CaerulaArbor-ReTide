@@ -45,11 +45,11 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public PrayerSplashEntity(EntityType<? extends PrayerSplashEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
+		super(type, x, y, z, world, ItemStack.EMPTY, ItemStack.EMPTY);
 	}
 
 	public PrayerSplashEntity(EntityType<? extends PrayerSplashEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world);
+		super(type, entity, world, ItemStack.EMPTY, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	@Override
-	protected ItemStack getPickupItem() {
+	protected ItemStack getDefaultPickupItem() {
 		return PROJECTILE_ITEM;
 	}
 
@@ -139,7 +139,6 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
-		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
 		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.SPLASHER_ATTACK.get(), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
@@ -162,7 +161,6 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 1.5f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(damage);
-		entityarrow.setKnockback(0);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
 		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.SPLASHER_ATTACK.get(), SoundSource.PLAYERS, 1,

@@ -1,6 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +25,7 @@ public class WearableCrownItem extends ArmorItem implements GeoItem, SyncedAnima
 	public String animationprocedure = "empty";
 
 	public WearableCrownItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial(
+		super(Holder.direct(new ArmorMaterial(
 			Map.of(
 				ArmorItem.Type.HELMET, 5,
 				ArmorItem.Type.CHESTPLATE, 6,
@@ -37,7 +38,7 @@ public class WearableCrownItem extends ArmorItem implements GeoItem, SyncedAnima
 			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "wearable_crown"))),
 			2.5f,
 			0f
-		), type, properties);
+		)), type, properties);
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class WearableCrownItem extends ArmorItem implements GeoItem, SyncedAnima
 	private PlayState predicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.crown.idle"));
-			Entity entity = event.getData(DataTickets.ENTITY);
+			Entity entity = (Entity) event.getData(DataTickets.ENTITY);
 			if (entity instanceof ArmorStand) {
 				return PlayState.CONTINUE;
 			}
@@ -68,7 +69,7 @@ public class WearableCrownItem extends ArmorItem implements GeoItem, SyncedAnima
 				this.animationprocedure = "empty";
 				event.getController().forceAnimationReset();
 			}
-			Entity entity = event.getData(DataTickets.ENTITY);
+			Entity entity = (Entity) event.getData(DataTickets.ENTITY);
 			if (entity instanceof ArmorStand) {
 				return PlayState.CONTINUE;
 			}

@@ -31,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -178,9 +179,9 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         } else {
             if (this.isTame()) {
                 if (this.isOwnedBy(sourceentity)) {
-                    if (item.components().has(DataComponents.FOOD) && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                    if (itemstack.getComponents().has(DataComponents.FOOD) && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
-                        this.heal((float) item.getFoodProperties().getNutrition());
+                        this.heal((float) item.getFoodProperties(itemstack, this).nutrition());
                         retval = InteractionResult.sidedSuccess(this.level().isClientSide());
                     } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
@@ -192,7 +193,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
                 }
             } else if (this.isFood(itemstack)) {
                 this.usePlayerItem(sourceentity, hand, itemstack);
-                if (this.random.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, sourceentity)) {
+                if (this.random.nextInt(3) == 0 && !EventHooks.onAnimalTame(this, sourceentity)) {
                     this.tame(sourceentity);
                     this.level().broadcastEntityEvent(this, (byte) 7);
                 } else {

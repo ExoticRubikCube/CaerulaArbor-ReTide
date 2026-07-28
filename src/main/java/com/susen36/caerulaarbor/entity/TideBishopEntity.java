@@ -181,7 +181,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         if (world instanceof ServerLevel level) {
             Entity entityToSpawn = CAEntities.TIDE_DEATHREPELLER.get().spawn(level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -3, 3), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -3, 3)), MobSpawnType.MOB_SUMMONED);
@@ -246,9 +246,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
                             AbstractArrow projectile = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
                             projectile.setOwner(this);
                             projectile.setBaseDamage((float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0));
-                            projectile.setKnockback(0);
                             projectile.setSilent(true);
-                            projectile.setPierceLevel((byte) 1);
                             projectile.setCritArrow(true);
                             projectile.setPos(this.getX(), this.getEyeY() - 0.1, this.getZ());
                             projectile.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z, 1.5F, 0);

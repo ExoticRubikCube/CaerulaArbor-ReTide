@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.util;
 
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -16,8 +17,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-
-import java.util.Map;
 
 public class ItemUtils {
 
@@ -71,23 +70,11 @@ public class ItemUtils {
 		if (entity.getMainHandItem().getItem() == itemstack.getItem()) {
 			if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.SHARPNESS), entity.getOffhandItem()) != 0
 					&& EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.SHARPNESS), entity.getOffhandItem()) > EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack)) {
-				{
-					// TODO: 1.21.1 enchantment map API migration
-					Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemstack);
-					if (enchantments.containsKey(CAEnchantments.SYNESTHESIA)) {
-						enchantments.remove(CAEnchantments.SYNESTHESIA);
-						EnchantmentHelper.setEnchantments(enchantments, itemstack);
-					}
-				}
+				Holder<Enchantment> synesthesia = CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SYNESTHESIA);
+				EnchantmentHelper.updateEnchantments(itemstack, enchantments -> enchantments.removeIf(enchantment -> enchantment.equals(synesthesia)));
 				itemstack.enchant(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SYNESTHESIA), EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.SHARPNESS), entity.getOffhandItem()));
-				{
-					// TODO: 1.21.1 enchantment map API migration
-					Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(entity.getOffhandItem());
-					if (enchantments.containsKey(Enchantments.SHARPNESS)) {
-						enchantments.remove(Enchantments.SHARPNESS);
-						EnchantmentHelper.setEnchantments(enchantments, entity.getOffhandItem());
-					}
-				}
+				Holder<Enchantment> sharpness = CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.SHARPNESS);
+				EnchantmentHelper.updateEnchantments(entity.getOffhandItem(), enchantments -> enchantments.removeIf(enchantment -> enchantment.equals(sharpness)));
 				if (world instanceof ServerLevel level)
 					level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
 				if (world instanceof Level level) {

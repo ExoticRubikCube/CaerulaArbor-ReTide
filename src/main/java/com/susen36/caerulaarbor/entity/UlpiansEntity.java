@@ -33,6 +33,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -380,7 +381,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
+                        this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 25, 9, false, false));
                         if (world instanceof Level level) {
@@ -456,7 +457,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         UlpiansEntity retval = CAEntities.ULPIANS.get().create(serverWorld);
         if (retval != null) {
-            retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
+            retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);
         }
         return retval;
     }
@@ -565,5 +566,10 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     @Override
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;
+    }
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return false;
     }
 }

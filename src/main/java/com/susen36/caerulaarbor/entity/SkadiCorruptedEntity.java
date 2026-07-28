@@ -2,14 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CAAttributes;
-import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.init.CAGameRules;
-import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.init.CAParticles;
-import com.susen36.caerulaarbor.init.CASounds;
+import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.SeabornSpawnManager;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -39,12 +32,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -63,11 +51,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -393,8 +378,8 @@ public class SkadiCorruptedEntity extends SeaMonster {
                     }
                     if ((Entity) this instanceof SkadiCorruptedEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_CONVERT_P, 1120);
-                    if ((Entity) this instanceof LivingEntity entity)
-                        entity.setHealth((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+                    if (this instanceof LivingEntity entity)
+                        entity.setHealth(this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
                     if ((Entity) this instanceof SkadiCorruptedEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_PHASE, 1);
                     if ((Entity) this instanceof SkadiCorruptedEntity datEntSetI)

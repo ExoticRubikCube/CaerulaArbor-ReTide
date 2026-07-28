@@ -1,14 +1,15 @@
 package com.susen36.caerulaarbor.datagen;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import net.minecraft.advancements.critereon.EnchantmentPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.loot.LootTableProvider.SubProviderEntry;
 import net.minecraft.data.loot.LootTableSubProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 /**
@@ -42,83 +44,83 @@ public final class LootTableProviders {
      * 创建完整的战利品表 provider
      *
      * @param output datagen 输出位置
+     * @param registries 注册表查找器
      * @return 已注册所有子 provider 的战利品表 provider
      */
-    public static net.minecraft.data.loot.LootTableProvider create(PackOutput output) {
-        return new net.minecraft.data.loot.LootTableProvider(
+    public static LootTableProvider create(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        return new LootTableProvider(
                 output,
                 Set.of(),
                 List.of(
-                        new SubProviderEntry(BlockTables::new, LootContextParamSets.BLOCK),
-                        new SubProviderEntry(ChestTables::new, LootContextParamSets.CHEST),
-                        new SubProviderEntry(EntityTables::new, LootContextParamSets.ENTITY),
-                        new SubProviderEntry(GameplayTables::new, LootContextParamSets.ALL_PARAMS)
-                )
+                        new SubProviderEntry(lookup -> new BlockTables(lookup), LootContextParamSets.BLOCK),
+                        new SubProviderEntry(lookup -> new ChestTables(lookup), LootContextParamSets.CHEST),
+                        new SubProviderEntry(lookup -> new EntityTables(lookup), LootContextParamSets.ENTITY),
+                        new SubProviderEntry(lookup -> new GameplayTables(lookup), LootContextParamSets.ALL_PARAMS)
+                ),
+                registries
         );
     }
 
-    private static LootTable.Builder table(TableDef definition) {
+    private static LootTable.Builder table(TableDef definition, HolderLookup.Provider registries) {
         LootTable.Builder builder = LootTable.lootTable();
         for (PoolDef pool : definition.pools()) {
-            builder.withPool(pool(pool));
+            builder.withPool(pool(pool, registries));
         }
         return builder;
     }
 
-    private static LootPool.Builder pool(PoolDef definition) {
+    private static LootPool.Builder pool(PoolDef definition, HolderLookup.Provider registries) {
         LootPool.Builder builder = LootPool.lootPool().setRolls(number(definition.rolls()));
         if (definition.bonusRolls() != null) {
             builder.setBonusRolls(number(definition.bonusRolls()));
         }
         for (CondDef condition : definition.conditions()) {
-            builder.when(condition(condition));
+            builder.when(condition(condition, registries));
         }
         for (EntryDef entry : definition.entries()) {
-            builder.add(entry(entry));
+            builder.add(entry(entry, registries));
         }
         return builder;
     }
 
-    private static LootPoolSingletonContainer.Builder<?> entry(EntryDef definition) {
+    private static LootPoolSingletonContainer.Builder<?> entry(EntryDef definition, HolderLookup.Provider registries) {
         LootPoolSingletonContainer.Builder<?> builder = LootItem.lootTableItem(item(definition.item()));
         if (definition.weight() != 1) {
             builder.setWeight(definition.weight());
         }
         for (CondDef condition : definition.conditions()) {
-            builder.when(condition(condition));
+            builder.when(condition(condition, registries));
         }
         for (FuncDef function : definition.functions()) {
-            builder.apply(function(function));
+            builder.apply(function(function, registries));
         }
         return builder;
     }
 
-    private static LootItemFunction.Builder function(FuncDef definition) {
+    private static LootItemFunction.Builder function(FuncDef definition, HolderLookup.Provider registries) {
         LootItemConditionalFunction.Builder<?> builder = switch (definition.type()) {
             case "set_count" -> SetItemCountFunction.setCount(number(definition.number()));
             case "explosion_decay" -> ApplyExplosionDecay.explosionDecay();
-            case "ore_bonus" -> ApplyBonusCount.addOreBonusCount(Enchantments.FORTUNE);
+            case "ore_bonus" -> ApplyBonusCount.addOreBonusCount(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE));
             case "enchant_with_levels" -> {
-                EnchantWithLevelsFunction.Builder enchantBuilder = EnchantWithLevelsFunction.enchantWithLevels(number(definition.number()));
-                if (definition.treasure()) {
-                    enchantBuilder.allowTreasure();
-                }
+                EnchantWithLevelsFunction.Builder enchantBuilder = EnchantWithLevelsFunction.enchantWithLevels(registries, number(definition.number()));
                 yield enchantBuilder;
             }
             default -> throw new IllegalStateException("Unsupported loot function: " + definition.type());
         };
         for (CondDef condition : definition.conditions()) {
-            builder.when(condition(condition));
+            builder.when(condition(condition, registries));
         }
         return builder;
     }
 
-    private static LootItemCondition.Builder condition(CondDef definition) {
+    private static LootItemCondition.Builder condition(CondDef definition, HolderLookup.Provider registries) {
         return switch (definition.type()) {
             case "survives_explosion" -> ExplosionCondition.survivesExplosion();
             case "silk_touch" -> MatchTool.toolMatches(ItemPredicate.Builder.item()
-                    .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
-            case "inverted" -> InvertedLootItemCondition.invert(condition(Objects.requireNonNull(definition.term())));
+                    .withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.enchantments(List.of(
+                            new EnchantmentPredicate(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), MinMaxBounds.Ints.atLeast(1))))));
+            case "inverted" -> InvertedLootItemCondition.invert(condition(Objects.requireNonNull(definition.term()), registries));
             case "block_state_property" -> blockStateProperty(definition);
             default -> throw new IllegalStateException("Unsupported loot condition: " + definition.type());
         };
@@ -140,11 +142,11 @@ public final class LootTableProviders {
     }
 
     private static Item item(String id) {
-        return Objects.requireNonNull(BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(id)), "Unknown loot item: " + id);
+        return Objects.requireNonNull(BuiltInRegistries.ITEM.get(ResourceLocation.parse(id)), "Unknown loot item: " + id);
     }
 
     private static Block block(String id) {
-        return Objects.requireNonNull(BuiltInRegistries.BLOCK.getValue(ResourceLocation.parse(id)), "Unknown loot block: " + id);
+        return Objects.requireNonNull(BuiltInRegistries.BLOCK.get(ResourceLocation.parse(id)), "Unknown loot block: " + id);
     }
 
     private static TableDef table(String path, PoolDef... pools) {
@@ -208,9 +210,11 @@ public final class LootTableProviders {
      */
     private abstract static class GeneratedLootTableProvider implements LootTableSubProvider {
         private final List<TableDef> tables;
+        protected final HolderLookup.Provider registries;
 
-        private GeneratedLootTableProvider(List<TableDef> tables) {
+        private GeneratedLootTableProvider(List<TableDef> tables, HolderLookup.Provider registries) {
             this.tables = tables;
+            this.registries = registries;
         }
 
         /**
@@ -219,9 +223,11 @@ public final class LootTableProviders {
          * @param output 战利品表输出回调
          */
         @Override
-        public void generate(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> output) {
+        public void generate(@NotNull BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
             for (TableDef table : tables) {
-                output.accept(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, table.path()), table(table));
+                ResourceKey<LootTable> key = ResourceKey.create(Registries.LOOT_TABLE,
+                        ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, table.path()));
+                output.accept(key, table(table, registries));
             }
         }
     }
@@ -233,7 +239,7 @@ public final class LootTableProviders {
         /**
          * 创建方块战利品表子 provider
          */
-        public BlockTables() {
+        public BlockTables(HolderLookup.Provider registries) {
             super(List.of(
                     babandonedSulpture(),
                     baegirGlassArch(),
@@ -359,7 +365,7 @@ public final class LootTableProviders {
                     bundertideSpawnumber(),
                     bundertideTable(),
                     bwhiteChitinBlock()
-            ));
+            ), registries);
         }
 
         private static TableDef babandonedSulpture() {
@@ -1125,7 +1131,7 @@ public final class LootTableProviders {
         /**
          * 创建箱子战利品表子 provider
          */
-        public ChestTables() {
+        public ChestTables(HolderLookup.Provider registries) {
             super(List.of(
                     caegirGene(),
                     caegirLife(),
@@ -1201,7 +1207,7 @@ public final class LootTableProviders {
                     ctideStationTop(),
                     ctownPossesion(),
                     cwatchtowerBomb()
-            ));
+            ), registries);
         }
 
         private static TableDef caegirGene() {
@@ -2253,7 +2259,7 @@ public final class LootTableProviders {
         /**
          * 创建实体战利品表子 provider
          */
-        public EntityTables() {
+        public EntityTables(HolderLookup.Provider registries) {
             super(List.of(
                     eaccumulatorProkaryote(),
                     eapostleProkaryote(),
@@ -2316,7 +2322,7 @@ public final class LootTableProviders {
                     etideDeathrepeller(),
                     etidutantRockSpider(),
                     eumbrellaAbyssal()
-            ));
+            ), registries);
         }
 
         private static TableDef eaccumulatorProkaryote() {
@@ -3068,7 +3074,7 @@ public final class LootTableProviders {
         /**
          * 创建 gameplay 战利品表子 provider
          */
-        public GameplayTables() {
+        public GameplayTables(HolderLookup.Provider registries) {
             super(List.of(
                     ghighmoreRelics(),
                     gmereGeenSample(),
@@ -3080,7 +3086,7 @@ public final class LootTableProviders {
                     gtableOfHands(),
                     gterminalRelics(),
                     gtriggerCrisisTable()
-            ));
+            ), registries);
         }
 
         private static TableDef ghighmoreRelics() {

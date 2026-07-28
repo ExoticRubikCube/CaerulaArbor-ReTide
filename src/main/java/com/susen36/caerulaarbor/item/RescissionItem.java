@@ -87,7 +87,7 @@ public class RescissionItem extends Item {
                     if (owner == entity) {
                         if (entityiterator instanceof LivingEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.UNTAME_CONFIRM)) {
                             if (entityiterator instanceof TamableAnimal ent) {
-                                ent.setTame(false);
+                                ent.setTame(false, false);
                             }
                             if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                                 player.displayClientMessage(Component.literal((entityiterator.getDisplayName().getString() + Component.translatable("item.caerula_arbor.language_key.description_2").getString())), false);

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MeatCanItem extends Item {
 	public MeatCanItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(14).saturationModifier(0.25f).meat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(14).saturationModifier(0.25f).build()));
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import java.util.List;
 
 public class CellClusterItem extends Item {
 	public CellClusterItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(5).saturationModifier(0.2f).meat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(5).saturationModifier(0.2f).build()));
 	}
 
 	@Override

@@ -93,7 +93,7 @@ public class LivingDamageEventHandler {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (damagesource == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (!(sourceentity instanceof Player attacker) || !EntityUtils.canPlayerEvo(attacker)) return;
 

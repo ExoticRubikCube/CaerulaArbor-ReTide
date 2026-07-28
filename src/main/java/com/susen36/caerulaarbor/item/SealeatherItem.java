@@ -1,32 +1,31 @@
 package com.susen36.caerulaarbor.item;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Multimap;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 
 public abstract class SealeatherItem extends ArmorItem {
 	public SealeatherItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial(
+		super(Holder.direct(new ArmorMaterial(
 			Map.of(
 				ArmorItem.Type.HELMET, 2,
 				ArmorItem.Type.CHESTPLATE, 4,
@@ -39,21 +38,16 @@ public abstract class SealeatherItem extends ArmorItem {
 			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "sealeather"))),
 			1f,
 			0f
-		), type, properties);
+		)), type, properties.component(DataComponents.ATTRIBUTE_MODIFIERS,
+			ItemAttributeModifiers.builder()
+				.add(CAAttributes.MISSRATE,
+					new AttributeModifier(
+						ResourceLocation.fromNamespaceAndPath("caerula_arbor", "sealeather_missrate"),
+						5.0,
+						AttributeModifier.Operation.ADD_VALUE),
+					EquipmentSlotGroup.ARMOR)
+				.build()));
 	}
-
-	@Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> map = super.getAttributeModifiers(slot, stack);
-        UUID uuid = new UUID(slot.toString().hashCode(), 0);
-        String name = "caerula_arbor_attribute_modifier";
-        if (slot == this.getEquipmentSlot()){
-            map = HashMultimap.create(map);
-            map.put(CAAttributes.MISSRATE.get(),
-                    new AttributeModifier(uuid, name , 5.0f, AttributeModifier.Operation.ADDITION));
-        }
-        return map;
-    }
 
 	public static class Helmet extends SealeatherItem {
 		public Helmet() {
@@ -66,10 +60,6 @@ public abstract class SealeatherItem extends ArmorItem {
 			list.add(Component.translatable("item.caerula_arbor.sealeather_helmet.description_0"));
 		}
 
-		@Override
-		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "caerula_arbor:textures/models/armor/sealeather_layer_1.png";
-		}
 	}
 
 	public static class Chestplate extends SealeatherItem {
@@ -84,10 +74,6 @@ public abstract class SealeatherItem extends ArmorItem {
 			list.add(Component.translatable("item.caerula_arbor.sealeather_chestplate.description_1"));
 		}
 
-		@Override
-		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "caerula_arbor:textures/models/armor/sealeather_layer_1.png";
-		}
 
 		@Override
     	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
@@ -115,10 +101,6 @@ public abstract class SealeatherItem extends ArmorItem {
 			list.add(Component.translatable("item.caerula_arbor.sealeather_leggings.description_0"));
 		}
 
-		@Override
-		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "caerula_arbor:textures/models/armor/sealeather_layer_2.png";
-		}
 	}
 
 	public static class Boots extends SealeatherItem {
@@ -132,9 +114,5 @@ public abstract class SealeatherItem extends ArmorItem {
 			list.add(Component.translatable("item.caerula_arbor.sealeather_boots.description_0"));
 		}
 
-		@Override
-		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "caerula_arbor:textures/models/armor/sealeather_layer_1.png";
-		}
 	}
 }

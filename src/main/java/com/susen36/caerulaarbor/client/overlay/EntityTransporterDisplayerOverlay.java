@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -45,7 +46,7 @@ public class EntityTransporterDisplayerOverlay {
                     result1 = entity;
                 } else {
                     ResourceLocation location = ResourceLocation.parse(name);
-                    EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(location);
+                    EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(location);
                     if (type == null) {
                         result1 = entity;
                     } else {
@@ -56,7 +57,7 @@ public class EntityTransporterDisplayerOverlay {
                 result1 = entity;
             }
             if (result1 instanceof LivingEntity livingEntity) {
-				InventoryScreen.renderEntityInInventoryFollowsAngle(event.getGuiGraphics(), w - 134, h - 22, 30, 1.1f, 0, livingEntity);
+				InventoryScreen.renderEntityInInventoryFollowsAngle(event.getGuiGraphics(), w - 164, h - 52, w - 104, h + 8, 30, 1.1f, 0f, 0f, livingEntity);
 			}
 		}
 	}

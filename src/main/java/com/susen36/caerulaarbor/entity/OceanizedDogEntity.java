@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -33,7 +34,7 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -177,9 +178,9 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
         } else {
             if (this.isTame()) {
                 if (this.isOwnedBy(sourceentity)) {
-                    if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                    if (itemstack.getComponents().has(DataComponents.FOOD) && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
-                        this.heal((float) item.getFoodProperties().getNutrition());
+                        this.heal((float) item.getFoodProperties(itemstack, this).nutrition());
                         retval = InteractionResult.sidedSuccess(this.level().isClientSide());
                     } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
@@ -191,7 +192,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
                 }
             } else if (this.isFood(itemstack)) {
                 this.usePlayerItem(sourceentity, hand, itemstack);
-                if (this.random.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, sourceentity)) {
+                if (this.random.nextInt(3) == 0 && !EventHooks.onAnimalTame(this, sourceentity)) {
                     this.tame(sourceentity);
                     this.level().broadcastEntityEvent(this, (byte) 7);
                 } else {
@@ -216,7 +217,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
                 if (entity instanceof OceanizedDogEntity datEntSetL)
                     datEntSetL.getEntityData().set(DATA_SITTING, (!(entity instanceof OceanizedDogEntity datEntL3 && datEntL3.getEntityData().get(DATA_SITTING))));
                 return InteractionResult.SUCCESS;
-            } else if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem().isEdible()) {
+            } else if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getComponents().has(DataComponents.FOOD)) {
                 if ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
                     LivingEntity livingEntity = (LivingEntity) entity;
                     livingEntity.setHealth(livingEntity.getMaxHealth());

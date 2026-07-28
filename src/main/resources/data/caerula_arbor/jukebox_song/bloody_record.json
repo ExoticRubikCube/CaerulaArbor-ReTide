@@ -1,0 +1,8 @@
+{
+  "sound_event": "caerula_arbor:bloody_wolf",
+  "description": {
+    "translate": "item.caerula_arbor.bloody_record.desc"
+  },
+  "length_in_seconds": 154.0,
+  "comparator_output": 9
+}

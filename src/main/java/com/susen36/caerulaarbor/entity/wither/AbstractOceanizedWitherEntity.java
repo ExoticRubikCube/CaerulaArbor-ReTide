@@ -33,7 +33,6 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.WitherSkull;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
@@ -444,7 +443,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
         });
 
         if (world instanceof ServerLevel projectileLevel) {
-            Projectile projectile = new WitherSkull(EntityType.WITHER_SKULL, projectileLevel) {
+            WitherSkull projectile = new WitherSkull(EntityType.WITHER_SKULL, projectileLevel) {
                 @Override
                 protected void onHitEntity(EntityHitResult result) {
                     Entity target = result.getEntity();
@@ -456,9 +455,6 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
                 }
             };
             projectile.setOwner(from);
-            ((WitherSkull) projectile).xPower = adjustedDx;
-            ((WitherSkull) projectile).yPower = adjustedDy;
-            ((WitherSkull) projectile).zPower = adjustedDz;
             projectile.setPos(x, y, z);
             projectile.shoot(dx, dy, dz, (float) speed, (float) inaccuracy);
             projectileLevel.addFreshEntity(projectile);

@@ -143,7 +143,7 @@ public class OperationTableBlock extends Block {
                                     }
                                     ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                     if ((LevelAccessor) world instanceof Level level) {
-                                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.BLOCKS, 1, 1);
+                                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.BLOCKS, 1, 1);
                                     }
                                     result = ItemInteractionResult.SUCCESS;
                                 }
@@ -179,7 +179,8 @@ public class OperationTableBlock extends Block {
                                 }
                                 (entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                 output = new ItemStack(CAItems.PERSONNEL_TRANSPORTER.get()).copy();
-                                CustomData.update(DataComponents.CUSTOM_DATA, output, tag -> tag.putString("name", res));
+                                String resultName = res;
+                                CustomData.update(DataComponents.CUSTOM_DATA, output, tag -> tag.putString("name", resultName));
                                 CustomData.update(DataComponents.CUSTOM_DATA, output, tag -> tag.putDouble("perc", 0.5));
                                 {
                                     int value = 0;

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class TransformCellItem extends Item {
 	public TransformCellItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(7).saturationModifier(0.4f).alwaysEdible().meat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(7).saturationModifier(0.4f).alwaysEdible().build()));
 	}
 
 	@Override

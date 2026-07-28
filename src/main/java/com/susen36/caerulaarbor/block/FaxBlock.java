@@ -10,7 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -68,7 +67,7 @@ public class FaxBlock extends Block {
 		int y = pos.getY();
 		int z = pos.getZ();
 		Direction direction = hit.getDirection();
-        InteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         ItemStack treaty;
         boolean isCreative;
         treaty = (entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
@@ -95,7 +94,7 @@ public class FaxBlock extends Block {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
-                result = InteractionResult.SUCCESS;
+                result = ItemInteractionResult.SUCCESS;
             }
         } else if (treaty.getItem() == CAItems.TREATY_IRON.get()) {
             if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 7 || isCreative) {
@@ -110,7 +109,7 @@ public class FaxBlock extends Block {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
-                result = InteractionResult.SUCCESS;
+                result = ItemInteractionResult.SUCCESS;
             }
         } else if (treaty.getItem() == CAItems.TREATY_GOLD.get()) {
             if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 9 || isCreative) {
@@ -136,7 +135,7 @@ public class FaxBlock extends Block {
                         }
                     }
                 }
-                result = InteractionResult.SUCCESS;
+                result = ItemInteractionResult.SUCCESS;
             }
         } else if (treaty.getItem() == CAItems.EMERALD_TREATY.get()) {
             if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 9 || isCreative) {
@@ -160,7 +159,7 @@ public class FaxBlock extends Block {
                         }
                     }
                 }
-                result = InteractionResult.SUCCESS;
+                result = ItemInteractionResult.SUCCESS;
             }
         } else if (treaty.getItem() == CAItems.TREATY_DIAMOND.get()) {
             if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 11 || isCreative) {
@@ -177,7 +176,7 @@ public class FaxBlock extends Block {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
-                result = InteractionResult.SUCCESS;
+                result = ItemInteractionResult.SUCCESS;
             }
         }
         return result;

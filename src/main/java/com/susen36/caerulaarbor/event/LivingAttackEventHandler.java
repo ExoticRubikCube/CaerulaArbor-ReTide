@@ -16,6 +16,7 @@ import com.susen36.caerulaarbor.util.CaerulaUtil;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -208,7 +209,7 @@ public class LivingAttackEventHandler {
         var entity = event.getEntity();
         var sourceEntity = event.getSource().getEntity();
 
-        if (damagesource == null || entity == null || sourceEntity == null) return;
+        if (sourceEntity == null) return;
 
         if (entity instanceof HighmoreEntity livEnt1) {
             if (livEnt1.hasEffect(CAMobEffects.COOLDOWN_SINAL)) return;
@@ -247,9 +248,7 @@ public class LivingAttackEventHandler {
         HighmoreShootEntity entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
         entityToSpawn.setOwner(shooter);
         entityToSpawn.setBaseDamage((float) damage);
-        entityToSpawn.setKnockback(0);
         entityToSpawn.setSilent(true);
-        entityToSpawn.setPierceLevel((byte) 1);
         entityToSpawn.setPos(x, y, z);
         entityToSpawn.shoot(dx, dy, dz, 2, 2);
         projectileLevel.addFreshEntity(entityToSpawn);
@@ -260,7 +259,7 @@ public class LivingAttackEventHandler {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (sourceentity instanceof TideutantRockSpiderEntity) {
             EntityUtils.giveLessArmor(entity, 8);
@@ -419,8 +418,8 @@ public class LivingAttackEventHandler {
     private static void handlePlayerHitRelics(Level world, LivingEntity target, Vec3 targetPosition, Entity immediateSource,
                                               Player player, double amount, ItemStack mainHandItem, PlayerVariable playerVariables) {
         if (immediateSource != player) {
-            var itemKey = ForgeRegistries.ITEMS.getKey(mainHandItem.getItem());
-            var registryName = itemKey == null ? "" : itemKey.toString();
+            var itemKey = BuiltInRegistries.ITEM.getKey(mainHandItem.getItem());
+            var registryName = itemKey.toString();
 
             if (playerVariables.relic_hand_STRANGLE && isStrangleWeapon(mainHandItem, registryName)
                     && target.isAlive() && target.getHealth() < target.getMaxHealth() * 0.25F) {
@@ -456,12 +455,12 @@ public class LivingAttackEventHandler {
     }
 
     private static boolean isStrangleWeapon(ItemStack itemStack, String registryName) {
-        return itemStack.is(Tags.Items.TOOLS_CROSSBOWS) || itemStack.getItem() instanceof CrossbowItem
+        return itemStack.is(Tags.Items.TOOLS_CROSSBOW) || itemStack.getItem() instanceof CrossbowItem
                 || matchesConfiguredItem(CAConfigs.HAND_STRANGLE.get(), registryName);
     }
 
     private static boolean isFireworkWeapon(ItemStack itemStack, String registryName) {
-        return itemStack.is(Tags.Items.TOOLS_BOWS) || itemStack.getItem() instanceof BowItem
+        return itemStack.is(Tags.Items.TOOLS_BOW) || itemStack.getItem() instanceof BowItem
                 || itemStack.is(CAItems.PHLOEM_BOW.get())
                 || matchesConfiguredItem(CAConfigs.HAND_FIREWORK.get(), registryName);
     }

@@ -1,10 +1,13 @@
 package com.susen36.caerulaarbor.datagen;
 
 import com.susen36.caerulaarbor.init.CALootModifier;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 生成全局战利品修改器数据
@@ -13,11 +16,12 @@ public class GlobalLootModifierProvider extends net.neoforged.neoforge.common.da
     /**
      * 创建全局战利品修改器 provider
      *
-     * @param output datagen 输出位置
-     * @param modid  输出所属命名空间
+     * @param output     datagen 输出位置
+     * @param registries 注册表查找提供者
+     * @param modid      输出所属命名空间
      */
-    public GlobalLootModifierProvider(PackOutput output, String modid) {
-        super(output, modid);
+    public GlobalLootModifierProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, String modid) {
+        super(output, registries, modid);
     }
 
     private static CALootModifier.CaerulaArborModLootTableModifier appendLootTable(String targetLootTable, String appendedLootTable) {

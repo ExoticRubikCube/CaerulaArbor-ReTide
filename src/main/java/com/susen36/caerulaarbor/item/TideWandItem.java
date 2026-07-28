@@ -90,7 +90,6 @@ public class TideWandItem extends Item {
                     AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
                     entityToSpawn.setOwner((Entity) entity);
                     entityToSpawn.setBaseDamage((float) ((Entity) entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity4.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-                    entityToSpawn.setKnockback(0);
                     entityToSpawn.setSilent(true);
                     entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
                     entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 2.2, 0);

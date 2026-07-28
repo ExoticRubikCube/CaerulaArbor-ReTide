@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.mixin;
 
 import com.susen36.caerulaarbor.entity.MartusEntity;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import net.minecraft.core.Holder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -22,11 +23,11 @@ public abstract class AddEffectMixin {
             at = @At("HEAD"),
             argsOnly = true)
     public MobEffectInstance addShorterEffect(MobEffectInstance value) {
-        MobEffect effect = value.getEffect().value();
-        if (effect.isInstantenous()) return value;
-        if (effect.getCategory() == MobEffectCategory.HARMFUL) {
+        Holder<MobEffect> effect = value.getEffect();
+        if (effect.value().isInstantenous()) return value;
+        if (effect.value().getCategory() == MobEffectCategory.HARMFUL) {
             LivingEntity me = (LivingEntity) (Object) this;
-            MobEffect resist = CAMobEffects.ESSENCE_RESISTANCE.get();
+            Holder<MobEffect> resist = CAMobEffects.ESSENCE_RESISTANCE;
             if (!me.hasEffect(resist)) return value;
             MobEffectInstance resistInstance = me.getEffect(resist);
             int amplifier = 0;

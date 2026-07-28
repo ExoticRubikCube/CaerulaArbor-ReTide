@@ -677,7 +677,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 AbstractArrow entityToSpawn = new FishShootEntity(CAEntities.FISH_SHOOT.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
-                entityToSpawn.setKnockback(0);
                 entityToSpawn.setSilent(true);
                 entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
@@ -695,7 +694,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 AbstractArrow entityToSpawn = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
-                entityToSpawn.setKnockback(0);
                 entityToSpawn.setSilent(true);
                 entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
@@ -713,7 +711,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 AbstractArrow entityToSpawn = new FleefishBulletEntity(CAEntities.FLEEFISH_BULLET.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
-                entityToSpawn.setKnockback(0);
                 entityToSpawn.setSilent(true);
                 entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
@@ -731,7 +728,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
-                entityToSpawn.setKnockback(0);
                 entityToSpawn.setSilent(true);
                 entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
@@ -749,7 +745,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
-                entityToSpawn.setKnockback(0);
                 entityToSpawn.setSilent(true);
                 entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
@@ -767,7 +762,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 AbstractArrow entityToSpawn = new FakerggShootEntity(CAEntities.FAKERGG_SHOOT.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
-                entityToSpawn.setKnockback(0);
                 entityToSpawn.setSilent(true);
                 entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);

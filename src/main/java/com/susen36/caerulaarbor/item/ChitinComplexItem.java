@@ -1,21 +1,20 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -24,7 +23,7 @@ import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 
 public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnimationItem {
@@ -32,7 +31,7 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
 	public String animationprocedure = "empty";
 
 	public ChitinComplexItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial(
+		super(Holder.direct(new ArmorMaterial(
 			Map.of(
 				ArmorItem.Type.HELMET, 4,
 				ArmorItem.Type.CHESTPLATE, 9,
@@ -45,30 +44,18 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
 			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "complexchitin_armor"))),
 			4f,
 			0.15f
-		), type, properties);
+		)), type, properties.component(DataComponents.ATTRIBUTE_MODIFIERS,
+			ItemAttributeModifiers.builder()
+				.add(CAAttributes.SANITY_RESISTANCE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "complex_chitin_sanity_resistance"), 15.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ARMOR)
+				.add(CAAttributes.SANITY_RATE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "complex_chitin_sanity_rate"), 1.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ARMOR)
+				.add(CAAttributes.GENERAL_DEFENSE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "complex_chitin_general_defense"), 2.5, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ARMOR)
+				.build()));
 	}
 
 	@Override
 		public boolean makesPiglinsNeutral(ItemStack itemstack, LivingEntity entity) {
 			return true;
 		}
-
-	@Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> map = super.getAttributeModifiers(slot, stack);
-        String name = "caerula_arbor_attribute_modifier";
-        UUID uuid = new UUID(slot.toString().hashCode(), 0);
-        if (slot == this.getEquipmentSlot()){
-            map = HashMultimap.create(map);
-            map.put(CAAttributes.SANITY_RESISTANCE,
-                    new AttributeModifier(uuid, name , 15.0f, AttributeModifier.Operation.ADDITION));
-            map.put(CAAttributes.SANITY_RATE.get(),
-                    new AttributeModifier(uuid, name , 1.0f, AttributeModifier.Operation.ADDITION));
-            map.put(CAAttributes.GENERAL_DEFENSE,
-                    new AttributeModifier(uuid, name , 2.5f, AttributeModifier.Operation.ADDITION));
-        }
-        return map;
-    }
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
@@ -78,7 +65,7 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
 	private PlayState predicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.complex_chitin.idle"));
-			Entity entity = event.getData(DataTickets.ENTITY);
+			Entity entity = (Entity) event.getData(DataTickets.ENTITY);
 			if (entity instanceof ArmorStand) {
 				return PlayState.CONTINUE;
 			}

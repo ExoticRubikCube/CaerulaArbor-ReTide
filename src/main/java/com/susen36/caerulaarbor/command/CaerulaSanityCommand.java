@@ -76,11 +76,11 @@ public class CaerulaSanityCommand {
                     ent = entityiterator;
                     if (ent instanceof LivingEntity) {
                         num = num + 1;
-                        CompoundTag sanityData = ModCapabilities.getSanityInjury((LivingEntity) ent).serializeNBT(ent.level());
+                        CompoundTag sanityData = ModCapabilities.getSanityInjury((LivingEntity) ent).serializeNBT(ent.registryAccess());
                         sanityData.putDouble("SanityInjury", DoubleArgumentType.getDouble(arguments, "amount"));
                         sanityData.putBoolean("SanityRecovering", false);
                         sanityData.putBoolean("SanityLocked", false);
-                        ModCapabilities.getSanityInjury((LivingEntity) ent).deserializeNBT(ent.level(), sanityData);
+                        ModCapabilities.getSanityInjury((LivingEntity) ent).deserializeNBT(ent.registryAccess(), sanityData);
                         if (num == 1) {
                             info = Component.translatable("command.sanity.set.single").getString();
                             info = info.replace("{name}", ent.getDisplayName().getString());

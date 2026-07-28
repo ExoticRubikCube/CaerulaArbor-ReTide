@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.material.FluidState;
 public class TrailButtonBlock extends ButtonBlock {
 	public TrailButtonBlock() {
-		super(BlockBehaviour.Properties.of().sound(SoundType.SCULK_CATALYST).strength(1f, 12f).dynamicShape(), BlockSetType.OAK, 30, true);
+		super(BlockSetType.OAK, 30, BlockBehaviour.Properties.of().sound(SoundType.SCULK_CATALYST).strength(1f, 12f).dynamicShape());
 	}
 
 	@Override

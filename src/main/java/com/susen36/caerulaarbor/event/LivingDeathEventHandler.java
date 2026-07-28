@@ -19,7 +19,9 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -124,9 +126,7 @@ public class LivingDeathEventHandler {
                 }
             }
             if (death_blocked) {
-                if (event.isCancelable()) {
-                    event.setCanceled(true);
-                }
+                event.setCanceled(true);
                 if (entity instanceof ServerPlayer player) {
                     AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "another_breath"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
@@ -178,11 +178,9 @@ public class LivingDeathEventHandler {
     private static void handleBarrierReset(LivingDeathEvent event) {
         Entity entity = event.getEntity();
 
-        if (!event.isCanceled()) {
-            if (entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER))
-                livingEntity1.getAttribute(CAAttributes.LIVING_BARRIER).setBaseValue(0);
-            entity.getPersistentData().putDouble("playerEvoHitTime", 0);
-        }
+        if (entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER))
+            livingEntity1.getAttribute(CAAttributes.LIVING_BARRIER).setBaseValue(0);
+        entity.getPersistentData().putDouble("playerEvoHitTime", 0);
     }
 
     private static void handleInvulnerableDeath(LivingDeathEvent event) {
@@ -193,9 +191,7 @@ public class LivingDeathEventHandler {
         if (sourceentity == null) return;
 
         if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.INVULNERABLE) && !damagesource.is(CADamageTypes.INV_KILLER)) {
-            if (event.isCancelable()) {
-                event.setCanceled(true);
-            }
+            
         }
     }
 
@@ -228,8 +224,7 @@ public class LivingDeathEventHandler {
                 double finalBreed = Math.min(subl, MapVariables.get(world).strategy_breed);
                 double rate = 0.05 + 0.05 * finalBreed;
                 if (Math.random() < rate) {
-                    if (event.isCancelable()) {
-                        event.setCanceled(true);
+                       event.setCanceled(true);
                     }
                     if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), SoundEvents.TOTEM_USE, SoundSource.HOSTILE, 1.5f, 1.0f);
@@ -258,7 +253,6 @@ public class LivingDeathEventHandler {
                 }
             }
         }
-    }
 
     private static void handleExtractorAdv(LivingDeathEvent event) {
         DamageSource damagesource = event.getSource();
@@ -287,7 +281,6 @@ public class LivingDeathEventHandler {
         Entity sourceentity = event.getSource().getEntity();
 
         if (entity == null || sourceentity == null) return;
-        if (event.isCanceled()) return;
         if (!world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) return;
 
         if (sourceentity instanceof Player && EntityUtils.canPlayerEvo(sourceentity)) {
@@ -336,7 +329,6 @@ public class LivingDeathEventHandler {
         Entity sourceentity = event.getSource().getEntity();
 
         if (damagesource == null || entity == null || sourceentity == null) return;
-        if (event.isCanceled()) return;
 
         if (sourceentity instanceof Player) {
             handlePlayerKillRelics(event, world, x, y, z, entity, sourceentity);
@@ -359,7 +351,7 @@ public class LivingDeathEventHandler {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.AMBIENT, 1, 1);
                     }
                     if (world instanceof ServerLevel level) {
-                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack((BuiltInRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "common_relics"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))));
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "common_relics"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))));
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
                         level.addFreshEntity(entityToSpawn);
@@ -444,7 +436,7 @@ public class LivingDeathEventHandler {
                 } else if (event.getSource().is(DamageTypes.TRIDENT)) {
                     validweapon = true;
                 } else {
-                    String rname = ForgeRegistries.ITEMS.getKey((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem()).toString();
+                    String rname = BuiltInRegistries.ITEM.getKey((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem()).toString();
                     for (String stringiterator : CAConfigs.HAND_ENGRAVE.get()) {
                         if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
                             validweapon = true;
@@ -482,14 +474,10 @@ public class LivingDeathEventHandler {
         Entity entity = event.getEntity();
 
         if (damagesource == null || entity == null) return;
-        if (event.isCanceled()) return;
         if (entity instanceof SkadiEntity) return;
 
         if (damagesource.is(CADamageTags.CAN_TRIGGER_OCEANIZATION)) {
             if (TransformManager.transformToSeaborn(world, x, y, z, entity)) {
-                if (event.isCancelable()) {
-                    event.setCanceled(true);
-                }
                 if (!entity.level().isClientSide())
                     entity.discard();
             }
@@ -646,9 +634,7 @@ public class LivingDeathEventHandler {
 
         if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
             if (TransformManager.transformToSeaborn(world, x, y, z, entity)) {
-                if (event.isCancelable()) {
-                    event.setCanceled(true);
-                }
+                event.setCanceled(true);
                 if (!entity.level().isClientSide())
                     entity.discard();
             }

@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 import snownee.jade.api.theme.IThemeHelper;
 import snownee.jade.api.ui.Element;
-import snownee.jade.impl.config.PluginConfig;
 import snownee.jade.overlay.DisplayHelper;
 import snownee.jade.overlay.OverlayRenderer;
 
@@ -20,10 +19,8 @@ public class CASanityElement extends Element {
     private static final ResourceLocation SANITY_BAR = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/ep/sanity_bar.png");
 
     public CASanityElement(double value, double max) {
-        if (!PluginConfig.INSTANCE.get(Identifiers.MC_ENTITY_HEALTH_SHOW_FRACTIONS)) {
-            value = Math.ceil(value);
-            max = Math.ceil(max);
-        }
+        value = Math.ceil(value);
+        max = Math.ceil(max);
         if (max <= 0) this.process = 1;
         else this.process = (float) (value / max);
         if (max < -1) this.text = "Infinity";

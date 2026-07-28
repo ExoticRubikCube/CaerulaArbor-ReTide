@@ -1,0 +1,8 @@
+{
+  "sound_event": "caerula_arbor:whisper_illusion",
+  "description": {
+    "translate": "item.caerula_arbor.record_whisper.desc"
+  },
+  "length_in_seconds": 224.0,
+  "comparator_output": 6
+}

@@ -309,9 +309,11 @@ public class OceanizedChickenEntity extends SeaMonster {
                                 ooo = ooo + 1;
                             }
                         }
+                        final double finalRrr = rrr;
+                        final double finalOoo = ooo;
                         CustomData.update(DataComponents.CUSTOM_DATA, egg, tag -> {
-                            tag.putDouble("rate", rrr);
-                            tag.putDouble("offset", ooo);
+                            tag.putDouble("rate", finalRrr);
+                            tag.putDouble("offset", finalOoo);
                         });
                         result = egg;
                         ItemEntity entityToSpawn = new ItemEntity(level, (getX()), (getY()), (getZ()), result);

@@ -25,7 +25,7 @@ public class CAVillagerProfessions {
     public static final DeferredHolder<VillagerProfession, VillagerProfession> CANNOT_GOODENOUGH = registerProfession("cannot_goodenough", CANNOT_GOODENOUGH_POI_HOLDER,
             () -> SoundEvents.VILLAGER_WORK_CLERIC);
 
-    private static DeferredHolder<PoiType, PoiType> registerPoi(String name, Supplier<Block> block) {
+    private static DeferredHolder<PoiType, PoiType> registerPoi(String name, DeferredHolder<Block, ? extends Block> block) {
         return POIS.register(name, () -> new PoiType(ImmutableSet.copyOf(block.get().getStateDefinition().getPossibleStates()), 1, 1));
     }
 

@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 public class KebabRawItem extends Item {
 	public KebabRawItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(5).saturationModifier(0.5f).meat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(5).saturationModifier(0.5f).build()));
 	}
 
 	@Override

@@ -20,7 +20,7 @@ import java.util.List;
 
 public class BrokenCellClusterItem extends Item {
 	public BrokenCellClusterItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(0.15f).meat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(0.15f).build()));
 	}
 
 	@Override

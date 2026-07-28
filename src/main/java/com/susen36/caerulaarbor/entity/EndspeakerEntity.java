@@ -12,6 +12,7 @@ import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -107,7 +108,7 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 		endspeaker.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, level.getRandom().nextFloat() * 360.0F, 0.0F);
 		endspeaker.setPhase(Mth.clamp(phase, 0, 3));
-		endspeaker.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), spawnType, null, null);
+		endspeaker.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), spawnType, null);
 		endspeaker.setHealth(endspeaker.getMaxHealth());
 		level.addFreshEntity(endspeaker);
 		return endspeaker;
@@ -236,7 +237,7 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 	}
 
-	private void setAttributeBaseValue(Attribute attribute, double value) {
+	private void setAttributeBaseValue(Holder<Attribute> attribute, double value) {
 		AttributeInstance instance = this.getAttribute(attribute);
 		if (instance != null) {
 			instance.setBaseValue(value);
@@ -394,7 +395,7 @@ public class EndspeakerEntity extends SeaMonster {
 				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseThreeDurative();
 			}
 		});
-		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, this, this, 1.0D, true) {
+		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true) {
 
 			@Override
 			public boolean canUse() {

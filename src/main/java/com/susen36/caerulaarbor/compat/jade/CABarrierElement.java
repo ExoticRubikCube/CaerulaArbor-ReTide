@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 import snownee.jade.api.theme.IThemeHelper;
 import snownee.jade.api.ui.Element;
-import snownee.jade.impl.config.PluginConfig;
 import snownee.jade.overlay.DisplayHelper;
 import snownee.jade.overlay.OverlayRenderer;
 
@@ -18,9 +17,7 @@ public class CABarrierElement extends Element {
     private static final ResourceLocation BARRIER_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/living_barrier.png");
 
     public CABarrierElement(double barrier) {
-        if (!PluginConfig.INSTANCE.get(Identifiers.MC_ENTITY_HEALTH_SHOW_FRACTIONS)) {
-            barrier = Math.ceil(barrier);
-        }
+        barrier = Math.ceil(barrier);
         if (barrier > 2147483647) this.barrier = "Too Large";
         else this.barrier = DisplayHelper.dfCommas.format(barrier);
     }

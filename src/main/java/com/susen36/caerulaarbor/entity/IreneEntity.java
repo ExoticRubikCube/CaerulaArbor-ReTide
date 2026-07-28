@@ -30,6 +30,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -47,7 +48,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.Comparator;
 import java.util.List;
 
-public class IreneEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
+public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.STRING);
@@ -598,5 +599,16 @@ public class IreneEntity extends PathfinderMob implements GeoEntity, SyncedAnima
 	@Override
 	public void setAnimationProcedure(String animation) {
 		this.animationprocedure = animation;
+	}
+
+	@Override
+	public boolean isFood(ItemStack stack) {
+		return false;
+	}
+
+	@javax.annotation.Nullable
+	@Override
+	public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
+		return null;
 	}
 }

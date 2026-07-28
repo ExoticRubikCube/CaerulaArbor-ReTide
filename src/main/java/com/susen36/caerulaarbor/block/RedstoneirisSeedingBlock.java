@@ -75,7 +75,7 @@ public class RedstoneirisSeedingBlock extends FlowerBlock implements Bonemealabl
 	}
 
 	@Override
-	public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState blockstate, boolean clientSide) {
+	public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState blockstate) {
 		if (worldIn instanceof LevelAccessor world) {
             double x = pos.getX();
             double y = pos.getY();

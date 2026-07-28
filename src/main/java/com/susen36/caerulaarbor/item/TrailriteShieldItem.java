@@ -4,6 +4,7 @@ import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -16,15 +17,12 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 
 public class TrailriteShieldItem extends ShieldItem {
-    private static final UUID ADD_ARMOR_UUID = UUID.fromString("d8a06f80-7b2c-4e8a-9b8c-1234567890ab");
-    private static final UUID ADD_DEFENSE_UUID = UUID.fromString("e9b17991-8c3d-5f9b-0c9d-0987654321ba");
-    private final AttributeModifier addArmor = new AttributeModifier(ADD_ARMOR_UUID, "trailrite_shield", 5.0, AttributeModifier.Operation.ADDITION);
-    private final AttributeModifier addDefense = new AttributeModifier(ADD_DEFENSE_UUID, "trailrite_shield", 0.75, AttributeModifier.Operation.MULTIPLY_BASE);
+    private final AttributeModifier addArmor = new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_shield_armor"), 5.0, AttributeModifier.Operation.ADD_VALUE);
+    private final AttributeModifier addDefense = new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_shield_defense"), 0.75, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 
     public TrailriteShieldItem() {
         super(new Item.Properties().durability(16384).fireResistant().rarity(Rarity.RARE));

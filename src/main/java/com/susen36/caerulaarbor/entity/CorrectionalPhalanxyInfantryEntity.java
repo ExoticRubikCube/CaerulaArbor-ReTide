@@ -312,4 +312,9 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;
     }
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return false;
+    }
 }

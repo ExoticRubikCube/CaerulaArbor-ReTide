@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -51,7 +52,7 @@ public class CoinOfTradeItem extends Item {
 		ItemStack togive = ItemStack.EMPTY;
 		if (entity.getOffhandItem().is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))) && entity.getMainHandItem().getItem() == itemstack.getItem()) {
 			for (int index0 = 0; index0 < 64; index0++) {
-				togive = new ItemStack((BuiltInRegistries.ITEM.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
+				togive = new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElseGet(() -> Items.AIR))).copy();
 				if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
 					break;
 				}

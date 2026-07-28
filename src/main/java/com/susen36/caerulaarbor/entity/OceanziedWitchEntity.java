@@ -8,6 +8,8 @@ import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,7 +27,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -43,18 +48,16 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.*;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -241,7 +244,9 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                                 Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), CAPotions.SANITY_CURE.get()));
+                                        ItemStack potionStack = Items.SPLASH_POTION.getDefaultInstance();
+                                        potionStack.set(DataComponents.POTION_CONTENTS, new PotionContents(CAPotions.SANITY_CURE));
+                                        entityToSpawn.setItem(potionStack);
                                         entityToSpawn.setOwner(shooter);
                                         return entityToSpawn;
                                     }
@@ -257,7 +262,9 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                                 Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.HEALING));
+                                        ItemStack potionStack = Items.SPLASH_POTION.getDefaultInstance();
+                                        potionStack.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.HEALING));
+                                        entityToSpawn.setItem(potionStack);
                                         entityToSpawn.setOwner(shooter);
                                         return entityToSpawn;
                                     }
@@ -273,7 +280,9 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                                 Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.LINGERING_POTION.getDefaultInstance(), Potions.REGENERATION));
+                                        ItemStack potionStack = Items.LINGERING_POTION.getDefaultInstance();
+                                        potionStack.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.REGENERATION));
+                                        entityToSpawn.setItem(potionStack);
                                         entityToSpawn.setOwner(shooter);
                                         return entityToSpawn;
                                     }
@@ -289,7 +298,9 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                                 Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.FIRE_RESISTANCE));
+                                        ItemStack potionStack = Items.SPLASH_POTION.getDefaultInstance();
+                                        potionStack.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.FIRE_RESISTANCE));
+                                        entityToSpawn.setItem(potionStack);
                                         entityToSpawn.setOwner(shooter);
                                         return entityToSpawn;
                                     }
@@ -305,7 +316,9 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                                 Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.STRENGTH));
+                                        ItemStack potionStack = Items.SPLASH_POTION.getDefaultInstance();
+                                        potionStack.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.STRENGTH));
+                                        entityToSpawn.setItem(potionStack);
                                         entityToSpawn.setOwner(shooter);
                                         return entityToSpawn;
                                     }
@@ -402,7 +415,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         if (potionIndex == 0) {
             this.throwSplashPotion(Potions.HARMING);
         } else if (potionIndex == 1) {
-            this.throwSplashPotion(CAPotions.INST_SANITY.get());
+            this.throwSplashPotion(CAPotions.INST_SANITY);
         } else if (potionIndex == 2) {
             this.throwSplashPotion(Potions.POISON);
         } else if (potionIndex == 3) {
@@ -414,18 +427,20 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         if (this.getRandom().nextBoolean()) {
             this.throwSplashPotion(Potions.HARMING);
         } else {
-            this.throwSplashPotion(CAPotions.INST_SANITY.get());
+            this.throwSplashPotion(CAPotions.INST_SANITY);
         }
     }
 
-    private void throwSplashPotion(Potion potion) {
+    private void throwSplashPotion(Holder<Potion> potion) {
         Level projectileLevel = this.level();
         if (projectileLevel.isClientSide()) {
             return;
         }
 
         ThrownPotion thrownPotion = new ThrownPotion(EntityType.POTION, projectileLevel);
-        thrownPotion.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), potion));
+        ItemStack potionStack = Items.SPLASH_POTION.getDefaultInstance();
+        potionStack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
+        thrownPotion.setItem(potionStack);
         thrownPotion.setOwner(this);
         thrownPotion.setPos(this.getX(), this.getEyeY() - 0.1, this.getZ());
         thrownPotion.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z, 1, 2);

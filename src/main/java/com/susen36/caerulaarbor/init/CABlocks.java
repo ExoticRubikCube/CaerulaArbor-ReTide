@@ -81,7 +81,7 @@ public class CABlocks {
     public static final DeferredHolder<Block, ? extends Block> TRAIL_PLANK_PRESSURE_PLATE = REGISTRY.register("trail_plank_pressure_plate", TrailPlankPressurePlateBlock::new);
     public static final DeferredHolder<Block, ? extends Block> STRIPPED_TRAIL_LOG = REGISTRY.register("stripped_trail_log", StrippedTrailLogBlock::new);
     public static final DeferredHolder<Block, ? extends Block> TRAIL_PLANK_DOOR = REGISTRY.register("trail_plank_door", TrailPlankDoorBlock::new);
-    public static final DeferredHolder<Block, ? extends Block> SALTSAND = REGISTRY.register("saltsand", SaltsandBlock::new);
+    public static final DeferredHolder<Block, ? extends Block> SALTSAND = REGISTRY.register("saltsand", () -> new SaltsandBlock());
     public static final DeferredHolder<Block, ? extends Block> SEA_TRAIL_BURNT = REGISTRY.register("sea_trail_burnt", SeaTrailBurntBlock::new);
     public static final DeferredHolder<Block, ? extends Block> SEA_TRAIL_BURNT_SOLID = REGISTRY.register("sea_trail_burnt_solid", SeaTrailBurntSolidBlock::new);
     public static final DeferredHolder<Block, ? extends Block> CHESTMEGA_SPAWNER = REGISTRY.register("chestmega_spawner", ChestmegaSpawnerBlock::new);

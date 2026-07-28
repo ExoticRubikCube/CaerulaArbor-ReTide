@@ -1,0 +1,8 @@
+{
+  "sound_event": "caerula_arbor:endospore",
+  "description": {
+    "translate": "item.caerula_arbor.record_endospore.desc"
+  },
+  "length_in_seconds": 197.0,
+  "comparator_output": 0
+}

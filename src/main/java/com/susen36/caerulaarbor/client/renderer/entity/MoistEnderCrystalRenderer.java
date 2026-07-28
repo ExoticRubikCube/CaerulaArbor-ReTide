@@ -1,11 +1,11 @@
 package com.susen36.caerulaarbor.client.renderer.entity;
 
-import com.susen36.caerulaarbor.client.model.entity.MoistEnderCrystalModel;
-import com.susen36.caerulaarbor.client.model.entity.layer.MoistEnderCrystalLayer;
-import com.susen36.caerulaarbor.entity.MoistEnderCrystalEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.susen36.caerulaarbor.client.model.entity.MoistEnderCrystalModel;
+import com.susen36.caerulaarbor.client.model.entity.layer.MoistEnderCrystalLayer;
+import com.susen36.caerulaarbor.entity.MoistEnderCrystalEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -90,10 +90,10 @@ public class MoistEnderCrystalRenderer extends GeoEntityRenderer<MoistEnderCryst
                 float f7 = Mth.sin((float) ((float) j * ((float) Math.PI * 2) / 4.0f)) * 0.75f;
                 float f8 = Mth.cos((float) ((float) j * ((float) Math.PI * 2) / 4.0f)) * 0.75f;
                 float f9 = (float) j / 8.0f;
-                vertexconsumer.vertex(matrix4f, f4 * 0.5f, f5 * 0.5f, 0.0f).color(232, 197, 246, 255).uv(f6, f2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(matrix3f, 0.0f, -1.0f, 0.0f).endVertex();
-                vertexconsumer.vertex(matrix4f, f4 * 0.125f, f5 * 0.125f, f1).color(181, 227, 238, 255).uv(f6, f3).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(matrix3f, 0.0f, -1.0f, 0.0f).endVertex();
-                vertexconsumer.vertex(matrix4f, f7 * 0.125f, f8 * 0.125f, f1).color(181, 227, 238, 255).uv(f9, f3).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(matrix3f, 0.0f, -1.0f, 0.0f).endVertex();
-                vertexconsumer.vertex(matrix4f, f7 * 0.5f, f8 * 0.5f, 0.0f).color(232, 197, 246, 255).uv(f9, f2).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight).normal(matrix3f, 0.0f, -1.0f, 0.0f).endVertex();
+                vertexconsumer.addVertex(matrix4f, f4 * 0.5f, f5 * 0.5f, 0.0f).setColor(232, 197, 246, 255).setUv(f6, f2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(posestack$pose, 0.0f, -1.0f, 0.0f);
+                vertexconsumer.addVertex(matrix4f, f4 * 0.125f, f5 * 0.125f, f1).setColor(181, 227, 238, 255).setUv(f6, f3).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(posestack$pose, 0.0f, -1.0f, 0.0f);
+                vertexconsumer.addVertex(matrix4f, f7 * 0.125f, f8 * 0.125f, f1).setColor(181, 227, 238, 255).setUv(f9, f3).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(posestack$pose, 0.0f, -1.0f, 0.0f);
+                vertexconsumer.addVertex(matrix4f, f7 * 0.5f, f8 * 0.5f, 0.0f).setColor(232, 197, 246, 255).setUv(f9, f2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(posestack$pose, 0.0f, -1.0f, 0.0f);
                 f4 = f7;
                 f5 = f8;
                 f6 = f9;

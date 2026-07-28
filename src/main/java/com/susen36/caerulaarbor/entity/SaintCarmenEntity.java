@@ -483,9 +483,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                         AbstractArrow entityToSpawn = new CarmenBulletEntity(CAEntities.CARMEN_BULLET.get(), projectileLevel);
                         entityToSpawn.setOwner(this);
                         entityToSpawn.setBaseDamage((float) dama);
-                        entityToSpawn.setKnockback(0);
                         entityToSpawn.setSilent(true);
-                        entityToSpawn.setPierceLevel((byte) 1);
                         entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
                         entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) 1.75, 15);
                         projectileLevel.addFreshEntity(entityToSpawn);

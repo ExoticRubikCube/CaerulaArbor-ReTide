@@ -13,14 +13,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
 
 @EventBusSubscriber
 public class ShieldEventHandler {
 	@SubscribeEvent
-	public static void whenEntityBlocksWithShield(ShieldBlockEvent event) {
+	public static void whenEntityBlocksWithShield(LivingShieldBlockEvent event) {
 		Entity blocker = event.getEntity();
 		Entity attacker = event.getDamageSource().getEntity();
-		if (blocker == null || attacker == null)
+		if (attacker == null)
 			return;
 		ItemStack activeItem = blocker instanceof LivingEntity livingBlocker ? livingBlocker.getUseItem() : ItemStack.EMPTY;
 		double blockedDamage = event.getBlockedDamage();

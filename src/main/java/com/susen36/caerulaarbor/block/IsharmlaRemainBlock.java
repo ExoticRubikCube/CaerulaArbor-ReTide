@@ -19,7 +19,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -163,7 +162,7 @@ public class IsharmlaRemainBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        InteractionResult result = InteractionResult.PASS;
+        ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         double stat;
         Entity skadi;
         if (world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
@@ -179,7 +178,7 @@ public class IsharmlaRemainBlock extends Block {
                     if (skadi == null) {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.isharmla_remain.fail").getString())), true);
-                        result = InteractionResult.FAIL;
+                        result = ItemInteractionResult.FAIL;
                     } else {
                         if (skadi instanceof LivingEntity livingEntity && !entity.level().isClientSide())
                             entity.addEffect(new MobEffectInstance(CAMobEffects.ISHARMLA_CURSE, 99999, 0));
@@ -195,7 +194,7 @@ public class IsharmlaRemainBlock extends Block {
                             if (!ap.isDone()) {
                                 for (String criteria : ap.getRemainingCriteria())
                                     player.getAdvancements().award(adv, criteria);
-                            }
+                            } 
                         }
                         for (int index0 = 0; index0 < 3; index0++) {
                             for (int index1 = 0; index1 < 3; index1++) {
@@ -210,7 +209,7 @@ public class IsharmlaRemainBlock extends Block {
                                 }
                             }
                         }
-                        result = InteractionResult.SUCCESS;
+                        result = ItemInteractionResult.SUCCESS;
                     }
                 } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
                         && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
@@ -237,7 +236,7 @@ public class IsharmlaRemainBlock extends Block {
                         }
                     }
                 }
-                result = InteractionResult.SUCCESS;
+                result = ItemInteractionResult.SUCCESS;
             } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
                     && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
                 if ((Entity) entity instanceof Player player && !player.level().isClientSide())

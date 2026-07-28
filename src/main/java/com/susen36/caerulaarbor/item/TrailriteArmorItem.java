@@ -1,23 +1,22 @@
-
 package com.susen36.caerulaarbor.item;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -26,7 +25,7 @@ import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 import java.util.function.Consumer;
 
 
@@ -35,7 +34,7 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
 	public String animationprocedure = "empty";
 
 	public TrailriteArmorItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial(
+		super(Holder.direct(new ArmorMaterial(
 			Map.of(
 				ArmorItem.Type.HELMET, 6,
 				ArmorItem.Type.CHESTPLATE, 10,
@@ -48,7 +47,21 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
 			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_armor"))),
 			6f,
 			0.2f
-		), type, properties);
+		)), type, properties.component(DataComponents.ATTRIBUTE_MODIFIERS,
+			ItemAttributeModifiers.builder()
+				.add(CAAttributes.SANITY_RESISTANCE,
+					new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_sanity_resistance"), 17.5, AttributeModifier.Operation.ADD_VALUE),
+					EquipmentSlotGroup.ARMOR)
+				.add(CAAttributes.SANITY_RATE,
+					new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_sanity_rate"), 0.75, AttributeModifier.Operation.ADD_VALUE),
+					EquipmentSlotGroup.ARMOR)
+				.add(CAAttributes.GENERAL_DEFENSE,
+					new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_general_defense"), 3.5, AttributeModifier.Operation.ADD_VALUE),
+					EquipmentSlotGroup.ARMOR)
+				.add(CAAttributes.MAGIC_RESISTANCE,
+					new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_magic_resistance"), 8.0, AttributeModifier.Operation.ADD_VALUE),
+					EquipmentSlotGroup.ARMOR)
+				.build()));
 	}
 
 	@Override
@@ -93,25 +106,6 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
 		}
 		return PlayState.STOP;
 	}
-
-	@Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> map = super.getAttributeModifiers(slot, stack);
-        String name = "caerula_arbor_attribute_modifier";
-        UUID uuid = new UUID(slot.toString().hashCode(), 0);
-        if (slot == this.getEquipmentSlot()){
-            map = HashMultimap.create(map);
-            map.put(CAAttributes.SANITY_RESISTANCE,
-                    new AttributeModifier(uuid, name , 17.5f, AttributeModifier.Operation.ADDITION));
-            map.put(CAAttributes.SANITY_RATE.get(),
-                    new AttributeModifier(uuid, name , 0.75f, AttributeModifier.Operation.ADDITION));
-            map.put(CAAttributes.GENERAL_DEFENSE,
-                    new AttributeModifier(uuid, name , 3.5f, AttributeModifier.Operation.ADDITION));
-            map.put(CAAttributes.MAGIC_RESISTANCE,
-                    new AttributeModifier(uuid, name , 8f, AttributeModifier.Operation.ADDITION));
-        }
-        return map;
-    }
 
 	String prevAnim = "empty";
 

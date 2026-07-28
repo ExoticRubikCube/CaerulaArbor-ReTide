@@ -41,11 +41,12 @@ public class DataGenerators {
         TagsProvider.addProviders(generator, event.includeServer(), output, lookupProvider, existingFileHelper);
 
         // loot tables
-        generator.addProvider(event.includeServer(), LootTableProviders.create(output));
+        generator.addProvider(event.includeServer(), LootTableProviders.create(output, lookupProvider));
 
         // global loot modifiers
         generator.addProvider(event.includeServer(), new GlobalLootModifierProvider(
                 output,
+                lookupProvider,
                 CaerulaArborMod.MODID
         ));
 

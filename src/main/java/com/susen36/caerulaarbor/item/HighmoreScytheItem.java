@@ -34,7 +34,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -130,10 +129,11 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 	}
 
 	@Override
-	public boolean onEntitySwing(ItemStack itemstack, LivingEntity entity) {
-		boolean result = super.onEntitySwing(itemstack, entity);
+	public boolean onEntitySwing(ItemStack itemstack, LivingEntity entity, InteractionHand hand) {
+		boolean result = super.onEntitySwing(itemstack, entity, hand);
 		if (entity instanceof Player player && this.canUseSpecialAttack(player, itemstack)) {
-			HitResult hitResult = player.pick(player.getAttributeValue(NeoForgeMod.ENTITY_REACH.get()), 0.0F, false);
+			double reach = player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE);
+			HitResult hitResult = player.pick(reach, 0.0F, false);
 			if (hitResult.getType() == HitResult.Type.MISS) {
 				this.setAttackAnimation(itemstack);
 				if (!player.level().isClientSide()) {

@@ -1,10 +1,12 @@
 package com.susen36.caerulaarbor.init;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -24,8 +26,8 @@ import java.util.function.Supplier;
 
 @EventBusSubscriber(modid = CaerulaArborMod.MODID)
 public class CALootModifier {
-    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, "caerula_arbor");
-    public static final DeferredHolder<Codec<? extends IGlobalLootModifier>, Codec<CaerulaArborModLootTableModifier>> LOOT_MODIFIER = LOOT_MODIFIERS.register("caerula_arbor_loot_modifier", CaerulaArborModLootTableModifier.CODEC);
+    public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, "caerula_arbor");
+    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<CaerulaArborModLootTableModifier>> LOOT_MODIFIER = LOOT_MODIFIERS.register("caerula_arbor_loot_modifier", CaerulaArborModLootTableModifier.CODEC);
 
     public static IEventBus context;
 
@@ -39,8 +41,8 @@ public class CALootModifier {
     }
 
     public static class CaerulaArborModLootTableModifier extends LootModifier {
-        public static final Supplier<Codec<CaerulaArborModLootTableModifier>> CODEC = Suppliers
-                .memoize(() -> RecordCodecBuilder.create(instance -> codecStart(instance).and(ResourceLocation.CODEC.fieldOf("lootTable").forGetter(m -> m.lootTable)).apply(instance, CaerulaArborModLootTableModifier::new)));
+        public static final Supplier<MapCodec<CaerulaArborModLootTableModifier>> CODEC = Suppliers
+                .memoize(() -> RecordCodecBuilder.mapCodec(instance -> codecStart(instance).and(ResourceLocation.CODEC.fieldOf("lootTable").forGetter(m -> m.lootTable)).apply(instance, CaerulaArborModLootTableModifier::new)));
         private final ResourceLocation lootTable;
 
         public CaerulaArborModLootTableModifier(LootItemCondition[] conditions, ResourceLocation lootTable) {
@@ -50,12 +52,12 @@ public class CALootModifier {
 
         @Override
         protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-            context.getResolver().getLootTable(lootTable).getRandomItems(context, generatedLoot::add);
+            context.getLevel().getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, lootTable)).getRandomItems(context, generatedLoot::add);
             return generatedLoot;
         }
 
         @Override
-        public Codec<? extends IGlobalLootModifier> codec() {
+        public MapCodec<? extends IGlobalLootModifier> codec() {
             return CODEC.get();
         }
     }

@@ -6,6 +6,7 @@ import com.susen36.caerulaarbor.entity.bullets.HealBullletEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -41,6 +42,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.EventHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -237,9 +239,9 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
             retval = this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
         } else if (this.isTame()) {
             if (this.isOwnedBy(sourceentity)) {
-                if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                if (itemstack.getComponents().has(DataComponents.FOOD) && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                     this.usePlayerItem(sourceentity, hand, itemstack);
-                    this.heal(item.getFoodProperties().getNutrition());
+                    this.heal(item.getFoodProperties(itemstack, this).nutrition());
                     retval = InteractionResult.sidedSuccess(this.level().isClientSide());
                 } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                     this.usePlayerItem(sourceentity, hand, itemstack);
@@ -250,7 +252,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                 }
             }
         } else if (itemstack.is(CAItems.EMERALD_TREATY.get())) {
-            if (!net.neoforged.neoforge.event.ForgeEventFactory.onAnimalTame(this, sourceentity)) {
+            if (!net.neoforged.neoforge.event.EventHooks.onAnimalTame(this, sourceentity)) {
                 this.tame(sourceentity);
                 this.level().broadcastEntityEvent(this, (byte) 7);
                 if (this.level() instanceof ServerLevel) {
@@ -262,7 +264,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
             }
         } else if (this.isFood(itemstack)) {
             this.usePlayerItem(sourceentity, hand, itemstack);
-            if (this.random.nextInt(3) == 0 && !net.neoforged.neoforge.event.ForgeEventFactory.onAnimalTame(this, sourceentity)) {
+            if (this.random.nextInt(3) == 0 && !EventHooks.onAnimalTame(this, sourceentity)) {
                 this.tame(sourceentity);
                 this.level().broadcastEntityEvent(this, (byte) 7);
             } else {

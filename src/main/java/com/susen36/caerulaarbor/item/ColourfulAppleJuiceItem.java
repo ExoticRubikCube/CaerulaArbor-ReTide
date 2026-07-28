@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -50,7 +51,7 @@ public class ColourfulAppleJuiceItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 2));
 		}
 		ModCapabilities.getSanityInjury(entity).heal(80);
-		if (entity instanceof Player player) {
+		if (entity instanceof Player) {
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 			capability.player_light = Math.min(capability.player_light + 12, 100.0);
 			capability.syncPlayerVariables(entity);

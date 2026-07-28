@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -127,7 +126,7 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        InteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         ItemStack res = ItemStack.EMPTY;
         ItemStack input;
         double stats;
@@ -182,7 +181,7 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                     entityToSpawn.setUnlimitedLifetime();
                     level.addFreshEntity(entityToSpawn);
                 }
-                result = InteractionResult.SUCCESS;
+                result = ItemInteractionResult.SUCCESS;
             }
         }
         return result;

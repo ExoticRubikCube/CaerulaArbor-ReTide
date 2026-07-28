@@ -28,11 +28,11 @@ public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier
 	}
 
 	public ThrowablePotionEntity(EntityType<? extends ThrowablePotionEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
+		super(type, x, y, z, world, ItemStack.EMPTY, ItemStack.EMPTY);
 	}
 
 	public ThrowablePotionEntity(EntityType<? extends ThrowablePotionEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world);
+		super(type, entity, world, ItemStack.EMPTY, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier
 	}
 
 	@Override
-	protected ItemStack getPickupItem() {
+	protected ItemStack getDefaultPickupItem() {
 		return PROJECTILE_ITEM;
 	}
 
@@ -82,7 +82,6 @@ public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
-		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
 		return entityarrow;
 	}
@@ -104,7 +103,6 @@ public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 0.9f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(damage);
-		entityarrow.setKnockback(0);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
 		return entityarrow;

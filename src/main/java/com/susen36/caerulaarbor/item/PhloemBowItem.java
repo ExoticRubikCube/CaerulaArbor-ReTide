@@ -231,7 +231,7 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
                     if (itemstack.getItem() instanceof PhloemBowItem)
                         CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.bluebow.pull"));
                     if ((LevelAccessor) world instanceof Level level) {
-                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_QUICK_CHARGE_1, SoundSource.NEUTRAL, (float) 1.8, 1);
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_QUICK_CHARGE_1.value(), SoundSource.NEUTRAL, (float) 1.8, 1);
                     }
                     if ((Entity) entity instanceof Player player)
                         player.getCooldowns().addCooldown(itemstack.getItem(), 30);

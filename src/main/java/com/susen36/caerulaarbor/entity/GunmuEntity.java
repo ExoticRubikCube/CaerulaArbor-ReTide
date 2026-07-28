@@ -32,6 +32,7 @@ import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class GunmuEntity extends Monster {
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.PROGRESS);
@@ -62,8 +63,8 @@ public class GunmuEntity extends Monster {
     }
 
     @Override
-    public double getMyRidingOffset() {
-        return -0.35D;
+    public Vec3 getVehicleAttachmentPoint(Entity vehicle) {
+        return super.getVehicleAttachmentPoint(vehicle).add(0.0D, -0.35D, 0.0D);
     }
 
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
@@ -120,7 +121,6 @@ public class GunmuEntity extends Monster {
         return super.hurt(damagesource, amount);
     }
 
-    @Override
     public boolean ignoreExplosion() {
         return true;
     }
@@ -143,7 +143,7 @@ public class GunmuEntity extends Monster {
             double z = this.getZ();
             BlockPos pos = this.blockPosition();
             if (!level.isClientSide()) {
-                level.playSound(this, pos, SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 2, 1);
+                level.playSound(this, pos, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 2, 1);
                 level.explode(this, x, y, z, 9, Level.ExplosionInteraction.MOB);
                 if (level instanceof ServerLevel slvl) {
                     slvl.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 4, 3, 3, 3, 1);

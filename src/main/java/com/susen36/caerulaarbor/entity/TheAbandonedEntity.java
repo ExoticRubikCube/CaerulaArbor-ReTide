@@ -191,7 +191,6 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
                                         entityToSpawn.setBaseDamage((float) ((livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                                                 ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
                                                 : 0) * 0.85));
-                                        entityToSpawn.setKnockback(0);
                                         entityToSpawn.setSilent(true);
                                         entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
                                         entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) 1.25, 2);

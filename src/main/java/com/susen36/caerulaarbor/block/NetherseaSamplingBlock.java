@@ -14,7 +14,7 @@ import net.minecraft.world.level.material.PushReaction;
 
 public class NetherseaSamplingBlock extends SaplingBlock {
 	public NetherseaSamplingBlock() {
-		super(new NetherseaSamplingTreeGrower(), BlockBehaviour.Properties.of().mapColor(MapColor.WATER).randomTicks().sound(SoundType.GRASS).instabreak().noCollission().offsetType(BlockBehaviour.OffsetType.NONE).pushReaction(PushReaction.DESTROY));
+		super(NetherseaSamplingTreeGrower.INSTANCE, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).randomTicks().sound(SoundType.GRASS).instabreak().noCollission().offsetType(BlockBehaviour.OffsetType.NONE).pushReaction(PushReaction.DESTROY));
 	}
 
 	@Override

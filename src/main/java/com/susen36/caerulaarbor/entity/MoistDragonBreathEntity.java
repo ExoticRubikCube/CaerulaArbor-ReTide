@@ -344,9 +344,6 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         if (world instanceof ServerLevel projectileLevel) {
             DragonFireball fireball = new DragonFireball(EntityType.DRAGON_FIREBALL, projectileLevel);
             fireball.setOwner(entity);
-            fireball.xPower = 0;
-            fireball.yPower = -0.1;
-            fireball.zPower = 0;
             fireball.setPos(tx, (y + Mth.nextInt(RandomSource.create(), 6, 9)), tz);
             fireball.shoot(0, 1, 0, (float) (-0.5), 0);
             projectileLevel.addFreshEntity(fireball);
@@ -370,8 +367,8 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         }
         uuid = entity instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_TARGET) : "";
         uuid1 = entity instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_OWNER) : "";
-        target = world instanceof ServerLevel server && uuid != null && !uuid.isEmpty() ? server.getEntity(UUID.fromString(uuid)) : null;
-        owner = world instanceof ServerLevel server && uuid1 != null && !uuid1.isEmpty() ? server.getEntity(UUID.fromString(uuid1)) : null;
+        target = world instanceof ServerLevel server && !uuid.isEmpty() ? server.getEntity(UUID.fromString(uuid)) : null;
+        owner = world instanceof ServerLevel server && !uuid1.isEmpty() ? server.getEntity(UUID.fromString(uuid1)) : null;
         if (!(owner == null) && owner.isAlive()) {
             d = owner instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity8.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
         } else {

@@ -267,9 +267,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                                         entityToSpawn.setBaseDamage((float) (livingEntity22.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                                                 ? livingEntity22.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
                                                 : 0));
-                                        entityToSpawn.setKnockback(0);
                                         entityToSpawn.setSilent(true);
-                                        entityToSpawn.setPierceLevel((byte) 1);
                                         entityToSpawn.setCritArrow(true);
                                         entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
                                         entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, 2, 5);

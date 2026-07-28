@@ -176,7 +176,7 @@ public class DisconcentrationEventHandler {
             return false;
         }
         for (int armorSlotIndex = 0; armorSlotIndex < 4; armorSlotIndex++) {
-            ItemStack armorItem = livingEntity.getItemBySlot(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, armorSlotIndex)).copy();
+            ItemStack armorItem = livingEntity.getItemBySlot(new EquipmentSlot[] {EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD}[armorSlotIndex]).copy();
             if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.REJECTION_CURSE), armorItem) != 0) {
                 return true;
             }

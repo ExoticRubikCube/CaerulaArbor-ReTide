@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.client.renderer.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.client.model.item.UninishedBeautyItemModel;
 import com.susen36.caerulaarbor.item.UninishedBeautyItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
+import software.bernie.geckolib.util.RenderUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -62,7 +64,7 @@ public class UninishedBeautyItemRenderer extends GeoItemRenderer<UninishedBeauty
 
 	@Override
 	public void renderRecursively(PoseStack stack, UninishedBeautyItem animatable, GeoBone bone, RenderType type, MultiBufferSource buffer, VertexConsumer bufferIn, boolean isReRender, float partialTick, int packedLightIn, int packedOverlayIn,
-	                              float red, float green, float blue, float alpha) {
+	                              int color) {
 		Minecraft mc = Minecraft.getInstance();
 		String name = bone.getName();
 		boolean renderingArms = false;
@@ -82,11 +84,7 @@ public class UninishedBeautyItemRenderer extends GeoItemRenderer<UninishedBeauty
 				PlayerModel<AbstractClientPlayer> model = playerRenderer.getModel();
 
 				stack.pushPose();
-				RenderUtils.translateMatrixToBone(stack, bone);
-				RenderUtils.translateToPivotPoint(stack, bone);
-				RenderUtils.rotateMatrixAroundBone(stack, bone);
-				RenderUtils.scaleMatrixForBone(stack, bone);
-				RenderUtils.translateAwayFromPivotPoint(stack, bone);
+				RenderUtil.prepMatrixForBone(stack, bone);
 
 				ResourceLocation loc = player.getSkin().texture();
 				VertexConsumer armBuilder = this.currentBuffer.getBuffer(RenderType.entitySolid(loc));
@@ -106,7 +104,7 @@ public class UninishedBeautyItemRenderer extends GeoItemRenderer<UninishedBeauty
 				stack.popPose();
 			}
 		}
-		super.renderRecursively(stack, animatable, bone, type, buffer, bufferIn, isReRender, partialTick, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		super.renderRecursively(stack, animatable, bone, type, buffer, bufferIn, isReRender, partialTick, packedLightIn, packedOverlayIn, color);
 	}
 
 	private void renderPartOverBone(ModelPart model, GeoBone bone, PoseStack stack, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, float alpha) {

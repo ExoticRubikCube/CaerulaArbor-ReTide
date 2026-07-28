@@ -7,10 +7,8 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
-import snownee.jade.api.Identifiers;
 import snownee.jade.api.theme.IThemeHelper;
 import snownee.jade.api.ui.Element;
-import snownee.jade.impl.config.PluginConfig;
 import snownee.jade.overlay.DisplayHelper;
 import snownee.jade.overlay.OverlayRenderer;
 
@@ -24,10 +22,8 @@ public class CAAttributeElement extends Element {
     private static final ResourceLocation MAGIC_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/magic_resistance.png");
 
     public CAAttributeElement(double defense, double resistance) {
-        if (!PluginConfig.INSTANCE.get(Identifiers.MC_ENTITY_HEALTH_SHOW_FRACTIONS)) {
-            defense = Math.ceil(defense);
-            resistance = Math.ceil(resistance);
-        }
+        defense = Math.ceil(defense);
+        resistance = Math.ceil(resistance);
         if (defense > 2147483647) this.defense = "Too Large";
         else this.defense = DisplayHelper.dfCommas.format(defense);
         if (resistance > 2147483647) this.resistance = "Too Large";

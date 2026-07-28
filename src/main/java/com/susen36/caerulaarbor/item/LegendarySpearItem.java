@@ -195,7 +195,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if (entity.isAlive()) {
                         if (world instanceof Level level) {
-                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_THROW, SoundSource.NEUTRAL, (float) 3.5, 1);
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_THROW.value(), SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             entity.hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),

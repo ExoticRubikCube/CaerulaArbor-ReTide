@@ -2,17 +2,23 @@ package com.susen36.caerulaarbor.datagen;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import net.minecraft.advancements.*;
+import net.minecraft.advancements.critereon.CriterionValidator;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -41,7 +47,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
                 item(icon),
                 Component.translatable(title),
                 Component.translatable(description),
-                background == null ? null : resLoc(background),
+                background == null ? Optional.empty() : Optional.of(resLoc(background)),
                 frame,
                 showToast,
                 announceToChat,
@@ -139,8 +145,13 @@ public class AdvancementProvider implements AdvancementSubProvider {
      * @param conditions 条件 JSON
      * @return 进度条件
      */
-    private static Criterion criterion(String trigger, JsonObject conditions) {
-        return new Criterion(new JsonCriterionTriggerInstance(resLoc(trigger), conditions));
+    private static Criterion<?> criterion(String trigger, JsonObject conditions) {
+        JsonObject json = new JsonObject();
+        json.addProperty("trigger", trigger);
+        json.add("conditions", conditions);
+        return Criterion.CODEC.parse(JsonOps.INSTANCE, json)
+                .result()
+                .orElseThrow(() -> new IllegalStateException("Failed to parse criterion: " + trigger));
     }
 
     /**
@@ -188,7 +199,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
         var builder = new AdvancementRewards.Builder();
         builder.addExperience(experience);
         for (var lootTable : lootTables) {
-            builder.addLootTable(resLoc(lootTable));
+            builder.addLootTable(ResourceKey.create(Registries.LOOT_TABLE, resLoc(lootTable)));
         }
         for (var recipe : recipes) {
             builder.addRecipe(resLoc(recipe));
@@ -213,7 +224,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
      * @return 图标物品栈
      */
     private static ItemStack item(String id) {
-        var item = ForgeRegistries.ITEMS.getValue(resLoc(id));
+        var item = BuiltInRegistries.ITEM.get(resLoc(id));
         return new ItemStack(Objects.requireNonNull(item, "Missing advancement icon item: " + id));
     }
 
@@ -2087,13 +2098,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
                                                 JsonObject conditions) implements CriterionTriggerInstance {
 
         @Override
-        public @NotNull ResourceLocation getCriterion() {
-            return trigger;
-        }
-
-        @Override
-        public @NotNull JsonObject serializeToJson(@NotNull SerializationContext context) {
-            return conditions.deepCopy();
+        public void validate(@NotNull CriterionValidator validator) {
         }
     }
 }

@@ -1,0 +1,8 @@
+{
+  "sound_event": "caerula_arbor:only_path_ahead",
+  "description": {
+    "translate": "item.caerula_arbor.record_path_ahead.desc"
+  },
+  "length_in_seconds": 152.0,
+  "comparator_output": 6
+}

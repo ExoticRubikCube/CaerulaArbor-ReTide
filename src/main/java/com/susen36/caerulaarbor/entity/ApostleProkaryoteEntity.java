@@ -213,7 +213,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
                     }
                     CaerulaArborMod.queueServerWork(17, () -> {
                         if (world instanceof Level level) {
-                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.HOSTILE, 1, 1);
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.HOSTILE, 1, 1);
                         }
                     });
                 }

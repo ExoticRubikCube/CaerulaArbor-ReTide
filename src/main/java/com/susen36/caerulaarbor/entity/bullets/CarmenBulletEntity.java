@@ -31,11 +31,11 @@ public class CarmenBulletEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public CarmenBulletEntity(EntityType<? extends CarmenBulletEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
+		super(type, x, y, z, world, ItemStack.EMPTY, ItemStack.EMPTY);
 	}
 
 	public CarmenBulletEntity(EntityType<? extends CarmenBulletEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world);
+		super(type, entity, world, ItemStack.EMPTY, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class CarmenBulletEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	@Override
-	protected ItemStack getPickupItem() {
+	protected ItemStack getDefaultPickupItem() {
 		return PROJECTILE_ITEM;
 	}
 
@@ -88,7 +88,6 @@ public class CarmenBulletEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
-		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
 		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
@@ -102,7 +101,6 @@ public class CarmenBulletEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 1.5f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(5);
-		entityarrow.setKnockback(0);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
 		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1, 1f / (RandomSource.create().nextFloat() * 0.5f + 1));

@@ -445,7 +445,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         targetCreeper.discard();
                     }
                     if (world instanceof Level level) {
-                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.HOSTILE, 2.0f, 1.0f);
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.HOSTILE, 2.0f, 1.0f);
                     }
                     this.entityData.set(DATA_HOLDING_CREEPER, true);
                     if (targetCreeper.charged()) {

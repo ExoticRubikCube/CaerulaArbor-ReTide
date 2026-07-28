@@ -91,9 +91,7 @@ public class TidelinkedWandItem extends Item {
                 AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
                 entityToSpawn.setOwner((Entity) entity);
                 entityToSpawn.setBaseDamage((float) (damage * 1));
-                entityToSpawn.setKnockback(0);
                 entityToSpawn.setSilent(true);
-                entityToSpawn.setPierceLevel((byte) 1);
                 entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
                 entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 2.65, 0);
                 projectileLevel.addFreshEntity(entityToSpawn);
@@ -101,11 +99,9 @@ public class TidelinkedWandItem extends Item {
             for (int index0 = 0; index0 < 2; index0++) {
                 if (!projectileLevel.isClientSide()) {
                     AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
-                    entityToSpawn.setOwner((Entity) entity);
+                    entityToSpawn.setOwner(entity);
                     entityToSpawn.setBaseDamage((float) (damage * 0.75));
-                    entityToSpawn.setKnockback(0);
                     entityToSpawn.setSilent(true);
-                    entityToSpawn.setPierceLevel((byte) 1);
                     entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
                     entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 2.1, 5);
                     projectileLevel.addFreshEntity(entityToSpawn);
@@ -116,7 +112,6 @@ public class TidelinkedWandItem extends Item {
                     AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
                     entityToSpawn.setOwner((Entity) entity);
                     entityToSpawn.setBaseDamage((float) (damage * 0.5));
-                    entityToSpawn.setKnockback(0);
                     entityToSpawn.setSilent(true);
                     entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
                     entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 1.85, 25);

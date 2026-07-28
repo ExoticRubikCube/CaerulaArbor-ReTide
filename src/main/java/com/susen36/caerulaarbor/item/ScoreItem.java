@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.CASounds;
+import com.susen36.caerulaarbor.init.CAJukeboxSongs;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -26,9 +26,9 @@ import net.minecraft.world.level.LevelAccessor;
 import java.util.List;
 
 
-public class ScoreItem extends RecordItem {
+public class ScoreItem extends Item {
 	public ScoreItem() {
-		super(8, () -> CASounds.BLOODYWOLF_OPENMOUTH.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), 1180);
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).jukeboxPlayable(CAJukeboxSongs.SCORE));
 	}
 
 	@Override

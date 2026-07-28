@@ -1,0 +1,22 @@
+{
+  "values": {
+    "caerula_arbor:baselayer_abyssal": {
+      "weight": 180
+    },
+    "caerula_arbor:flee_fish": {
+      "weight": 180
+    },
+    "caerula_arbor:slider_fish": {
+      "weight": 180
+    },
+    "caerula_arbor:nethersea_slime": {
+      "weight": 180
+    },
+    "caerula_arbor:splasher_abyssal": {
+      "weight": 180
+    },
+    "caerula_arbor:umbrella_abyssal": {
+      "weight": 180
+    }
+  }
+}

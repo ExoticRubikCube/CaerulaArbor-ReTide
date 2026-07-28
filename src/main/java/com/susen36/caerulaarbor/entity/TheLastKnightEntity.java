@@ -481,4 +481,9 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;
     }
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return false;
+    }
 }

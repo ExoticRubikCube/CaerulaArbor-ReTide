@@ -4,17 +4,17 @@ import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.Comparator;
@@ -36,15 +36,17 @@ public class ApocataSwordItem extends SwordItem {
 	}
 
 	@Override
-	public boolean onEntitySwing(ItemStack itemstack, LivingEntity entity) {
-		boolean retval = super.onEntitySwing(itemstack, entity);
+	public boolean onEntitySwing(ItemStack itemstack, LivingEntity entity, InteractionHand hand) {
+		boolean retval = super.onEntitySwing(itemstack, entity, hand);
+
 		if (entity instanceof Player player && player.getMainHandItem() == itemstack) {
-			HitResult hitResult = player.pick(player.getAttributeValue(NeoForgeMod.ENTITY_REACH.get()), 0.0F, false);
+			double reach = player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE);
+
+			HitResult hitResult = player.pick(reach, 0.0F, false);
 			if (hitResult.getType() == HitResult.Type.MISS && !player.level().isClientSide()) {
-				Vec3 center = new Vec3(player.getX(), player.getY(), player.getZ());
-				List<Entity> entities = player.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32.0), target -> true).stream()
-						.sorted(Comparator.comparingDouble(target -> target.distanceToSqr(center)))
-						.toList();
+				Vec3 center = player.position();
+				List<Entity> entities = player.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32.0), target -> true).stream().sorted(Comparator.comparingDouble(target -> target.distanceToSqr(center))).toList();
+
 				for (Entity target : entities) {
 					if (target instanceof LightningBolt) {
 						continue;
@@ -53,7 +55,7 @@ public class ApocataSwordItem extends SwordItem {
 						continue;
 					}
 					if (target != entity) {
-						target.hurt(CADamageTypes.source(player.level(), CADamageTypes.INV_KILLER), 114514);
+						target.hurt(CADamageTypes.source(player.level(), CADamageTypes.INV_KILLER), 114514.0F);
 					}
 				}
 			}

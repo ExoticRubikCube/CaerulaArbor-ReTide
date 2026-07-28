@@ -2,15 +2,15 @@ package com.susen36.caerulaarbor.event;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
-import net.neoforged.neoforge.event.entity.living.MobSpawnEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 
 @EventBusSubscriber
 public class FinalizeSpawnEventHandler {
 
     @SubscribeEvent
-    public static void onMobSpawn(MobSpawnEvent.FinalizeSpawn event) {
+    public static void onMobSpawn(FinalizeSpawnEvent event) {
         if (event.isCanceled()) {
             return;
         }

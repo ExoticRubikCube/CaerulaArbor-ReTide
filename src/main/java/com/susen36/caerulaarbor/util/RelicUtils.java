@@ -273,13 +273,11 @@ public class RelicUtils {
 			Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
 
 		if (storedLives > 1) {
-			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			capability.player_lives = 1;
-			capability.syncPlayerVariables(entity);
+			playerVariables.player_lives = 1;
+			playerVariables.syncPlayerVariables(entity);
 		}
 
 		double shieldAfterLifeTransfer = playerVariables.player_shield + storedLives;
-		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 		capability.player_shield = shieldAfterLifeTransfer;
 		capability.syncPlayerVariables(entity);
 

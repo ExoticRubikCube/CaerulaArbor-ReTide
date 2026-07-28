@@ -49,7 +49,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public AbandonedShootEntity(EntityType<? extends AbandonedShootEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world);
+		super(type, entity, world, ItemStack.EMPTY, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	@Override
-	protected ItemStack getPickupItem() {
+	protected ItemStack getDefaultPickupItem() {
 		return PROJECTILE_ITEM;
 	}
 

@@ -71,7 +71,7 @@ public class OilAndCreamItem extends Item {
             entity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
             entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 1200, 0));
         }
-        entity.setSecondsOnFire(8);
+        entity.igniteForSeconds(8);
         if ((LevelAccessor) world instanceof ServerLevel level) {
             ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(Items.STICK));
             entityToSpawn.setPickUpDelay(10);

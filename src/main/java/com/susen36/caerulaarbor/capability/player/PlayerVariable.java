@@ -157,7 +157,7 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
         nbt.putBoolean("relic_util_TOPONYM", relic_util_TOPONYM);
         nbt.putBoolean("relic_util_KETTLE", relic_util_KETTLE);
         nbt.putBoolean("relic_legend_CHITIN", relic_legend_CHITIN);
-        nbt.put("chitin_knife_selected", chitin_knife_selected.save(new CompoundTag()));
+        nbt.put("chitin_knife_selected", chitin_knife_selected.saveOptional(null));
         nbt.putBoolean("relic_util_ALLEY", relic_util_ALLEY);
         nbt.putBoolean("relic_util_BATBED", relic_util_BATBED);
         nbt.putBoolean("relic_util_LONGEVITY", relic_util_LONGEVITY);
@@ -253,7 +253,7 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
         relic_util_TOPONYM = nbt.getBoolean("relic_util_TOPONYM");
         relic_util_KETTLE = nbt.getBoolean("relic_util_KETTLE");
         relic_legend_CHITIN = nbt.getBoolean("relic_legend_CHITIN");
-        chitin_knife_selected = ItemStack.of(nbt.getCompound("chitin_knife_selected"));
+        chitin_knife_selected = ItemStack.parseOptional(null, nbt.getCompound("chitin_knife_selected"));
         relic_util_ALLEY = nbt.getBoolean("relic_util_ALLEY");
         relic_util_BATBED = nbt.getBoolean("relic_util_BATBED");
         relic_util_LONGEVITY = nbt.getBoolean("relic_util_LONGEVITY");

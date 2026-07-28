@@ -14,7 +14,7 @@ import net.minecraft.world.level.material.FluidState;
 
 public class TrailPressurePlateBlock extends PressurePlateBlock {
 	public TrailPressurePlateBlock() {
-		super(Sensitivity.MOBS, BlockBehaviour.Properties.of().sound(SoundType.SCULK_CATALYST).strength(1f, 12f).dynamicShape().forceSolidOn(), BlockSetType.IRON);
+		super(BlockSetType.IRON, BlockBehaviour.Properties.of().sound(SoundType.SCULK_CATALYST).strength(1f, 12f).dynamicShape().forceSolidOn());
 	}
 
 	@Override

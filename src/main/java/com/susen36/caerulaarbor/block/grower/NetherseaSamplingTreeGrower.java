@@ -1,12 +1,18 @@
 package com.susen36.caerulaarbor.block.grower;
 
 import net.minecraft.data.worldgen.features.FeatureUtils;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.block.grower.TreeGrower;
 
-public class NetherseaSamplingTreeGrower extends AbstractTreeGrower {
-	protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource randomSource, boolean hasFlower) {
-		return FeatureUtils.createKey("caerula_arbor:nethersea_tree");
-	}
+import java.util.Optional;
+
+public final class NetherseaSamplingTreeGrower {
+    public static final TreeGrower INSTANCE = new TreeGrower(
+        "nethersea_sampling",
+        Optional.empty(),
+        Optional.of(FeatureUtils.createKey("caerula_arbor:nethersea_tree")),
+        Optional.empty()
+    );
+
+    private NetherseaSamplingTreeGrower() {
+    }
 }

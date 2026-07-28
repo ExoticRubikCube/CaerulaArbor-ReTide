@@ -4,6 +4,7 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAConfigs;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -33,19 +34,19 @@ public class PlayerEatEventHandler {
 		if (itemId.equals("alexscaves:biome_treat")) {
 			return;
 		}
-		if (entity instanceof LivingEntity livingEntity && itemStack.getItem().isEdible() && livingEntity.getHealth() >= livingEntity.getMaxHealth() * 0.6) {
+		if (entity instanceof LivingEntity livingEntity && itemStack.getComponents().has(DataComponents.FOOD) && livingEntity.getHealth() >= livingEntity.getMaxHealth() * 0.6) {
 			if (entity instanceof Player player && player.getFoodData().getFoodLevel() < 20 && player.getFoodData().getSaturationLevel() < 20) {
-				double reviveChance = itemStack.getItem().getFoodProperties().getNutrition() * 0.01;
+				double reviveChance = itemStack.getItem().getFoodProperties(itemStack, livingEntity).nutrition() * 0.01;
 				if (player.getFoodData().getFoodLevel() > 16) {
 					reviveChance = reviveChance * 1.5;
 				}
-				if (itemStack.getItem().getFoodProperties().getSaturationModifier() > 0.5) {
+				if (itemStack.getItem().getFoodProperties(itemStack, livingEntity).saturation() > 0.5) {
 					reviveChance = reviveChance * 1.25;
 				}
 				if (Math.random() < reviveChance) {
 					double maxReviveAmount = 1;
 					messageText = Component.translatable("gameplay.life_point.revive.2").getString();
-					if (itemStack.getItem().getFoodProperties().getSaturationModifier() > 0.1 && Math.random() < 0.33) {
+					if (itemStack.getItem().getFoodProperties(itemStack, livingEntity).saturation() > 0.1 && Math.random() < 0.33) {
 						maxReviveAmount = 2;
 						messageText = Component.translatable("gameplay.life_point.revive.1").getString();
 					}

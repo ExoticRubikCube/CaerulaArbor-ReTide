@@ -1,9 +1,11 @@
 package com.susen36.caerulaarbor.datagen;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -23,8 +25,8 @@ public class LootTableModifier extends LootModifier {
     /**
      * additem 序列化器 codec
      */
-    public static final Supplier<Codec<LootTableModifier>> CODEC = Suppliers.memoize(
-            () -> RecordCodecBuilder.create(instance -> codecStart(instance)
+    public static final Supplier<MapCodec<LootTableModifier>> CODEC = Suppliers.memoize(
+            () -> RecordCodecBuilder.mapCodec(instance -> codecStart(instance)
                     .and(ResourceLocation.CODEC.optionalFieldOf("lootTable").forGetter(modifier -> Optional.ofNullable(modifier.lootTable)))
                     .and(ItemStack.CODEC.optionalFieldOf("item").forGetter(modifier -> Optional.ofNullable(modifier.itemStack)))
                     .apply(instance, (conditions, lootTable, itemStack) -> new LootTableModifier(
@@ -74,7 +76,7 @@ public class LootTableModifier extends LootModifier {
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         if (lootTable != null) {
-            context.getResolver().getLootTable(lootTable).getRandomItems(context, generatedLoot::add);
+            context.getLevel().getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, lootTable)).getRandomItems(context, generatedLoot::add);
         }
         if (itemStack != null) {
             generatedLoot.add(itemStack.copy());
@@ -86,7 +88,7 @@ public class LootTableModifier extends LootModifier {
      * 返回 additem 序列化器 codec
      */
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC.get();
     }
 }
