@@ -159,7 +159,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
             String output;
             double balance;
             double amount;
-            balance = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).plauyer_balance;
+            balance = (ModCapabilities.getPlayerVariables(entity)).plauyer_balance;
             if (balance >= 131072) {
                 if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                     player.displayClientMessage(Component.literal((Component.translatable("block.golden_chalise.inquiry").getString())), true);
@@ -171,10 +171,9 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         balance = Math.min(balance + amount, 131072);
                         {
                             double setval = balance;
-                            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.plauyer_balance = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                         ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).setCount(0);
                         if ((LevelAccessor) world instanceof Level level) {
@@ -185,10 +184,9 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         balance = balance + 1;
                         {
                             double setval = balance;
-                            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.plauyer_balance = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                         if ((Entity) entity instanceof Player player) {
                             ItemStack stktoremove = new ItemStack(CAItems.REDSTONE_INGOT.get());
@@ -205,10 +203,9 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         balance = Math.min(balance + amount * 9, 131072);
                         {
                             double setval = balance;
-                            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.plauyer_balance = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                         ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).setCount(0);
                         if ((LevelAccessor) world instanceof Level level) {
@@ -219,10 +216,9 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         balance = Math.min(balance + 9, 131072);
                         {
                             double setval = balance;
-                            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.plauyer_balance = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                         if ((Entity) entity instanceof Player player) {
                             ItemStack stktoremove = new ItemStack(CAItems.REDSTONIUM.get());
@@ -244,10 +240,9 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                 balance = balance - 9;
                                 {
                                     double setval = balance;
-                                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                    PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                         capability.plauyer_balance = setval;
                                         capability.syncPlayerVariables(entity);
-                                    });
                                 }
                                 if ((LevelAccessor) world instanceof ServerLevel level) {
                                     ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONIUM.get()));
@@ -269,10 +264,9 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                 balance = 0;
                                 {
                                     double setval = balance;
-                                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                    PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                         capability.plauyer_balance = setval;
                                         capability.syncPlayerVariables(entity);
-                                    });
                                 }
                                 if ((LevelAccessor) world instanceof Level level) {
                                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
@@ -283,10 +277,9 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                             balance = balance - 1;
                             {
                                 double setval = balance;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                     capability.plauyer_balance = setval;
                                     capability.syncPlayerVariables(entity);
-                                });
                             }
                             if ((LevelAccessor) world instanceof ServerLevel level) {
                                 ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONE_INGOT.get()));

@@ -1,12 +1,10 @@
 package com.susen36.caerulaarbor.capability.player;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CAConfigs;
-import com.susen36.caerulaarbor.init.CANetwork;
 import com.susen36.caerulaarbor.network.receive.PlayerVariablesSyncMessage;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -14,8 +12,6 @@ import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class PlayerVariable implements INBTSerializable<CompoundTag> {
-
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "player_variables");
 
     public double player_light = 100.0;
     public double player_lives = CAConfigs.LP_INIT.get();
@@ -111,7 +107,7 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
 
     public void syncPlayerVariables(Entity entity) {
         if (entity instanceof ServerPlayer serverPlayer) {
-            CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
+            PacketDistributor.sendToPlayer(serverPlayer, new PlayerVariablesSyncMessage(this));
         }
     }
 
@@ -307,12 +303,12 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         return (CompoundTag) writeNBT();
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         readNBT(nbt);
     }
 }

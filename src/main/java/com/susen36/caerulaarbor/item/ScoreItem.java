@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.core.BlockPos;
@@ -48,10 +49,9 @@ public class ScoreItem extends RecordItem {
         ItemStack itemstack = ar.getObject();
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             boolean setval = true;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_util_score = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            capability.relic_util_score = setval;
+            capability.syncPlayerVariables(entity);
             if ((Entity) entity instanceof Player player)
                 player.giveExperienceLevels(2);
             if ((LevelAccessor) world instanceof Level level) {

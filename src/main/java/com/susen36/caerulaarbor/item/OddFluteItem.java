@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
@@ -71,10 +72,9 @@ public class OddFluteItem extends Item {
                 livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 300, 0, false, false));
             {
                 boolean setval = true;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_util_FLUTE = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.relic_util_FLUTE = setval;
+                capability.syncPlayerVariables(entity);
             }
             CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
         }

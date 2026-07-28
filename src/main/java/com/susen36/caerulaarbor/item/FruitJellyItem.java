@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class FruitJellyItem extends Item {
 	public FruitJellyItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(10).saturationMod(0.4f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(10).saturationModifier(0.4f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -31,10 +32,9 @@ public class FruitJellyItem extends Item {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		ModCapabilities.getSanityInjury(entity).heal(150);
 		if (entity instanceof Player) {
-			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.player_light = Math.min(capability.player_light + 16, 100.0);
-				capability.syncPlayerVariables(entity);
-			});
+			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+			capability.player_light = Math.min(capability.player_light + 16, 100.0);
+			capability.syncPlayerVariables(entity);
 		}
 		return retval;
 	}

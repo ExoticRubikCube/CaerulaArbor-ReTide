@@ -40,11 +40,10 @@ public class LivingDamageEventHandler {
 
         if (entity instanceof Player) {
             double light_cost = Math.min(amount * 0.0025, 0.25);
-            double setval = Math.max((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - light_cost, 0);
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            double setval = Math.max(ModCapabilities.getPlayerVariables(entity).player_light - light_cost, 0);
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            capability.player_light = setval;
+            capability.syncPlayerVariables(entity);
         }
     }
 

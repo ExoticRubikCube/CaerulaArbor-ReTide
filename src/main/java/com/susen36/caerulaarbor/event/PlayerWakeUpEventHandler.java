@@ -14,21 +14,16 @@ public class PlayerWakeUpEventHandler {
 	public static void onEntityEndSleep(PlayerWakeUpEvent event) {
 		if (!event.updateLevel() && !event.wakeImmediately()) {
 			Entity entity = event.getEntity();
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.player_light = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + Mth.nextInt(RandomSource.create(), 1, 3);
+			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+			capability.player_light = capability.player_light + Mth.nextInt(RandomSource.create(), 1, 3);
+			capability.syncPlayerVariables(entity);
+			if (capability.player_light > 100) {
+				capability.player_light = 100;
 				capability.syncPlayerVariables(entity);
-			});
-			if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light > 100) {
-				entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-					capability.player_light = 100;
-					capability.syncPlayerVariables(entity);
-				});
 			}
 			if (Math.random() < 0.2) {
-				entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-					capability.player_shield = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 1;
-					capability.syncPlayerVariables(entity);
-				});
+				capability.player_shield = capability.player_shield + 1;
+				capability.syncPlayerVariables(entity);
 			}
 		}
 	}

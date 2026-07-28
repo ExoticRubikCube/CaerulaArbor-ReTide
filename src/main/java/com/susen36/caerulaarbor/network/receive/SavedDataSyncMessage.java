@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.network.receive;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.world.WorldVariables;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -19,9 +20,14 @@ public class SavedDataSyncMessage implements CustomPacketPayload {
 	);
 
 	private final int type;
-	private final SavedData data;
+	private final CompoundTag data;
 
-	public SavedDataSyncMessage(int type, SavedData data) {
+	public SavedDataSyncMessage(int type, SavedData savedData, HolderLookup.Provider provider) {
+		this.type = type;
+		this.data = savedData.save(new CompoundTag(), provider);
+	}
+
+	private SavedDataSyncMessage(int type, CompoundTag data) {
 		this.type = type;
 		this.data = data;
 	}
@@ -29,32 +35,21 @@ public class SavedDataSyncMessage implements CustomPacketPayload {
 	public static SavedDataSyncMessage decode(FriendlyByteBuf buffer) {
 		int type = buffer.readInt();
 		CompoundTag nbt = buffer.readNbt();
-		SavedData data = null;
-		if (nbt != null) {
-			data = type == 0 ? new MapVariables() : new WorldVariables();
-			if (data instanceof MapVariables mapVariables) {
-				mapVariables.read(nbt);
-			} else if (data instanceof WorldVariables worldVariables) {
-				worldVariables.read(nbt);
-			}
-		}
-		return new SavedDataSyncMessage(type, data);
+		return new SavedDataSyncMessage(type, nbt);
 	}
 
 	public static void encode(FriendlyByteBuf buffer, SavedDataSyncMessage message) {
 		buffer.writeInt(message.type);
-		if (message.data != null) {
-			buffer.writeNbt(message.data.save(new CompoundTag()));
-		}
+		buffer.writeNbt(message.data);
 	}
 
 	public static void handle(SavedDataSyncMessage message, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			if (context.flow().isClientbound() && message.data != null) {
 				if (message.type == 0) {
-					MapVariables.clientSide = (MapVariables) message.data;
+					MapVariables.clientSide.read(message.data);
 				} else {
-					WorldVariables.clientSide = (WorldVariables) message.data;
+					WorldVariables.clientSide.read(message.data);
 				}
 			}
 		});

@@ -1,38 +1,23 @@
 package com.susen36.caerulaarbor.capability;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.capability.anchor.AnchorRecord;
 import com.susen36.caerulaarbor.capability.apoptosis.ApoptosisInjuryCapability;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.susen36.caerulaarbor.init.CABlockEntities;
-import com.susen36.caerulaarbor.init.CANetwork;
 import com.susen36.caerulaarbor.network.receive.SavedDataSyncMessage;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.Tag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
-import net.neoforged.neoforge.common.capabilities.ICapabilitySerializable;
-import net.neoforged.neoforge.common.util.FakePlayer;
-import net.neoforged.neoforge.common.util.INBTSerializable;
-import net.neoforged.neoforge.common.util.LazyOptional;
-import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @EventBusSubscriber(modid = CaerulaArborMod.MODID)
 public class CapabilityEventHandler {
@@ -43,51 +28,37 @@ public class CapabilityEventHandler {
 
     public static void registerBlockCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.HUGE_LILY.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.CHESTMEGA_SPAWNER.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.CENTRIFUGER.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.ABANDONED_SULPTURE.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.CRISIS_TABLE.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.VIVIPAROUS_LILY.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.TRAILRITE_ARMORSTAND.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.TIDEWAY_CRADLE.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.SWARMCALLER_DOLL.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.STONECUTTER_DOLL.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.POCKET_SEA_DOLL.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.MIZUKI_STATUE.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.LIVING_ARMORSTAND.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.ILLUSIONER_BANNER.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.HIGHMORE_SPAWNING_BLOCK.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CABlockEntities.HIGHMORE_SPAWNBLOCK.get(),
-                (level, pos, state, blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
-    }
-
-    @SubscribeEvent
-    public static void attachLevelCapabilities(AttachCapabilitiesEvent<Level> event) {
-        if (event.getObject() instanceof ServerLevel) {
-            LazyOptional<AnchorRecord> optional = LazyOptional.of(AnchorRecord::new);
-            ICapabilityProvider provider = new ICapabilityProvider() {
-                @Override
-                public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-                    return ModCapabilities.ANCHOR_RECORD.orEmpty(cap, optional.cast());
-                }
-            };
-            event.addCapability(AnchorRecord.ID, provider);
-        }
+                (blockEntity, side) -> side == null ? null : blockEntity.getItemHandler(side));
     }
 
     @SubscribeEvent
@@ -124,13 +95,14 @@ public class CapabilityEventHandler {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getEntity().level().isClientSide()) {
+            ServerPlayer serverPlayer = (ServerPlayer) event.getEntity();
             SavedData mapData = ModCapabilities.getMapVariables(event.getEntity().level());
             SavedData worldData = ModCapabilities.getWorldVariables(event.getEntity().level());
             if (mapData != null) {
-                CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(0, mapData));
+                PacketDistributor.sendToPlayer(serverPlayer, new SavedDataSyncMessage(0, mapData, serverPlayer.level().registryAccess()));
             }
             if (worldData != null) {
-                CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worldData));
+                PacketDistributor.sendToPlayer(serverPlayer, new SavedDataSyncMessage(1, worldData, serverPlayer.level().registryAccess()));
             }
         }
     }
@@ -138,61 +110,33 @@ public class CapabilityEventHandler {
     @SubscribeEvent
     public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (!event.getEntity().level().isClientSide()) {
+            ServerPlayer serverPlayer = (ServerPlayer) event.getEntity();
             SavedData worldData = ModCapabilities.getWorldVariables(event.getEntity().level());
             if (worldData != null) {
-                CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worldData));
+                PacketDistributor.sendToPlayer(serverPlayer, new SavedDataSyncMessage(1, worldData, serverPlayer.level().registryAccess()));
             }
         }
     }
 
     @SubscribeEvent
     public static void onLivingTick(EntityTickEvent.Post event) {
-        if (!event.getEntity().level().isClientSide()) {
-            ModCapabilities.getSanityInjury(event.getEntity()).tick();
-            ModCapabilities.getApoptosisInjury(event.getEntity()).tick();
+        Entity entity = event.getEntity();
+        if (!entity.level().isClientSide() && entity instanceof LivingEntity livingEntity) {
+            ModCapabilities.getSanityInjury(livingEntity).tick();
+            ModCapabilities.getApoptosisInjury(livingEntity).tick();
         }
-    }
-
-    @SubscribeEvent
-    public static void registerEntityCapabilities(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof LivingEntity livingEntity) {
-            event.addCapability(SanityInjuryCapability.ID, createProvider(LazyOptional.of(() -> new SanityInjuryCapability(livingEntity)), ModCapabilities.SANITY_INJURY));
-            event.addCapability(ApoptosisInjuryCapability.ID, createProvider(LazyOptional.of(() -> new ApoptosisInjuryCapability(livingEntity)), ModCapabilities.APOPTOSIS_INJURY));
-        }
-        if (event.getObject() instanceof Player && !(event.getObject() instanceof FakePlayer)) {
-            event.addCapability(PlayerVariable.ID, createProvider(LazyOptional.of(PlayerVariable::new), ModCapabilities.PLAYER_VARIABLE));
-        }
-    }
-
-    public static <S extends Tag, T extends INBTSerializable<S>> ICapabilitySerializable<S> createProvider(LazyOptional<T> instance, Capability<T> capability) {
-        return new ICapabilitySerializable<>() {
-            @Override
-            public @NotNull <C> LazyOptional<C> getCapability(@NotNull Capability<C> cap, @Nullable Direction side) {
-                return capability.orEmpty(cap, instance.cast());
-            }
-
-            @Override
-            public S serializeNBT() {
-                return instance.orElseThrow(NullPointerException::new).serializeNBT();
-            }
-
-            @Override
-            public void deserializeNBT(S nbt) {
-                instance.orElseThrow(NullPointerException::new).deserializeNBT(nbt);
-            }
-        };
     }
 
     private static void handleSanityCap(Player player, Player oldPlayer) {
         SanityInjuryCapability oldInjury = ModCapabilities.getSanityInjury(oldPlayer);
         SanityInjuryCapability newInjury = ModCapabilities.getSanityInjury(player);
-        newInjury.deserializeNBT(oldInjury.serializeNBT());
+        newInjury.deserializeNBT(oldPlayer.registryAccess(), oldInjury.serializeNBT(oldPlayer.registryAccess()));
     }
 
     private static void handleApoptosisCap(Player player, Player oldPlayer) {
         ApoptosisInjuryCapability oldApoptosis = ModCapabilities.getApoptosisInjury(oldPlayer);
         ApoptosisInjuryCapability newApoptosis = ModCapabilities.getApoptosisInjury(player);
-        newApoptosis.deserializeNBT(oldApoptosis.serializeNBT());
+        newApoptosis.deserializeNBT(oldPlayer.registryAccess(), oldApoptosis.serializeNBT(oldPlayer.registryAccess()));
     }
 
     private static void handlePlayerVariables(Player player, Player oldPlayer, boolean wasDeath) {

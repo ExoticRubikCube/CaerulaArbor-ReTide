@@ -97,7 +97,7 @@ public final class LootTableProviders {
         LootItemConditionalFunction.Builder<?> builder = switch (definition.type()) {
             case "set_count" -> SetItemCountFunction.setCount(number(definition.number()));
             case "explosion_decay" -> ApplyExplosionDecay.explosionDecay();
-            case "ore_bonus" -> ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE);
+            case "ore_bonus" -> ApplyBonusCount.addOreBonusCount(Enchantments.FORTUNE);
             case "enchant_with_levels" -> {
                 EnchantWithLevelsFunction.Builder enchantBuilder = EnchantWithLevelsFunction.enchantWithLevels(number(definition.number()));
                 if (definition.treasure()) {

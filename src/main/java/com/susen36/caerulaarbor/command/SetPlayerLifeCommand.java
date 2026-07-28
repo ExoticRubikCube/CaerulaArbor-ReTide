@@ -1,4 +1,3 @@
-
 package com.susen36.caerulaarbor.command;
 
 import com.mojang.brigadier.arguments.DoubleArgumentType;
@@ -39,13 +38,12 @@ public class SetPlayerLifeCommand {
                     double lfs;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
-                            lfs = Math.min(DoubleArgumentType.getDouble(arguments, "life"), Math.min(CAConfigs.LP_LIMIT.get(), (entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive));
+                            lfs = Math.min(DoubleArgumentType.getDouble(arguments, "life"), Math.min(CAConfigs.LP_LIMIT.get(), ModCapabilities.getPlayerVariables(entityiterator).player_maxlive));
                             {
                                 double setval = lfs;
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.player_lives = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.player_lives = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.set_life").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -77,10 +75,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = Math.min(DoubleArgumentType.getDouble(arguments, "life"), CAConfigs.LP_LIMIT.get());
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.player_maxlive = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.player_maxlive = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.set_maxlife").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -112,10 +109,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = Math.min(DoubleArgumentType.getDouble(arguments, "shield"), CAConfigs.SHIELD_LIMIT.get());
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.player_shield = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.player_shield = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.set_shield").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -147,10 +143,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = 100;
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.player_light = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.player_light = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.set_light").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -182,10 +177,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = 80;
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.player_light = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.player_light = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.set_light").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -217,10 +211,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = 40;
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.player_light = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.player_light = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.set_light").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -252,10 +245,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = 0;
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.player_light = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.player_light = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.set_light").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -287,10 +279,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = DoubleArgumentType.getDouble(arguments, "light");
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.player_light = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.player_light = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.set_light").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -322,10 +313,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = DoubleArgumentType.getDouble(arguments, "state");
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.player_oceanization = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.player_oceanization = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.oceanize").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -357,10 +347,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = 0;
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.disoclusion = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.disoclusion = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.rejection.clear").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -391,10 +380,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = 1;
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.disoclusion = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.disoclusion = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.rejection.set_disconcentration").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -425,10 +413,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = 2;
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.disoclusion = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.disoclusion = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.rejection.set_haemophilia").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -459,10 +446,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = 3;
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.disoclusion = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.disoclusion = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.rejection.set_neurodegression").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
@@ -493,10 +479,9 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double setval = 1;
-                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.disoclusion = setval;
-                                    capability.syncPlayerVariables(entityiterator);
-                                });
+                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
+                                capability.disoclusion = setval;
+                                capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.rejection.set_deformity").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());

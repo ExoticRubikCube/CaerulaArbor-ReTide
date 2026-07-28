@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 public class CannedNoodleItem extends Item {
 	public CannedNoodleItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(18).saturationMod(0.5f).build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(18).saturationModifier(0.5f).build()));
 	}
 
 	@Override

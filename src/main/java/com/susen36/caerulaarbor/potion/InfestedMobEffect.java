@@ -40,7 +40,7 @@ public class InfestedMobEffect extends MobEffect {
         if (entity == null)
              return true;
         double dam;
-        if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 3) {
+        if ((ModCapabilities.getPlayerVariables(entity)).player_oceanization < 3) {
             dam = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * Mth.nextDouble(RandomSource.create(), 0.1, 0.25) * ((double) amplifier + 1);
             if ((Entity) entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.POWER_OF_ANCHOR)) {
                 dam = dam * 0.1;
@@ -95,10 +95,9 @@ public class InfestedMobEffect extends MobEffect {
             }
             {
                 double setval = ampli + 1;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                     capability.player_oceanization = setval;
                     capability.syncPlayerVariables(entity);
-                });
             }
             SIHelper.causeSanityInjury(entity, 750 * ((double) amplifier + 1), SanityEvent.Hurt.Type.POTION);
             if ((Entity) entity instanceof ServerPlayer player) {
@@ -120,10 +119,9 @@ public class InfestedMobEffect extends MobEffect {
                 }
                 {
                     double setval = 0;
-                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                         capability.disoclusion = setval;
                         capability.syncPlayerVariables(entity);
-                    });
                 }
             }
             if (world instanceof Level level) {

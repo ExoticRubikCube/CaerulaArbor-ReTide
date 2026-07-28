@@ -107,21 +107,18 @@ public class LivingDeathEventHandler {
             if (!should_func) {
                 light_cost = 25;
             } else {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield > 0) {
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                if (capability.player_shield > 0) {
                     death_blocked = true;
                     is_shield = true;
-                    double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield - 1;
-                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_shield = setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                } else if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives > 1) {
+                    double setval = capability.player_shield - 1;
+                    capability.player_shield = setval;
+                    capability.syncPlayerVariables(entity);
+                } else if (capability.player_lives > 1) {
                     death_blocked = true;
-                    double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives - 1;
-                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_lives = setval;
-                        capability.syncPlayerVariables(entity);
-                    });
+                    double setval = capability.player_lives - 1;
+                    capability.player_lives = setval;
+                    capability.syncPlayerVariables(entity);
                 } else {
                     light_cost = 50;
                 }
@@ -169,12 +166,11 @@ public class LivingDeathEventHandler {
                 }
             }
             if (light_cost > 0) {
-                double cur_light = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light;
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                double cur_light = capability.player_light;
                 double setval = Math.max(0, cur_light - light_cost);
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_light = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                capability.player_light = setval;
+                capability.syncPlayerVariables(entity);
             }
         }
     }
@@ -389,57 +385,44 @@ public class LivingDeathEventHandler {
     }
 
     private static void handlePlayerKillRelics(LivingDeathEvent event, LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity) {
-        if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_EMELIGHT) {
-            double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - Mth.nextDouble(RandomSource.create(), 0.1, 0.2);
-            sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = setval;
-                capability.syncPlayerVariables(sourceentity);
-            });
+        PlayerVariable capability = ModCapabilities.getPlayerVariables(sourceentity);
+        if (capability.relic_cursed_EMELIGHT) {
+            double setval = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.1, 0.2);
+            capability.player_light = setval;
+            capability.syncPlayerVariables(sourceentity);
         }
-        if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_GLOWBODY) {
-            double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - Mth.nextDouble(RandomSource.create(), 0.2, 0.3);
-            sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = setval;
-                capability.syncPlayerVariables(sourceentity);
-            });
+        if (capability.relic_cursed_GLOWBODY) {
+            double setval = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.2, 0.3);
+            capability.player_light = setval;
+            capability.syncPlayerVariables(sourceentity);
         }
-        if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_RESEARCH) {
-            double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - Mth.nextDouble(RandomSource.create(), 0.3, 0.5);
-            sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = setval;
-                capability.syncPlayerVariables(sourceentity);
-            });
+        if (capability.relic_cursed_RESEARCH) {
+            double setval = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.3, 0.5);
+            capability.player_light = setval;
+            capability.syncPlayerVariables(sourceentity);
         }
-        if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light < 0) {
-            sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = 0;
-                capability.syncPlayerVariables(sourceentity);
-            });
+        if (capability.player_light < 0) {
+            capability.player_light = 0;
+            capability.syncPlayerVariables(sourceentity);
         }
-        if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_ARMOR) {
+        if (capability.relic_king_ARMOR) {
             if (Math.random() < 0.08) {
-                if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives > 1) {
-                    double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives - 1;
-                    sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_lives = setval;
-                        capability.syncPlayerVariables(sourceentity);
-                    });
-                }
-                double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 1;
-                sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_shield = setval;
+                if (capability.player_lives > 1) {
+                    double setval = capability.player_lives - 1;
+                    capability.player_lives = setval;
                     capability.syncPlayerVariables(sourceentity);
-                });
+                }
+                double setval = capability.player_shield + 1;
+                capability.player_shield = setval;
+                capability.syncPlayerVariables(sourceentity);
             }
         }
-        if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CRYSTAL) {
+        if (capability.relic_king_CRYSTAL) {
             if (Math.random() < 0.1) {
-                if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives > 1) {
-                    double setval = Math.max((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives - 2, 1);
-                    sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_lives = setval;
-                        capability.syncPlayerVariables(sourceentity);
-                    });
+                if (capability.player_lives > 1) {
+                    double setval = Math.max(capability.player_lives - 2, 1);
+                    capability.player_lives = setval;
+                    capability.syncPlayerVariables(sourceentity);
                 }
                 if (sourceentity instanceof Player player)
                     player.giveExperienceLevels(1);
@@ -450,8 +433,8 @@ public class LivingDeathEventHandler {
                 }
             }
         }
-        if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE >= 0
-                && (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE < 99) {
+        if (capability.relic_hand_ENGRAVE >= 0
+                && capability.relic_hand_ENGRAVE < 99) {
             if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
                 boolean validweapon = false;
                 if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.TRIDENT) {
@@ -470,23 +453,19 @@ public class LivingDeathEventHandler {
                     }
                 }
                 if (validweapon) {
-                    double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE + 1;
-                    sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_hand_ENGRAVE = setval;
-                        capability.syncPlayerVariables(sourceentity);
-                    });
+                    double setval = capability.relic_hand_ENGRAVE + 1;
+                    capability.relic_hand_ENGRAVE = setval;
+                    capability.syncPlayerVariables(sourceentity);
                 }
             }
         }
-        if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR >= 0
-                && (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR < 32) {
+        if (capability.relic_SURVIVOR >= 0
+                && capability.relic_SURVIVOR < 32) {
             if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
                 if (Math.random() < 0.035 || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses")))) {
-                    double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR + 1;
-                    sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_SURVIVOR = setval;
-                        capability.syncPlayerVariables(sourceentity);
-                    });
+                    double setval = capability.relic_SURVIVOR + 1;
+                    capability.relic_SURVIVOR = setval;
+                    capability.syncPlayerVariables(sourceentity);
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.WAX_ON, x, y, z, 48, 0.7, 1.5, 0.7, 0.2);
                 }
@@ -622,11 +601,10 @@ public class LivingDeathEventHandler {
             if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_PLACE, SoundSource.PLAYERS, (float) 0.75, 1);
             }
-            if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 2.9) {
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_oceanization = 0;
-                    capability.syncPlayerVariables(entity);
-                });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            if (capability.player_oceanization < 2.9) {
+                capability.player_oceanization = 0;
+                capability.syncPlayerVariables(entity);
             }
         }
     }

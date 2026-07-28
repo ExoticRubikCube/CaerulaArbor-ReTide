@@ -43,7 +43,6 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -244,18 +243,13 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
                     if (this.isAlive() && this.getHealth() < this.getMaxHealth()) {
                         Level projectileLevel = this.level();
                         if (!projectileLevel.isClientSide()) {
-                            Projectile projectile = new Object() {
-                                public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                                    AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
-                                    entityToSpawn.setOwner(shooter);
-                                    entityToSpawn.setBaseDamage(damage);
-                                    entityToSpawn.setKnockback(knockback);
-                                    entityToSpawn.setSilent(true);
-                                    entityToSpawn.setPierceLevel(piercing);
-                                    entityToSpawn.setCritArrow(true);
-                                    return entityToSpawn;
-                                }
-                            }.getArrow(projectileLevel, this, (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0), 0, (byte) 1);
+                            AbstractArrow projectile = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                            projectile.setOwner(this);
+                            projectile.setBaseDamage((float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0));
+                            projectile.setKnockback(0);
+                            projectile.setSilent(true);
+                            projectile.setPierceLevel((byte) 1);
+                            projectile.setCritArrow(true);
                             projectile.setPos(this.getX(), this.getEyeY() - 0.1, this.getZ());
                             projectile.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z, 1.5F, 0);
                             projectileLevel.addFreshEntity(projectile);

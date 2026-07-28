@@ -51,7 +51,6 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -448,17 +447,10 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                                     if (world instanceof ServerLevel level)
                                         level.sendParticles(ParticleTypes.END_ROD, x, (y + 1), z, 72, 2, 2, 2, 0.2);
                                     if (world instanceof ServerLevel projectileLevel) {
-                                        Projectile entityToSpawn = new Object() {
-                                            public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                                                AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), level);
-                                                entityToSpawn.setOwner(shooter);
-                                                entityToSpawn.setBaseDamage(damage);
-                                                entityToSpawn.setKnockback(knockback);
-                                                entityToSpawn.setSilent(true);
-                                                return entityToSpawn;
-                                            }
-                                        }.getArrow(projectileLevel, (Entity) HighmoreEntity.this,
-                                                (float) (((Entity) HighmoreEntity.this instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5), 0);
+                                        AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
+                                        entityToSpawn.setOwner((Entity) HighmoreEntity.this);
+                                        entityToSpawn.setBaseDamage((float) (((Entity) HighmoreEntity.this instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
+                                        entityToSpawn.setSilent(true);
                                         entityToSpawn.setPos(x, (y + 9), z);
                                         entityToSpawn.shoot((rng * Math.sin(angl)), (-9), (rng * Math.cos(angl)), (float) 1.5, 5);
                                         projectileLevel.addFreshEntity(entityToSpawn);
@@ -703,17 +695,10 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 if (world instanceof ServerLevel projectileLevel) {
-                    Projectile entityToSpawn = new Object() {
-                        public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                            AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), level);
-                            entityToSpawn.setOwner(shooter);
-                            entityToSpawn.setBaseDamage(damage);
-                            entityToSpawn.setKnockback(knockback);
-                            entityToSpawn.setSilent(true);
-                            return entityToSpawn;
-                        }
-                    }.getArrow(projectileLevel, HighmoreEntity.this,
-                            (float) (HighmoreEntity.this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? HighmoreEntity.this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0), 0);
+                    AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
+                    entityToSpawn.setOwner(HighmoreEntity.this);
+                    entityToSpawn.setBaseDamage((float) (HighmoreEntity.this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? HighmoreEntity.this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                    entityToSpawn.setSilent(true);
                     entityToSpawn.setPos(x, (y + 1.5), z);
                     entityToSpawn.shoot((target.getX() - x), ((target.getY() + target.getBbHeight() * 0.5) - (y + 2.5)), (target.getZ() - z), (float) 1.5, 5);
                     projectileLevel.addFreshEntity(entityToSpawn);
@@ -770,17 +755,10 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 for (int index1 = 0; index1 < 12; index1++) {
                     if (world instanceof ServerLevel projectileLevel) {
-                        Projectile entityToSpawn = new Object() {
-                            public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                                AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), level);
-                                entityToSpawn.setOwner(shooter);
-                                entityToSpawn.setBaseDamage(damage);
-                                entityToSpawn.setKnockback(knockback);
-                                entityToSpawn.setSilent(true);
-                                return entityToSpawn;
-                            }
-                        }.getArrow(projectileLevel, entity,
-                                (float) ((entity instanceof LivingEntity livingEntity17 && livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3.3), 0);
+                        AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
+                        entityToSpawn.setOwner(entity);
+                        entityToSpawn.setBaseDamage((float) ((entity instanceof LivingEntity livingEntity17 && livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3.3));
+                        entityToSpawn.setSilent(true);
                         entityToSpawn.setPos(x, (y + 0.75), z);
                         entityToSpawn.shoot(Math.sin(30 * index1), 0, Math.cos(30 * index1), 1, 0);
                         projectileLevel.addFreshEntity(entityToSpawn);

@@ -20,7 +20,7 @@ import java.util.List;
 
 public class NourishedApplePieItem extends Item {
 	public NourishedApplePieItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(8).saturationMod(0.8f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(8).saturationModifier(0.8f).alwaysEdible().build()));
 	}
 
 	@Override

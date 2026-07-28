@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 public class TrailAppleItem extends Item {
 	public TrailAppleItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(5).saturationMod(0.35f).build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(5).saturationModifier(0.35f).build()));
 	}
 
 	@Override

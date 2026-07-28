@@ -2,7 +2,6 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,7 +18,7 @@ import java.util.List;
 
 public class TransformCellItem extends Item {
 	public TransformCellItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(7).saturationMod(0.4f).alwaysEat().meat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(7).saturationModifier(0.4f).alwaysEdible().meat().build()));
 	}
 
 	@Override
@@ -31,11 +30,11 @@ public class TransformCellItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 3
+		if (ModCapabilities.getPlayerVariables(entity).player_oceanization < 3
 				&& !entity.hasEffect(CAMobEffects.INFESTED)) {
 			if (!entity.level().isClientSide())
 				entity.addEffect(new MobEffectInstance(CAMobEffects.INFESTED, 5000,
-						(int) (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization));
+						(int) ModCapabilities.getPlayerVariables(entity).player_oceanization));
 		}
 		return retval;
 	}

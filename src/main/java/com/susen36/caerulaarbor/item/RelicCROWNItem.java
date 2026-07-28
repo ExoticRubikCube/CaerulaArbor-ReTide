@@ -52,7 +52,7 @@ public class RelicCROWNItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CROWN) {
+        if (!ModCapabilities.getPlayerVariables(entity).relic_king_CROWN) {
             if ((LevelAccessor) world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
             }
@@ -60,10 +60,9 @@ public class RelicCROWNItem extends Item {
                 level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
             {
                 boolean setval = true;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_king_CROWN = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.relic_king_CROWN = setval;
+                capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);

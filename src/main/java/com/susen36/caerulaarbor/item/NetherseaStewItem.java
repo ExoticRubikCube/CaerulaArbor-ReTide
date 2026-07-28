@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 public class NetherseaStewItem extends Item {
 	public NetherseaStewItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(1f).build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(1f).build()));
 	}
 
 	@Override

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ApocalypseItem extends Item {
 	public ApocalypseItem() {
-		super(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(-114).saturationMod(1f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(-114).saturationModifier(1f).alwaysEdible().build()));
 	}
 
 	@Override

@@ -9,10 +9,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -140,9 +140,8 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                 return false;
             }
         }.checkGamemode((Entity) entity))) {
-            if (itemstack.hurt(1, RandomSource.create(), null)) {
-                itemstack.shrink(1);
-                itemstack.setDamageValue(0);
+            if (world instanceof ServerLevel _level) {
+                itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
             }
         }
         if (!((Entity) sourceentity instanceof Player plrCldCheck4 && plrCldCheck4.getCooldowns().isOnCooldown(itemstack.getItem()))

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class TearIsharmlaItem extends Item {
 	public TearIsharmlaItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(0.5f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(0.5f).alwaysEdible().build()));
 	}
 
 	@Override

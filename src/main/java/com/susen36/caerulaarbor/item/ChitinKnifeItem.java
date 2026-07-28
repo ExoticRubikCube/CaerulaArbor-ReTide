@@ -44,7 +44,7 @@ public class ChitinKnifeItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_legend_CHITIN) {
+        if (!ModCapabilities.getPlayerVariables(entity).relic_legend_CHITIN) {
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BELL_BLOCK, SoundSource.NEUTRAL, (float) 3.5, 1);
             }
@@ -52,10 +52,9 @@ public class ChitinKnifeItem extends Item {
                 level.sendParticles(ParticleTypes.DOLPHIN, x, y, z, 72, 1, 1, 1, 0.1);
             {
                 boolean setval = true;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_legend_CHITIN = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.relic_legend_CHITIN = setval;
+                capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);

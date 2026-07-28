@@ -70,8 +70,8 @@ public class EntityUtils {
 	public static boolean canPlayerEvo(Entity entity) {
 		if (entity == null)
 			return false;
-		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).can_player_evo
-				&& (RelicUtils.hasDiso(entity) || (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization > 2.9);
+		return (ModCapabilities.getPlayerVariables(entity)).can_player_evo
+				&& (RelicUtils.hasDiso(entity) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
 	}
 
 	public static Entity catchNearestEnemy(LevelAccessor world, double x, double y, double z, Entity obj) {
@@ -99,15 +99,14 @@ public class EntityUtils {
 			return;
 		if (num <= 0)
 			return;
-		double snt = (player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + num;
+		double snt = ModCapabilities.getPlayerVariables(player).player_light + num;
 		if (snt > 100) {
 			snt = 100;
 		}
 		double setval = snt;
-		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.player_light = setval;
-			capability.syncPlayerVariables(player);
-		});
+		PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
+		capability.player_light = setval;
+		capability.syncPlayerVariables(player);
 	}
 
 	public static boolean isAlive(Entity entity) {
@@ -150,7 +149,7 @@ public class EntityUtils {
 			if (!living.level().isClientSide()) {
 				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
 			}
-		} else if (entity instanceof Player && entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).player_oceanization >= 3) {
+		} else if (entity instanceof Player && ModCapabilities.getPlayerVariables(entity).player_oceanization >= 3) {
 			if (mapVars.strategy_silence >= 2) {
 				living.heal((float) (living.getMaxHealth() * 0.0025));
 			} else if (mapVars.strategy_subsisting >= 3) {
@@ -227,7 +226,7 @@ public class EntityUtils {
 					if (Math.random() < 0.2 * lvl + 0.05 * lvl1) {
 						return;
 					}
-					if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 3) {
+					if ((ModCapabilities.getPlayerVariables(entity)).player_oceanization >= 3) {
 						return;
 					}
 				}
@@ -245,7 +244,7 @@ public class EntityUtils {
 	public static String getPlayerSurvconta(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR);
+		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).relic_SURVIVOR);
 	}
 
 	//需要评估是否下放到海嗣的基类
@@ -308,18 +307,16 @@ public class EntityUtils {
 		if (exp > 0) {
 			if ((entity instanceof Player plr ? plr.experienceLevel : 0) >= exp || creative) {
 				{
-					double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quantity + r;
-					entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-						capability.reserve_quantity = setval;
-						capability.syncPlayerVariables(entity);
-					});
+					PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+					double setval = capability.reserve_quantity + r;
+					capability.reserve_quantity = setval;
+					capability.syncPlayerVariables(entity);
 				}
 				{
-					double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quality + r_a;
-					entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-						capability.reserve_quality = setval;
-						capability.syncPlayerVariables(entity);
-					});
+					PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+					double setval = capability.reserve_quality + r_a;
+					capability.reserve_quality = setval;
+					capability.syncPlayerVariables(entity);
 				}
 				if (!creative) {
 					if (entity instanceof Player player)
@@ -340,7 +337,7 @@ public class EntityUtils {
 	public static String getPlayerEnrave(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE);
+		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).relic_hand_ENGRAVE);
 	}
 
 	public static Entity getNearestEnemy(LevelAccessor world, double x, double y, double z, Entity exception0, Entity exception1, Entity obj) {
@@ -416,7 +413,7 @@ public class EntityUtils {
 	public static String getLiveMaxShown(Entity entity) {
 		if (entity == null)
 			return "";
-		return "/" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive);
+		return "/" + Math.round((ModCapabilities.getPlayerVariables(entity)).player_maxlive);
 	}
 
 	public static void giveSpearFight(Entity entity) {
@@ -498,13 +495,13 @@ public class EntityUtils {
 	public static String getLives(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives);
+		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).player_lives);
 	}
 
 	public static String getShield(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield);
+		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).player_shield);
 	}
 
 	public static String getPalsy(Entity entity) {
@@ -529,7 +526,7 @@ public class EntityUtils {
 	public static String getLight(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light);
+		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).player_light);
 	}
 
 	public static Comparator<Entity> compareDistOf(double x, double y, double z) {
@@ -620,7 +617,7 @@ public class EntityUtils {
 		final Vec3 center = new Vec3(x, y, z);
 		List<Player> entfound = world.getEntitiesOfClass(Player.class, new AABB(center, center).inflate(72 / 2d), e -> true);
 		for (Player entityiterator : entfound) {
-			if ((entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 2.9) {
+			if (ModCapabilities.getPlayerVariables(entityiterator).player_oceanization >= 2.9) {
 				return false;
 			}
 		}

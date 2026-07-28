@@ -1,17 +1,20 @@
 package com.susen36.caerulaarbor.capability.anchor;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.SectionPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.Tag;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnchorRecord {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "anchor_record");
+public class AnchorRecord implements INBTSerializable<CompoundTag> {
 
     private final Long2ObjectMap<List<BlockPos>> section2anchorPosMap = new Long2ObjectOpenHashMap<>();
 
@@ -58,5 +61,39 @@ public class AnchorRecord {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        CompoundTag tag = new CompoundTag();
+        ListTag sectionList = new ListTag();
+        for (Long2ObjectMap.Entry<List<BlockPos>> entry : section2anchorPosMap.long2ObjectEntrySet()) {
+            CompoundTag sectionTag = new CompoundTag();
+            sectionTag.putLong("section", entry.getLongKey());
+            ListTag posList = new ListTag();
+            for (BlockPos pos : entry.getValue()) {
+                posList.add(LongTag.valueOf(pos.asLong()));
+            }
+            sectionTag.put("positions", posList);
+            sectionList.add(sectionTag);
+        }
+        tag.put("sections", sectionList);
+        return tag;
+    }
+
+    @Override
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        section2anchorPosMap.clear();
+        ListTag sectionList = nbt.getList("sections", Tag.TAG_COMPOUND);
+        for (int i = 0; i < sectionList.size(); i++) {
+            CompoundTag sectionTag = sectionList.getCompound(i);
+            long section = sectionTag.getLong("section");
+            List<BlockPos> posList = new ArrayList<>();
+            ListTag positions = sectionTag.getList("positions", Tag.TAG_LONG);
+            for (int j = 0; j < positions.size(); j++) {
+                posList.add(BlockPos.of(positions.getLong(j)));
+            }
+            section2anchorPosMap.put(section, posList);
+        }
     }
 }

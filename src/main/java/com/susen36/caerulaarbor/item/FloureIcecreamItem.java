@@ -21,7 +21,7 @@ import java.util.List;
 
 public class FloureIcecreamItem extends Item {
 	public FloureIcecreamItem() {
-		super(new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.75f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.75f).alwaysEdible().build()));
 	}
 
 	@Override

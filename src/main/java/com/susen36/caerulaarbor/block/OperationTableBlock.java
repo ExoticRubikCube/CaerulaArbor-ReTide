@@ -6,6 +6,7 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -176,13 +177,12 @@ public class OperationTableBlock extends Block {
                                         level.playLocalSound(x, y, z, SoundEvents.ZOMBIE_CONVERTED_TO_DROWNED, SoundSource.BLOCKS, 1, 1, false);
                                     }
                                 }
-                                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                                (entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                 output = new ItemStack(CAItems.PERSONNEL_TRANSPORTER.get()).copy();
                                 CustomData.update(DataComponents.CUSTOM_DATA, output, tag -> tag.putString("name", res));
                                 CustomData.update(DataComponents.CUSTOM_DATA, output, tag -> tag.putDouble("perc", 0.5));
                                 {
                                     int value = 0;
-                                    BlockPos blockPos = BlockPos.containing(x, y, z);
                                     BlockState bs = world.getBlockState(pos);
                                     if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
                                         world.setBlock(pos, bs.setValue(integerProp, value), 3);

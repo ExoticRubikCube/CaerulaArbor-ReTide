@@ -4,7 +4,6 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.SeabornSpawnManager;
@@ -866,7 +865,7 @@ public class EndspeakerEntity extends SeaMonster {
             if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffpsring"))) && candidate instanceof Player) {
                 continue;
             }
-            if ((this.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization > 2) {
+            if ((ModCapabilities.getPlayerVariables(this)).player_oceanization > 2) {
                 continue;
             }
             if (sacrifice.distanceTo(candidate) < radius) {

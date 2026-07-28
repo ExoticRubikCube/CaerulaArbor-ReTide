@@ -308,7 +308,7 @@ public class LivingAttackEventHandler {
         }
 
         if (target instanceof Player player
-                && player.getCapability(ModCapabilities.PLAYER_VARIABLE).map(data -> data.player_oceanization >= 3).orElse(false)
+                && ModCapabilities.getPlayerVariables(player).player_oceanization >= 3
                 && !sourceEntity.getType().is(OCEAN_OFFSPRING)) {
             var migrationArea = new AABB(target.getX() - (8 + migrationLevel * 24), target.getY() - 16,
                     target.getZ() - (8 + migrationLevel * 24), target.getX() + 8 + migrationLevel * 24,
@@ -411,8 +411,8 @@ public class LivingAttackEventHandler {
         if (event.isCanceled()) return;
 
         if (sourceEntity instanceof Player player) {
-            player.getCapability(ModCapabilities.PLAYER_VARIABLE).ifPresent(playerVariables -> handlePlayerHitRelics(
-                    world, target, target.position(), immediateSource, player, event.getAmount(), mainHandItem, playerVariables));
+            PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(player);
+            handlePlayerHitRelics(world, target, target.position(), immediateSource, player, event.getAmount(), mainHandItem, playerVariables);
         }
     }
 

@@ -1,10 +1,9 @@
 package com.susen36.caerulaarbor.capability.world;
 
-import com.susen36.caerulaarbor.init.CANetwork;
 import com.susen36.caerulaarbor.network.receive.SavedDataSyncMessage;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -24,20 +23,20 @@ public class WorldVariables extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbt) {
+    public CompoundTag save(CompoundTag nbt, HolderLookup.Provider provider) {
         return nbt;
     }
 
     public void syncData(LevelAccessor world) {
         this.setDirty();
-        if (world instanceof Level level && !level.isClientSide()) {
-            CANetwork.PACKET_HANDLER.send(PacketDistributor.DIMENSION.with(level::dimension), new SavedDataSyncMessage(1, this));
+        if (world instanceof ServerLevel level) {
+            PacketDistributor.sendToPlayersInDimension(level, new SavedDataSyncMessage(1, this, level.registryAccess()));
         }
     }
 
     public static WorldVariables get(LevelAccessor world) {
         if (world instanceof ServerLevel level) {
-            return level.getDataStorage().computeIfAbsent(WorldVariables::load, WorldVariables::new, DATA_NAME);
+            return level.getDataStorage().computeIfAbsent(new SavedData.Factory<>(WorldVariables::new, (tag, provider) -> WorldVariables.load(tag)), DATA_NAME);
         }
         return clientSide;
     }

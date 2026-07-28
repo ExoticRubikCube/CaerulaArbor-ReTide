@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.core.BlockPos;
@@ -60,10 +61,9 @@ public class RescissionItem extends Item {
         Entity owner;
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             boolean setval = true;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_util_RESCISSION = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            capability.relic_util_RESCISSION = setval;
+            capability.syncPlayerVariables(entity);
             if (entity instanceof Player player)
                 player.giveExperienceLevels(2);
             if (world instanceof Level level) {

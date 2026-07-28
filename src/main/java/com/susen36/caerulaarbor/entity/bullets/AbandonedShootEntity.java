@@ -45,7 +45,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public AbandonedShootEntity(EntityType<? extends AbandonedShootEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
+		super(type, world);
 	}
 
 	public AbandonedShootEntity(EntityType<? extends AbandonedShootEntity> type, LivingEntity entity, Level world) {
@@ -156,7 +156,6 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
-		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
 		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
@@ -170,7 +169,6 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 1.5f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(3);
-		entityarrow.setKnockback(0);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
 		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1, 1f / (RandomSource.create().nextFloat() * 0.5f + 1));

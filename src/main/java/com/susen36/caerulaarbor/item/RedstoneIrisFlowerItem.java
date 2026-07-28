@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -60,10 +61,9 @@ public class RedstoneIrisFlowerItem extends Item {
             if ((LevelAccessor) world instanceof ServerLevel level)
                 level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
         }
-        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.relic_util_IRIS = true;
-			capability.syncPlayerVariables(entity);
-		});
+        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+        capability.relic_util_IRIS = true;
+        capability.syncPlayerVariables(entity);
         if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
         }

@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.menu.PlayerEvoMenu;
 import com.susen36.caerulaarbor.network.send.PlayerEvoButtonMessage;
 import com.susen36.caerulaarbor.util.NodeUtils;
@@ -14,7 +13,6 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -401,14 +399,14 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
                 result1, 9, 192, -1, false);
         String result2 = "";
         if (entity != null) {
-            result2 = Component.translatable("p_evo.caerula_arbor.quantity_reserve").getString() + (int) ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quantity);
+            result2 = Component.translatable("p_evo.caerula_arbor.quantity_reserve").getString() + (int) ((ModCapabilities.getPlayerVariables(entity)).reserve_quantity);
         }
         guiGraphics.drawString(this.font,
 
                 result2, 3, 3, -13158601, false);
         String result = "";
         if (entity != null) {
-            result = Component.translatable("p_evo.caerula_arbor.quality_reserve").getString() + (int) ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quality);
+            result = Component.translatable("p_evo.caerula_arbor.quality_reserve").getString() + (int) ((ModCapabilities.getPlayerVariables(entity)).reserve_quality);
         }
         guiGraphics.drawString(this.font,
 

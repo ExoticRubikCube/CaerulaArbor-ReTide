@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 public class RadiantBerriesItem extends Item {
 	public RadiantBerriesItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(5).saturationMod(1f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(5).saturationModifier(1f).alwaysEdible().build()));
 	}
 
 	@Override

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class NetherseaEggCustardItem extends Item {
 	public NetherseaEggCustardItem() {
-		super(new Item.Properties().stacksTo(8).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(8).saturationMod(0.6f).meat().build()));
+		super(new Item.Properties().stacksTo(8).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(8).saturationModifier(0.6f).meat().build()));
 	}
 
 	@Override

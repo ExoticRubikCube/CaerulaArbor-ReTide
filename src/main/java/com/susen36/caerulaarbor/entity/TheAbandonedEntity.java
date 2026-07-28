@@ -35,7 +35,6 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -187,20 +186,13 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
                                     Level projectileLevel = shootFrom.level();
                                     if (!projectileLevel.isClientSide()) {
                                         LivingEntity livingEntity15 = TheAbandonedEntity.this;
-                                        Projectile entityToSpawn = new Object() {
-                                            public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                                                AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), level);
-                                                entityToSpawn.setOwner(shooter);
-                                                entityToSpawn.setBaseDamage(damage);
-                                                entityToSpawn.setKnockback(knockback);
-                                                entityToSpawn.setSilent(true);
-                                                return entityToSpawn;
-                                            }
-                                        }.getArrow(projectileLevel, (Entity) TheAbandonedEntity.this,
-                                                (float) ((livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                                        ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-                                                        : 0) * 0.85),
-                                                0);
+                                        AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), projectileLevel);
+                                        entityToSpawn.setOwner((Entity) TheAbandonedEntity.this);
+                                        entityToSpawn.setBaseDamage((float) ((livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                                ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
+                                                : 0) * 0.85));
+                                        entityToSpawn.setKnockback(0);
+                                        entityToSpawn.setSilent(true);
                                         entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
                                         entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) 1.25, 2);
                                         projectileLevel.addFreshEntity(entityToSpawn);

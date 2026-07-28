@@ -148,7 +148,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, AbstractOceanizedWardenEntity.this, 2, true) {
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 2, true) {
 
 			@Override
 			public boolean canUse() {
@@ -501,7 +501,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			if (gap > 0 && target != null && target.isAlive() && this.tickCount % gap == 0) {
 				if (world instanceof Level level) {
 					level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_HEARTBEAT, SoundSource.HOSTILE, 2,
-							Mth.nextInt(RandomSource.create(), (int) 0.9, (int) 1.05));
+							Mth.nextInt(RandomSource.create(),  0,  1));
 				}
 			}
 		}

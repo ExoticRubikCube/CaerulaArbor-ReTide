@@ -32,7 +32,7 @@ public class FishShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public FishShootEntity(EntityType<? extends FishShootEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
+		super(type, world);
 	}
 
 	public FishShootEntity(EntityType<? extends FishShootEntity> type, LivingEntity entity, Level world) {

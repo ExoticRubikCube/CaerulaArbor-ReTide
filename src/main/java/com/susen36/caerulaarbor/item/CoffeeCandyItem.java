@@ -20,7 +20,7 @@ import java.util.List;
 
 public class CoffeeCandyItem extends Item {
 	public CoffeeCandyItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(1f).build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(1f).build()));
 	}
 
 	@Override
@@ -43,10 +43,9 @@ public class CoffeeCandyItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 240, 1));
 		{
 			boolean setval = true;
-			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.relic_util_COFFEE = setval;
-				capability.syncPlayerVariables(entity);
-			});
+			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+			capability.relic_util_COFFEE = setval;
+			capability.syncPlayerVariables(entity);
 		}
 		if (itemstack.isEmpty()) {
 			return retval;

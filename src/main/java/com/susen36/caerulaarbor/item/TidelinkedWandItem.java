@@ -19,7 +19,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.GameType;
@@ -89,34 +88,24 @@ public class TidelinkedWandItem extends Item {
             damage = (Entity) entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity4.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
             Level projectileLevel = entity.level();
             if (!projectileLevel.isClientSide()) {
-                Projectile entityToSpawn = new Object() {
-                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                        AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
-                        entityToSpawn.setOwner(shooter);
-                        entityToSpawn.setBaseDamage(damage);
-                        entityToSpawn.setKnockback(knockback);
-                        entityToSpawn.setSilent(true);
-                        entityToSpawn.setPierceLevel(piercing);
-                        return entityToSpawn;
-                    }
-                }.getArrow(projectileLevel, (Entity) entity, (float) (damage * 1), 0, (byte) 1);
+                AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                entityToSpawn.setOwner((Entity) entity);
+                entityToSpawn.setBaseDamage((float) (damage * 1));
+                entityToSpawn.setKnockback(0);
+                entityToSpawn.setSilent(true);
+                entityToSpawn.setPierceLevel((byte) 1);
                 entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
                 entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 2.65, 0);
                 projectileLevel.addFreshEntity(entityToSpawn);
             }
             for (int index0 = 0; index0 < 2; index0++) {
                 if (!projectileLevel.isClientSide()) {
-                    Projectile entityToSpawn = new Object() {
-                        public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                            AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
-                            entityToSpawn.setOwner(shooter);
-                            entityToSpawn.setBaseDamage(damage);
-                            entityToSpawn.setKnockback(knockback);
-                            entityToSpawn.setSilent(true);
-                            entityToSpawn.setPierceLevel(piercing);
-                            return entityToSpawn;
-                        }
-                    }.getArrow(projectileLevel, (Entity) entity, (float) (damage * 0.75), 0, (byte) 1);
+                    AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                    entityToSpawn.setOwner((Entity) entity);
+                    entityToSpawn.setBaseDamage((float) (damage * 0.75));
+                    entityToSpawn.setKnockback(0);
+                    entityToSpawn.setSilent(true);
+                    entityToSpawn.setPierceLevel((byte) 1);
                     entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
                     entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 2.1, 5);
                     projectileLevel.addFreshEntity(entityToSpawn);
@@ -124,16 +113,11 @@ public class TidelinkedWandItem extends Item {
             }
             for (int index1 = 0; index1 < 3; index1++) {
                 if (!projectileLevel.isClientSide()) {
-                    Projectile entityToSpawn = new Object() {
-                        public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                            AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
-                            entityToSpawn.setOwner(shooter);
-                            entityToSpawn.setBaseDamage(damage);
-                            entityToSpawn.setKnockback(knockback);
-                            entityToSpawn.setSilent(true);
-                            return entityToSpawn;
-                        }
-                    }.getArrow(projectileLevel, (Entity) entity, (float) (damage * 0.5), 0);
+                    AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                    entityToSpawn.setOwner((Entity) entity);
+                    entityToSpawn.setBaseDamage((float) (damage * 0.5));
+                    entityToSpawn.setKnockback(0);
+                    entityToSpawn.setSilent(true);
                     entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
                     entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 1.85, 25);
                     projectileLevel.addFreshEntity(entityToSpawn);

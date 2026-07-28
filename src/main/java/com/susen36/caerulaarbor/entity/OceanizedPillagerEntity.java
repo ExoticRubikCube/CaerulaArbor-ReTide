@@ -32,17 +32,13 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -266,22 +262,15 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                                     Level projectileLevel = shootFrom.level();
                                     if (!projectileLevel.isClientSide()) {
                                         LivingEntity livingEntity22 = OceanizedPillagerEntity.this;
-                                        Projectile entityToSpawn = new Object() {
-                                            public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                                                AbstractArrow entityToSpawn = new ShotOceanArrowEntity(CAEntities.SHOT_OCEAN_ARROW.get(), level);
-                                                entityToSpawn.setOwner(shooter);
-                                                entityToSpawn.setBaseDamage(damage);
-                                                entityToSpawn.setKnockback(knockback);
-                                                entityToSpawn.setSilent(true);
-                                                entityToSpawn.setPierceLevel(piercing);
-                                                entityToSpawn.setCritArrow(true);
-                                                return entityToSpawn;
-                                            }
-                                        }.getArrow(projectileLevel, (Entity) OceanizedPillagerEntity.this,
-                                                (float) (livingEntity22.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                                        ? livingEntity22.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-                                                        : 0),
-                                                0, (byte) 1);
+                                        AbstractArrow entityToSpawn = new ShotOceanArrowEntity(CAEntities.SHOT_OCEAN_ARROW.get(), projectileLevel);
+                                        entityToSpawn.setOwner((Entity) OceanizedPillagerEntity.this);
+                                        entityToSpawn.setBaseDamage((float) (livingEntity22.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                                ? livingEntity22.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
+                                                : 0));
+                                        entityToSpawn.setKnockback(0);
+                                        entityToSpawn.setSilent(true);
+                                        entityToSpawn.setPierceLevel((byte) 1);
+                                        entityToSpawn.setCritArrow(true);
                                         entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
                                         entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, 2, 5);
                                         projectileLevel.addFreshEntity(entityToSpawn);

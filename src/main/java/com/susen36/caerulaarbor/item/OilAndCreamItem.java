@@ -26,7 +26,7 @@ import java.util.List;
 
 public class OilAndCreamItem extends Item {
 	public OilAndCreamItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(1).saturationMod(0f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(1).saturationModifier(0f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -54,17 +54,15 @@ public class OilAndCreamItem extends Item {
 		double z = entity.getZ();
         {
             double setval = 0;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.disoclusion = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            capability.disoclusion = setval;
+            capability.syncPlayerVariables(entity);
         }
         {
-            double setval = Math.max((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - 30, 0);
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            double setval = Math.max(capability.player_light - 30, 0);
+            capability.player_light = setval;
+            capability.syncPlayerVariables(entity);
         }
         entity.hurt(entity.level().damageSources().inFire(), 12);
         if (!entity.level().isClientSide()) {

@@ -22,8 +22,8 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 public class EntityTransporterDisplayerOverlay {
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
-		int w = event.getWindow().getGuiScaledWidth();
-		int h = event.getWindow().getGuiScaledHeight();
+		int w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+		int h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 		Player entity = Minecraft.getInstance().player;
         boolean result = false;
         if (entity != null) {

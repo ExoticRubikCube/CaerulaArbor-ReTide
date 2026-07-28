@@ -4,7 +4,6 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.init.*;
@@ -34,7 +33,6 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.HoeItem;
@@ -416,7 +414,7 @@ public class LivingHurtEventHandler {
         boolean valid = false;
         String regName;
 
-        if (entity instanceof Player && (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_TREATY) {
+        if (entity instanceof Player && (entity).relic_TREATY) {
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:nether_mobs")))) {
                 valid = true;
             } else {
@@ -477,14 +475,14 @@ public class LivingHurtEventHandler {
         if (sourceentity instanceof Player && damagesource.is(DamageTypes.PLAYER_ATTACK)) {
             ItemStack item_temp = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (item_temp.getItem() instanceof HoeItem || item_temp.is(ItemTags.create(ResourceLocation.parse("minecraft:hoes")))) {
-                if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FERTILITY) {
+                if ((sourceentity).relic_hand_FERTILITY) {
                     entity.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, sourceentity), (float) ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.075));
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.SQUID_INK, x, y, z, 8, 0.75, 0.9, 0.75, 0.1);
                 }
             }
             if (item_temp.getItem() instanceof SwordItem || item_temp.is(ItemTags.create(ResourceLocation.parse("minecraft:swords")))) {
-                if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWORD) {
+                if ((sourceentity).relic_hand_SWORD) {
                     if (!(entity instanceof LivingEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.ROCK_BREAK))) {
                         if (entity instanceof LivingEntity living && !entity.level().isClientSide())
                             living.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 120, 1));
@@ -507,7 +505,7 @@ public class LivingHurtEventHandler {
         if (sourceentity == null) return;
 
         if (entity instanceof Player && entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0) >= 5) {
-            if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_THORNS) {
+            if ((entity).relic_hand_THORNS) {
                 if (!entity.isShiftKeyDown() && sourceentity.isAlive() && entity.isAlive()) {
                     if (!(sourceentity instanceof Player)) {
                         if (!damagesource.is(CADamageTypes.HAND_SPIKE) && !damagesource.is(DamageTypes.THORNS) && !damagesource.is(CADamageTypes.GUNMU_DAMAGE)) {
@@ -581,18 +579,13 @@ public class LivingHurtEventHandler {
                     double vx = arrow.getDeltaMovement().x();
                     double vz = arrow.getDeltaMovement().z();
                     if (world instanceof ServerLevel projectileLevel) {
-                        Projectile entityToSpawn = new Object() {
-                            public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                                AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, level);
-                                entityToSpawn.setOwner(shooter);
-                                entityToSpawn.setBaseDamage(damage);
-                                entityToSpawn.setKnockback(knockback);
-                                entityToSpawn.setPierceLevel(piercing);
-                                entityToSpawn.setCritArrow(true);
-                                entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-                                return entityToSpawn;
-                            }
-                        }.getArrow(projectileLevel, (damagesource.getEntity()), (float) (amount * 0.64), 0, (byte) 1);
+                        AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, projectileLevel);
+                        entityToSpawn.setOwner(damagesource.getEntity());
+                        entityToSpawn.setBaseDamage((float) (amount * 0.64));
+                        entityToSpawn.setKnockback(0);
+                        entityToSpawn.setPierceLevel((byte) 1);
+                        entityToSpawn.setCritArrow(true);
+                        entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         entityToSpawn.setPos(x, (arrow.getY()), z);
                         entityToSpawn.shoot((1.5 * (vx * cosine + vz * sine)), (1.5 + arrow.getDeltaMovement().y()), (1.5 + vz * cosine - vx * sine), (float) 1.5, (float) 0.05);
                         projectileLevel.addFreshEntity(entityToSpawn);
@@ -632,17 +625,12 @@ public class LivingHurtEventHandler {
                             }
                         }
                         if (nextTarget != null && world instanceof ServerLevel projectileLevel) {
-                            Projectile entityToSpawn = new Object() {
-                                public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                                    AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, level);
-                                    entityToSpawn.setOwner(shooter);
-                                    entityToSpawn.setBaseDamage(damage);
-                                    entityToSpawn.setKnockback(knockback);
-                                    entityToSpawn.setCritArrow(true);
-                                    entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-                                    return entityToSpawn;
-                                }
-                            }.getArrow(projectileLevel, entity1, (float) amount, 0);
+                            AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, projectileLevel);
+                            entityToSpawn.setOwner(entity1);
+                            entityToSpawn.setBaseDamage((float) amount);
+                            entityToSpawn.setKnockback(0);
+                            entityToSpawn.setCritArrow(true);
+                            entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                             entityToSpawn.setPos(x, y1, z);
                             entityToSpawn.getPersistentData().putDouble("TrailriteLink", lll - 1);
                             entityToSpawn.shoot((nextTarget.getX() - x), ((nextTarget.getY() + nextTarget.getBbHeight() * 0.9) - y1), (nextTarget.getZ() - z), (float) 1.75, 0);
@@ -847,7 +835,7 @@ public class LivingHurtEventHandler {
 
         boolean isIndirect = damagesource.isIndirect();
         double rate = 1;
-        double e = (player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_less_damage;
+        double e = ModCapabilities.getPlayerVariables(player).PEVO_NODE_less_damage;
         double finalAmount = amount;
 
         if (PlayerStateUtils.isNexusExpoShieldSelected(player)) {
@@ -916,7 +904,7 @@ public class LivingHurtEventHandler {
             }
         }
 
-        e = (attacker.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_less_armor;
+        e = ModCapabilities.getPlayerVariables(attacker).PEVO_NODE_less_armor;
 
         if (e > 0) {
             double lll = 0;

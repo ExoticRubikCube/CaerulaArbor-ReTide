@@ -11,10 +11,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 import java.util.Comparator;
 
@@ -22,8 +22,8 @@ import java.util.Comparator;
 public class IzumikSkillbarOverlay {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
-		int w = event.getWindow().getGuiScaledWidth();
-		int h = event.getWindow().getGuiScaledHeight();
+		int w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+		int h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 		Level world = null;
 		double x = 0;
 		double y = 0;

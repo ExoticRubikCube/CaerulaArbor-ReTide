@@ -93,7 +93,7 @@ public class ComplexChitinBowItem extends BowItem {
                             abstractarrow.setCritArrow(true);
                         }
 
-                        int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, pStack);
+                        int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER, pStack);
                         if (j > 0) {
                             abstractarrow.setBaseDamage(abstractarrow.getBaseDamage() + (double)j * 0.75D + 0.5D);
                         }
@@ -103,13 +103,13 @@ public class ComplexChitinBowItem extends BowItem {
                         	abstractarrow.setBaseDamage(abstractarrow.getBaseDamage() * r);
                         }
 
-                        int k = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, pStack);
+                        int k = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH, pStack);
                         if (k > 0) {
                             abstractarrow.setKnockback(k);
                         }
 
                         if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, pStack) > 0) {
-                            abstractarrow.setSecondsOnFire(100);
+                            abstractarrow.igniteForSeconds(100);
                         }
 
                         pStack.hurtAndBreak(1, player, (p_289501_) -> {

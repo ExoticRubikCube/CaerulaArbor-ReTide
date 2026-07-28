@@ -19,7 +19,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class EnchantedTrailGoldenAppleItem extends Item {
 	public EnchantedTrailGoldenAppleItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationMod(1f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(1f).alwaysEdible().build()));
 	}
 
 	@Override

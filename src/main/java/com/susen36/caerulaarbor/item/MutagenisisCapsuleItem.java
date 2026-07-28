@@ -27,7 +27,7 @@ import java.util.List;
 
 public class MutagenisisCapsuleItem extends Item {
 	public MutagenisisCapsuleItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.RARE).food((new FoodProperties.Builder()).nutrition(2).saturationMod(1f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.RARE).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(1f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class MutagenisisCapsuleItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
         double ocean;
-        ocean = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
+        ocean = ModCapabilities.getPlayerVariables(entity).player_oceanization;
         if (ocean < 2.9) {
             SIHelper.causeSanityInjury(entity, (ocean + 1) * 40, SanityEvent.Hurt.Type.FOOD);
             entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEANIZE_DAMAGE), (float) (3 * (ocean + 1)));
@@ -52,10 +52,9 @@ public class MutagenisisCapsuleItem extends Item {
             if (entity.isAlive()) {
                 {
                     double setval = ocean + 1;
-                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_oceanization = setval;
-                        capability.syncPlayerVariables(entity);
-                    });
+                    PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                    capability.player_oceanization = setval;
+                    capability.syncPlayerVariables(entity);
                 }
             }
             if (ocean + 1 > 2.9) {

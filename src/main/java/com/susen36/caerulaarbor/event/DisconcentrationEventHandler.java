@@ -135,10 +135,9 @@ public class DisconcentrationEventHandler {
         }
 
         int rejectionStage = Mth.nextInt(RandomSource.create(), DISCONCENTRATION_REJECTION_STAGE, FLESHDEFORMITY_REJECTION_STAGE);
-        player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-            capability.disoclusion = rejectionStage;
-            capability.syncPlayerVariables(player);
-        });
+        PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
+        capability.disoclusion = rejectionStage;
+        capability.syncPlayerVariables(player);
 
         Level level = player.level();
         if (!level.isClientSide()) {
@@ -169,8 +168,7 @@ public class DisconcentrationEventHandler {
     }
 
     private static PlayerVariable getPlayerVariables(Entity entity) {
-        return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-                .orElse(new PlayerVariable());
+        return ModCapabilities.getPlayerVariables(entity);
     }
 
     private static boolean hasRejectionCurseArmor(Entity entity) {

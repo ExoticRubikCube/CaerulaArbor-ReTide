@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MeatCanItem extends Item {
 	public MeatCanItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(14).saturationMod(0.25f).meat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(14).saturationModifier(0.25f).meat().build()));
 	}
 
 	@Override
@@ -42,12 +42,11 @@ public class MeatCanItem extends Item {
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 0));
-		if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_util_MEATCAN) {
+		if (!ModCapabilities.getPlayerVariables(entity).relic_util_MEATCAN) {
 			boolean setval = true;
-			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.relic_util_MEATCAN = setval;
-				capability.syncPlayerVariables(entity);
-			});
+			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+			capability.relic_util_MEATCAN = setval;
+			capability.syncPlayerVariables(entity);
 		}
 		if (itemstack.isEmpty()) {
 			return retval;

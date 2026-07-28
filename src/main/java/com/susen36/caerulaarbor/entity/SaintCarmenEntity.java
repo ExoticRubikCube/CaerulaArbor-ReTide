@@ -31,7 +31,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -481,17 +480,12 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                     Entity shootFrom = this;
                     Level projectileLevel = shootFrom.level();
                     if (!projectileLevel.isClientSide()) {
-                        Projectile entityToSpawn = new Object() {
-                            public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                                AbstractArrow entityToSpawn = new CarmenBulletEntity(CAEntities.CARMEN_BULLET.get(), level);
-                                entityToSpawn.setOwner(shooter);
-                                entityToSpawn.setBaseDamage(damage);
-                                entityToSpawn.setKnockback(knockback);
-                                entityToSpawn.setSilent(true);
-                                entityToSpawn.setPierceLevel(piercing);
-                                return entityToSpawn;
-                            }
-                        }.getArrow(projectileLevel, this, (float) dama, 0, (byte) 1);
+                        AbstractArrow entityToSpawn = new CarmenBulletEntity(CAEntities.CARMEN_BULLET.get(), projectileLevel);
+                        entityToSpawn.setOwner(this);
+                        entityToSpawn.setBaseDamage((float) dama);
+                        entityToSpawn.setKnockback(0);
+                        entityToSpawn.setSilent(true);
+                        entityToSpawn.setPierceLevel((byte) 1);
                         entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
                         entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) 1.75, 15);
                         projectileLevel.addFreshEntity(entityToSpawn);

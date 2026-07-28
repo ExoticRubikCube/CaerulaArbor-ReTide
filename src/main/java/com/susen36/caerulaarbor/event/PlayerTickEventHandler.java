@@ -109,31 +109,30 @@ public class PlayerTickEventHandler {
         }
 
         if (entity.tickCount % 20 == 10) {
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_hand_ENGRAVE = -1;
-                capability.relic_SURVIVOR = -1;
-                capability.relic_king_CROWN = false;
-                capability.relic_king_ARMOR = false;
-                capability.relic_king_SPEAR = false;
-                capability.relic_king_EXTENSION = false;
-                capability.relic_king_CRYSTAL = false;
-                capability.relic_archfi_FLAG = false;
-                capability.relic_archfi_BED = false;
-                capability.relic_archifi_RYLFATE = false;
-                capability.relic_archfi_ARTIFACT = false;
-                capability.relic_hand_THORNS = false;
-                capability.relic_hand_STRANGLE = false;
-                capability.relic_hand_FERTILITY = false;
-                capability.relic_hand_SPEED = false;
-                capability.relic_hand_BARREN = false;
-                capability.relic_hand_SWIPE = false;
-                capability.relic_hand_FIREWORK = false;
-                capability.relic_hand_SWORD = false;
-                capability.relic_legend_CHITIN = false;
-                capability.relic_YEARNING = false;
-                capability.relic_TREATY = false;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            capability.relic_hand_ENGRAVE = -1;
+            capability.relic_SURVIVOR = -1;
+            capability.relic_king_CROWN = false;
+            capability.relic_king_ARMOR = false;
+            capability.relic_king_SPEAR = false;
+            capability.relic_king_EXTENSION = false;
+            capability.relic_king_CRYSTAL = false;
+            capability.relic_archfi_FLAG = false;
+            capability.relic_archfi_BED = false;
+            capability.relic_archifi_RYLFATE = false;
+            capability.relic_archfi_ARTIFACT = false;
+            capability.relic_hand_THORNS = false;
+            capability.relic_hand_STRANGLE = false;
+            capability.relic_hand_FERTILITY = false;
+            capability.relic_hand_SPEED = false;
+            capability.relic_hand_BARREN = false;
+            capability.relic_hand_SWIPE = false;
+            capability.relic_hand_FIREWORK = false;
+            capability.relic_hand_SWORD = false;
+            capability.relic_legend_CHITIN = false;
+            capability.relic_YEARNING = false;
+            capability.relic_TREATY = false;
+            capability.syncPlayerVariables(entity);
         }
     }
 
@@ -149,7 +148,7 @@ public class PlayerTickEventHandler {
         if (entity == null) return;
         if (entity.tickCount % 20 != 0) return;
 
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWIPE) {
+        if (ModCapabilities.getPlayerVariables(entity).relic_hand_SWIPE) {
             if (!((entity.getOffhandItem()).getItem() == net.minecraft.world.item.Items.BRUSH)) return;
 
             if (entity.hasEffect(MobEffects.REGENERATION)) {
@@ -200,10 +199,9 @@ public class PlayerTickEventHandler {
 
         if (PlayerStateUtils.isNexusNoRejectionSelected(entity)) {
             if (RelicUtils.hasDiso(entity)) {
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.disoclusion = -1;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.disoclusion = -1;
+                capability.syncPlayerVariables(entity);
             }
         }
 
@@ -308,7 +306,7 @@ public class PlayerTickEventHandler {
         } else if (PlayerStateUtils.isLightCeased(entity)) {
             modifi = 1.5;
         }
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 3) {
+        if (ModCapabilities.getPlayerVariables(entity).player_oceanization >= 3) {
             modifi = modifi * 0.33;
         }
         if (entity.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
@@ -316,18 +314,19 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleKingSuit(Player entity) {
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives > 1) return;
+        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+        if (capability.player_lives > 1) return;
 
         double suitKing = 0;
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_SPEAR) {
+        if (capability.relic_king_SPEAR) {
             suitKing = suitKing + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BOOST, 20, 1, false, false));
         }
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_ARMOR) {
+        if (capability.relic_king_ARMOR) {
             suitKing = suitKing + 1;
         }
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_EXTENSION) {
+        if (capability.relic_king_EXTENSION) {
             suitKing = suitKing + 1;
             double amplifi = Math.ceil(entity.getMaxHealth() / 20);
             if (amplifi > 24) amplifi = 24;
@@ -336,27 +335,23 @@ public class PlayerTickEventHandler {
                     entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20, (int) amplifi, false, false));
             }
         }
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CROWN) {
+        if (capability.relic_king_CROWN) {
             suitKing = suitKing + 1;
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BREATH, 20, suitKing < 3 ? 0 : 2, false, false));
             }
             final double suitLevel = suitKing < 3 ? 1 : 2;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_king_suit = suitLevel;
-                capability.syncPlayerVariables(entity);
-            });
+            capability.player_king_suit = suitLevel;
+            capability.syncPlayerVariables(entity);
         } else {
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_king_suit = 0;
-                capability.syncPlayerVariables(entity);
-            });
+            capability.player_king_suit = 0;
+            capability.syncPlayerVariables(entity);
         }
     }
 
     private static void handleHandSpeed(Player entity, LevelAccessor world, double x, double y, double z) {
         ItemStack mainHandItem = (entity.getMainHandItem()).copy();
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SPEED) {
+        if (ModCapabilities.getPlayerVariables(entity).relic_hand_SPEED) {
             if (mainHandItem.getItem() instanceof PickaxeItem || mainHandItem.is(ItemTags.create(ResourceLocation.parse("minecraft:pickaxes")))) {
                 boolean valid = true;
                 final Vec3 center = new Vec3(x, y, z);
@@ -379,65 +374,59 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleArchfiSuit(Player entity) {
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives < (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive)
+        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+        if (capability.player_lives < capability.player_maxlive)
             return;
 
         double suitArchfi = 0;
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_FLAG) {
+        if (capability.relic_archfi_FLAG) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.FLAG_SWINGS, 20, 2, false, false));
         }
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_BED) {
+        if (capability.relic_archfi_BED) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KEEP_BEDDING, 20, 0, false, false));
         }
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_ARTIFACT) {
+        if (capability.relic_archfi_ARTIFACT) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SACREFICE, 20, suitArchfi < 3 ? 0 : 2, false, false));
             }
             final double suitLevel = suitArchfi < 3 ? 1 : 2;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_demon_suit = suitLevel;
-                capability.syncPlayerVariables(entity);
-            });
+            capability.player_demon_suit = suitLevel;
+            capability.syncPlayerVariables(entity);
         } else {
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_demon_suit = 0;
-                capability.syncPlayerVariables(entity);
-            });
+            capability.player_demon_suit = 0;
+            capability.syncPlayerVariables(entity);
         }
     }
 
     private static void handleEngraveAndSurvivor(Player entity) {
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE > 0) {
+        if (ModCapabilities.getPlayerVariables(entity).relic_hand_ENGRAVE > 0) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.ENGRAVED_TRIUMPH, 20,
-                        (int) ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE - 1), false, false));
+                        (int) (ModCapabilities.getPlayerVariables(entity).relic_hand_ENGRAVE - 1), false, false));
         }
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR > 0) {
+        if (ModCapabilities.getPlayerVariables(entity).relic_SURVIVOR > 0) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SURVIVORS_GUIDE, 20,
-                        (int) ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR - 1), false, false));
+                        (int) (ModCapabilities.getPlayerVariables(entity).relic_SURVIVOR - 1), false, false));
         }
     }
 
     private static void handlePlayerLives(Player entity) {
-        double playerLives = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives;
-        double maxLives = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive;
+        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+        double playerLives = capability.player_lives;
+        double maxLives = capability.player_maxlive;
 
         if (playerLives > maxLives) {
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_lives = capability.player_maxlive;
-                capability.syncPlayerVariables(entity);
-            });
+            capability.player_lives = capability.player_maxlive;
+            capability.syncPlayerVariables(entity);
         } else if (playerLives < 1) {
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_lives = 1;
-                capability.syncPlayerVariables(entity);
-            });
+            capability.player_lives = 1;
+            capability.syncPlayerVariables(entity);
         }
     }
 
@@ -462,7 +451,7 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleOceanizationEffects(Player entity) {
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 3) {
+        if (ModCapabilities.getPlayerVariables(entity).player_oceanization >= 3) {
             if (entity.isUnderWater() && !entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 20, 0));
                 entity.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 20, 0));
@@ -471,14 +460,14 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleRelicHemost(Player entity) {
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_HEMOST) {
+        if (ModCapabilities.getPlayerVariables(entity).relic_HEMOST) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.HEMOSTATIC, 20, 0, false, false));
         }
     }
 
     private static void handleRelicYearning(Player entity) {
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_YEARNING) {
+        if (ModCapabilities.getPlayerVariables(entity).relic_YEARNING) {
             if (!(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() == ItemStack.EMPTY.getItem())) {
                 double amplifi = Math.min(Math.floor(entity.experienceLevel * 0.25), 64);
                 if (amplifi >= 1 && !entity.level().isClientSide()) {

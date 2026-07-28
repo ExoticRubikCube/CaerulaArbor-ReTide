@@ -42,17 +42,16 @@ public class UnripeYearningItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_YEARNING) {
+        if (!ModCapabilities.getPlayerVariables(entity).relic_YEARNING) {
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, SoundSource.NEUTRAL, 2, 1);
             }
             if (world instanceof ServerLevel level) level.sendParticles(ParticleTypes.DOLPHIN, x, y, z, 72, 1, 1, 1, 1);
             {
                 boolean setval = true;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_YEARNING = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.relic_YEARNING = setval;
+                capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);

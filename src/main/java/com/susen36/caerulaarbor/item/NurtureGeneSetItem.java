@@ -41,14 +41,13 @@ public class NurtureGeneSetItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).can_player_evo) {
+        if (!ModCapabilities.getPlayerVariables(entity).can_player_evo) {
             entity.swing(InteractionHand.MAIN_HAND, true);
             itemstack.shrink(1);
             boolean setval = true;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.can_player_evo = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            capability.can_player_evo = setval;
+            capability.syncPlayerVariables(entity);
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 2, 1);
             }

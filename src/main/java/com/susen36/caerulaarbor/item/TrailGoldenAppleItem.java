@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 
 public class TrailGoldenAppleItem extends Item {
 	public TrailGoldenAppleItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.8f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.8f).alwaysEdible().build()));
 	}
 
 	@Override

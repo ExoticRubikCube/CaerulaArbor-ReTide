@@ -165,7 +165,6 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
-		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
 		return entityarrow;
 	}

@@ -42,62 +42,50 @@ public class CaerulaUtil {
 	// 从 Procedure 迁移过来的共享工具方法。
 	// 生命点数
 	public static int getLifePoint(Player player){
-		return (int) player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-		.orElse(new PlayerVariable()).player_lives;
+		return (int) ModCapabilities.getPlayerVariables(player).player_lives;
 	}
 
 	public static void setLifePoint(Player player, int value){
 		if(value < 1) return;
 		int maxPoint = getMaxLifePoint(player);
-		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-		.ifPresent(c -> {
-			c.player_lives = Math.min(value,maxPoint);
-			c.syncPlayerVariables(player);
-		});
+		PlayerVariable c = ModCapabilities.getPlayerVariables(player);
+		c.player_lives = Math.min(value,maxPoint);
+		c.syncPlayerVariables(player);
 	}
 
 	public static int getMaxLifePoint(Player player){
-		return (int) player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-		.orElse(new PlayerVariable()).player_maxlive;
+		return (int) ModCapabilities.getPlayerVariables(player).player_maxlive;
 	}
 
 	public static void setMaxLifePoint(Player player, int value){
 		if(value < 1) return;
 		int clampedValue = (int) Math.min(value, CAConfigs.LP_LIMIT.get());
-		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-		.ifPresent(c -> {
-			c.player_maxlive = clampedValue;
-			c.syncPlayerVariables(player);
-		});
+		PlayerVariable c = ModCapabilities.getPlayerVariables(player);
+		c.player_maxlive = clampedValue;
+		c.syncPlayerVariables(player);
 		if (clampedValue < getLifePoint(player)) setLifePoint(player, clampedValue);
 	}
 
 	// 护盾点数
 	public static int getShieldPoint(Player player){
-		return (int) player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-		.orElse(new PlayerVariable()).player_shield;
+		return (int) ModCapabilities.getPlayerVariables(player).player_shield;
 	}
 	public static void setShieldPoint(Player player, int value){
 		if(value < 0) return;
 		int clampedValue = (int) Math.min(value, CAConfigs.SHIELD_LIMIT.get());
-		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-		.ifPresent(c -> {
-			c.player_shield = clampedValue;
-			c.syncPlayerVariables(player);
-		});
+		PlayerVariable c = ModCapabilities.getPlayerVariables(player);
+		c.player_shield = clampedValue;
+		c.syncPlayerVariables(player);
 	}
 
 	// 光芒值
 	public static double getLights(Player player){
-		return player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-		.orElse(new PlayerVariable()).player_light;
+		return ModCapabilities.getPlayerVariables(player).player_light;
 	}
 	public static void setLights(Player player, double value){
-		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-		.ifPresent(c -> {
-			c.player_light = Mth.clamp(value, 0, 100);
-			c.syncPlayerVariables(player);
-		});
+		PlayerVariable c = ModCapabilities.getPlayerVariables(player);
+		c.player_light = Mth.clamp(value, 0, 100);
+		c.syncPlayerVariables(player);
 	}
 	public static void reviveLights(Player player, double value){
 		EntityUtils.restorePlayerLights(player, value);
@@ -126,7 +114,7 @@ public class CaerulaUtil {
 		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "nethersea_protective")))) {
 			return;
 		}
-		if (entity instanceof LivingEntity livingEntity && (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 3) {
+		if (entity instanceof LivingEntity livingEntity && (ModCapabilities.getPlayerVariables(entity)).player_oceanization < 3) {
 			SIHelper.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 16, 32));
 		}
 		if (world instanceof ServerLevel level) {
@@ -142,7 +130,7 @@ public class CaerulaUtil {
 		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "nethersea_protective")))) {
 			return;
 		}
-		if (entity instanceof LivingEntity livingEntity && (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 2.85) {
+		if (entity instanceof LivingEntity livingEntity && (ModCapabilities.getPlayerVariables(entity)).player_oceanization < 2.85) {
 			SIHelper.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 32, 96));
 		}
 		if (world instanceof ServerLevel level) {

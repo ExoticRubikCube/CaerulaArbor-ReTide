@@ -42,16 +42,15 @@ public class ArchfiendsArtifactItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_ARTIFACT) {
+        if (!ModCapabilities.getPlayerVariables(entity).relic_archfi_ARTIFACT) {
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
             }
             if ((LevelAccessor) world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.DRIPPING_LAVA, x, y, z, 72, 1, 1, 1, 1);
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_archfi_ARTIFACT = true;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            capability.relic_archfi_ARTIFACT = true;
+            capability.syncPlayerVariables(entity);
             if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
         }

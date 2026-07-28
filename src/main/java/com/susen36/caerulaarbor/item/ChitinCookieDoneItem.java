@@ -17,7 +17,7 @@ import java.util.List;
 //TODO 直接注册就行
 public class ChitinCookieDoneItem extends Item {
 	public ChitinCookieDoneItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationMod(0.25f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.25f).alwaysEdible().build()));
 	}
 
 	@Override

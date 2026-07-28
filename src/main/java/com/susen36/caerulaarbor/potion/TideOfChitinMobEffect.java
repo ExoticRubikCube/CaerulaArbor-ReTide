@@ -40,10 +40,9 @@ public class TideOfChitinMobEffect extends MobEffect {
         super.onEffectAdded(entity, amplifier);
         {
             ItemStack setval = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY);
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.chitin_knife_selected = setval.copy();
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables((Entity) entity);
+            capability.chitin_knife_selected = setval.copy();
+            capability.syncPlayerVariables(entity);
         }
     }
 
@@ -55,7 +54,7 @@ public class TideOfChitinMobEffect extends MobEffect {
         double z = entity.getZ();
         double perc;
         if (!(((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY)
-                .getItem() == ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).chitin_knife_selected).getItem())) {
+                .getItem() == (ModCapabilities.getPlayerVariables((Entity) entity).chitin_knife_selected).getItem())) {
             if (world instanceof Level level) {
                 if (level.isClientSide()) {
                     level.playLocalSound(x, y, z, SoundEvents.BEACON_DEACTIVATE, SoundSource.NEUTRAL, (float) 3.2, 1, false);
@@ -67,7 +66,7 @@ public class TideOfChitinMobEffect extends MobEffect {
             if ((Entity) entity instanceof LivingEntity livingEntity)
                 livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
         }
-        if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).kingShowPtc) {
+        if (ModCapabilities.getPlayerVariables((Entity) entity).kingShowPtc) {
             world.addParticle(CAParticles.KNIFEPTC.get(), (x + Mth.nextDouble(RandomSource.create(), -0.45, 0.45)), (y + Mth.nextDouble(RandomSource.create(), 0, entity.getBbHeight() * 0.8)),
                     (z + Mth.nextDouble(RandomSource.create(), -0.45, 0.45)), Math.sin(Mth.nextDouble(RandomSource.create(), 0, 6.283)), 0.1, Math.cos(Mth.nextDouble(RandomSource.create(), 0, 6.283)));
         }

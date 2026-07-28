@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class TulipMedcineItem extends Item {
 	public TulipMedcineItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(2f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(2f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -51,10 +52,9 @@ public class TulipMedcineItem extends Item {
         if ((LevelAccessor) world instanceof ServerLevel level)
 			level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.15);
 		double setval = 0;
-		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.disoclusion = setval;
-			capability.syncPlayerVariables(entity);
-		});
+		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+		capability.disoclusion = setval;
+		capability.syncPlayerVariables(entity);
         if (!entity.level().isClientSide()) {
             entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 400, 2));
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 1));

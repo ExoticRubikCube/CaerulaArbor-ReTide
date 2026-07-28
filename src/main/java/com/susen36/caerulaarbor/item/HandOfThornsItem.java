@@ -41,16 +41,15 @@ public class HandOfThornsItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_THORNS) {
+        if (!ModCapabilities.getPlayerVariables(entity).relic_hand_THORNS) {
             world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.CLOUD, x, y, z, 72, 1, 1, 1, 1);
             {
                 boolean setval = true;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_hand_THORNS = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.relic_hand_THORNS = setval;
+                capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);

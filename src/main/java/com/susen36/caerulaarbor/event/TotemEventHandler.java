@@ -34,12 +34,10 @@ public class TotemEventHandler {
 		}
 
 		if (event.getEntity() instanceof Player player) {
-			double nextShield = player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-					.orElse(new PlayerVariable()).player_shield + 1;
-			player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.player_shield = nextShield;
-				capability.syncPlayerVariables(player);
-			});
+			double nextShield = ModCapabilities.getPlayerVariables(player).player_shield + 1;
+			PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
+			capability.player_shield = nextShield;
+			capability.syncPlayerVariables(player);
 		}
 	}
 }

@@ -19,7 +19,7 @@ import java.util.List;
 
 public class AromaticCoffeeItem extends Item {
 	public AromaticCoffeeItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(5).saturationMod(3f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(5).saturationModifier(3f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -39,15 +39,15 @@ public class AromaticCoffeeItem extends Item {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 240, 0));
-		double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 1;
-		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.player_shield = setval;
-			capability.syncPlayerVariables(entity);
-		});
-		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.player_util_AROMATIC = true;
-			capability.syncPlayerVariables(entity);
-		});
+		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+		double setval = capability.player_shield + 1;
+		capability.player_shield = setval;
+		capability.syncPlayerVariables(entity);
+		{
+			PlayerVariable cap = ModCapabilities.getPlayerVariables(entity);
+			cap.player_util_AROMATIC = true;
+			cap.syncPlayerVariables(entity);
+		}
 		return retval;
 	}
 }

@@ -1,14 +1,13 @@
 package com.susen36.caerulaarbor.capability.sanity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,7 +18,6 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.NeoForge;
 
 public class SanityInjuryCapability implements ISanityInjuryCapability {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sanity_injury");
     private static final double DEFAULT_MAX_SANITY = 1000.0;
 
     private final LivingEntity owner;
@@ -66,7 +64,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
             return;
         }
         SanityEvent.Heal event = new SanityEvent.Heal(owner, amount);
-        if (!NeoForge.EVENT_BUS.post(event)) {
+        if (!NeoForge.EVENT_BUS.post(event).isCanceled()) {
             value = Math.min(value + event.getAmount(), getMaxValue());
         }
     }
@@ -107,7 +105,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
 
     private void sanityBreak() {
         SanityEvent.Break event = new SanityEvent.Break(owner);
-        if (NeoForge.EVENT_BUS.post(event)) {
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
             return;
         }
         if (owner.level().isClientSide()) {
@@ -129,7 +127,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
             if (numbAttribute != null) {
                 numbAttribute.setBaseValue(Math.max(numbAttribute.getBaseValue(), 3));
             }
-            owner.hurt(sanityBreakDamage, (float) Math.min(Math.max(owner.getMaxHealth() * 0.8F, baseDamage), baseDamage * 6));
+            owner.hurt(sanityBreakDamage, Math.min(Math.max(owner.getMaxHealth() * 0.8F, baseDamage), baseDamage * 6));
         }
 
         owner.level().playSound(owner instanceof Player player ? player : null,
@@ -139,7 +137,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         tag.putDouble("SanityInjury", value);
         tag.putBoolean("SanityRecovering", recovering);
@@ -148,7 +146,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         value = Math.max(0, Math.min(getMaxValue(), nbt.getDouble("SanityInjury")));
         recovering = nbt.getBoolean("SanityRecovering");
         locked = nbt.getBoolean("SanityLocked");

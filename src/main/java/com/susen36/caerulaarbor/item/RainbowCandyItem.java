@@ -24,7 +24,7 @@ import java.util.List;
 
 public class RainbowCandyItem extends Item {
 	public RainbowCandyItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.5f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -55,10 +55,9 @@ public class RainbowCandyItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 280, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 560, 1));
 		}
-        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.player_util_RAINBOW = true;
-			capability.syncPlayerVariables(entity);
-		});
+        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+		capability.player_util_RAINBOW = true;
+		capability.syncPlayerVariables(entity);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

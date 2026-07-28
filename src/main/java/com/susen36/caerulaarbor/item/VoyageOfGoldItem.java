@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -69,10 +70,9 @@ public class VoyageOfGoldItem extends Item {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 400, 1, false, false));
             {
                 boolean setval = true;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_util_VOYGOLD = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.relic_util_VOYGOLD = setval;
+                capability.syncPlayerVariables(entity);
             }
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);

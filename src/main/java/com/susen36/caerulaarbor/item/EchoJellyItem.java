@@ -19,7 +19,7 @@ import java.util.List;
 
 public class EchoJellyItem extends Item {
 	public EchoJellyItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.RARE).food((new FoodProperties.Builder()).nutrition(9).saturationMod(0.75f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.RARE).food((new FoodProperties.Builder()).nutrition(9).saturationModifier(0.75f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -43,11 +43,10 @@ public class EchoJellyItem extends Item {
 			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 3600, 1));
 			entity.addEffect(new MobEffectInstance(CAMobEffects.SANITY_HEAL, 1, 2, false, false));
 		}
-		double setval = Math.min((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + 19, 100);
-		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.player_light = setval;
-			capability.syncPlayerVariables(entity);
-		});
+		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+		double setval = Math.min(capability.player_light + 19, 100);
+		capability.player_light = setval;
+		capability.syncPlayerVariables(entity);
 		return super.finishUsingItem(itemstack, world, entity);
 	}
 }

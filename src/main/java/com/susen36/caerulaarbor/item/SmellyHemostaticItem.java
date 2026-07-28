@@ -41,7 +41,7 @@ public class SmellyHemostaticItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_HEMOST) {
+        if (!ModCapabilities.getPlayerVariables(entity).relic_HEMOST) {
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, (float) 3.5, 1);
             }
@@ -49,10 +49,9 @@ public class SmellyHemostaticItem extends Item {
                 level.sendParticles(ParticleTypes.DAMAGE_INDICATOR, x, y, z, 8, 1, 1, 1, 0.1);
             {
                 boolean setval = true;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_HEMOST = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.relic_HEMOST = setval;
+                capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);

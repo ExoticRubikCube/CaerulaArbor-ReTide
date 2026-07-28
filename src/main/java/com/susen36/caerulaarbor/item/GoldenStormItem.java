@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class GoldenStormItem extends Item {
 	public GoldenStormItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(0.4f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(0.4f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -42,10 +43,9 @@ public class GoldenStormItem extends Item {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 100, 0));
 		boolean setval = true;
-		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.relic_util_ORANGE = setval;
-			capability.syncPlayerVariables(entity);
-		});
+		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+		capability.relic_util_ORANGE = setval;
+		capability.syncPlayerVariables(entity);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

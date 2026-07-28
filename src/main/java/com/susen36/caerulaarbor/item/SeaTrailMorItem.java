@@ -20,7 +20,7 @@ import java.util.List;
 
 public class SeaTrailMorItem extends Item {
 	public SeaTrailMorItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(1).saturationMod(0f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(1).saturationModifier(0f).alwaysEdible().build()));
 	}
 
 	@Override

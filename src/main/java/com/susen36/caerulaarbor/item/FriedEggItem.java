@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 public class FriedEggItem extends Item {
 	public FriedEggItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.6f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.6f).alwaysEdible().build()));
 	}
 
 	@Override

@@ -72,21 +72,19 @@ public class CaerulaRecordGUIButtonMessage implements CustomPacketPayload {
 		if (buttonID == 0) {
 
 			{
-				boolean setval = !(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).show_stats;
-				entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+				boolean setval = !(ModCapabilities.getPlayerVariables(entity)).show_stats;
+				PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 					capability.show_stats = setval;
 					capability.syncPlayerVariables(entity);
-				});
 			}
 		}
 		if (buttonID == 1) {
 
 			{
-				boolean setval = !(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).kingShowPtc;
-				entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+				boolean setval = !(ModCapabilities.getPlayerVariables(entity)).kingShowPtc;
+				PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 					capability.kingShowPtc = setval;
 					capability.syncPlayerVariables(entity);
-				});
 			}
 		}
 		if (buttonID == 2) {

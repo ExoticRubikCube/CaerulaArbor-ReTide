@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ElitePeduncleItem extends Item {
 	public ElitePeduncleItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(1f).build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(1f).build()));
 	}
 
 	@Override

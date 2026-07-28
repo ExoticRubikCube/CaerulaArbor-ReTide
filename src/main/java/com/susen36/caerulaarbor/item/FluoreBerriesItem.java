@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 public class FluoreBerriesItem extends Item {
 	public FluoreBerriesItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(4).saturationMod(0.5f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(4).saturationModifier(0.5f).alwaysEdible().build()));
 	}
 
 	@Override

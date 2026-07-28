@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.susen36.caerulaarbor.network.send.CaerulaRecordGUIButtonMessage;
@@ -87,11 +86,11 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
             String result;
             if (entity == null) {
                 result = "";
-            } else if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization == 3) {
+            } else if ((ModCapabilities.getPlayerVariables(entity)).player_oceanization == 3) {
                 result = Component.translatable("item.caerula_arbor.language_key.description_13").getString();
-            } else if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization == 2) {
+            } else if ((ModCapabilities.getPlayerVariables(entity)).player_oceanization == 2) {
                 result = Component.translatable("item.caerula_arbor.language_key.description_12").getString();
-            } else if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization == 1) {
+            } else if ((ModCapabilities.getPlayerVariables(entity)).player_oceanization == 1) {
                 result = Component.translatable("item.caerula_arbor.language_key.description_11").getString();
             } else {
                 result = Component.translatable("item.caerula_arbor.language_key.description_10").getString();
@@ -147,7 +146,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		}
 
         double result = 0;
-        result = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
+        result = ModCapabilities.getPlayerVariables(entity).player_oceanization;
         guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/oceanize_icon.png"), this.leftPos + 137, this.topPos + 7, Mth.clamp((int) result * 24, 0, 72), 0, 24, 20, 96, 20);
 
 		RenderSystem.disableBlend();
@@ -194,7 +193,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_disoclution"), 101, 86, -3368449, false);
         String result = "";
         if (entity != null) {
-            result = new java.text.DecimalFormat("##.##").format((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light);
+            result = new java.text.DecimalFormat("##.##").format((ModCapabilities.getPlayerVariables(entity)).player_light);
         }
         guiGraphics.drawString(this.font,
 

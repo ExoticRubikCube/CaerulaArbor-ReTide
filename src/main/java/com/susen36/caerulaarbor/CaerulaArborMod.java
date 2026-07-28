@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor;
 
 import com.mojang.logging.LogUtils;
 import com.susen36.caerulaarbor.capability.CapabilityEventHandler;
+import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -45,6 +46,7 @@ public class CaerulaArborMod {
         CAVillagerProfessions.PROFESSIONS.register(modEventBus);
         CAMenus.REGISTRY.register(modEventBus);
         CAAttributes.REGISTRY.register(modEventBus);
+        ModCapabilities.register(modEventBus);
         modEventBus.addListener(CapabilityEventHandler::registerBlockCapabilities);
     }
 

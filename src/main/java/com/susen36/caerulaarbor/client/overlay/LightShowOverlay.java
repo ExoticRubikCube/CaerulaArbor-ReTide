@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
@@ -13,10 +12,10 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 @EventBusSubscriber({Dist.CLIENT})
 public class LightShowOverlay {
@@ -33,8 +32,8 @@ public class LightShowOverlay {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
-		int w = event.getWindow().getGuiScaledWidth();
-		int h = event.getWindow().getGuiScaledHeight();
+		int w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+		int h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 		Player entity = Minecraft.getInstance().player;
 		if (entity == null || entity.isSpectator())
 			return;
@@ -45,7 +44,7 @@ public class LightShowOverlay {
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
         boolean result1;
-        result1 = entity.isAlive() && entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).show_stats;
+        result1 = entity.isAlive() && ModCapabilities.getPlayerVariables(entity).show_stats;
         if (result1) {
 			boolean isNeat = CAConfigs.LIGHTS_NEAT_STYLE.get();
 			int lightDx = CAConfigs.X_OFFSET_LIGHT.get().intValue();
@@ -96,7 +95,7 @@ public class LightShowOverlay {
 				6 + lifeDx, h - 24 + lifeDy, 0, 0, 24, 16, 24, 16);
 
             boolean result;
-            result = entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).player_shield > 0;
+            result = ModCapabilities.getPlayerVariables(entity).player_shield > 0;
             if (result) {
 				event.getGuiGraphics().blit(SHIELD_POINT, 
 					6 + shieldDx, h - 40 + shieldDy, 0, 0, 24, 16, 24, 16);

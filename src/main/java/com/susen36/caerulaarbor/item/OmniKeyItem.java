@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -11,7 +12,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -58,10 +58,9 @@ public class OmniKeyItem extends Item {
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             {
                 boolean setval = true;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_util_OMNIKEY = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.relic_util_OMNIKEY = setval;
+                capability.syncPlayerVariables(entity);
             }
             if ((Entity) entity instanceof Player player)
                 player.giveExperienceLevels(3);
@@ -104,9 +103,8 @@ public class OmniKeyItem extends Item {
                             world.setBlock(pos, bs.setValue(booleanProp, false), 3);
                     }
                 });
-                if (itemstack.hurt(1, RandomSource.create(), null)) {
-                    itemstack.shrink(1);
-                    itemstack.setDamageValue(0);
+                if (world instanceof ServerLevel _level) {
+                    itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                 }
             }
             return InteractionResult.SUCCESS;

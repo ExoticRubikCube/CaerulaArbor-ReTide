@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -105,9 +104,8 @@ public class OcarinaItem extends Item {
                                             }
                                         }
                                         {
-                                            if (itemstack.hurt(1, RandomSource.create(), null)) {
-                                                itemstack.shrink(1);
-                                                itemstack.setDamageValue(0);
+                                            if (world instanceof ServerLevel _level) {
+                                                itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                                             }
                                         }
                                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
@@ -120,9 +118,8 @@ public class OcarinaItem extends Item {
                                     }
                                 } else if (cradle.getBlock() == CABlocks.ENDSPEAKER_NEST.get()) {
                                     {
-                                        if (itemstack.hurt(1, RandomSource.create(), null)) {
-                                            itemstack.shrink(1);
-                                            itemstack.setDamageValue(0);
+                                        if (world instanceof ServerLevel _level) {
+                                            itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                                         }
                                     }
                                     world.destroyBlock(BlockPos.containing(px, py, pz), false);
@@ -144,9 +141,8 @@ public class OcarinaItem extends Item {
                                             if (blockState.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
                                                 world.setBlock(pos, blockState.setValue(integerProp, value), 3);
                                         }
-                                        if (itemstack.hurt(1, RandomSource.create(), null)) {
-                                            itemstack.shrink(1);
-                                            itemstack.setDamageValue(0);
+                                        if (world instanceof ServerLevel _level) {
+                                            itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                                         }
                                         if ((LevelAccessor) world instanceof ServerLevel level) {
                                             Entity entityToSpawn = CAEntities.IZUMIK.get().spawn(level, BlockPos.containing(px, py, pz), MobSpawnType.MOB_SUMMONED);
@@ -165,9 +161,8 @@ public class OcarinaItem extends Item {
                                 } else if (cradle.getBlock() == CABlocks.HIGHMORE_SPAWNBLOCK.get()) {
                                     world.setBlock(BlockPos.containing(px, py, pz), CABlocks.HIGHMORE_SPAWNING_BLOCK.get().defaultBlockState(), 3);
                                     {
-                                        if (itemstack.hurt(1, RandomSource.create(), null)) {
-                                            itemstack.shrink(1);
-                                            itemstack.setDamageValue(0);
+                                        if (world instanceof ServerLevel _level) {
+                                            itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                                         }
                                     }
                                     if ((Entity) entity instanceof Player player && !player.level().isClientSide())
@@ -196,9 +191,8 @@ public class OcarinaItem extends Item {
                                         }
                                     }
                                     {
-                                        if (itemstack.hurt(1, RandomSource.create(), null)) {
-                                            itemstack.shrink(1);
-                                            itemstack.setDamageValue(0);
+                                        if (world instanceof ServerLevel _level) {
+                                            itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                                         }
                                     }
                                     if ((Entity) entity instanceof Player player && !player.level().isClientSide())

@@ -9,10 +9,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -159,9 +159,8 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
             }.checkGamemode(entity))) {
                 {
                     ItemStack ist = itemstack;
-                    if (ist.hurt(1, RandomSource.create(), null)) {
-                        ist.shrink(1);
-                        ist.setDamageValue(0);
+                    if (world instanceof ServerLevel _level) {
+                        ist.hurtAndBreak(1, _level, null, _item -> ist.setDamageValue(0));
                     }
                 }
             }
@@ -212,9 +211,8 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
         }.checkGamemode((Entity) entity))) {
             {
                 ItemStack ist = itemstack;
-                if (ist.hurt(1, RandomSource.create(), null)) {
-                    ist.shrink(1);
-                    ist.setDamageValue(0);
+                if (world instanceof ServerLevel _level) {
+                    ist.hurtAndBreak(1, _level, null, _item -> ist.setDamageValue(0));
                 }
             }
         }

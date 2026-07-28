@@ -80,9 +80,7 @@ public enum Relic {
     }
 
     public int get(Entity player) {
-        return player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-                .map(this::get)
-                .orElse(defaultLevel);
+        return get(ModCapabilities.getPlayerVariables(player));
     }
 
     public int get(PlayerVariable variables) {
@@ -147,9 +145,7 @@ public enum Relic {
     }
 
     public boolean gained(Entity player) {
-        return player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-                .map(this::gained)
-                .orElse(false);
+        return gained(ModCapabilities.getPlayerVariables(player));
     }
 
     public boolean gained(PlayerVariable variables) {
@@ -157,7 +153,7 @@ public enum Relic {
     }
 
     public void reset(Entity player) {
-        player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(this::reset);
+        reset(ModCapabilities.getPlayerVariables(player));
     }
 
     public void reset(PlayerVariable variables) {
@@ -165,7 +161,7 @@ public enum Relic {
     }
 
     public void set(Entity player, int level) {
-        player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(cap -> set(cap, level));
+        set(ModCapabilities.getPlayerVariables(player), level);
     }
 
     public void set(PlayerVariable variables, int level) {
@@ -235,7 +231,8 @@ public enum Relic {
     }
 
     public static void modify(Entity player, Consumer<PlayerVariable> operation) {
-        player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(cap -> modify(cap, player, operation));
+        PlayerVariable cap = ModCapabilities.getPlayerVariables(player);
+        modify(cap, player, operation);
     }
 
     public static void modify(PlayerVariable cap, Entity player, Consumer<PlayerVariable> operation) {
@@ -244,7 +241,8 @@ public enum Relic {
     }
 
     public void modify(Entity player, int value) {
-        player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(cap -> modify(cap, player, value));
+        PlayerVariable cap = ModCapabilities.getPlayerVariables(player);
+        modify(cap, player, value);
     }
 
     public void modify(PlayerVariable cap, Entity player, int value) {
@@ -253,7 +251,8 @@ public enum Relic {
     }
 
     public void gainAndSync(Entity player) {
-        player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(cap -> gainAndSync(cap, player));
+        PlayerVariable cap = ModCapabilities.getPlayerVariables(player);
+        gainAndSync(cap, player);
     }
 
     public void gainAndSync(PlayerVariable cap, Entity player) {

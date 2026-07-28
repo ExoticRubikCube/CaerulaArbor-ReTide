@@ -29,7 +29,7 @@ import java.util.List;
 
 public class EliteCavairItem extends Item {
 	public EliteCavairItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(11).saturationMod(0.75f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(11).saturationModifier(0.75f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -59,17 +59,15 @@ public class EliteCavairItem extends Item {
         }
         {
             double setval = 0;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.disoclusion = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            capability.disoclusion = setval;
+            capability.syncPlayerVariables(entity);
         }
         {
-            double setval = Math.min((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + 10, 100);
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            double setval = Math.min(capability.player_light + 10, 100);
+            capability.player_light = setval;
+            capability.syncPlayerVariables(entity);
         }
         SIHelper.causeSanityInjury(entity, 45, SanityEvent.Hurt.Type.FOOD);
         if ((Entity) entity instanceof ServerPlayer player) {

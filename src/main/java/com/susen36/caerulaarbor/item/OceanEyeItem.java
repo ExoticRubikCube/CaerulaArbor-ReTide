@@ -20,7 +20,7 @@ import java.util.List;
 
 public class OceanEyeItem extends Item {
 	public OceanEyeItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(1.5f).meat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(1.5f).meat().build()));
 	}
 
 	@Override

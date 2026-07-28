@@ -63,33 +63,29 @@ public class CaerulaHeartItem extends Item {
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             {
                 boolean setval = true;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_cursed_HEART = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.relic_cursed_HEART = setval;
+                capability.syncPlayerVariables(entity);
             }
             {
-                double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - 50;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_light = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                double setval = capability.player_light - 50;
+                capability.player_light = setval;
+                capability.syncPlayerVariables(entity);
             }
-            if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light < 0) {
+            if (ModCapabilities.getPlayerVariables(entity).player_light < 0) {
                 {
                     double setval = 0;
-                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_light = setval;
-                        capability.syncPlayerVariables(entity);
-                    });
+                    PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                    capability.player_light = setval;
+                    capability.syncPlayerVariables(entity);
                 }
             }
             {
                 double setval = Mth.nextInt(RandomSource.create(), 1, 4);
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.disoclusion = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.disoclusion = setval;
+                capability.syncPlayerVariables(entity);
             }
             if (entity instanceof ServerPlayer player) {
                 AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_we_many"));

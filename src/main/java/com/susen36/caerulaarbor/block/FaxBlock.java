@@ -71,7 +71,7 @@ public class FaxBlock extends Block {
         InteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         ItemStack treaty;
         boolean isCreative;
-        treaty = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
+        treaty = (entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
         isCreative = new Object() {
             public boolean checkGamemode(Entity ent) {
                 if (ent instanceof ServerPlayer serverPlayer) {

@@ -4,7 +4,6 @@ package com.susen36.caerulaarbor.potion;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.FirstTellerEntity;
 import com.susen36.caerulaarbor.entity.bullets.TellerShotEntity;
@@ -32,7 +31,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -97,7 +95,7 @@ public class  FirstTellerSkillMobEffect extends MobEffect {
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     continue;
                 }
-                if (entityiterator instanceof Player && (entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 3) {
+                if (entityiterator instanceof Player && (ModCapabilities.getPlayerVariables(entityiterator)).player_oceanization >= 3) {
                     continue;
                 }
                 if (!(entityiterator instanceof Mob livingEntity)) {
@@ -108,16 +106,9 @@ public class  FirstTellerSkillMobEffect extends MobEffect {
                 SIHelper.causeSanityInjury(livingEntity, ayk * 60, SanityEvent.Hurt.Type.POTION);
             }
             if (world instanceof ServerLevel projectileLevel) {
-                Projectile entityToSpawn = new Object() {
-                    public Projectile getArrow(Level level, float damage, int knockback, byte piercing) {
-                        AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
-                        entityToSpawn.setBaseDamage(damage);
-                        entityToSpawn.setKnockback(knockback);
-                        entityToSpawn.setSilent(true);
-                        entityToSpawn.setPierceLevel(piercing);
-                        return entityToSpawn;
-                    }
-                }.getArrow(projectileLevel, (float) (ayk * 0.6), 0, (byte) 1);
+                AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                entityToSpawn.setBaseDamage((float) (ayk * 0.6));
+                entityToSpawn.setSilent(true);
                 entityToSpawn.setPos(x, (y + 8), z);
                 entityToSpawn.shoot((Mth.nextDouble(RandomSource.create(), -0.125, 0.125)), (-1), (Mth.nextDouble(RandomSource.create(), -0.125, 0.125)), 1, 5);
                 projectileLevel.addFreshEntity(entityToSpawn);

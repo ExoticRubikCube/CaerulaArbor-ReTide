@@ -15,7 +15,7 @@ import net.minecraft.world.level.LevelAccessor;
 
 public class FakeEggItem extends Item {
 	public FakeEggItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.25f).build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(0.25f).build()));
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class SIHelper {
 
     public static void causeSanityInjury(LivingEntity target, @Nullable LivingEntity attacker, double value, SanityEvent.Hurt.Type type) {
         SanityEvent.Hurt event = new SanityEvent.Hurt(attacker, target, value, type);
-        if (!NeoForge.EVENT_BUS.post(event)) {
+        if (!NeoForge.EVENT_BUS.post(event).isCanceled()) {
             ModCapabilities.getSanityInjury(target).hurt(event.getAmount());
         }
     }

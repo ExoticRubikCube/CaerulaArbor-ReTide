@@ -6,7 +6,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@EventBusSubscriber(modid = CaerulaArborMod.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = CaerulaArborMod.MODID)
 public final class CACompostableItems {
     private CACompostableItems() {
     }

@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 public class CaramelCakePieceItem extends Item {
 	public CaramelCakePieceItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.5f).build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).build()));
 	}
 
 	@Override

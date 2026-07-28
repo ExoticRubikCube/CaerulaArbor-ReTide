@@ -49,24 +49,21 @@ public class ProofOfLongevityItem extends Item {
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 0.1);
         {
             boolean setval = true;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_util_LONGEVITY = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            capability.relic_util_LONGEVITY = setval;
+            capability.syncPlayerVariables(entity);
         }
         {
-            double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive + 6;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_maxlive = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            double setval = capability.player_maxlive + 6;
+            capability.player_maxlive = setval;
+            capability.syncPlayerVariables(entity);
         }
         {
-            double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives + 6;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_lives = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            double setval = capability.player_lives + 6;
+            capability.player_lives = setval;
+            capability.syncPlayerVariables(entity);
         }
         if (world.isClientSide())
             Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);

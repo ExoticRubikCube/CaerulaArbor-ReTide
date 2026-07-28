@@ -8,10 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 @EventBusSubscriber({Dist.CLIENT})
 public class SanityShowOverlay {
@@ -20,8 +20,8 @@ public class SanityShowOverlay {
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
-		int w = event.getWindow().getGuiScaledWidth();
-		int h = event.getWindow().getGuiScaledHeight();
+		int w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+		int h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 		Player entity = Minecraft.getInstance().player;
 		if (entity != null) {
 			SanityInjuryCapability sanityCapability = ModCapabilities.getSanityInjury(entity);

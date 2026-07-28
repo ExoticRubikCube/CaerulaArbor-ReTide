@@ -42,7 +42,7 @@ public class SurvivorContractItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR < 0) {
+        if (ModCapabilities.getPlayerVariables(entity).relic_SURVIVOR < 0) {
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BEACON_ACTIVATE, SoundSource.NEUTRAL, (float) 3.2, 1);
             }
@@ -52,10 +52,9 @@ public class SurvivorContractItem extends Item {
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
             {
                 double setval = 0;
-                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_SURVIVOR = setval;
-                    capability.syncPlayerVariables(entity);
-                });
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.relic_SURVIVOR = setval;
+                capability.syncPlayerVariables(entity);
             }
         }
         return ar;

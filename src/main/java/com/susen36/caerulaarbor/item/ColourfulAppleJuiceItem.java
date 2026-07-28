@@ -51,10 +51,9 @@ public class ColourfulAppleJuiceItem extends Item {
 		}
 		ModCapabilities.getSanityInjury(entity).heal(80);
 		if (entity instanceof Player player) {
-			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.player_light = Math.min(capability.player_light + 12, 100.0);
-				capability.syncPlayerVariables(entity);
-			});
+			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+			capability.player_light = Math.min(capability.player_light + 12, 100.0);
+			capability.syncPlayerVariables(entity);
 		}
 		if (!(entity instanceof Player)) {
 			resultStack.shrink(1);

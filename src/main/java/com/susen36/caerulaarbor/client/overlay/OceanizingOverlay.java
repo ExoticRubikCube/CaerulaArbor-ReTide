@@ -9,10 +9,10 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 @EventBusSubscriber({Dist.CLIENT})
 public class OceanizingOverlay {
@@ -31,8 +31,8 @@ public class OceanizingOverlay {
 			}
 		}
 		if (texture != null) {
-			int width = event.getWindow().getGuiScaledWidth();
-			int height = event.getWindow().getGuiScaledHeight();
+			int width = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+			int height = Minecraft.getInstance().getWindow().getGuiScaledHeight();
 			RenderSystem.disableDepthTest();
 			RenderSystem.depthMask(false);
 			RenderSystem.enableBlend();

@@ -1,14 +1,12 @@
 package com.susen36.caerulaarbor.capability.apoptosis;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 public class ApoptosisInjuryCapability implements IApoptosisInjuryCapability {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "apoptosis_injury");
 
     private final LivingEntity owner;
     private double value;
@@ -21,7 +19,7 @@ public class ApoptosisInjuryCapability implements IApoptosisInjuryCapability {
 
     public ApoptosisInjuryCapability(LivingEntity owner, double value) {
         this.owner = owner;
-        this.value = Math.max(0, Math.min(1000, value));
+        this.value = Math.clamp(value, 0, 1000);
         this.recovering = false;
         this.locked = false;
     }
@@ -84,7 +82,7 @@ public class ApoptosisInjuryCapability implements IApoptosisInjuryCapability {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         tag.putDouble("ApoptosisInjury", value);
         tag.putBoolean("ApoptosisRecovering", recovering);
@@ -93,7 +91,7 @@ public class ApoptosisInjuryCapability implements IApoptosisInjuryCapability {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         value = nbt.getDouble("ApoptosisInjury");
         recovering = nbt.getBoolean("ApoptosisRecovering");
         locked = nbt.getBoolean("ApoptosisLocked");

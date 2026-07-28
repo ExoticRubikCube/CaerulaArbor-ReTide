@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class CannedCherryItem extends Item {
 	public CannedCherryItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.1f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.1f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -46,12 +47,11 @@ public class CannedCherryItem extends Item {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 240, 1));
 		{
-			boolean setval = true;
-			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.relic_util_BERRIES = setval;
-				capability.syncPlayerVariables(entity);
-			});
-		}
+		boolean setval = true;
+		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+		capability.relic_util_BERRIES = setval;
+		capability.syncPlayerVariables(entity);
+	}
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

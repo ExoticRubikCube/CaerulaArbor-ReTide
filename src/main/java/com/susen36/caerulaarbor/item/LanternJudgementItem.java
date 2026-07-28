@@ -16,7 +16,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -137,7 +136,7 @@ public class LanternJudgementItem extends Item {
                         entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE, 400, 0, false, false));
                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE, entity), (float) Math.max(((Entity) entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.15,
                                     15));
-                    entityiterator.setSecondsOnFire(5);
+                    entityiterator.igniteForSeconds(5);
                 }
             }
         }
@@ -152,9 +151,8 @@ public class LanternJudgementItem extends Item {
             }
         }.checkGamemode((Entity) entity))) {
             {
-                if (itemstack.hurt(10, RandomSource.create(), null)) {
-                    itemstack.shrink(1);
-                    itemstack.setDamageValue(0);
+                if (world instanceof ServerLevel _level) {
+                    itemstack.hurtAndBreak(10, _level, null, _item -> itemstack.setDamageValue(0));
                 }
             }
             if ((Entity) entity instanceof Player player)
@@ -202,9 +200,8 @@ public class LanternJudgementItem extends Item {
                 }
             }.checkGamemode(entity))) {
                 {
-                    if (itemstack.hurt(1, RandomSource.create(), null)) {
-                        itemstack.shrink(1);
-                        itemstack.setDamageValue(0);
+                    if (world instanceof ServerLevel _level) {
+                        itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                     }
                 }
             }
@@ -228,9 +225,8 @@ public class LanternJudgementItem extends Item {
                     }
                 }
             }
-            if (itemstack.hurt(1, RandomSource.create(), null)) {
-                itemstack.shrink(1);
-                itemstack.setDamageValue(0);
+            if (world instanceof ServerLevel _level) {
+                itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
             }
             return InteractionResult.SUCCESS;
         }

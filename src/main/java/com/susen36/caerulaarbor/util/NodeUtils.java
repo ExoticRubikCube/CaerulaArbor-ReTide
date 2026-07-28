@@ -1,6 +1,5 @@
 package com.susen36.caerulaarbor.util;
 
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import net.minecraft.world.entity.Entity;
 
@@ -13,7 +12,7 @@ public class NodeUtils {
 	public static double getNodeAddDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_damage;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_add_damage;
 	}
 
 	public static boolean isNodeAddDamageAtLeast(Entity entity, int value) {
@@ -23,7 +22,7 @@ public class NodeUtils {
 	public static double getNodeRealDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_real_damage;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_real_damage;
 	}
 
 	public static boolean isNodeRealDamageAtLeast(Entity entity, int value) {
@@ -33,7 +32,7 @@ public class NodeUtils {
 	public static double getNodeAddSanity(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_sanity;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_add_sanity;
 	}
 
 	public static boolean isNodeAddSanityAtLeast(Entity entity, int value) {
@@ -43,7 +42,7 @@ public class NodeUtils {
 	public static double getNodeLessDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_less_damage;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_less_damage;
 	}
 
 	public static boolean isNodeLessDamageAtLeast(Entity entity, int value) {
@@ -53,7 +52,7 @@ public class NodeUtils {
 	public static double getNodeLessArmor(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_less_armor;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_less_armor;
 	}
 
 	public static boolean isNodeLessArmorAtLeast(Entity entity, int value) {
@@ -63,7 +62,7 @@ public class NodeUtils {
 	public static double getNodeHealDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_heal_damage;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_heal_damage;
 	}
 
 	public static boolean isNodeHealDamageAtLeast(Entity entity, int value) {
@@ -73,7 +72,7 @@ public class NodeUtils {
 	public static double getNodeWorseBreak(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_worse_break;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_worse_break;
 	}
 
 	public static boolean isNodeWorseBreakAtLeast(Entity entity, int value) {
@@ -83,7 +82,7 @@ public class NodeUtils {
 	public static double getNodeAddSpeed(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_speed;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_add_speed;
 	}
 
 	public static boolean isNodeAddSpeedAtLeast(Entity entity, int value) {
@@ -93,7 +92,7 @@ public class NodeUtils {
 	public static double getNodeAddResis(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_resis;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_add_resis;
 	}
 
 	public static boolean isNodeAddResisAtLeast(Entity entity, int value) {
@@ -103,7 +102,7 @@ public class NodeUtils {
 	public static double getNodeAddMiss(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_miss;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_add_miss;
 	}
 
 	public static boolean isNodeAddMissAtLeast(Entity entity, int value) {
@@ -113,7 +112,7 @@ public class NodeUtils {
 	public static double getNodeAddDef(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_def;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_add_def;
 	}
 
 	public static boolean isNodeAddDefAtLeast(Entity entity, int value) {
@@ -123,7 +122,7 @@ public class NodeUtils {
 	public static double getNodeEunectes(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_eunectes;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_eunectes;
 	}
 
 	public static boolean isNodeEunectesAtLeast(Entity entity, int value) {
@@ -133,7 +132,7 @@ public class NodeUtils {
 	public static double getNodeLivingBarrier(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_living_barrier;
+		return ModCapabilities.getPlayerVariables(entity).PEVO_NODE_living_barrier;
 	}
 
 	public static boolean isNodeLivingBarrierAtLeast(Entity entity, int value) {

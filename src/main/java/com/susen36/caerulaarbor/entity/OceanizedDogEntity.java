@@ -99,7 +99,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
                 return super.canContinueToUse() && isNotSitting();
             }
         });
-        this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 0.8, (float) 4, (float) 16, false) {
+        this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 0.8, (float) 4, (float) 16) {
             @Override
             public boolean canUse() {
                 return super.canUse() && isNotSitting();

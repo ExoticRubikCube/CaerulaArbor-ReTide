@@ -22,7 +22,7 @@ import java.util.List;
 
 public class OceanCavairItem extends Item {
 	public OceanCavairItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(9).saturationMod(0.5f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(9).saturationModifier(0.5f).alwaysEdible().build()));
 	}
 
 	@Override

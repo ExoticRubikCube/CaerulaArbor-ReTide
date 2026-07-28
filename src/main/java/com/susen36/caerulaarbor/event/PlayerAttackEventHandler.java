@@ -1,7 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -10,9 +9,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 
 @EventBusSubscriber
 public class PlayerAttackEventHandler {
@@ -23,8 +22,7 @@ public class PlayerAttackEventHandler {
 			return;
 		}
 
-		if (!(attacker.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-				.orElse(new PlayerVariable())).relic_hand_BARREN) {
+		if (!ModCapabilities.getPlayerVariables(attacker).relic_hand_BARREN) {
 			return;
 		}
 

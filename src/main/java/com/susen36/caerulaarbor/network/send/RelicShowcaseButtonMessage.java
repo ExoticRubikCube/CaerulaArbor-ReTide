@@ -98,7 +98,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 		if (buttonID == 1) {
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CROWN) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_king_CROWN) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -116,10 +116,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_king_CROWN = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -134,13 +133,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CROWN) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_king_CROWN) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_king_CROWN = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -150,7 +148,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_SPEAR) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_king_SPEAR) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -168,10 +166,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_king_SPEAR = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -186,13 +183,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_SPEAR) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_king_SPEAR) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_king_SPEAR = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -202,7 +198,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_ARMOR) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_king_ARMOR) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -220,10 +216,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_king_ARMOR = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -238,13 +233,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_ARMOR) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_king_ARMOR) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_king_ARMOR = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -254,7 +248,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_EXTENSION) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_king_EXTENSION) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -272,10 +266,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_king_EXTENSION = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -290,13 +283,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_EXTENSION) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_king_EXTENSION) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_king_EXTENSION = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -306,7 +298,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CRYSTAL) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_king_CRYSTAL) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -324,10 +316,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_king_CRYSTAL = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -342,13 +333,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CRYSTAL) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_king_CRYSTAL) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_king_CRYSTAL = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -358,7 +348,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_ARTIFACT) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_archfi_ARTIFACT) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -376,10 +366,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_archfi_ARTIFACT = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -394,13 +383,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_ARTIFACT) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_archfi_ARTIFACT) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_archfi_ARTIFACT = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -410,7 +398,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_FLAG) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_archfi_FLAG) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -428,10 +416,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_archfi_FLAG = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -446,13 +433,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_FLAG) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_archfi_FLAG) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_archfi_FLAG = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -462,13 +448,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_BED) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_archfi_BED) {
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_archfi_BED = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -498,13 +483,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_BED) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_archfi_BED) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_archfi_BED = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -514,7 +498,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_THORNS) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_THORNS) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -532,10 +516,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_hand_THORNS = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -550,13 +533,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_THORNS) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_THORNS) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_hand_THORNS = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -566,7 +548,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_STRANGLE) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_STRANGLE) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -584,10 +566,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_hand_STRANGLE = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -602,13 +583,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_STRANGLE) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_STRANGLE) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_hand_STRANGLE = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -618,7 +598,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FERTILITY) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_FERTILITY) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -636,10 +616,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_hand_FERTILITY = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -654,13 +633,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FERTILITY) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_FERTILITY) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_hand_FERTILITY = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -670,7 +648,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_BARREN) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_BARREN) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -688,10 +666,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_hand_BARREN = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -706,13 +683,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_BARREN) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_BARREN) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_hand_BARREN = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -722,7 +698,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWIPE) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_SWIPE) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -740,10 +716,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_hand_SWIPE = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -758,13 +733,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWIPE) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_SWIPE) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_hand_SWIPE = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -774,13 +748,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE >= 0) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_ENGRAVE >= 0) {
                     {
                         double setval = -1;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_hand_ENGRAVE = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -810,13 +783,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE >= 0) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_ENGRAVE >= 0) {
                         {
                             double setval = -1;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_hand_ENGRAVE = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -826,13 +798,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FIREWORK) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_FIREWORK) {
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_hand_FIREWORK = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -862,13 +833,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FIREWORK) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_FIREWORK) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_hand_FIREWORK = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -878,13 +848,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_TREATY) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_TREATY) {
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_TREATY = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -914,13 +883,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_TREATY) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_TREATY) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_TREATY = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -930,13 +898,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR >= 0) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_SURVIVOR >= 0) {
                     {
                         double setval = -1;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_SURVIVOR = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -966,13 +933,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR >= 0) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_SURVIVOR >= 0) {
                         {
                             double setval = -1;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_SURVIVOR = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -982,13 +948,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_EMELIGHT) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_cursed_EMELIGHT) {
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_cursed_EMELIGHT = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -1018,13 +983,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_EMELIGHT) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_cursed_EMELIGHT) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_cursed_EMELIGHT = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -1034,7 +998,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_GLOWBODY) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_cursed_GLOWBODY) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -1052,10 +1016,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_cursed_GLOWBODY = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -1070,13 +1033,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_GLOWBODY) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_cursed_GLOWBODY) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_cursed_GLOWBODY = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -1086,7 +1048,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_RESEARCH) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_cursed_RESEARCH) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -1104,10 +1066,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_cursed_RESEARCH = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -1122,13 +1083,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_RESEARCH) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_cursed_RESEARCH) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_cursed_RESEARCH = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -1138,13 +1098,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWORD) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_SWORD) {
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_hand_SWORD = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -1174,13 +1133,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWORD) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_SWORD) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_hand_SWORD = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -1190,13 +1148,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_legend_CHITIN) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_legend_CHITIN) {
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_legend_CHITIN = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -1226,13 +1183,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_legend_CHITIN) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_legend_CHITIN) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_legend_CHITIN = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -1242,7 +1198,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SPEED) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_SPEED) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -1260,10 +1216,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_hand_SPEED = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                 }
             } else {
@@ -1278,13 +1233,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SPEED) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_hand_SPEED) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_hand_SPEED = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -1294,13 +1248,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_HEMOST) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_HEMOST) {
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_HEMOST = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -1330,13 +1283,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_HEMOST) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_HEMOST) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_HEMOST = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }
@@ -1346,13 +1298,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_YEARNING) {
+                if ((ModCapabilities.getPlayerVariables(entity)).relic_YEARNING) {
                     {
                         boolean setval = false;
-                        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                             capability.relic_YEARNING = setval;
                             capability.syncPlayerVariables(entity);
-                        });
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -1382,13 +1333,12 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_YEARNING) {
+                    if ((ModCapabilities.getPlayerVariables(entity)).relic_YEARNING) {
                         {
                             boolean setval = false;
-                            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                                 capability.relic_YEARNING = setval;
                                 capability.syncPlayerVariables(entity);
-                            });
                         }
                     }
                 }

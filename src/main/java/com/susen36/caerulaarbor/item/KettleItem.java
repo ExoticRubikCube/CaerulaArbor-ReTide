@@ -48,10 +48,9 @@ public class KettleItem extends Item {
         ItemStack itemstack = ar.getObject();
         {
             boolean setval = true;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_util_KETTLE = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            capability.relic_util_KETTLE = setval;
+            capability.syncPlayerVariables(entity);
         }
         if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
@@ -61,18 +60,16 @@ public class KettleItem extends Item {
         if (world.isClientSide())
             Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
         {
-            double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive + 1;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_maxlive = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            double setval = capability.player_maxlive + 1;
+            capability.player_maxlive = setval;
+            capability.syncPlayerVariables(entity);
         }
         {
-            double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives + 1;
-            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_lives = setval;
-                capability.syncPlayerVariables(entity);
-            });
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            double setval = capability.player_lives + 1;
+            capability.player_lives = setval;
+            capability.syncPlayerVariables(entity);
         }
         if ((Entity) entity instanceof Player player) {
             ItemStack setstack = new ItemStack(CABlocks.BLOCK_KETTLE.get()).copy();

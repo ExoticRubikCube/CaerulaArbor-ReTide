@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.capability.map;
 
 import com.susen36.caerulaarbor.init.CAConfigs;
-import com.susen36.caerulaarbor.init.CANetwork;
 import com.susen36.caerulaarbor.network.receive.SavedDataSyncMessage;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -10,6 +10,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 
 public class MapVariables extends SavedData {
 
@@ -61,7 +62,7 @@ public class MapVariables extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbt) {
+    public @NotNull CompoundTag save(CompoundTag nbt, HolderLookup.@NotNull Provider provider) {
         nbt.putDouble("evo_point_grow", evo_point_grow);
         nbt.putDouble("evo_point_subsisting", evo_point_subsisting);
         nbt.putDouble("evo_point_breed", evo_point_breed);
@@ -85,7 +86,7 @@ public class MapVariables extends SavedData {
     public void syncData(LevelAccessor world) {
         this.setDirty();
         if (world instanceof Level level && !level.isClientSide()) {
-            CANetwork.PACKET_HANDLER.send(PacketDistributor.ALL.noArg(), new SavedDataSyncMessage(0, this));
+            PacketDistributor.sendToAllPlayers(new SavedDataSyncMessage(0, this, level.registryAccess()));
         }
     }
 
@@ -93,7 +94,7 @@ public class MapVariables extends SavedData {
         if (world instanceof ServerLevelAccessor serverLevelAccessor) {
             ServerLevel overworld = serverLevelAccessor.getLevel().getServer().getLevel(Level.OVERWORLD);
             if (overworld != null) {
-                return overworld.getDataStorage().computeIfAbsent(MapVariables::load, MapVariables::new, DATA_NAME);
+                return overworld.getDataStorage().computeIfAbsent(new SavedData.Factory<>(MapVariables::new, (tag, provider) -> MapVariables.load(tag)), DATA_NAME);
             }
         }
         return clientSide;

@@ -12,9 +12,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 
 @EventBusSubscriber
 public class PlayerEatEventHandler {
@@ -53,15 +53,14 @@ public class PlayerEatEventHandler {
 						messageText = Component.translatable("gameplay.life_point.revive.0").getString();
 					}
 					lifeGain = Mth.nextInt(RandomSource.create(), 1, (int) maxReviveAmount);
-					maxLives = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive;
-					currentLives = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives;
+					maxLives = ModCapabilities.getPlayerVariables(entity).player_maxlive;
+					currentLives = ModCapabilities.getPlayerVariables(entity).player_lives;
 					if (currentLives < maxLives) {
 						{
 							double setval = Math.min(currentLives + lifeGain, maxLives);
-							entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-								capability.player_lives = setval;
-								capability.syncPlayerVariables(entity);
-							});
+							PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+							capability.player_lives = setval;
+							capability.syncPlayerVariables(entity);
 						}
 						if (!player.level().isClientSide())
 							player.displayClientMessage(Component.literal("§a" + messageText.replace("{num}", "" + Math.round(lifeGain))), true);
@@ -95,12 +94,11 @@ public class PlayerEatEventHandler {
 				}
 				{
 					double setval = Math.min(100,
-							(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light
+							ModCapabilities.getPlayerVariables(entity).player_light
 									+ Mth.nextInt(RandomSource.create(), (int) minimumLightGain, (int) maximumLightGain));
-					entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-						capability.player_light = setval;
-						capability.syncPlayerVariables(entity);
-					});
+					PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+					capability.player_light = setval;
+					capability.syncPlayerVariables(entity);
 				}
 			}
 		}

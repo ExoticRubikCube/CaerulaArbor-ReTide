@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
@@ -82,28 +83,27 @@ public class RelicCursedGLOWBODYItem extends Item {
 				.getBoolean("used");
 
 		if (!isUsed) {
-			entity.getCapability(ModCapabilities.PLAYER_VARIABLE).ifPresent(capability -> {
-				if (!capability.relic_cursed_GLOWBODY) {
-					double x = entity.getX();
-					double y = entity.getY();
-					double z = entity.getZ();
+			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+			if (!capability.relic_cursed_GLOWBODY) {
+				double x = entity.getX();
+				double y = entity.getY();
+				double z = entity.getZ();
 
-					world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2.0F, 1.0F);
+				world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2.0F, 1.0F);
 
-					if (world instanceof ServerLevel serverLevel) {
-						serverLevel.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1.0, 1.0, 1.0, 1.0);
-					}
-
-					capability.relic_cursed_GLOWBODY = true;
-					capability.syncPlayerVariables(entity);
-
-					if (world.isClientSide()) {
-						Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-					}
-
-					CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
+				if (world instanceof ServerLevel serverLevel) {
+					serverLevel.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1.0, 1.0, 1.0, 1.0);
 				}
-			});
+
+				capability.relic_cursed_GLOWBODY = true;
+				capability.syncPlayerVariables(entity);
+
+				if (world.isClientSide()) {
+					Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
+				}
+
+				CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
+			}
 		}
 	}
 }

@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -92,9 +91,8 @@ public class PathInauguratorItem extends AxeItem {
                     return false;
                 }
             }.checkGamemode(entity))) {
-                if (itemstack.hurt(1, RandomSource.create(), null)) {
-                    itemstack.shrink(1);
-                    itemstack.setDamageValue(0);
+                if (world instanceof ServerLevel _level) {
+                    itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                 }
             }
             return InteractionResult.SUCCESS;
@@ -132,9 +130,8 @@ public class PathInauguratorItem extends AxeItem {
                     return false;
                 }
             }.checkGamemode(entity))) {
-                if (itemstack.hurt(1, RandomSource.create(), null)) {
-                    itemstack.shrink(1);
-                    itemstack.setDamageValue(0);
+                if (world instanceof ServerLevel _level) {
+                    itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                 }
             }
             return InteractionResult.SUCCESS;

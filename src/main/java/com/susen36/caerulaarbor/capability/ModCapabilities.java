@@ -1,3 +1,4 @@
+
 package com.susen36.caerulaarbor.capability;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
@@ -11,41 +12,48 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.LevelAccessor;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.attachment.AttachmentType;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+
+import java.util.function.Supplier;
 
 public class ModCapabilities {
 
-    public static final Capability<PlayerVariable> PLAYER_VARIABLE = CapabilityManager.get(new CapabilityToken<>() {
-    });
-    public static final Capability<AnchorRecord> ANCHOR_RECORD = CapabilityManager.get(new CapabilityToken<>() {
-    });
-    public static final Capability<SanityInjuryCapability> SANITY_INJURY = CapabilityManager.get(new CapabilityToken<>() {
-    });
-    public static final Capability<ApoptosisInjuryCapability> APOPTOSIS_INJURY = CapabilityManager.get(new CapabilityToken<>() {
-    });
+    private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, CaerulaArborMod.MODID);
+
+    public static final Supplier<AttachmentType<PlayerVariable>> PLAYER_VARIABLE = ATTACHMENT_TYPES.register("player_variables",
+            () -> AttachmentType.serializable((IAttachmentHolder holder) -> new PlayerVariable()).build());
+
+    public static final Supplier<AttachmentType<SanityInjuryCapability>> SANITY_INJURY = ATTACHMENT_TYPES.register("sanity_injury",
+            () -> AttachmentType.serializable((IAttachmentHolder holder) -> new SanityInjuryCapability(holder instanceof LivingEntity living ? living : null)).build());
+
+    public static final Supplier<AttachmentType<ApoptosisInjuryCapability>> APOPTOSIS_INJURY = ATTACHMENT_TYPES.register("apoptosis_injury",
+            () -> AttachmentType.serializable((IAttachmentHolder holder) -> new ApoptosisInjuryCapability(holder instanceof LivingEntity living ? living : null)).build());
+
+    public static final Supplier<AttachmentType<AnchorRecord>> ANCHOR_RECORD = ATTACHMENT_TYPES.register("anchor_record",
+            () -> AttachmentType.serializable((IAttachmentHolder holder) -> new AnchorRecord()).build());
+
+    public static void register(IEventBus modEventBus) {
+        ATTACHMENT_TYPES.register(modEventBus);
+    }
 
     private ModCapabilities() {
         throw new UnsupportedOperationException("Utility class");
     }
 
     public static PlayerVariable getPlayerVariables(Entity entity) {
-        return entity.getCapability(PLAYER_VARIABLE, null).orElseGet(() -> {
-            CaerulaArborMod.LOGGER.warn("Failed to get capability {} for blockentity {}", PLAYER_VARIABLE, entity);
-            return new PlayerVariable();
-        });
+        return entity.getData(PLAYER_VARIABLE.get());
     }
 
     public static SanityInjuryCapability getSanityInjury(LivingEntity entity) {
-        return entity.getCapability(SANITY_INJURY, null).orElseGet(() -> {
-            CaerulaArborMod.LOGGER.warn("Failed to get capability {} for blockentity {}", SANITY_INJURY, entity);
-            return new SanityInjuryCapability(entity);
-        });
+        return entity.getData(SANITY_INJURY.get());
     }
 
     public static ApoptosisInjuryCapability getApoptosisInjury(LivingEntity entity) {
-        return entity.getCapability(APOPTOSIS_INJURY, null).orElseGet(() -> {
-            CaerulaArborMod.LOGGER.warn("Failed to get capability {} for blockentity {}", APOPTOSIS_INJURY, entity);
-            return new ApoptosisInjuryCapability(entity);
-        });
+        return entity.getData(APOPTOSIS_INJURY.get());
     }
 
     public static MapVariables getMapVariables(LevelAccessor world) {
@@ -57,9 +65,6 @@ public class ModCapabilities {
     }
 
     public static AnchorRecord getAnchorRecord(ServerLevel level) {
-        return level.getCapability(ANCHOR_RECORD, null).orElseGet(() -> {
-            CaerulaArborMod.LOGGER.warn("Failed to get anchor record for level {}", level.dimension().location());
-            return new AnchorRecord();
-        });
+        return level.getData(ANCHOR_RECORD.get());
     }
 }
