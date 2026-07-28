@@ -1,10 +1,10 @@
 package com.susen36.caerulaarbor.init;
 
 import net.minecraft.world.level.GameRules;
-import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber
 public class CAGameRules {
+    public static void init() {}
+
     public static final GameRules.Key<GameRules.BooleanValue> TARGET_LIFE_FUNCTION = GameRules.register("targetLifeFunction", GameRules.Category.PLAYER, GameRules.BooleanValue.create(true));
     public static final GameRules.Key<GameRules.BooleanValue> NATURAL_EVOLUTION = GameRules.register("naturalEvolution", GameRules.Category.MOBS, GameRules.BooleanValue.create(true));
     public static final GameRules.Key<GameRules.IntegerValue> CLONE_NUMBER_LIMIT = GameRules.register("cloneNumberLimit", GameRules.Category.MOBS, GameRules.IntegerValue.create(24));

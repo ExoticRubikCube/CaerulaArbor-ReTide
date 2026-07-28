@@ -27,8 +27,6 @@ public class CaerulaArborMod {
     private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
 
     public CaerulaArborMod(IEventBus modEventBus, ModContainer modContainer) {
-        CALootModifier.init(modEventBus);
-
         modContainer.registerConfig(ModConfig.Type.COMMON, CAConfigs.SPEC, "caerular_configs.toml");
         NeoForge.EVENT_BUS.register(this);
         CASounds.REGISTRY.register(modEventBus);
@@ -47,6 +45,8 @@ public class CaerulaArborMod {
         CAMenus.REGISTRY.register(modEventBus);
         CAAttributes.REGISTRY.register(modEventBus);
         ModCapabilities.register(modEventBus);
+        CALootModifier.init(modEventBus);
+        CAGameRules.init();
         modEventBus.addListener(CapabilityEventHandler::registerBlockCapabilities);
     }
 
@@ -59,15 +59,25 @@ public class CaerulaArborMod {
         return ResourceLocation.fromNamespaceAndPath(MODID, patchedPath);
     }
 
+    // TODO: MCreator 模板延迟队列
+    //   远期迁移方向（非 MCreator 生态主流方案）：
+    //   方案 A: vanilla MinecraftServer.tell(new TickTask(server.getTickCount()+delay, runnable))
+    //   适用于能拿到 MinecraftServer 实例的调用点，零基础设施
+    //   方案 B: 绑定到 BlockEntity/Entity 的 serverTick() 内维护 tickCount 字段
+    //   适用于延迟逻辑与具体方块/实体绑定的场景（vanilla 自身做法）
     @SubscribeEvent
     public void tick(ServerTickEvent.Post event) {
-        List<AbstractMap.SimpleEntry<Runnable, Integer>> actions = new ArrayList<>();
-        workQueue.forEach(work -> {
-            work.setValue(work.getValue() - 1);
-            if (work.getValue() == 0)
-                actions.add(work);
-        });
-        actions.forEach(e -> e.getKey().run());
-        workQueue.removeAll(actions);
+        if (!workQueue.isEmpty()) {
+            List<Runnable> readyToRun = new ArrayList<>();
+            workQueue.removeIf(work -> {
+                work.setValue(work.getValue() - 1);
+                if (work.getValue() <= 0) {
+                    readyToRun.add(work.getKey());
+                    return true;
+                }
+                return false;
+            });
+            readyToRun.forEach(Runnable::run);
+        }
     }
 }

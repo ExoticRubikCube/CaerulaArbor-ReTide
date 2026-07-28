@@ -90,28 +90,22 @@ public class PlayerEvoButtonMessage implements CustomPacketPayload {
             quality = (ModCapabilities.getPlayerVariables(entity)).reserve_quality;
             title = entity.getPersistentData().getString("showcasingEvoNode");
             if (!PlayerStateUtils.isNexusNoRejectionSelected(entity) && (title).equals("nexus.no_rejection") && quality >= 1) {
-                {
-                    boolean setval = true;
-                    PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                        capability.PEVO_NEXUS_no_rejection = setval;
-                        capability.syncPlayerVariables(entity);
-                }
+                boolean setval = true;
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.PEVO_NEXUS_no_rejection = setval;
+                capability.syncPlayerVariables(entity);
                 quality_cost = 1;
             } else if (!PlayerStateUtils.isNexusRegSanitySelected(entity) && (title).equals("nexus.reg_sanity") && quantity >= 1) {
-                {
-                    boolean setval = true;
-                    PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                        capability.PEVO_NEXUS_reg_sanity = setval;
-                        capability.syncPlayerVariables(entity);
-                }
+                boolean setval = true;
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.PEVO_NEXUS_reg_sanity = setval;
+                capability.syncPlayerVariables(entity);
                 quantity_cost = 2;
             } else if (!PlayerStateUtils.isNexusRegLightsSelected(entity) && (title).equals("nexus.reg_lights") && quality >= 2) {
-                {
-                    boolean setval = true;
-                    PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                        capability.PEVO_NEXUS_reg_lights = setval;
-                        capability.syncPlayerVariables(entity);
-                }
+                boolean setval = true;
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+                capability.PEVO_NEXUS_reg_lights = setval;
+                capability.syncPlayerVariables(entity);
                 quality_cost = 2;
             } else if (!PlayerStateUtils.isNexusPercDamageSelected(entity) && (title).equals("nexus.perc_damage") && quality >= 3) {
                 {
@@ -474,9 +468,7 @@ public class PlayerEvoButtonMessage implements CustomPacketPayload {
 		}
 		if (buttonID == 19) {
 
-            if (entity != null) {
-                entity.getPersistentData().putString("showcasingEvoNode", "nexus.reg_lights");
-            }
+            entity.getPersistentData().putString("showcasingEvoNode", "nexus.reg_lights");
         }
 		if (buttonID == 20) {
 

@@ -6,6 +6,9 @@ import com.mojang.serialization.JsonOps;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.CriterionValidator;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -73,23 +76,14 @@ public class AdvancementProvider implements AdvancementSubProvider {
      * @return inventory_changed 条件
      */
     private static Criterion inventoryChanged(String item, int min, int max) {
-        var itemIds = new JsonArray();
-        itemIds.add(item);
-
-        var count = new JsonObject();
-        count.addProperty("min", min);
-        count.addProperty("max", max);
-
-        var itemCondition = new JsonObject();
-        itemCondition.add("items", itemIds);
-        itemCondition.add("count", count);
-
-        var items = new JsonArray();
-        items.add(itemCondition);
-
-        var conditions = new JsonObject();
-        conditions.add("items", items);
-        return criterion("minecraft:inventory_changed", conditions);
+        var itemId = ResourceLocation.parse(item);
+        var itemValue = BuiltInRegistries.ITEM.getOptional(itemId)
+                .orElseThrow(() -> new IllegalStateException("Unknown item: " + item));
+        var predicate = ItemPredicate.Builder.item()
+                .of(itemValue)
+                .withCount(MinMaxBounds.Ints.between(min, max))
+                .build();
+        return InventoryChangeTrigger.TriggerInstance.hasItems(predicate);
     }
 
     /**
