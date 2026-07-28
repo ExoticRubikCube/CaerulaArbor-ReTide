@@ -128,7 +128,7 @@ public class RecipesProvider extends RecipeProvider {
             case "food" -> RecipeCategory.FOOD;
             case "redstone" -> RecipeCategory.REDSTONE;
             case "tools" -> RecipeCategory.TOOLS;
-            case "combat" -> RecipeCategory.COMBAT;
+            case "combat", "equipment" -> RecipeCategory.COMBAT;
             case "brewing" -> RecipeCategory.BREWING;
             default -> throw new IllegalArgumentException("Unknown recipe category: " + category);
         };

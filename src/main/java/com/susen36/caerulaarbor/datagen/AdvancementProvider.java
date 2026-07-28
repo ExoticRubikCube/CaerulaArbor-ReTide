@@ -1,14 +1,9 @@
 package com.susen36.caerulaarbor.datagen;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.critereon.CriterionValidator;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -64,7 +59,8 @@ public class AdvancementProvider implements AdvancementSubProvider {
      * @return impossible 条件
      */
     private static Criterion impossible() {
-        return criterion("minecraft:impossible", new JsonObject());
+        var triggerId = ResourceLocation.withDefaultNamespace("impossible");
+        return new Criterion<>(lookupTrigger(triggerId), new ImpossibleTrigger.TriggerInstance());
     }
 
     /**
@@ -93,16 +89,10 @@ public class AdvancementProvider implements AdvancementSubProvider {
      * @return placed_block 条件
      */
     private static Criterion placedBlock(String block) {
-        var locationCondition = new JsonObject();
-        locationCondition.addProperty("condition", "minecraft:block_state_property");
-        locationCondition.addProperty("block", block);
-
-        var location = new JsonArray();
-        location.add(locationCondition);
-
-        var conditions = new JsonObject();
-        conditions.add("location", location);
-        return criterion("minecraft:placed_block", conditions);
+        var blockId = ResourceLocation.parse(block);
+        var blockValue = BuiltInRegistries.BLOCK.getOptional(blockId)
+                .orElseThrow(() -> new IllegalStateException("Unknown block: " + block));
+        return ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(blockValue);
     }
 
     /**
@@ -115,21 +105,17 @@ public class AdvancementProvider implements AdvancementSubProvider {
      * @return entity_hurt_player 条件
      */
     private static Criterion entityHurtPlayer(String sourceEntity, int minTaken, int maxTaken, boolean blocked) {
-        var taken = new JsonObject();
-        taken.addProperty("min", minTaken);
-        taken.addProperty("max", maxTaken);
-
-        var source = new JsonObject();
-        source.addProperty("type", sourceEntity);
-
-        var damage = new JsonObject();
-        damage.add("taken", taken);
-        damage.add("source_entity", source);
-        damage.addProperty("blocked", blocked);
-
-        var conditions = new JsonObject();
-        conditions.add("damage", damage);
-        return criterion("minecraft:entity_hurt_player", conditions);
+        var entityId = ResourceLocation.parse(sourceEntity);
+        var entityValue = BuiltInRegistries.ENTITY_TYPE.getOptional(entityId)
+                .orElseThrow(() -> new IllegalStateException("Unknown entity type: " + sourceEntity));
+        var sourceEntityPred = EntityPredicate.Builder.entity()
+                .entityType(EntityTypePredicate.of(entityValue))
+                .build();
+        var damageBuilder = DamagePredicate.Builder.damageInstance()
+                .takenDamage(MinMaxBounds.Doubles.between((double) minTaken, (double) maxTaken))
+                .sourceEntity(sourceEntityPred)
+                .blocked(Boolean.valueOf(blocked));
+        return EntityHurtPlayerTrigger.TriggerInstance.entityHurtPlayer(damageBuilder);
     }
 
     /**
@@ -139,13 +125,26 @@ public class AdvancementProvider implements AdvancementSubProvider {
      * @param conditions 条件 JSON
      * @return 进度条件
      */
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private static Criterion<?> criterion(String trigger, JsonObject conditions) {
-        JsonObject json = new JsonObject();
-        json.addProperty("trigger", trigger);
-        json.add("conditions", conditions);
-        return Criterion.CODEC.parse(JsonOps.INSTANCE, json)
-                .result()
-                .orElseThrow(() -> new IllegalStateException("Failed to parse criterion: " + trigger));
+        var triggerId = ResourceLocation.parse(trigger);
+        var triggerObj = lookupTrigger(triggerId);
+        var instance = new JsonCriterionTriggerInstance(triggerId, conditions);
+        return new Criterion(triggerObj, instance);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static CriterionTrigger lookupTrigger(ResourceLocation triggerId) {
+        var triggerRegistryName = ResourceLocation.withDefaultNamespace("trigger_type");
+        var triggerRegistry = (net.minecraft.core.Registry<CriterionTrigger>) BuiltInRegistries.REGISTRY.get(triggerRegistryName);
+        if (triggerRegistry == null) {
+            throw new IllegalStateException("Trigger registry not found for: " + triggerId + " (registry name: " + triggerRegistryName + ")");
+        }
+        var triggerObj = triggerRegistry.get(triggerId);
+        if (triggerObj == null) {
+            throw new IllegalStateException("Unknown trigger: " + triggerId);
+        }
+        return triggerObj;
     }
 
     /**

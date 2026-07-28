@@ -4,7 +4,7 @@ import com.susen36.caerulaarbor.init.CAPaintings;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.PaintingVariantTags;
 import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -26,19 +26,19 @@ public class PaintingVariantTagsProvider extends TagsProvider.RegistryTagsProvid
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         var placeable = tag(PaintingVariantTags.PLACEABLE);
-        placeable.add(paintingVariantKey(CAPaintings.PRESIOUS_DAYS));
-        placeable.add(paintingVariantKey(CAPaintings.AGE_OF_SILENCE));
-        placeable.add(paintingVariantKey(CAPaintings.PRICE_OF_PIECE));
-        placeable.add(paintingVariantKey(CAPaintings.CAERULA_STELLA));
+        placeable.addOptional(paintingVariantLocation(CAPaintings.PRESIOUS_DAYS));
+        placeable.addOptional(paintingVariantLocation(CAPaintings.AGE_OF_SILENCE));
+        placeable.addOptional(paintingVariantLocation(CAPaintings.PRICE_OF_PIECE));
+        placeable.addOptional(paintingVariantLocation(CAPaintings.CAERULA_STELLA));
     }
 
     /**
-     * 从注册对象创建画作变体 key
+     * 从注册对象创建画作变体 ID
      *
-     * @param variant 画作变体注册对象
-     * @return 画作变体 key
+     * @param variant 注册对象
+     * @return 画作变体 location
      */
-    private static ResourceKey<PaintingVariant> paintingVariantKey(DeferredHolder<PaintingVariant, ?> variant) {
-        return variant.getKey();
+    private static ResourceLocation paintingVariantLocation(DeferredHolder<PaintingVariant, ?> variant) {
+        return variant.getKey().location();
     }
 }
