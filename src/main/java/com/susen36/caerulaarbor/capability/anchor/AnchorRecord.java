@@ -90,8 +90,8 @@ public class AnchorRecord implements INBTSerializable<CompoundTag> {
             long section = sectionTag.getLong("section");
             List<BlockPos> posList = new ArrayList<>();
             ListTag positions = sectionTag.getList("positions", Tag.TAG_LONG);
-            for (int j = 0; j < positions.size(); j++) {
-                posList.add(BlockPos.of(((LongTag) positions.get(j)).getAsLong()));
+            for (Tag position : positions) {
+                posList.add(BlockPos.of(((LongTag) position).getAsLong()));
             }
             section2anchorPosMap.put(section, posList);
         }

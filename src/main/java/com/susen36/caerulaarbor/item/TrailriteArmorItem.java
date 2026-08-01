@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.api.entity.ElementalAttacker;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.client.gui.screens.Screen;
@@ -29,7 +31,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 
-public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnimationItem {
+public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnimationItem, ElementalAttacker {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
@@ -52,9 +54,6 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
 				.add(CAAttributes.SANITY_RESISTANCE,
 					new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_sanity_resistance"), 17.5, AttributeModifier.Operation.ADD_VALUE),
 					EquipmentSlotGroup.ARMOR)
-				.add(CAAttributes.SANITY_RATE,
-					new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_sanity_rate"), 0.75, AttributeModifier.Operation.ADD_VALUE),
-					EquipmentSlotGroup.ARMOR)
 				.add(CAAttributes.GENERAL_DEFENSE,
 					new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_general_defense"), 3.5, AttributeModifier.Operation.ADD_VALUE),
 					EquipmentSlotGroup.ARMOR)
@@ -62,6 +61,21 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
 					new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_magic_resistance"), 8.0, AttributeModifier.Operation.ADD_VALUE),
 					EquipmentSlotGroup.ARMOR)
 				.build()));
+	}
+
+	@Override
+	public AbstractEPCapability.EPType getElementalType() {
+		return AbstractEPCapability.EPType.NERVOUS;
+	}
+
+	@Override
+	public double getElementalRate() {
+		return 0.75;
+	}
+
+	@Override
+	public double getElementalInjuryDamage() {
+		return 0;
 	}
 
 	@Override

@@ -1,15 +1,17 @@
-
 package com.susen36.caerulaarbor.command;
 
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.elemental.base.ElementalInjurySource;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -49,7 +51,7 @@ public class CaerulaSanityCommand {
             info = Component.translatable("command.sanity.check.success").getString();
             info = info.replace("{name}", ent.getDisplayName().getString());
             info = info.replace("{num}",
-                    "" + Math.round(Math.pow(10, 1) * (ent instanceof LivingEntity livingEntity ? ModCapabilities.getSanityInjury(livingEntity).getValue() : 0)) / Math.pow(10, 1));
+                    "" + (ent instanceof LivingEntity livingEntity ? BabelAPI.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).getValue() : 0));
             {
                 final String success = info;
                 final boolean informAdmins = true;
@@ -76,11 +78,11 @@ public class CaerulaSanityCommand {
                     ent = entityiterator;
                     if (ent instanceof LivingEntity) {
                         num = num + 1;
-                        CompoundTag sanityData = ModCapabilities.getSanityInjury((LivingEntity) ent).serializeNBT(ent.registryAccess());
-                        sanityData.putDouble("SanityInjury", DoubleArgumentType.getDouble(arguments, "amount"));
-                        sanityData.putBoolean("SanityRecovering", false);
-                        sanityData.putBoolean("SanityLocked", false);
-                        ModCapabilities.getSanityInjury((LivingEntity) ent).deserializeNBT(ent.registryAccess(), sanityData);
+                        CompoundTag sanityData = BabelAPI.getEP((LivingEntity) ent).getEP(AbstractEPCapability.EPType.NERVOUS).serializeNBT(ent.registryAccess());
+                        sanityData.putInt("nervous.injury", Mth.floor(DoubleArgumentType.getDouble(arguments, "amount")));
+                        sanityData.putInt("nervous.leftReviveTick", 0);
+                        sanityData.putInt("nervous.immunityTick", 0);
+                        BabelAPI.getEP((LivingEntity) ent).getEP(AbstractEPCapability.EPType.NERVOUS).deserializeNBT(ent.registryAccess(), sanityData);
                         if (num == 1) {
                             info = Component.translatable("command.sanity.set.single").getString();
                             info = info.replace("{name}", ent.getDisplayName().getString());
@@ -118,9 +120,9 @@ public class CaerulaSanityCommand {
             try {
                 for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                     ent = entityiterator;
-                    if (!(ent == null) && ent instanceof LivingEntity) {
+                    if (ent instanceof LivingEntity) {
                         num = num + 1;
-                        ModCapabilities.getSanityInjury((LivingEntity) ent).hurt(DoubleArgumentType.getDouble(arguments, "amount"));
+                        BabelAPI.getEP((LivingEntity) ent).getEP(AbstractEPCapability.EPType.NERVOUS).hurt(ElementalInjurySource.fromNothing(), Mth.floor(DoubleArgumentType.getDouble(arguments, "amount")));
                         if (num == 1) {
                             info = Component.translatable("command.sanity.hurt.single").getString();
                             info = info.replace("{name}", ent.getDisplayName().getString());
@@ -158,9 +160,9 @@ public class CaerulaSanityCommand {
             try {
                 for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                     ent = entityiterator;
-                    if (!(ent == null) && ent instanceof LivingEntity) {
+                    if (ent instanceof LivingEntity) {
                         num = num + 1;
-                        ModCapabilities.getSanityInjury((LivingEntity) ent).heal(DoubleArgumentType.getDouble(arguments, "amount"));
+                        BabelAPI.getEP((LivingEntity) ent).getEP(AbstractEPCapability.EPType.NERVOUS).heal(Mth.floor(DoubleArgumentType.getDouble(arguments, "amount")));
                         if (num == 1) {
                             info = Component.translatable("command.sanity.heal.single").getString();
                             info = info.replace("{name}", ent.getDisplayName().getString());

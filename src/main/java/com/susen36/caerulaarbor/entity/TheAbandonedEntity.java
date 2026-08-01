@@ -34,7 +34,6 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -170,7 +169,7 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
             if (!(target == null) && target.isAlive() && distanceTo(target) < 7) {
                 if ((Entity) this instanceof TheAbandonedEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILLP, 100);
-                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + target.getBbHeight()), (target.getZ())));
+                this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + target.getBbHeight()), (target.getZ())));
                 if (this instanceof TheAbandonedEntity) {
                     this.setAnimation("animation.the_abandoned.shoot");
                 }
@@ -186,8 +185,8 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
                                     Level projectileLevel = shootFrom.level();
                                     if (!projectileLevel.isClientSide()) {
                                         LivingEntity livingEntity15 = TheAbandonedEntity.this;
-                                        AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), projectileLevel);
-                                        entityToSpawn.setOwner((Entity) TheAbandonedEntity.this);
+                                        AbandonedShootEntity entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), projectileLevel);
+                                        entityToSpawn.setOwner(TheAbandonedEntity.this);
                                         entityToSpawn.setBaseDamage((float) ((livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                                                 ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
                                                 : 0) * 0.85));

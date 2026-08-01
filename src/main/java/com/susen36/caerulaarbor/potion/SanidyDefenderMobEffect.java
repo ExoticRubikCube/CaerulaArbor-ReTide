@@ -1,16 +1,24 @@
-
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.caerulaarbor.init.CAAttributes;
-import net.minecraft.resources.ResourceLocation;
+import com.susen36.babel.api.entity.ElementalDefenseModifier;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.LivingEntity;
 
-public class SanidyDefenderMobEffect extends MobEffect {
+public class SanidyDefenderMobEffect extends MobEffect implements ElementalDefenseModifier {
     public SanidyDefenderMobEffect() {
         super(MobEffectCategory.NEUTRAL, -6697729);
-        this.addAttributeModifier(CAAttributes.SANITY_MODIFIER, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sanidy_defender_sanity_modifier"), -0.06, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+    }
+
+    @Override
+    public AbstractEPCapability.EPType getElementalDefenseType() {
+        return AbstractEPCapability.EPType.NERVOUS;
+    }
+
+    @Override
+    public double modifyElementalDefenseBase(LivingEntity entity, double modifier, int amplifier) {
+        return modifier * (1 - 0.06 * (amplifier + 1));
     }
 
     @Override

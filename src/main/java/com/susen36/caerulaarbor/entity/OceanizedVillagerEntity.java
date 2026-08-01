@@ -2,7 +2,6 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.entity.base.PolarMountRider;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -31,11 +30,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRider {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedVillagerEntity.class, EntityDataSerializers.BOOLEAN);
@@ -136,7 +132,6 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.SANITY_RATE, 6);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
         builder = builder.add(Attributes.MAX_HEALTH, 40);
         builder = builder.add(Attributes.ARMOR, 0);

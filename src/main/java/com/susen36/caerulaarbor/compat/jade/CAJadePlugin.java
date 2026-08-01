@@ -15,7 +15,6 @@ public class CAJadePlugin implements IWailaPlugin {
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
-        registration.registerEntityComponent(CASanityProvider.INSTANCE, LivingEntity.class);
         registration.registerEntityComponent(CAAttributeProvider.INSTANCE, LivingEntity.class);
         registration.registerEntityComponent(CAMissNumbProvider.INSTANCE, LivingEntity.class);
         registration.registerEntityComponent(CABarrierProvider.INSTANCE, LivingEntity.class);

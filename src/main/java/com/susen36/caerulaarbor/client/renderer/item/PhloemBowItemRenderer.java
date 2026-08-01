@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.client.renderer.item;
 
-import com.susen36.caerulaarbor.item.PhloemBowItem;
-import com.susen36.caerulaarbor.client.model.item.PhloemBowItemModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.client.model.item.PhloemBowItemModel;
+import com.susen36.caerulaarbor.item.PhloemBowItem;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -11,9 +11,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class PhloemBowItemRenderer extends GeoItemRenderer<PhloemBowItem> {
 	public PhloemBowItemRenderer() {
@@ -31,8 +28,6 @@ public class PhloemBowItemRenderer extends GeoItemRenderer<PhloemBowItem> {
 	protected RenderType renderType;
 	public ItemDisplayContext transformType;
 	protected PhloemBowItem animatable;
-	private final Set<String> hiddenBones = new HashSet<>();
-	private final Set<String> suppressedBones = new HashSet<>();
 
 	@Override
 	public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack matrixStack, MultiBufferSource bufferIn, int combinedLightIn, int p_239207_6_) {

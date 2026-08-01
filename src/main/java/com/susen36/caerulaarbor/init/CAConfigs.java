@@ -35,8 +35,6 @@ public class CAConfigs {
 	public static final ModConfigSpec.ConfigValue<Double> Y_OFFSET_LIGHT;
 	public static final ModConfigSpec.ConfigValue<Double> X_OFFSET_LIFE;
 	public static final ModConfigSpec.ConfigValue<Double> Y_OFFSET_LIFE;
-	public static final ModConfigSpec.ConfigValue<Double> X_OFFSET_ATTR;
-	public static final ModConfigSpec.ConfigValue<Double> Y_OFFSET_ATTR;
 	public static final ModConfigSpec.ConfigValue<Boolean> BOSSBAR;
 	public static final ModConfigSpec.ConfigValue<Boolean> EXTERNAL_ERROSION;
 	public static final ModConfigSpec.ConfigValue<Double> LP_LIMIT;
@@ -103,8 +101,6 @@ public class CAConfigs {
 		Y_OFFSET_LIGHT = BUILDER.comment("灯火渲染y轴偏移。正数值为向下偏移").define("lights_y_offset", (double) 0);
 		X_OFFSET_LIFE = BUILDER.comment("目标生命值渲染x轴偏移。正数值为向右偏移").define("life_point_x_offset", (double) 0);
 		Y_OFFSET_LIFE = BUILDER.comment("目标生命值渲染y轴偏移。正数值为向下偏移").define("life_point_y_offset", (double) 0);
-		X_OFFSET_ATTR = BUILDER.comment("模组属性渲染x轴偏移。正数值为向右偏移").define("attr_x_offset", (double) 0);
-		Y_OFFSET_ATTR = BUILDER.comment("模组属性渲染y轴偏移。正数值为向下偏移").define("attr_y_offset", (double) 0);
 		BOSSBAR = BUILDER.comment("渲染自定义Boss血条。").define("custom_boss_bar", true);
 		SANITY_PTC = BUILDER.comment("造成额外精神损伤时显示粒子效果。").define("sanity_particle", true);
 		X_OFFSET_SHIELD = BUILDER.comment("护盾值渲染x轴偏移，注意为相对目标生命UI的偏移").define("shield_x_offset", (double) 0);

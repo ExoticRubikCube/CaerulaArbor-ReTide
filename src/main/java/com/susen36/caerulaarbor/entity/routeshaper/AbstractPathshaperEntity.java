@@ -162,8 +162,11 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	/**
-	 * 婢跺嫮鎮婃繅鎴ｇ熅閼板懏婀版担鎾堕兇鐎圭偘缍嬮惃鍕╅崝銊ｂ偓浣哥窡閺堣桨绗屽璁抽閸斻劎鏁鹃妴?	 *
-	 * @param event GeckoLib 閸斻劎鏁鹃悩鑸碘偓?	 * @return 鐎电懓绨查幒褍鍩楅崳銊ф畱閹绢厽鏂侀悩鑸碘偓?	 */
+	 * 处理塑路者本体系实体的移动、待机与死亡动画。
+	 *
+	 * @param event GeckoLib 动画状态
+	 * @return 对应控制器的播放状态
+	 */
 	protected PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isVehicle() && !this.isAggressive() && !this.isSprinting()) {
@@ -187,8 +190,11 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	/**
-	 * 婢跺嫮鎮婃繅鎴ｇ熅閼板懏婀版担鎾堕兇鐎圭偘缍嬮惃鍕珮閺€缁樺皩閸戣濮╅悽姹団偓?	 *
-	 * @param event GeckoLib 閸斻劎鏁鹃悩鑸碘偓?	 * @return 鐎电懓绨查幒褍鍩楅崳銊ф畱閹绢厽鏂侀悩鑸碘偓?	 */
+	 * 处理塑路者本体系实体的普通挥击动画。
+	 *
+	 * @param event GeckoLib 动画状态
+	 * @return 对应控制器的播放状态
+	 */
 	protected PlayState attackingPredicate(AnimationState event) {
 		if (this.getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;

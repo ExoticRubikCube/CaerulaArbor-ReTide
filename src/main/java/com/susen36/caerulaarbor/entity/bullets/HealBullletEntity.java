@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
@@ -16,7 +17,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -31,9 +31,8 @@ import java.util.Comparator;
 import java.util.List;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
-public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
+public class HealBullletEntity extends BaseProjectile implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.AMETHYST_SHARD);
-
 	public HealBullletEntity(Level world) {
 		super(CAEntities.HEAL_BULLLET.get(), world);
 	}
@@ -43,28 +42,18 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public HealBullletEntity(EntityType<? extends HealBullletEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world, ItemStack.EMPTY, ItemStack.EMPTY);
+		super(type, world);
+		moveTo(x, y, z);
 	}
 
 	public HealBullletEntity(EntityType<? extends HealBullletEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world, ItemStack.EMPTY, ItemStack.EMPTY);
+		super(type, entity, world);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack getItem() {
 		return PROJECTILE_ITEM;
-	}
-
-	@Override
-	protected ItemStack getDefaultPickupItem() {
-		return PROJECTILE_ITEM;
-	}
-
-	@Override
-	protected void doPostHurtEffects(LivingEntity entity) {
-		super.doPostHurtEffects(entity);
-		entity.setArrowCount(entity.getArrowCount() - 1);
 	}
 
 	@Override
@@ -82,8 +71,6 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
                 if (entity.isAlive()) {
                     double atk;
                     double count = 0;
-                    double curH = 0;
-                    double maxH = 0;
                     atk = entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                     {
                         final Vec3 center = new Vec3(x, y, z);
@@ -127,7 +114,6 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 		HealBullletEntity entityarrow = new HealBullletEntity(CAEntities.HEAL_BULLLET.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
-		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
 		world.addFreshEntity(entityarrow);
 		return entityarrow;
@@ -142,7 +128,6 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 0.1f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(0);
-		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
 		return entityarrow;
 	}

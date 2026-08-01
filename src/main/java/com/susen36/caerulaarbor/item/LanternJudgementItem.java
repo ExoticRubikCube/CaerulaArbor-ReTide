@@ -1,6 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -131,7 +132,7 @@ public class LanternJudgementItem extends Item {
             for (Entity entityiterator : entfound) {
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))) && entity.distanceTo(entityiterator) <= 18) {
                     if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())
-                        entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 200, 0, false, false));
+                        entity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 200, 0, false, false));
                     if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())
                         entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE, 400, 0, false, false));
                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE, entity), (float) Math.max(((Entity) entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.15,
@@ -158,7 +159,7 @@ public class LanternJudgementItem extends Item {
             if ((Entity) entity instanceof Player player)
                 player.getCooldowns().addCooldown(itemstack.getItem(), 400);
         }
-        entity.removeEffect(CAMobEffects.DIZZY);
+        entity.removeEffect(BabelMobEffects.DIZZY);
         return retval;
 	}
 

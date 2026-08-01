@@ -87,7 +87,7 @@ public class BombTrailerBlock extends Block {
                 for (int index2 = 0; index2 < 21; index2++) {
                     dy = -2;
                     for (int index3 = 0; index3 < 5; index3++) {
-                        target = (((LevelAccessor) world).getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
+                        target = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
                         if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "blow_up")))) {
                             world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
                         }
@@ -97,7 +97,7 @@ public class BombTrailerBlock extends Block {
                 }
                 dx = dx + 1;
             }
-            ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.IRON_BLOCK.defaultBlockState(), 3);
+            world.setBlock(BlockPos.containing(x, y, z), Blocks.IRON_BLOCK.defaultBlockState(), 3);
         }
 	}
 }

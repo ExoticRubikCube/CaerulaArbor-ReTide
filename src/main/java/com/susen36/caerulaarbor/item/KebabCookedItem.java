@@ -1,7 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -30,7 +31,7 @@ public class KebabCookedItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(Items.STICK);
 		super.finishUsingItem(itemstack, world, entity);
-		ModCapabilities.getSanityInjury(entity).heal(50);
+		BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(50);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

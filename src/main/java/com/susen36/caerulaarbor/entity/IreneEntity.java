@@ -293,7 +293,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                         if (!(target == null) && target.isAlive()) {
 				return InteractionResult.PASS;
 			}
-			if (!((LevelAccessor) world).isClientSide()) {
+			if (!world.isClientSide()) {
 				if ((LevelAccessor) world instanceof Level level) {
 					level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_INTERACT.get(), SoundSource.NEUTRAL, 3, 1);
 				}

@@ -96,7 +96,7 @@ public class EnderinaCoreBlock extends Block {
                         BlockPos blockPos = curPos;
                         BlockState bs = blockstate;
                         if (bs.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty booleanProp)
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, true), 3);
+                            world.setBlock(pos, bs.setValue(booleanProp, true), 3);
                     }
                     if ((LevelAccessor) world instanceof Level level) {
                             level.playSound(null, curPos, SoundEvents.ENDER_DRAGON_GROWL, SoundSource.BLOCKS, 2, 1);
@@ -129,7 +129,7 @@ public class EnderinaCoreBlock extends Block {
                 if ((LevelAccessor) world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.OCEANIZED_ENDERINA.get().spawn(level, BlockPos.containing(x, (double) y + 1, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
                 if ((LevelAccessor) world instanceof Level level) {
@@ -141,7 +141,7 @@ public class EnderinaCoreBlock extends Block {
                     BlockPos blockPos = curPos;
                     BlockState bs = blockstate;
                     if (bs.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty booleanProp)
-                        ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                        world.setBlock(pos, bs.setValue(booleanProp, false), 3);
                 }
             }
         }

@@ -107,9 +107,9 @@ public class AnchorMediumBlock extends Block {
             double y = pos.getY();
             double z = pos.getZ();
             if (!(blockstate.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty getbp1 && blockstate.getValue(getbp1))) {
-                if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
+                if ((world.getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
                     public Direction getDirection(BlockPos pos1) {
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos1);
+                        BlockState bs = world.getBlockState(pos1);
                         Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
                         if (property != null && bs.getValue(property) instanceof Direction dir)
                             return dir;
@@ -127,9 +127,9 @@ public class AnchorMediumBlock extends Block {
                         prop = bs.getBlock().getStateDefinition().getProperty("axis");
                         return prop instanceof EnumProperty ep && ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) bs.getValue(ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
                     }
-                }.getDirection(blockstate)) && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == CABlocks.ANCHOR_LOWER.get() && (new Object() {
+                }.getDirection(blockstate)) && (world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == CABlocks.ANCHOR_LOWER.get() && (new Object() {
                     public Direction getDirection(BlockPos pos1) {
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos1);
+                        BlockState bs = world.getBlockState(pos1);
                         Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
                         if (property != null && bs.getValue(property) instanceof Direction dir)
                             return dir;
@@ -184,13 +184,13 @@ public class AnchorMediumBlock extends Block {
             {
                 int value = 1;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                BlockState bs = world.getBlockState(blockPos);
                 if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                    world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
             }
-            if (!((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
+            if (!((world.getBlockState(BlockPos.containing(x, (double) y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
                 public Direction getDirection(BlockPos pos1) {
-                    BlockState bs = ((LevelAccessor) world).getBlockState(pos1);
+                    BlockState bs = world.getBlockState(pos1);
                     Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
                     if (property != null && bs.getValue(property) instanceof Direction dir)
                         return dir;
@@ -208,9 +208,9 @@ public class AnchorMediumBlock extends Block {
                     prop = bs.getBlock().getStateDefinition().getProperty("axis");
                     return prop instanceof EnumProperty ep && ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) bs.getValue(ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
                 }
-            }.getDirection(blockstate)) && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CABlocks.ANCHOR_LOWER.get() && (new Object() {
+            }.getDirection(blockstate)) && (world.getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CABlocks.ANCHOR_LOWER.get() && (new Object() {
                 public Direction getDirection(BlockPos pos1) {
-                    BlockState bs = ((LevelAccessor) world).getBlockState(pos1);
+                    BlockState bs = world.getBlockState(pos1);
                     Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
                     if (property != null && bs.getValue(property) instanceof Direction dir)
                         return dir;
@@ -232,15 +232,15 @@ public class AnchorMediumBlock extends Block {
                 {
                     int value = 0;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
-                    BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                    BlockState bs = world.getBlockState(blockPos);
                     if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                        world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
                 }
                 {
                     BlockPos blockPos = BlockPos.containing(x, y, z);
-                    BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                    BlockState bs = world.getBlockState(blockPos);
                     if (bs.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty booleanProp)
-                        ((LevelAccessor) world).setBlock(blockPos, bs.setValue(booleanProp, false), 3);
+                        world.setBlock(blockPos, bs.setValue(booleanProp, false), 3);
                 }
                 if ((LevelAccessor) world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_DEACTIVATE, SoundSource.NEUTRAL, 2, 1);
@@ -261,7 +261,7 @@ public class AnchorMediumBlock extends Block {
             for (int index1 = 0; index1 < 73; index1++) {
                 dz = -36;
                 for (int index2 = 0; index2 < 73; index2++) {
-                    target = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, (double) y + dy, (double) z + dz)));
+                    target = (world.getBlockState(BlockPos.containing((double) x + dx, (double) y + dy, (double) z + dz)));
                     if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail")))) {
                         attr = target.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty getip30 ? target.getValue(getip30) : -1;
                         if (attr < 61) {
@@ -271,9 +271,9 @@ public class AnchorMediumBlock extends Block {
                             {
                                 int value = (int) attr;
                                 BlockPos blockPos = BlockPos.containing((double) x + dx, (double) y + dy, (double) z + dz);
-                                BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                                BlockState bs = world.getBlockState(blockPos);
                                 if (bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                                    ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                                    world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
                             }
                         }
                     }
@@ -287,9 +287,9 @@ public class AnchorMediumBlock extends Block {
             {
                 int value = (int) (dy + 22);
                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                BlockState bs = world.getBlockState(blockPos);
                 if (bs.getBlock().getStateDefinition().getProperty("detect_y") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                    world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
             }
             for (Entity entityiterator : world.getEntities(null, new AABB(((double) x + 37), ((double) y + 22), ((double) z + 37), ((double) x - 36), ((double) y - 21), ((double) z - 36)))) {
                 if (!(entityiterator instanceof LivingEntity livEnt33 && livEnt33.hasEffect(CAMobEffects.POWER_OF_ANCHOR))) {
@@ -301,9 +301,9 @@ public class AnchorMediumBlock extends Block {
             {
                 int value = 0;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                BlockState bs = world.getBlockState(blockPos);
                 if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                    world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
             }
         }
         world.scheduleTick(pos, this, 5);
@@ -343,20 +343,20 @@ public class AnchorMediumBlock extends Block {
                     {
                         int value = 0;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                        BlockState bs = world.getBlockState(blockPos);
                         if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
                     }
                     {
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                        BlockState bs = world.getBlockState(blockPos);
                         if (bs.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty booleanProp)
-                            ((LevelAccessor) world).setBlock(blockPos, bs.setValue(booleanProp, false), 3);
+                            world.setBlock(blockPos, bs.setValue(booleanProp, false), 3);
                     }
                     finished = true;
-                } else if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
+                } else if ((world.getBlockState(BlockPos.containing(x, (double) y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
                     public Direction getDirection(BlockPos pos1) {
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos1);
+                        BlockState bs = world.getBlockState(pos1);
                         Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
                         if (property != null && bs.getValue(property) instanceof Direction dir)
                             return dir;
@@ -376,9 +376,9 @@ public class AnchorMediumBlock extends Block {
                                 ? Direction.fromAxisAndDirection((Direction.Axis) bs.getValue(ep), Direction.AxisDirection.POSITIVE)
                                 : Direction.NORTH;
                     }
-                }.getDirection(blockstate)) && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CABlocks.ANCHOR_LOWER.get() && (new Object() {
+                }.getDirection(blockstate)) && (world.getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CABlocks.ANCHOR_LOWER.get() && (new Object() {
                     public Direction getDirection(BlockPos pos1) {
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos1);
+                        BlockState bs = world.getBlockState(pos1);
                         Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
                         if (property != null && bs.getValue(property) instanceof Direction dir)
                             return dir;
@@ -405,15 +405,15 @@ public class AnchorMediumBlock extends Block {
                     {
                         int value = 1;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                        BlockState bs = world.getBlockState(blockPos);
                         if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
                     }
                     {
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                        BlockState bs = world.getBlockState(blockPos);
                         if (bs.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty booleanProp)
-                            ((LevelAccessor) world).setBlock(blockPos, bs.setValue(booleanProp, true), 3);
+                            world.setBlock(blockPos, bs.setValue(booleanProp, true), 3);
                     }
                     finished = true;
                 } else {

@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -137,7 +138,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
             if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
                 this.getAttribute(CAAttributes.MISSRATE).setBaseValue(0);
         }
-        if ((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(CAMobEffects.DIZZY) || (Entity) this instanceof LivingEntity livEnt10 && livEnt10.hasEffect(CAMobEffects.FROZEN)
+        if ((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(BabelMobEffects.DIZZY) || (Entity) this instanceof LivingEntity livEnt10 && livEnt10.hasEffect(CAMobEffects.FROZEN)
                 || (Entity) this instanceof LivingEntity livEnt11 && livEnt11.hasEffect(MobEffects.LEVITATION) || (Entity) this instanceof LivingEntity livEnt12 && livEnt12.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
                 || (Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(MobEffects.SLOW_FALLING)) {
             if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
@@ -164,7 +165,6 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
-		builder = builder.add(CAAttributes.SANITY_RATE, 9);
 		return builder;
 	}
 

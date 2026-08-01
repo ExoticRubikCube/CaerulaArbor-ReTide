@@ -1,13 +1,11 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.init.CAAttributes;
+import com.susen36.babel.api.entity.ElementalAttacker;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -16,7 +14,7 @@ import net.neoforged.neoforge.common.SimpleTier;
 import java.util.List;
 
 
-public class ComplexChitinSwordItem extends SwordItem {
+public class ComplexChitinSwordItem extends SwordItem implements ElementalAttacker {
 	private static final Tier TIER = new SimpleTier(
 			BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
 			3374,
@@ -36,11 +34,22 @@ public class ComplexChitinSwordItem extends SwordItem {
 		for (ItemAttributeModifiers.Entry entry : base.modifiers()) {
 			builder.add(entry.attribute(), entry.modifier(), entry.slot());
 		}
-		builder.add(CAAttributes.SANITY_INJURY_DAMAGE,
-				new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerulaarbor", "complex_chitin_sword_sanity_injury_damage"),
-						120.0D, AttributeModifier.Operation.ADD_VALUE),
-				EquipmentSlotGroup.MAINHAND);
 		return builder.build();
+	}
+
+	@Override
+	public AbstractEPCapability.EPType getElementalType() {
+		return AbstractEPCapability.EPType.NERVOUS;
+	}
+
+	@Override
+	public double getElementalRate() {
+		return 0.0D;
+	}
+
+	@Override
+	public double getElementalInjuryDamage() {
+		return 120.0D;
 	}
 
 	@Override

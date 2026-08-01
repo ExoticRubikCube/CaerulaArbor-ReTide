@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.client.renderer.block.listener;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.client.model.entity.ModelSealeatherChitinArmor;
 import com.susen36.caerulaarbor.client.renderer.block.*;
@@ -30,6 +31,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 import java.util.Collections;
@@ -102,7 +104,7 @@ public class ClientListener {
 			CAMobEffects.FLESHDEFORMITY.get(),
 			CAMobEffects.BOOST_OF_SILENCE.get(),
 			CAMobEffects.STRENGTH_OF_CROWD.get(),
-			CAMobEffects.LESS_ARMOR.get(),
+			BabelMobEffects.LESS_ARMOR.get(),
 			CAMobEffects.ANGER_OF_TIDE.get(),
 			CAMobEffects.DEDUCT_ONE_SANITY.get(),
 			CAMobEffects.FIRST_TELLER_SKILL.get(),
@@ -128,7 +130,7 @@ public class ClientListener {
 			CAMobEffects.REDUCE_SANITY_MODIFIER.get(),
 			CAMobEffects.ADD_MISS_RATE.get(),
 			CAMobEffects.ADD_DAMAGE_TINY.get(),
-			CAMobEffects.UNDER_BREAK.get(),
+			BabelMobEffects.UNDER_BREAK.get(),
 			CAMobEffects.SANITY_HEAL.get()
 		};
 		for (MobEffect effect : hiddenEffects) {
@@ -139,7 +141,7 @@ public class ClientListener {
 			private GeoArmorRenderer<?> renderer;
 
 			@Override
-			public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+			public HumanoidModel<?> getHumanoidArmorModel(@NotNull LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
 				if (this.renderer == null)
 					this.renderer = new ChitinComplexArmorRenderer();
 				this.renderer.prepForRender(livingEntity, itemStack, equipmentSlot, original);
@@ -180,8 +182,8 @@ public class ClientListener {
 
 		event.registerItem(new IClientItemExtensions() {
 			@Override
-			public HumanoidModel getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel defaultModel) {
-				HumanoidModel armorModel = new HumanoidModel(new ModelPart(Collections.emptyList(),
+			public HumanoidModel<?> getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel defaultModel) {
+				HumanoidModel<?> armorModel = new HumanoidModel(new ModelPart(Collections.emptyList(),
 						Map.of("left_leg", new ModelSealeatherChitinArmor(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSealeatherChitinArmor.LAYER_LOCATION)).legL, "right_leg",
 							new ModelSealeatherChitinArmor(Minecraft.getInstance().getEntityModels().bakeLayer(ModelSealeatherChitinArmor.LAYER_LOCATION)).legR, "head", new ModelPart(Collections.emptyList(), Collections.emptyMap()),
 								"hat", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "body", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "right_arm",

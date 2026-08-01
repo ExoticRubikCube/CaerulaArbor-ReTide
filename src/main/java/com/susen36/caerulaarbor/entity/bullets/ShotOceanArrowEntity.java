@@ -21,24 +21,28 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
+
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(CAItems.OCEAN_ARROW.get());
 
-	public ShotOceanArrowEntity(Level world) {
-		super(CAEntities.SHOT_OCEAN_ARROW.get(), world);
-	}
-
-	public ShotOceanArrowEntity(EntityType<? extends ShotOceanArrowEntity> type, Level world) {
-		super(type, world);
-	}
-
-	public ShotOceanArrowEntity(EntityType<? extends ShotOceanArrowEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world, ItemStack.EMPTY, ItemStack.EMPTY);
+	public ShotOceanArrowEntity(EntityType<? extends ShotOceanArrowEntity> entityType, Level level) {
+		super(entityType, level);
 	}
 
 	public ShotOceanArrowEntity(EntityType<? extends ShotOceanArrowEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world, ItemStack.EMPTY, ItemStack.EMPTY);
+		super(type, world);
+		setOwner(entity);
+		setPos(entity.getX(), entity.getY() - 0.1, entity.getZ());
+	}
+
+	public ShotOceanArrowEntity(Level level, double x, double y, double z, ItemStack pickupItemStack, @Nullable ItemStack firedFromWeapon) {
+		super(CAEntities.SHOT_OCEAN_ARROW.get(), x, y, z, level, pickupItemStack, firedFromWeapon);
+	}
+
+	public ShotOceanArrowEntity(Level level, LivingEntity owner, ItemStack pickupItemStack, @Nullable ItemStack firedFromWeapon) {
+		super(CAEntities.SHOT_OCEAN_ARROW.get(), owner, level, pickupItemStack, firedFromWeapon);
 	}
 
 	@Override

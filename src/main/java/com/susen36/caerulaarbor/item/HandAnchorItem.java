@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.babel.init.BabelMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -33,7 +33,7 @@ public class HandAnchorItem extends PickaxeItem {
 		boolean retval = super.hurtEnemy(itemstack, living, sourceentity);
         if (Math.random() < 0.15) {
             if (!living.level().isClientSide())
-				living.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 40, 0, false, false));
+				living.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 40, 0, false, false));
         }
         return retval;
 	}

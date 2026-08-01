@@ -7,8 +7,6 @@ import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
@@ -31,7 +29,7 @@ public class FrozenSurfaceOverlay {
 		RenderSystem.setShaderColor(1, 1, 1, 1);
         boolean result = false;
         if (entity != null) {
-            result = (Entity) entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.FROZEN);
+            result = entity.hasEffect(CAMobEffects.FROZEN);
         }
         if (result) {
 			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/frozensurface.png"), 0, 0, 0, 0, w, h, w, h);

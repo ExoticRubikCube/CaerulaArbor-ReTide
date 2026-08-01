@@ -1,6 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CAMobEffects;
@@ -46,7 +47,7 @@ public class EnchantedTrailGoldenAppleItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 3));
 			entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3600, 0));
 			entity.addEffect(new MobEffectInstance(CAMobEffects.SANITY_IMMUE, 2400, 0));
-			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 3600, 1));
+			entity.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 3600, 1));
 		}
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.8, z, 48, 0.5, 1, 0.5, 0.1);

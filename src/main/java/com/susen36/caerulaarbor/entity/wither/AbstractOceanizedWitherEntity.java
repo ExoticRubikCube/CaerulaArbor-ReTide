@@ -1,5 +1,8 @@
 package com.susen36.caerulaarbor.entity.wither;
 
+import com.susen36.babel.api.entity.ElementalAttacker;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
@@ -47,7 +50,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
+public abstract class AbstractOceanizedWitherEntity extends SeaMonster implements ElementalAttacker {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.INT);
@@ -77,6 +80,21 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
         builder.define(DATA_SKILLP, this.getInitialSkillp());
         builder.define(DATA_DURATION, this.getInitialDuration());
         builder.define(DATA_SHELLED, false);
+    }
+
+    @Override
+    public AbstractEPCapability.EPType getElementalType() {
+        return AbstractEPCapability.EPType.NECROSIS;
+    }
+
+    @Override
+    public double getElementalRate() {
+        return 0.45D;
+    }
+
+    @Override
+    public double getElementalInjuryDamage() {
+        return 15;
     }
 
     protected abstract int getInitialSkillp();
@@ -321,7 +339,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
             this.tickSubclassBaseTick(world, x, y, z);
             if (this.tickCount % 20 == 0) {
                 this.removeEffect(MobEffects.WITHER);
-                this.removeEffect(CAMobEffects.DIZZY);
+                this.removeEffect(BabelMobEffects.DIZZY);
 
                 Vec3 center = new Vec3(x, y, z);
                 List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(64 / 2D), entity -> true).stream().sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center)))

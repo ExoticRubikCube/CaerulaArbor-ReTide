@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -23,6 +25,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -48,6 +51,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
+import com.susen36.babel.init.BabelAttributes;
 
 import java.util.Comparator;
 import java.util.List;
@@ -193,7 +197,12 @@ public class TideDeathrepellerEntity extends SeaMonster {
                                                     CADamageTypes.source(world, CADamageTypes.REPELLER_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                             * 2.5));
                                             for (int index0 = 0; index0 < 2; index0++) {
-                                                EntityUtils.giveLessArmor(entityiterator, 11);
+                                                BabelAPI.hurtElemental(
+                                                        entityiterator,
+                                                        AbstractEPCapability.EPType.CORROSION,
+                                                        this,
+                                                        Mth.floor(this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 2.5D)
+                                                );
                                             }
                                         }
                                     }
@@ -383,7 +392,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 8);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.65);
-        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         return builder;
     }
 

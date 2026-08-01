@@ -26,3 +26,4 @@ run-data
 # reference files (local only)
 reference
 repo
+/libs/

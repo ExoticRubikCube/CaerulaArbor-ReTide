@@ -165,7 +165,7 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
                         if (this instanceof CorrectinalPhalaxVanguardEntity) {
                             this.setAnimation("animation.correctional_phalanx _vanguard.swing");
                         }
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY()), (target.getZ())));
+                        this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY()), (target.getZ())));
                         CaerulaArborMod.queueServerWork(11, () -> {
                             if (this.isAlive()) {
                                 vanguardSwing(1.8);

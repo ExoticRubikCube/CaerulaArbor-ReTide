@@ -1,6 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.network.chat.Component;
@@ -30,7 +32,7 @@ public class FruitJellyItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		ModCapabilities.getSanityInjury(entity).heal(150);
+		BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(150);
 		if (entity instanceof Player) {
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 			capability.player_light = Math.min(capability.player_light + 16, 100.0);

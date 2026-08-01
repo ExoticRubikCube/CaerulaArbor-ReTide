@@ -191,23 +191,23 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
         }
         if (valid) {
             if (!((Entity) entity instanceof Player plrCldCheck32 && plrCldCheck32.getCooldowns().isOnCooldown(itemstack.getItem()))) {
-                if (((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || isCreativeMode((Entity) entity)) {
+                if (((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || isCreativeMode(entity)) {
                     if (entity != null) {
                         CaerulaArborMod.queueServerWork(24, () -> {
-                            if ((((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || isCreativeMode((Entity) entity) || EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.METABOLISM), itemstack) != 0)
+                            if ((((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || isCreativeMode(entity) || EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.METABOLISM), itemstack) != 0)
                                     && (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()
                                     || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem())) {
                                 if ((LevelAccessor) world instanceof Level level1) {
                                         level1.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, (float) 1.8, 1);
                                 }
-                                if (!isCreativeMode((Entity) entity)) {
+                                if (!isCreativeMode(entity)) {
                                     if (world instanceof ServerLevel _level) {
                                         itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                                     }
                                     if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.METABOLISM), itemstack) != 0) {
                                         spawnArrow(entity, itemstack);
                                     } else {
-                                        if (!isCreativeMode((Entity) entity)) {
+                                        if (!isCreativeMode(entity)) {
                                             if ((Entity) entity instanceof Player player1) {
                                                 ItemStack stktoremove = new ItemStack(CAItems.OCEAN_ARROW.get());
                                                 player1.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player1.inventoryMenu.getCraftSlots());

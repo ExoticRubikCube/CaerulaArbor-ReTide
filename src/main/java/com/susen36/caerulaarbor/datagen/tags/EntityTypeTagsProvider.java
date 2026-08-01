@@ -45,12 +45,12 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
     private static final TagKey<EntityType<?>> SEA_FRIEND = caEntityTypeTag("sea_friend");
     private static final TagKey<EntityType<?>> SKIP_MIGRATION = caEntityTypeTag("skip_migration");
     private static final TagKey<EntityType<?>> WARRIORS = caEntityTypeTag("warriors");
-    private static final TagKey<EntityType<?>> WITH_LOW_SANITY_MODIFIER = caEntityTypeTag("with_low_sanity_modifier");
-    private static final TagKey<EntityType<?>> WITH_LOWER_SANITY_MODIFIER = caEntityTypeTag("with_lower_sanity_modifier");
-    private static final TagKey<EntityType<?>> WITH_LOWEST_SANITY_MODIFIER = caEntityTypeTag("with_lowest_sanity_modifier");
-    private static final TagKey<EntityType<?>> WITH_LOWEST_SMALLER_SANITY_MODIFIER = caEntityTypeTag("with_lowest_smaller_sanity_modifier");
-    private static final TagKey<EntityType<?>> WITH_LOWEST_SMALLEST_SANITY_MODIFIER = caEntityTypeTag("with_lowest_smallest_sanity_modifier");
-    private static final TagKey<EntityType<?>> WITH_ZERO_SANITY_MODIFIER = caEntityTypeTag("with_zero_sanity_modifier");
+    private static final TagKey<EntityType<?>> WITH_LOW_ELEMENTAL_MODIFIER = caEntityTypeTag("with_low_elemental_modifier");
+    private static final TagKey<EntityType<?>> WITH_LOWER_ELEMENTAL_MODIFIER = caEntityTypeTag("with_lower_elemental_modifier");
+    private static final TagKey<EntityType<?>> WITH_LOWEST_ELEMENTAL_MODIFIER = caEntityTypeTag("with_lowest_elemental_modifier");
+    private static final TagKey<EntityType<?>> WITH_LOWEST_SMALLER_ELEMENTAL_MODIFIER = caEntityTypeTag("with_lowest_smaller_elemental_modifier");
+    private static final TagKey<EntityType<?>> WITH_LOWEST_SMALLEST_ELEMENTAL_MODIFIER = caEntityTypeTag("with_lowest_smallest_elemental_modifier");
+    private static final TagKey<EntityType<?>> WITH_ZERO_ELEMENTAL_MODIFIER = caEntityTypeTag("with_zero_elemental_modifier");
 
     private static final TagKey<EntityType<?>> FORGE_BOSSES = forgeEntityTypeTag("bosses");
     private static final TagKey<EntityType<?>> FORGE_NETHER_MOBS = forgeEntityTypeTag("nether_mobs");
@@ -91,13 +91,13 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
         addEntityTypesToTag(SEA_FRIEND, EntityType.GLOW_SQUID, EntityType.SQUID, EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN, EntityType.AXOLOTL, EntityType.PANDA, EntityType.DOLPHIN, EntityType.TADPOLE, EntityType.PUFFERFISH, EntityType.CREEPER, EntityType.GHAST, EntityType.TURTLE, EntityType.TROPICAL_FISH, EntityType.SALMON, EntityType.COD, CAEntities.APOCATA, CAEntities.LITTLE_HELPER, CAEntities.AL_1_S_HELPER, EntityType.ARMOR_STAND, CAEntities.MOIST_DRAGON_BREATH, CAEntities.SPIKE_CHEST);
         addEntityTypesToTag(SKIP_MIGRATION, CAEntities.OCEANIZED_WITHER, CAEntities.TIDE_CHIMERA, CAEntities.MOIST_DRAGON_BREATH, CAEntities.MOIST_ENDER_CRYSTAL);
         addEntityTypesToTag(WARRIORS, CAEntities.JUNIOR_WARRIOR_PRIEST, CAEntities.WARRIOR_PRIEST);
-        addTagsToTag(WITH_LOW_SANITY_MODIFIER, INQUISITION);
-        addTagsToTag(WITH_LOWER_SANITY_MODIFIER, OCEANOFFSPRING);
-        addEntityTypesToTag(WITH_LOWEST_SANITY_MODIFIER, EntityType.WARDEN);
-        addTagsToTag(WITH_LOWEST_SANITY_MODIFIER, OCEANELITE);
-        addTagsToTag(WITH_LOWEST_SMALLER_SANITY_MODIFIER, FORGE_BOSSES, HUNTERS);
-        addEntityTypesToTag(WITH_LOWEST_SMALLEST_SANITY_MODIFIER, EntityType.IRON_GOLEM, CAEntities.CHITIN_GOLEM, CAEntities.THE_LAST_KNIGHT, CAEntities.LAST_KNIGHT_AND_HORSE, CAEntities.COMPLEX_CHITIN_GOLEM, CAEntities.FLAMARINE_STATUE, CAEntities.FLAMARINE_GOLEM);
-        addEntityTypesToTag(WITH_ZERO_SANITY_MODIFIER, CAEntities.GUNMU, CAEntities.AL_1_S_HELPER, CAEntities.LITTLE_HELPER, CAEntities.IZUMIK, CAEntities.QUNYOU_WANTED_ISHARMLA, CAEntities.ISHARMLA_TEAR);
+        addTagsToTag(WITH_LOW_ELEMENTAL_MODIFIER, INQUISITION);
+        addTagsToTag(WITH_LOWER_ELEMENTAL_MODIFIER, OCEANOFFSPRING);
+        addEntityTypesToTag(WITH_LOWEST_ELEMENTAL_MODIFIER, EntityType.WARDEN);
+        addTagsToTag(WITH_LOWEST_ELEMENTAL_MODIFIER, OCEANELITE);
+        addTagsToTag(WITH_LOWEST_SMALLER_ELEMENTAL_MODIFIER, FORGE_BOSSES, HUNTERS);
+        addEntityTypesToTag(WITH_LOWEST_SMALLEST_ELEMENTAL_MODIFIER, EntityType.IRON_GOLEM, CAEntities.CHITIN_GOLEM, CAEntities.THE_LAST_KNIGHT, CAEntities.LAST_KNIGHT_AND_HORSE, CAEntities.COMPLEX_CHITIN_GOLEM, CAEntities.FLAMARINE_STATUE, CAEntities.FLAMARINE_GOLEM);
+        addEntityTypesToTag(WITH_ZERO_ELEMENTAL_MODIFIER, CAEntities.GUNMU, CAEntities.AL_1_S_HELPER, CAEntities.LITTLE_HELPER, CAEntities.IZUMIK, CAEntities.QUNYOU_WANTED_ISHARMLA, CAEntities.ISHARMLA_TEAR);
 
         addEntityTypesToTag(FORGE_BOSSES, CAEntities.CHITIN_GOLEM, CAEntities.COMPLEX_CHITIN_GOLEM, CAEntities.THE_LAST_KNIGHT, CAEntities.LAST_KNIGHT_AND_HORSE, CAEntities.FLAMARINE_GOLEM);
         addTagsToTag(FORGE_BOSSES, BOSSOFFSPRING, HUNTERS);

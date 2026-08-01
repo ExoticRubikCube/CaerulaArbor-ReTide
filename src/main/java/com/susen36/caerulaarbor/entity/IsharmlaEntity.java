@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
@@ -643,8 +644,8 @@ public class IsharmlaEntity extends SeaMonster {
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
 		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
-		builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.01);
-		builder = builder.add(CAAttributes.MAX_SANITY, 2000);
+		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
+		builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
 		return builder;
 	}
 
@@ -857,7 +858,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 		for (IsharmlaTearEntity entityiterator : nearbyEntities) {
 			entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE),
-					114514);//TODO 濂借嚟鐨勪激瀹?
+					114514);//TODO 好臭的伤害
 		}
 	}
 

@@ -112,15 +112,15 @@ public class UnambiguousDirectionItem extends Item {
             }
             Level projectileLevel = entity.level();
             if (!projectileLevel.isClientSide()) {
-                AbstractArrow entityToSpawn = new AnchorFlyEntity(CAEntities.ANCHOR_FLY.get(), projectileLevel);
+                AnchorFlyEntity entityToSpawn = new AnchorFlyEntity(CAEntities.ANCHOR_FLY.get(), projectileLevel);
                 entityToSpawn.setOwner(entity);
                 entityToSpawn.setBaseDamage((float) ((Entity) entity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 entityToSpawn.setSilent(true);
-                entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
                 entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 2.4, 0);
                 projectileLevel.addFreshEntity(entityToSpawn);
             }
+			//TODO 需要去mcr化
             if (!(new Object() {
                 public boolean checkGamemode(Entity ent) {
                     if (ent instanceof ServerPlayer serverPlayer) {

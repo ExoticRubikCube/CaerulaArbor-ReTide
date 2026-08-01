@@ -2,8 +2,8 @@ package com.susen36.caerulaarbor.client.overlay;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -40,7 +40,7 @@ public class PalsyOverlay {
 		RenderSystem.setShaderColor(1, 1, 1, 1);
         boolean result = false;
         if (entity != null) {
-            result = ((Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.NUMB) ? livingEntity0.getAttribute(CAAttributes.NUMB).getBaseValue() : 0) > 0;
+            result = ((Entity) entity instanceof LivingEntity livingEntity0) && livingEntity0.hasEffect(BabelMobEffects.NUMB);
         }
         if (result) {
 			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/palsy.png"), w / 2 + 5, h / 2 + -8, 0, 0, 16, 16, 16, 16);

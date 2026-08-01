@@ -1,10 +1,16 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CAConfigs;
+import com.susen36.caerulaarbor.init.CADamageTypes;
+import com.susen36.caerulaarbor.init.CAEnchantments;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.NodeUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
@@ -90,7 +96,7 @@ public class PlayerTickEventHandler {
             double maxAmplif = Math.min(Math.max(Math.max(lvl0, lvl1), Math.max(lvl2, lvl3)), 2);
             if (entity.tickCount % gap == 64) {
                 if (!entity.level().isClientSide())
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 260, (int) (maxAmplif - 1), false, false));
+                    entity.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 260, (int) (maxAmplif - 1), false, false));
             }
         }
     }
@@ -138,7 +144,7 @@ public class PlayerTickEventHandler {
 
     private static void handleEssenceResistanceWithIce(Player entity) {
         if (entity == null) return;
-        if (entity.tickCount % 2 == 0 && entity.hasEffect(CAMobEffects.ESSENCE_RESISTANCE)) {
+        if (entity.tickCount % 2 == 0 && entity.hasEffect(BabelMobEffects.ESSENCE_RESISTANCE)) {
             if (entity.getTicksFrozen() < 140) entity.setTicksFrozen(Math.max(entity.getTicksFrozen() - 1, 0));
             entity.setRemainingFireTicks(Math.max(entity.getRemainingFireTicks() - 1, 0));
         }
@@ -206,7 +212,7 @@ public class PlayerTickEventHandler {
         }
 
         if (PlayerStateUtils.isNexusRegSanitySelected(entity)) {
-            ModCapabilities.getSanityInjury(entity).heal(1);
+            BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(1);
         }
 
         if (tickCount % 10 == 0) {
@@ -309,8 +315,7 @@ public class PlayerTickEventHandler {
         if (ModCapabilities.getPlayerVariables(entity).player_oceanization >= 3) {
             modifi = modifi * 0.33;
         }
-        if (entity.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
-            entity.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(modifi);
+        BabelAPI.setElementalDefenseBaseModifier(entity, modifi);
     }
 
     private static void handleKingSuit(Player entity) {

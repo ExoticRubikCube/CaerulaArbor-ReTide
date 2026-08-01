@@ -1,8 +1,11 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.api.entity.ElementalAttacker;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -26,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnimationItem {
+public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnimationItem, ElementalAttacker {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
@@ -47,9 +50,23 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
 		)), type, properties.component(DataComponents.ATTRIBUTE_MODIFIERS,
 			ItemAttributeModifiers.builder()
 				.add(CAAttributes.SANITY_RESISTANCE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "complex_chitin_sanity_resistance"), 15.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ARMOR)
-				.add(CAAttributes.SANITY_RATE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "complex_chitin_sanity_rate"), 1.0, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ARMOR)
 				.add(CAAttributes.GENERAL_DEFENSE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "complex_chitin_general_defense"), 2.5, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.ARMOR)
 				.build()));
+	}
+
+	@Override
+	public AbstractEPCapability.EPType getElementalType() {
+		return AbstractEPCapability.EPType.NERVOUS;
+	}
+
+	@Override
+	public double getElementalRate() {
+		return 1;
+	}
+
+	@Override
+	public double getElementalInjuryDamage() {
+		return 0;
 	}
 
 	@Override

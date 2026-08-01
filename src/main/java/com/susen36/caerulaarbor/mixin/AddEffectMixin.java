@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.mixin;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.entity.MartusEntity;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.Holder;
@@ -27,7 +28,7 @@ public abstract class AddEffectMixin {
         if (effect.value().isInstantenous()) return value;
         if (effect.value().getCategory() == MobEffectCategory.HARMFUL) {
             LivingEntity me = (LivingEntity) (Object) this;
-            Holder<MobEffect> resist = CAMobEffects.ESSENCE_RESISTANCE;
+            Holder<MobEffect> resist = BabelMobEffects.ESSENCE_RESISTANCE;
             if (!me.hasEffect(resist)) return value;
             MobEffectInstance resistInstance = me.getEffect(resist);
             int amplifier = 0;

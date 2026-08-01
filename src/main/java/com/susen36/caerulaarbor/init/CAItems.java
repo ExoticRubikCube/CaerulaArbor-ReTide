@@ -1,8 +1,10 @@
 package com.susen36.caerulaarbor.init;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.block.item.*;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.item.*;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -162,7 +164,7 @@ public class CAItems {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
             ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-            ModCapabilities.getSanityInjury(entity).heal(15);
+            BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(15);
             return retval;
         }
     });
@@ -223,7 +225,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> COOKED_PEDUNCLE = REGISTRY.register("cooked_peduncle", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(1f).build())) {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
-            ModCapabilities.getSanityInjury(entity).heal(15);
+            BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(15);
             return super.finishUsingItem(itemstack, world, entity);
         }
     });
@@ -237,7 +239,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> BOILED_EGG = REGISTRY.register("boiled_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build())) {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
-            ModCapabilities.getSanityInjury(entity).heal(125);
+            BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(125);
             return super.finishUsingItem(itemstack, world, entity);
         }
     });
@@ -665,7 +667,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> ENDERINA_SPAWNER = tooltipItem("enderina_spawner",
             () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_ENDERINA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC)), 1);
     public static final DeferredHolder<Item, ? extends Item> MOIST_DRAGON_HEART = tooltipItem("moist_dragon_heart", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)), 1);
-    public static final DeferredHolder<Item, ? extends Item> NETHERSEA_PRESERVED_EGG = tooltipItem("nethersea_preserved_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).alwaysEdible().effect(() -> new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 400, 1, false, true), 1.0F).effect(() -> new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 60, 0, false, false), 1.0F).build())), 1);
+    public static final DeferredHolder<Item, ? extends Item> NETHERSEA_PRESERVED_EGG = tooltipItem("nethersea_preserved_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).alwaysEdible().effect(() -> new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 400, 1, false, true), 1.0F).effect(() -> new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 60, 0, false, false), 1.0F).build())), 1);
     public static final DeferredHolder<Item, ? extends Item> SEA_PRAIRIE_BOMB = block(CABlocks.SEA_PRAIRIE_BOMB);
     public static final DeferredHolder<Item, ? extends Item> CHEST_FISH_FOOD = block(CABlocks.CHEST_FISH_FOOD);
 

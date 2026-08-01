@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -41,11 +41,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
@@ -305,8 +302,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
             } else {
                 LivingEntity livingEntity = (LivingEntity) enderina;
                 EntityUtils.heal(livingEntity, (livingEntity.getMaxHealth()) * 0.05);
-                SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(livingEntity);
-                sanityInjury.heal(sanityInjury.getMaxValue());
+                BabelAPI.healToFull(livingEntity, AbstractEPCapability.EPType.NERVOUS);
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -43,7 +45,6 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -90,7 +91,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
         builder = builder.add(Attributes.FOLLOW_RANGE, 48);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.SANITY_RATE, 4);
         builder = builder.add(CAAttributes.MISSRATE, 50);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 45);
         return builder;
@@ -174,14 +174,21 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         if (!this.level().isClientSide()) {
             CaerulaArborMod.queueServerWork(8, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 4) {
-                    EntityUtils.giveLessArmor(target, 11);
+                    if (target instanceof LivingEntity livingTarget) {
+                        BabelAPI.hurtElemental(
+                                livingTarget,
+                                AbstractEPCapability.EPType.CORROSION,
+                                this,
+                                Mth.floor(this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.35D + 4.0D)
+                        );
+                    }
                     this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                             CASounds.PUNCTUREFISH_ATTACK.get(), SoundSource.HOSTILE, 3,
                             (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
                     if (target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0))) {
                         int amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER) ? this.getEffect(CAMobEffects.REEF_CRACKER).getAmplifier() : -1;
-                        int nextAmplifier = amplifier < 0 ? 0 : Math.min(amplifier + 1, 31);
+                        int nextAmplifier = Mth.clamp(amplifier + 1, 0, 31);
                         this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER, 100, nextAmplifier, false, false));
                     }
                 }
@@ -674,11 +681,10 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
             tz = z + d * Math.sin(r);
             if (world instanceof ServerLevel projectileLevel) {
-                AbstractArrow entityToSpawn = new FishShootEntity(CAEntities.FISH_SHOOT.get(), projectileLevel);
+                FishShootEntity entityToSpawn = new FishShootEntity(CAEntities.FISH_SHOOT.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
                 entityToSpawn.setSilent(true);
-                entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
                 entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
                 projectileLevel.addFreshEntity(entityToSpawn);
@@ -691,11 +697,10 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
             tz = z + d * Math.sin(r);
             if (world instanceof ServerLevel projectileLevel) {
-                AbstractArrow entityToSpawn = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), projectileLevel);
+                FishSplashEntity entityToSpawn = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
                 entityToSpawn.setSilent(true);
-                entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
                 entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
                 projectileLevel.addFreshEntity(entityToSpawn);
@@ -708,11 +713,10 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
             tz = z + d * Math.sin(r);
             if (world instanceof ServerLevel projectileLevel) {
-                AbstractArrow entityToSpawn = new FleefishBulletEntity(CAEntities.FLEEFISH_BULLET.get(), projectileLevel);
+                FleefishBulletEntity entityToSpawn = new FleefishBulletEntity(CAEntities.FLEEFISH_BULLET.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
                 entityToSpawn.setSilent(true);
-                entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
                 entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
                 projectileLevel.addFreshEntity(entityToSpawn);
@@ -725,11 +729,10 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
             tz = z + d * Math.sin(r);
             if (world instanceof ServerLevel projectileLevel) {
-                AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                TellerShotEntity entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
                 entityToSpawn.setSilent(true);
-                entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
                 entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
                 projectileLevel.addFreshEntity(entityToSpawn);
@@ -742,11 +745,10 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
             tz = z + d * Math.sin(r);
             if (world instanceof ServerLevel projectileLevel) {
-                AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), projectileLevel);
+                AbandonedShootEntity entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
                 entityToSpawn.setSilent(true);
-                entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
                 entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
                 projectileLevel.addFreshEntity(entityToSpawn);
@@ -759,11 +761,10 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
             tz = z + d * Math.sin(r);
             if (world instanceof ServerLevel projectileLevel) {
-                AbstractArrow entityToSpawn = new FakerggShootEntity(CAEntities.FAKERGG_SHOOT.get(), projectileLevel);
+                FakerggShootEntity entityToSpawn = new FakerggShootEntity(CAEntities.FAKERGG_SHOOT.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
                 entityToSpawn.setSilent(true);
-                entityToSpawn.setCritArrow(true);
                 entityToSpawn.setPos(tx, ty, tz);
                 entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
                 projectileLevel.addFreshEntity(entityToSpawn);

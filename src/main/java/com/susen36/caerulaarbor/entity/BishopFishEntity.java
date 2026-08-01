@@ -1,5 +1,8 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -231,14 +234,12 @@ public class BishopFishEntity extends SeaMonster {
                             SIHelper.causeSanityInjury(target,
                                     this,
                                     (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE)
-                                            ? this.getAttribute(CAAttributes.SANITY_RATE).getValue()
-                                            : 0)
+                                            * BabelAPI.getElementalAttackConfig(this).rate()
                                             * 1.5,
                                     SanityEvent.Hurt.Type.ENTITY);
                         }
                         if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 60, 0, false, false));
+                            this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 60, 0, false, false));
                     }
                 }
                 if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP)) {
@@ -538,9 +539,8 @@ public class BishopFishEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
         builder = builder.add(Attributes.FOLLOW_RANGE, 64);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.SANITY_RATE, 10);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 24);
-        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         return builder;
     }
 

@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
@@ -9,7 +11,7 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.NodeUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -17,6 +19,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+
 
 @EventBusSubscriber
 public class LivingDamageEventHandler {
@@ -54,28 +57,31 @@ public class LivingDamageEventHandler {
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getNewDamage();
 
         if (!(entity instanceof LivingEntity target) || !(sourceentity instanceof LivingEntity attacker)) return;
 
-        double sanityRate = attacker.getAttributes().hasAttribute(CAAttributes.SANITY_RATE)
-                ? attacker.getAttribute(CAAttributes.SANITY_RATE).getValue()
-                : 0;
-        double sanityInjuryDamage = attacker.getAttributes().hasAttribute(CAAttributes.SANITY_INJURY_DAMAGE)
-                ? attacker.getAttribute(CAAttributes.SANITY_INJURY_DAMAGE).getValue()
-                : 0;
-        double sanityDamage = sanityInjuryDamage + amount * sanityRate;
+        BabelAPI.ElementalAttackConfig attackConfig = BabelAPI.getElementalAttackConfig(attacker);
+        AbstractEPCapability.EPType epType = attackConfig.type();
+        double sanityRate = attackConfig.rate();
+        double sanityInjuryDamage = attackConfig.injuryDamage();
+        BabelAPI.ElementalDefenseConfig defenseConfig = BabelAPI.getElementalDefenseConfig(target);
+        if (epType == AbstractEPCapability.EPType.NERVOUS && defenseConfig.type() == epType) {
+            sanityRate *= defenseConfig.baseModifier() * defenseConfig.totalModifier();
+            sanityInjuryDamage *= defenseConfig.baseModifier() * defenseConfig.totalModifier();
+        }
+        double sanityDamage = sanityInjuryDamage + event.getNewDamage() * sanityRate;
 
         if (sanityDamage > 0) {
-            ModCapabilities.getSanityInjury(target).hurt(sanityDamage);
+            if (!BabelAPI.hurtElemental(target, epType, attacker, Mth.floor(sanityDamage))) return;
         }
 
         if (sanityRate > 0) {
+            double finalSanityRate = sanityRate;
             new Object() {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + entity.getBbHeight() * 0.5), z,
-                                (int) Math.min(sanityRate, 16),
+                                Mth.clamp(Mth.floor(finalSanityRate), 0, 16),
                                 1.2, 1.5, 1.2, 0.1);
                     final int tick2 = ticks;
                     CaerulaArborMod.queueServerWork(tick2, () -> {
@@ -89,7 +95,6 @@ public class LivingDamageEventHandler {
     }
 
     private static void handlePlayerEvolutionDamage(LivingDamageEvent.Pre event) {
-        DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 

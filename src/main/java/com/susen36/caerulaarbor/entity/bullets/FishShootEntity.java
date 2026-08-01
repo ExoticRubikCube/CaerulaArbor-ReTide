@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
+import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -9,7 +10,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,9 +20,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
-public class FishShootEntity extends AbstractArrow implements ItemSupplier {
+public class FishShootEntity extends BaseProjectile implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.IRON_NUGGET);
-
 	public FishShootEntity(Level world) {
 		super(CAEntities.FISH_SHOOT.get(), world);
 	}
@@ -32,12 +31,15 @@ public class FishShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public FishShootEntity(EntityType<? extends FishShootEntity> type, double x, double y, double z, Level world) {
-		super(type, world);
+		super(type, x, y, z, world);
 	}
 
 	public FishShootEntity(EntityType<? extends FishShootEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world, ItemStack.EMPTY, ItemStack.EMPTY);
+		super(type, world);
+		setOwner(entity);
+		setPos(entity.getX(), entity.getY() - 0.1, entity.getZ());
 	}
+
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
@@ -46,19 +48,7 @@ public class FishShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	@Override
-	protected ItemStack getDefaultPickupItem() {
-		return PROJECTILE_ITEM;
-	}
-
-	@Override
-	protected void doPostHurtEffects(LivingEntity entity) {
-		super.doPostHurtEffects(entity);
-		entity.setArrowCount(entity.getArrowCount() - 1);
-	}
-
-	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
-		super.onHitEntity(entityHitResult);
 		EntityUtils.killSelf(this.level(), entityHitResult.getEntity(), this);
 	}
 
@@ -85,6 +75,7 @@ public class FishShootEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
+		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
 		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.FLYFISH_ATTACK.get(), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
@@ -107,7 +98,6 @@ public class FishShootEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 1f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(damage);
-		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
 		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.FLYFISH_ATTACK.get(), SoundSource.PLAYERS, 1,
 				1f / (RandomSource.create().nextFloat() * 0.5f + 1));

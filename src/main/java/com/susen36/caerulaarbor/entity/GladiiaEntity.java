@@ -1,8 +1,13 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CADamageTypes;
+import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -270,7 +275,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 						if (world instanceof Level level) {
 							level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PRE.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
 						}
-						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
+						this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
 						CaerulaArborMod.queueServerWork(10, () -> {
 							if (this.isAlive()) {
 								Entity ene = this.getTarget();
@@ -296,9 +301,9 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 										level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 3, 1);
 									}
 									if (ene instanceof LivingEntity && !this.level().isClientSide())
-										this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 40, 0, false, false));
+										this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 40, 0, false, false));
 									if (EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene) instanceof LivingEntity && !this.level().isClientSide())
-										this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 40, 0, false, false));
+										this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 40, 0, false, false));
 								});
 							}
 						});
@@ -329,7 +334,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 						if (world instanceof Level level) {
 							level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL.get(), SoundSource.NEUTRAL, 2, 1);
 						}
-						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
+						this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
 						if (!this.level().isClientSide())
 							this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, 120, 4, false, false));
 						if (!this.level().isClientSide())
@@ -404,7 +409,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
 		builder = builder.add(NeoForgeMod.SWIM_SPEED, 8);
-		builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.33);
+		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.33);
 		builder = builder.add(Attributes.MAX_HEALTH, 216);
 		builder = builder.add(Attributes.ARMOR, 9);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 27);

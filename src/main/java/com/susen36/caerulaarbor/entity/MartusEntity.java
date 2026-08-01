@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -375,11 +376,9 @@ public class MartusEntity extends SeaMonster {
                             if (tgt instanceof LivingEntity livingEntity24 && livingEntity24.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                                 livingEntity24.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                                         ((tgt instanceof LivingEntity livingEntity23 && livingEntity23.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity23.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 2.5));
-                            if (tgt instanceof LivingEntity livingEntity26 && livingEntity26.getAttributes().hasAttribute(CAAttributes.SANITY_RATE))
-                                livingEntity26.getAttribute(CAAttributes.SANITY_RATE)
-                                        .setBaseValue(((tgt instanceof LivingEntity livingEntity25 && livingEntity25.getAttributes().hasAttribute(CAAttributes.SANITY_RATE)
-                                                ? livingEntity25.getAttribute(CAAttributes.SANITY_RATE).getBaseValue()
-                                                : 0) + 25));
+                            if (tgt instanceof LivingEntity livingTarget) {
+                                livingTarget.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF, -1, 24, false, false));
+                            }
                             if (tgt instanceof LivingEntity entity)
                                 entity.setHealth((float) ((tgt instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc));
                             if (tgt instanceof LivingEntity && !this.level().isClientSide())
@@ -596,7 +595,7 @@ public class MartusEntity extends SeaMonster {
         builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.5);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 16384);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 100);
-        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         return builder;
     }
 

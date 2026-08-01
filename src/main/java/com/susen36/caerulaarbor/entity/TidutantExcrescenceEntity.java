@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -89,6 +90,21 @@ public class TidutantExcrescenceEntity extends SeaMonster {
         this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
+    }
+
+    @Override
+    public AbstractEPCapability.EPType getElementalType() {
+        return AbstractEPCapability.EPType.CORROSION;
+    }
+
+    @Override
+    public double getElementalRate() {
+        return 0.20D;
+    }
+
+    @Override
+    public double getElementalInjuryDamage() {
+        return 2.0D;
     }
 
     @Override

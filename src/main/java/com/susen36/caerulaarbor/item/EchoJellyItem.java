@@ -1,6 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
@@ -40,7 +41,7 @@ public class EchoJellyItem extends Item {
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 80, 0));
 			entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, 700, 2));
-			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 3600, 1));
+			entity.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 3600, 1));
 			entity.addEffect(new MobEffectInstance(CAMobEffects.SANITY_HEAL, 1, 2, false, false));
 		}
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);

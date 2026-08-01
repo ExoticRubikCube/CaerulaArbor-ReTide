@@ -61,13 +61,13 @@ public class TrailPumpkingBlock extends Block {
         BlockState taregt;
         double direc = 0;
         taregt = CABlocks.CHITIN_BLOCK.get().defaultBlockState();
-        if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == taregt.getBlock() && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 2, z))).getBlock() == taregt.getBlock()) {
+        if ((world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == taregt.getBlock() && (world.getBlockState(BlockPos.containing(x, y - 2, z))).getBlock() == taregt.getBlock()) {
             vec = true;
         }
-        if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x - 1, y - 1, z))).getBlock() == taregt.getBlock() && (((LevelAccessor) world).getBlockState(BlockPos.containing(x + 1, y - 1, z))).getBlock() == taregt.getBlock()) {
+        if ((world.getBlockState(BlockPos.containing(x - 1, y - 1, z))).getBlock() == taregt.getBlock() && (world.getBlockState(BlockPos.containing(x + 1, y - 1, z))).getBlock() == taregt.getBlock()) {
             hor = true;
             direc = 0;
-        } else if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z - 1))).getBlock() == taregt.getBlock() && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z + 1))).getBlock() == taregt.getBlock()) {
+        } else if ((world.getBlockState(BlockPos.containing(x, y - 1, z - 1))).getBlock() == taregt.getBlock() && (world.getBlockState(BlockPos.containing(x, y - 1, z + 1))).getBlock() == taregt.getBlock()) {
             hor = true;
             direc = 1;
         }
@@ -85,19 +85,19 @@ public class TrailPumpkingBlock extends Block {
             if ((LevelAccessor) world instanceof ServerLevel level) {
                 Entity entityToSpawn = CAEntities.CHITIN_GOLEM.get().spawn(level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
-                    entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
             }
             return;
         }
         taregt = CABlocks.COMPLEX_CHITIN_BLOCK.get().defaultBlockState();
-        if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == taregt.getBlock() && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 2, z))).getBlock() == taregt.getBlock()) {
+        if ((world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == taregt.getBlock() && (world.getBlockState(BlockPos.containing(x, y - 2, z))).getBlock() == taregt.getBlock()) {
             vec = true;
         }
-        if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x - 1, y - 1, z))).getBlock() == taregt.getBlock() && (((LevelAccessor) world).getBlockState(BlockPos.containing(x + 1, y - 1, z))).getBlock() == taregt.getBlock()) {
+        if ((world.getBlockState(BlockPos.containing(x - 1, y - 1, z))).getBlock() == taregt.getBlock() && (world.getBlockState(BlockPos.containing(x + 1, y - 1, z))).getBlock() == taregt.getBlock()) {
             hor = true;
             direc = 0;
-        } else if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z - 1))).getBlock() == taregt.getBlock() && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z + 1))).getBlock() == taregt.getBlock()) {
+        } else if ((world.getBlockState(BlockPos.containing(x, y - 1, z - 1))).getBlock() == taregt.getBlock() && (world.getBlockState(BlockPos.containing(x, y - 1, z + 1))).getBlock() == taregt.getBlock()) {
             hor = true;
             direc = 1;
         }
@@ -115,7 +115,7 @@ public class TrailPumpkingBlock extends Block {
             if ((LevelAccessor) world instanceof ServerLevel level) {
                 Entity entityToSpawn = CAEntities.COMPLEX_CHITIN_GOLEM.get().spawn(level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
-                    entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
             }
         }

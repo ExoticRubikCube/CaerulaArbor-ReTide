@@ -63,7 +63,7 @@ public class ImmortalMobEffect extends MobEffect {
         if (entity == null)
             return;
         if (entity.getPersistentData().getBoolean("immortalTriggered")) {
-            ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.IMMORTAL_PUNISHMENT), 114514);
+            entity.hurt(CADamageTypes.source(world, CADamageTypes.IMMORTAL_PUNISHMENT), 114514);
         }
         entity.getPersistentData().putBoolean("immortalTriggered", false);
     }

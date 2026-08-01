@@ -3,14 +3,11 @@ package com.susen36.caerulaarbor.capability;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.anchor.AnchorRecord;
-import com.susen36.caerulaarbor.capability.apoptosis.ApoptosisInjuryCapability;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.susen36.caerulaarbor.capability.world.WorldVariables;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -27,12 +24,6 @@ public class ModCapabilities {
     public static final Supplier<AttachmentType<PlayerVariable>> PLAYER_VARIABLE = ATTACHMENT_TYPES.register("player_variables",
             () -> AttachmentType.serializable((IAttachmentHolder holder) -> new PlayerVariable()).build());
 
-    public static final Supplier<AttachmentType<SanityInjuryCapability>> SANITY_INJURY = ATTACHMENT_TYPES.register("sanity_injury",
-            () -> AttachmentType.serializable((IAttachmentHolder holder) -> new SanityInjuryCapability(holder instanceof LivingEntity living ? living : null)).build());
-
-    public static final Supplier<AttachmentType<ApoptosisInjuryCapability>> APOPTOSIS_INJURY = ATTACHMENT_TYPES.register("apoptosis_injury",
-            () -> AttachmentType.serializable((IAttachmentHolder holder) -> new ApoptosisInjuryCapability(holder instanceof LivingEntity living ? living : null)).build());
-
     public static final Supplier<AttachmentType<AnchorRecord>> ANCHOR_RECORD = ATTACHMENT_TYPES.register("anchor_record",
             () -> AttachmentType.serializable((IAttachmentHolder holder) -> new AnchorRecord()).build());
 
@@ -46,14 +37,6 @@ public class ModCapabilities {
 
     public static PlayerVariable getPlayerVariables(Entity entity) {
         return entity.getData(PLAYER_VARIABLE.get());
-    }
-
-    public static SanityInjuryCapability getSanityInjury(LivingEntity entity) {
-        return entity.getData(SANITY_INJURY.get());
-    }
-
-    public static ApoptosisInjuryCapability getApoptosisInjury(LivingEntity entity) {
-        return entity.getData(APOPTOSIS_INJURY.get());
     }
 
     public static MapVariables getMapVariables(LevelAccessor world) {

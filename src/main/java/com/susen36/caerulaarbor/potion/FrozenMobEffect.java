@@ -50,10 +50,10 @@ public class FrozenMobEffect extends MobEffect {
                 creeper.setSwellDir(0);
         }
         if (entity instanceof Blaze) {
-            ((Entity) entity).hurt(entity.level().damageSources().freeze(), 1);
+            entity.hurt(entity.level().damageSources().freeze(), 1);
         }
         if (entity instanceof MagmaCube) {
-            ((Entity) entity).hurt(entity.level().damageSources().freeze(), 1);
+            entity.hurt(entity.level().damageSources().freeze(), 1);
         }
         dh = entity.getBbHeight() * 0.5;
         dw = entity.getBbWidth() * 0.5;

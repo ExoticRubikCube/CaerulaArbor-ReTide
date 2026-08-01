@@ -167,7 +167,6 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
-		builder = builder.add(CAAttributes.SANITY_RATE, 9);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 20);
 		return builder;
 	}

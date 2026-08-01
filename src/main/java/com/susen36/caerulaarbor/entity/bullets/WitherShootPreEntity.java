@@ -10,7 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -21,9 +21,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
-public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier {
+public class WitherShootPreEntity extends BaseProjectile implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Blocks.WITHER_SKELETON_SKULL);
-
 	public WitherShootPreEntity(Level world) {
 		super(CAEntities.WITHER_SHOOT_PRE.get(), world);
 	}
@@ -33,11 +32,11 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public WitherShootPreEntity(EntityType<? extends WitherShootPreEntity> type, double x, double y, double z, Level world) {
-		super(type, world);
+		super(type, x, y, z, world);
 	}
 
 	public WitherShootPreEntity(EntityType<? extends WitherShootPreEntity> type, LivingEntity entity, Level world) {
-		super(type, world);
+		super(type, entity, world);
 	}
 
 	@Override
@@ -47,19 +46,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	@Override
-	protected ItemStack getDefaultPickupItem() {
-		return PROJECTILE_ITEM;
-	}
-
-	@Override
-	protected void doPostHurtEffects(LivingEntity entity) {
-		super.doPostHurtEffects(entity);
-		entity.setArrowCount(entity.getArrowCount() - 1);
-	}
-
-	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
-		super.onHitEntity(entityHitResult);
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -163,7 +150,6 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 		WitherShootPreEntity entityarrow = new WitherShootPreEntity(CAEntities.WITHER_SHOOT_PRE.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
-		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
 		world.addFreshEntity(entityarrow);
 		return entityarrow;
@@ -178,7 +164,6 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 0.1f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(0);
-		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
 		return entityarrow;
 	}

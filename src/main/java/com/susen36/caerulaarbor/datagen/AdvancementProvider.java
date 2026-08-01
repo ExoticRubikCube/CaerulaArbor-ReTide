@@ -112,9 +112,9 @@ public class AdvancementProvider implements AdvancementSubProvider {
                 .entityType(EntityTypePredicate.of(entityValue))
                 .build();
         var damageBuilder = DamagePredicate.Builder.damageInstance()
-                .takenDamage(MinMaxBounds.Doubles.between((double) minTaken, (double) maxTaken))
+                .takenDamage(MinMaxBounds.Doubles.between(minTaken, maxTaken))
                 .sourceEntity(sourceEntityPred)
-                .blocked(Boolean.valueOf(blocked));
+                .blocked(blocked);
         return EntityHurtPlayerTrigger.TriggerInstance.entityHurtPlayer(damageBuilder);
     }
 

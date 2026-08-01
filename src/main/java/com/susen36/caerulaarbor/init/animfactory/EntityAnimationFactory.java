@@ -11,7 +11,6 @@ public class EntityAnimationFactory {
 
 	@SubscribeEvent
 	public static void onEntityTick(EntityTickEvent.Post event) {
-		// 建议仅在服务端处理同步逻辑，避免客户端重复发包或计算
 		if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof SyncedAnimationEntity syncable) {
 			syncable.syncClientAnimation();
 		}

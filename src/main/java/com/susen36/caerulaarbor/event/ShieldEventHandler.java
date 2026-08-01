@@ -1,10 +1,9 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -32,14 +31,15 @@ public class ShieldEventHandler {
 			if (blocker.level() instanceof ServerLevel serverLevel)
 				serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, attacker.getX(), attacker.getY() + 0.5, attacker.getZ(), 8, 0.5, 0.5, 0.5, 0.1);
 		} else if (activeItem.getItem() == CAItems.TIDELINKED_SHIELD.get()) {
-			if (attacker instanceof LivingEntity livingAttacker && livingAttacker.hasEffect(CAMobEffects.LESS_ARMOR)) {
-				MobEffectInstance lessArmorEffect = livingAttacker.getEffect(CAMobEffects.LESS_ARMOR);
+			if (attacker instanceof LivingEntity livingAttacker && livingAttacker.hasEffect(BabelMobEffects.LESS_ARMOR)) {
+				MobEffectInstance lessArmorEffect = livingAttacker.getEffect(BabelMobEffects.LESS_ARMOR);
 				double lessArmorAmplifier = lessArmorEffect != null ? lessArmorEffect.getAmplifier() + 1 : 0;
 				activeItem.setDamageValue((int) (activeItem.getDamageValue() - lessArmorAmplifier));
 				if (blocker instanceof LivingEntity livingBlocker && blocker.isAlive() && livingBlocker.getHealth() < livingBlocker.getMaxHealth())
 					livingBlocker.setHealth((float) (livingBlocker.getHealth() + livingBlocker.getMaxHealth() * lessArmorAmplifier * 0.01));
 			}
-			EntityUtils.giveLessArmor(attacker, 5);
+			if (attacker instanceof LivingEntity livingAttacker)
+				BabelMobEffects.LESS_ARMOR.get().apply(livingAttacker);
 		}
 	}
 }

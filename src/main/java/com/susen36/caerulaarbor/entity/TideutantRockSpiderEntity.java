@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -117,6 +118,21 @@ public class TideutantRockSpiderEntity extends SeaMonster {
         });
         this.goalSelector.addGoal(16, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(17, new FloatGoal(this));
+    }
+
+    @Override
+    public AbstractEPCapability.EPType getElementalType() {
+        return AbstractEPCapability.EPType.CORROSION;
+    }
+
+    @Override
+    public double getElementalRate() {
+        return 0.35D;
+    }
+
+    @Override
+    public double getElementalInjuryDamage() {
+        return 4.0D;
     }
 
     @Override

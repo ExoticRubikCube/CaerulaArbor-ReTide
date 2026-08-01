@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.potion;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.entity.IzumikEntity;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.core.particles.ParticleTypes;
@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -47,10 +48,11 @@ public class IzumikShockMobEffect extends MobEffect {
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.END_ROD, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);
             if (Math.random() < 0.33) {
-                if ((Entity) entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(CAAttributes.NUMB))
-                    livingEntity8.getAttribute(CAAttributes.NUMB).setBaseValue(
-                            (((Entity) entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(CAAttributes.NUMB) ? livingEntity7.getAttribute(CAAttributes.NUMB).getBaseValue() : 0)
-                                    + 1));
+                if ((Entity) entity instanceof LivingEntity livingEntity8) {
+                    int currentNumb = livingEntity8.hasEffect(BabelMobEffects.NUMB) ? livingEntity8.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
+                    livingEntity8.removeEffect(BabelMobEffects.NUMB);
+                    livingEntity8.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, Integer.MAX_VALUE, currentNumb, false, false, true));
+                }
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.FIREWORK, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);
             }

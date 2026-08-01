@@ -175,7 +175,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         if (target.getTicksFrozen() >= 200) {
             damage *= 1.75F;
         }
-        //TODO:涓轰粈涔堟病鏈塭lse?
+        //TODO:为什么没有else?
         if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
             damage *= 1.5F;
         }

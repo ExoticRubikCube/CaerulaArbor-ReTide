@@ -1,12 +1,13 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.susen36.caerulaarbor.entity.IzumikOffspringEntity;
 import com.susen36.caerulaarbor.entity.MartusEntity;
 import com.susen36.caerulaarbor.entity.SkadiEntity;
@@ -139,8 +140,8 @@ public class LivingDeathEventHandler {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, (float) 0.33, 1);
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.TARGET_DAMAGED.get(), SoundSource.PLAYERS, (float) 0.33, 1);
                 }
-                SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(entity);
-                sanityInjury.heal(sanityInjury.getMaxValue());
+                AbstractEPCapability sanityInjury = BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS);
+                BabelAPI.healToFull(entity, AbstractEPCapability.EPType.NERVOUS);
                 if (is_shield) {
                     if (world instanceof ServerLevel level)
                         level.sendParticles(CAParticles.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
@@ -379,18 +380,15 @@ public class LivingDeathEventHandler {
     private static void handlePlayerKillRelics(LivingDeathEvent event, LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity) {
         PlayerVariable capability = ModCapabilities.getPlayerVariables(sourceentity);
         if (capability.relic_cursed_EMELIGHT) {
-            double setval = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.1, 0.2);
-            capability.player_light = setval;
+            capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.1, 0.2);
             capability.syncPlayerVariables(sourceentity);
         }
         if (capability.relic_cursed_GLOWBODY) {
-            double setval = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.2, 0.3);
-            capability.player_light = setval;
+            capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.2, 0.3);
             capability.syncPlayerVariables(sourceentity);
         }
         if (capability.relic_cursed_RESEARCH) {
-            double setval = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.3, 0.5);
-            capability.player_light = setval;
+            capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.3, 0.5);
             capability.syncPlayerVariables(sourceentity);
         }
         if (capability.player_light < 0) {
@@ -400,20 +398,17 @@ public class LivingDeathEventHandler {
         if (capability.relic_king_ARMOR) {
             if (Math.random() < 0.08) {
                 if (capability.player_lives > 1) {
-                    double setval = capability.player_lives - 1;
-                    capability.player_lives = setval;
+                    capability.player_lives = capability.player_lives - 1;
                     capability.syncPlayerVariables(sourceentity);
                 }
-                double setval = capability.player_shield + 1;
-                capability.player_shield = setval;
+                capability.player_shield = capability.player_shield + 1;
                 capability.syncPlayerVariables(sourceentity);
             }
         }
         if (capability.relic_king_CRYSTAL) {
             if (Math.random() < 0.1) {
                 if (capability.player_lives > 1) {
-                    double setval = Math.max(capability.player_lives - 2, 1);
-                    capability.player_lives = setval;
+                    capability.player_lives = Math.max(capability.player_lives - 2, 1);
                     capability.syncPlayerVariables(sourceentity);
                 }
                 if (sourceentity instanceof Player player)
@@ -445,8 +440,7 @@ public class LivingDeathEventHandler {
                     }
                 }
                 if (validweapon) {
-                    double setval = capability.relic_hand_ENGRAVE + 1;
-                    capability.relic_hand_ENGRAVE = setval;
+                    capability.relic_hand_ENGRAVE = capability.relic_hand_ENGRAVE + 1;
                     capability.syncPlayerVariables(sourceentity);
                 }
             }
@@ -455,8 +449,7 @@ public class LivingDeathEventHandler {
                 && capability.relic_SURVIVOR < 32) {
             if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
                 if (Math.random() < 0.035 || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses")))) {
-                    double setval = capability.relic_SURVIVOR + 1;
-                    capability.relic_SURVIVOR = setval;
+                    capability.relic_SURVIVOR = capability.relic_SURVIVOR + 1;
                     capability.syncPlayerVariables(sourceentity);
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.WAX_ON, x, y, z, 48, 0.7, 1.5, 0.7, 0.2);
@@ -473,7 +466,6 @@ public class LivingDeathEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
 
-        if (damagesource == null || entity == null) return;
         if (entity instanceof SkadiEntity) return;
 
         if (damagesource.is(CADamageTags.CAN_TRIGGER_OCEANIZATION)) {
@@ -492,7 +484,6 @@ public class LivingDeathEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
 
-        if (damagesource == null || entity == null) return;
         if (event.isCanceled()) return;
 
         if (MapVariables.get(world).strategy_breed >= 3) {
@@ -576,7 +567,6 @@ public class LivingDeathEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
 
-        if (damagesource == null || entity == null) return;
         if (event.isCanceled()) return;
 
         if (entity instanceof Player && damagesource.is(CADamageTypes.OCEANIZE_DAMAGE)) {
@@ -605,7 +595,7 @@ public class LivingDeathEventHandler {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (event.isCanceled()||entity == null) return;
+        if (event.isCanceled()) return;
 
         MartusEntity martus = world.getEntitiesOfClass(MartusEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream()
                 .sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
@@ -629,7 +619,7 @@ public class LivingDeathEventHandler {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
         if (event.isCanceled()) return;
 
         if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {

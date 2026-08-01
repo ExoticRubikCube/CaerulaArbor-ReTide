@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -28,7 +28,7 @@ public class RadiantBerriesItem extends Item {
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 3200, 2));
 			entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0));
-			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 3600, 1));
+			entity.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 3600, 1));
 		}
 		entity.removeEffect(MobEffects.BLINDNESS);
 		return super.finishUsingItem(itemstack, world, entity);

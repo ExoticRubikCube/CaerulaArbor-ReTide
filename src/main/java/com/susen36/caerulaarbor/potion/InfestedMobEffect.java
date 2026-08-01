@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.potion;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
@@ -45,7 +46,7 @@ public class InfestedMobEffect extends MobEffect {
             if ((Entity) entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.POWER_OF_ANCHOR)) {
                 dam = dam * 0.1;
             }
-            ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.OCEANIZE_DAMAGE), (float) dam);
+            entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEANIZE_DAMAGE), (float) dam);
             if (!((Entity) entity instanceof LivingEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.POWER_OF_ANCHOR))) {
                 if (Math.random() < 0.33) {
                     dam = Mth.nextInt(RandomSource.create(), 0, 7);
@@ -72,7 +73,7 @@ public class InfestedMobEffect extends MobEffect {
                             livingEntity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN, 160, 0));
                     } else if (dam == 7) {
                         if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 160, 0));
+                            livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 160, 0));
                     }
                 }
             }

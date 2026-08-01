@@ -1,14 +1,10 @@
 package com.susen36.caerulaarbor.capability;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.capability.apoptosis.ApoptosisInjuryCapability;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.network.receive.SavedDataSyncMessage;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -16,7 +12,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = CaerulaArborMod.MODID)
@@ -87,8 +82,6 @@ public class CapabilityEventHandler {
         Player player = event.getEntity();
         Player oldPlayer = event.getOriginal();
         oldPlayer.revive();
-        handleSanityCap(player, oldPlayer);
-        handleApoptosisCap(player, oldPlayer);
         handlePlayerVariables(player, oldPlayer, event.isWasDeath());
     }
 
@@ -116,27 +109,6 @@ public class CapabilityEventHandler {
                 PacketDistributor.sendToPlayer(serverPlayer, new SavedDataSyncMessage(1, worldData, serverPlayer.level().registryAccess()));
             }
         }
-    }
-
-    @SubscribeEvent
-    public static void onLivingTick(EntityTickEvent.Post event) {
-        Entity entity = event.getEntity();
-        if (!entity.level().isClientSide() && entity instanceof LivingEntity livingEntity) {
-            ModCapabilities.getSanityInjury(livingEntity).tick();
-            ModCapabilities.getApoptosisInjury(livingEntity).tick();
-        }
-    }
-
-    private static void handleSanityCap(Player player, Player oldPlayer) {
-        SanityInjuryCapability oldInjury = ModCapabilities.getSanityInjury(oldPlayer);
-        SanityInjuryCapability newInjury = ModCapabilities.getSanityInjury(player);
-        newInjury.deserializeNBT(oldPlayer.registryAccess(), oldInjury.serializeNBT(oldPlayer.registryAccess()));
-    }
-
-    private static void handleApoptosisCap(Player player, Player oldPlayer) {
-        ApoptosisInjuryCapability oldApoptosis = ModCapabilities.getApoptosisInjury(oldPlayer);
-        ApoptosisInjuryCapability newApoptosis = ModCapabilities.getApoptosisInjury(player);
-        newApoptosis.deserializeNBT(oldPlayer.registryAccess(), oldApoptosis.serializeNBT(oldPlayer.registryAccess()));
     }
 
     private static void handlePlayerVariables(Player player, Player oldPlayer, boolean wasDeath) {

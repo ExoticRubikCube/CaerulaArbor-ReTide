@@ -134,9 +134,9 @@ public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWater
             {
                 int value = 1;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                BlockState bs = world.getBlockState(pos);
                 if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                    world.setBlock(pos, bs.setValue(integerProp, value), 3);
             }
             result = InteractionResult.SUCCESS;
         }

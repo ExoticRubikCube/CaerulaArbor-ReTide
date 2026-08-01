@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -85,8 +87,7 @@ public class ThirsterEntity extends SeaMonster {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 10);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 95);
-        builder = builder.add(CAAttributes.SANITY_RATE, 50);
-        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         return builder;
     }
 
@@ -194,7 +195,7 @@ public class ThirsterEntity extends SeaMonster {
                 for (LivingEntity entityiterator : entfound) {
                     if (this.distanceToSqr(entityiterator) < 400) {
                         if (!entityiterator.level().isClientSide())
-                            entityiterator.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 160, 0, false, false));
+                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 160, 0, false, false));
                         dizzyTargetCount = dizzyTargetCount - 1;
                         if (dizzyTargetCount <= 1) {
                             break;

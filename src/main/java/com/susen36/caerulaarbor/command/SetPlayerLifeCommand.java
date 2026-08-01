@@ -7,7 +7,6 @@ import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -24,30 +23,25 @@ public class SetPlayerLifeCommand {
 		event.getDispatcher().register(Commands.literal("caerula_arbor:player_data").requires(s -> s.hasPermission(2))
 				.then(Commands.argument("name", EntityArgument.players()).then(Commands.literal("life_point").then(Commands.argument("life", DoubleArgumentType.doubleArg(0, 255)).executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
-                    double lfs;
+                    double setval;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
-                            lfs = Math.min(DoubleArgumentType.getDouble(arguments, "life"), Math.min(CAConfigs.LP_LIMIT.get(), ModCapabilities.getPlayerVariables(entityiterator).player_maxlive));
+                            setval = Math.min(DoubleArgumentType.getDouble(arguments, "life"), Math.min(CAConfigs.LP_LIMIT.get(), ModCapabilities.getPlayerVariables(entityiterator).player_maxlive));
                             {
-                                double setval = lfs;
                                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
                                 capability.player_lives = setval;
                                 capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.set_life").getString();
                             info = info.replace("<player>", entityiterator.getDisplayName().getString());
-                            info = info.replace("<num>", "" + Math.round(lfs));
+                            info = info.replace("<num>", "" + Math.round(setval));
                             {
                                 final String success = info;
                                 final boolean informAdmins = true;
@@ -60,14 +54,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				}))).then(Commands.literal("max_life_point").then(Commands.argument("life", DoubleArgumentType.doubleArg(1, 255)).executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -94,14 +84,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				}))).then(Commands.literal("shield").then(Commands.argument("shield", DoubleArgumentType.doubleArg(0, 999)).executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -128,14 +114,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				}))).then(Commands.literal("lights").then(Commands.literal("ablaze").executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -162,14 +144,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				})).then(Commands.literal("flicker").executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
 					Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -196,13 +174,9 @@ public class SetPlayerLifeCommand {
                     return 0;
 				})).then(Commands.literal("dim").executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
 					Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
 					if (entity != null)
                         entity.getDirection();
 
@@ -230,14 +204,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				})).then(Commands.literal("tranquil").executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -264,14 +234,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				})).then(Commands.argument("light", DoubleArgumentType.doubleArg(0, 100)).executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -298,14 +264,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				}))).then(Commands.literal("oceanization").then(Commands.argument("state", DoubleArgumentType.doubleArg(0, 3)).executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -332,14 +294,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				}))).then(Commands.literal("rejection").then(Commands.literal("clear").executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -365,14 +323,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				})).then(Commands.literal("disconcentration").executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -398,14 +352,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				})).then(Commands.literal("haemophilia").executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -431,14 +381,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				})).then(Commands.literal("neurodegression").executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;
@@ -464,14 +410,10 @@ public class SetPlayerLifeCommand {
                     return 0;
 				})).then(Commands.literal("deformity").executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
-					double x = arguments.getSource().getPosition().x();
-					double y = arguments.getSource().getPosition().y();
-					double z = arguments.getSource().getPosition().z();
-					Entity entity = arguments.getSource().getEntity();
+                    Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)
 						entity = FakePlayerFactory.getMinecraft(servLevel);
-					Direction direction = Direction.DOWN;
-					if (entity != null)
+                    if (entity != null)
                         entity.getDirection();
 
                     String info;

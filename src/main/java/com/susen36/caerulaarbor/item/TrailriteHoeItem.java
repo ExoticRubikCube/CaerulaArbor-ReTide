@@ -76,7 +76,7 @@ public class TrailriteHoeItem extends HoeItem {
 		if (context.getPlayer() == null) {
 			return InteractionResult.PASS;
 		}
-		// TODO锛氳瘎浼版槸鍚︿负 ComplexChitinHoeItem 涓?TrailriteHoeItem 鍒朵綔鍏卞悓鍩虹被锛屽苟灏嗚繖娈靛叡浜氦浜掗€昏緫鏀跺彛鍒伴偅閲屻€?
+		// TODO：评估是否为 ComplexChitinHoeItem 与 TrailriteHoeItem 制作共同基类，并将这段共享交互逻辑收口到那里。
 		BlockState clickedState = context.getLevel().getBlockState(context.getClickedPos());
 		if (context.getPlayer().isShiftKeyDown() && clickedState.getBlock() == Blocks.FARMLAND) {
 			BlockState oceanFarmlandState = CABlocks.OCEAN_FARMLAND.get().withPropertiesOf(clickedState);

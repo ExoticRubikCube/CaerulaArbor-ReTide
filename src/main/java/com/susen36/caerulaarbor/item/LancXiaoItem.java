@@ -103,7 +103,7 @@ public class LancXiaoItem extends SwordItem {
                                         if ((LevelAccessor) world instanceof Level level) {
                                                 level.playSound(null, BlockPos.containing(tx, ty, tz), CASounds.ENDSPEAKER_ATTACK_HIT.get(), SoundSource.PLAYERS, (float) 1.5, 1);
                                         }
-                                        entityiterator.hurt(CADamageTypes.source((LevelAccessor) world, CADamageTypes.ENDSPEAKER_ATTACK, entity), (float) (atk * 2));
+                                        entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ENDSPEAKER_ATTACK, entity), (float) (atk * 2));
                                     }
                                 });
                             }

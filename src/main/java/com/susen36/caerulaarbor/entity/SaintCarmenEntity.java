@@ -30,7 +30,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -278,7 +277,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                             datEntSetI.getEntityData().set(DATA_SHOOT_P, 50);
                         dura = 50;
                         push((getLookAngle().x * (-1.5)), 0, (getLookAngle().z * (-1.5)));
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (getY() + 1.8), (target.getZ())));
+                        this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (getY() + 1.8), (target.getZ())));
                         CaerulaArborMod.queueServerWork(12, () -> {
                             if (this.isAlive()) {
                                 shootAbundant(world, x, y, z, 1);
@@ -310,7 +309,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                                 datEntSetI.getEntityData().set(DATA_SHOOT_P, 80);
                             if ((Entity) this instanceof SaintCarmenEntity datEntSetI)
                                 datEntSetI.getEntityData().set(DATA_BULLET, (int) (bullet - 1));
-                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (getY() + 1.8), (target.getZ())));
+                            this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (getY() + 1.8), (target.getZ())));
                             CaerulaArborMod.queueServerWork(9, () -> {
                                 if (this.isAlive()) {
                                     shoot(world, x, y, z, 2);
@@ -480,7 +479,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                     Entity shootFrom = this;
                     Level projectileLevel = shootFrom.level();
                     if (!projectileLevel.isClientSide()) {
-                        AbstractArrow entityToSpawn = new CarmenBulletEntity(CAEntities.CARMEN_BULLET.get(), projectileLevel);
+                        CarmenBulletEntity entityToSpawn = new CarmenBulletEntity(CAEntities.CARMEN_BULLET.get(), projectileLevel);
                         entityToSpawn.setOwner(this);
                         entityToSpawn.setBaseDamage((float) dama);
                         entityToSpawn.setSilent(true);

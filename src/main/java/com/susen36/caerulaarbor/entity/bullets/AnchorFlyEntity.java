@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
+import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -12,7 +14,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -28,9 +29,8 @@ import java.util.Comparator;
 import java.util.List;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
-public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
+public class AnchorFlyEntity extends BaseProjectile implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(CAItems.UNAMBIGUOUS_DIRECTION.get());
-
 	public AnchorFlyEntity(Level world) {
 		super(CAEntities.ANCHOR_FLY.get(), world);
 	}
@@ -40,12 +40,14 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public AnchorFlyEntity(EntityType<? extends AnchorFlyEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world, ItemStack.EMPTY, ItemStack.EMPTY);
+		super(type, world);
+		moveTo(x, y, z);
 	}
 
 	public AnchorFlyEntity(EntityType<? extends AnchorFlyEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world, ItemStack.EMPTY, ItemStack.EMPTY);
+		super(type, entity, world);
 	}
+
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
@@ -54,19 +56,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	@Override
-	protected ItemStack getDefaultPickupItem() {
-		return PROJECTILE_ITEM;
-	}
-
-	@Override
-	protected void doPostHurtEffects(LivingEntity entity) {
-		super.doPostHurtEffects(entity);
-		entity.setArrowCount(entity.getArrowCount() - 1);
-	}
-
-	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
-		super.onHitEntity(entityHitResult);
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -101,7 +91,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                         entityiterator.hurt(
                                 CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, sourceentity), (float) ((sourceentity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                         if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
+                            livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
                     }
                 }
             }
@@ -109,7 +99,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
             if (sourceentity instanceof ServerPlayer serverPlayer)
                 serverPlayer.connection.teleport(x, y, z, sourceentity.getYRot(), sourceentity.getXRot());
             if (sourceentity instanceof LivingEntity livingEntity)
-                livingEntity.removeEffect(CAMobEffects.DIZZY);
+                livingEntity.removeEffect(BabelMobEffects.DIZZY);
             if (sourceentity instanceof LivingEntity livingEntity)
                 livingEntity.removeEffect(MobEffects.DIG_SLOWDOWN);
             if (sourceentity instanceof LivingEntity livingEntity)
@@ -156,7 +146,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                 if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, entity), (float) ((entity instanceof LivingEntity livingEntity15 && livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                     if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
+                        livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
                 }
             }
         }
@@ -164,7 +154,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         if (entity instanceof ServerPlayer serverPlayer)
             serverPlayer.connection.teleport((getX()), (getY()), (getZ()), entity.getYRot(), entity.getXRot());
         if (entity instanceof LivingEntity living) {
-            living.removeEffect(CAMobEffects.DIZZY);
+            living.removeEffect(BabelMobEffects.DIZZY);
             living.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
             living.removeEffect(MobEffects.DIG_SLOWDOWN);
         }
@@ -210,12 +200,12 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                         if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, entity), (float) ((entity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                             if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
+                                livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
                         }
                     }
                 }
         if (entity instanceof LivingEntity livingEntity)
-            livingEntity.removeEffect(CAMobEffects.DIZZY);
+            livingEntity.removeEffect(BabelMobEffects.DIZZY);
         if (entity instanceof LivingEntity livingEntity)
             livingEntity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
         if (entity instanceof LivingEntity livingEntity)
@@ -245,6 +235,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
+		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
 		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.ANCHOR_THROW.get(), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
@@ -258,7 +249,6 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 2f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(10);
-		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
 		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.ANCHOR_THROW.get(), SoundSource.PLAYERS, 1,
 				1f / (RandomSource.create().nextFloat() * 0.5f + 1));

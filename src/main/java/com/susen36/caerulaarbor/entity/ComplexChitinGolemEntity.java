@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -120,6 +122,15 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     }
 
     @Override
+    public boolean doHurtTarget(Entity target) {
+        boolean hurt = super.doHurtTarget(target);
+        if (hurt && target.getBbWidth() * target.getBbHeight() <= 6) {
+            target.push(0, 0.5, 0);
+        }
+        return hurt;
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.is(DamageTypes.IN_FIRE))
             return false;
@@ -235,7 +246,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         double sklp1;
         double dura;
         if (this.isAlive()) {
-            this.removeEffect(CAMobEffects.DIZZY);
+            this.removeEffect(BabelMobEffects.DIZZY);
             boolean root;
             double rx;
             double rz;
@@ -353,8 +364,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.17);
-        builder = builder.add(CAAttributes.SANITY_RATE, 8);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.05);
+        builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.05);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 12);
         builder = builder.add(Attributes.MAX_HEALTH, 675);

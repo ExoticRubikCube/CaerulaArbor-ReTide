@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.warden;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -545,7 +546,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 48);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 75);
-		builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.01);
+		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
 		return builder;
 	}
 

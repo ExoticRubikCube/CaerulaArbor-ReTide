@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -127,9 +128,9 @@ public class EmergencyAidBuildingBlock extends Block implements SimpleWaterlogge
 					continue;
 				}
 				if (livingEntity instanceof Player) {
-						ModCapabilities.getSanityInjury(livingEntity).heal(20);
+						BabelAPI.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(20);
 					} else {
-					ModCapabilities.getSanityInjury(livingEntity).heal(10);
+					BabelAPI.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(10);
 				}
 			}
 			for (int index0 = 0; index0 < 120; index0++) {

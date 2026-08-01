@@ -88,8 +88,8 @@ public class TidelinkedWandItem extends Item {
             damage = (Entity) entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity4.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
             Level projectileLevel = entity.level();
             if (!projectileLevel.isClientSide()) {
-                AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
-                entityToSpawn.setOwner((Entity) entity);
+                TellerShotEntity entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                entityToSpawn.setOwner(entity);
                 entityToSpawn.setBaseDamage((float) (damage * 1));
                 entityToSpawn.setSilent(true);
                 entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
@@ -98,7 +98,7 @@ public class TidelinkedWandItem extends Item {
             }
             for (int index0 = 0; index0 < 2; index0++) {
                 if (!projectileLevel.isClientSide()) {
-                    AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                    TellerShotEntity entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
                     entityToSpawn.setOwner(entity);
                     entityToSpawn.setBaseDamage((float) (damage * 0.75));
                     entityToSpawn.setSilent(true);
@@ -109,8 +109,8 @@ public class TidelinkedWandItem extends Item {
             }
             for (int index1 = 0; index1 < 3; index1++) {
                 if (!projectileLevel.isClientSide()) {
-                    AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
-                    entityToSpawn.setOwner((Entity) entity);
+                    TellerShotEntity entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                    entityToSpawn.setOwner(entity);
                     entityToSpawn.setBaseDamage((float) (damage * 0.5));
                     entityToSpawn.setSilent(true);
                     entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());

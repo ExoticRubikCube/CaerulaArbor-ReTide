@@ -1,12 +1,14 @@
 package com.susen36.caerulaarbor.capability.sanity;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.api.event.ElementEvent;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 
 public class SIHelper {
@@ -15,22 +17,19 @@ public class SIHelper {
     }
 
     public static void causeSanityInjury(LivingEntity target, double value) {
-        causeSanityInjury(target, null, value, SanityEvent.Hurt.Type.BLOCK);
+        BabelAPI.hurtElemental(target, AbstractEPCapability.EPType.NERVOUS, Mth.floor(value));
     }
 
     public static void causeSanityInjury(LivingEntity target, double value, SanityEvent.Hurt.Type type) {
-        causeSanityInjury(target, null, value, type);
+        BabelAPI.hurtElemental(target, AbstractEPCapability.EPType.NERVOUS, null, Mth.floor(value), ElementEvent.HurtType.valueOf(type.name()));
     }
 
     public static void causeSanityInjury(LivingEntity target, LivingEntity attacker, double value) {
-        causeSanityInjury(target, attacker, value, SanityEvent.Hurt.Type.ENTITY);
+        BabelAPI.hurtElemental(target, AbstractEPCapability.EPType.NERVOUS, attacker, Mth.floor(value));
     }
 
     public static void causeSanityInjury(LivingEntity target, @Nullable LivingEntity attacker, double value, SanityEvent.Hurt.Type type) {
-        SanityEvent.Hurt event = new SanityEvent.Hurt(attacker, target, value, type);
-        if (!NeoForge.EVENT_BUS.post(event).isCanceled()) {
-            ModCapabilities.getSanityInjury(target).hurt(event.getAmount());
-        }
+        BabelAPI.hurtElemental(target, AbstractEPCapability.EPType.NERVOUS, attacker, Mth.floor(value), ElementEvent.HurtType.valueOf(type.name()));
     }
 
     public static void causeSanityInjuryWithParticles(LivingEntity target, double value) {

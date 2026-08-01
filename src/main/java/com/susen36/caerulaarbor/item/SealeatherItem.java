@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.google.common.collect.Iterables;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -79,10 +79,10 @@ public abstract class SealeatherItem extends ArmorItem {
     	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 			super.inventoryTick(itemstack, world, entity, slot, selected);
 			if (entity instanceof Player player && Iterables.contains(player.getArmorSlots(), itemstack)) {
-				if (player.hasEffect(CAMobEffects.ESSENCE_RESISTANCE)) return;
+				if (player.hasEffect(BabelMobEffects.ESSENCE_RESISTANCE)) return;
 				if (player.tickCount % 600 == 64) {
 					player.addEffect(
-							new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE,
+							new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE,
 									400, 0, false, false)
 					);
 				}

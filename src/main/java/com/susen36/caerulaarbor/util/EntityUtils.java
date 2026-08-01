@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.util;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
@@ -7,7 +8,10 @@ import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.NetherseaSlimeEntity;
 import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CADamageTypes;
+import com.susen36.caerulaarbor.init.CAEnchantments;
+import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -429,22 +433,6 @@ public class EntityUtils {
 		return (entity instanceof NetherseaSlimeEntity datEntI ? datEntI.getEntityData().get(NetherseaSlimeEntity.DATA_SIZE) : 0) * 0.5;
 	}
 
-	// TODO: 护甲削减逻辑仍需进一步评估
-	public static void giveLessArmor(Entity obj, double limit) {
-		if (obj == null)
-			return;
-		if (obj instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.LESS_ARMOR)) {
-			if ((obj instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR).getAmplifier() : 0) < limit) {
-				if (obj instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR, 300,
-                            (obj instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR).getAmplifier() : 0) + 1, false, true));
-			}
-		} else {
-			if (obj instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR, 300, 0, false, true));
-		}
-	}
-
 	public static void repellerChop(LevelAccessor world, double x, double y, double z, Entity entity, double rate) {
 		if (entity == null)
 			return;
@@ -464,7 +452,7 @@ public class EntityUtils {
 				if (entity instanceof LivingEntity livingEntity)
 					livingEntity.setHealth(livingEntity.getHealth() + 3);
 				for (int index0 = 0; index0 < 2; index0++) {
-					giveLessArmor(entityiterator, 18);
+					BabelMobEffects.LESS_ARMOR.get().apply(entityiterator);
 				}
 			}
 		}
@@ -507,7 +495,7 @@ public class EntityUtils {
 	public static String getPalsy(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round(entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.NUMB) ? livingEntity0.getAttribute(CAAttributes.NUMB).getBaseValue() : 0);
+		return "" + Math.round(entity instanceof LivingEntity livingEntity0 && livingEntity0.hasEffect(BabelMobEffects.NUMB) ? livingEntity0.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0);
 	}
 
 	public static String getHealth(Entity entity) {

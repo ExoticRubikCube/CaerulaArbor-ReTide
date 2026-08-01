@@ -1,6 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -41,7 +42,7 @@ public class FloureIcecreamItem extends Item {
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0));
-			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 1200, 0));
+			entity.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 1200, 0));
 		}
 		entity.removeEffect(CAMobEffects.FROZEN);
 		entity.setTicksFrozen(0);

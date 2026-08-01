@@ -337,7 +337,6 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.5);
-		builder = builder.add(CAAttributes.SANITY_RATE, 10);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
 		builder = builder.add(Attributes.MAX_HEALTH, 20);
 		builder = builder.add(Attributes.ARMOR, 0);

@@ -133,33 +133,33 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
             {
                 int value = 1;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                BlockState bs = world.getBlockState(pos);
                 if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                    world.setBlock(pos, bs.setValue(integerProp, value), 3);
             }
             CaerulaArborMod.queueServerWork(40, () -> {
-                if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.HIGHMORE_SPAWNING_BLOCK.get()
-                        && ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip6
-                                ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(getip6)
+                if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.HIGHMORE_SPAWNING_BLOCK.get()
+                        && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip6
+                                ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip6)
                                 : -1) == 0) {
                     {
                         int value = 1;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                     {
                         int value = 0;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                     if ((LevelAccessor) world instanceof ServerLevel level) {
                         Entity entityToSpawn = CAEntities.HIGHMORE.get().spawn(level, BlockPos.containing(x + 0.5, y + 1, z + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                         }
                     }
                 }
@@ -181,7 +181,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
         if (entity != null) {
             if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 1) {
                 if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()) {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.HIGHMORE_SPAWNBLOCK.get().defaultBlockState(), 3);
+                    world.setBlock(BlockPos.containing(x, y, z), CABlocks.HIGHMORE_SPAWNBLOCK.get().defaultBlockState(), 3);
                     if ((LevelAccessor) world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, (float) 1.5, 1);
                     }

@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
@@ -79,7 +80,6 @@ public class OceanizedBruteEntity extends SeaMonster {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.SANITY_RATE, 7);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 20);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
         builder = builder.add(Attributes.MAX_HEALTH, 115);
@@ -202,7 +202,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                                         recordHurtPlayer(player);
                                     }
                                     if (sourceentity instanceof LivingEntity entity1 && !entity1.level().isClientSide())
-                                        entity1.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
+                                        entity1.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
                                     if (sourceentity instanceof LivingEntity entity1 && !entity1.level().isClientSide())
                                         entity1.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 120, 0, false, false));
                                 }
@@ -234,7 +234,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                                         entityiterator.hurt(
                                                 CADamageTypes.source(world, CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) sklp1);
                                         if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
-                                            entity1.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
+                                            entity1.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
                                         if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
                                             entity1.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 120, 0, false, false));
                                     }

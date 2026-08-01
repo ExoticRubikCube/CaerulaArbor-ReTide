@@ -1,15 +1,13 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.init.CAAttributes;
+import com.susen36.babel.api.entity.ElementalAttacker;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
@@ -21,7 +19,7 @@ import net.neoforged.neoforge.common.SimpleTier;
 import java.util.List;
 
 
-public class ComplexChitinHoeItem extends HoeItem {
+public class ComplexChitinHoeItem extends HoeItem implements ElementalAttacker {
 	private static final Tier TIER = new SimpleTier(
 			BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
 			3374,
@@ -41,11 +39,22 @@ public class ComplexChitinHoeItem extends HoeItem {
 		for (ItemAttributeModifiers.Entry entry : base.modifiers()) {
 			builder.add(entry.attribute(), entry.modifier(), entry.slot());
 		}
-		builder.add(CAAttributes.SANITY_INJURY_DAMAGE,
-				new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerulaarbor", "complex_chitin_hoe_sanity_injury_damage"),
-						80.0D, AttributeModifier.Operation.ADD_VALUE),
-				EquipmentSlotGroup.MAINHAND);
 		return builder.build();
+	}
+
+	@Override
+	public AbstractEPCapability.EPType getElementalType() {
+		return AbstractEPCapability.EPType.NERVOUS;
+	}
+
+	@Override
+	public double getElementalRate() {
+		return 0.0D;
+	}
+
+	@Override
+	public double getElementalInjuryDamage() {
+		return 80.0D;
 	}
 
 	@Override
@@ -80,7 +89,7 @@ public class ComplexChitinHoeItem extends HoeItem {
 		if (context.getPlayer() == null) {
 			return InteractionResult.PASS;
 		}
-		// TODO锛氳瘎浼版槸鍚︿负 ComplexChitinHoeItem 涓?TrailriteHoeItem 鍒朵綔鍏卞悓鍩虹被锛屽苟灏嗚繖娈靛叡浜氦浜掗€昏緫鏀跺彛鍒伴偅閲屻€?
+		// TODO：评估是否为 ComplexChitinHoeItem 与 TrailriteHoeItem 制作共同基类，并将这段共享交互逻辑收口到那里。
 		BlockState clickedState = context.getLevel().getBlockState(context.getClickedPos());
 		if (context.getPlayer().isShiftKeyDown() && clickedState.getBlock() == Blocks.FARMLAND) {
 			BlockState oceanFarmlandState = CABlocks.OCEAN_FARMLAND.get().withPropertiesOf(clickedState);

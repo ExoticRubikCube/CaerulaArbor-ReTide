@@ -1,10 +1,15 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.HighmoreShootEntity;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CADamageTypes;
+import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
@@ -51,7 +56,6 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -91,6 +95,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         setNoAi(false);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         setPersistenceRequired();
+        setNoGravity(true);
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
@@ -301,7 +306,12 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         }
         if (source.is(DamageTypes.DROWN))
             return false;
-        return super.hurt(source, amount);
+
+        boolean hurt = super.hurt(source, amount);
+        if (hurt) {
+            this.handleCounter(source, source.getEntity());
+        }
+        return hurt;
     }
 
     public void awardPreciousDaysAdvancement() {
@@ -425,7 +435,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                         }
                     }
                 } else {
-                    if ((Entity) this instanceof HighmoreEntity datEntSetI)
+                    if (this instanceof HighmoreEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                 }
                 if (sklp2 <= 0) {
@@ -448,9 +458,9 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                                     if (world instanceof ServerLevel level)
                                         level.sendParticles(ParticleTypes.END_ROD, x, (y + 1), z, 72, 2, 2, 2, 0.2);
                                     if (world instanceof ServerLevel projectileLevel) {
-                                        AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
-                                        entityToSpawn.setOwner((Entity) HighmoreEntity.this);
-                                        entityToSpawn.setBaseDamage((float) (((Entity) HighmoreEntity.this instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
+                                        HighmoreShootEntity entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
+                                        entityToSpawn.setOwner(HighmoreEntity.this);
+                                        entityToSpawn.setBaseDamage((float) ((HighmoreEntity.this instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                                         entityToSpawn.setSilent(true);
                                         entityToSpawn.setPos(x, (y + 9), z);
                                         entityToSpawn.shoot((rng * Math.sin(angl)), (-9), (rng * Math.cos(angl)), (float) 1.5, 5);
@@ -530,6 +540,21 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
     }
 
     @Override
+    public AbstractEPCapability.EPType getElementalType() {
+        return AbstractEPCapability.EPType.CORROSION;
+    }
+
+    @Override
+    public double getElementalRate() {
+        return 0.35D;
+    }
+
+    @Override
+    public double getElementalInjuryDamage() {
+        return 4.0D;
+    }
+
+    @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
     }
 
@@ -537,12 +562,6 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
     public void setNoGravity(boolean ignored) {
         super.setNoGravity(true);
     }
-
-    public void aiStep() {
-        super.aiStep();
-        this.setNoGravity(true);
-    }
-
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -553,7 +572,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         builder = builder.add(Attributes.FOLLOW_RANGE, 48);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.6);
-        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         return builder;
     }
 
@@ -690,13 +709,53 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
     }
 
+    public void handleCounter(DamageSource damageSource, Entity sourceEntity) {
+        if (sourceEntity == null || this.hasEffect(CAMobEffects.COOLDOWN_SINAL)
+                || damageSource.is(CADamageTypes.HAND_SPIKE) || damageSource.is(DamageTypes.THORNS)
+                || sourceEntity instanceof HighmoreEntity) {
+            return;
+        }
+
+        if (!this.level().isClientSide()) {
+            this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 100, 0, false, false));
+        }
+
+        int phase = this.getEntityData().get(DATA_PHASE);
+        double range = phase == 0 ? 7.0D : phase == 1 ? 11.0D : 17.0D;
+        if (this.distanceToSqr(sourceEntity) < range * range) {
+            return;
+        }
+
+        double attackDamage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2.5D : 0.0D;
+        spawnCounterProjectile(attackDamage, sourceEntity.getX(), sourceEntity.getY() + sourceEntity.getBbHeight() + 4.0D, sourceEntity.getZ(), 0.0D, -1.0D, 0.0D);
+        spawnCounterProjectile(attackDamage, sourceEntity.getX() + sourceEntity.getBbWidth() * 2.0D, sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ(), -1.0D, 0.0D, 0.0D);
+        spawnCounterProjectile(attackDamage, sourceEntity.getX() - sourceEntity.getBbWidth() * 2.0D, sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ(), 1.0D, 0.0D, 0.0D);
+        spawnCounterProjectile(attackDamage, sourceEntity.getX(), sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ() + sourceEntity.getBbWidth() * 2.0D, 0.0D, 0.0D, -1.0D);
+        spawnCounterProjectile(attackDamage, sourceEntity.getX(), sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ() - sourceEntity.getBbWidth() * 2.0D, 0.0D, 0.0D, 1.0D);
+    }
+
+    private void spawnCounterProjectile(double damage, double x, double y, double z, double dx, double dy, double dz) {
+        if (this.getRandom().nextDouble() >= 0.5D || !(this.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        HighmoreShootEntity projectile = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), serverLevel);
+        projectile.setOwner(this);
+        projectile.setBaseDamage((float) damage);
+        projectile.setSilent(true);
+        projectile.setPos(x, y, z);
+        projectile.shoot(dx, dy, dz, 2.0F, 2.0F);
+        serverLevel.addFreshEntity(projectile);
+    }
+
     public void multiShoot(LevelAccessor world, double x, double y, double z, Entity target, double t) {
         if (target == null)
             return;
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 if (world instanceof ServerLevel projectileLevel) {
-                    AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
+                    HighmoreShootEntity entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
                     entityToSpawn.setOwner(HighmoreEntity.this);
                     entityToSpawn.setBaseDamage((float) (HighmoreEntity.this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? HighmoreEntity.this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                     entityToSpawn.setSilent(true);
@@ -756,12 +815,12 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 for (int index1 = 0; index1 < 12; index1++) {
                     if (world instanceof ServerLevel projectileLevel) {
-                        AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
+                        HighmoreShootEntity entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
                         entityToSpawn.setOwner(entity);
                         entityToSpawn.setBaseDamage((float) ((entity instanceof LivingEntity livingEntity17 && livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3.3));
                         entityToSpawn.setSilent(true);
                         entityToSpawn.setPos(x, (y + 0.75), z);
-                        entityToSpawn.shoot(Math.sin(30 * index1), 0, Math.cos(30 * index1), 1, 0);
+                        entityToSpawn.shoot(Math.sin(30 * index1), 0, Mth.cos(30 * index1), 1, 0);
                         projectileLevel.addFreshEntity(entityToSpawn);
                     }
                 }

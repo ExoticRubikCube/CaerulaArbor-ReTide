@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -208,7 +209,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         double validY;
         double tX;
         double tZ;
-        if (!source.is(BYPASSES_ENDERMAN) && !this.hasEffect(CAMobEffects.DIZZY) && !this.hasEffect(CAMobEffects.MUTE)) {
+        if (!source.is(BYPASSES_ENDERMAN) && !this.hasEffect(BabelMobEffects.DIZZY) && !this.hasEffect(CAMobEffects.MUTE)) {
             Entity directEntity = source.getDirectEntity();
             if (directEntity != sourceentity || !(sourceentity instanceof LivingEntity)) {
                 if (sourceentity instanceof LivingEntity target) {

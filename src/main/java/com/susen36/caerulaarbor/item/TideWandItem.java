@@ -87,8 +87,8 @@ public class TideWandItem extends Item {
             {
                 Level projectileLevel = entity.level();
                 if (!projectileLevel.isClientSide()) {
-                    AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
-                    entityToSpawn.setOwner((Entity) entity);
+                    TellerShotEntity entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                    entityToSpawn.setOwner(entity);
                     entityToSpawn.setBaseDamage((float) ((Entity) entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity4.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                     entityToSpawn.setSilent(true);
                     entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());

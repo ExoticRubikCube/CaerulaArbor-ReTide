@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.enderdragon;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.MoistDragonBreathEntity;
 import com.susen36.caerulaarbor.entity.MoistEnderCrystalEntity;
@@ -53,11 +54,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -133,7 +131,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		return null;
 	}
 
-	//TODO:闇€瑕佷慨鏀逛负姘存櫠鍏夋潫
+	//TODO:需要修改为水晶光束
 	public static void spawnLinkParticles(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
 		double vx = toX - fromX;
 		double vy = toY - fromY;
@@ -610,7 +608,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		builder = builder.add(Attributes.FLYING_SPEED, 0.55);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 85);
 		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
-		builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.0125);
+		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.0125);
 		builder = builder.add(CAAttributes.SANITY_RESISTANCE, 75);
 		return builder;
 	}

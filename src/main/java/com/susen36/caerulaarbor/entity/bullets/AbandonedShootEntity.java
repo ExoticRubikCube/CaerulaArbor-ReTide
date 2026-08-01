@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAParticles;
@@ -16,7 +17,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -33,9 +33,8 @@ import java.util.Comparator;
 import java.util.List;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
-public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier {
+public class AbandonedShootEntity extends BaseProjectile implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Blocks.BLUE_CANDLE);
-
 	public AbandonedShootEntity(Level world) {
 		super(CAEntities.ABANDONED_SHOOT.get(), world);
 	}
@@ -45,12 +44,15 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public AbandonedShootEntity(EntityType<? extends AbandonedShootEntity> type, double x, double y, double z, Level world) {
-		super(type, world);
+		super(type, x, y, z, world);
 	}
 
 	public AbandonedShootEntity(EntityType<? extends AbandonedShootEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world, ItemStack.EMPTY, ItemStack.EMPTY);
+		super(type, world);
+		setOwner(entity);
+		setPos(entity.getX(), entity.getY() - 0.1, entity.getZ());
 	}
+
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
@@ -59,19 +61,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	@Override
-	protected ItemStack getDefaultPickupItem() {
-		return PROJECTILE_ITEM;
-	}
-
-	@Override
-	protected void doPostHurtEffects(LivingEntity entity) {
-		super.doPostHurtEffects(entity);
-		entity.setArrowCount(entity.getArrowCount() - 1);
-	}
-
-	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
-		super.onHitEntity(entityHitResult);
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -156,6 +146,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
+		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
 		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
@@ -169,7 +160,6 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 1.5f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(3);
-		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
 		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1, 1f / (RandomSource.create().nextFloat() * 0.5f + 1));
 		return entityarrow;

@@ -30,7 +30,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -106,7 +105,7 @@ public class  FirstTellerSkillMobEffect extends MobEffect {
                 SIHelper.causeSanityInjury(livingEntity, ayk * 60, SanityEvent.Hurt.Type.POTION);
             }
             if (world instanceof ServerLevel projectileLevel) {
-                AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                TellerShotEntity entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
                 entityToSpawn.setBaseDamage((float) (ayk * 0.6));
                 entityToSpawn.setSilent(true);
                 entityToSpawn.setPos(x, (y + 8), z);

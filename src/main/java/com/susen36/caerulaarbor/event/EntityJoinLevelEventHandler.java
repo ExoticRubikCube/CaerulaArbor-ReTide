@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.api.BabelAPI;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -43,41 +44,17 @@ public class EntityJoinLevelEventHandler {
     private static void handleMobInit(EntityJoinLevelEvent event) {
         Entity entity = event.getEntity();
 
-        if ((entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER)
-                ? livingEntity0.getAttribute(CAAttributes.SANITY_MODIFIER).getBaseValue()
-                : 0) == 1) {
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
-                if (entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
-                    livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(0.16);
-            }
-            if (entity instanceof LivingEntity livEnt3 && livEnt3.getType().is(EntityTypeTags.UNDEAD)) {
-                if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
-                    livingEntity4.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(0.5);
-            }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_low_sanity_modifier")))) {
-                if (entity instanceof LivingEntity livingEntity6 && livingEntity6.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
-                    livingEntity6.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(0.5);
-            }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lower_sanity_modifier")))) {
-                if (entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
-                    livingEntity8.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(0.33);
-            }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lowest_sanity_modifier")))) {
-                if (entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
-                    livingEntity10.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(0.25);
-            }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lowest_smaller_sanity_modifier")))) {
-                if (entity instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
-                    livingEntity12.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(0.2);
-            }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lowest_smallest_sanity_modifier")))) {
-                if (entity instanceof LivingEntity livingEntity14 && livingEntity14.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
-                    livingEntity14.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(0.1);
-            }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_zero_sanity_modifier")))) {
-                if (entity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER))
-                    livingEntity16.getAttribute(CAAttributes.SANITY_MODIFIER).setBaseValue(0);
-            }
+        if (entity instanceof LivingEntity livingEntity0) {
+            double sanityModifier = 1;
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) sanityModifier = 0.16;
+            if (livingEntity0.getType().is(EntityTypeTags.UNDEAD)) sanityModifier = 0.5;
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_low_elemental_modifier")))) sanityModifier = 0.5;
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lower_elemental_modifier")))) sanityModifier = 0.33;
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lowest_elemental_modifier")))) sanityModifier = 0.25;
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lowest_smaller_elemental_modifier")))) sanityModifier = 0.2;
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lowest_smallest_elemental_modifier")))) sanityModifier = 0.1;
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_zero_elemental_modifier")))) sanityModifier = 0;
+            BabelAPI.setElementalDefenseBaseModifier(livingEntity0, sanityModifier);
         }
     }
 

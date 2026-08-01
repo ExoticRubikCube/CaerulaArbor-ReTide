@@ -40,11 +40,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -73,8 +70,6 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		builder.define(DATA_SHOOT, false);
 		builder.define(DATA_ANIMATION, "undefined");
 	}
-
-
 
     @Override
 	protected void registerGoals() {

@@ -19,7 +19,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 
@@ -55,11 +54,10 @@ public class SplasherAttackMobEffect extends MobEffect {
                 rand = Mth.nextDouble(RandomSource.create(), 7, 11);
                 if (entityiterator instanceof LivingEntity livEnt6 && livEnt6.hasEffect(CAMobEffects.TRAIL_BUFF)) {
                     if (world instanceof ServerLevel projectileLevel) {
-                        AbstractArrow entityToSpawn = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), projectileLevel);
-                        entityToSpawn.setOwner((Entity) entity);
+                        FishSplashEntity entityToSpawn = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), projectileLevel);
+                        entityToSpawn.setOwner(entity);
                         entityToSpawn.setBaseDamage((float) dama);
                         entityToSpawn.setSilent(true);
-                        entityToSpawn.setCritArrow(true);
                         entityToSpawn.setPos((entityiterator.getX()), (entityiterator.getY() + rand), (entityiterator.getZ()));
                         entityToSpawn.shoot(0, (-1), 0, (float) 1.5, 0);
                         projectileLevel.addFreshEntity(entityToSpawn);

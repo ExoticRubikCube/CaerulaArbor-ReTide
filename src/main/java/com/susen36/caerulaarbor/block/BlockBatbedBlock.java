@@ -140,7 +140,7 @@ public class BlockBatbedBlock extends Block {
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x + ((new Object() {
+        if ((world.getBlockState(BlockPos.containing(x + ((new Object() {
             public Direction getDirection(BlockState bs) {
                 Property<?> prop = bs.getBlock().getStateDefinition().getProperty("facing");
                 if (prop instanceof DirectionProperty dp)
@@ -157,7 +157,7 @@ public class BlockBatbedBlock extends Block {
                 return prop instanceof EnumProperty ep && ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) bs.getValue(ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
             }
         }.getDirection(blockstate)).getOpposite()).getStepZ()))).canBeReplaced()) {
-            ((LevelAccessor) world).setBlock(BlockPos.containing(x + ((new Object() {
+            world.setBlock(BlockPos.containing(x + ((new Object() {
                 public Direction getDirection(BlockState bs) {
                     Property<?> prop = bs.getBlock().getStateDefinition().getProperty("facing");
                     if (prop instanceof DirectionProperty dp)
@@ -199,7 +199,7 @@ public class BlockBatbedBlock extends Block {
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if (!((((LevelAccessor) world).getBlockState(BlockPos.containing(x + ((new Object() {
+        if (!((world.getBlockState(BlockPos.containing(x + ((new Object() {
             public Direction getDirection(BlockState bs) {
                 Property<?> prop = bs.getBlock().getStateDefinition().getProperty("facing");
                 if (prop instanceof DirectionProperty dp)
@@ -207,7 +207,7 @@ public class BlockBatbedBlock extends Block {
                 prop = bs.getBlock().getStateDefinition().getProperty("axis");
                 return prop instanceof EnumProperty ep && ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) bs.getValue(ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
             }
-        }.getDirection((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))))).getOpposite()).getStepX(), y, z + ((new Object() {
+        }.getDirection((world.getBlockState(BlockPos.containing(x, y, z))))).getOpposite()).getStepX(), y, z + ((new Object() {
             public Direction getDirection(BlockState bs) {
                 Property<?> prop = bs.getBlock().getStateDefinition().getProperty("facing");
                 if (prop instanceof DirectionProperty dp)
@@ -215,10 +215,10 @@ public class BlockBatbedBlock extends Block {
                 prop = bs.getBlock().getStateDefinition().getProperty("axis");
                 return prop instanceof EnumProperty ep && ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) bs.getValue(ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
             }
-        }.getDirection((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))))).getOpposite()).getStepZ()))).getBlock() == CABlocks.BATBED_UPPER.get())) {
+        }.getDirection((world.getBlockState(BlockPos.containing(x, y, z))))).getOpposite()).getStepZ()))).getBlock() == CABlocks.BATBED_UPPER.get())) {
             {
                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                dropResources(((LevelAccessor) world).getBlockState(blockPos), world, BlockPos.containing(x, y, z), null);
+                dropResources(world.getBlockState(blockPos), world, BlockPos.containing(x, y, z), null);
                 world.destroyBlock(blockPos, false);
             }
         }

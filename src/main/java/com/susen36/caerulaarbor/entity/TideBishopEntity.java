@@ -51,6 +51,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
+import com.susen36.babel.init.BabelAttributes;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -86,7 +87,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
-        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         return builder;
     }
 
@@ -243,11 +244,10 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
                     if (this.isAlive() && this.getHealth() < this.getMaxHealth()) {
                         Level projectileLevel = this.level();
                         if (!projectileLevel.isClientSide()) {
-                            AbstractArrow projectile = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                            TellerShotEntity projectile = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
                             projectile.setOwner(this);
                             projectile.setBaseDamage((float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0));
                             projectile.setSilent(true);
-                            projectile.setCritArrow(true);
                             projectile.setPos(this.getX(), this.getEyeY() - 0.1, this.getZ());
                             projectile.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z, 1.5F, 0);
                             projectileLevel.addFreshEntity(projectile);

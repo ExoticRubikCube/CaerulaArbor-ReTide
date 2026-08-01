@@ -249,12 +249,12 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 if (OceanizedPillagerEntity.this.getTarget() != null) {
-                                    ((Entity) OceanizedPillagerEntity.this).lookAt(EntityAnchorArgument.Anchor.EYES,
+                                    OceanizedPillagerEntity.this.lookAt(EntityAnchorArgument.Anchor.EYES,
                                             new Vec3((((Entity) OceanizedPillagerEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getX()),
                                                     (((Entity) OceanizedPillagerEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getY() + ((Entity) OceanizedPillagerEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getBbHeight()),
                                                     (((Entity) OceanizedPillagerEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getZ())));
                                 }
-                                if (((Entity) OceanizedPillagerEntity.this).isAlive()) {
+                                if (OceanizedPillagerEntity.this.isAlive()) {
                                     if (world instanceof Level level) {
                                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_SHOOT, SoundSource.HOSTILE, 1, 1);
                                     }
@@ -263,7 +263,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                                     if (!projectileLevel.isClientSide()) {
                                         LivingEntity livingEntity22 = OceanizedPillagerEntity.this;
                                         AbstractArrow entityToSpawn = new ShotOceanArrowEntity(CAEntities.SHOT_OCEAN_ARROW.get(), projectileLevel);
-                                        entityToSpawn.setOwner((Entity) OceanizedPillagerEntity.this);
+                                        entityToSpawn.setOwner(OceanizedPillagerEntity.this);
                                         entityToSpawn.setBaseDamage((float) (livingEntity22.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                                                 ? livingEntity22.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
                                                 : 0));

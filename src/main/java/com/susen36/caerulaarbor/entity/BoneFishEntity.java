@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -104,6 +105,21 @@ public class BoneFishEntity extends SeaMonster implements Bucketable {
     @Override
 	protected PathNavigation createNavigation(Level world) {
 		return new WaterBoundPathNavigation(this, world);
+	}
+
+	@Override
+	public AbstractEPCapability.EPType getElementalType() {
+		return AbstractEPCapability.EPType.CORROSION;
+	}
+
+	@Override
+	public double getElementalRate() {
+		return 0.45D;
+	}
+
+	@Override
+	public double getElementalInjuryDamage() {
+		return 15;
 	}
 
 	@Override

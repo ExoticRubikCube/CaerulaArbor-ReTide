@@ -6,8 +6,8 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.entity.*;
-import com.susen36.caerulaarbor.entity.bullets.HighmoreShootEntity;
+import com.susen36.caerulaarbor.entity.ChitinGolemEntity;
+import com.susen36.caerulaarbor.entity.PredatorAbyssalEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.GrowUpgradeManager;
 import com.susen36.caerulaarbor.manager.SilenceUpgradeManager;
@@ -26,7 +26,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -50,7 +49,6 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 import java.util.List;
-import java.util.Objects;
 
 @SuppressWarnings("unused")
 @EventBusSubscriber
@@ -72,13 +70,10 @@ public class LivingAttackEventHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEntityAttack(LivingIncomingDamageEvent event) {
         handleInvulnerable(event);
-        handleNumbness(event);
         handleMissRate(event);
         handleMartusArrowImmunity(event);
         handleInquisitionFriendlyFire(event);
         handleDamagePrevention(event);
-        handleHighmoreCounter(event);
-        handleTidutantArmorBreak(event);
         handleMobHit(event);
         handlePlayerHit(event);
     }
@@ -89,25 +84,6 @@ public class LivingAttackEventHandler {
         if (damageSource.is(CADamageTypes.INV_KILLER)) return;
 
         if (target.hasEffect(CAMobEffects.INVULNERABLE)) {
-            event.setCanceled(true);
-        }
-    }
-
-    private static void handleNumbness(LivingIncomingDamageEvent event) {
-        var level = event.getEntity().level();
-        var target = event.getEntity();
-        var sourceEntity = event.getSource().getEntity();
-        if (!(sourceEntity instanceof LivingEntity attacker)) return;
-        if (event.isCanceled()) return;
-
-        var numbness = attacker.getAttribute(CAAttributes.NUMB);
-        if (numbness != null && numbness.getBaseValue() > 0) {
-            numbness.setBaseValue(numbness.getBaseValue() - 1);
-            if (level instanceof ServerLevel serverLevel)
-                serverLevel.sendParticles(CAParticles.NUMBNESS.get(), attacker.getX(), attacker.getY() + 1, attacker.getZ(), 12, 1, 1, 1, 0.1);
-            if (level instanceof Level) {
-                level.playSound(null, target.blockPosition(), SoundEvents.WAXED_SIGN_INTERACT_FAIL, SoundSource.HOSTILE, 2, 1);
-            }
             event.setCanceled(true);
         }
     }
@@ -202,72 +178,6 @@ public class LivingAttackEventHandler {
         event.setCanceled(true);
     }
 
-    // TODO：Highmore 反击逻辑仍需复核，可能需要下放
-    private static void handleHighmoreCounter(LivingIncomingDamageEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        DamageSource damagesource = event.getSource();
-        var entity = event.getEntity();
-        var sourceEntity = event.getSource().getEntity();
-
-        if (sourceEntity == null) return;
-
-        if (entity instanceof HighmoreEntity livEnt1) {
-            if (livEnt1.hasEffect(CAMobEffects.COOLDOWN_SINAL)) return;
-
-            if (!(damagesource.is(CADamageTypes.HAND_SPIKE) || damagesource.is(DamageTypes.THORNS) || sourceEntity instanceof HighmoreEntity)) {
-                if (!livEnt1.level().isClientSide())
-                    livEnt1.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 100, 0, false, false));
-
-                double range;
-                if ((entity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 0) {
-                    range = 7;
-                } else if ((entity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 1) {
-                    range = 11;
-                } else {
-                    range = 17;
-                }
-
-                if (entity.distanceTo(sourceEntity) >= range) {
-                    double atk = (livEnt1.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                            ? Objects.requireNonNull(livEnt1.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0) * 2.5;
-
-                    spawnHighmoreProjectile(world, entity, sourceEntity, atk, sourceEntity.getX(), sourceEntity.getY() + sourceEntity.getBbHeight() + 4, sourceEntity.getZ(), 0, -1, 0);
-                    spawnHighmoreProjectile(world, entity, sourceEntity, atk, sourceEntity.getX() + sourceEntity.getBbWidth() * 2, sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ(), -1, 0, 0);
-                    spawnHighmoreProjectile(world, entity, sourceEntity, atk, sourceEntity.getX() - sourceEntity.getBbWidth() * 2, sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ(), 1, 0, 0);
-                    spawnHighmoreProjectile(world, entity, sourceEntity, atk, sourceEntity.getX(), sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ() + sourceEntity.getBbWidth() * 2, 0, 0, -1);
-                    spawnHighmoreProjectile(world, entity, sourceEntity, atk, sourceEntity.getX(), sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ() - sourceEntity.getBbWidth() * 2, 0, 0, 1);
-                }
-            }
-        }
-    }
-
-    private static void spawnHighmoreProjectile(LevelAccessor world, Entity shooter, Entity target, double damage, double x, double y, double z, double dx, double dy, double dz) {
-        if (Math.random() >= 0.5) return;
-        if (!(world instanceof ServerLevel projectileLevel)) return;
-
-        HighmoreShootEntity entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), projectileLevel);
-        entityToSpawn.setOwner(shooter);
-        entityToSpawn.setBaseDamage((float) damage);
-        entityToSpawn.setSilent(true);
-        entityToSpawn.setPos(x, y, z);
-        entityToSpawn.shoot(dx, dy, dz, 2, 2);
-        projectileLevel.addFreshEntity(entityToSpawn);
-    }
-
-    // TODO：Midutant 破甲逻辑仍需复核
-    private static void handleTidutantArmorBreak(LivingIncomingDamageEvent event) {
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (sourceentity == null) return;
-
-        if (sourceentity instanceof TideutantRockSpiderEntity) {
-            EntityUtils.giveLessArmor(entity, 8);
-        } else if (sourceentity instanceof TidutantExcrescenceEntity) {
-            EntityUtils.giveLessArmor(entity, 4);
-        }
-    }
-
     private static void handleMobHit(LivingIncomingDamageEvent event) {
         var world = event.getEntity().level();
         var target = event.getEntity();
@@ -280,7 +190,8 @@ public class LivingAttackEventHandler {
         handleOceanOffspringFriendlyFire(event, target, sourceEntity);
         if (event.isCanceled()) return;
         handleMobHitEvolution(event, world, target, sourceEntity, damageSource, event.getAmount());
-        handleMobHitSpecialEffects(world, target, sourceEntity, damageSource, event.getAmount());
+        event.getAmount();
+        handleSublimationAttack(world, target, sourceEntity, damageSource);
     }
 
     private static void handleOceanOffspringFriendlyFire(LivingIncomingDamageEvent event, LivingEntity target, Entity sourceEntity) {
@@ -365,29 +276,10 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void handleMobHitSpecialEffects(LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource, double amount) {
-        if (sourceEntity instanceof BoneFishEntity) {
-            EntityUtils.giveLessArmor(target, 1);
-        } else if (sourceEntity instanceof FakeOffspringEntity) {
-            EntityUtils.giveLessArmor(target, 2);
-        }
-        if ((sourceEntity instanceof ChitinGolemEntity || sourceEntity instanceof ComplexChitinGolemEntity)
-                && target.getBbWidth() * target.getBbHeight() <= 6 && !damageSource.is(CADamageTypes.GOLEM_ATTACK)) {
-            target.push(0, 0.5, 0);
-        }
-        if (sourceEntity instanceof HighmoreEntity && sourceEntity != target) {
-            EntityUtils.giveLessArmor(target, 21);
-        }
-        if (target instanceof SpikeChestEntity && target.isAlive()) {
-            sourceEntity.hurt(CADamageTypes.source(world, CADamageTypes.CHEST_SPIKE), (float) (amount * 0.33));
-        }
-
-        handleSublimationAttack(world, target, sourceEntity);
-    }
-
-    private static void handleSublimationAttack(LevelAccessor world, LivingEntity target, Entity sourceEntity) {
+    private static void handleSublimationAttack(LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource) {
         double finalGrow = Math.min(MapVariables.get(world).strategy_sublimation, MapVariables.get(world).strategy_grow);
-        if (finalGrow > 0.0 && sourceEntity instanceof LivingEntity livingSource) {
+        if (finalGrow > 0.0 && sourceEntity instanceof LivingEntity livingSource
+                && !damageSource.is(CADamageTypes.OCEAN_REAL)) {
             double damage = livingSource.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                     ? livingSource.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0.0;
             target.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_REAL, sourceEntity), (float) (damage * finalGrow * 0.03));

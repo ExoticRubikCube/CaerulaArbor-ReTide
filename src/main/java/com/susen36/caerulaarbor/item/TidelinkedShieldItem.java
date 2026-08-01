@@ -1,8 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -59,7 +59,7 @@ public class TidelinkedShieldItem extends ShieldItem {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected) {
             if (entity instanceof LivingEntity living)
-				living.removeEffect(CAMobEffects.LESS_ARMOR);
+				living.removeEffect(BabelMobEffects.LESS_ARMOR);
         }
 	}
 }

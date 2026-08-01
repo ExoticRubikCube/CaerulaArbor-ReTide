@@ -275,7 +275,6 @@ public class ReaperFishEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
-		builder = builder.add(CAAttributes.SANITY_RATE, 6);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 40);
 		return builder;
 	}

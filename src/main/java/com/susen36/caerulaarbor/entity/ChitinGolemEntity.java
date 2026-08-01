@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -108,6 +109,15 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     }
 
     @Override
+    public boolean doHurtTarget(Entity target) {
+        boolean hurt = super.doHurtTarget(target);
+        if (hurt && target.getBbWidth() * target.getBbHeight() <= 6) {
+            target.push(0, 0.5, 0);
+        }
+        return hurt;
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         double x = this.getX();
@@ -135,7 +145,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                             }
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 60, 0, false, false));
-                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
+                            this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             CaerulaArborMod.queueServerWork(13, () -> {
                                 if (world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_DAMAGE, SoundSource.HOSTILE, 2, 1);
@@ -308,8 +318,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         builder = builder.add(Attributes.ATTACK_DAMAGE, 17);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.05);
-        builder = builder.add(CAAttributes.SANITY_RATE, 10);
+        builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.05);
         builder = builder.add(CAAttributes.MISSRATE, 33);
         return builder;
     }

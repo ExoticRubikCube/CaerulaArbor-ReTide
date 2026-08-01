@@ -12,9 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class CircularSawItemRenderer extends GeoItemRenderer<CircularSawItem> {
 	public CircularSawItemRenderer() {
 		super(new CircularSawItemModel());
@@ -31,8 +28,6 @@ public class CircularSawItemRenderer extends GeoItemRenderer<CircularSawItem> {
 	protected RenderType renderType;
 	public ItemDisplayContext transformType;
 	protected CircularSawItem animatable;
-	private final Set<String> hiddenBones = new HashSet<>();
-	private final Set<String> suppressedBones = new HashSet<>();
 
 	@Override
 	public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack matrixStack, MultiBufferSource bufferIn, int combinedLightIn, int p_239207_6_) {

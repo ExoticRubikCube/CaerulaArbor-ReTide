@@ -55,14 +55,14 @@ public class TrailriteAxeItem extends AxeItem {
         int sharpnessLevel = 0;
         if (world instanceof Level level) {
             silkTouchLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SILK_TOUCH)
-                    .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
+                    .map(itemstack::getEnchantmentLevel).orElse(0);
             efficiencyLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.EFFICIENCY)
-                    .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
+                    .map(itemstack::getEnchantmentLevel).orElse(0);
             sharpnessLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SHARPNESS)
-                    .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
+                    .map(itemstack::getEnchantmentLevel).orElse(0);
         }
         if (Math.random() < 0.15 + silkTouchLevel * 0.08) {
-            ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.AXE_CLEAVE, sourceentity), (float) (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * (0.08 + efficiencyLevel * 0.03 + sharpnessLevel * 0.02)));
+            entity.hurt(CADamageTypes.source(world, CADamageTypes.AXE_CLEAVE, sourceentity), (float) (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * (0.08 + efficiencyLevel * 0.03 + sharpnessLevel * 0.02)));
             if (world instanceof ServerLevel level)
                 level.sendParticles(CAParticles.BLOODOOZE.get(), x, (y + 1), z, 32, 2, 2, 2, 0.15);
             if (world instanceof Level level) {

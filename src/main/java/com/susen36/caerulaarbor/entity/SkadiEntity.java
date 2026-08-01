@@ -1,8 +1,13 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CADamageTypes;
+import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -166,7 +171,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                                 CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                         * 2.5));
                                         if (sourceentity instanceof LivingEntity && !this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 100, 0, false, false));
+                                            this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 100, 0, false, false));
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
                                     if (world instanceof Level level) {
@@ -178,7 +183,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                             && distanceTo(sourceentity) <= 3) {
                                         sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ddd);
                                         if (!this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 100, 0, false, false));
+                                            this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 100, 0, false, false));
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
                                 }
@@ -399,7 +404,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
         builder = builder.add(NeoForgeMod.SWIM_SPEED, 8);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.33);
+        builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.33);
         builder = builder.add(Attributes.MAX_HEALTH, 270);
         builder = builder.add(Attributes.ARMOR, 5);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 38);

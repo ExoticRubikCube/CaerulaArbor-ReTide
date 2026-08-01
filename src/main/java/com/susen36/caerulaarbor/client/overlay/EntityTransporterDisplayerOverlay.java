@@ -57,7 +57,7 @@ public class EntityTransporterDisplayerOverlay {
                 result1 = entity;
             }
             if (result1 instanceof LivingEntity livingEntity) {
-				InventoryScreen.renderEntityInInventoryFollowsAngle(event.getGuiGraphics(), w - 164, h - 52, w - 104, h + 8, 30, 1.1f, 0f, 0f, livingEntity);
+				InventoryScreen.renderEntityInInventoryFollowsAngle(event.getGuiGraphics(), w - 164, h - 52, w - 104, h + 8, 30, 0f, 1.1f, 0f, livingEntity);
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
@@ -120,9 +121,9 @@ public class SkadiCorruptedEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 15);
         builder = builder.add(Attributes.FOLLOW_RANGE, 36);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.02);
+        builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.02);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 30);
-        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         return builder;
     }
 
@@ -472,7 +473,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                         if ((Entity) this instanceof LivingEntity entity)
                             entity.setHealth((float) (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) - dama));
                     } else {
-                        ((Entity) this).hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE), 99999);
+                        this.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE), 99999);
                     }
                 }
                 double ang;

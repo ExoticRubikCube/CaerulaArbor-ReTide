@@ -13,7 +13,6 @@ public class CAMobEffects {
 
     public static final DeferredHolder<MobEffect, ? extends MobEffect> HAEMOPHILIA = REGISTRY.register("haemophilia", HaemophiliaMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> SANITY_IMMUE = REGISTRY.register("sanity_immue", SanityImmueMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> DIZZY = REGISTRY.register("dizzy", DizzyMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> KINGS_BREATH = REGISTRY.register("kings_breath", KingsBreathMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> KINGS_BOOST = REGISTRY.register("kings_boost", KingsBoostMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> SPEAR_FIGHT = REGISTRY.register("spear_fight", SpearFightMobEffect::new);
@@ -42,7 +41,6 @@ public class CAMobEffects {
     public static final DeferredHolder<MobEffect, ? extends MobEffect> BOOST_OF_SILENCE = REGISTRY.register("boost_of_silence", BoostOfSilenceMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> STRENGTH_OF_CROWD = REGISTRY.register("strength_of_crowd", StrengthOfCrowdMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> INFESTED = REGISTRY.register("infested", InfestedMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> LESS_ARMOR = REGISTRY.register("less_armor", LessArmorMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> INVULNERABLE = REGISTRY.register("invulnerable", InvulnerableMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ANGER_OF_TIDE = REGISTRY.register("anger_of_tide", AngerOfTideMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> DEDUCT_ONE_SANITY = REGISTRY.register("deduct_one_sanity", DeductOneSanityMobEffect::new);
@@ -71,14 +69,12 @@ public class CAMobEffects {
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ENDSPEAER_BRANDGUIDE_BUFF = REGISTRY.register("endspeaer_brandguide_buff", EndspeaerBrandguideBuffMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> FLEXIBILITY_BUFF = REGISTRY.register("flexibility_buff", FlexibilityBuffMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> MAGIC_RESIS_BUFF = REGISTRY.register("magic_resis_buff", MagicResisBuffMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> ESSENCE_RESISTANCE = REGISTRY.register("essence_resistance", EssenceResistanceMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> IMMORTAL = REGISTRY.register("immortal", ImmortalMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ADD_HEALTH_PERCLY = REGISTRY.register("add_health_percly", AddHealthPerclyMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ISHARMLA_CURSE = REGISTRY.register("isharmla_curse", IsharmlaCurseMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> REGENERATION_PERCLY = REGISTRY.register("regeneration_percly", RegenerationPerclyMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> SHULKER_BUFF = REGISTRY.register("shulker_buff", ShulkerBuffMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> MORE_FALL_DAMAGE = REGISTRY.register("more_fall_damage", MoreFallDamageMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> UNDER_BREAK = REGISTRY.register("under_break", UnderBreakMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ADD_DEF_TINY = REGISTRY.register("add_def_tiny", AddDefTinyMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ADD_DEF_PERCLY_TINY = REGISTRY.register("add_def_percly_tiny", AddDefPerclyTinyMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ADD_RESIS_TINY = REGISTRY.register("add_resis_tiny", AddResisTinyMobEffect::new);

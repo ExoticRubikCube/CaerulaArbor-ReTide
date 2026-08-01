@@ -1,5 +1,8 @@
 package com.susen36.caerulaarbor.util;
 
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
@@ -96,13 +99,15 @@ public class CaerulaUtil {
 		SIHelper.causeSanityInjury(living, amount);
 	}
 	public static void healSanityInjury(LivingEntity living, double amount){
-		ModCapabilities.getSanityInjury(living).heal(amount);
+		BabelAPI.getEP(living).getEP(AbstractEPCapability.EPType.NERVOUS).heal(Mth.floor(amount));
 	}
 
 	// 护甲侵蚀
 	public static void armorErrosion(Entity entity, int amount, int limit){
 		for (int i=0;i<amount;i++){
-			EntityUtils.giveLessArmor(entity, limit);
+			if (entity instanceof LivingEntity living) {
+				BabelMobEffects.LESS_ARMOR.get().apply(living);
+			}
 		}
 	}
 

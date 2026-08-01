@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.wither;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.bullets.WitherShootPreEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -38,11 +39,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -301,7 +299,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
 
     @Override
     public void performRangedAttack(LivingEntity target, float flval) {
-        // TODO锛氬綋鍓嶇疆鍑嬬伒寮硅矾寰勬竻鐞嗗畬鎴愬悗锛岄噸鏂板瑙嗚繖涓仐鐣欑殑绯荤粺璋冪敤銆?
+        // TODO：当前置凋灵弹路径清理完成后，重新审视这个遗留的系统调用。
         WitherShootPreEntity.shoot(this, target);
     }
 
@@ -331,8 +329,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
         builder = builder.add(Attributes.FOLLOW_RANGE, 56);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.35);
-        builder = builder.add(CAAttributes.SANITY_RATE, 10);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.01);
+        builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 65);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 5);
         return builder;

@@ -297,25 +297,25 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                     {
                         int value = 2;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                 } else if (balance > 64) {
                     {
                         int value = 1;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                 } else {
                     {
                         int value = 0;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                 }
             }

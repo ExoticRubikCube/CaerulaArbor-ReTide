@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.enderdragon;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.MoistDragonBreathEntity;
 import com.susen36.caerulaarbor.entity.MoistEnderCrystalEntity;
@@ -36,7 +37,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -52,11 +54,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -75,7 +74,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	public Set<String> crystals = new HashSet<>();
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
-	// 绋嬪簭鍔ㄧ敾椹卞姩鏁版嵁 - 铔囧舰鍋忚埅寤惰繜缂撳啿鍖?
+	// 程序动画驱动数据 - 弧形偏转延迟缓冲区
 	public final double[] yRotHistory = new double[64];
 	public int posPointer = -1;
 	public float oFlapTime;
@@ -108,7 +107,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		builder.define(DATA_DURATION, 50);
 	}
 
-	// 鑾峰彇寤惰繜index甯х殑鍋忚埅瑙掑害锛堣泧褰㈤琛屽欢杩熸晥鏋滐級
+	// 获取延迟index带的偏转角度（弧形飞行延迟效果）
 	public double getLatencyYRot(int index, float partialTick) {
 		if (this.isDeadOrDying()) {
 			partialTick = 0.0F;
@@ -136,7 +135,9 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		this.goalSelector.addGoal(0, new DoNothingGoal());
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 60, 15.0F));
-		this.goalSelector.addGoal(5, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
+		this.goalSelector.addGoal(5, new DragonWanderGoal(this, 0.7D));
+		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 32.0F));
 	}
 
 	public void putCrystal(Entity crystal) {
@@ -381,7 +382,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		double deadTime;
 		deadTime = this.deathTime;
 		if (this.isAlive()) {
-			// 绉绘鑷師鐗?EnderDragon - flapTime 鍜屽欢杩熶綅缃紦鍐插尯鏇存柊
+			// 移植自原版EnderDragon - flapTime 和延迟位置缓冲区更新
 			this.oFlapTime = this.flapTime;
 			if (!this.isDeadOrDying()) {
 				Vec3 velocity = this.getDeltaMovement();
@@ -410,7 +411,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			dura = (Entity) this instanceof OceanizedEnderDragonEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
 			rev = (Entity) this instanceof OceanizedEnderDragonEntity datEntI ? datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0;
 			if (tickCount % 100 == 0) {
-				if (WorldUtils.hasNoSolidGroundWithin20Below(world, x, y, z)) {
+				if (y > world.getMaxBuildHeight() - 20 && WorldUtils.hasNoSolidGroundWithin20Below(world, x, y, z)) {
 					push(0, (-0.35), 0);
 				}
 			}
@@ -519,7 +520,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			if (rev > 0 && tickCount % 70 == 50) {
 				distributeCrystal(world, x, y, z);
 			}
-			if (EntityUtils.getSpeed(this) > 0.64) {
+			if (EntityUtils.getSpeed(this) > 2.0) {
 				setDeltaMovement(new Vec3(0, 0, 0));
 			}
 		}
@@ -628,7 +629,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		builder = builder.add(Attributes.FLYING_SPEED, 0.55);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 85);
 		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
-		builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.0125);
+		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.0125);
 		builder = builder.add(CAAttributes.SANITY_RESISTANCE, 75);
 		return builder;
 	}
@@ -818,6 +819,66 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	@Override
 	public void setAnimationProcedure(String animation) {
 		this.animationprocedure = animation;
+	}
+
+	class DragonWanderGoal extends Goal {
+		private final OceanizedEnderDragonEntity dragon;
+		private final double speedModifier;
+		private double targetX;
+		private double targetY;
+		private double targetZ;
+		private int nextRecalcTick;
+
+		public DragonWanderGoal(OceanizedEnderDragonEntity dragon, double speedModifier) {
+			this.dragon = dragon;
+			this.speedModifier = speedModifier;
+			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+		}
+
+		@Override
+		public boolean canUse() {
+			if (dragon.getTarget() != null) return false;
+			if (!dragon.isEnderinaDurative()) return false;
+			if (dragon.getNavigation().isInProgress()) return false;
+			if (dragon.tickCount < this.nextRecalcTick) return false;
+			Vec3 target = this.pickRandomTarget();
+			if (target == null) return false;
+			this.targetX = target.x;
+			this.targetY = target.y;
+			this.targetZ = target.z;
+			return true;
+		}
+
+		@Override
+		public boolean canContinueToUse() {
+			return dragon.getTarget() == null
+				&& dragon.isEnderinaDurative()
+				&& !dragon.getNavigation().isDone();
+		}
+
+		@Override
+		public void start() {
+			this.nextRecalcTick = dragon.tickCount + 120 + dragon.getRandom().nextInt(60);
+			dragon.getNavigation().moveTo(targetX, targetY, targetZ, speedModifier);
+		}
+
+		@Override
+		public void stop() {
+			dragon.getNavigation().stop();
+		}
+
+		@Nullable
+		private Vec3 pickRandomTarget() {
+			RandomSource r = dragon.getRandom();
+			float angle = r.nextFloat() * Mth.TWO_PI;
+			float radius = 25 + r.nextFloat() * 15;
+			double dx = Mth.cos(angle) * radius;
+			double dz = Mth.sin(angle) * radius;
+			double dy = (r.nextFloat() - 0.5F) * 30;
+			Level level = dragon.level();
+			double y = Mth.clamp(dragon.getY() + dy, level.getMinBuildHeight() + 10, level.getMaxBuildHeight() - 20);
+			return new Vec3(dragon.getX() + dx, y, dragon.getZ() + dz);
+		}
 	}
 
 	class DoNothingGoal extends Goal {

@@ -123,7 +123,6 @@ public class NucleicMaleficentEntity extends SeaMonster {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 1.25);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 45);
-        builder = builder.add(CAAttributes.SANITY_RATE, 6);
         builder = builder.add(Attributes.MAX_HEALTH, 120);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 9);

@@ -42,7 +42,7 @@ public class GuidePathAheadMobEffect extends MobEffect {
         if (entity == null)
              return true;
         BlockState target;
-        if (((Entity) entity).isAlive()) {
+        if (entity.isAlive()) {
             if (WorldUtils.canGrief(world) && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
                 if (!((Entity) entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.MUTE))) {
                     target = (world.getBlockState(BlockPos.containing(x, y, z)));

@@ -1,6 +1,9 @@
 package com.susen36.caerulaarbor.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.susen36.babel.BabelMod;
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CAGameRules;
@@ -24,7 +27,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
@@ -59,7 +61,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
             result1 = entity;
         }
         if (result1 instanceof LivingEntity livingEntity) {
-			InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphics, this.leftPos + 56, this.topPos + 37, this.leftPos + 116, this.topPos + 97, 30, 0f + (float) Math.atan((this.leftPos + 86 - mouseX) / 40.0), (float) Math.atan((this.topPos + 18 - mouseY) / 40.0), 0f, livingEntity);
+			InventoryScreen.renderEntityInInventoryFollowsMouse(guiGraphics, this.leftPos + 39, this.topPos + 4, this.leftPos + 126, this.topPos + 75, 30, 0.0f, mouseX, mouseY, livingEntity);
 		}
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		if (mouseX > leftPos + 4 && mouseX < leftPos + 28 && mouseY > topPos + 123 && mouseY < topPos + 147)
@@ -133,10 +135,15 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light_extinguish.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 
-		double sanity = ModCapabilities.getSanityInjury(entity).getValue();
-		double maxSanity = ModCapabilities.getSanityInjury(entity).getMaxValue();
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/ep/sanity.png"), this.leftPos + 106, this.topPos + 43,
-				Mth.clamp((int) Math.ceil(sanity / maxSanity * 20.0) * 16, 0, 304), 0, 16, 16, 320, 16);
+		AbstractEPCapability currentElement = BabelAPI.getEP(entity).getCurrentElement();
+		if (currentElement != null) {
+			double elementValue = currentElement.getValue();
+			double maxElementValue = currentElement.getMaxValue();
+			ResourceLocation elementIcon = ResourceLocation.fromNamespaceAndPath(BabelMod.MODID,
+					"textures/overlay/ep/" + currentElement.getType().getNickName() + ".png");
+			guiGraphics.blit(elementIcon, this.leftPos + 106, this.topPos + 43,
+					Mth.clamp(Mth.ceil(elementValue / maxElementValue * 20.0) * 16, 0, 304), 0, 16, 16, 320, 16);
+		}
 
 		if (RelicUtils.hasDisoNeuro(entity)) {
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/disoclution_neuro.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
@@ -210,23 +217,26 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_disconcentration"), 101, 147, -3368449, false);
 		if (RelicUtils.hasDisoBlood(entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_haemophilia"), 101, 147, -3368449, false);
-		String sanity = Math.round(ModCapabilities.getSanityInjury(entity).getValue()) + "/" + Math.round(ModCapabilities.getSanityInjury(entity).getMaxValue());
-		guiGraphics.drawString(this.font,
+		AbstractEPCapability currentElement = BabelAPI.getEP(entity).getCurrentElement();
+		if (currentElement != null) {
+			String elementValue = Math.round(currentElement.getValue()) + "/" + Math.round(currentElement.getMaxValue());
+			guiGraphics.drawString(this.font,
 
-				sanity, 124, 50, -16737895, false);
-		guiGraphics.drawString(this.font,
+					elementValue, 124, 50, -16737895, false);
+			guiGraphics.drawString(this.font,
 
-				sanity, 123, 50, -1, false);
-		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_sanity1"), 124, 41, -16737895, false);
-		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_sanity"), 123, 41, -1, false);
+					elementValue, 123, 50, -1, false);
+			guiGraphics.drawString(this.font, currentElement.getType().description(), 124, 41, -16737895, false);
+			guiGraphics.drawString(this.font, currentElement.getType().description(), 123, 41, -1, false);
+		}
 		if (RelicUtils.hasDisoNeuro(entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_neurodegression"), 101, 147, -3368449, false);
 		if (RelicUtils.hasDisoFlesh(entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_deformity"), 101, 147, -3368449, false);
-        if ((((LevelAccessor) world).getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)) > 0)
+        if ((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)) > 0)
             guiGraphics.drawString(this.font,
 
-                    Component.translatable("key.surging_waves").getString() + "\u00B7" + Math.round((((LevelAccessor) world).getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES))), -4, -13, -10040065, false);
+                    Component.translatable("key.surging_waves").getString() + "\u00B7" + Math.round((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES))), -4, -13, -10040065, false);
 	}
 
 	@Override

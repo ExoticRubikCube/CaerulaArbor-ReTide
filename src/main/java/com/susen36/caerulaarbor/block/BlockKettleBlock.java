@@ -215,9 +215,9 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
             } else if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.A_CUP_OF_WATER.get()) {
                 {
                     BlockPos blockPos = BlockPos.containing(x, y, z);
-                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    BlockState bs = world.getBlockState(pos);
                     if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
-                        ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, true), 3);
+                        world.setBlock(pos, bs.setValue(booleanProp, true), 3);
                 }
                 ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 ItemStack setstack = new ItemStack(CAItems.OCEANGLASS_CUP.get()).copy();
@@ -241,15 +241,15 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                         && blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty getbp31 && blockstate.getValue(getbp31)) {
                     {
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                            world.setBlock(pos, bs.setValue(booleanProp, false), 3);
                     }
                     {
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty booleanProp)
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                            world.setBlock(pos, bs.setValue(booleanProp, false), 3);
                     }
                     ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     ItemStack setstack = new ItemStack(CAItems.CANNED_NOODLE.get()).copy();
@@ -261,9 +261,9 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                         && !(blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty getbp41 && blockstate.getValue(getbp41))) {
                     {
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                            world.setBlock(pos, bs.setValue(booleanProp, false), 3);
                     }
                     ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     ItemStack setstack = new ItemStack(CAItems.CANNED_BOILED_WATER.get()).copy();
@@ -275,9 +275,9 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                         && !(blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty getbp50 && blockstate.getValue(getbp50))) {
                     {
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty booleanProp)
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, true), 3);
+                            world.setBlock(pos, bs.setValue(booleanProp, true), 3);
                     }
                     ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if ((LevelAccessor) world instanceof Level level) {
@@ -303,9 +303,9 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             setstack.setCount(1);
                             ItemHandlerHelper.giveItemToPlayer(player, setstack);
                             BlockPos blockPos = BlockPos.containing(x, y, z);
-                            BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                            BlockState bs = world.getBlockState(pos);
                             if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
-                                ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                                world.setBlock(pos, bs.setValue(booleanProp, false), 3);
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
                         }
@@ -317,9 +317,9 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             setstack.setCount(1);
                             ItemHandlerHelper.giveItemToPlayer(player, setstack);
                         BlockPos blockPos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                            world.setBlock(pos, bs.setValue(booleanProp, false), 3);
 
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
@@ -335,9 +335,9 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                             {
                                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                                BlockState bs = world.getBlockState(pos);
                                 if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
-                                    ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                                    world.setBlock(pos, bs.setValue(booleanProp, false), 3);
                             }
                             ItemStack setstack = new ItemStack(Blocks.WET_SPONGE).copy();
                                 setstack.setCount(1);
@@ -350,9 +350,9 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                             {
                                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                                BlockState bs = world.getBlockState(pos);
                                 if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
-                                    ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                                    world.setBlock(pos, bs.setValue(booleanProp, false), 3);
                             }
                             ItemStack setstack = new ItemStack(CAItems.OBISIDIAN_BALL.get()).copy();
                                 setstack.setCount(1);
@@ -368,9 +368,9 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                                 && blockstate.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty getbp104 && blockstate.getValue(getbp104)) {
                             {
                                 BlockPos blockPos = BlockPos.containing(x, y, z);
-                                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                                BlockState bs = world.getBlockState(pos);
                                 if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
-                                    ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                                    world.setBlock(pos, bs.setValue(booleanProp, false), 3);
                             }
                             ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                             ItemStack setstack = new ItemStack(CAItems.BOILED_EGG.get()).copy();

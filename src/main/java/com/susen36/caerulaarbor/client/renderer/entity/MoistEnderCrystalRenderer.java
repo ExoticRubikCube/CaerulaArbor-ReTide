@@ -87,8 +87,8 @@ public class MoistEnderCrystalRenderer extends GeoEntityRenderer<MoistEnderCryst
             Matrix4f matrix4f = posestack$pose.pose();
             Matrix3f matrix3f = posestack$pose.normal();
             for (int j = 1; j <= 4; ++j) {
-                float f7 = Mth.sin((float) ((float) j * ((float) Math.PI * 2) / 4.0f)) * 0.75f;
-                float f8 = Mth.cos((float) ((float) j * ((float) Math.PI * 2) / 4.0f)) * 0.75f;
+                float f7 = Mth.sin((float) j * ((float) Math.PI * 2) / 4.0f) * 0.75f;
+                float f8 = Mth.cos((float) j * ((float) Math.PI * 2) / 4.0f) * 0.75f;
                 float f9 = (float) j / 8.0f;
                 vertexconsumer.addVertex(matrix4f, f4 * 0.5f, f5 * 0.5f, 0.0f).setColor(232, 197, 246, 255).setUv(f6, f2).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(posestack$pose, 0.0f, -1.0f, 0.0f);
                 vertexconsumer.addVertex(matrix4f, f4 * 0.125f, f5 * 0.125f, f1).setColor(181, 227, 238, 255).setUv(f6, f3).setOverlay(OverlayTexture.NO_OVERLAY).setLight(packedLight).setNormal(posestack$pose, 0.0f, -1.0f, 0.0f);

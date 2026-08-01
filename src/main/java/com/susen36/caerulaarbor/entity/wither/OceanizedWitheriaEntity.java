@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.wither;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -32,11 +33,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -265,8 +263,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         builder = builder.add(Attributes.FOLLOW_RANGE, 48);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.45);
-        builder = builder.add(CAAttributes.SANITY_RATE, 10);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.01);
+        builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 65);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 5);
         return builder;

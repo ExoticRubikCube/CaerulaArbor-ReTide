@@ -22,7 +22,6 @@ public class  CAParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> KING_SLAY_RED = REGISTRY.register("king_slay_red", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ARCHFIEND_KEEP = REGISTRY.register("archfiend_keep", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ARCHFIEND_RESEV = REGISTRY.register("archfiend_resev", () -> new SimpleParticleType(false));
-    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> DIZZINESS = REGISTRY.register("dizziness", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> KNIFEPTC = REGISTRY.register("knifeptc", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MISS = REGISTRY.register("miss", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CRACKER_BUFF_0 = REGISTRY.register("cracker_buff_0", () -> new SimpleParticleType(false));
@@ -33,7 +32,6 @@ public class  CAParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INV_PTC_VOILET = REGISTRY.register("inv_ptc_voilet", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PURPLE_FLAME = REGISTRY.register("purple_flame", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> EDERMAN_PTC = REGISTRY.register("ederman_ptc", () -> new SimpleParticleType(false));
-    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> NUMBNESS = REGISTRY.register("numbness", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MARTUS_CHARS = REGISTRY.register("martus_chars", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ENDSPEAKER_PARTICLE = REGISTRY.register("endspeaker_particle", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ENDSPEAKER_INV = REGISTRY.register("endspeaker_inv", () -> new SimpleParticleType(false));
@@ -59,7 +57,6 @@ public class  CAParticles {
             event.registerSpriteSet(CAParticles.KING_SLAY_RED.get(), KingSlayRedParticle::provider);
             event.registerSpriteSet(CAParticles.ARCHFIEND_KEEP.get(), ArchfiendKeepParticle::provider);
             event.registerSpriteSet(CAParticles.ARCHFIEND_RESEV.get(), ArchfiendResevParticle::provider);
-            event.registerSpriteSet(CAParticles.DIZZINESS.get(), DizzinessParticle::provider);
             event.registerSpriteSet(CAParticles.KNIFEPTC.get(), KnifeptcParticle::provider);
             event.registerSpriteSet(CAParticles.MISS.get(), MissParticle::provider);
             event.registerSpriteSet(CAParticles.CRACKER_BUFF_0.get(), CrackerBuff0Particle::provider);
@@ -70,7 +67,6 @@ public class  CAParticles {
             event.registerSpriteSet(CAParticles.INV_PTC_VOILET.get(), InvPtcVoiletParticle::provider);
             event.registerSpriteSet(CAParticles.PURPLE_FLAME.get(), PurpleFlameParticle::provider);
             event.registerSpriteSet(CAParticles.EDERMAN_PTC.get(), EdermanPtcParticle::provider);
-            event.registerSpriteSet(CAParticles.NUMBNESS.get(), NumbnessParticle::provider);
             event.registerSpriteSet(CAParticles.MARTUS_CHARS.get(), MartusCharsParticle::provider);
             event.registerSpriteSet(CAParticles.ENDSPEAKER_PARTICLE.get(), EndspeakerParticleParticle::provider);
             event.registerSpriteSet(CAParticles.ENDSPEAKER_INV.get(), EndspeakerInvParticle::provider);

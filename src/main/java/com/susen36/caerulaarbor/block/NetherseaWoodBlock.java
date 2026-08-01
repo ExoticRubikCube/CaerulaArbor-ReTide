@@ -99,7 +99,7 @@ public class NetherseaWoodBlock extends Block {
             {
                 BlockPos bp = BlockPos.containing(x, y, z);
                 BlockState bs = CABlocks.STRIPPED_NETHERSEA_WOOD.get().withPropertiesOf(blockstate);
-                ((LevelAccessor) world).setBlock(bp, bs, 3);
+                world.setBlock(bp, bs, 3);
             }
             result = ItemInteractionResult.SUCCESS;
         }

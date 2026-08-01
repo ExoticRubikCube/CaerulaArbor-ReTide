@@ -2,8 +2,8 @@ package com.susen36.caerulaarbor.client.overlay;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -20,8 +20,8 @@ public class LessArmorOverlay {
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		Player player = Minecraft.getInstance().player;
 		ResourceLocation texture = null;
-		if (player.hasEffect(CAMobEffects.LESS_ARMOR)) {
-			int amplifier = player.getEffect(CAMobEffects.LESS_ARMOR).getAmplifier();
+		if (player.hasEffect(BabelMobEffects.LESS_ARMOR)) {
+			int amplifier = player.getEffect(BabelMobEffects.LESS_ARMOR).getAmplifier();
 			if (amplifier <= 4) {
 				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/low_armor_ui.png");
 			} else if (amplifier <= 9) {

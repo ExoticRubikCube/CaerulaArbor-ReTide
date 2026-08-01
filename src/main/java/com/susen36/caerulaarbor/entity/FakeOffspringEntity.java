@@ -36,11 +36,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 
@@ -171,7 +168,7 @@ public class FakeOffspringEntity extends SeaMonster {
             if (this.getHealth() > ToHurt) {
                 this.setHealth((float) (this.getHealth() - ToHurt));
             } else {
-                ((Entity) this).hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE), 99999);
+                this.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE), 99999);
             }
         }
         this.refreshDimensions();

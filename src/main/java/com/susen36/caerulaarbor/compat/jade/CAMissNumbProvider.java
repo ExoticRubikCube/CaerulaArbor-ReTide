@@ -1,9 +1,11 @@
 package com.susen36.caerulaarbor.compat.jade;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 
 import com.susen36.caerulaarbor.init.CAAttributes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -41,8 +43,8 @@ public enum CAMissNumbProvider implements IEntityComponentProvider {
     }
 
     private double getNumb(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CAAttributes.NUMB);
-        if (instance != null) return instance.getBaseValue();
+        MobEffectInstance instance = living.getEffect(BabelMobEffects.NUMB);
+        if (instance != null) return instance.getAmplifier() + 1;
         return 0;
     }
 }

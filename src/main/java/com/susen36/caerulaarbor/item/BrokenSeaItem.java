@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.entity.GladiiaEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -12,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -29,7 +31,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.tags.BlockTags;
 import net.neoforged.neoforge.common.SimpleTier;
 
 import java.util.Comparator;
@@ -86,7 +87,7 @@ public class BrokenSeaItem extends SwordItem {
                 if ((LevelAccessor) world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
                 if (!(new Object() {
@@ -116,8 +117,8 @@ public class BrokenSeaItem extends SwordItem {
                             GladiiaEntity.spawnGladiiaLinkParticles(world, entity, entityiterator);
                             LivingEntity livingEntity = (LivingEntity) entityiterator;
                             if (!livingEntity.level().isClientSide())
-                                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 40, 0, false, false));
-                            entityiterator.hurt(CADamageTypes.source((LevelAccessor) world, CADamageTypes.HUNTER_ATTACK, entity), (float) (damage * 3));
+                                livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 40, 0, false, false));
+                            entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, entity), (float) (damage * 3));
                             count = count + 1;
                         }
                     }
@@ -125,7 +126,7 @@ public class BrokenSeaItem extends SwordItem {
                         break;
                     }
                 }
-                if (count > 0 && !((LevelAccessor) world).isClientSide()) {
+                if (count > 0 && !world.isClientSide()) {
                     if ((LevelAccessor) world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.PLAYERS, 2, 1);
                     }

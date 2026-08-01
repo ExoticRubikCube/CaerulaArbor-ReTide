@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -201,10 +203,10 @@ public class IzumikEntity extends SeaMonster {
                         }
                         target.hurt(
                                 CADamageTypes.source(this.level(), CADamageTypes.OCEAN_MAGIC, this), oceanMagicDamage);
-                        if (this.getEntityData().get(DATA_PHASE) >= 2 && Math.random() < 0.15 && target instanceof LivingEntity livingTarget
-                                && livingTarget.getAttributes().hasAttribute(CAAttributes.NUMB)) {
-                            livingTarget.getAttribute(CAAttributes.NUMB)
-                                    .setBaseValue(livingTarget.getAttribute(CAAttributes.NUMB).getBaseValue() + 1);
+                        if (this.getEntityData().get(DATA_PHASE) >= 2 && Math.random() < 0.15 && target instanceof LivingEntity livingTarget) {
+                            int currentNumb = livingTarget.hasEffect(BabelMobEffects.NUMB) ? livingTarget.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
+                            livingTarget.removeEffect(BabelMobEffects.NUMB);
+                            livingTarget.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, Integer.MAX_VALUE, currentNumb, false, false, true));
                             if (this.level() instanceof ServerLevel serverLevel) {
                                 serverLevel.sendParticles(ParticleTypes.FIREWORK, targetX, targetY + 0.75, targetZ, 16, 0.75, 0.75, 0.75, 0.1);
                             }
@@ -355,7 +357,7 @@ public class IzumikEntity extends SeaMonster {
         double waves;
         double amplifi;
         if (this.isAlive()) {
-            this.removeEffect(CAMobEffects.DIZZY);
+            this.removeEffect(BabelMobEffects.DIZZY);
             this.removeEffect(CAMobEffects.FROZEN);
             sklp = this.getEntityData().get(DATA_SKILLP);
             sklp1 = this.getEntityData().get(DATA_SKILLP_1);
@@ -506,7 +508,7 @@ public class IzumikEntity extends SeaMonster {
                 }
             } else {
                 if (sklp <= 0) {
-                    if (!(this.getTarget() == null) && ((Entity) this.getTarget()).isAlive()) {
+                    if (!(this.getTarget() == null) && this.getTarget().isAlive()) {
                         if ((this.getTarget() != null ? distanceTo(this.getTarget()) : -1) <= 24) {
                             if (phase >= 2) {
                                 this.getEntityData().set(DATA_SKILLP, 400);
@@ -664,9 +666,9 @@ public class IzumikEntity extends SeaMonster {
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.IZUMIK_SHOCK, 160, 0, false, false));
                 }
-                if (!entityiterator.hasEffect(CAMobEffects.DIZZY)) {
+                if (!entityiterator.hasEffect(BabelMobEffects.DIZZY)) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 160, 0, false, false));
+                        this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 160, 0, false, false));
                 }
                 if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
                     this.getAttribute(CAAttributes.GENERAL_DEFENSE)
@@ -677,17 +679,13 @@ public class IzumikEntity extends SeaMonster {
                 if ((this.getEntityData().get(DATA_PHASE) >= 2)) {
                     if (Math.random() < 0.33) {
                         if (MapVariables.get(world).strategy_grow >= 4) {
-                            if (entityiterator.getAttributes().hasAttribute(CAAttributes.NUMB))
-                                entityiterator.getAttribute(CAAttributes.NUMB)
-                                        .setBaseValue((entityiterator.getAttributes().hasAttribute(CAAttributes.NUMB)
-                                                ? entityiterator.getAttribute(CAAttributes.NUMB).getBaseValue()
-                                                : 0) + 2);
+                            int currentNumb = entityiterator.hasEffect(BabelMobEffects.NUMB) ? entityiterator.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
+                            entityiterator.removeEffect(BabelMobEffects.NUMB);
+                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, Integer.MAX_VALUE, currentNumb + 1, false, false, true));
                         } else {
-                            if (entityiterator.getAttributes().hasAttribute(CAAttributes.NUMB))
-                                entityiterator.getAttribute(CAAttributes.NUMB)
-                                        .setBaseValue((entityiterator.getAttributes().hasAttribute(CAAttributes.NUMB)
-                                                ? entityiterator.getAttribute(CAAttributes.NUMB).getBaseValue()
-                                                : 0) + 1);
+                            int currentNumb = entityiterator.hasEffect(BabelMobEffects.NUMB) ? entityiterator.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
+                            entityiterator.removeEffect(BabelMobEffects.NUMB);
+                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, Integer.MAX_VALUE, currentNumb, false, false, true));
                         }
                     }
                     this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.01));
@@ -707,8 +705,8 @@ public class IzumikEntity extends SeaMonster {
         builder = builder.add(Attributes.FLYING_SPEED, 0.6);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 10);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.01);
-        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
+        builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         return builder;
     }
 

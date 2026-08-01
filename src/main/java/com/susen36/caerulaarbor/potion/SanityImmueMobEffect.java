@@ -1,7 +1,8 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -20,7 +21,7 @@ public class SanityImmueMobEffect extends MobEffect {
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity.isAlive()) {
-            ModCapabilities.getSanityInjury(entity).heal(5);
+            BabelAPI.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, 5);
         }
         return true;
     }

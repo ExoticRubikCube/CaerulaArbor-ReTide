@@ -50,6 +50,9 @@ repositories {
         name = 'Modrinth'
         url = 'https://api.modrinth.com/maven'
     }
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 base {
@@ -140,6 +143,7 @@ configurations {
 }
 
 dependencies {
+    implementation files("libs/babel-${babel_version}.jar")
     implementation "curse.maven:geckolib-388172:${geckolib_version}"
 
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
@@ -192,6 +196,10 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
     options.compilerArgs << '-Xmaxerrs' << '2000'
+}
+
+tasks.withType(ProcessResources).configureEach {
+    filteringCharset = 'UTF-8'
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

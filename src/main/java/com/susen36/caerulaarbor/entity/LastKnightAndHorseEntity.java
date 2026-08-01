@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -265,7 +267,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         double skillp;
         if (this.isAlive()) {
             if (tickCount % 10 == 0) {
-                this.removeEffect(CAMobEffects.DIZZY);
+                this.removeEffect(BabelMobEffects.DIZZY);
                 this.removeEffect(CAMobEffects.FROZEN);
                 this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                 if (!this.level().isClientSide())
@@ -296,7 +298,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
             setTicksFrozen(0);
             this.removeEffect(CAMobEffects.FROZEN);
             this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-            this.removeEffect(CAMobEffects.DIZZY);
+            this.removeEffect(BabelMobEffects.DIZZY);
             skillp = this.getEntityData().get(DATA_SKILL_COOLDOWN);
             duration = this.getEntityData().get(DATA_SKILL_DURATION);
             if (duration > 0) {
@@ -422,7 +424,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         builder = builder.add(Attributes.FOLLOW_RANGE, 36);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.5);
-        builder = builder.add(CAAttributes.MAX_SANITY, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         return builder;
     }
 

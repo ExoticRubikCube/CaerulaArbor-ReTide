@@ -134,7 +134,7 @@ public class LivingArmorstandBlock extends BaseEntityBlock implements SimpleWate
             if ((LevelAccessor) world instanceof ServerLevel level) {
                 Entity entityToSpawn = CAEntities.FLAMARINE_STATUE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
-                    entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
             }
             world.destroyBlock(BlockPos.containing(x, y, z), false);

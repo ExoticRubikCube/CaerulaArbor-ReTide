@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
+import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -65,6 +66,15 @@ public class SpikeChestEntity extends SeaMonster {
 	@Override
 	public boolean canBeCollidedWith() {
         return EntityUtils.isAlive(this);
+	}
+
+	@Override
+	public boolean hurt(DamageSource source, float amount) {
+		Entity sourceEntity = source.getEntity();
+		if (this.isAlive() && sourceEntity != null) {
+			sourceEntity.hurt(CADamageTypes.source(this.level(), CADamageTypes.CHEST_SPIKE), (float) (amount * 0.33));
+		}
+		return super.hurt(source, amount);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
@@ -122,7 +124,7 @@ public class EndspeakerEntity extends SeaMonster {
 				.add(Attributes.ATTACK_DAMAGE, 1.0)
 				.add(Attributes.FOLLOW_RANGE, 16.0)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.0)
-				.add(CAAttributes.MAX_SANITY, 2000.0);
+				.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000.0);
 	}
 
 	protected int getFloatGoalPriority() {
@@ -1024,9 +1026,7 @@ public class EndspeakerEntity extends SeaMonster {
 			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
 				this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(30);
 			}
-			if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE)) {
-				this.getAttribute(CAAttributes.SANITY_RATE).setBaseValue(60);
-			}
+			this.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF, -1, 59, false, false));
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 9, false, false));
 			}
@@ -1109,14 +1109,14 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 		if (this.hasAbility(4)) {
 			this.clearFire();
-			this.removeEffect(CAMobEffects.DIZZY);
+			this.removeEffect(BabelMobEffects.DIZZY);
 			this.removeEffect(CAMobEffects.MUTE);
 			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
 			this.removeEffect(MobEffects.WEAKNESS);
 			this.removeEffect(CAMobEffects.FROZEN);
 			this.setTicksFrozen(0);
-			if (this.tickCount % 200 == 0 && !this.hasEffect(CAMobEffects.ESSENCE_RESISTANCE) && !this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE, 180, 2, false, false));
+			if (this.tickCount % 200 == 0 && !this.hasEffect(BabelMobEffects.ESSENCE_RESISTANCE) && !this.level().isClientSide()) {
+				this.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 180, 2, false, false));
 			}
 			double movementSpeed = this.getAttributeValue(Attributes.MOVEMENT_SPEED);
 			if (EntityUtils.getSpeed(this) > movementSpeed * 1.25D) {
@@ -1128,7 +1128,7 @@ public class EndspeakerEntity extends SeaMonster {
 			if (this.isOnFire() && !this.fireImmune()) {
 				missRate = 0.0D;
 			}
-			if (this.hasEffect(CAMobEffects.DIZZY)
+			if (this.hasEffect(BabelMobEffects.DIZZY)
 				|| this.hasEffect(CAMobEffects.FROZEN)
 				|| this.hasEffect(MobEffects.LEVITATION)
 				|| this.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
@@ -1528,7 +1528,7 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 	}
 
-	//TODO 鎴栬鍙互淇敼涓烘瘡绾?5
+	//TODO 或许可以修改为每5ticks
 	protected int getPhaseDeathTickThreshold() {
 		return switch (this.getPhase()) {
 			case 1 -> 40;

@@ -174,7 +174,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
                     for (int dy = -2; dy <= 3; dy++) {
                         for (int dz = -2; dz <= 2; dz++) {
                             if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.WHITE_CHITIN_BLOCK.get()) {
-                                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((x + dx), (y + dy), (z + dz)));
+                                this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((x + dx), (y + dy), (z + dz)));
                                 world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
                                 found = true;
                                 break;

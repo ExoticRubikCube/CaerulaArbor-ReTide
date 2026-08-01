@@ -155,12 +155,12 @@ public class TrailCakeBlock extends Block implements SimpleWaterloggedBlock {
                 {
                     int value = (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip4 ? blockstate.getValue(getip4) : -1) + 1;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
-                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    BlockState bs = world.getBlockState(pos);
                     if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
             } else {
-                ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
+                world.setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
             }
             if ((Entity) entity instanceof Player player) {
                 ItemStack setstack = new ItemStack(CAItems.TRAIL_CAKE_PIECE.get()).copy();

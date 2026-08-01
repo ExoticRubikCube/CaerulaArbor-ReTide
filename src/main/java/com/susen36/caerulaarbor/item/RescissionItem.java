@@ -98,12 +98,12 @@ public class RescissionItem extends Item {
                             if (entityiterator instanceof Wolf) {
                                 CaerulaArborMod.queueServerWork(Mth.nextInt(RandomSource.create(), 40, 80), () -> {
                                     if ((Entity) entity instanceof Player player && !player.level().isClientSide())
-                                        player.displayClientMessage(Component.literal(("鎼俹" + Component.translatable("item.caerula_arbor.language_key.description_3").getString())), false);
+                                        player.displayClientMessage(Component.literal(("搂o" + Component.translatable("item.caerula_arbor.language_key.description_3").getString())), false);
                                 });
                             }
                         } else {
                             if ((Entity) entity instanceof Player player && !player.level().isClientSide())
-                                player.displayClientMessage(Component.literal(("鎼俢" + Component.translatable("item.caerula_arbor.language_key.description_0").getString() + entityiterator.getDisplayName().getString()
+                                player.displayClientMessage(Component.literal(("搂c" + Component.translatable("item.caerula_arbor.language_key.description_0").getString() + entityiterator.getDisplayName().getString()
                                         + Component.translatable("item.caerula_arbor.language_key.description_1").getString())), false);
                             if (entityiterator instanceof LivingEntity living && !entity.level().isClientSide())
                                 living.addEffect(new MobEffectInstance(CAMobEffects.UNTAME_CONFIRM, 300, 0, false, false));

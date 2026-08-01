@@ -1,7 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +20,7 @@ public class FriedEggItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		ModCapabilities.getSanityInjury(entity).heal(45);
+		BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(45);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1));
 		return retval;

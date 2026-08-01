@@ -2,8 +2,9 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.sanity.SanityInjuryCapability;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -45,6 +46,9 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 
 import java.util.List;
 
@@ -320,7 +324,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                         d = distanceTo(entityiterator);
                                         if (d <= r && (EntityUtils.getEntityCosine(this, entityiterator) > 0.5 || d <= 3)) {
                                             if (!this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 40, 0, false, false));
+                                                this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 40, 0, false, false));
                                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                         }
                                     }
@@ -410,7 +414,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                     Entity ent = this;
                                     ent.teleportTo((enemy1.getX()), (enemy1.getY()), (enemy1.getZ()));
                                     if (enemy1 instanceof LivingEntity && !this.level().isClientSide())
-                                        this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
+                                        this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
                                     enemy1.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                 }
                                 noeX = getX();
@@ -428,15 +432,15 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                     for (LivingEntity entityiterator : entfound) {
                                         if (distanceToSqr(entityiterator) <= 36) {
                                             if (!this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY, 120, 0, false, false));
+                                                this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
                                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                         }
                                     }
                                 }
-                                this.removeEffect(CAMobEffects.DIZZY);
+                                this.removeEffect(BabelMobEffects.DIZZY);
                                 this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                                 this.removeEffect(MobEffects.DIG_SLOWDOWN);
-                                SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(this);
+                                AbstractEPCapability sanityInjury = BabelAPI.getEP(this).getEP(AbstractEPCapability.EPType.NERVOUS);
                                 sanityInjury.heal(sanityInjury.getMaxValue());
                                 if (world instanceof ServerLevel level)
                                     level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, noeX, nowY, nowZ, 72, 3, 3, 3, 0.5);
@@ -472,7 +476,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
         builder = builder.add(NeoForgeMod.SWIM_SPEED, 8);
-        builder = builder.add(CAAttributes.SANITY_MODIFIER, 0.33);
+        builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.33);
         builder = builder.add(Attributes.MAX_HEALTH, 430);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 55);

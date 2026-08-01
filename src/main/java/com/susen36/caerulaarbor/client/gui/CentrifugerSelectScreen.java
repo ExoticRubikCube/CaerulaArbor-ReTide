@@ -72,7 +72,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
             }
         }
         if (result instanceof LivingEntity livingEntity) {
-			InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphics, this.leftPos + 99, this.topPos + 64, this.leftPos + 159, this.topPos + 124, 30, 0f + (float) Math.atan((this.leftPos + 129 - mouseX) / 40.0), (float) Math.atan((this.topPos + 45 - mouseY) / 40.0), 0f, livingEntity);
+			InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphics, this.leftPos + 99, this.topPos + 64, this.leftPos + 159, this.topPos + 124, 30, 0f, 0f + (float) Math.atan((this.leftPos + 129 - mouseX) / 40.0), (float) Math.atan((this.topPos + 45 - mouseY) / 40.0), livingEntity);
 		}
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		if (mouseX > leftPos + 117 && mouseX < leftPos + 141 && mouseY > topPos + 105 && mouseY < topPos + 121)

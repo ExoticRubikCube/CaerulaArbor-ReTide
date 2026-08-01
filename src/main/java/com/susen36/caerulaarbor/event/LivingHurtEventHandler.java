@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
@@ -245,7 +246,8 @@ public class LivingHurtEventHandler {
 
         if (helm.getItem() == CAItems.TRAILRITE_ARMOR_HELMET.get() && chest.getItem() == CAItems.TRAILRITE_ARMOR_CHESTPLATE.get()
                 && legg.getItem() == CAItems.TRAILRITE_ARMOR_LEGGINGS.get() && boot.getItem() == CAItems.TRAILRITE_ARMOR_BOOTS.get()) {
-            EntityUtils.giveLessArmor(entity, 24);
+            if (entity instanceof LivingEntity living)
+                BabelMobEffects.LESS_ARMOR.get().apply(living);
         }
 
         helm = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).copy();
@@ -646,7 +648,8 @@ public class LivingHurtEventHandler {
                             SIHelper.causeSanityInjury(target, amount * 5, SanityEvent.Hurt.Type.ENTITY);
                         }
                     }
-                    EntityUtils.giveLessArmor(entity, 16);
+                    if (entity instanceof LivingEntity living)
+                        BabelMobEffects.LESS_ARMOR.get().apply(living);
                 }
             }
         }
@@ -717,7 +720,8 @@ public class LivingHurtEventHandler {
 
         Entity bullet = damagesource.getDirectEntity();
         if (bullet instanceof ShulkerBullet && bullet.getPersistentData().getBoolean("oceanized")) {
-            EntityUtils.giveLessArmor(entity, 8);
+            if (entity instanceof LivingEntity living)
+                BabelMobEffects.LESS_ARMOR.get().apply(living);
             if (entity instanceof LivingEntity living && !living.level().isClientSide())
                 living.addEffect(new MobEffectInstance(CAMobEffects.MORE_FALL_DAMAGE, 300, 0));
         }
@@ -890,7 +894,7 @@ public class LivingHurtEventHandler {
             finalValue = amount * rate;
         }
 
-        if (entity instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.UNDER_BREAK)) {
+        if (entity instanceof LivingEntity livEnt && livEnt.hasEffect(BabelMobEffects.UNDER_BREAK)) {
             e = NodeUtils.getNodeWorseBreak(attacker);
             if (e >= 4) rate = 2.4;
             else if (e >= 3) rate = 1.9;
@@ -921,10 +925,10 @@ public class LivingHurtEventHandler {
             }
 
             for (int index0 = 0; index0 < (int) e; index0++) {
-                EntityUtils.giveLessArmor(entity, lll);
+                BabelMobEffects.LESS_ARMOR.get().apply((LivingEntity) entity);
             }
 
-            if ((entity instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR).getAmplifier() : 0) >= lll) {
+            if ((entity instanceof LivingEntity livEnt && livEnt.hasEffect(BabelMobEffects.LESS_ARMOR) ? livEnt.getEffect(BabelMobEffects.LESS_ARMOR).getAmplifier() : 0) >= lll) {
                 if (rate > 1) {
                     finalValue = finalValue * rate;
                 }

@@ -48,7 +48,7 @@ public class PlayerLeftClickEventHandler {
         public static void handle(HelperLeftClickMessage message, IPayloadContext context) {
             context.enqueueWork(() -> {
                 Player sender = context.player();
-                if (sender == null || !sender.level().hasChunkAt(sender.blockPosition())) {
+                if (!sender.level().hasChunkAt(sender.blockPosition())) {
                     return;
                 }
                 executeHelperLeftClick(sender);

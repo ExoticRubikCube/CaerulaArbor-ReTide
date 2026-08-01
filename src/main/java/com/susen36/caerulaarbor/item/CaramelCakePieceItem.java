@@ -1,7 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +22,7 @@ public class CaramelCakePieceItem extends Item {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 80, 1));
-		ModCapabilities.getSanityInjury(entity).heal(125);
+		BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(125);
 		return retval;
 	}
 }

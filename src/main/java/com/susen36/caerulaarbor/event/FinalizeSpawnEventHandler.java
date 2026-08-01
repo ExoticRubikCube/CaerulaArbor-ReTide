@@ -15,9 +15,6 @@ public class FinalizeSpawnEventHandler {
             return;
         }
         Entity entity = event.getEntity();
-        if (entity == null) {
-            return;
-        }
         if (event.getSpawnType() == MobSpawnType.NATURAL || event.getSpawnType() == MobSpawnType.CHUNK_GENERATION) {
             entity.getPersistentData().putBoolean("caerulaNaturalSpawn", true);
         }
