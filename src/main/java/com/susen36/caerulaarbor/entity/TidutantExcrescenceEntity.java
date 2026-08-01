@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CABlocks;
@@ -45,7 +46,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import software.bernie.geckolib.animation.*;
 
-public class TidutantExcrescenceEntity extends SeaMonster {
+public class TidutantExcrescenceEntity extends SeaMonster implements ElementalAttacker {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TidutantExcrescenceEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TidutantExcrescenceEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_MUTE_TIME = SynchedEntityData.defineId(TidutantExcrescenceEntity.class, EntityDataSerializers.INT);

@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -39,7 +40,7 @@ public class ShieldEventHandler {
 					livingBlocker.setHealth((float) (livingBlocker.getHealth() + livingBlocker.getMaxHealth() * lessArmorAmplifier * 0.01));
 			}
 			if (attacker instanceof LivingEntity livingAttacker)
-				BabelMobEffects.LESS_ARMOR.get().apply(livingAttacker);
+				LessArmorMobEffect.apply(livingAttacker);
 		}
 	}
 }

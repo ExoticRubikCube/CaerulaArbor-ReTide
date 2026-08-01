@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.client.renderer.block.listener;
 
-import com.susen36.babel.init.BabelMobEffects;
+
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.client.model.entity.ModelSealeatherChitinArmor;
 import com.susen36.caerulaarbor.client.renderer.block.*;
@@ -104,7 +104,6 @@ public class ClientListener {
 			CAMobEffects.FLESHDEFORMITY.get(),
 			CAMobEffects.BOOST_OF_SILENCE.get(),
 			CAMobEffects.STRENGTH_OF_CROWD.get(),
-			BabelMobEffects.LESS_ARMOR.get(),
 			CAMobEffects.ANGER_OF_TIDE.get(),
 			CAMobEffects.DEDUCT_ONE_SANITY.get(),
 			CAMobEffects.FIRST_TELLER_SKILL.get(),
@@ -130,7 +129,6 @@ public class ClientListener {
 			CAMobEffects.REDUCE_SANITY_MODIFIER.get(),
 			CAMobEffects.ADD_MISS_RATE.get(),
 			CAMobEffects.ADD_DAMAGE_TINY.get(),
-			BabelMobEffects.UNDER_BREAK.get(),
 			CAMobEffects.SANITY_HEAL.get()
 		};
 		for (MobEffect effect : hiddenEffects) {
@@ -140,6 +138,7 @@ public class ClientListener {
 		event.registerItem(new IClientItemExtensions() {
 			private GeoArmorRenderer<?> renderer;
 
+			@SuppressWarnings("removal")
 			@Override
 			public HumanoidModel<?> getHumanoidArmorModel(@NotNull LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
 				if (this.renderer == null)
@@ -213,6 +212,7 @@ public class ClientListener {
 		event.registerItem(new IClientItemExtensions() {
 			private GeoArmorRenderer<?> renderer;
 
+			@SuppressWarnings("removal")
 			@Override
 			public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
 				if (this.renderer == null)
@@ -225,6 +225,7 @@ public class ClientListener {
 		event.registerItem(new IClientItemExtensions() {
 			private GeoArmorRenderer<?> renderer;
 
+			@SuppressWarnings("removal")
 			@Override
 			public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
 				if (this.renderer == null)
@@ -237,6 +238,7 @@ public class ClientListener {
 		event.registerItem(new IClientItemExtensions() {
 			private GeoArmorRenderer<?> renderer;
 
+			@SuppressWarnings("removal")
 			@Override
 			public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
 				if (this.renderer == null)

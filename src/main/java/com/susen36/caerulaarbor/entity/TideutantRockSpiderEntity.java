@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -40,16 +41,13 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
 
-public class TideutantRockSpiderEntity extends SeaMonster {
+public class TideutantRockSpiderEntity extends SeaMonster implements ElementalAttacker {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.INT);

@@ -141,7 +141,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                 level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
         }
         if (MapVariables.get(world).strategy_grow >= 3) {
-            for (int index1 = 0; index1 < 14; index1++) {
+            for (int index1 = 0; index1 < 9; index1++) {
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 d = Mth.nextDouble(RandomSource.create(), 3.6, 4.3);
                 if (world instanceof ServerLevel level)

@@ -1,12 +1,12 @@
 package com.susen36.caerulaarbor.util;
 
+import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
-import com.susen36.caerulaarbor.entity.NetherseaSlimeEntity;
 import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
@@ -312,14 +312,12 @@ public class EntityUtils {
 			if ((entity instanceof Player plr ? plr.experienceLevel : 0) >= exp || creative) {
 				{
 					PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-					double setval = capability.reserve_quantity + r;
-					capability.reserve_quantity = setval;
+                    capability.reserve_quantity = capability.reserve_quantity + r;
 					capability.syncPlayerVariables(entity);
 				}
 				{
 					PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-					double setval = capability.reserve_quality + r_a;
-					capability.reserve_quality = setval;
+                    capability.reserve_quality = capability.reserve_quality + r_a;
 					capability.syncPlayerVariables(entity);
 				}
 				if (!creative) {
@@ -427,12 +425,6 @@ public class EntityUtils {
 		}
 	}
 
-	public static double getSlimeSize(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity instanceof NetherseaSlimeEntity datEntI ? datEntI.getEntityData().get(NetherseaSlimeEntity.DATA_SIZE) : 0) * 0.5;
-	}
-
 	public static void repellerChop(LevelAccessor world, double x, double y, double z, Entity entity, double rate) {
 		if (entity == null)
 			return;
@@ -452,7 +444,7 @@ public class EntityUtils {
 				if (entity instanceof LivingEntity livingEntity)
 					livingEntity.setHealth(livingEntity.getHealth() + 3);
 				for (int index0 = 0; index0 < 2; index0++) {
-					BabelMobEffects.LESS_ARMOR.get().apply(entityiterator);
+					LessArmorMobEffect.apply(entityiterator);
 				}
 			}
 		}

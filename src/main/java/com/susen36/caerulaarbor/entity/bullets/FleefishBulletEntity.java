@@ -1,15 +1,11 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
-import com.susen36.babel.api.BabelAPI;
-import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -47,20 +43,7 @@ public class FleefishBulletEntity extends BaseProjectile implements ItemSupplier
 
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
-        Entity entity = entityHitResult.getEntity();
-        Entity sourceentity = this.getOwner();
-        if (sourceentity == null)
-            return;
-        if (sourceentity instanceof LivingEntity livingSource
-                && entity instanceof LivingEntity livingTarget
-                && sourceentity != entity) {
-            BabelAPI.hurtElemental(
-                    livingTarget,
-                    AbstractEPCapability.EPType.CORROSION,
-                    livingSource,
-                    Mth.floor(this.getBaseDamage())
-            );
-        }
+        super.onHitEntity(entityHitResult);
         CaerulaArborMod.queueServerWork(10, () -> {
             if (!level().isClientSide())
                 discard();

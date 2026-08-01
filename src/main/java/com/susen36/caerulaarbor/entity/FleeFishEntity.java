@@ -1,6 +1,8 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.api.entity.ElementalAttacker;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FleefishBulletEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -48,7 +50,7 @@ import software.bernie.geckolib.animation.AnimationState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
+public class FleeFishEntity extends SeaMonster implements RangedAttackMob, ElementalAttacker {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FleeFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(FleeFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
@@ -72,6 +74,21 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 		super.defineSynchedData(builder);
 		builder.define(DATA_SHOOT, false);
 		builder.define(DATA_ANIMATION, "undefined");
+	}
+
+	@Override
+	public AbstractEPCapability.EPType getElementalType() {
+		return AbstractEPCapability.EPType.CORROSION;
+	}
+
+	@Override
+	public double getElementalRate() {
+		return 0.6D;
+	}
+
+	@Override
+	public double getElementalInjuryDamage() {
+		return 5.0D;
 	}
 
 	@Override

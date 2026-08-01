@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -43,7 +44,7 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import software.bernie.geckolib.animation.*;
 
-public class BoneFishEntity extends SeaMonster implements Bucketable {
+public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalAttacker {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(BoneFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(BoneFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;

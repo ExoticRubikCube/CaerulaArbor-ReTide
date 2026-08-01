@@ -4,7 +4,6 @@ import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -147,10 +146,13 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		this.refreshDimensions();
 	}
 
+	public double getSlimeSize() {
+		return this.getEntityData().get(DATA_SIZE) * 0.5;
+	}
+
 	@Override
 	public EntityDimensions getDefaultDimensions(Pose p_33597_) {
-		Entity entity = this;
-		return super.getDefaultDimensions(p_33597_).scale((float) EntityUtils.getSlimeSize(entity));
+		return super.getDefaultDimensions(p_33597_).scale((float) this.getSlimeSize());
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

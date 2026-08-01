@@ -35,7 +35,8 @@ public class SeaRippleParticle extends TextureSheetParticle {
 		super(world, x, y, z);
 		this.spriteSet = spriteSet;
 		this.setSize(0.3f, 0.3f);
-		this.quadSize *= 1.12f + this.random.nextFloat() * 0.12f;
+        float sizeMultiplier = vy > 0.0 ? (float)vy : 1.0F;
+        this.quadSize *= (1.12f + this.random.nextFloat() * 0.12f) * sizeMultiplier;
 		this.baseQuadSize = this.quadSize;
 		this.lifetime = 20 + this.random.nextInt(6);
 		this.gravity = 0f;
@@ -71,7 +72,7 @@ public class SeaRippleParticle extends TextureSheetParticle {
 	public float getQuadSize(float partialTick) {
 		float progress = ((float) this.age + partialTick) / (float) this.lifetime;
 		float easedProgress = progress * progress * (3.0f - 2.0f * progress);
-		return this.baseQuadSize * (0.26f + 1.82f * easedProgress);
+		return this.baseQuadSize * (0.26f + 1.65f * easedProgress);
 	}
 
 	@Override

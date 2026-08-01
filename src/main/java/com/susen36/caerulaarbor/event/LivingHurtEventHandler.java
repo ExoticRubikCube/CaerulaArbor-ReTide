@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
@@ -247,7 +248,7 @@ public class LivingHurtEventHandler {
         if (helm.getItem() == CAItems.TRAILRITE_ARMOR_HELMET.get() && chest.getItem() == CAItems.TRAILRITE_ARMOR_CHESTPLATE.get()
                 && legg.getItem() == CAItems.TRAILRITE_ARMOR_LEGGINGS.get() && boot.getItem() == CAItems.TRAILRITE_ARMOR_BOOTS.get()) {
             if (entity instanceof LivingEntity living)
-                BabelMobEffects.LESS_ARMOR.get().apply(living);
+                LessArmorMobEffect.apply(living);
         }
 
         helm = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).copy();
@@ -649,7 +650,7 @@ public class LivingHurtEventHandler {
                         }
                     }
                     if (entity instanceof LivingEntity living)
-                        BabelMobEffects.LESS_ARMOR.get().apply(living);
+                        LessArmorMobEffect.apply(living);
                 }
             }
         }
@@ -721,7 +722,7 @@ public class LivingHurtEventHandler {
         Entity bullet = damagesource.getDirectEntity();
         if (bullet instanceof ShulkerBullet && bullet.getPersistentData().getBoolean("oceanized")) {
             if (entity instanceof LivingEntity living)
-                BabelMobEffects.LESS_ARMOR.get().apply(living);
+                LessArmorMobEffect.apply(living);
             if (entity instanceof LivingEntity living && !living.level().isClientSide())
                 living.addEffect(new MobEffectInstance(CAMobEffects.MORE_FALL_DAMAGE, 300, 0));
         }
@@ -925,7 +926,7 @@ public class LivingHurtEventHandler {
             }
 
             for (int index0 = 0; index0 < (int) e; index0++) {
-                BabelMobEffects.LESS_ARMOR.get().apply((LivingEntity) entity);
+                LessArmorMobEffect.apply((LivingEntity) entity);
             }
 
             if ((entity instanceof LivingEntity livEnt && livEnt.hasEffect(BabelMobEffects.LESS_ARMOR) ? livEnt.getEffect(BabelMobEffects.LESS_ARMOR).getAmplifier() : 0) >= lll) {

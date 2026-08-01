@@ -1,15 +1,13 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.HighmoreShootEntity;
-import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.init.CASounds;
+import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
@@ -74,7 +72,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
+public class HighmoreEntity extends SeaMonster implements RangedAttackMob, ElementalAttacker {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.INT);
@@ -380,10 +378,9 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         sklp2 = (Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
         if (this.isAlive()) {
             if (!this.hasEffect(CAMobEffects.FAKE_DEATH)) {
-                assert Boolean.TRUE; //#dbg:HighmoreRim:marker1
                 for (int index0 = 0; index0 < 120; index0++) {
                     if (world instanceof ServerLevel level)
-                        level.sendParticles(ParticleTypes.DOLPHIN, (x + range * Math.sin(Math.toRadians(3 * index0))), y, (z + range * Math.cos(Math.toRadians(3 * index0))), 6, 0.15, 0.2, 0.15, 0.1);
+                        level.sendParticles(CAParticles.LARGE_DOLPHIN.get(), (x + range * Math.sin(Math.toRadians(3 * index0))), y, (z + range * Math.cos(Math.toRadians(3 * index0))), 4, 0.15, 0.2, 0.15, 0.1);
                 }
                 final Vec3 center = new Vec3(x, (y + 1.5), z);
                 List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(range * 2), e -> true);
@@ -546,7 +543,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
 
     @Override
     public double getElementalRate() {
-        return 0.35D;
+        return 0.6D;
     }
 
     @Override

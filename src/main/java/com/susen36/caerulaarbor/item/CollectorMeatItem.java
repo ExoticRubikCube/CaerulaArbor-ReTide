@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.effect.LessArmorMobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -18,7 +18,7 @@ public class CollectorMeatItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(@NotNull ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		BabelMobEffects.LESS_ARMOR.get().apply(entity);
+		LessArmorMobEffect.apply(entity);
         return retval;
 	}
 }

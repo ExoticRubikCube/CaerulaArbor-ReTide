@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.util;
 
 import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
@@ -106,7 +106,7 @@ public class CaerulaUtil {
 	public static void armorErrosion(Entity entity, int amount, int limit){
 		for (int i=0;i<amount;i++){
 			if (entity instanceof LivingEntity living) {
-				BabelMobEffects.LESS_ARMOR.get().apply(living);
+				LessArmorMobEffect.apply(living);
 			}
 		}
 	}

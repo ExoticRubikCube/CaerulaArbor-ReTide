@@ -26,17 +26,21 @@ public class  CAParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MISS = REGISTRY.register("miss", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CRACKER_BUFF_0 = REGISTRY.register("cracker_buff_0", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CRACKER_BUFF_1 = REGISTRY.register("cracker_buff_1", () -> new SimpleParticleType(false));
-    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INV_PTC = REGISTRY.register("inv_ptc", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INV_PTC = REGISTRY.register("inv_ptc", () -> new SimpleParticleType(true));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MUTENESS = REGISTRY.register("muteness", () -> new SimpleParticleType(false));
+    // TODO: 后续决定是否让蓝色无敌粒子绕过粒子数量限制
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INV_PTC_BLUE = REGISTRY.register("inv_ptc_blue", () -> new SimpleParticleType(false));
+    // TODO: 后续决定是否让紫色无敌粒子绕过粒子数量限制
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INV_PTC_VOILET = REGISTRY.register("inv_ptc_voilet", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PURPLE_FLAME = REGISTRY.register("purple_flame", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> EDERMAN_PTC = REGISTRY.register("ederman_ptc", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MARTUS_CHARS = REGISTRY.register("martus_chars", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ENDSPEAKER_PARTICLE = REGISTRY.register("endspeaker_particle", () -> new SimpleParticleType(false));
+    // TODO: 后续决定是否让 Endspeaker 无敌粒子绕过粒子数量限制
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ENDSPEAKER_INV = REGISTRY.register("endspeaker_inv", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SEA_SPLASH = REGISTRY.register("sea_splash", () -> new SimpleParticleType(false));
-    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SEA_RIPPLE = REGISTRY.register("sea_ripple", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SEA_RIPPLE = REGISTRY.register("sea_ripple", () -> new SimpleParticleType(true));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> LARGE_DOLPHIN = REGISTRY.register("large_dolphin", () -> new SimpleParticleType(true));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPECTER_GLITTER = REGISTRY.register("specter_glitter", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPECTER_CHARS = REGISTRY.register("specter_chars", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> IMMORTAL_PTC = REGISTRY.register("immortal_ptc", () -> new SimpleParticleType(false));
@@ -72,6 +76,7 @@ public class  CAParticles {
             event.registerSpriteSet(CAParticles.ENDSPEAKER_INV.get(), EndspeakerInvParticle::provider);
             event.registerSpriteSet(CAParticles.SEA_SPLASH.get(), SeaSplashParticle::provider);
             event.registerSpriteSet(CAParticles.SEA_RIPPLE.get(), SeaRippleParticle::provider);
+            event.registerSpriteSet(CAParticles.LARGE_DOLPHIN.get(), LargeDolphinParticle::provider);
             event.registerSpriteSet(CAParticles.SPECTER_GLITTER.get(), SpecterGlitterParticle::provider);
             event.registerSpriteSet(CAParticles.SPECTER_CHARS.get(), SpecterCharsParticle::provider);
             event.registerSpriteSet(CAParticles.IMMORTAL_PTC.get(), ImmortalPtcParticle::provider);
