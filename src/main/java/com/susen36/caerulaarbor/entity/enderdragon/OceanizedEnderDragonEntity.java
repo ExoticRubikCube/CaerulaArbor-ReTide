@@ -106,9 +106,9 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		super(type, world);
 		this.serverGeoAnimator = new ServerGeoAnimator<>(this, new OceanizedEnderDragonModel());
 		this.head = new OceanizedEnderDragonPart(this, "head", 1.25F, 1.25F);
-		this.neck1 = new OceanizedEnderDragonPart(this, "neck2", 1.75F, 1.75F);
-		this.neck2 = new OceanizedEnderDragonPart(this, "neck4", 1.75F, 1.75F);
-		this.body = new OceanizedEnderDragonPart(this, "body", 5.0F, 3.0F);
+		this.neck1 = new OceanizedEnderDragonPart(this, "neck2", 1.5F, 1.75F);
+		this.neck2 = new OceanizedEnderDragonPart(this, "neck4", 1.5F, 1.75F);
+		this.body = new OceanizedEnderDragonPart(this, "body",false, 5.0F, 3.0F);
 		this.tail1 = new OceanizedEnderDragonPart(this, "tail2", 1.75F, 1.75F);
 		this.tail2 = new OceanizedEnderDragonPart(this, "tail5", 1.75F, 1.75F);
 		this.tail3 = new OceanizedEnderDragonPart(this, "tail8", 1.75F, 1.75F);
