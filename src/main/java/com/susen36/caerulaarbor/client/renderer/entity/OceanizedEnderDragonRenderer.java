@@ -17,8 +17,8 @@ public class OceanizedEnderDragonRenderer extends GeoEntityRenderer<OceanizedEnd
 
 	@Override
 	protected void applyRotations(OceanizedEnderDragonEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick, float nativeScale) {
-		float yaw = (float) animatable.getLatencyYRot(7, partialTick);
-		poseStack.mulPose(Axis.YP.rotationDegrees(180f - yaw));
+		double[] historyPosition = animatable.getLatencyPos(7, partialTick);
+		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - (float) historyPosition[0]));
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -367,12 +368,13 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
         double sklp2;
         if (((Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0) == 0) {
             range = 7;
+            lvl = 2;
         } else if (((Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0) == 1) {
             range = 11;
-            lvl = 1;
+            lvl = 3;
         } else {
             range = 17;
-            lvl = 2;
+            lvl = 3;
         }
         sklp1 = (Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
         sklp2 = (Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
@@ -380,7 +382,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
             if (!this.hasEffect(CAMobEffects.FAKE_DEATH)) {
                 for (int index0 = 0; index0 < 120; index0++) {
                     if (world instanceof ServerLevel level)
-                        level.sendParticles(CAParticles.LARGE_DOLPHIN.get(), (x + range * Math.sin(Math.toRadians(3 * index0))), y, (z + range * Math.cos(Math.toRadians(3 * index0))), 4, 0.15, 0.2, 0.15, 0.1);
+                        level.sendParticles(CAParticles.LARGE_DOLPHIN.get(), (x + range * Math.sin(Math.toRadians(3 * index0))), y, (z + range * Math.cos(Math.toRadians(3 * index0))), 2, 0.15, 0.2, 0.15, 0.1);
                 }
                 final Vec3 center = new Vec3(x, (y + 1.5), z);
                 List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(range * 2), e -> true);
@@ -397,11 +399,15 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                         continue;
                     }
                     if (distanceToSqr(entityiterator) <= range * range) {
-                        if (!this.hasEffect(CAMobEffects.FADINGSHADOW)) {
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.FADINGSHADOW, 20, (int) lvl, false, false));
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20, (int) lvl, false, true));
+                        if (!this.level().isClientSide()) {
+                            if (!entityiterator.hasEffect(MobEffects.MOVEMENT_SLOWDOWN))
+                                entityiterator.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, (int) lvl, false, true));
+                            if (!entityiterator.hasEffect(BabelMobEffects.FEEBLENESS))
+                                entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.FEEBLENESS, 20, (int) lvl, false, true));
+                            if (!entityiterator.hasEffect(BabelMobEffects.WEIGHTLESS))
+                                entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.WEIGHTLESS, 20, (int) lvl, false, true));
+                            if (!entityiterator.hasEffect(MobEffects.DIG_SLOWDOWN))
+                                entityiterator.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20, (int) lvl, false, true));
                         }
                     }
                 }

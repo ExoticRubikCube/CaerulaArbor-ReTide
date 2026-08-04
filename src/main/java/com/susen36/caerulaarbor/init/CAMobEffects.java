@@ -53,7 +53,6 @@ public class CAMobEffects {
     public static final DeferredHolder<MobEffect, ? extends MobEffect> SEEK_OF_FRACTAL = REGISTRY.register("seek_of_fractal", SeekOfFractalMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> MUTE = REGISTRY.register("mute", MuteMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> GUIDE_PATH_AHEAD = REGISTRY.register("guide_path_ahead", GuidePathAheadMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> FADINGSHADOW = REGISTRY.register("fadingshadow", FadingshadowMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> HEMOSTATIC = REGISTRY.register("hemostatic", HemostaticMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> PATH_TO_UNCOVER = REGISTRY.register("path_to_uncover", PathToUncoverMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> LESS_ATTACKSPEED = REGISTRY.register("less_attackspeed", LessAttackspeedMobEffect::new);

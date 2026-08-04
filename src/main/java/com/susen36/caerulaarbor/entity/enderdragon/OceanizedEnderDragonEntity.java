@@ -2,6 +2,8 @@ package com.susen36.caerulaarbor.entity.enderdragon;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.api.ServerGeoAnimator;
+import com.susen36.caerulaarbor.client.model.entity.OceanizedEnderDragonModel;
 import com.susen36.caerulaarbor.entity.MoistDragonBreathEntity;
 import com.susen36.caerulaarbor.entity.MoistEnderCrystalEntity;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -13,6 +15,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -54,8 +57,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.entity.PartEntity;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.cache.object.GeoBone;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -74,11 +80,25 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	public Set<String> crystals = new HashSet<>();
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
-	// 程序动画驱动数据 - 弧形偏转延迟缓冲区
-	public final double[] yRotHistory = new double[64];
+	public final double[][] positions = new double[64][3];
 	public int posPointer = -1;
-	public float oFlapTime;
 	public float flapTime;
+	public float yRotA;
+	private final OceanizedEnderDragonPart[] subEntities;
+	public final OceanizedEnderDragonPart head;
+	private final OceanizedEnderDragonPart neck1;
+	private final OceanizedEnderDragonPart neck2;
+	private final OceanizedEnderDragonPart body;
+	private final OceanizedEnderDragonPart tail1;
+	private final OceanizedEnderDragonPart tail2;
+	private final OceanizedEnderDragonPart tail3;
+	private final OceanizedEnderDragonPart tail4;
+	public final OceanizedEnderDragonPart wing1;
+	private final OceanizedEnderDragonPart wing2;
+
+	// 服务端动画泛型 Helper（内部含 model/processor/bakedModel/animTick/lastUpdateTime 5 个字段），
+	// 仅保留 1 个 final 字段，后续 Hydra/Leviathan 等 SeaMonster 可直接 new ServerGeoAnimator 复用
+	private final ServerGeoAnimator<OceanizedEnderDragonEntity> serverGeoAnimator;
 
 	public OceanizedEnderDragonEntity(Level world) {
 		this(CAEntities.OCEANIZED_ENDER_DRAGON.get(), world);
@@ -86,6 +106,18 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 
 	public OceanizedEnderDragonEntity(EntityType<OceanizedEnderDragonEntity> type, Level world) {
 		super(type, world);
+		this.serverGeoAnimator = new ServerGeoAnimator<>(this, new OceanizedEnderDragonModel());
+		this.head = new OceanizedEnderDragonPart(this, "head", 1.25F, 1.25F);
+		this.neck1 = new OceanizedEnderDragonPart(this, "neck2", 2.0F, 2.0F);
+		this.neck2 = new OceanizedEnderDragonPart(this, "neck4", 2.0F, 2.0F);
+		this.body = new OceanizedEnderDragonPart(this, "body", 5.0F, 3.0F);
+		this.tail1 = new OceanizedEnderDragonPart(this, "tail2", 1.75F, 1.75F);
+		this.tail2 = new OceanizedEnderDragonPart(this, "tail5", 1.75F, 1.75F);
+		this.tail3 = new OceanizedEnderDragonPart(this, "tail8", 1.75F, 1.75F);
+		this.tail4 = new OceanizedEnderDragonPart(this, "tail11", 1.75F, 1.75F);
+		this.wing1 = new OceanizedEnderDragonPart(this, "left_wing", 4.0F, 1.75F);
+		this.wing2 = new OceanizedEnderDragonPart(this, "right_wing", 4.0F, 1.75F);
+		this.subEntities = new OceanizedEnderDragonPart[]{this.head, this.neck1, this.neck2, this.body, this.tail1, this.tail2, this.tail3, this.tail4, this.wing1, this.wing2};
 		this.noPhysics = true;
 		this.noCulling = true;
 		xpReward = 128;
@@ -94,6 +126,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		setPersistenceRequired();
 		this.moveControl = new FlyingMoveControl(this, 10, true);
+		this.setId(ENTITY_COUNTER.getAndAdd(this.subEntities.length + 1) + 1);
 	}
 
 	@Override
@@ -107,17 +140,45 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		builder.define(DATA_DURATION, 50);
 	}
 
-	// 获取延迟index带的偏转角度（弧形飞行延迟效果）
-	public double getLatencyYRot(int index, float partialTick) {
+	private void tickPart(OceanizedEnderDragonPart part, double x, double y, double z) {
+		part.setPos(this.getX() + x, this.getY() + y, this.getZ() + z);
+	}
+
+	public float getHeadPartYOffset(int index, double[] basePosition, double[] currentPosition) {
+		if (this.isShiftKeyDown()) {
+			return index;
+		}
+		if (index == 6) {
+			return 0.0F;
+		}
+		return (float) (currentPosition[1] - basePosition[1]);
+	}
+
+	private float getHeadYOffset() {
+		if (!this.isReviving()) {
+			return -1.0F;
+		} else {
+			double[] adouble = this.getLatencyPos(5, 1.0F);
+			double[] adouble1 = this.getLatencyPos(0, 1.0F);
+			return (float)(adouble[1] - adouble1[1]);
+		}
+	}
+
+	public double[] getLatencyPos(int index, float partialTick) {
 		if (this.isDeadOrDying()) {
 			partialTick = 0.0F;
 		}
 		partialTick = 1.0F - partialTick;
-		int i = this.posPointer - index & 63;
-		int j = this.posPointer - index - 1 & 63;
-		double d0 = this.yRotHistory[i];
-		double d1 = Mth.wrapDegrees(this.yRotHistory[j] - d0);
-		return d0 + d1 * (double) partialTick;
+		int currentIndex = this.posPointer - index & 63;
+		int previousIndex = this.posPointer - index - 1 & 63;
+		double[] result = new double[3];
+		double currentYaw = this.positions[currentIndex][0];
+		double yawDelta = Mth.wrapDegrees(this.positions[previousIndex][0] - currentYaw);
+		result[0] = currentYaw + yawDelta * (double) partialTick;
+		double currentY = this.positions[currentIndex][1];
+		result[1] = currentY + (this.positions[previousIndex][1] - currentY) * (double) partialTick;
+		result[2] = Mth.lerp(partialTick, this.positions[currentIndex][2], this.positions[previousIndex][2]);
+		return result;
 	}
 
 	@Override
@@ -135,7 +196,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		this.goalSelector.addGoal(0, new DoNothingGoal());
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 60, 15.0F));
-		this.goalSelector.addGoal(5, new DragonWanderGoal(this, 0.7D));
+		this.goalSelector.addGoal(5, new DragonWanderGoal(this, 1.25D));
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 32.0F));
 	}
@@ -147,8 +208,8 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	public MoistEnderCrystalEntity getCrystal(String uuid) {
 		Level level = this.level();
 		if (level instanceof ServerLevel serverLevel && uuid != null && !uuid.isEmpty()) {
-			Entity c = serverLevel.getEntity(UUID.fromString(uuid));
-			return c instanceof MoistEnderCrystalEntity ? (MoistEnderCrystalEntity) c : null;
+			Entity entity = serverLevel.getEntity(UUID.fromString(uuid));
+			return entity instanceof MoistEnderCrystalEntity ? (MoistEnderCrystalEntity) entity : null;
 		}
 		return null;
 	}
@@ -165,6 +226,8 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		private final int attackIntervalMax;
 		private final float attackRadius;
 		private final float attackRadiusSqr;
+		private Vec3 lastPathTarget;
+		private int pathRecalcCooldown;
 
 		public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
 			this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
@@ -185,6 +248,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			}
 		}
 
+		@Override
 		public boolean canUse() {
 			LivingEntity livingentity = this.mob.getTarget();
 			if (livingentity != null && livingentity.isAlive()) {
@@ -195,17 +259,33 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			}
 		}
 
+		@Override
 		public boolean canContinueToUse() {
 			return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
 		}
 
+		@Override
+		public void start() {
+			this.pathRecalcCooldown = 0;
+			this.recalculatePath();
+		}
+
+		@Override
 		public void stop() {
 			this.target = null;
 			this.seeTime = 0;
 			this.attackTime = -1;
+			this.pathRecalcCooldown = 0;
 			((OceanizedEnderDragonEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 
+		private void recalculatePath() {
+			this.mob.getNavigation().moveTo(this.target, this.speedModifier);
+			this.lastPathTarget = this.target.position();
+			this.pathRecalcCooldown = 10;
+		}
+
+		@Override
 		public void tick() {
 			double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
 			boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
@@ -217,7 +297,16 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
 				this.mob.getNavigation().stop();
 			} else {
-				this.mob.getNavigation().moveTo(this.target, this.speedModifier);
+				if (this.pathRecalcCooldown > 0) {
+					--this.pathRecalcCooldown;
+				}
+				double dx = this.target.getX() - this.lastPathTarget.x;
+				double dy = this.target.getY() - this.lastPathTarget.y;
+				double dz = this.target.getZ() - this.lastPathTarget.z;
+				if (this.pathRecalcCooldown == 0 && (this.mob.getNavigation().isDone() || this.mob.horizontalCollision || this.mob.verticalCollision
+					|| Mth.square(dx) + Mth.square(dy) + Mth.square(dz) > 16.0D)) {
+					this.recalculatePath();
+				}
 			}
 			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
 			if (--this.attackTime == 0) {
@@ -238,12 +327,35 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	}
 
 	@Override
+	public void setId(int id) {
+		super.setId(id);
+		for(int i = 0; i < this.subEntities.length; ++i) {
+			this.subEntities[i].setId(id + i + 1);
+		}
+	}
+
+	@Override
+	public boolean isMultipartEntity() {
+		return true;
+	}
+
+	@Override
+	public PartEntity<?> [] getParts() {
+		return this.subEntities;
+	}
+
+	@Override
+	public void recreateFromPacket(ClientboundAddEntityPacket packet) {
+		super.recreateFromPacket(packet);
+	}
+
+	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource damageSource) {
 		return CASounds.CASTER_HURT.get();
 	}
 
@@ -265,6 +377,10 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		float rate = isReviving() ? 0.25f : 1;
         float actualDamage = Math.min(amount * rate, this.getMaxHealth() * 0.33f);
 		return super.hurt(source, actualDamage);
+	}
+
+	public boolean hurt(OceanizedEnderDragonPart part, DamageSource source, float amount) {
+		return this.hurt(source, amount);
 	}
 
     @Override
@@ -382,31 +498,6 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		double deadTime;
 		deadTime = this.deathTime;
 		if (this.isAlive()) {
-			// 移植自原版EnderDragon - flapTime 和延迟位置缓冲区更新
-			this.oFlapTime = this.flapTime;
-			if (!this.isDeadOrDying()) {
-				Vec3 velocity = this.getDeltaMovement();
-				float flapSpeed = 0.2F / ((float) velocity.horizontalDistance() * 10.0F + 1.0F);
-				flapSpeed *= (float) Math.pow(2.0D, velocity.y);
-				if (this.isShiftKeyDown()) {
-					this.flapTime += 0.1F;
-				} else if (this.horizontalCollision) {
-					this.flapTime += flapSpeed * 0.5F;
-				} else {
-					this.flapTime += flapSpeed;
-				}
-
-				this.setYRot(Mth.wrapDegrees(this.getYRot()));
-
-				if (this.posPointer < 0) {
-                    Arrays.fill(this.yRotHistory, this.getYRot());
-				}
-				if (++this.posPointer == this.yRotHistory.length) {
-					this.posPointer = 0;
-				}
-				this.yRotHistory[this.posPointer] = this.getYRot();
-			}
-
 			sklp1 = (Entity) this instanceof OceanizedEnderDragonEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P) : 0;
 			dura = (Entity) this instanceof OceanizedEnderDragonEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
 			rev = (Entity) this instanceof OceanizedEnderDragonEntity datEntI ? datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0;
@@ -527,6 +618,105 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		this.refreshDimensions();
 	}
 
+	@Override
+	public void aiStep() {
+		super.aiStep();
+		if (this.isAlive()) {
+			if (!this.isReviving() && !this.isDeadOrDying()) {
+				Vec3 movement = this.getDeltaMovement();
+				if (movement.lengthSqr() > 1.0E-7D) {
+					Vec3 movementDirection = movement.normalize();
+					Vec3 facingDirection = new Vec3(
+							Mth.sin(this.getYRot() * Mth.DEG_TO_RAD),
+							movement.y,
+							-Mth.cos(this.getYRot() * Mth.DEG_TO_RAD)
+					).normalize();
+					double damping = 0.8D + 0.15D * (movementDirection.dot(facingDirection) + 1.0D) / 2.0D;
+					this.setDeltaMovement(movement.multiply(damping, 0.91D, damping));
+				}
+			}
+
+			this.yBodyRot = this.getYRot();
+			Vec3[] oldPositions = new Vec3[this.subEntities.length];
+			for (int index = 0; index < this.subEntities.length; index++) {
+				oldPositions[index] = this.subEntities[index].position();
+			}
+
+			if (this.posPointer < 0) {
+				for (int index = 0; index < this.positions.length; index++) {
+					this.positions[index][0] = this.getYRot();
+					this.positions[index][1] = this.getY();
+				}
+			}
+			if (++this.posPointer == this.positions.length) {
+				this.posPointer = 0;
+			}
+			this.positions[this.posPointer][0] = this.getYRot();
+			this.positions[this.posPointer][1] = this.getY();
+
+			Map<String, Vec3> allBonePos = this.serverGeoAnimator.tickAndGetCurrentPose(this.tickCount);
+
+			// Dragon 专属：从 Helper 返回的全量骨骼里只挑出 subEntities 需要的部分；
+			// 同时保留 Dragon 专属 debug 日志（neck1/tail1/root 骨骼名 + subEntities 枚举），
+			// 这两段是 Hydra/Leviathan 等其他实体不需要的，所以故意不塞进泛型 ServerGeoAnimator
+			AnimationProcessor<OceanizedEnderDragonEntity> proc = this.serverGeoAnimator.getAnimationProcessor();
+			Map<String, Vec3> currentPose = new HashMap<>();
+			for (OceanizedEnderDragonPart part : this.subEntities) {
+				Vec3 v = allBonePos.get(part.name);
+				if (v != null) currentPose.put(part.name, v);
+			}
+
+			// 诊断日志（每 20 tick）：确认 setCustomAnimations 里的程序化旋转是否真的写进了 GeoBone 对象
+			if (this.tickCount % 20 == 0) {
+				GeoBone neck1 = proc.getBone("neck1");
+				GeoBone tail1 = proc.getBone("tail1");
+				GeoBone root = proc.getBone("root");
+				CaerulaArborMod.LOGGER.info("[ServerGeo] rot: neck1.rotY={} tail1.rotY={} root.posY={} root.rotX={}",
+					neck1 == null ? "null" : String.format("%.4f", neck1.getRotY()),
+					tail1 == null ? "null" : String.format("%.4f", tail1.getRotY()),
+					root == null ? "null" : String.format("%.3f", root.getPosY()),
+					root == null ? "null" : String.format("%.4f", root.getRotX()));
+			}
+
+			if (this.tickCount % 40 == 0) {
+				AnimatableInstanceCache cache = this.getAnimatableInstanceCache();
+				AnimatableManager<OceanizedEnderDragonEntity> manager = cache == null ? null : cache.getManagerForId(this.getId());
+				Map<String, AnimationController<OceanizedEnderDragonEntity>> controllers = manager == null ? java.util.Collections.emptyMap() : manager.getAnimationControllers();
+				StringBuilder sb = new StringBuilder(256);
+				sb.append("tick=").append(this.tickCount).append(" controllers=").append(controllers.size());
+				for (OceanizedEnderDragonPart part : this.subEntities) {
+					Vec3 v = currentPose.get(part.name);
+					sb.append(' ').append(part.name).append('=');
+					if (v == null) sb.append("null");
+					else sb.append(String.format("(%.2f,%.2f,%.2f)", v.x, v.y, v.z));
+				}
+				CaerulaArborMod.LOGGER.info("[ServerGeo] pose: {}", sb);
+			}
+
+			// 前后修正：模型空间的 Z 轴与 Minecraft 实体前方方向相反（模型里 +Z 才是尾，-Z 是头与 Minecraft 相反），
+			// 故先对 Z 取反修正前后，再绕 -yaw 水平旋转跟随主实体朝向，与 facingDirection 公式（L630-L632：x=sin, z=-cos）逐行一致。
+			float yaw = this.getYRot() * Mth.DEG_TO_RAD;
+
+			for (OceanizedEnderDragonPart part : this.subEntities) {
+				Vec3 modelPos = currentPose.get(part.name);
+				if (modelPos == null) continue;
+				Vec3 entityOffset = new Vec3(modelPos.x, modelPos.y, -modelPos.z).yRot(-yaw);
+				this.tickPart(part, entityOffset.x, entityOffset.y, entityOffset.z);
+			}
+
+			for (int index = 0; index < this.subEntities.length; index++) {
+				OceanizedEnderDragonPart part = this.subEntities[index];
+				Vec3 oldPosition = oldPositions[index];
+				part.xo = oldPosition.x;
+				part.yo = oldPosition.y;
+				part.zo = oldPosition.z;
+				part.xOld = oldPosition.x;
+				part.yOld = oldPosition.y;
+				part.zOld = oldPosition.z;
+			}
+		}
+	}
+
 	private void destroyBlocks() {
 		Level world = this.level();
 		if (!WorldUtils.canGrief(world)) {
@@ -639,7 +829,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			if (this.isDeadOrDying()) {
 				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_ender_dragon.death"));
 			}
-			if (this.isShiftKeyDown()) {
+			if (this.isReviving()) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_ender_dragon.revive"));
 			}
 			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_ender_dragon.idle"));
@@ -728,7 +918,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		return this.entityData.get(DATA_PHASE);
 	}
 
-	private boolean isReviving() {
+	public boolean isReviving() {
 		return this.entityData.get(DATA_REVIVE_TICK) > 0;
 	}
 
@@ -839,7 +1029,6 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		public boolean canUse() {
 			if (dragon.getTarget() != null) return false;
 			if (!dragon.isEnderinaDurative()) return false;
-			if (dragon.getNavigation().isInProgress()) return false;
 			if (dragon.tickCount < this.nextRecalcTick) return false;
 			Vec3 target = this.pickRandomTarget();
 			if (target == null) return false;
@@ -851,20 +1040,27 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 
 		@Override
 		public boolean canContinueToUse() {
+			double dx = dragon.getX() - this.targetX;
+			double dy = dragon.getY() - this.targetY;
+			double dz = dragon.getZ() - this.targetZ;
 			return dragon.getTarget() == null
 				&& dragon.isEnderinaDurative()
-				&& !dragon.getNavigation().isDone();
+				&& Mth.square(dx) + Mth.square(dy) + Mth.square(dz) > 4.0D;
 		}
 
 		@Override
 		public void start() {
-			this.nextRecalcTick = dragon.tickCount + 120 + dragon.getRandom().nextInt(60);
-			dragon.getNavigation().moveTo(targetX, targetY, targetZ, speedModifier);
+			this.nextRecalcTick = dragon.tickCount + 1;
+		}
+
+		@Override
+		public void tick() {
+			dragon.getMoveControl().setWantedPosition(this.targetX, this.targetY, this.targetZ, this.speedModifier);
 		}
 
 		@Override
 		public void stop() {
-			dragon.getNavigation().stop();
+			dragon.getMoveControl().setWantedPosition(dragon.getX(), dragon.getY(), dragon.getZ(), 0.0D);
 		}
 
 		@Nullable
@@ -890,4 +1086,5 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			return OceanizedEnderDragonEntity.this.getEntityData().get(DATA_REVIVE_TICK) > 0;
 		}
 	}
+
 }
