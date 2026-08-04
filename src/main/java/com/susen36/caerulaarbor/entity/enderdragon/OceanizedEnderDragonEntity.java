@@ -58,10 +58,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.cache.object.GeoBone;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -108,15 +106,15 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		super(type, world);
 		this.serverGeoAnimator = new ServerGeoAnimator<>(this, new OceanizedEnderDragonModel());
 		this.head = new OceanizedEnderDragonPart(this, "head", 1.25F, 1.25F);
-		this.neck1 = new OceanizedEnderDragonPart(this, "neck2", 2.0F, 2.0F);
-		this.neck2 = new OceanizedEnderDragonPart(this, "neck4", 2.0F, 2.0F);
+		this.neck1 = new OceanizedEnderDragonPart(this, "neck2", 1.75F, 1.75F);
+		this.neck2 = new OceanizedEnderDragonPart(this, "neck4", 1.75F, 1.75F);
 		this.body = new OceanizedEnderDragonPart(this, "body", 5.0F, 3.0F);
 		this.tail1 = new OceanizedEnderDragonPart(this, "tail2", 1.75F, 1.75F);
 		this.tail2 = new OceanizedEnderDragonPart(this, "tail5", 1.75F, 1.75F);
 		this.tail3 = new OceanizedEnderDragonPart(this, "tail8", 1.75F, 1.75F);
 		this.tail4 = new OceanizedEnderDragonPart(this, "tail11", 1.75F, 1.75F);
-		this.wing1 = new OceanizedEnderDragonPart(this, "left_wing", 4.0F, 1.75F);
-		this.wing2 = new OceanizedEnderDragonPart(this, "right_wing", 4.0F, 1.75F);
+		this.wing1 = new OceanizedEnderDragonPart(this, "left_wing_tip", 4.0F, 1.75F);
+		this.wing2 = new OceanizedEnderDragonPart(this, "right_wing_tip", 4.0F, 1.75F);
 		this.subEntities = new OceanizedEnderDragonPart[]{this.head, this.neck1, this.neck2, this.body, this.tail1, this.tail2, this.tail3, this.tail4, this.wing1, this.wing2};
 		this.noPhysics = true;
 		this.noCulling = true;
@@ -138,10 +136,6 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		builder.define(DATA_PHASE, 0);
 		builder.define(DATA_SKILL_P, 0);
 		builder.define(DATA_DURATION, 50);
-	}
-
-	private void tickPart(OceanizedEnderDragonPart part, double x, double y, double z) {
-		part.setPos(this.getX() + x, this.getY() + y, this.getZ() + z);
 	}
 
 	public float getHeadPartYOffset(int index, double[] basePosition, double[] currentPosition) {
@@ -654,53 +648,20 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			this.positions[this.posPointer][0] = this.getYRot();
 			this.positions[this.posPointer][1] = this.getY();
 
-			Map<String, Vec3> allBonePos = this.serverGeoAnimator.tickAndGetCurrentPose(this.tickCount);
+			// applyWorldRotation=true：Helper 内部自动按 GeckoLib 官方 applyRotations 公式 (180°-yaw) 把所有骨骼位置绕 Y+ 做世界旋转，
+			// 返回的 x/y/z 直接就是可丢给 tickPart 的世界偏移，不再需要在 Entity 端手搓 worldRot + .yRot()。
+			Map<String, Vec3> allBonePos = this.serverGeoAnimator.tickAndGetCurrentPose(this.tickCount, this.getYRot(), true);
 
-			// Dragon 专属：从 Helper 返回的全量骨骼里只挑出 subEntities 需要的部分；
-			// 同时保留 Dragon 专属 debug 日志（neck1/tail1/root 骨骼名 + subEntities 枚举），
-			// 这两段是 Hydra/Leviathan 等其他实体不需要的，所以故意不塞进泛型 ServerGeoAnimator
-			AnimationProcessor<OceanizedEnderDragonEntity> proc = this.serverGeoAnimator.getAnimationProcessor();
+			// 从 Helper 返回的全量骨骼里挑出 subEntities 需要的部分
 			Map<String, Vec3> currentPose = new HashMap<>();
 			for (OceanizedEnderDragonPart part : this.subEntities) {
 				Vec3 v = allBonePos.get(part.name);
 				if (v != null) currentPose.put(part.name, v);
 			}
 
-			// 诊断日志（每 20 tick）：确认 setCustomAnimations 里的程序化旋转是否真的写进了 GeoBone 对象
-			if (this.tickCount % 20 == 0) {
-				GeoBone neck1 = proc.getBone("neck1");
-				GeoBone tail1 = proc.getBone("tail1");
-				GeoBone root = proc.getBone("root");
-				CaerulaArborMod.LOGGER.info("[ServerGeo] rot: neck1.rotY={} tail1.rotY={} root.posY={} root.rotX={}",
-					neck1 == null ? "null" : String.format("%.4f", neck1.getRotY()),
-					tail1 == null ? "null" : String.format("%.4f", tail1.getRotY()),
-					root == null ? "null" : String.format("%.3f", root.getPosY()),
-					root == null ? "null" : String.format("%.4f", root.getRotX()));
-			}
-
-			if (this.tickCount % 40 == 0) {
-				AnimatableInstanceCache cache = this.getAnimatableInstanceCache();
-				AnimatableManager<OceanizedEnderDragonEntity> manager = cache == null ? null : cache.getManagerForId(this.getId());
-				Map<String, AnimationController<OceanizedEnderDragonEntity>> controllers = manager == null ? java.util.Collections.emptyMap() : manager.getAnimationControllers();
-				StringBuilder sb = new StringBuilder(256);
-				sb.append("tick=").append(this.tickCount).append(" controllers=").append(controllers.size());
-				for (OceanizedEnderDragonPart part : this.subEntities) {
-					Vec3 v = currentPose.get(part.name);
-					sb.append(' ').append(part.name).append('=');
-					if (v == null) sb.append("null");
-					else sb.append(String.format("(%.2f,%.2f,%.2f)", v.x, v.y, v.z));
-				}
-				CaerulaArborMod.LOGGER.info("[ServerGeo] pose: {}", sb);
-			}
-
-			// 前后修正：模型空间的 Z 轴与 Minecraft 实体前方方向相反（模型里 +Z 才是尾，-Z 是头与 Minecraft 相反），
-			// 故先对 Z 取反修正前后，再绕 -yaw 水平旋转跟随主实体朝向，与 facingDirection 公式（L630-L632：x=sin, z=-cos）逐行一致。
-			float yaw = this.getYRot() * Mth.DEG_TO_RAD;
-
 			for (OceanizedEnderDragonPart part : this.subEntities) {
-				Vec3 modelPos = currentPose.get(part.name);
-				if (modelPos == null) continue;
-				Vec3 entityOffset = new Vec3(modelPos.x, modelPos.y, -modelPos.z).yRot(-yaw);
+				Vec3 entityOffset = currentPose.get(part.name);
+				if (entityOffset == null) continue;
 				this.tickPart(part, entityOffset.x, entityOffset.y, entityOffset.z);
 			}
 
@@ -808,6 +769,10 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		super.setNoGravity(true);
 	}
 
+	private void tickPart(OceanizedEnderDragonPart part, double x, double y, double z) {
+		part.setPos(this.getX() + x, this.getY() + y, this.getZ() + z);
+	}
+	
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.45);
