@@ -389,7 +389,7 @@ public class CAEntities {
 
     public static final DeferredHolder<EntityType<?>, EntityType<OceanizedEnderDragonEntity>> OCEANIZED_ENDER_DRAGON = register("oceanized_ender_dragon",
             EntityType.Builder.<OceanizedEnderDragonEntity>of(OceanizedEnderDragonEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).fireImmune()
-                    .sized(8.0f, 4.0f));
+                    .sized(6.0f, 3.6f));
     public static final DeferredHolder<EntityType<?>, EntityType<MoistDragonBreathEntity>> MOIST_DRAGON_BREATH = register("moist_dragon_breath",
             EntityType.Builder.<MoistDragonBreathEntity>of(MoistDragonBreathEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(0.5f, 0.5f));
