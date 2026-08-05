@@ -11,9 +11,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.BossEvent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -141,7 +141,7 @@ public class CustomBossBarEventHandler {
         INDEX.add(Pair.of("entity.caerula_arbor.lingering_pathshaper", CONTEXT_LINGERING));
         INDEX.add(Pair.of("entity.caerula_arbor.bishop_fish", CONTEXT_QUINTUS));
         INDEX.add(Pair.of("entity.caerula_arbor.tide_bishop", CONTEXT_TIDELINKED_BISHOP));
-        INDEX.add(Pair.of("entity.caerula_arbor.tide_deathrepeller", CONTEXT_TIDELINKED_IMMORTAL));
+        INDEX.add(Pair.of("entity.caerula_arbor.tidelinked_immortal", CONTEXT_TIDELINKED_IMMORTAL));
         INDEX.add(Pair.of("entity.caerula_arbor.highmore",CONTEXT_HIGHMORE));
         INDEX.add(Pair.of("entity.caerula_arbor.the_last_knight",CONTEXT_TIDE_HUNT));
         INDEX.add(Pair.of("entity.caerula_arbor.martus",CONTEXT_MARTUS));

@@ -384,7 +384,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> QUINTUS_SPAWNEGG = REGISTRY.register("quintus_spawnegg", () -> new DeferredSpawnEggItem(CAEntities.BISHOP_FISH, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
     public static final DeferredHolder<Item, ? extends Item> PATH_SHAPER_SPAWNEGG = REGISTRY.register("path_shaper_spawnegg", PathShaperSpawneggItem::new);
     public static final DeferredHolder<Item, ? extends Item> TIDE_BISHOP_SPAWNEGG = REGISTRY.register("tide_bishop_spawnegg", TideBishopSpawneggItem::new);
-    public static final DeferredHolder<Item, ? extends Item> DEATHREPELLER_SPAWNEGG = REGISTRY.register("deathrepeller_spawnegg", () -> new DeferredSpawnEggItem(CAEntities.TIDE_DEATHREPELLER, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
+    public static final DeferredHolder<Item, ? extends Item> TIDELINKED_IMMORTAL_SPAWNEGG = REGISTRY.register("tidelinked_immortal_spawnegg", () -> new DeferredSpawnEggItem(CAEntities.TIDELINKED_IMMORTAL, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
     public static final DeferredHolder<Item, ? extends Item> HIGHMORE_SPAWNEGG = REGISTRY.register("highmore_spawnegg", () -> new DeferredSpawnEggItem(CAEntities.HIGHMORE, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
     public static final DeferredHolder<Item, ? extends Item> COLOURFULL_JELLY = REGISTRY.register("colourfull_jelly", ColourfullJellyItem::new);
     public static final DeferredHolder<Item, ? extends Item> CHITIN_SHIELD = REGISTRY.register("chitin_shield", ChitinShieldItem::new);

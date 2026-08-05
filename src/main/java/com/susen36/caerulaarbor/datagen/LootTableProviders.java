@@ -3032,7 +3032,7 @@ public final class LootTableProviders {
         }
 
         private static TableDef etideDeathrepeller() {
-            return table("entities/tide_deathrepeller",
+            return table("entities/tidelinked_immortal",
                     pool(number(2.0F), u(1.0F, 2.0F), cond(),
                             entry("caerula_arbor:ocean_phloem", 35, cond(), setCount(u(9.0F, 11.0F))),
                             entry("caerula_arbor:ocean_crystal", 35, cond(), setCount(u(12.0F, 17.0F))),

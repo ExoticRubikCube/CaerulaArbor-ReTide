@@ -522,7 +522,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             } else if (randomValue < 0.02) {
                 entityToSpawn = CAEntities.TIDE_CHIMERA.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
             } else if (randomValue < 0.21) {
-                entityToSpawn = CAEntities.TIDE_DEATHREPELLER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.TIDELINKED_IMMORTAL.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
             } else if (randomValue < 0.4) {
                 entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
             } else if (randomValue < 0.6) {

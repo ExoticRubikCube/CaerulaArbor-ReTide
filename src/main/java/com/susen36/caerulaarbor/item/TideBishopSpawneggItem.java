@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.entity.TideDeathrepellerEntity;
+import com.susen36.caerulaarbor.entity.TidelinkedImmortalEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +28,7 @@ public class TideBishopSpawneggItem extends DeferredSpawnEggItem {
 
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
-        if (!entity.level().isClientSide() && entity instanceof TideDeathrepellerEntity) {
+        if (!entity.level().isClientSide() && entity instanceof TidelinkedImmortalEntity) {
             entity.discard();
         }
         return true;

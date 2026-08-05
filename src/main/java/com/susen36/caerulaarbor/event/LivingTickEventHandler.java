@@ -59,10 +59,10 @@ public class LivingTickEventHandler {
 
         Entity other = null;
 
-        if (enemy instanceof TideDeathrepellerEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.FAKE_DEATH)) {
+        if (enemy instanceof TidelinkedImmortalEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.FAKE_DEATH)) {
             other = world.getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
         } else if (enemy instanceof TideBishopEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.FAKE_DEATH)) {
-            other = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
+            other = world.getEntitiesOfClass(TidelinkedImmortalEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
         } else if (enemy instanceof MartusEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.INVULNERABLE)) {
             Entity tgt_ent = null;
             Entity tgt_blessed = null;

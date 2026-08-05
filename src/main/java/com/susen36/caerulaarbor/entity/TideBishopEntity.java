@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -42,7 +43,6 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -51,7 +51,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import com.susen36.babel.init.BabelAttributes;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -146,7 +145,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().min(new Object() {
+        world.getEntitiesOfClass(TidelinkedImmortalEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().min(new Object() {
             Comparator<Entity> compareDistOf(double x, double y, double z) {
                 return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
             }
@@ -162,7 +161,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            Entity repeller = this.level().getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+            Entity repeller = this.level().getEntitiesOfClass(TidelinkedImmortalEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                     .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
             boolean keepup = repeller != null;
             if (repeller instanceof LivingEntity repellerLiving && repellerLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
@@ -185,7 +184,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         if (world instanceof ServerLevel level) {
-            Entity entityToSpawn = CAEntities.TIDE_DEATHREPELLER.get().spawn(level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -3, 3), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -3, 3)), MobSpawnType.MOB_SUMMONED);
+            Entity entityToSpawn = CAEntities.TIDELINKED_IMMORTAL.get().spawn(level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -3, 3), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -3, 3)), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
             }
@@ -219,7 +218,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         double z = this.getZ();
         Entity nearest;
         if (this.hasEffect(CAMobEffects.FAKE_DEATH)) {
-            nearest = this.level().getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+            nearest = this.level().getEntitiesOfClass(TidelinkedImmortalEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                     .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
             boolean keepup = nearest != null;
             if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
@@ -257,7 +256,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
                             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y + 1.5, z, 64, 1.5, 1.5, 1.5, 0.2);
                         }
                     }
-                    repeller = this.level().getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), candidate -> true).stream()
+                    repeller = this.level().getEntitiesOfClass(TidelinkedImmortalEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), candidate -> true).stream()
                             .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
                     if (repeller instanceof LivingEntity repellerLiving && repellerLiving.isAlive() && repellerLiving.getHealth() < repellerLiving.getMaxHealth()) {
                         repellerLiving.setHealth((float) (repellerLiving.getHealth() + repellerLiving.getMaxHealth() * 0.1));
@@ -271,7 +270,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         } else {
             this.getEntityData().set(DATA_SKILL_COOLDOWN, (int) (skillCooldown - 1));
         }
-        nearest = this.level().getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+        nearest = this.level().getEntitiesOfClass(TidelinkedImmortalEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                 .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
         if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
             EntityUtils.spawnLinkParticles(this.level(), this, nearest);

@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.deathrepeller.default": {
+		"animation.tidelinked_immortal.default": {
 			"animation_length": 0.25,
 			"bones": {
 				"root": {
@@ -734,7 +734,7 @@
 				}
 			}
 		},
-		"animation.deathrepeller.idle": {
+		"animation.tidelinked_immortal.idle": {
 			"loop": true,
 			"animation_length": 1.375,
 			"bones": {
@@ -1394,7 +1394,7 @@
 				}
 			}
 		},
-		"animation.deathrepeller.move": {
+		"animation.tidelinked_immortal.move": {
 			"loop": true,
 			"animation_length": 1.25,
 			"bones": {
@@ -2159,7 +2159,7 @@
 				}
 			}
 		},
-		"animation.deathrepeller.die": {
+		"animation.tidelinked_immortal.die": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1.1,
 			"bones": {
@@ -3039,7 +3039,7 @@
 				}
 			}
 		},
-		"animation.deathrepeller.die_loop": {
+		"animation.tidelinked_immortal.die_loop": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
@@ -3570,7 +3570,7 @@
 				}
 			}
 		},
-		"animation.deathrepeller.die_idle": {
+		"animation.tidelinked_immortal.die_idle": {
 			"animation_length": 1.1667,
 			"bones": {
 				"root": {
@@ -4167,7 +4167,7 @@
 				}
 			}
 		},
-		"animation.deathrepeller.attack": {
+		"animation.tidelinked_immortal.attack": {
 			"animation_length": 0.95,
 			"bones": {
 				"root": {
@@ -4867,7 +4867,7 @@
 				}
 			}
 		},
-		"animation.deathrepeller.combo": {
+		"animation.tidelinked_immortal.combo": {
 			"animation_length": 2.625,
 			"bones": {
 				"root": {
@@ -6159,7 +6159,7 @@
 				}
 			}
 		},
-		"animation.deathrepeller.enchantattack": {
+		"animation.tidelinked_immortal.enchantattack": {
 			"animation_length": 1,
 			"bones": {
 				"root": {

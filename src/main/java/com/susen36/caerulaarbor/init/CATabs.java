@@ -316,7 +316,7 @@ public class CATabs {
                 tabData.accept(CAItems.ROUTE_FRACTAL_SPAWN_EGG.get());
                 tabData.accept(CAItems.LINGERING_FRACTAL_SPAWN_EGG.get());
                 tabData.accept(CAItems.TIDE_BISHOP_SPAWNEGG.get());
-                tabData.accept(CAItems.DEATHREPELLER_SPAWNEGG.get());
+                tabData.accept(CAItems.TIDELINKED_IMMORTAL_SPAWNEGG.get());
                 tabData.accept(CAItems.QUINTUS_SPAWNEGG.get());
                 tabData.accept(CAItems.SONS_SPAWN_EGG.get());
                 tabData.accept(CAItems.ENDSPEAKER_SPAWNEGG.get());

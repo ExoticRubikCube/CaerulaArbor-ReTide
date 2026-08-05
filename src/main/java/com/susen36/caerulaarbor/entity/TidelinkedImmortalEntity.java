@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -51,26 +52,25 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import com.susen36.babel.init.BabelAttributes;
 
 import java.util.Comparator;
 import java.util.List;
 
-public class TideDeathrepellerEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
+public class TidelinkedImmortalEntity extends SeaMonster {
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TidelinkedImmortalEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TidelinkedImmortalEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(TidelinkedImmortalEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TidelinkedImmortalEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
-    public TideDeathrepellerEntity(Level world) {
-        this(CAEntities.TIDE_DEATHREPELLER.get(), world);
+    public TidelinkedImmortalEntity(Level world) {
+        this(CAEntities.TIDELINKED_IMMORTAL.get(), world);
     }
 
-    public TideDeathrepellerEntity(EntityType<TideDeathrepellerEntity> type, Level world) {
+    public TidelinkedImmortalEntity(EntityType<TidelinkedImmortalEntity> type, Level world) {
         super(type, world);
         xpReward = 6;
         setNoAi(false);
@@ -93,36 +93,36 @@ public class TideDeathrepellerEntity extends SeaMonster {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                return super.canUse() && TideDeathrepellerEntity.this.isFaking();
+                return super.canUse() && TidelinkedImmortalEntity.this.isFaking();
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && TideDeathrepellerEntity.this.isFaking();
+                return super.canContinueToUse() && TidelinkedImmortalEntity.this.isFaking();
             }
         });
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  0.8, true) {
 
             @Override
             public boolean canUse() {
-                return super.canUse() && TideDeathrepellerEntity.this.isFaking();
+                return super.canUse() && TidelinkedImmortalEntity.this.isFaking();
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && TideDeathrepellerEntity.this.isFaking();
+                return super.canContinueToUse() && TidelinkedImmortalEntity.this.isFaking();
             }
 
         });
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false) {
             @Override
             public boolean canUse() {
-                return super.canUse() && TideDeathrepellerEntity.this.isFaking();
+                return super.canUse() && TidelinkedImmortalEntity.this.isFaking();
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && TideDeathrepellerEntity.this.isFaking();
+                return super.canContinueToUse() && TidelinkedImmortalEntity.this.isFaking();
             }
         });
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
@@ -177,8 +177,8 @@ public class TideDeathrepellerEntity extends SeaMonster {
                             }
                         }
                         if (num >= 2 || ((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
-                            if (this instanceof TideDeathrepellerEntity) {
-                                this.setAnimation("animation.deathrepeller.enchantattack");
+                            if (this instanceof TidelinkedImmortalEntity) {
+                                this.setAnimation("animation.tidelinked_immortal.enchantattack");
                             }
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 60, 0, false, false));
@@ -280,7 +280,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
                 keepup = false;
             }
             if (!keepup) {
-                this.setAnimation("animation.deathrepeller.die");
+                this.setAnimation("animation.tidelinked_immortal.die");
                 this.removeAllEffects();
                 this.hurt(this.level().damageSources().fellOutOfWorld(), 114514);
             }
@@ -308,7 +308,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
                     if (!this.level().isClientSide()) {
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
                     }
-                    this.setAnimation("animation.deathrepeller.combo");
+                    this.setAnimation("animation.tidelinked_immortal.combo");
                     CaerulaArborMod.queueServerWork(17, () -> {
                         if (this.isAlive()) {
                             EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
@@ -401,15 +401,15 @@ public class TideDeathrepellerEntity extends SeaMonster {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
             ) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.deathrepeller.move"));
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidelinked_immortal.move"));
             }
             if (this.isDeadOrDying()) {
-                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.deathrepeller.die"));
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tidelinked_immortal.die"));
             }
             if (this.isShiftKeyDown()) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.deathrepeller.die_loop"));
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidelinked_immortal.die_loop"));
             }
-            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.deathrepeller.idle"));
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidelinked_immortal.idle"));
         }
         return PlayState.STOP;
     }
@@ -424,7 +424,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
         }
         if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
-            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.deathrepeller.attack"));
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tidelinked_immortal.attack"));
         }
         return PlayState.CONTINUE;
     }
@@ -474,7 +474,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
     }
 
     public boolean isFaking() {
-        if (this.getEntityData().get(TideDeathrepellerEntity.DATA_DURATION) > 0) {
+        if (this.getEntityData().get(TidelinkedImmortalEntity.DATA_DURATION) > 0) {
             return false;
         }
         return !this.hasEffect(CAMobEffects.FAKE_DEATH);

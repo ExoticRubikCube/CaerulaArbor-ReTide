@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.deathrepeller",
+				"identifier": "geometry.tidelinked_trchon",
 				"texture_width": 128,
 				"texture_height": 128,
 				"visible_bounds_width": 4,
@@ -206,10 +206,10 @@
 							}
 						},
 						{
-							"origin": [-10.2, 27.1, -10],
-							"size": [7.9, 3.9, 1.4],
-							"pivot": [-5.5, 29, -9.5],
-							"rotation": [-22.5, 22.5, 22.5],
+							"origin": [-6.2, 25.6, -10],
+							"size": [5.9, 3.9, 1.4],
+							"pivot": [-3.5, 27, -9.5],
+							"rotation": [-22.5, 22.5, 7.5],
 							"uv": {
 								"north": {"uv": [55, 52], "uv_size": [8, 4]},
 								"east": {"uv": [52, 55], "uv_size": [1, 4]},
@@ -234,10 +234,24 @@
 							}
 						},
 						{
-							"origin": [2.7, 27.1, -10.1],
-							"size": [7.9, 3.9, 1.4],
-							"pivot": [5.9, 29, -9.6],
-							"rotation": [-22.5, -22.5, -22.5],
+							"origin": [-1.6, 30.6, -7.7],
+							"size": [3.6, 5.4, 2.8],
+							"pivot": [0, 35, -10.3],
+							"rotation": [-22.5, 0, 0],
+							"uv": {
+								"north": {"uv": [90, 9], "uv_size": [4, 5]},
+								"east": {"uv": [94, 9], "uv_size": [3, 5]},
+								"south": {"uv": [97, 9], "uv_size": [4, 5]},
+								"west": {"uv": [87, 9], "uv_size": [3, 5]},
+								"up": {"uv": [94, 9], "uv_size": [-4, -3]},
+								"down": {"uv": [94, 17], "uv_size": [-4, -3]}
+							}
+						},
+						{
+							"origin": [2, 25, -12],
+							"size": [4.9, 3.9, 1.4],
+							"pivot": [2.9, 24, -9.6],
+							"rotation": [-27.5, -17.5, -7.5],
 							"uv": {
 								"north": {"uv": [55, 3], "uv_size": [8, 4]},
 								"east": {"uv": [20, 28], "uv_size": [1, 4]},
@@ -267,7 +281,8 @@
 								"up": {"uv": [0, 92.1], "uv_size": [0, -5]},
 								"down": {"uv": [0, 92.1], "uv_size": [0, -5]}
 							}
-						}
+						},
+						{"origin": [1, 26, -12], "size": [1, 2, 1], "pivot": [3, 26, -11], "rotation": [0, -22.5, 0], "uv": [0, 84]}
 					]
 				},
 				{
@@ -288,7 +303,8 @@
 								"up": {"uv": [78.5, 92.1], "uv_size": [0, -5]},
 								"down": {"uv": [78.5, 92.1], "uv_size": [0, -5]}
 							}
-						}
+						},
+						{"origin": [-2, 26, -12], "size": [1, 2, 1], "pivot": [-2, 26, -11], "rotation": [0, 22.5, 0], "uv": [84, 87]}
 					]
 				},
 				{

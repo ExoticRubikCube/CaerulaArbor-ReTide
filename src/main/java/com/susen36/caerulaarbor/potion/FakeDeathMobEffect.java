@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.potion;
 
 import com.susen36.caerulaarbor.entity.TideBishopEntity;
-import com.susen36.caerulaarbor.entity.TideDeathrepellerEntity;
+import com.susen36.caerulaarbor.entity.TidelinkedImmortalEntity;
 import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -48,8 +48,8 @@ public class FakeDeathMobEffect extends MobEffect {
         if (entity instanceof TideBishopEntity tideBishop) {
             tideBishop.setAnimation("animation.tidebishop.die_idle");
         }
-        if (entity instanceof TideDeathrepellerEntity deathrepellerEntity) {
-            deathrepellerEntity.setAnimation("animation.deathrepeller.die_idle");
+        if (entity instanceof TidelinkedImmortalEntity tidelinkedImmortalEntity) {
+            tidelinkedImmortalEntity.setAnimation("animation.tidelinked_immortal.die_idle");
         }
         entity.setShiftKeyDown(false);
     }

@@ -144,8 +144,8 @@ public class CAEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<ChitinGolemEntity>> CHITIN_GOLEM = register("chitin_golem",
             EntityType.Builder.<ChitinGolemEntity>of(ChitinGolemEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(1.75f, 4f));
-    public static final DeferredHolder<EntityType<?>, EntityType<TideDeathrepellerEntity>> TIDE_DEATHREPELLER = register("tide_deathrepeller",
-            EntityType.Builder.<TideDeathrepellerEntity>of(TideDeathrepellerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
+    public static final DeferredHolder<EntityType<?>, EntityType<TidelinkedImmortalEntity>> TIDELINKED_IMMORTAL = register("tidelinked_immortal",
+            EntityType.Builder.<TidelinkedImmortalEntity>of(TidelinkedImmortalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(1.5f, 2f));
     public static final DeferredHolder<EntityType<?>, EntityType<MegaChestEntity>> MEGA_CHEST = register("mega_chest",
             EntityType.Builder.<MegaChestEntity>of(MegaChestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(14).setUpdateInterval(3)
@@ -451,7 +451,7 @@ public class CAEntities {
         addAttributeRegistration(SONS, SonsEntity::createAttributes);
         addAttributeRegistration(FLOATER_PROKARYOTE, FloaterProkaryoteEntity::createAttributes);
         addAttributeRegistration(CHITIN_GOLEM, ChitinGolemEntity::createAttributes);
-        addAttributeRegistration(TIDE_DEATHREPELLER, TideDeathrepellerEntity::createAttributes);
+        addAttributeRegistration(TIDELINKED_IMMORTAL, TidelinkedImmortalEntity::createAttributes);
         addAttributeRegistration(MEGA_CHEST, MegaChestEntity::createAttributes);
         addAttributeRegistration(APOSTLE_PROKARYOTE, ApostleProkaryoteEntity::createAttributes);
         addAttributeRegistration(HIGHMORE, HighmoreEntity::createAttributes);
@@ -572,7 +572,7 @@ public class CAEntities {
         markSummonable(SONS);
         markSummonable(FLOATER_PROKARYOTE);
         markSummonable(CHITIN_GOLEM);
-        markSummonable(TIDE_DEATHREPELLER);
+        markSummonable(TIDELINKED_IMMORTAL);
         markSummonable(MEGA_CHEST);
         markSummonable(APOSTLE_PROKARYOTE);
         markSummonable(HIGHMORE);
@@ -774,7 +774,7 @@ public class CAEntities {
             addRenderer(CAEntities.SONS, SonsRenderer::new);
             addRenderer(CAEntities.FLOATER_PROKARYOTE, FloaterProkaryoteRenderer::new);
             addRenderer(CAEntities.CHITIN_GOLEM, ChitinGolemRenderer::new);
-            addRenderer(CAEntities.TIDE_DEATHREPELLER, TideDeathrepellerRenderer::new);
+            addRenderer(CAEntities.TIDELINKED_IMMORTAL, TidelinkedImmortalRenderer::new);
             addRenderer(CAEntities.MEGA_CHEST, MegaChestRenderer::new);
             addRenderer(CAEntities.APOSTLE_PROKARYOTE, ApostleProkaryoteRenderer::new);
             addRenderer(CAEntities.HIGHMORE_SHOOT, HighmoreShootRenderer::new);
