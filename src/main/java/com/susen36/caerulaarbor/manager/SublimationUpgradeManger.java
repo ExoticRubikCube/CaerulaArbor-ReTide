@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -31,7 +31,7 @@ public class SublimationUpgradeManger {
         stra = MapVariables.get(world).strategy_sublimation;
 
         if (stra > 0.0) {
-            for (Entity entityiterator : new ArrayList<>(world.players())) {
+            for (Player entityiterator : new ArrayList<>(world.players())) {
                 if (!(entityiterator instanceof ServerPlayer serverPlayer)) continue;
                 _player = serverPlayer;
                 _adv = _player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fifth_touch"));
@@ -71,7 +71,7 @@ public class SublimationUpgradeManger {
                     }
 
                     if (CAConfigs.EVOSOUND.get()) {
-                        for (Entity entityiterator : new ArrayList<>(world.players())) {
+                        for (Player entityiterator : new ArrayList<>(world.players())) {
                             if (stra <= 2.0) {
                                 if (world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.SUBLIMATION_1.get(), SoundSource.NEUTRAL, 5.0f, 1.0f);
@@ -90,7 +90,7 @@ public class SublimationUpgradeManger {
                 }
             } else {
                 MapVariablesHandler.setEvoPoint(world, StrategyType.SUBLIMATION, 0.0);
-                for (Entity entityiterator : new ArrayList<>(world.players())) {
+                for (Player entityiterator : new ArrayList<>(world.players())) {
                     if (!(entityiterator instanceof ServerPlayer)) continue;
                     _player = (ServerPlayer) entityiterator;
                     _adv = _player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "absurd_of_evolution"));

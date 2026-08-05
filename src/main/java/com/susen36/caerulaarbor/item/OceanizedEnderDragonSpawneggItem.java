@@ -28,7 +28,7 @@ public class OceanizedEnderDragonSpawneggItem extends DeferredSpawnEggItem {
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.oceanized_ender_dragon_spawnegg.description_0"));
+		list.add(Component.translatable("item.caerula_arbor.oceanized_ender_dragon_spawn_egg.description_0"));
 	}
 
 	@Override

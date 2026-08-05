@@ -515,26 +515,6 @@
 							}
 						}
 					]
-				},
-				{
-					"name": "right_arm",
-					"parent": "root",
-					"pivot": [-1.25, 10, 10],
-					"rotation": [90, 10, 180],
-					"cubes": [
-						{"origin": [-4.25, 0, 8], "size": [4, 12, 4], "pivot": [-2.25, 6, 10], "rotation": [0, 0, -180], "uv": [12, 15]},
-						{"origin": [-4.25, 0, 8], "size": [4, 12, 4], "inflate": 0.25, "pivot": [-2.25, 6, 10], "rotation": [0, 0, -180], "uv": [40, 32]}
-					]
-				},
-				{
-					"name": "left_arm",
-					"parent": "root",
-					"pivot": [2, -9, 10],
-					"rotation": [90, -10, 180],
-					"cubes": [
-						{"origin": [1, -19, 8], "size": [4, 12, 4], "pivot": [3, -13, 10], "rotation": [0, 0, -180], "uv": [12, 15], "mirror": true},
-						{"origin": [1, -19, 8], "size": [4, 12, 4], "inflate": 0.25, "pivot": [3, -13, 10], "rotation": [0, 0, -180], "uv": [40, 32], "mirror": true}
-					]
 				}
 			]
 		}

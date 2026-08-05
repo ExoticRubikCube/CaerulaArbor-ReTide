@@ -39,9 +39,12 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
+import net.minecraft.world.entity.ai.util.HoverRandomPos;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
@@ -401,7 +404,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
     private boolean canEnterPhaseTwo(DamageSource source) {
         Entity attacker = source.getEntity();
         if (attacker == null) return false;
-        if (attacker instanceof LivingEntity living && living.getOffhandItem().is(CAItems.ENDERINA_SPAWNER.get())) return true;
+        if (attacker instanceof LivingEntity living && living.getOffhandItem().is(CAItems.OCEANIZED_ENDER_DRAGON_SPAWN_EGG.get())) return true;
         if (attacker.getType().is(EntityUtils.OCEAN_OFFSPRING)) return false;
         if (attacker instanceof TamableAnimal tamable && tamable.isTame()) return false;
         return !(attacker instanceof Player) && !attacker.getType().is(EntityUtils.HUMAN);
@@ -979,7 +982,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		this.animationprocedure = animation;
 	}
 
-	class DragonWanderGoal extends Goal {
+	static class DragonWanderGoal extends WaterAvoidingRandomStrollGoal {
 		private final OceanizedEnderDragonEntity dragon;
 		private final double speedModifier;
 		private double targetX;
@@ -988,9 +991,17 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 		private int nextRecalcTick;
 
 		public DragonWanderGoal(OceanizedEnderDragonEntity dragon, double speedModifier) {
+			super(dragon, speedModifier);
 			this.dragon = dragon;
 			this.speedModifier = speedModifier;
 			this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+		}
+
+		@Nullable
+		protected Vec3 getPosition() {
+			Vec3 vec3 = this.mob.getViewVector(0.0F);
+			Vec3 vec31 = HoverRandomPos.getPos(this.mob, 8, 7, vec3.x, vec3.z, Mth.PI / 2.0F, 8, 4);
+			return vec31 != null ? vec31 : AirAndWaterRandomPos.getPos(this.mob, 8, 4, 2, vec3.x, vec3.z, Mth.PI / 2.0F);
 		}
 
 		@Override
@@ -998,7 +1009,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			if (dragon.getTarget() != null) return false;
 			if (!dragon.isEnderinaDurative()) return false;
 			if (dragon.tickCount < this.nextRecalcTick) return false;
-			Vec3 target = this.pickRandomTarget();
+			Vec3 target = this.getPosition();
 			if (target == null) return false;
 			this.targetX = target.x;
 			this.targetY = target.y;
@@ -1031,18 +1042,6 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			dragon.getMoveControl().setWantedPosition(dragon.getX(), dragon.getY(), dragon.getZ(), 0.0D);
 		}
 
-		@Nullable
-		private Vec3 pickRandomTarget() {
-			RandomSource r = dragon.getRandom();
-			float angle = r.nextFloat() * Mth.TWO_PI;
-			float radius = 25 + r.nextFloat() * 15;
-			double dx = Mth.cos(angle) * radius;
-			double dz = Mth.sin(angle) * radius;
-			double dy = (r.nextFloat() - 0.5F) * 30;
-			Level level = dragon.level();
-			double y = Mth.clamp(dragon.getY() + dy, level.getMinBuildHeight() + 10, level.getMaxBuildHeight() - 20);
-			return new Vec3(dragon.getX() + dx, y, dragon.getZ() + dz);
-		}
 	}
 
 	class DoNothingGoal extends Goal {

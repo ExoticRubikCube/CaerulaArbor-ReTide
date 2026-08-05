@@ -13,7 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -27,7 +27,7 @@ public class GrowUpgradeManager {
 		stra = MapVariables.get(world).strategy_grow;
 		if (stra < 4) {
 			if (MapVariables.get(world).evo_point_grow >= Math.pow(stra + 1, 3) * CAConfigs.COEFFICIENT.get()) {
-				for (Entity entityiterator : new ArrayList<>(world.players())) {
+				for (Player entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer player) {
 						AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_experience_evolution"));
 						if (adv == null) continue;
@@ -55,7 +55,7 @@ public class GrowUpgradeManager {
 					prefix = "§1";
 				}
 				if (CAConfigs.EVOSOUND.get()) {
-					for (Entity entityiterator : new ArrayList<>(world.players())) {
+					for (Player entityiterator : new ArrayList<>(world.players())) {
 						if (stra >= 3) {
 							if (world instanceof Level level) {
 									level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.GROW2.get(),
@@ -73,7 +73,7 @@ public class GrowUpgradeManager {
 					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.sample_grow.description_5").getString() + num)), false);
 			}
 		} else {
-			for (Entity entityiterator : new ArrayList<>(world.players())) {
+			for (Player entityiterator : new ArrayList<>(world.players())) {
 				if (entityiterator instanceof ServerPlayer player) {
 					AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_terminate_evolution"));
 					if (adv == null) continue;

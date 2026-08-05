@@ -358,7 +358,7 @@ public class CATabs {
                 tabData.accept(CAItems.OCEAN_ILLUSION_SPAWN_EGG.get());
                 tabData.accept(CAItems.OCEANIZED_WITHER_SPAWNEGG.get());
                 tabData.accept(CAItems.OCEANIZED_WARDEN_SPAWNEGG.get());
-                tabData.accept(CAItems.ENDERINA_SPAWNER.get());
+                tabData.accept(CAItems.OCEANIZED_ENDER_DRAGON_SPAWN_EGG.get());
                 tabData.accept(CAItems.MOIST_ENDER_CRYSTAL_SPAWN_EGG.get());
                 tabData.accept(CAItems.CHITIN_GOLEM_SPAWN_EGG.get());
                 tabData.accept(CAItems.COMPLEX_CHITIN_GOLEM_SPAWN_EGG.get());

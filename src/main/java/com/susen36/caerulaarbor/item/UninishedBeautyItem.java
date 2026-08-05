@@ -7,7 +7,6 @@ import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +24,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
@@ -42,11 +40,13 @@ import java.util.List;
 
 
 public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimationItem {
+	private static final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().thenPlay("animation.unfinished_beautuy.attack");
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
 	public UninishedBeautyItem() {
 		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC).attributes(createAttributes()));
+		GeoItem.registerSyncedAnimatable(this);
 	}
 
 	@Override
@@ -83,7 +83,8 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		AnimationController procedureController = new AnimationController(this, "procedureController", 0, this::procedurePredicate);
+		AnimationController procedureController = new AnimationController(this, "procedureController", 0, this::procedurePredicate)
+				.triggerableAnim("attack", ATTACK_ANIMATION);
 		data.add(procedureController);
 		AnimationController idleController = new AnimationController(this, "idleController", 0, this::idlePredicate);
 		data.add(idleController);
@@ -132,6 +133,9 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
             return InteractionResult.PASS;
         BlockState tgt;
         if (blockstate.is(BlockTags.create(ResourceLocation.parse("minecraft:mineable/axe")))) {
+            if (world instanceof ServerLevel serverLevel) {
+                triggerAnim(entity, GeoItem.getOrAssignId(itemstack, serverLevel), "procedureController", "attack");
+            }
             {
                 BlockPos pos = BlockPos.containing(x, y, z);
                 Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x + 0.5, y, z + 0.5), null);
@@ -179,8 +183,9 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
         double y = entity.getY();
         double z = entity.getZ();
         if (((Entity) sourceentity instanceof Player plr ? plr.getAttackStrengthScale(0) : 0) >= 0.95) {
-            if (itemstack.getItem() instanceof UninishedBeautyItem)
-                CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.unfinished_beautuy.attack"));
+            if (world instanceof ServerLevel serverLevel) {
+                triggerAnim(sourceentity, GeoItem.getOrAssignId(itemstack, serverLevel), "procedureController", "attack");
+            }
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT_SPECT.get(), SoundSource.PLAYERS, (float) 2.4, 1);
             }

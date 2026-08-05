@@ -14,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -30,7 +29,7 @@ public class SilenceUpgradeManager {
 		if (StrategyUtils.canEnableSilence(world)) {
 			MapVariablesHandler.addEvoPoint(world, StrategyType.SILENCE, point);
 			if (stra > 0) {
-				for (Entity entityiterator : new ArrayList<>(world.players())) {
+				for (Player entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer player) {
 						AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "she_coming"));
 						if (adv == null) continue;
@@ -61,7 +60,7 @@ public class SilenceUpgradeManager {
 						prefix = "§4";
 					}
 					if (CAConfigs.EVOSOUND.get()) {
-						for (Entity entityiterator : new ArrayList<>(world.players())) {
+						for (Player entityiterator : new ArrayList<>(world.players())) {
 							if (stra == 1) {
 								if (world instanceof Level level) {
 										level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.SILENCE1.get(),
@@ -98,7 +97,7 @@ public class SilenceUpgradeManager {
 				}
 			} else {
 				MapVariablesHandler.setEvoPoint(world, StrategyType.SILENCE, 0);
-				for (Entity entityiterator : new ArrayList<>(world.players())) {
+				for (Player entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer player) {
 						AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hymn_of_land"));
 						if (adv == null) continue;
