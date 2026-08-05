@@ -4,8 +4,6 @@ import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.ServerGeoAnimator;
 import com.susen36.caerulaarbor.client.model.entity.OceanizedEnderDragonModel;
-import com.susen36.caerulaarbor.entity.MoistDragonBreathEntity;
-import com.susen36.caerulaarbor.entity.MoistEnderCrystalEntity;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -15,7 +13,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -336,11 +333,6 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	@Override
 	public PartEntity<?> [] getParts() {
 		return this.subEntities;
-	}
-
-	@Override
-	public void recreateFromPacket(ClientboundAddEntityPacket packet) {
-		super.recreateFromPacket(packet);
 	}
 
 	@Override
@@ -893,21 +885,29 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 
 	private void normalAttack(LivingEntity target) {
 		CaerulaArborMod.queueServerWork(11, () -> {
-					MoistDragonBreathEntity.spawn(this.level(), this.getX(), this.getY() + 2.5, this.getZ(), this, target, 0);
-					MoistDragonBreathEntity.spawn(this.level(), this.getX(), this.getY() + 2.5, this.getZ(), this, target, 0);
-					MoistDragonBreathEntity.spawn(this.level(), this.getX(), this.getY() + 2.5, this.getZ(), this, target, 1);
-				}
+				Vec3 viewVec = this.getViewVector(1.0F);
+				double sx = this.head.getX() - viewVec.x;
+				double sy = this.head.getY(0.5) + 0.5;
+				double sz = this.head.getZ() - viewVec.z;
+				MoistDragonBreathEntity.spawn(this.level(), sx, sy, sz, this, target, 0);
+				MoistDragonBreathEntity.spawn(this.level(), sx, sy, sz, this, target, 0);
+				MoistDragonBreathEntity.spawn(this.level(), sx, sy, sz, this, target, 1);
+			}
 		);
 	}
 
 	private void superAttack(LivingEntity target) {
 		CaerulaArborMod.queueServerWork(11, () -> {
-					MoistDragonBreathEntity.spawn(this.level(), this.getX(), this.getY() + 2.5, this.getZ(), this, target, 0);
-					MoistDragonBreathEntity.spawn(this.level(), this.getX(), this.getY() + 2.5, this.getZ(), this, target, 0);
-					MoistDragonBreathEntity.spawn(this.level(), this.getX(), this.getY() + 2.5, this.getZ(), this, target, 0);
-					MoistDragonBreathEntity.spawn(this.level(), this.getX(), this.getY() + 2.5, this.getZ(), this, target, 1);
-					MoistDragonBreathEntity.spawn(this.level(), this.getX(), this.getY() + 2.5, this.getZ(), this, target, 1);
-				}
+				Vec3 viewVec = this.getViewVector(1.0F);
+				double sx = this.head.getX() - viewVec.x;
+				double sy = this.head.getY(0.5) + 0.5;
+				double sz = this.head.getZ() - viewVec.z;
+				MoistDragonBreathEntity.spawn(this.level(), sx, sy, sz, this, target, 0);
+				MoistDragonBreathEntity.spawn(this.level(), sx, sy, sz, this, target, 0);
+				MoistDragonBreathEntity.spawn(this.level(), sx, sy, sz, this, target, 0);
+				MoistDragonBreathEntity.spawn(this.level(), sx, sy, sz, this, target, 1);
+				MoistDragonBreathEntity.spawn(this.level(), sx, sy, sz, this, target, 1);
+			}
 		);
 	}
 
@@ -922,12 +922,15 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 			tx = x + d * Math.cos(r);
 			tz = z + d * Math.sin(r);
 			if (world instanceof ServerLevel level) {
-				Entity entityToSpawn = CAEntities.MOIST_ENDER_CRYSTAL.get().spawn(level, BlockPos.containing(tx, y, tz), MobSpawnType.MOB_SUMMONED);
-				if (entityToSpawn != null) {
-					this.putCrystal(entityToSpawn);
-					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+			Entity entityToSpawn = CAEntities.MOIST_ENDER_CRYSTAL.get().spawn(level, BlockPos.containing(tx, y, tz), MobSpawnType.MOB_SUMMONED);
+			if (entityToSpawn != null) {
+				this.putCrystal(entityToSpawn);
+				if (entityToSpawn instanceof MoistEnderCrystalEntity crystal) {
+					crystal.setOwner(this);
 				}
+				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 			}
+		}
 			if (world instanceof ServerLevel level)
 				level.sendParticles(ParticleTypes.EXPLOSION, tx, (y + 1), tz, 1, 0, 0, 0, 0.1);
 		}

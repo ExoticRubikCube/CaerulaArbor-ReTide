@@ -2,8 +2,6 @@ package com.susen36.caerulaarbor.entity.enderdragon;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.MoistDragonBreathEntity;
-import com.susen36.caerulaarbor.entity.MoistEnderCrystalEntity;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -746,12 +744,15 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			tx = x + d * Math.cos(r);
 			tz = z + d * Math.sin(r);
 			if (world instanceof ServerLevel level) {
-				Entity entityToSpawn = CAEntities.MOIST_ENDER_CRYSTAL.get().spawn(level, BlockPos.containing(tx, y, tz), MobSpawnType.MOB_SUMMONED);
-				if (entityToSpawn != null) {
-					this.putCrystal(entityToSpawn);
-					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+			Entity entityToSpawn = CAEntities.MOIST_ENDER_CRYSTAL.get().spawn(level, BlockPos.containing(tx, y, tz), MobSpawnType.MOB_SUMMONED);
+			if (entityToSpawn != null) {
+				this.putCrystal(entityToSpawn);
+				if (entityToSpawn instanceof MoistEnderCrystalEntity crystal) {
+					crystal.setOwner(this);
 				}
+				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 			}
+		}
 			if (world instanceof ServerLevel level)
 				level.sendParticles(ParticleTypes.EXPLOSION, tx, (y + 1), tz, 1, 0, 0, 0, 0.1);
 		}

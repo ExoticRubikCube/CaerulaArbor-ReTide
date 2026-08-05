@@ -1,7 +1,11 @@
-package com.susen36.caerulaarbor.entity;
+package com.susen36.caerulaarbor.entity.isharmla;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.api.ServerGeoAnimator;
+import com.susen36.caerulaarbor.client.model.entity.IsharmlaModel;
+import com.susen36.caerulaarbor.entity.GladiiaWhirlEntity;
+import com.susen36.caerulaarbor.entity.SkadiCorruptedEntity;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -51,13 +55,12 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.entity.PartEntity;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class IsharmlaEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.BOOLEAN);
@@ -77,17 +80,39 @@ public class IsharmlaEntity extends SeaMonster {
 
 	public static final SoundEvent SKADI_HIT = CASounds.SKADI_HIT.get();
 
+	public final IsharmlaPart head;
+	private final IsharmlaPart body;
+	private final IsharmlaPart front;
+	private final IsharmlaPart medium;
+	private final IsharmlaPart back;
+	private final IsharmlaPart backTail;
+	private final IsharmlaPart tail;
+	private final IsharmlaPart[] subEntities;
+	// 服务端骨骼姿态计算器，驱动 subEntities 跟随 GeckoLib 动画
+	private final ServerGeoAnimator<IsharmlaEntity> serverGeoAnimator;
+
 	public IsharmlaEntity(Level world) {
 		this(CAEntities.ISHARMLA.get(), world);
 	}
 
 	public IsharmlaEntity(EntityType<IsharmlaEntity> type, Level world) {
 		super(type, world);
+		this.serverGeoAnimator = new ServerGeoAnimator<>(this, new IsharmlaModel());
+		this.head = new IsharmlaPart(this, "upjaw", 4.0F, 4.0F);
+		this.body = new IsharmlaPart(this, "isharmla_body", 0.0F, 0.0F);
+		this.front = new IsharmlaPart(this, "front", 8.0F, 6.0F);
+		this.medium = new IsharmlaPart(this, "medium", 8.0F, 6.0F);
+		this.back = new IsharmlaPart(this, "back", 8.0F, 6.0F);
+		this.backTail = new IsharmlaPart(this, "backTail", 6.0F, 4.0F);
+		this.tail = new IsharmlaPart(this, "tail", 6.0F, 4.0F);
+		this.subEntities = new IsharmlaPart[]{this.head, this.body, this.front, this.medium, this.back, this.backTail, this.tail};
 		xpReward = 64;
 		setNoAi(false);
+		this.noCulling = true;
 		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
 		setPersistenceRequired();
 		IS_ANGERED = false;
+		this.setId(ENTITY_COUNTER.getAndAdd(8) + 1);
 	}
 
 	@Override
@@ -253,8 +278,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL)
-		)
+		if (source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL))
 			return false;
 		return super.hurt(source, amount);
 	}
@@ -269,8 +293,7 @@ public class IsharmlaEntity extends SeaMonster {
 	public void setHealth(float pHealth) {
 		float deletion = Math.min(this.getHealth() - pHealth, this.getMaxHealth() * 0.51f);
 		float newHealth = this.getHealth() - deletion;
-		if (newHealth <= 0
-				&& this.transformToHuman()) return;
+		if (newHealth <= 0 && this.transformToHuman()) return;
 		super.setHealth(newHealth);
 	}
 
@@ -522,7 +545,7 @@ public class IsharmlaEntity extends SeaMonster {
 					}
 				}
 			} else {
-				healP = (Entity) this instanceof IsharmlaEntity datEntI ? datEntI.getEntityData().get(DATA_HEAL_P) : 0;
+				healP =  this instanceof IsharmlaEntity datEntI ? datEntI.getEntityData().get(DATA_HEAL_P) : 0;
 				if (healP > 0) {
 					if ((Entity) this instanceof IsharmlaEntity datEntSetI)
 						datEntSetI.getEntityData().set(DATA_HEAL_P, (int) (healP - 1));
@@ -530,9 +553,9 @@ public class IsharmlaEntity extends SeaMonster {
 					if (this instanceof IsharmlaEntity) {
 						this.setAnimation("animation.isharmla.heal_human");
 					}
-					if ((Entity) this instanceof IsharmlaEntity datEntSetI)
+					if (this instanceof IsharmlaEntity datEntSetI)
 						datEntSetI.getEntityData().set(DATA_HEAL_P, 120);
-					if ((Entity) this instanceof IsharmlaEntity datEntSetI)
+					if (this instanceof IsharmlaEntity datEntSetI)
 						datEntSetI.getEntityData().set(DATA_DURATION, 30);
 					dura = 30;
 					CaerulaArborMod.queueServerWork(15, () -> {
@@ -596,8 +619,26 @@ public class IsharmlaEntity extends SeaMonster {
 
 	@Override
 	public EntityDimensions getDefaultDimensions(Pose p_33597_) {
-		if (isMonster()) return super.getDefaultDimensions(p_33597_).scale(10, 4f);
+		if (isMonsterForm()) return super.getDefaultDimensions(p_33597_).scale(10, 4f);
 		return super.getDefaultDimensions(p_33597_);
+	}
+
+	@Override
+	public void setId(int id) {
+		super.setId(id);
+		for (int index = 0; index < this.subEntities.length; index++) {
+			this.subEntities[index].setId(id + index + 1);
+		}
+	}
+
+	@Override
+	public boolean isMultipartEntity() {
+		return true;
+	}
+
+	@Override
+	public PartEntity<?>[] getParts() {
+		return this.subEntities;
 	}
 
 	@Override
@@ -621,6 +662,50 @@ public class IsharmlaEntity extends SeaMonster {
 	public void customServerAiStep() {
 		super.customServerAiStep();
 		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+	}
+
+	@Override
+	public void aiStep() {
+		super.aiStep();
+		for (IsharmlaPart part : this.subEntities) {
+			part.refreshDimensions();
+		}
+		if (this.isAlive() && this.isMonsterForm()) {
+			//region debug-point isharmla-parts-pose
+			if (this.tickCount % 20 == 0) {
+				CaerulaArborMod.LOGGER.info("Isharmla parts: id={}, monsterFlag={}, durative={}, duration={}, animation={}, procedure={}, poseTick={}", this.getId(), this.getEntityData().get(DATA_IS_MONSTER), this.isDurative(), this.getEntityData().get(DATA_DURATION), this.getEntityData().get(DATA_ANIMATION), this.animationprocedure, this.tickCount);
+			}
+			//endregion
+			Vec3[] oldPositions = new Vec3[this.subEntities.length];
+			for (int index = 0; index < this.subEntities.length; index++) {
+				oldPositions[index] = this.subEntities[index].position();
+			}
+			Map<String, Vec3> allBonePos = this.serverGeoAnimator.tickAndGetCurrentPose(this.tickCount, this.getYRot(), true);
+			Map<String, Vec3> currentPose = new HashMap<>();
+			for (IsharmlaPart part : this.subEntities) {
+				Vec3 v = allBonePos.get(part.name);
+				if (v != null) currentPose.put(part.name, v);
+			}
+			for (IsharmlaPart part : this.subEntities) {
+				Vec3 entityOffset = currentPose.get(part.name);
+				if (entityOffset == null) continue;
+				this.tickPart(part, entityOffset.x, entityOffset.y, entityOffset.z);
+			}
+			for (int index = 0; index < this.subEntities.length; index++) {
+				IsharmlaPart part = this.subEntities[index];
+				Vec3 oldPosition = oldPositions[index];
+				part.xo = oldPosition.x;
+				part.yo = oldPosition.y;
+				part.zo = oldPosition.z;
+				part.xOld = oldPosition.x;
+				part.yOld = oldPosition.y;
+				part.zOld = oldPosition.z;
+			}
+		} else if (this.isAlive()) {
+			for (IsharmlaPart part : this.subEntities) {
+				part.setPos(this.getX(), this.getEyeY(), this.getZ());
+			}
+		}
 	}
 
 	@Override
@@ -737,6 +822,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 	public void setAnimation(String animation) {
 		this.entityData.set(DATA_ANIMATION, animation);
+		this.setAnimationProcedure(animation);
 	}
 
 	@Override
@@ -777,7 +863,7 @@ public class IsharmlaEntity extends SeaMonster {
 		double vx = target.getX() - (x + 0.5);
 		double vy = target.getY() - (y + 0.5);
 		double vz = target.getZ() - (z + 0.5);
-		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
+		double size = Math.clamp(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 1, 32);
 		for (int index = 0; index < (int) size; index++) {
 			if (world instanceof ServerLevel level) {
 				level.sendParticles(CAParticles.ISHARMLA_CURSE_PARTICLE.get(), x + 0.5 + vx / size * index, y + 0.5 + vy / size * index + 0.5, z + 0.5 + vz / size * index, 5, 0.32, 0.5, 0.32, 0.05);
@@ -792,8 +878,20 @@ public class IsharmlaEntity extends SeaMonster {
 		return getEntityData().get(DATA_DURATION) <= 0;
 	}
 
-	private boolean isMonster() {
-		return isDurative() && getEntityData().get(DATA_IS_MONSTER);
+	public boolean isMonsterForm() {
+		return getEntityData().get(DATA_IS_MONSTER);
+	}
+
+	public boolean isMonster() {
+		return isDurative() && isMonsterForm();
+	}
+
+	private void tickPart(IsharmlaPart part, double x, double y, double z) {
+		part.setPos(this.getX() + x, this.getY() + y, this.getZ() + z);
+	}
+
+	public boolean hurt(IsharmlaPart part, DamageSource source, float amount) {
+		return this.hurt(source, amount);
 	}
 
 	private void performRangedAttack(double radius, double damageRate) {

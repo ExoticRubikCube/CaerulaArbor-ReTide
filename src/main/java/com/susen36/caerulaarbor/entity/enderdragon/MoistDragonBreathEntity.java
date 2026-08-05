@@ -1,10 +1,9 @@
-package com.susen36.caerulaarbor.entity;
+package com.susen36.caerulaarbor.entity.enderdragon;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAParticles;
@@ -170,7 +169,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
             Entity target = null;
             if (world instanceof ServerLevel level) {
                 String targetUuid = data.get(DATA_TARGET);
-                if (targetUuid != null && !targetUuid.isEmpty()) {
+                if (!targetUuid.isEmpty()) {
                     target = level.getEntity(UUID.fromString(targetUuid));
                 }
                 level.sendParticles(CAParticles.EDERMAN_PTC.get(), x, y + 0.25, z, 3, 0.1, 0.1, 0.1, 0.1);

@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.entity.MoistEnderCrystalEntity;
+import com.susen36.caerulaarbor.entity.enderdragon.MoistEnderCrystalEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

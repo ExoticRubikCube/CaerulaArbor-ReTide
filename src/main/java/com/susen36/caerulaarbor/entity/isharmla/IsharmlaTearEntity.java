@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.entity;
+package com.susen36.caerulaarbor.entity.isharmla;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;

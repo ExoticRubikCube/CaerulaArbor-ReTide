@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.client.overlay.skillbar;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.IsharmlaEntity;
+import com.susen36.caerulaarbor.entity.isharmla.IsharmlaEntity;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;

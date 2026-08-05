@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.susen36.caerulaarbor.client.model.entity.MoistEnderCrystalModel;
 import com.susen36.caerulaarbor.client.model.entity.layer.MoistEnderCrystalLayer;
-import com.susen36.caerulaarbor.entity.MoistEnderCrystalEntity;
+import com.susen36.caerulaarbor.entity.enderdragon.MoistEnderCrystalEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
@@ -85,7 +84,6 @@ public class MoistEnderCrystalRenderer extends GeoEntityRenderer<MoistEnderCryst
             float f6 = 0.0f;
             PoseStack.Pose posestack$pose = poseStack.last();
             Matrix4f matrix4f = posestack$pose.pose();
-            Matrix3f matrix3f = posestack$pose.normal();
             for (int j = 1; j <= 4; ++j) {
                 float f7 = Mth.sin((float) j * ((float) Math.PI * 2) / 4.0f) * 0.75f;
                 float f8 = Mth.cos((float) j * ((float) Math.PI * 2) / 4.0f) * 0.75f;

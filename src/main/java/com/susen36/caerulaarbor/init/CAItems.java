@@ -559,7 +559,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> ISHARMLA_WALL_GILDED = block(CABlocks.ISHARMLA_WALL_GILDED);
     public static final DeferredHolder<Item, ? extends Item> COMPASSION_PRAYER_SPAWN_EGG = REGISTRY.register("compassion_prayer_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.COMPASSION_PRAYER, -11571331, -2371137, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> MOIST_ENDER_CRYSTAL_SPAWN_EGG = REGISTRY.register("moist_ender_crystal_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.MOIST_ENDER_CRYSTAL, -1, -1, new Item.Properties()));
-    public static final DeferredHolder<Item, ? extends Item> OCEANIZED_ENDER_DRAGON_SPAWNEGG = REGISTRY.register("oceanized_ender_dragon_spawnegg", OceanizedEnderDragonSpawneggItem::new);
     public static final DeferredHolder<Item, ? extends Item> DRAGON_BRAND = block(CABlocks.DRAGON_BRAND);
     public static final DeferredHolder<Item, ? extends Item> MOIST_CRYSTAL_ITEM = REGISTRY.register("moist_crystal_item", MoistCrystalItemItem::new);
     public static final DeferredHolder<Item, ? extends Item> ENDERINA_CORE = block(CABlocks.ENDERINA_CORE);
@@ -664,8 +663,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> ISHARMLA_SPAWNER = tooltipItem("isharmla_spawner",
             () -> new DeferredSpawnEggItem(CAEntities.ISHARMLA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC)), 1);
     public static final DeferredHolder<Item, ? extends Item> MIZUKI_DETERMINATION = tooltipItem("mizuki_determination", () -> new Item(new Item.Properties().stacksTo(16).fireResistant().rarity(Rarity.RARE)), 2);
-    public static final DeferredHolder<Item, ? extends Item> ENDERINA_SPAWNER = tooltipItem("enderina_spawner",
-            () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_ENDERINA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC)), 1);
+    public static final DeferredHolder<Item, ? extends Item> ENDERINA_SPAWNER = REGISTRY.register("enderina_spawner", OceanizedEnderDragonSpawneggItem::new);
     public static final DeferredHolder<Item, ? extends Item> MOIST_DRAGON_HEART = tooltipItem("moist_dragon_heart", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)), 1);
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_PRESERVED_EGG = tooltipItem("nethersea_preserved_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).alwaysEdible().effect(() -> new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 400, 1, false, true), 1.0F).effect(() -> new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 60, 0, false, false), 1.0F).build())), 1);
     public static final DeferredHolder<Item, ? extends Item> SEA_PRAIRIE_BOMB = block(CABlocks.SEA_PRAIRIE_BOMB);

@@ -1,10 +1,9 @@
-package com.susen36.caerulaarbor.entity;
+package com.susen36.caerulaarbor.entity.enderdragon;
 
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -205,19 +204,6 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         this.setDeltaMovement(Vec3.ZERO);
-        if (!world.isClientSide()) {
-            double x = this.getX();
-            double y = this.getY();
-            double z = this.getZ();
-            List<OceanizedEnderinaEntity> enderinas = world.getEntitiesOfClass(OceanizedEnderinaEntity.class,
-                    new AABB(x, y, z, x, y, z).inflate(32), e -> e.isAlive());
-            if (!enderinas.isEmpty()) {
-                enderinas.sort(Comparator.comparingDouble(e -> e.distanceToSqr(x, y, z)));
-                OceanizedEnderinaEntity enderina = enderinas.get(0);
-                enderina.putCrystal(this);
-                this.setOwner(enderina);
-            }
-        }
         return super.finalizeSpawn(world, difficulty, reason, livingdata);
     }
 
@@ -259,7 +245,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
             double y = this.getY();
             double z = this.getZ();
             double d;
-            Entity enderina;
+            LivingEntity enderina;
             if (world.isClientSide()) {
                 return;
             }
@@ -300,9 +286,8 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
                 enderina.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER),
                         (float) ((enderina instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.25));
             } else {
-                LivingEntity livingEntity = (LivingEntity) enderina;
-                EntityUtils.heal(livingEntity, (livingEntity.getMaxHealth()) * 0.05);
-                BabelAPI.healToFull(livingEntity, AbstractEPCapability.EPType.NERVOUS);
+                EntityUtils.heal(enderina, (enderina.getMaxHealth()) * 0.05);
+                BabelAPI.healToFull(enderina, AbstractEPCapability.EPType.NERVOUS);
             }
         }
     }

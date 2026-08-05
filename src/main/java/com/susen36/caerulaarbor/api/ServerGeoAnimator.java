@@ -15,6 +15,7 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 import software.bernie.geckolib.util.RenderUtil;
 
 import java.util.Collection;
@@ -126,6 +127,7 @@ public class ServerGeoAnimator<T extends Entity & GeoAnimatable> {
 		AnimationState<T> state = new AnimationState<>(this.animatable, 0F, 0F, partialTick, false);
 		state.setData(DataTickets.TICK, (double) tickCount);
 		state.setData(DataTickets.ENTITY, this.animatable);
+		state.setData(DataTickets.ENTITY_MODEL_DATA, new EntityModelData(false, false, 0.0F, 0.0F));
 		state.animationTick = this.animTickTime;
 		AnimationProcessor<T> proc = this.animationProcessor;
 		Collection<GeoBone> bones = proc.getRegisteredBones();
@@ -158,8 +160,8 @@ public class ServerGeoAnimator<T extends Entity & GeoAnimatable> {
 			//  poseStack.mulPose(Axis.YP.rotationDegrees(180f - rotationYaw));
 			// 这里在 Vec3 层做旋转（等价于先绕 Y+ 转 180° - yaw），结果与渲染端逐行一致，
 			// 业务端拿到的 x/y/z 直接可用于 tickPart(x, y, z)，不再需要自己 .yRot()。
-			float worldRot = (180.0F - entityYaw) * Mth.DEG_TO_RAD;
-			bonePos.replaceAll((name, vec) -> vec.yRot(worldRot));
+			float worldRotation = (180.0F - entityYaw) * Mth.DEG_TO_RAD;
+			bonePos.replaceAll((name, vec) -> vec.yRot(worldRotation));
 		}
 		return bonePos;
 	}
@@ -193,9 +195,8 @@ public class ServerGeoAnimator<T extends Entity & GeoAnimatable> {
 		Matrix4f poseState = new Matrix4f(stack.last().pose());
 		bone.setModelSpaceMatrix(poseState);
 
-		// 复用 GeoBone.getModelPosition() 前半段官方逻辑，不执行最后一步 *16f → 直接得到 Minecraft 方块单位
-		Vector4f vec = bone.getModelSpaceMatrix().transform(new Vector4f(0F, 0F, 0F, 1F));
-		result.put(bone.getName(), new Vec3(-vec.x(), vec.y(), vec.z()));
+		Vector4f vec = bone.getModelSpaceMatrix().transform(new Vector4f(0F, 0F, 0F, 1.0F));
+		result.put(bone.getName(), new Vec3(vec.x(), vec.y(), vec.z()));
 
 		RenderUtil.translateAwayFromPivotPoint(stack, bone);
 

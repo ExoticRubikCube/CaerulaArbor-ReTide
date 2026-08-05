@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.client.model.entity.layer;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.MoistDragonBreathEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.entity.enderdragon.MoistDragonBreathEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;

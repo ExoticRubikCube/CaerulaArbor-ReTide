@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.IsharmlaEntity;
 import com.susen36.caerulaarbor.entity.SkadiCorruptedEntity;
 import com.susen36.caerulaarbor.entity.SkadiEntity;
+import com.susen36.caerulaarbor.entity.isharmla.IsharmlaEntity;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;

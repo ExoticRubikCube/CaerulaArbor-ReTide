@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.entity.MoistEnderCrystalEntity;
+import com.susen36.caerulaarbor.entity.enderdragon.MoistEnderCrystalEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;

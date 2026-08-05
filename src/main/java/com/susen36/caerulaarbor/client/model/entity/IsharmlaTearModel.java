@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.client.model.entity;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.IsharmlaTearEntity;
+import com.susen36.caerulaarbor.entity.isharmla.IsharmlaTearEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

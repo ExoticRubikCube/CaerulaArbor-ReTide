@@ -24,10 +24,10 @@ public abstract class CAPartEntity<T extends LivingEntity> extends PartEntity<T>
 
     public CAPartEntity(T parentMob, String name, float width, float height) {
         super(parentMob);
-        this.size = EntityDimensions.scalable(width, height);
-        this.refreshDimensions();
         this.parentMob = parentMob;
         this.name = name;
+        this.size = EntityDimensions.scalable(width, height);
+        this.refreshDimensions();
     }
 
     public CAPartEntity(T parentMob, String name,boolean canPickable, float width, float height) {
