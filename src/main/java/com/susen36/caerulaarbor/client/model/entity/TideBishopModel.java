@@ -1,12 +1,12 @@
 package com.susen36.caerulaarbor.client.model.entity;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.TideBishopEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TideBishopEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 

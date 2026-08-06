@@ -7,6 +7,8 @@ import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.entity.enderdragon.MoistEnderCrystalEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TideBishopEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedImmortalEntity;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.manager.MigrationUpgradeManager;

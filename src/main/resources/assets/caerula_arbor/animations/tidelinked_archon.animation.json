@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.tidelinked_trchon.default": {
+		"animation.tidelinked_archon.default": {
 			"animation_length": 0.25,
 			"bones": {
 				"root": {
@@ -734,7 +734,7 @@
 				}
 			}
 		},
-		"animation.tidelinked_trchon.idle": {
+		"animation.tidelinked_archon.idle": {
 			"loop": true,
 			"animation_length": 1.375,
 			"bones": {
@@ -1394,7 +1394,7 @@
 				}
 			}
 		},
-		"animation.tidelinked_trchon.move": {
+		"animation.tidelinked_archon.move": {
 			"loop": true,
 			"animation_length": 1.25,
 			"bones": {
@@ -2159,7 +2159,7 @@
 				}
 			}
 		},
-		"animation.tidelinked_trchon.die": {
+		"animation.tidelinked_archon.die": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1.1,
 			"bones": {
@@ -3039,7 +3039,7 @@
 				}
 			}
 		},
-		"animation.tidelinked_trchon.die_loop": {
+		"animation.tidelinked_archon.die_loop": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
@@ -3570,7 +3570,7 @@
 				}
 			}
 		},
-		"animation.tidelinked_trchon.die_idle": {
+		"animation.tidelinked_archon.die_idle": {
 			"animation_length": 1.1667,
 			"bones": {
 				"root": {
@@ -4167,7 +4167,7 @@
 				}
 			}
 		},
-		"animation.tidelinked_trchon.attack": {
+		"animation.tidelinked_archon.attack": {
 			"animation_length": 0.95,
 			"bones": {
 				"root": {
@@ -4867,7 +4867,7 @@
 				}
 			}
 		},
-		"animation.tidelinked_trchon.combo": {
+		"animation.tidelinked_archon.combo": {
 			"animation_length": 2.625,
 			"bones": {
 				"root": {
@@ -6159,7 +6159,7 @@
 				}
 			}
 		},
-		"animation.tidelinked_trchon.enchantattack": {
+		"animation.tidelinked_archon.enchantattack": {
 			"animation_length": 1,
 			"bones": {
 				"root": {

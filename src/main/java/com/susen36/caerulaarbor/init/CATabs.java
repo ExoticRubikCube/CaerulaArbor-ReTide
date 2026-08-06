@@ -312,11 +312,12 @@ public class CATabs {
                 tabData.accept(CAItems.FIRST_TO_TALK_SPAWN_EGG.get());
                 tabData.accept(CAItems.THIRSTER_SPAWN_EGG.get());
                 tabData.accept(CAItems.ABSORBER_LIMB_SPAWN_EGG.get());
+                tabData.accept(CAItems.TIDE_BISHOP_SPAWNEGG.get());
                 tabData.accept(CAItems.PATH_SHAPER_SPAWNEGG.get());
                 tabData.accept(CAItems.ROUTE_FRACTAL_SPAWN_EGG.get());
                 tabData.accept(CAItems.LINGERING_FRACTAL_SPAWN_EGG.get());
-                tabData.accept(CAItems.TIDE_BISHOP_SPAWNEGG.get());
                 tabData.accept(CAItems.TIDELINKED_IMMORTAL_SPAWNEGG.get());
+                tabData.accept(CAItems.TIDELINKED_ARCHON_SPAWNEGG.get());
                 tabData.accept(CAItems.QUINTUS_SPAWNEGG.get());
                 tabData.accept(CAItems.SONS_SPAWN_EGG.get());
                 tabData.accept(CAItems.ENDSPEAKER_SPAWNEGG.get());

@@ -17,6 +17,9 @@ import com.susen36.caerulaarbor.entity.routeshaper.LineringPathshaperEntity;
 import com.susen36.caerulaarbor.entity.routeshaper.LingeringFractalEntity;
 import com.susen36.caerulaarbor.entity.routeshaper.RouteFractalEntity;
 import com.susen36.caerulaarbor.entity.routeshaper.RouteShaperEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TideBishopEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedArchonEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedImmortalEntity;
 import com.susen36.caerulaarbor.entity.warden.OceanizedWardenEntity;
 import com.susen36.caerulaarbor.entity.warden.OceanizedWardenisEntity;
 import com.susen36.caerulaarbor.entity.wither.OceanizedWitherEntity;
@@ -146,6 +149,9 @@ public class CAEntities {
                     .sized(1.75f, 4f));
     public static final DeferredHolder<EntityType<?>, EntityType<TidelinkedImmortalEntity>> TIDELINKED_IMMORTAL = register("tidelinked_immortal",
             EntityType.Builder.<TidelinkedImmortalEntity>of(TidelinkedImmortalEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
+                    .sized(1.5f, 2f));
+    public static final DeferredHolder<EntityType<?>, EntityType<TidelinkedArchonEntity>> TIDELINKED_ARCHON = register("tidelinked_archon",
+            EntityType.Builder.<TidelinkedArchonEntity>of(TidelinkedArchonEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3)
                     .sized(1.5f, 2f));
     public static final DeferredHolder<EntityType<?>, EntityType<MegaChestEntity>> MEGA_CHEST = register("mega_chest",
             EntityType.Builder.<MegaChestEntity>of(MegaChestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(14).setUpdateInterval(3)
@@ -452,6 +458,7 @@ public class CAEntities {
         addAttributeRegistration(FLOATER_PROKARYOTE, FloaterProkaryoteEntity::createAttributes);
         addAttributeRegistration(CHITIN_GOLEM, ChitinGolemEntity::createAttributes);
         addAttributeRegistration(TIDELINKED_IMMORTAL, TidelinkedImmortalEntity::createAttributes);
+        addAttributeRegistration(TIDELINKED_ARCHON, TidelinkedArchonEntity::createAttributes);
         addAttributeRegistration(MEGA_CHEST, MegaChestEntity::createAttributes);
         addAttributeRegistration(APOSTLE_PROKARYOTE, ApostleProkaryoteEntity::createAttributes);
         addAttributeRegistration(HIGHMORE, HighmoreEntity::createAttributes);
@@ -573,6 +580,7 @@ public class CAEntities {
         markSummonable(FLOATER_PROKARYOTE);
         markSummonable(CHITIN_GOLEM);
         markSummonable(TIDELINKED_IMMORTAL);
+        markSummonable(TIDELINKED_ARCHON);
         markSummonable(MEGA_CHEST);
         markSummonable(APOSTLE_PROKARYOTE);
         markSummonable(HIGHMORE);
@@ -775,6 +783,7 @@ public class CAEntities {
             addRenderer(CAEntities.FLOATER_PROKARYOTE, FloaterProkaryoteRenderer::new);
             addRenderer(CAEntities.CHITIN_GOLEM, ChitinGolemRenderer::new);
             addRenderer(CAEntities.TIDELINKED_IMMORTAL, TidelinkedImmortalRenderer::new);
+            addRenderer(CAEntities.TIDELINKED_ARCHON, TidelinkedArchonRenderer::new);
             addRenderer(CAEntities.MEGA_CHEST, MegaChestRenderer::new);
             addRenderer(CAEntities.APOSTLE_PROKARYOTE, ApostleProkaryoteRenderer::new);
             addRenderer(CAEntities.HIGHMORE_SHOOT, HighmoreShootRenderer::new);

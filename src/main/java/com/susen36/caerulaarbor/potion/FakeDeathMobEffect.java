@@ -1,8 +1,8 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.caerulaarbor.entity.TideBishopEntity;
-import com.susen36.caerulaarbor.entity.TidelinkedImmortalEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TideBishopEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedImmortalEntity;
 import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;

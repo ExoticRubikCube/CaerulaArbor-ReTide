@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.client.model.entity;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.TidelinkedImmortalEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedImmortalEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.animation.AnimationState;

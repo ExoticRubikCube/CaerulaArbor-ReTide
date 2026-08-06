@@ -26,13 +26,13 @@ public class CustomBossBarEventHandler {
 	public static final Map<BossEvent, BossBarRenderContext> CACHE = new HashMap<>();
 	public static final Set<BossEvent> BLACK_LIST = new HashSet<>();
 
-    public static final ResourceLocation TEST = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/test_boss_bar.png");
     public static final ResourceLocation GENERIC = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/generic_bossbar.png");
     public static final ResourceLocation PATHSHAPER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/path_shaper_bossbar.png");
     public static final ResourceLocation LINGERING = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/lingering_shaper_bossbar.png");
     public static final ResourceLocation QUINTUS = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/quintus_bossbar.png");
     public static final ResourceLocation T_BISHOP = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/tidelinked_bishop_bossbar.png");
     public static final ResourceLocation T_IMMORTAL = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/tidelinked_immortal_bossbar.png");
+    public static final ResourceLocation T_ARCHON = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/tidelinked_archon_bossbar.png");
     public static final ResourceLocation HIGHMORE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/highmore_bossbar.png");
     public static final ResourceLocation IZUMIK = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/izumik_bossbar.png");
     public static final ResourceLocation MARTUS = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/martus_bossbar.png");
@@ -54,13 +54,13 @@ public class CustomBossBarEventHandler {
     public static final ResourceLocation WARDEN_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/warden_bossstyle.png");
     public static final ResourceLocation ENDERINA_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/enderina_style.png");
 
-    public static final BossBarRenderContext CONTEXT_TEST = BossBarRenderContext.of(TEST).frame(182,5).bar(180,3,1,1).offset(0, 0);
     public static final BossBarRenderContext CONTEXT_GENERIC = BossBarRenderContext.of(GENERIC).frame(158,26).bar(156,3,1,11).offset(-9, 5);
     public static final BossBarRenderContext CONTEXT_PATHSHAPER = BossBarRenderContext.of(PATHSHAPER).frame(182,13).bar(180,7,1,4).offset(-1, -5).color(0x628CFE);
     public static final BossBarRenderContext CONTEXT_LINGERING = BossBarRenderContext.of(LINGERING).frame(182,13).bar(180,7,1,4).offset(-1, -5).color(0x7ABB66);
     public static final BossBarRenderContext CONTEXT_QUINTUS = BossBarRenderContext.of(QUINTUS).frame(182,14).bar(180,4,1,6).offset(-11, 2);
     public static final BossBarRenderContext CONTEXT_TIDELINKED_BISHOP = BossBarRenderContext.of(T_BISHOP).frame(182,12).bar(180,4,1,4).offset(-3, -8).color(0xDCE4CE);
     public static final BossBarRenderContext CONTEXT_TIDELINKED_IMMORTAL = BossBarRenderContext.of(T_IMMORTAL).frame(182,16).bar(180,5,1,6).offset(-6, -9).color(0xC7DCE0);
+    public static final BossBarRenderContext CONTEXT_TIDELINKED_ARCHON = BossBarRenderContext.of(T_ARCHON).frame(182,16).bar(180,5,1,6).offset(-6, -9).color(0xDDD607);
     public static final BossBarRenderContext CONTEXT_HIGHMORE = BossBarRenderContext.of(HIGHMORE).frame(182,19).bar(180,3,1,5).offset(-9, 4).color(0xFEBC9C);
     public static final BossBarRenderContext CONTEXT_IZUMIK = BossBarRenderContext.of(IZUMIK).frame(188,26).bar(180,3,4,11).offset(-12, 5).color(0xF1F1F9);
     public static final BossBarRenderContext CONTEXT_MARTUS = BossBarRenderContext.of(MARTUS).frame(186,22).bar(180,3,1,13).offset(-12, -8);
@@ -142,6 +142,7 @@ public class CustomBossBarEventHandler {
         INDEX.add(Pair.of("entity.caerula_arbor.bishop_fish", CONTEXT_QUINTUS));
         INDEX.add(Pair.of("entity.caerula_arbor.tide_bishop", CONTEXT_TIDELINKED_BISHOP));
         INDEX.add(Pair.of("entity.caerula_arbor.tidelinked_immortal", CONTEXT_TIDELINKED_IMMORTAL));
+        INDEX.add(Pair.of("entity.caerula_arbor.tidelinked_archon", CONTEXT_TIDELINKED_ARCHON));
         INDEX.add(Pair.of("entity.caerula_arbor.highmore",CONTEXT_HIGHMORE));
         INDEX.add(Pair.of("entity.caerula_arbor.the_last_knight",CONTEXT_TIDE_HUNT));
         INDEX.add(Pair.of("entity.caerula_arbor.martus",CONTEXT_MARTUS));

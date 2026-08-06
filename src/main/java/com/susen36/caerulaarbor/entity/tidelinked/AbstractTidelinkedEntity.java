@@ -1,14 +1,12 @@
-package com.susen36.caerulaarbor.entity;
+package com.susen36.caerulaarbor.entity.tidelinked;
 
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -31,7 +29,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -56,27 +53,28 @@ import software.bernie.geckolib.animation.AnimationState;
 import java.util.Comparator;
 import java.util.List;
 
-public class TidelinkedImmortalEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TidelinkedImmortalEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TidelinkedImmortalEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(TidelinkedImmortalEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TidelinkedImmortalEntity.class, EntityDataSerializers.INT);
+public abstract class AbstractTidelinkedEntity extends SeaMonster {
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(AbstractTidelinkedEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractTidelinkedEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(AbstractTidelinkedEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(AbstractTidelinkedEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
+    protected final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
-    public TidelinkedImmortalEntity(Level world) {
-        this(CAEntities.TIDELINKED_IMMORTAL.get(), world);
-    }
-
-    public TidelinkedImmortalEntity(EntityType<TidelinkedImmortalEntity> type, Level world) {
+    public AbstractTidelinkedEntity(EntityType<? extends AbstractTidelinkedEntity> type, Level world) {
         super(type, world);
         xpReward = 6;
         setNoAi(false);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
+        bossInfo.setColor(ServerBossEvent.BossBarColor.YELLOW);
         setPersistenceRequired();
     }
+
+    protected abstract String getAnimationPrefix();
+
+    protected abstract int getRevivalDuration();
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -93,36 +91,36 @@ public class TidelinkedImmortalEntity extends SeaMonster {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                return super.canUse() && TidelinkedImmortalEntity.this.isFaking();
+                return super.canUse() && AbstractTidelinkedEntity.this.isFaking();
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && TidelinkedImmortalEntity.this.isFaking();
+                return super.canContinueToUse() && AbstractTidelinkedEntity.this.isFaking();
             }
         });
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  0.8, true) {
 
             @Override
             public boolean canUse() {
-                return super.canUse() && TidelinkedImmortalEntity.this.isFaking();
+                return super.canUse() && AbstractTidelinkedEntity.this.isFaking();
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && TidelinkedImmortalEntity.this.isFaking();
+                return super.canContinueToUse() && AbstractTidelinkedEntity.this.isFaking();
             }
 
         });
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false) {
             @Override
             public boolean canUse() {
-                return super.canUse() && TidelinkedImmortalEntity.this.isFaking();
+                return super.canUse() && AbstractTidelinkedEntity.this.isFaking();
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && TidelinkedImmortalEntity.this.isFaking();
+                return super.canContinueToUse() && AbstractTidelinkedEntity.this.isFaking();
             }
         });
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
@@ -177,8 +175,8 @@ public class TidelinkedImmortalEntity extends SeaMonster {
                             }
                         }
                         if (num >= 2 || ((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
-                            if (this instanceof TidelinkedImmortalEntity) {
-                                this.setAnimation("animation.tidelinked_immortal.enchantattack");
+                            if (this instanceof AbstractTidelinkedEntity) {
+                                this.setAnimation(this.getAnimationPrefix() + ".enchantattack");
                             }
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 60, 0, false, false));
@@ -223,18 +221,18 @@ public class TidelinkedImmortalEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            Entity bishop = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+            TideBishopEntity bishop = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                     .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
             boolean keepup = bishop != null;
-            if (bishop instanceof LivingEntity bishopLiving && bishopLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
+            if (bishop != null && bishop.hasEffect(CAMobEffects.FAKE_DEATH)) {
                 keepup = false;
             }
             if (keepup) {
                 super.setHealth(Math.max(this.getHealth(), 1.0F));
                 this.setShiftKeyDown(true);
                 if (!this.level().isClientSide()) {
-                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 200, 0, false, false));
-                    this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1, false, false));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, this.getRevivalDuration(), 0, false, false));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, this.getRevivalDuration(), 1, false, false));
                 }
                 return;
             }
@@ -263,11 +261,6 @@ public class TidelinkedImmortalEntity extends SeaMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        this.tickLinkedBehavior();
-        this.refreshDimensions();
-    }
-
-    private void tickLinkedBehavior() {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -280,79 +273,80 @@ public class TidelinkedImmortalEntity extends SeaMonster {
                 keepup = false;
             }
             if (!keepup) {
-                this.setAnimation("animation.tidelinked_immortal.die");
+                this.setAnimation(this.getAnimationPrefix() + ".die");
                 this.removeAllEffects();
                 this.hurt(this.level().damageSources().fellOutOfWorld(), 114514);
             }
-            return;
-        }
-        double skillCooldown = this.getEntityData().get(DATA_SKILLP);
-        double skillDuration = this.getEntityData().get(DATA_DURATION);
-        if (skillDuration > 0) {
-            this.getEntityData().set(DATA_DURATION, (int) (skillDuration - 1));
-        }
-        if (skillCooldown <= 0) {
-            double nearbyCount = 0;
-            Vec3 center = new Vec3(x, y, z);
-            List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8), candidate -> true);
-            for (LivingEntity nearbyEntity : nearbyEntities) {
-                if (nearbyEntity != this && nearbyEntity.getMaxHealth() >= 10) {
-                    nearbyCount++;
-                }
-            }
-            if (nearbyCount >= 2 || this.getHealth() < this.getMaxHealth() * 0.5) {
-                Entity target = this.getTarget();
-                if (target != null && this.distanceTo(target) <= 4) {
-                    this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY(), target.getZ()));
-                    this.setAnimation("empty");
-                    if (!this.level().isClientSide()) {
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
-                    }
-                    this.setAnimation("animation.tidelinked_immortal.combo");
-                    CaerulaArborMod.queueServerWork(17, () -> {
-                        if (this.isAlive()) {
-                            EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
-                        }
-                    });
-                    CaerulaArborMod.queueServerWork(23, () -> {
-                        if (this.isAlive()) {
-                            EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
-                        }
-                    });
-                    CaerulaArborMod.queueServerWork(35, () -> {
-                        if (this.isAlive()) {
-                            EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
-                        }
-                    });
-                    CaerulaArborMod.queueServerWork(42, () -> {
-                        if (this.isAlive()) {
-                            EntityUtils.repellerChop(this.level(), x, y, z, this, 3.5);
-                        }
-                    });
-                    this.getEntityData().set(DATA_DURATION, 53);
-                    this.getEntityData().set(DATA_SKILLP, 300);
-                }
-            }
         } else {
-            this.getEntityData().set(DATA_SKILLP, (int) (skillCooldown - 1));
-            if (MapVariables.get(this.level()).strategy_grow >= 3) {
-                this.getEntityData().set(DATA_SKILLP, (int) (skillCooldown - 2));
+            double skillCooldown = this.getEntityData().get(DATA_SKILLP);
+            double skillDuration = this.getEntityData().get(DATA_DURATION);
+            if (skillDuration > 0) {
+                this.getEntityData().set(DATA_DURATION, (int) (skillDuration - 1));
+            }
+            if (skillCooldown <= 0) {
+                double nearbyCount = 0;
+                Vec3 center = new Vec3(x, y, z);
+                List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8), candidate -> true);
+                for (LivingEntity nearbyEntity : nearbyEntities) {
+                    if (nearbyEntity != this && nearbyEntity.getMaxHealth() >= 10) {
+                        nearbyCount++;
+                    }
+                }
+                if (nearbyCount >= 2 || this.getHealth() < this.getMaxHealth() * 0.5) {
+                    Entity target = this.getTarget();
+                    if (target != null && this.distanceTo(target) <= 4) {
+                        this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY(), target.getZ()));
+                        this.setAnimation("empty");
+                        if (!this.level().isClientSide()) {
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
+                        }
+                        this.setAnimation(this.getAnimationPrefix() + ".combo");
+                        CaerulaArborMod.queueServerWork(17, () -> {
+                            if (this.isAlive()) {
+                                EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(23, () -> {
+                            if (this.isAlive()) {
+                                EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(35, () -> {
+                            if (this.isAlive()) {
+                                EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(42, () -> {
+                            if (this.isAlive()) {
+                                EntityUtils.repellerChop(this.level(), x, y, z, this, 3.5);
+                            }
+                        });
+                        this.getEntityData().set(DATA_DURATION, 53);
+                        this.getEntityData().set(DATA_SKILLP, 300);
+                    }
+                }
+            } else {
+                this.getEntityData().set(DATA_SKILLP, (int) (skillCooldown - 1));
+                if (MapVariables.get(this.level()).strategy_grow >= 3) {
+                    this.getEntityData().set(DATA_SKILLP, (int) (skillCooldown - 2));
+                }
+            }
+            nearest = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+                    .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
+            if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
+                EntityUtils.spawnLinkParticles(this.level(), this, nearest);
+                if (MapVariables.get(this.level()).strategy_silence >= 3) {
+                    if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
+                        this.getAttribute(CAAttributes.MISSRATE).setBaseValue(40);
+                    }
+                } else if (MapVariables.get(this.level()).strategy_subsisting >= 4) {
+                    if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
+                        this.getAttribute(CAAttributes.MISSRATE).setBaseValue(20);
+                    }
+                }
             }
         }
-        nearest = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
-                .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
-        if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
-            EntityUtils.spawnLinkParticles(this.level(), this, nearest);
-            if (MapVariables.get(this.level()).strategy_silence >= 3) {
-                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
-                    this.getAttribute(CAAttributes.MISSRATE).setBaseValue(40);
-                }
-            } else if (MapVariables.get(this.level()).strategy_subsisting >= 4) {
-                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
-                    this.getAttribute(CAAttributes.MISSRATE).setBaseValue(20);
-                }
-            }
-        }
+        this.refreshDimensions();
     }
 
     @Override
@@ -383,33 +377,20 @@ public class TidelinkedImmortalEntity extends SeaMonster {
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
-        builder = builder.add(Attributes.MAX_HEALTH, 75);
-        builder = builder.add(Attributes.ARMOR, 10);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 8);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.65);
-        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
-        return builder;
-    }
-
     private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
             ) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidelinked_immortal.move"));
+                return event.setAndContinue(RawAnimation.begin().thenLoop(this.getAnimationPrefix() + ".move"));
             }
             if (this.isDeadOrDying()) {
-                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tidelinked_immortal.die"));
+                return event.setAndContinue(RawAnimation.begin().thenPlay(this.getAnimationPrefix() + ".die"));
             }
             if (this.isShiftKeyDown()) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidelinked_immortal.die_loop"));
+                return event.setAndContinue(RawAnimation.begin().thenLoop(this.getAnimationPrefix() + ".die_loop"));
             }
-            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidelinked_immortal.idle"));
+            return event.setAndContinue(RawAnimation.begin().thenLoop(this.getAnimationPrefix() + ".idle"));
         }
         return PlayState.STOP;
     }
@@ -424,7 +405,7 @@ public class TidelinkedImmortalEntity extends SeaMonster {
         }
         if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
-            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tidelinked_immortal.attack"));
+            return event.setAndContinue(RawAnimation.begin().thenPlay(this.getAnimationPrefix() + ".attack"));
         }
         return PlayState.CONTINUE;
     }
@@ -474,7 +455,7 @@ public class TidelinkedImmortalEntity extends SeaMonster {
     }
 
     public boolean isFaking() {
-        if (this.getEntityData().get(TidelinkedImmortalEntity.DATA_DURATION) > 0) {
+        if (this.getEntityData().get(AbstractTidelinkedEntity.DATA_DURATION) > 0) {
             return false;
         }
         return !this.hasEffect(CAMobEffects.FAKE_DEATH);

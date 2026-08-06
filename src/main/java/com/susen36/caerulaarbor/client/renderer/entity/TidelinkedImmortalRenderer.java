@@ -4,7 +4,7 @@ package com.susen36.caerulaarbor.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.susen36.caerulaarbor.client.model.entity.TidelinkedImmortalModel;
-import com.susen36.caerulaarbor.entity.TidelinkedImmortalEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedImmortalEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

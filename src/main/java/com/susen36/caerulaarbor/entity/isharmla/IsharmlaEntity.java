@@ -671,11 +671,6 @@ public class IsharmlaEntity extends SeaMonster {
 			part.refreshDimensions();
 		}
 		if (this.isAlive() && this.isMonsterForm()) {
-			//region debug-point isharmla-parts-pose
-			if (this.tickCount % 20 == 0) {
-				CaerulaArborMod.LOGGER.info("Isharmla parts: id={}, monsterFlag={}, durative={}, duration={}, animation={}, procedure={}, poseTick={}", this.getId(), this.getEntityData().get(DATA_IS_MONSTER), this.isDurative(), this.getEntityData().get(DATA_DURATION), this.getEntityData().get(DATA_ANIMATION), this.animationprocedure, this.tickCount);
-			}
-			//endregion
 			Vec3[] oldPositions = new Vec3[this.subEntities.length];
 			for (int index = 0; index < this.subEntities.length; index++) {
 				oldPositions[index] = this.subEntities[index].position();
