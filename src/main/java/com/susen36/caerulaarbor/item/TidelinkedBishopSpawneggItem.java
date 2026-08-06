@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.entity.tidelinked.TideBishopEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedBishopEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,16 +19,16 @@ import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
 import java.util.List;
 
-public class TideBishopSpawneggItem extends DeferredSpawnEggItem {
-    public TideBishopSpawneggItem() {
-        super(CAEntities.TIDE_BISHOP, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
+public class TidelinkedBishopSpawneggItem extends DeferredSpawnEggItem {
+    public TidelinkedBishopSpawneggItem() {
+        super(CAEntities.TIDELINKED_BISHOP, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
     }
 
     @Override
     public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         super.appendHoverText(itemstack, context, list, flag);
-        list.add(Component.translatable("item.caerula_arbor.tide_bishop_spawnegg.description_0"));
-        list.add(Component.translatable("item.caerula_arbor.tide_bishop_spawnegg.description_1"));
+        list.add(Component.translatable("item.caerula_arbor.tidelinked_bishop_spawnegg.description_0"));
+        list.add(Component.translatable("item.caerula_arbor.tidelinked_bishop_spawnegg.description_1"));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class TideBishopSpawneggItem extends DeferredSpawnEggItem {
         BlockPos spawnPos = context.getClickedPos().relative(direction);
         ItemStack itemStack = context.getItemInHand();
         if (level instanceof ServerLevel serverLevel) {
-            TideBishopEntity bishop = new TideBishopEntity(CAEntities.TIDE_BISHOP.get(), serverLevel, true);
+            TidelinkedBishopEntity bishop = new TidelinkedBishopEntity(CAEntities.TIDELINKED_BISHOP.get(), serverLevel, true);
             bishop.moveTo(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5, level.getRandom().nextFloat() * 360F, 0.0F);
             bishop.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(spawnPos), MobSpawnType.MOB_SUMMONED, null);
             serverLevel.addFreshEntity(bishop);

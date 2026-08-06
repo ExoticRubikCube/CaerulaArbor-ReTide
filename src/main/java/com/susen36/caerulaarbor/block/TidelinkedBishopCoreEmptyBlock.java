@@ -23,8 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class TideBishopCoreEmptyBlock extends Block {
-	public TideBishopCoreEmptyBlock() {
+public class TidelinkedBishopCoreEmptyBlock extends Block {
+	public TidelinkedBishopCoreEmptyBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.LODESTONE).strength(-1, 3600000).lightLevel(s -> 8).pushReaction(PushReaction.BLOCK));
 	}
 
@@ -45,7 +45,7 @@ public class TideBishopCoreEmptyBlock extends Block {
             Player player2;
             if (world.getBlockState(BlockPos.containing(x, (double) y + 2.0, z)).canBeReplaced()) {
                 ItemStack itemStack2;
-                world.setBlock(BlockPos.containing(x, (double) y + 2.0, z), CABlocks.TIDE_BISHOP_CORE.get().defaultBlockState(), 3);
+                world.setBlock(BlockPos.containing(x, (double) y + 2.0, z), CABlocks.TIDELINKED_BISHOP_CORE.get().defaultBlockState(), 3);
                 world.setBlock(BlockPos.containing(x, y, z), Blocks.STONE_BRICKS.defaultBlockState(), 3);
                 if ((Entity) entity instanceof LivingEntity livEnt) {
                     itemStack2 = livEnt.getMainHandItem();
@@ -63,10 +63,10 @@ public class TideBishopCoreEmptyBlock extends Block {
                 return ItemInteractionResult.SUCCESS;
             }
             if (entity instanceof Player && !(player2 = entity).level().isClientSide()) {
-                player2.displayClientMessage(Component.literal(Component.translatable("block.caerula_arbor.tidebishop_core_empty.warn").getString()), true);
+                player2.displayClientMessage(Component.literal(Component.translatable("block.caerula_arbor.tidelinked_bishop_core_empty.warn").getString()), true);
             }
         } else if (entity instanceof Player && !(player = entity).level().isClientSide()) {
-            player.displayClientMessage(Component.literal(Component.translatable("block.caerula_arbor.tidebishop_core_empty.note").getString()), true);
+            player.displayClientMessage(Component.literal(Component.translatable("block.caerula_arbor.tidelinked_bishop_core_empty.note").getString()), true);
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 	}

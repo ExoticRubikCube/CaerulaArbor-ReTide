@@ -115,12 +115,12 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 
 	@Override
 	public double getElementalRate() {
-		return 0.45D;
+		return 0.5D;
 	}
 
 	@Override
 	public double getElementalInjuryDamage() {
-		return 15;
+		return 4;
 	}
 
 	@Override
@@ -223,7 +223,8 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 		super.baseTick();
 		this.refreshDimensions();
 	}
-@Override
+
+	@Override
 	public boolean checkSpawnObstruction(LevelReader world) {
 		return world.isUnobstructed(this);
 	}

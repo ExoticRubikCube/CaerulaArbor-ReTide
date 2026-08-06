@@ -300,8 +300,8 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> SALTWIND_SAND_WALL = block(CABlocks.SALTWIND_SAND_WALL);
     public static final DeferredHolder<Item, ? extends Item> CHIESELED_SALTWIND_SAND_WALL = block(CABlocks.CHIESELED_SALTWIND_SAND_WALL);
     public static final DeferredHolder<Item, ? extends Item> SMOOTH_SALTWIND_SAND_WALL = block(CABlocks.SMOOTH_SALTWIND_SAND_WALL);
-    public static final DeferredHolder<Item, ? extends Item> TIDE_BISHOP_CORE = block(CABlocks.TIDE_BISHOP_CORE);
-    public static final DeferredHolder<Item, ? extends Item> TIDE_BISHOP_CORE_EMPTY = block(CABlocks.TIDE_BISHOP_CORE_EMPTY);
+    public static final DeferredHolder<Item, ? extends Item> TIDELINKED_BISHOP_CORE = block(CABlocks.TIDELINKED_BISHOP_CORE);
+    public static final DeferredHolder<Item, ? extends Item> TIDELINKED_BISHOP_CORE_EMPTY = block(CABlocks.TIDELINKED_BISHOP_CORE_EMPTY);
     public static final DeferredHolder<Item, ? extends Item> ADV_ITEM = REGISTRY.register("adv_item", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> HETEROPIC_BLOCK = block(CABlocks.HETEROPIC_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> TRAIL_LOG = block(CABlocks.TRAIL_LOG);
@@ -383,7 +383,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> SEA_TRAIL_STOP = block(CABlocks.SEA_TRAIL_STOP);
     public static final DeferredHolder<Item, ? extends Item> QUINTUS_SPAWNEGG = REGISTRY.register("quintus_spawnegg", () -> new DeferredSpawnEggItem(CAEntities.BISHOP_FISH, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
     public static final DeferredHolder<Item, ? extends Item> PATH_SHAPER_SPAWNEGG = REGISTRY.register("path_shaper_spawnegg", PathShaperSpawneggItem::new);
-    public static final DeferredHolder<Item, ? extends Item> TIDE_BISHOP_SPAWNEGG = REGISTRY.register("tide_bishop_spawnegg", TideBishopSpawneggItem::new);
+    public static final DeferredHolder<Item, ? extends Item> TIDELINKED_BISHOP_SPAWNEGG = REGISTRY.register("tidelinked_bishop_spawnegg", TidelinkedBishopSpawneggItem::new);
     public static final DeferredHolder<Item, ? extends Item> TIDELINKED_IMMORTAL_SPAWNEGG = REGISTRY.register("tidelinked_immortal_spawnegg", () -> new DeferredSpawnEggItem(CAEntities.TIDELINKED_IMMORTAL, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
     public static final DeferredHolder<Item, ? extends Item> TIDELINKED_ARCHON_SPAWNEGG = REGISTRY.register("tidelinked_archon_spawnegg", () -> new DeferredSpawnEggItem(CAEntities.TIDELINKED_ARCHON, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
     public static final DeferredHolder<Item, ? extends Item> HIGHMORE_SPAWNEGG = REGISTRY.register("highmore_spawnegg", () -> new DeferredSpawnEggItem(CAEntities.HIGHMORE, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));

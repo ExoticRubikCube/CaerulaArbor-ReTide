@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "caerula_arbor:block/tide_bishop_core",
-    "particle": "caerula_arbor:block/tide_bishop_core"
-  },
-  "render_type": "solid"
-}

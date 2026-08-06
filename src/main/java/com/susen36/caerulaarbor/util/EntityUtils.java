@@ -1,6 +1,5 @@
 package com.susen36.caerulaarbor.util;
 
-import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
@@ -28,7 +27,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
@@ -422,31 +420,6 @@ public class EntityUtils {
 		if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.SPEAR_FIGHT))) {
 			if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
 				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.SPEAR_FIGHT, 60, 0, false, false));
-		}
-	}
-
-	public static void repellerChop(LevelAccessor world, double x, double y, double z, Entity entity, double rate) {
-		if (entity == null)
-			return;
-		if (world instanceof Level level) {
-				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GUARDIAN_ATTACK, SoundSource.HOSTILE, 2, 1);
-		}
-		{
-			final Vec3 center = new Vec3((x + 1.8 * entity.getLookAngle().x), (y + 1.5), (z + 1.8 * entity.getLookAngle().z));
-			List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(5 / 2d), e -> true);
-			for (LivingEntity entityiterator : entfound) {
-				if (entityiterator.getType().is(OCEAN_OFFSPRING)) {
-					if (!((entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)) {
-						continue;
-					}
-				}
-				entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.REPELLER_ATTACK, entity), (float) ((entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity7.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
-				if (entity instanceof LivingEntity livingEntity)
-					livingEntity.setHealth(livingEntity.getHealth() + 3);
-				for (int index0 = 0; index0 < 2; index0++) {
-					LessArmorMobEffect.apply(entityiterator);
-				}
-			}
 		}
 	}
 

@@ -9,8 +9,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 
-public class TideBishopCoreBlock extends Block {
-	public TideBishopCoreBlock() {
+public class TidelinkedBishopCoreBlock extends Block {
+	public TidelinkedBishopCoreBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.LODESTONE).strength(-1, 3600000).lightLevel(s -> 8).pushReaction(PushReaction.BLOCK));
 	}
 

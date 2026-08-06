@@ -1,37 +1,27 @@
 package com.susen36.caerulaarbor.entity.tidelinked;
 
-import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
-import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -44,16 +34,14 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 
 import java.util.Comparator;
-import java.util.List;
 
-public abstract class AbstractTidelinkedEntity extends SeaMonster {
+public abstract class AbstractTidelinkedEntity extends SeaMonster implements ElementalAttacker {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(AbstractTidelinkedEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractTidelinkedEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(AbstractTidelinkedEntity.class, EntityDataSerializers.INT);
@@ -68,7 +56,6 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster {
         xpReward = 6;
         setNoAi(false);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
-        bossInfo.setColor(ServerBossEvent.BossBarColor.YELLOW);
         setPersistenceRequired();
     }
 
@@ -91,36 +78,23 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                return super.canUse() && AbstractTidelinkedEntity.this.isFaking();
+                return super.canUse() && !AbstractTidelinkedEntity.this.isFaking();
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && AbstractTidelinkedEntity.this.isFaking();
+                return super.canContinueToUse() && !AbstractTidelinkedEntity.this.isFaking();
             }
-        });
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  0.8, true) {
-
-            @Override
-            public boolean canUse() {
-                return super.canUse() && AbstractTidelinkedEntity.this.isFaking();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && AbstractTidelinkedEntity.this.isFaking();
-            }
-
         });
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false) {
             @Override
             public boolean canUse() {
-                return super.canUse() && AbstractTidelinkedEntity.this.isFaking();
+                return super.canUse() && !AbstractTidelinkedEntity.this.isFaking();
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && AbstractTidelinkedEntity.this.isFaking();
+                return super.canContinueToUse() && !AbstractTidelinkedEntity.this.isFaking();
             }
         });
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
@@ -154,65 +128,24 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        Entity sourceentity = source.getEntity();
-        if (sourceentity != null) {
-            double num;
-            if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL) && !((Entity) this instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.FAKE_DEATH))) {
-                    if (distanceTo(sourceentity) <= 6) {
-                        num = 0;
-                        {
-                            final Vec3 center = new Vec3(x, y, z);
-                            List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8), e -> true);
-                            for (LivingEntity entityiterator : entfound) {
-                                if (!(entityiterator == this) && entityiterator.getMaxHealth() >= 10) {
-                                    num = num + 1;
-                                }
-                            }
-                        }
-                        if (num >= 2 || ((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
-                            if (this instanceof AbstractTidelinkedEntity) {
-                                this.setAnimation(this.getAnimationPrefix() + ".enchantattack");
-                            }
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 60, 0, false, false));
-                            this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
-                            CaerulaArborMod.queueServerWork(12, () -> {
-                                if (world instanceof Level level) {
-                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2, 1);
-                                }
-                                {
-                                    final Vec3 center = new Vec3((x + 1.8 * getLookAngle().x), (y + 1.5), (z + 1.8 * getLookAngle().z));
-                                    List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(5), e -> true);
-                                    for (LivingEntity entityiterator : entfound) {
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator
-                                                || !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && (entityiterator instanceof Mob || entityiterator instanceof Player)) {
-                                            entityiterator.hurt(
-                                                    CADamageTypes.source(world, CADamageTypes.REPELLER_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                                            * 2.5));
-                                            for (int index0 = 0; index0 < 2; index0++) {
-                                                BabelAPI.hurtElemental(
-                                                        entityiterator,
-                                                        AbstractEPCapability.EPType.CORROSION,
-                                                        this,
-                                                        Mth.floor(this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 2.5D)
-                                                );
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-            }
-        }
-        if (source.is(DamageTypes.DROWN))
-            return false;
-        return super.hurt(source, amount);
+    protected void playAttackSound() {
+        this.level().playSound(null, this.blockPosition(), SoundEvents.GUARDIAN_ATTACK, SoundSource.HOSTILE, 2, 1);
+    }
+
+
+    @Override
+    public AbstractEPCapability.EPType getElementalType() {
+        return AbstractEPCapability.EPType.CORROSION;
+    }
+
+    @Override
+    public double getElementalRate() {
+        return 0.5D;
+    }
+
+    @Override
+    public double getElementalInjuryDamage() {
+        return 0.0D;
     }
 
     @Override
@@ -221,7 +154,7 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            TideBishopEntity bishop = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+            TidelinkedBishopEntity bishop = this.level().getEntitiesOfClass(TidelinkedBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                     .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
             boolean keepup = bishop != null;
             if (bishop != null && bishop.hasEffect(CAMobEffects.FAKE_DEATH)) {
@@ -266,7 +199,7 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster {
         double z = this.getZ();
         Entity nearest;
         if (this.hasEffect(CAMobEffects.FAKE_DEATH)) {
-            nearest = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+            nearest = this.level().getEntitiesOfClass(TidelinkedBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                     .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
             boolean keepup = nearest != null;
             if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
@@ -283,55 +216,13 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster {
             if (skillDuration > 0) {
                 this.getEntityData().set(DATA_DURATION, (int) (skillDuration - 1));
             }
-            if (skillCooldown <= 0) {
-                double nearbyCount = 0;
-                Vec3 center = new Vec3(x, y, z);
-                List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8), candidate -> true);
-                for (LivingEntity nearbyEntity : nearbyEntities) {
-                    if (nearbyEntity != this && nearbyEntity.getMaxHealth() >= 10) {
-                        nearbyCount++;
-                    }
-                }
-                if (nearbyCount >= 2 || this.getHealth() < this.getMaxHealth() * 0.5) {
-                    Entity target = this.getTarget();
-                    if (target != null && this.distanceTo(target) <= 4) {
-                        this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY(), target.getZ()));
-                        this.setAnimation("empty");
-                        if (!this.level().isClientSide()) {
-                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
-                        }
-                        this.setAnimation(this.getAnimationPrefix() + ".combo");
-                        CaerulaArborMod.queueServerWork(17, () -> {
-                            if (this.isAlive()) {
-                                EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
-                            }
-                        });
-                        CaerulaArborMod.queueServerWork(23, () -> {
-                            if (this.isAlive()) {
-                                EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
-                            }
-                        });
-                        CaerulaArborMod.queueServerWork(35, () -> {
-                            if (this.isAlive()) {
-                                EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
-                            }
-                        });
-                        CaerulaArborMod.queueServerWork(42, () -> {
-                            if (this.isAlive()) {
-                                EntityUtils.repellerChop(this.level(), x, y, z, this, 3.5);
-                            }
-                        });
-                        this.getEntityData().set(DATA_DURATION, 53);
-                        this.getEntityData().set(DATA_SKILLP, 300);
-                    }
-                }
-            } else {
+            if (skillCooldown > 0) {
                 this.getEntityData().set(DATA_SKILLP, (int) (skillCooldown - 1));
                 if (MapVariables.get(this.level()).strategy_grow >= 3) {
                     this.getEntityData().set(DATA_SKILLP, (int) (skillCooldown - 2));
                 }
             }
-            nearest = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+            nearest = this.level().getEntitiesOfClass(TidelinkedBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                     .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
             if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
                 EntityUtils.spawnLinkParticles(this.level(), this, nearest);
@@ -455,10 +346,7 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster {
     }
 
     public boolean isFaking() {
-        if (this.getEntityData().get(AbstractTidelinkedEntity.DATA_DURATION) > 0) {
-            return false;
-        }
-        return !this.hasEffect(CAMobEffects.FAKE_DEATH);
+        return this.getEntityData().get(AbstractTidelinkedEntity.DATA_DURATION) > 0 || this.hasEffect(CAMobEffects.FAKE_DEATH);
     }
 
     @Override

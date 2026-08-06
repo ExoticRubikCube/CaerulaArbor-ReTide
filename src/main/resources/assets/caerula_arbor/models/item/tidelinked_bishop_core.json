@@ -1,5 +1,5 @@
 {
-  "parent": "caerula_arbor:block/tidebishop_core_empty",
+  "parent": "caerula_arbor:block/tidelinked_bishop_core",
   "display": {
     "thirdperson": {
       "rotation": [

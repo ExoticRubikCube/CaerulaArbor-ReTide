@@ -57,10 +57,10 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Objects;
 
-public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
-    public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.INT);
+public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMob {
+    public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(TidelinkedBishopEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TidelinkedBishopEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(TidelinkedBishopEntity.class, EntityDataSerializers.INT);
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.NOTCHED_6);
     public String animationprocedure = "empty";
     String prevAnim = "empty";
@@ -68,15 +68,15 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     private long lastSwing;
     private final boolean variant;
 
-    public TideBishopEntity(Level world) {
-        this(CAEntities.TIDE_BISHOP.get(), world, false);
+    public TidelinkedBishopEntity(Level world) {
+        this(CAEntities.TIDELINKED_BISHOP.get(), world, false);
     }
 
-    public TideBishopEntity(EntityType<TideBishopEntity> type, Level world) {
+    public TidelinkedBishopEntity(EntityType<TidelinkedBishopEntity> type, Level world) {
         this(type, world, false);
     }
 
-    public TideBishopEntity(EntityType<TideBishopEntity> type, Level world, boolean variant) {
+    public TidelinkedBishopEntity(EntityType<TidelinkedBishopEntity> type, Level world, boolean variant) {
         super(type, world);
         this.variant = variant;
         xpReward = 32;
@@ -232,7 +232,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
                 keepup = false;
             }
             if (!keepup) {
-                this.setAnimation("animation.tidebishop.die");
+                this.setAnimation("animation.tidelinked_bishop.die");
                 this.removeAllEffects();
                 this.hurt(this.level().damageSources().fellOutOfWorld(), 114514);
             }
@@ -241,7 +241,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         double skillCooldown = this.getEntityData().get(DATA_SKILL_COOLDOWN);
         if (skillCooldown <= 0) {
             if (this.getTarget() != null) {
-                this.setAnimation("animation.tidebishop.cast");
+                this.setAnimation("animation.tidelinked_bishop.cast");
                 if (!this.level().isClientSide()) {
                     this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
                 }
@@ -331,18 +331,18 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isSprinting()) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidebishop.move"));
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidelinked_bishop.move"));
             }
             if (this.isDeadOrDying()) {
-                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tidebishop.die"));
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tidelinked_bishop.die"));
             }
             if (this.isShiftKeyDown()) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidebishop.die_loop"));
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidelinked_bishop.die_loop"));
             }
             if (this.isSprinting()) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidebishop.die_move"));
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidelinked_bishop.die_move"));
             }
-            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidebishop.idle"));
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidelinked_bishop.idle"));
         }
         return PlayState.STOP;
     }
@@ -357,7 +357,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         }
         if ((this.swinging || this.entityData.get(DATA_IS_SHOOTING)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
-            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tidebishop.attack"));
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tidelinked_bishop.attack"));
         }
         return PlayState.CONTINUE;
     }
@@ -409,7 +409,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         this.animationprocedure = animation;
     }
 
-    public class RangedAttackGoal extends Goal {
+    public static class RangedAttackGoal extends Goal {
         private final Mob mob;
         private final RangedAttackMob rangedAttackMob;
         private final double speedModifier;
@@ -459,7 +459,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
             this.target = null;
             this.seeTime = 0;
             this.attackTime = -1;
-            ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
+            ((TidelinkedBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -485,10 +485,10 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
                 if (!flag) {
-                    ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
+                    ((TidelinkedBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
                     return;
                 }
-                ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, true);
+                ((TidelinkedBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, true);
                 float f = (float) Math.sqrt(d0) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -496,7 +496,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
             } else if (this.attackTime < 0) {
                 this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
-                ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
+                ((TidelinkedBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
         }
     }
 }

@@ -335,8 +335,8 @@ public final class LootTableProviders {
                     bstrippedNetherseaWood(),
                     bstrippedTrailLog(),
                     bthirstCoral(),
-                    btideBishopCore(),
-                    btidebishopCoreEmpty(),
+                    btidelinkedBishopCore(),
+                    btidelinked_bishopCoreEmpty(),
                     btideObservation(),
                     btrailBrick(),
                     btrailButton(),
@@ -934,16 +934,16 @@ public final class LootTableProviders {
                             entry("caerula_arbor:thirst_coral", 1, cond())));
         }
 
-        private static TableDef btideBishopCore() {
-            return table("blocks/tide_bishop_core",
+        private static TableDef btidelinkedBishopCore() {
+            return table("blocks/tidelinked_bishop_core",
                     pool(number(1.0F), null, cond(survivesExplosion()),
-                            entry("caerula_arbor:tide_bishop_core", 1, cond())));
+                            entry("caerula_arbor:tidelinked_bishop_core", 1, cond())));
         }
 
-        private static TableDef btidebishopCoreEmpty() {
-            return table("blocks/tidebishop_core_empty",
+        private static TableDef btidelinked_bishopCoreEmpty() {
+            return table("blocks/tidelinked_bishop_core_empty",
                     pool(number(1.0F), null, cond(survivesExplosion()),
-                            entry("caerula_arbor:tidebishop_core_empty", 1, cond())));
+                            entry("caerula_arbor:tidelinked_bishop_core_empty", 1, cond())));
         }
 
         private static TableDef btideObservation() {
@@ -2318,7 +2318,7 @@ public final class LootTableProviders {
                     espikeChest(),
                     esplasherAbyssal(),
                     ethirster(),
-                    etideBishop(),
+                    etidelinkedBishop(),
                     etideDeathrepeller(),
                     etidutantRockSpider(),
                     eumbrellaAbyssal()
@@ -3013,8 +3013,8 @@ public final class LootTableProviders {
                             entry("caerula_arbor:nervous_regeneration", 100, cond(), setCount(u(3.0F, 5.0F)))));
         }
 
-        private static TableDef etideBishop() {
-            return table("entities/tide_bishop",
+        private static TableDef etidelinkedBishop() {
+            return table("entities/tidelinked_bishop",
                     pool(number(2.0F), u(1.0F, 2.0F), cond(),
                             entry("minecraft:leather", 75, cond(), setCount(u(4.0F, 11.0F))),
                             entry("minecraft:gold_nugget", 25, cond(), setCount(u(12.0F, 22.0F))),

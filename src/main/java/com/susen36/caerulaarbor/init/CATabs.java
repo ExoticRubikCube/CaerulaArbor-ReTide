@@ -100,7 +100,7 @@ public class CATabs {
                 tabData.accept(CABlocks.BLOCK_CHESTFISH.get().asItem());
                 tabData.accept(CABlocks.CHESTMEGA_SPAWNER.get().asItem());
                 tabData.accept(CABlocks.TIDEWAY_CRADLE.get().asItem());
-                tabData.accept(CABlocks.TIDE_BISHOP_CORE.get().asItem());
+                tabData.accept(CABlocks.TIDELINKED_BISHOP_CORE.get().asItem());
                 tabData.accept(CABlocks.UNDERTIDE_TABLE.get().asItem());
                 tabData.accept(CABlocks.ENDSPEAKER_NEST.get().asItem());
                 tabData.accept(CABlocks.HIGHMORE_SPAWNBLOCK.get().asItem());
@@ -312,7 +312,7 @@ public class CATabs {
                 tabData.accept(CAItems.FIRST_TO_TALK_SPAWN_EGG.get());
                 tabData.accept(CAItems.THIRSTER_SPAWN_EGG.get());
                 tabData.accept(CAItems.ABSORBER_LIMB_SPAWN_EGG.get());
-                tabData.accept(CAItems.TIDE_BISHOP_SPAWNEGG.get());
+                tabData.accept(CAItems.TIDELINKED_BISHOP_SPAWNEGG.get());
                 tabData.accept(CAItems.PATH_SHAPER_SPAWNEGG.get());
                 tabData.accept(CAItems.ROUTE_FRACTAL_SPAWN_EGG.get());
                 tabData.accept(CAItems.LINGERING_FRACTAL_SPAWN_EGG.get());

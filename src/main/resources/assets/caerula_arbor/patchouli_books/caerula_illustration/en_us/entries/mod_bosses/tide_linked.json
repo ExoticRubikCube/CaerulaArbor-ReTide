@@ -1,6 +1,6 @@
 {
   "name": "接潮主教",
-  "icon": "caerula_arbor:tide_bishop_spawnegg",
+  "icon": "caerula_arbor:tidelinked_bishop_spawnegg",
   "category": "caerula_arbor:mod_bosses",
   "read_by_default": true,
   "sortnum": 1,

@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.tidebishop.default": {
+		"animation.tidelinked_bishop.default": {
 			"loop": true,
 			"bones": {
 				"Body": {
@@ -204,7 +204,7 @@
 				}
 			}
 		},
-		"animation.tidebishop.attack": {
+		"animation.tidelinked_bishop.attack": {
 			"animation_length": 1.25,
 			"bones": {
 				"Root": {
@@ -899,7 +899,7 @@
 				}
 			}
 		},
-		"animation.tidebishop.idle": {
+		"animation.tidelinked_bishop.idle": {
 			"loop": true,
 			"animation_length": 2.3333,
 			"bones": {
@@ -1398,7 +1398,7 @@
 				}
 			}
 		},
-		"animation.tidebishop.move": {
+		"animation.tidelinked_bishop.move": {
 			"loop": true,
 			"animation_length": 1.5417,
 			"bones": {
@@ -2130,7 +2130,7 @@
 				}
 			}
 		},
-		"animation.tidebishop.cast": {
+		"animation.tidelinked_bishop.cast": {
 			"animation_length": 2.5,
 			"bones": {
 				"Body": {
@@ -2589,7 +2589,7 @@
 				}
 			}
 		},
-		"animation.tidebishop.die": {
+		"animation.tidelinked_bishop.die": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
@@ -3041,7 +3041,7 @@
 				}
 			}
 		},
-		"animation.tidebishop.die_idle": {
+		"animation.tidelinked_bishop.die_idle": {
 			"animation_length": 1,
 			"bones": {
 				"Body": {
@@ -3590,7 +3590,7 @@
 				}
 			}
 		},
-		"animation.tidebishop.die_loop": {
+		"animation.tidelinked_bishop.die_loop": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -3934,7 +3934,7 @@
 				}
 			}
 		},
-		"animation.tidebishop.die_move": {
+		"animation.tidelinked_bishop.die_move": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {

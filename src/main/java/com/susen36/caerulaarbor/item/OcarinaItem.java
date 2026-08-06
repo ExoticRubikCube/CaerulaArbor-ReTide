@@ -172,7 +172,7 @@ public class OcarinaItem extends Item {
                                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                                     }
                                     found = true;
-                                } else if (cradle.getBlock() == CABlocks.TIDE_BISHOP_CORE.get()) {
+                                } else if (cradle.getBlock() == CABlocks.TIDELINKED_BISHOP_CORE.get()) {
                                     double hdns;
                                     for (int dx = -1; dx <= 1; dx++) {
                                         for (int dy = -1; dy <= 5; dy++) {
@@ -185,7 +185,7 @@ public class OcarinaItem extends Item {
                                         }
                                     }
                                     if ((LevelAccessor) world instanceof ServerLevel level) {
-                                        Entity entityToSpawn = CAEntities.TIDE_BISHOP.get().spawn(level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
+                                        Entity entityToSpawn = CAEntities.TIDELINKED_BISHOP.get().spawn(level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
                                         if (entityToSpawn != null) {
                                             entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                         }
@@ -202,7 +202,7 @@ public class OcarinaItem extends Item {
                                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                                     }
                                     world.destroyBlock(BlockPos.containing(px, py, pz), false);
-                                    world.setBlock(BlockPos.containing(px, py - 2, pz), CABlocks.TIDE_BISHOP_CORE_EMPTY.get().defaultBlockState(), 3);
+                                    world.setBlock(BlockPos.containing(px, py - 2, pz), CABlocks.TIDELINKED_BISHOP_CORE_EMPTY.get().defaultBlockState(), 3);
                                     found = true;
                                 } else if (cradle.getBlock() == CABlocks.UNDERTIDE_TABLE.get()) {
                                     if ((Entity) entity instanceof Player player && !player.level().isClientSide())

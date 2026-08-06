@@ -1,16 +1,14 @@
 package com.susen36.caerulaarbor.entity.base;
 
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.LivingBreatheEvent;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-@EventBusSubscriber
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -18,11 +16,18 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		super(entityType, level);
 	}
 
-	@SubscribeEvent
-	public static void onLivingBreathe(LivingBreatheEvent event) {
-		if (event.getEntity() instanceof SeaMonster) {
-			event.setCanBreathe(true);
-		}
+	/*
+	 @Deprecated
+    public final boolean canBreatheUnderwater() {
+        return this.getType().is(EntityTypeTags.CAN_BREATHE_UNDER_WATER);
+    }
+    */
+
+	@Override
+	public boolean hurt(DamageSource source, float amount) {
+		if (source.is(DamageTypes.DROWN))
+			return false;
+		return super.hurt(source, amount);
 	}
 
 	@Override
@@ -31,8 +36,8 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 	}
 
 	@Override
-	public void baseTick() {
-		super.baseTick();
+	public void aiStep() {
+		super.aiStep();
 		if (!this.level().isClientSide()) {
 			if (this instanceof PolarMountRider rider) {
 				rider.tickMountBehavior();

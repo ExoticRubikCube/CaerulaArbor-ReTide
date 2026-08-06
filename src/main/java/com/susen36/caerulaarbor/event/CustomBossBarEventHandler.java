@@ -140,7 +140,7 @@ public class CustomBossBarEventHandler {
         INDEX.add(Pair.of("entity.caerula_arbor.route_shaper", CONTEXT_PATHSHAPER));
         INDEX.add(Pair.of("entity.caerula_arbor.lingering_pathshaper", CONTEXT_LINGERING));
         INDEX.add(Pair.of("entity.caerula_arbor.bishop_fish", CONTEXT_QUINTUS));
-        INDEX.add(Pair.of("entity.caerula_arbor.tide_bishop", CONTEXT_TIDELINKED_BISHOP));
+        INDEX.add(Pair.of("entity.caerula_arbor.tidelinked_bishop", CONTEXT_TIDELINKED_BISHOP));
         INDEX.add(Pair.of("entity.caerula_arbor.tidelinked_immortal", CONTEXT_TIDELINKED_IMMORTAL));
         INDEX.add(Pair.of("entity.caerula_arbor.tidelinked_archon", CONTEXT_TIDELINKED_ARCHON));
         INDEX.add(Pair.of("entity.caerula_arbor.highmore",CONTEXT_HIGHMORE));

@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.entity.routeshaper;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -37,6 +39,24 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 	@Override
 	protected int getHurtSummonThreshold() {
 		return 10;
+	}
+
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false) {
+
+			@Override
+			public boolean canUse() {
+				return super.canUse() && !hasEffect(CAMobEffects.FAKE_DEATH);
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canUse() && !hasEffect(CAMobEffects.FAKE_DEATH);
+			}
+
+		});
 	}
 
 	@Override

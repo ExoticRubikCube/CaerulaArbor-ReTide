@@ -17,8 +17,8 @@ import com.susen36.caerulaarbor.entity.routeshaper.LineringPathshaperEntity;
 import com.susen36.caerulaarbor.entity.routeshaper.LingeringFractalEntity;
 import com.susen36.caerulaarbor.entity.routeshaper.RouteFractalEntity;
 import com.susen36.caerulaarbor.entity.routeshaper.RouteShaperEntity;
-import com.susen36.caerulaarbor.entity.tidelinked.TideBishopEntity;
 import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedArchonEntity;
+import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedBishopEntity;
 import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedImmortalEntity;
 import com.susen36.caerulaarbor.entity.warden.OceanizedWardenEntity;
 import com.susen36.caerulaarbor.entity.warden.OceanizedWardenisEntity;
@@ -135,8 +135,8 @@ public class CAEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<BishopFishEntity>> BISHOP_FISH = register("bishop_fish",
             EntityType.Builder.<BishopFishEntity>of(BishopFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(18).setUpdateInterval(3)
                     .sized(1.4f, 2.2f));
-    public static final DeferredHolder<EntityType<?>, EntityType<TideBishopEntity>> TIDE_BISHOP = register("tide_bishop",
-            EntityType.Builder.<TideBishopEntity>of(TideBishopEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
+    public static final DeferredHolder<EntityType<?>, EntityType<TidelinkedBishopEntity>> TIDELINKED_BISHOP = register("tidelinked_bishop",
+            EntityType.Builder.<TidelinkedBishopEntity>of(TidelinkedBishopEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
                     .sized(1.1f, 2.2f));
     public static final DeferredHolder<EntityType<?>, EntityType<SonsEntity>> SONS = register("sons",
             EntityType.Builder.<SonsEntity>of(SonsEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
@@ -453,7 +453,7 @@ public class CAEntities {
         addAttributeRegistration(FIRST_TO_TALK, FirstTellerEntity::createAttributes);
         addAttributeRegistration(REAPER_PET, ReaperPetEntity::createAttributes);
         addAttributeRegistration(BISHOP_FISH, BishopFishEntity::createAttributes);
-        addAttributeRegistration(TIDE_BISHOP, TideBishopEntity::createAttributes);
+        addAttributeRegistration(TIDELINKED_BISHOP, TidelinkedBishopEntity::createAttributes);
         addAttributeRegistration(SONS, SonsEntity::createAttributes);
         addAttributeRegistration(FLOATER_PROKARYOTE, FloaterProkaryoteEntity::createAttributes);
         addAttributeRegistration(CHITIN_GOLEM, ChitinGolemEntity::createAttributes);
@@ -575,7 +575,7 @@ public class CAEntities {
         markSummonable(FIRST_TO_TALK);
         markSummonable(REAPER_PET);
         markSummonable(BISHOP_FISH);
-        markSummonable(TIDE_BISHOP);
+        markSummonable(TIDELINKED_BISHOP);
         markSummonable(SONS);
         markSummonable(FLOATER_PROKARYOTE);
         markSummonable(CHITIN_GOLEM);
@@ -778,7 +778,7 @@ public class CAEntities {
             addRenderer(CAEntities.FIRST_TO_TALK, FirstTellerRenderer::new);
             addRenderer(CAEntities.REAPER_PET, ReaperPetRenderer::new);
             addRenderer(CAEntities.BISHOP_FISH, BishopFishRenderer::new);
-            addRenderer(CAEntities.TIDE_BISHOP, TideBishopRenderer::new);
+            addRenderer(CAEntities.TIDELINKED_BISHOP, TidelinkedBishopRenderer::new);
             addRenderer(CAEntities.SONS, SonsRenderer::new);
             addRenderer(CAEntities.FLOATER_PROKARYOTE, FloaterProkaryoteRenderer::new);
             addRenderer(CAEntities.CHITIN_GOLEM, ChitinGolemRenderer::new);
