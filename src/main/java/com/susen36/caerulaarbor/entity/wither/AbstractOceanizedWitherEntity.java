@@ -89,12 +89,12 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster implement
 
     @Override
     public double getElementalRate() {
-        return 0.45D;
+        return 0.5D;
     }
 
     @Override
     public double getElementalInjuryDamage() {
-        return 15;
+        return 5;
     }
 
     protected abstract int getInitialSkillp();

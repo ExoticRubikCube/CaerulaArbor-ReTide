@@ -271,7 +271,7 @@
   "block.caerula_arbor.tide_observation": "海潮观测站",
   "item.caerula_arbor.white_chitin": "赘生几丁质",
   "p_evo.caerula_arbor.node.real_damage.4.desc": "玩家攻击额外造成攻击力12%的真实伤害。§b[量变储备 x 8]",
-  "item.caerula_arbor.pocket_sea_creeper_spawn_egg": "囊海爬行者刷怪蛋",
+  "item.caerula_arbor.pocket_sea_creeper_spawn_egg": "囊海苦力怕刷怪蛋",
   "structure.caerula_arbor.aircraft": "坠落的飞船",
   "gamerule.naturalEvolution.description": "允许大群累积进化点数。",
   "enchantment.caerula_arbor.sanity_injury_curse.desc": "装备时玩家持续受到神经损伤。",
@@ -1234,7 +1234,7 @@
   "enchantment.caerula_arbor.reflection": "肌肉反射",
   "item.caerula_arbor.crimson_treaty.description_1": "§o由此物始，下界众生止戈言和，同仇敌忾",
   "block.caerula_arbor.anchor_upper": "伊莎玛拉超距透镜",
-  "entity.caerula_arbor.pocket_sea_creeper": "囊海爬行者",
+  "entity.caerula_arbor.pocket_sea_creeper": "囊海苦力怕",
   "item.caerula_arbor.pale_gold_pendant": "淡金坠饰",
   "gui.caerula_arbor.info_strategy_grow.button_return": "返回",
   "death.attack.boil_water.item": "%1$s 喝下了沸水",
@@ -2261,5 +2261,7 @@
   "evolution.caerula_aerbor.sublimation.breed.4": "【升华】非领袖海嗣首次被击败后有25%概率复活并恢复30%生命值。",
   "evolution.caerula_aerbor.sublimation.breed.4_1": "复活后有20%概率召唤一个深蓝子代。",
   "entity.caerula_arbor.caerula_offspring": "深蓝子代",
-  "item.caerula_arbor.caerula_offspring_spawn_egg": "深蓝子代刷怪蛋"
+  "item.caerula_arbor.caerula_offspring_spawn_egg": "深蓝子代刷怪蛋",
+  "entity.caerula_arbor.pocket_sea_crawler": "囊海爬行者",
+  "item.caerula_arbor.pocket_sea_crawler_spawn_egg": "囊海爬行者刷怪蛋"
 }

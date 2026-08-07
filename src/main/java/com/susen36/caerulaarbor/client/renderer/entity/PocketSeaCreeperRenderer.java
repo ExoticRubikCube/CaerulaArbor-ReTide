@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.susen36.caerulaarbor.client.model.entity.PocketSeaCreeperModel;
 import com.susen36.caerulaarbor.client.model.entity.layer.PocketSeaCreeperLayer;
+import com.susen36.caerulaarbor.client.model.entity.layer.PocketSeaCreeperPowerLayer;
 import com.susen36.caerulaarbor.entity.crawler.PocketSeaCreeperEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -19,6 +20,7 @@ public class PocketSeaCreeperRenderer extends GeoEntityRenderer<PocketSeaCreeper
 		super(renderManager, new PocketSeaCreeperModel());
 		this.shadowRadius = 0.5f;
 		this.addRenderLayer(new PocketSeaCreeperLayer(this));
+		this.addRenderLayer(new PocketSeaCreeperPowerLayer(this));
 	}
 
 	@Override

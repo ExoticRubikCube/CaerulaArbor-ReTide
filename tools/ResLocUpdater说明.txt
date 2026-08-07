@@ -1,0 +1,5 @@
+1.运行java ResourceLocationUpdater.java
+2.输入指定目录即可开始
+脚本作用：将该目录下的所有java文件内的new ResourceLocation(namespace, path)调用替换为ResourceLocation.fromNamespaceAndPath(namespace, path)调用
+注意事项：
+java文件必须使用UTF-8编码

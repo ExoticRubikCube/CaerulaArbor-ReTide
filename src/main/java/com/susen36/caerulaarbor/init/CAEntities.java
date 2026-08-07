@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.client.model.entity.*;
 import com.susen36.caerulaarbor.client.renderer.entity.*;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.entity.bullets.*;
+import com.susen36.caerulaarbor.entity.crawler.PocketSeaCrawlerEntity;
 import com.susen36.caerulaarbor.entity.crawler.PocketSeaCreeperEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.MoistDragonBreathEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.MoistEnderCrystalEntity;
@@ -73,6 +74,9 @@ public class CAEntities {
                     .sized(1.2f, 2.8f));
     public static final DeferredHolder<EntityType<?>, EntityType<PocketSeaCreeperEntity>> POCKET_SEA_CREEPER = register("pocket_sea_creeper",
             EntityType.Builder.<PocketSeaCreeperEntity>of(PocketSeaCreeperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
+                    .sized(0.8f, 1.5f));
+    public static final DeferredHolder<EntityType<?>, EntityType<PocketSeaCrawlerEntity>> POCKET_SEA_CRAWLER = register("pocket_sea_crawler",
+            EntityType.Builder.<PocketSeaCrawlerEntity>of(PocketSeaCrawlerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.8f, 1.5f));
     public static final DeferredHolder<EntityType<?>, EntityType<PunctureFishEntity>> PUNCTURE_FISH = register("puncture_fish",
             EntityType.Builder.<PunctureFishEntity>of(PunctureFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
@@ -436,6 +440,7 @@ public class CAEntities {
         addAttributeRegistration(FLY_FISH, FlyFishEntity::createAttributes);
         addAttributeRegistration(REAPER_FISH, ReaperFishEntity::createAttributes);
         addAttributeRegistration(POCKET_SEA_CREEPER, PocketSeaCreeperEntity::createAttributes);
+        addAttributeRegistration(POCKET_SEA_CRAWLER, PocketSeaCrawlerEntity::createAttributes);
         addAttributeRegistration(PUNCTURE_FISH, PunctureFishEntity::createAttributes);
         addAttributeRegistration(BASELAYER_ABYSSAL, BaselayerAbyssalEntity::createAttributes);
         addAttributeRegistration(PREDATOR_ABYSSAL, PredatorAbyssalEntity::createAttributes);
@@ -558,6 +563,7 @@ public class CAEntities {
         markSummonable(FLY_FISH);
         markSummonable(REAPER_FISH);
         markSummonable(POCKET_SEA_CREEPER);
+        markSummonable(POCKET_SEA_CRAWLER);
         markSummonable(PUNCTURE_FISH);
         markSummonable(BASELAYER_ABYSSAL);
         markSummonable(PREDATOR_ABYSSAL);
@@ -631,7 +637,7 @@ public class CAEntities {
         addSpawnPlacementRegistration(SHOOTER_FISH, ShooterFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(FLY_FISH, FlyFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(REAPER_FISH, ReaperFishEntity::registerSpawnPlacements);
-        addSpawnPlacementRegistration(POCKET_SEA_CREEPER, PocketSeaCreeperEntity::registerSpawnPlacements);
+         addSpawnPlacementRegistration(POCKET_SEA_CRAWLER, PocketSeaCrawlerEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(PUNCTURE_FISH, PunctureFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(BASELAYER_ABYSSAL, BaselayerAbyssalEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(PREDATOR_ABYSSAL, PredatorAbyssalEntity::registerSpawnPlacements);
@@ -757,6 +763,7 @@ public class CAEntities {
             addRenderer(CAEntities.FLY_FISH, FlyFishRenderer::new);
             addRenderer(CAEntities.REAPER_FISH, ReaperFishRenderer::new);
             addRenderer(CAEntities.POCKET_SEA_CREEPER, PocketSeaCreeperRenderer::new);
+            addRenderer(CAEntities.POCKET_SEA_CRAWLER, PocketSeaCrawlerRenderer::new);
             addRenderer(CAEntities.PUNCTURE_FISH, PunctureFishRenderer::new);
             addRenderer(CAEntities.BASELAYER_ABYSSAL, BaselayerAbyssalRenderer::new);
             addRenderer(CAEntities.PREDATOR_ABYSSAL, PredatorAbyssalRenderer::new);

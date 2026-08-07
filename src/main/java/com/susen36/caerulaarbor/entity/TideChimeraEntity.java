@@ -5,7 +5,6 @@ import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
-import com.susen36.caerulaarbor.entity.base.RangedSanityAttacker;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.*;
 import com.susen36.caerulaarbor.init.*;
@@ -55,9 +54,10 @@ import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.List;
 
-public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacker {
+public class TideChimeraEntity extends SeaMonster {
 
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.STRING);
@@ -237,6 +237,40 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         return damaged;
     }
 
+    protected void performRangedSanityAttack() {
+        Level level = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        double attackDamage = (Entity) this instanceof LivingEntity livingEntity && livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+
+        float selfDamage = this.getMaxHealth() * 0.3f;
+        this.setHealth(this.getHealth() - selfDamage);
+
+        if (level instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(ParticleTypes.EXPLOSION, x, y + 1, z, 1, 0, 0, 0, 0.5);
+            serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y + 1, z, 1, 0, 0, 0, 0.5);
+        }
+
+        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 3.0F, 1.0F);
+
+        Vec3 centerPos = new Vec3(x, y + 1, z);
+        double radius = 3.0D;
+        List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AABB(centerPos, centerPos).inflate(radius), entity -> entity != this).stream().sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(centerPos))).toList();
+        for (Entity entity : nearbyEntities) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                continue;
+            }
+            if (!(entity instanceof LivingEntity)) {
+                continue;
+            }
+            entity.hurt(CADamageTypes.source(level, CADamageTypes.OCEAN_MAGIC, this),
+                    (float) attackDamage);
+            if ((Entity) this instanceof LivingEntity attacker && entity instanceof LivingEntity target) {
+                SIHelper.causeSanityInjury(target, attacker, attackDamage * 150, SanityEvent.Hurt.Type.ENTITY);
+            }
+        }
+    }
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         double x = this.getX();
