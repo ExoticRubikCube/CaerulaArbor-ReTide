@@ -8,7 +8,7 @@ import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
-import com.susen36.caerulaarbor.manager.SeabornSpawnManager;
+import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;

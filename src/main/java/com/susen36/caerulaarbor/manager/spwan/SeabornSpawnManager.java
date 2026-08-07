@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.manager;
+package com.susen36.caerulaarbor.manager.spwan;
 
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;

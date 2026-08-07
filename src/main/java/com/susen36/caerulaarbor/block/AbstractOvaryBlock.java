@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.manager.SeabornSpawnManager;
+import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;

@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.manager;
+package com.susen36.caerulaarbor.manager.upgrade;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;

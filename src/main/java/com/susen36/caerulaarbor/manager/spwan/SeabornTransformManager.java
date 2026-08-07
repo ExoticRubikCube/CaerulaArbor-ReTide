@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.manager;
+package com.susen36.caerulaarbor.manager.spwan;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.TribunalHealerEntity;
@@ -34,7 +34,7 @@ import net.minecraft.world.level.LevelAccessor;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class TransformManager {
+public class SeabornTransformManager {
 	private static final TagKey<EntityType<?>> HOMO_SAPIENS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "homo_sapiens"));
 
 	private static final List<TransformRule> STANDARD_TRANSFORM_RULES = List.of(

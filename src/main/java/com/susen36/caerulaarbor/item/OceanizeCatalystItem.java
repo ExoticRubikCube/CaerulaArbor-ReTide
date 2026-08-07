@@ -4,7 +4,7 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.manager.TransformManager;
+import com.susen36.caerulaarbor.manager.spwan.SeabornTransformManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -59,7 +59,7 @@ public class OceanizeCatalystItem extends Item {
 		double targetY = target.getY();
 		double targetZ = target.getZ();
 		double healthPercentage = 1 - target.getHealth() / target.getMaxHealth();
-		if (Math.random() < healthPercentage + 0.05 && TransformManager.transformToSeaborn(level, targetX, targetY, targetZ, target)) {
+		if (Math.random() < healthPercentage + 0.05 && SeabornTransformManager.transformToSeaborn(level, targetX, targetY, targetZ, target)) {
 			target.discard();
 			stack.shrink(1);
 			return InteractionResult.sidedSuccess(false);

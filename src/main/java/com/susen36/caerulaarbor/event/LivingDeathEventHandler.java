@@ -12,9 +12,9 @@ import com.susen36.caerulaarbor.entity.IzumikOffspringEntity;
 import com.susen36.caerulaarbor.entity.MartusEntity;
 import com.susen36.caerulaarbor.entity.SkadiEntity;
 import com.susen36.caerulaarbor.init.*;
-import com.susen36.caerulaarbor.manager.BreedUpgradeManager;
-import com.susen36.caerulaarbor.manager.SilenceUpgradeManager;
-import com.susen36.caerulaarbor.manager.TransformManager;
+import com.susen36.caerulaarbor.manager.spwan.SeabornTransformManager;
+import com.susen36.caerulaarbor.manager.upgrade.BreedUpgradeManager;
+import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.util.CaerulaUtil;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.AdvancementHolder;
@@ -469,7 +469,7 @@ public class LivingDeathEventHandler {
         if (entity instanceof SkadiEntity) return;
 
         if (damagesource.is(CADamageTags.CAN_TRIGGER_OCEANIZATION)) {
-            if (TransformManager.transformToSeaborn(world, x, y, z, entity)) {
+            if (SeabornTransformManager.transformToSeaborn(world, x, y, z, entity)) {
                 if (!entity.level().isClientSide())
                     entity.discard();
             }
@@ -623,7 +623,7 @@ public class LivingDeathEventHandler {
         if (event.isCanceled()) return;
 
         if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-            if (TransformManager.transformToSeaborn(world, x, y, z, entity)) {
+            if (SeabornTransformManager.transformToSeaborn(world, x, y, z, entity)) {
                 event.setCanceled(true);
                 if (!entity.level().isClientSide())
                     entity.discard();

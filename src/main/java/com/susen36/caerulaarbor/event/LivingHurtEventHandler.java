@@ -9,7 +9,7 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.init.*;
-import com.susen36.caerulaarbor.manager.SublimationUpgradeManger;
+import com.susen36.caerulaarbor.manager.upgrade.SublimationUpgradeManger;
 import com.susen36.caerulaarbor.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

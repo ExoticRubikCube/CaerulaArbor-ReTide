@@ -4,7 +4,7 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.init.CAParticles;
-import com.susen36.caerulaarbor.manager.SilenceUpgradeManager;
+import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.util.StrategyUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

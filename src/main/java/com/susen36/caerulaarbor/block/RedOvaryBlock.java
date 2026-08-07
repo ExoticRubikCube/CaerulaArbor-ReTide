@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.block;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAGameRules;
-import com.susen36.caerulaarbor.manager.SeabornSpawnManager;
+import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
