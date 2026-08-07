@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.entity.PocketSeaCreeperEntity;
+import com.susen36.caerulaarbor.entity.crawler.PocketSeaCreeperEntity;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.menu.InfoStrategyGrowMenu;

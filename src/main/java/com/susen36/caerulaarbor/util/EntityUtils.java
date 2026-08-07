@@ -7,10 +7,7 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
-import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAEnchantments;
-import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -60,7 +57,7 @@ public class EntityUtils {
 		for (int i = 0; i < 40; i++) {
 			if (Math.random() < 0.1) {
 				double t = 0.025 * i;
-				level.sendParticles(ParticleTypes.DOLPHIN,
+				level.sendParticles(CAParticles.INV_PTC_BLUE.get(),
 					b.getX() + dx * t,
 					b.getY() + dy * t + 1,
 					b.getZ() + dz * t,

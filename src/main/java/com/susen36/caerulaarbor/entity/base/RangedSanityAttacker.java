@@ -4,12 +4,12 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -31,23 +31,21 @@ public interface RangedSanityAttacker {
 			double z = center.getZ();
 			double attackDamage = center instanceof LivingEntity livingEntity && livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 
-			new Object() {
-				void timedLoop(int timedLoopIterator, int timedLoopTotal, int ticks) {
-					if (level instanceof ServerLevel serverLevel) {
-						serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 1.5, z, 128, 3.5, 2, 3.5, 0.1);
-					}
-					CaerulaArborMod.queueServerWork(ticks, () -> {
-						if (timedLoopTotal > timedLoopIterator + 1) {
-							timedLoop(timedLoopIterator + 1, timedLoopTotal, ticks);
-						}
-					});
-				}
-			}.timedLoop(0, 5, 2);
+			if (center instanceof LivingEntity selfEntity) {
+				float selfDamage = selfEntity.getMaxHealth() * 0.3f;
+				selfEntity.setHealth(selfEntity.getHealth() - selfDamage);
+			}
 
-			level.playSound(null, BlockPos.containing(x, y, z), CASounds.POCKET_SEA_CREEPER_EXPLODE.get(), SoundSource.HOSTILE, 3, 1);
+			if (level instanceof ServerLevel serverLevel) {
+				serverLevel.sendParticles(ParticleTypes.EXPLOSION, x, y + 1, z, 1, 0, 0, 0, 0.5);
+				serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y + 1, z, 1, 0, 0, 0, 0.5);
+			}
 
-			Vec3 centerPos = new Vec3(x, y + 1.5, z);
-			List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AABB(centerPos, centerPos).inflate(8 / 2d), entity -> true).stream().sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(centerPos))).toList();
+			level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 3.0F, 1.0F);
+
+			Vec3 centerPos = new Vec3(x, y + 1, z);
+			double radius = 3.0D;
+			List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AABB(centerPos, centerPos).inflate(radius), entity -> entity != center).stream().sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(centerPos))).toList();
 			for (Entity entity : nearbyEntities) {
 				if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 					continue;
@@ -55,7 +53,7 @@ public interface RangedSanityAttacker {
 				if (!(entity instanceof LivingEntity)) {
 					continue;
 				}
-				entity.hurt(CADamageTypes.source(level, CADamageTypes.OCEAN_MAGIC),
+				entity.hurt(CADamageTypes.source(level, CADamageTypes.OCEAN_MAGIC, center),
 						(float) attackDamage);
 				if (center instanceof LivingEntity attacker && entity instanceof LivingEntity target) {
 					SIHelper.causeSanityInjury(target, attacker, attackDamage * 150, SanityEvent.Hurt.Type.ENTITY);

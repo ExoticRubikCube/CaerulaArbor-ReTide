@@ -3,10 +3,12 @@ package com.susen36.caerulaarbor.entity.tidelinked;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -64,6 +66,16 @@ public class TidelinkedImmortalEntity extends AbstractTidelinkedEntity {
 
         });
     }
+
+    @Override
+    public void remove(Entity.RemovalReason reason) {
+        if (this.hasEffect(CAMobEffects.FAKE_DEATH)) {
+            this.setAnimation("animation.tidelinked_immortal.die_idle");
+            this.setShiftKeyDown(false);
+        }
+        super.remove(reason);
+    }
+
     @Override
     public void baseTick() {
         super.baseTick();

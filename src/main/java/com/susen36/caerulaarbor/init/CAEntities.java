@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.client.model.entity.*;
 import com.susen36.caerulaarbor.client.renderer.entity.*;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.entity.bullets.*;
+import com.susen36.caerulaarbor.entity.crawler.PocketSeaCreeperEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.MoistDragonBreathEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.MoistEnderCrystalEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderDragonEntity;

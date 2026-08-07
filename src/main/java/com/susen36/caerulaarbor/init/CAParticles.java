@@ -28,16 +28,13 @@ public class  CAParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CRACKER_BUFF_1 = REGISTRY.register("cracker_buff_1", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INV_PTC = REGISTRY.register("inv_ptc", () -> new SimpleParticleType(true));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MUTENESS = REGISTRY.register("muteness", () -> new SimpleParticleType(false));
-    // TODO: 后续决定是否让蓝色无敌粒子绕过粒子数量限制
-    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INV_PTC_BLUE = REGISTRY.register("inv_ptc_blue", () -> new SimpleParticleType(false));
-    // TODO: 后续决定是否让紫色无敌粒子绕过粒子数量限制
-    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INV_PTC_VOILET = REGISTRY.register("inv_ptc_voilet", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INV_PTC_BLUE = REGISTRY.register("inv_ptc_blue", () -> new SimpleParticleType(true));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> INV_PTC_VOILET = REGISTRY.register("inv_ptc_voilet", () -> new SimpleParticleType(true));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PURPLE_FLAME = REGISTRY.register("purple_flame", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> EDERMAN_PTC = REGISTRY.register("ederman_ptc", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MARTUS_CHARS = REGISTRY.register("martus_chars", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ENDSPEAKER_PARTICLE = REGISTRY.register("endspeaker_particle", () -> new SimpleParticleType(false));
-    // TODO: 后续决定是否让 Endspeaker 无敌粒子绕过粒子数量限制
-    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ENDSPEAKER_INV = REGISTRY.register("endspeaker_inv", () -> new SimpleParticleType(false));
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ENDSPEAKER_INV = REGISTRY.register("endspeaker_inv", () -> new SimpleParticleType(true));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SEA_SPLASH = REGISTRY.register("sea_splash", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SEA_RIPPLE = REGISTRY.register("sea_ripple", () -> new SimpleParticleType(true));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> LARGE_DOLPHIN = REGISTRY.register("large_dolphin", () -> new SimpleParticleType(true));

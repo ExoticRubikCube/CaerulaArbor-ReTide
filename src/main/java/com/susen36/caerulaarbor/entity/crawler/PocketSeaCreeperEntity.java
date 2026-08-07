@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.entity;
+package com.susen36.caerulaarbor.entity.crawler;
 
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
@@ -27,7 +27,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.MoveBackToVillageGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
@@ -38,7 +37,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import software.bernie.geckolib.animation.*;
@@ -48,8 +46,9 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Boolean> DATA_CHARGED = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.BOOLEAN);
-	private boolean swinging;
-	private long lastSwing;
+	public static final EntityDataAccessor<Integer> DATA_SWELL_DIR = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_SWELL = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.INT);
+	public static final int MAX_SWELL = 30;
 	public String animationprocedure = "empty";
 
 	public PocketSeaCreeperEntity(Level world) {
@@ -70,6 +69,8 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 		builder.define(DATA_ANIMATION, "undefined");
 		builder.define(DATA_DEAL, 0);
 		builder.define(DATA_CHARGED, false);
+		builder.define(DATA_SWELL_DIR, -1);
+		builder.define(DATA_SWELL, 0);
 	}
 
 	public boolean charged() {
@@ -80,10 +81,22 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 		this.entityData.set(DATA_CHARGED, true);
 	}
 
+	public int getSwellDir() {
+		return this.entityData.get(DATA_SWELL_DIR);
+	}
+
+	public void setSwellDir(int dir) {
+		this.entityData.set(DATA_SWELL_DIR, dir);
+	}
+
+	public float getSwelling(float partialTick) {
+		return this.entityData.get(DATA_SWELL) / (float) MAX_SWELL;
+	}
+
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, true));
+		this.goalSelector.addGoal(1, new SelfDestructGoal(this));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Cat.class, false, false));
 		this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
 		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
@@ -118,17 +131,7 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 			return false;
 		if (this.charged() && (source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE)))
 			return false;
-		float healthBeforeDamage = this.getHealth();
-		boolean damaged = super.hurt(source, amount);
-		if (damaged && amount <= healthBeforeDamage) {
-			double accumulatedDamage = this.getEntityData().get(DATA_DEAL) + amount;
-			this.getEntityData().set(DATA_DEAL, (int) accumulatedDamage);
-			if (accumulatedDamage >= this.getMaxHealth() * 0.15) {
-				this.performRangedSanityAttack();
-				this.getEntityData().set(DATA_DEAL, 0);
-			}
-		}
-		return damaged;
+		return super.hurt(source, amount);
 	}
 
 	@Override
@@ -159,9 +162,7 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 		PocketSeaCreeperEntity entity = this;
 		Level world = this.level();
         if (itemstack.getItem() == Items.FLINT_AND_STEEL) {
-            if ((LevelAccessor) world instanceof Level level) {
-                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CREEPER_PRIMED, SoundSource.HOSTILE, 2, 1);
-            }
+            world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CREEPER_PRIMED.value(), SoundSource.HOSTILE, 2.0F, 1.0F);
             if (entity instanceof PocketSeaCreeperEntity) {
                 entity.setAnimation("animation.pocket_sea_creeper.jump");
             }
@@ -187,8 +188,6 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 		this.refreshDimensions();
 	}
 
-	
-
 	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
 		event.register(CAEntities.POCKET_SEA_CREEPER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
@@ -201,7 +200,7 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
-		builder = builder.add(Attributes.MAX_HEALTH, 85);
+		builder = builder.add(Attributes.MAX_HEALTH, 65);
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
@@ -232,21 +231,6 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.pocket_sea_creeper.idle"));
 		}
 		return PlayState.STOP;
-	}
-
-	private PlayState attackingPredicate(AnimationState event) {
-        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.pocket_sea_creeper.attack"));
-		}
-		return PlayState.CONTINUE;
 	}
 
 	String prevAnim = "empty";
@@ -293,10 +277,8 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
 		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 	}
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

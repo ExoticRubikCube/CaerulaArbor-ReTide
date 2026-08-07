@@ -40,7 +40,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 		double y = this.getY();
 		double z = this.getZ();
 		if (tickCount > 1200 && tickCount % 20 == 7) {
-			if (world.getEntitiesOfClass(LineringPathshaperEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
+			if (world.getEntitiesOfClass(LineringPathshaperEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).size() > 3) {
 				final Vec3 center = new Vec3(x, y, z);
 				List<LingeringFractalEntity> entfound = world.getEntitiesOfClass(LingeringFractalEntity.class, new AABB(center, center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
 				for (LingeringFractalEntity fractal : entfound) {

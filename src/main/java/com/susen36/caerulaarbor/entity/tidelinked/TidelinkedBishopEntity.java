@@ -46,16 +46,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
-import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Objects;
+import java.util.UUID;
 
 public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMob {
     public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(TidelinkedBishopEntity.class, EntityDataSerializers.BOOLEAN);
@@ -67,6 +65,7 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
     private boolean swinging;
     private long lastSwing;
     private final boolean variant;
+
 
     public TidelinkedBishopEntity(Level world) {
         this(CAEntities.TIDELINKED_BISHOP.get(), world, false);
@@ -151,11 +150,10 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        world.getEntitiesOfClass(AbstractTidelinkedEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().min(new Object() {
-            Comparator<Entity> compareDistOf(double x, double y, double z) {
-                return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
-            }
-        }.compareDistOf(x, y, z)).ifPresent(call -> call.getNavigation().moveTo(x, y, z, 0.8));
+        Mob repeller = this.getLinkedRepeller();
+        if (repeller != null) {
+            repeller.getNavigation().moveTo(x, y, z, 0.8);
+        }
         if (source.is(DamageTypes.DROWN))
             return false;
         return super.hurt(source, amount);
@@ -164,13 +162,9 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
     @Override
     public void setHealth(float pHealth) {
         if (pHealth <= 0) {
-            double x = this.getX();
-            double y = this.getY();
-            double z = this.getZ();
-            Entity repeller = this.level().getEntitiesOfClass(AbstractTidelinkedEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
-                    .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
-            boolean keepup = repeller != null;
-            if (repeller instanceof LivingEntity repellerLiving && repellerLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
+            Mob repeller = this.getLinkedRepeller();
+            boolean keepup = repeller != null && this.distanceToSqr(repeller) < 1024.0;
+            if (repeller != null && repeller.hasEffect(CAMobEffects.FAKE_DEATH)) {
                 keepup = false;
             }
             if (keepup) {
@@ -187,6 +181,30 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
     }
 
     @Override
+    public void remove(Entity.RemovalReason reason) {
+        if (this.hasEffect(CAMobEffects.FAKE_DEATH)) {
+            this.setAnimation("animation.tidelinked_bishop.die_idle");
+            this.setShiftKeyDown(false);
+        }
+        super.remove(reason);
+    }
+
+    @Nullable
+    private UUID ownerUUID;
+
+    public void setOwner(@Nullable LivingEntity entity) {
+        this.ownerUUID = entity != null ? entity.getUUID() : null;
+    }
+
+    @Nullable
+    private Mob getLinkedRepeller() {
+        if (this.ownerUUID == null || !(this.level() instanceof ServerLevel serverLevel))
+            return null;
+        Entity entity = serverLevel.getEntity(this.ownerUUID);
+        return entity instanceof Mob mob ? mob : null;
+    }
+
+    @Override
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
         if (world instanceof ServerLevel level) {
@@ -194,6 +212,10 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
             Entity entityToSpawn = attachedType.spawn(level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -3, 3), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -3, 3)), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                if (entityToSpawn instanceof AbstractTidelinkedEntity repeller) {
+                    repeller.setOwner(this);
+                    this.setOwner(repeller);
+                }
             }
         }
         return retval;
@@ -203,6 +225,9 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
     public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("SkillCooldown", this.entityData.get(DATA_SKILL_COOLDOWN));
+        if (this.ownerUUID != null) {
+            compound.putUUID("Owner", this.ownerUUID);
+        }
     }
 
     @Override
@@ -210,25 +235,20 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
         super.readAdditionalSaveData(compound);
         if (compound.contains("SkillCooldown"))
             this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("SkillCooldown"));
+        if (compound.hasUUID("Owner"))
+            this.ownerUUID = compound.getUUID("Owner");
     }
 
     @Override
     public void baseTick() {
         super.baseTick();
-        this.tickLinkedBehavior();
-        this.refreshDimensions();
-    }
-
-    private void tickLinkedBehavior() {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity nearest;
         if (this.hasEffect(CAMobEffects.FAKE_DEATH)) {
-            nearest = this.level().getEntitiesOfClass(AbstractTidelinkedEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
-                    .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
-            boolean keepup = nearest != null;
-            if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
+            Mob repeller = this.getLinkedRepeller();
+            boolean keepup = repeller != null && this.distanceToSqr(repeller) < 1024.0;
+            if (repeller != null && repeller.hasEffect(CAMobEffects.FAKE_DEATH)) {
                 keepup = false;
             }
             if (!keepup) {
@@ -236,63 +256,61 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
                 this.removeAllEffects();
                 this.hurt(this.level().damageSources().fellOutOfWorld(), 114514);
             }
-            return;
-        }
-        double skillCooldown = this.getEntityData().get(DATA_SKILL_COOLDOWN);
-        if (skillCooldown <= 0) {
-            if (this.getTarget() != null) {
-                this.setAnimation("animation.tidelinked_bishop.cast");
-                if (!this.level().isClientSide()) {
-                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
-                }
-                CaerulaArborMod.queueServerWork(33, () -> {
-                    Entity repeller;
-                    if (this.isAlive() && this.getHealth() < this.getMaxHealth()) {
-                        Level projectileLevel = this.level();
-                        if (!projectileLevel.isClientSide()) {
-                            TellerShotEntity projectile = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
-                            projectile.setOwner(this);
-                            projectile.setBaseDamage((float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0));
-                            projectile.setSilent(true);
-                            projectile.setPos(this.getX(), this.getEyeY() - 0.1, this.getZ());
-                            projectile.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z, 1.5F, 0);
-                            projectileLevel.addFreshEntity(projectile);
-                        }
-                        this.setHealth((float) (this.getHealth() + this.getMaxHealth() * 0.1));
-                        if (this.level() instanceof ServerLevel level) {
-                            level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y + 1.5, z, 64, 1.5, 1.5, 1.5, 0.2);
-                        }
-                    }
-                    repeller = this.level().getEntitiesOfClass(AbstractTidelinkedEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), candidate -> true).stream()
-                            .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
-                    if (repeller instanceof LivingEntity repellerLiving && repellerLiving.isAlive() && repellerLiving.getHealth() < repellerLiving.getMaxHealth()) {
-                        repellerLiving.setHealth((float) (repellerLiving.getHealth() + repellerLiving.getMaxHealth() * 0.1));
-                        if (this.level() instanceof ServerLevel level) {
-                            level.sendParticles(ParticleTypes.HAPPY_VILLAGER, repellerLiving.getX(), repellerLiving.getY() + 1.5, repellerLiving.getZ(), 64, 1.5, 1.5, 1.5, 0.2);
-                        }
-                    }
-                });
-                this.getEntityData().set(DATA_SKILL_COOLDOWN, 200);
-            }
         } else {
-            this.getEntityData().set(DATA_SKILL_COOLDOWN, (int) (skillCooldown - 1));
-        }
-        nearest = this.level().getEntitiesOfClass(AbstractTidelinkedEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
-                .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
-        if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
-            EntityUtils.spawnLinkParticles(this.level(), this, nearest);
-            if (MapVariables.get(this.level()).strategy_silence >= 3) {
-                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
-                    Objects.requireNonNull(this.getAttribute(CAAttributes.MISSRATE)).setBaseValue(30);
+            double skillCooldown = this.getEntityData().get(DATA_SKILL_COOLDOWN);
+            if (skillCooldown <= 0) {
+                if (this.getTarget() != null) {
+                    this.setAnimation("animation.tidelinked_bishop.cast");
+                    if (!this.level().isClientSide()) {
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
+                    }
+                    CaerulaArborMod.queueServerWork(33, () -> {
+                        if (this.isAlive() && this.getHealth() < this.getMaxHealth()) {
+                            Level projectileLevel = this.level();
+                            if (!projectileLevel.isClientSide()) {
+                                TellerShotEntity projectile = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
+                                projectile.setOwner(this);
+                                projectile.setBaseDamage((float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0));
+                                projectile.setSilent(true);
+                                projectile.setPos(this.getX(), this.getEyeY() - 0.1, this.getZ());
+                                projectile.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z, 1.5F, 0);
+                                projectileLevel.addFreshEntity(projectile);
+                            }
+                            this.setHealth((float) (this.getHealth() + this.getMaxHealth() * 0.1));
+                            if (this.level() instanceof ServerLevel level) {
+                                level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y + 1.5, z, 64, 1.5, 1.5, 1.5, 0.2);
+                            }
+                        }
+                        Entity repeller = this.getLinkedRepeller();
+                        if (repeller instanceof LivingEntity repellerLiving && repellerLiving.isAlive() && repellerLiving.getHealth() < repellerLiving.getMaxHealth()) {
+                            repellerLiving.setHealth((float) (repellerLiving.getHealth() + repellerLiving.getMaxHealth() * 0.1));
+                            if (this.level() instanceof ServerLevel level) {
+                                level.sendParticles(ParticleTypes.HAPPY_VILLAGER, repellerLiving.getX(), repellerLiving.getY() + 1.5, repellerLiving.getZ(), 64, 1.5, 1.5, 1.5, 0.2);
+                            }
+                        }
+                    });
+                    this.getEntityData().set(DATA_SKILL_COOLDOWN, 200);
                 }
-            } else if (MapVariables.get(this.level()).strategy_subsisting >= 4) {
-                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
-                    Objects.requireNonNull(this.getAttribute(CAAttributes.MISSRATE)).setBaseValue(15);
-                }
+            } else {
+                this.getEntityData().set(DATA_SKILL_COOLDOWN, (int) (skillCooldown - 1));
             }
-        } else if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
-            Objects.requireNonNull(this.getAttribute(CAAttributes.MISSRATE)).setBaseValue(0);
+            Entity repeller = this.getLinkedRepeller();
+            if (repeller instanceof LivingEntity repellerLiving && repellerLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
+                EntityUtils.spawnLinkParticles(this.level(), this, repeller);
+                if (MapVariables.get(this.level()).strategy_silence >= 3) {
+                    if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
+                        this.getAttribute(CAAttributes.MISSRATE).setBaseValue(30);
+                    }
+                } else if (MapVariables.get(this.level()).strategy_subsisting >= 4) {
+                    if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
+                        this.getAttribute(CAAttributes.MISSRATE).setBaseValue(15);
+                    }
+                }
+            } else if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
+                this.getAttribute(CAAttributes.MISSRATE).setBaseValue(0);
+            }
         }
+        this.refreshDimensions();
     }
 
     @Override

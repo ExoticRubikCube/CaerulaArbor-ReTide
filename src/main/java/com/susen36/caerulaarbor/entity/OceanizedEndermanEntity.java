@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.crawler.PocketSeaCreeperEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;

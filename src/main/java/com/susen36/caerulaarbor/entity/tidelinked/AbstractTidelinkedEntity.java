@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -34,12 +35,11 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 
-import java.util.Comparator;
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 public abstract class AbstractTidelinkedEntity extends SeaMonster implements ElementalAttacker {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(AbstractTidelinkedEntity.class, EntityDataSerializers.BOOLEAN);
@@ -132,6 +132,20 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
         this.level().playSound(null, this.blockPosition(), SoundEvents.GUARDIAN_ATTACK, SoundSource.HOSTILE, 2, 1);
     }
 
+    @Nullable
+    private UUID ownerUUID;
+
+    public void setOwner(@Nullable LivingEntity entity) {
+        this.ownerUUID = entity != null ? entity.getUUID() : null;
+    }
+
+    @Nullable
+    protected TidelinkedBishopEntity getLinkedBishop() {
+        if (this.ownerUUID == null || !(this.level() instanceof ServerLevel serverLevel))
+            return null;
+        Entity entity = serverLevel.getEntity(this.ownerUUID);
+        return entity instanceof TidelinkedBishopEntity bishop ? bishop : null;
+    }
 
     @Override
     public AbstractEPCapability.EPType getElementalType() {
@@ -151,12 +165,8 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
     @Override
     public void setHealth(float pHealth) {
         if (pHealth <= 0) {
-            double x = this.getX();
-            double y = this.getY();
-            double z = this.getZ();
-            TidelinkedBishopEntity bishop = this.level().getEntitiesOfClass(TidelinkedBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
-                    .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
-            boolean keepup = bishop != null;
+            TidelinkedBishopEntity bishop = this.getLinkedBishop();
+            boolean keepup = bishop != null && this.distanceToSqr(bishop) < 1024.0;
             if (bishop != null && bishop.hasEffect(CAMobEffects.FAKE_DEATH)) {
                 keepup = false;
             }
@@ -178,6 +188,9 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
         super.addAdditionalSaveData(compound);
         compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
         compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+        if (this.ownerUUID != null) {
+            compound.putUUID("Owner", this.ownerUUID);
+        }
 	}
 
 	@Override
@@ -189,6 +202,9 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
         if (compound.contains("Duration")) {
             this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
         }
+        if (compound.hasUUID("Owner")) {
+            this.ownerUUID = compound.getUUID("Owner");
+        }
 	}
 
     @Override
@@ -197,12 +213,10 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity nearest;
         if (this.hasEffect(CAMobEffects.FAKE_DEATH)) {
-            nearest = this.level().getEntitiesOfClass(TidelinkedBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
-                    .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
-            boolean keepup = nearest != null;
-            if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
+            TidelinkedBishopEntity bishop = this.getLinkedBishop();
+            boolean keepup = bishop != null && this.distanceToSqr(bishop) < 1024.0;
+            if (bishop != null && bishop.hasEffect(CAMobEffects.FAKE_DEATH)) {
                 keepup = false;
             }
             if (!keepup) {
@@ -222,10 +236,9 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
                     this.getEntityData().set(DATA_SKILLP, (int) (skillCooldown - 2));
                 }
             }
-            nearest = this.level().getEntitiesOfClass(TidelinkedBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
-                    .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
-            if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
-                EntityUtils.spawnLinkParticles(this.level(), this, nearest);
+            TidelinkedBishopEntity bishop = this.getLinkedBishop();
+            if (bishop instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
+                EntityUtils.spawnLinkParticles(this.level(), this, bishop);
                 if (MapVariables.get(this.level()).strategy_silence >= 3) {
                     if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
                         this.getAttribute(CAAttributes.MISSRATE).setBaseValue(40);
