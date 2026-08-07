@@ -7,6 +7,7 @@ import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.block.item.*;
 import com.susen36.caerulaarbor.item.*;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +17,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.api.distmarker.Dist;
@@ -703,6 +705,8 @@ public class CAItems {
             ItemProperties.register(TRAILRITE_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trailrite_bow_pulling"),
                     (itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
                             && living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
+            ItemProperties.register(PATH_SHAPER_SPAWNEGG.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "path_shaper_lingering"),
+                    (itemStackToRender, clientWorld, living, itemEntityId) -> itemStackToRender.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("lingering") ? 1.0F : 0.0F);
         });
     }
 

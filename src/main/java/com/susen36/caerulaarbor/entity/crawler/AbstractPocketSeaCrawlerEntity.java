@@ -22,9 +22,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MoveBackToVillageGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -38,18 +37,19 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implements ElementalAttacker {
-    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Boolean> DATA_CHARGED = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<Integer> DATA_SWELL_DIR = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_SWELL = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.INT);
-    public static final int MAX_SWELL = 30;
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_CHARGED = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> DATA_SWELL_DIR = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SWELL = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.INT);
+    public static int maxSwell = 30;
     public String animationprocedure = "empty";
 
     protected AbstractPocketSeaCrawlerEntity(EntityType<? extends Monster> entityType, Level level) {
@@ -96,46 +96,75 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
     }
 
     public float getSwelling(float partialTick) {
-        return this.entityData.get(DATA_SWELL) / (float) MAX_SWELL;
+        return this.entityData.get(DATA_SWELL) / (float) maxSwell;
     }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity()== this || source.is(DamageTypes.EXPLOSION))
+        if (source.getEntity()== this || (source.is(DamageTypes.EXPLOSION) || source.is(CADamageTypes.OCEAN_MAGIC)))
             return false;
         if (this.charged() && (source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE)))
             return false;
         return super.hurt(source, amount);
     }
 
-    protected void performRangedSanityAttack() {
-        Level level = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        double attackDamage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+    protected void explode() {
+        if (!this.level().isClientSide) {
 
-        LivingEntity selfEntity = this;
-        float selfDamage = selfEntity.getMaxHealth() * 0.3f;
-        selfEntity.setHealth(selfEntity.getHealth() - selfDamage);
+            ServerLevel serverLevel = (ServerLevel) this.level();
+            double x = this.getX();
+            double y = this.getY();
+            double z = this.getZ();
 
-        if (level instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(ParticleTypes.EXPLOSION, x, y + 1, z, 1, 0, 0, 0, 0.5);
-            serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y + 1, z, 1, 0, 0, 0, 0.5);
-        }
+            serverLevel.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 1, 0, 0, 0, 0.5);
+            serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 1, 0, 0, 0, 0.5);
+            serverLevel.playSound(null, BlockPos.containing(this.position()), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 3.0F, 1.0F);
 
-        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 3.0F, 1.0F);
+            float attackDamage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                    ? (float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 3.5F * (this.charged() ? 2.0D : 1.0D))
+                    : 0.0F;
 
-        Vec3 centerPos = new Vec3(x, y + 1, z);
-        double radius = 3.0D;
-        List<LivingEntity> nearbyEntities = level.getEntitiesOfClass(LivingEntity.class, new AABB(centerPos, centerPos).inflate(radius), entity -> entity != this).stream().sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(centerPos))).toList();
-        for (LivingEntity entity : nearbyEntities) {
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                continue;
+            Vec3 centerPos = new Vec3(x, y, z);
+            List<LivingEntity> nearbyEntities = serverLevel.getEntitiesOfClass(
+                    LivingEntity.class,
+                    new AABB(centerPos, centerPos).inflate(3.0D),
+                    entity -> entity != this && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
+            );
+
+            for (LivingEntity entity : nearbyEntities) {
+                entity.hurt(CADamageTypes.source(serverLevel, CADamageTypes.OCEAN_MAGIC, this), attackDamage);
             }
-            entity.hurt(CADamageTypes.source(level, CADamageTypes.OCEAN_MAGIC, this),
-                    (float) attackDamage);
+
+            this.spawnLingeringCloud();
+
+            float selfDamage = this.getMaxHealth() * 0.3F;
+            if (this.getHealth() <= selfDamage) {
+                this.dead = true;
+                this.triggerOnDeathMobEffects(Entity.RemovalReason.KILLED);
+                this.discard();
+            } else {
+                this.setHealth(this.getHealth() - selfDamage);
+            }
         }
+    }
+
+    private void spawnLingeringCloud() {
+        Collection<MobEffectInstance> collection = this.getActiveEffects();
+        if (!collection.isEmpty()) {
+            AreaEffectCloud areaeffectcloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
+            areaeffectcloud.setRadius(2.0F);
+            areaeffectcloud.setRadiusOnUse(-0.5F);
+            areaeffectcloud.setWaitTime(10);
+            areaeffectcloud.setDuration(areaeffectcloud.getDuration() / 2);
+            areaeffectcloud.setRadiusPerTick(-areaeffectcloud.getRadius() / (float)areaeffectcloud.getDuration());
+
+            for(MobEffectInstance mobeffectinstance : collection) {
+                areaeffectcloud.addEffect(new MobEffectInstance(mobeffectinstance));
+            }
+
+            this.level().addFreshEntity(areaeffectcloud);
+        }
+
     }
 
     @Override

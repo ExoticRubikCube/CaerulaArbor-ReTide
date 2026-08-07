@@ -2,5 +2,13 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "caerula_arbor:item/pathshaperegg"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "caerula_arbor:path_shaper_lingering": 1
+      },
+      "model": "caerula_arbor:item/path_shaper_spawnegg_lingering"
+    }
+  ]
 }

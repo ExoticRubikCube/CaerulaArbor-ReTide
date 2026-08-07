@@ -4,9 +4,12 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +17,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 
@@ -33,34 +38,44 @@ public class PathShaperSpawneggItem extends DeferredSpawnEggItem {
 	}
 
 	@Override
+	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
+		ItemStack itemstack = entity.getItemInHand(hand);
+		InteractionResultHolder<ItemStack> result;
+		if (entity.isShiftKeyDown()) {
+			CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("lingering", !tag.getBoolean("lingering")));
+			result = InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
+		} else {
+			result = super.use(world, entity, hand);
+		}
+		return result;
+	}
+
+	@Override
 	public InteractionResult useOn(UseOnContext context) {
 		Player player = context.getPlayer();
-		if(player != null && !player.isShiftKeyDown()) return super.useOn(context);
-        LevelAccessor world = context.getLevel();
-        double x = context.getClickedPos().getX();
-        double y = context.getClickedPos().getY();
-        double z = context.getClickedPos().getZ();
-        Direction direction = context.getClickedFace();
-        Entity entity = context.getPlayer();
-        ItemStack itemstack = context.getItemInHand();
-        if (entity == null)
-            return InteractionResult.PASS;
-        if (entity.isShiftKeyDown()) {
-            if (world instanceof ServerLevel level) {
-                Entity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
-                if (entityToSpawn != null) {
-                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                }
-            }
-        } else {
-            if (world instanceof ServerLevel level) {
-                Entity entityToSpawn = CAEntities.ROUTE_SHAPER.get().spawn(level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
-                if (entityToSpawn != null) {
-                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                }
-            }
-        }
-        itemstack.shrink(1);
-        return InteractionResult.SUCCESS;
+		InteractionResult result = InteractionResult.PASS;
+		if (player == null || !player.isShiftKeyDown()) {
+			LevelAccessor world = context.getLevel();
+			double x = context.getClickedPos().getX();
+			double y = context.getClickedPos().getY();
+			double z = context.getClickedPos().getZ();
+			Direction direction = context.getClickedFace();
+			ItemStack itemstack = context.getItemInHand();
+			boolean lingering = itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("lingering");
+			if (world instanceof ServerLevel level) {
+				Entity entityToSpawn;
+				if (lingering) {
+					entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+				} else {
+					entityToSpawn = CAEntities.ROUTE_SHAPER.get().spawn(level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+				}
+				if (entityToSpawn != null) {
+					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+				}
+			}
+			itemstack.shrink(1);
+			result = InteractionResult.SUCCESS;
+		}
+		return result;
     }
 }
