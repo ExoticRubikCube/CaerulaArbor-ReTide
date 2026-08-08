@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.Relic;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import com.susen36.caerulaarbor.network.send.RelicShowcaseButtonMessage;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -14,11 +15,14 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.PlainTextButton;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -131,31 +135,31 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_alley", Relic.UTIL_ALLEY, RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_alley", "allay_sculpture",
 			entity -> RelicUtils.hasRelic(Relic.UTIL_ALLEY, entity),
-			"stonealley.png", null));
+			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_batbed", Relic.VAMPIRES_BED, RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_batbed", "bat_bed",
 			entity -> RelicUtils.hasRelic(Relic.VAMPIRES_BED, entity),
-			"itembatbed.png", null));
+			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_score", Relic.UTIL_SCORE, RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_score", "score",
 			entity -> RelicUtils.hasRelic(Relic.UTIL_SCORE, entity),
-			"score.png", null));
+			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_rescission", Relic.UTIL_RESCISSION, RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_rescission", "rescission",
 			entity -> RelicUtils.hasRelic(Relic.UTIL_RESCISSION, entity),
-			"rescission.png", null));
+			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_omnikey", Relic.UTIL_OMNIKEY, RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_omnikey", "omni_key",
 			entity -> RelicUtils.hasRelic(Relic.UTIL_OMNIKEY, entity),
-			"omnikey.png", null));
+			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_stare", Relic.UTIL_STARE, RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_stare", "guardian_stare",
 			entity -> RelicUtils.hasRelic(Relic.UTIL_STARE, entity),
-			"guardianstare.png", null));
+			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_longevity", Relic.PROOF_OF_LONGEVITY, RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_longevity", "proof_of_longevity",
 			entity -> RelicUtils.hasRelic(Relic.PROOF_OF_LONGEVITY, entity),
-			"longevity.png", null));
+			null, null));
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
 		// ===== 第 6 行（翻页第 2 页开始） =====
@@ -171,7 +175,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_cursed_heart", Relic.CURSED_HEART, RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_cursed_heart", "caerula_heart",
 			entity -> RelicUtils.hasRelic(Relic.CURSED_HEART, entity),
-			"caerulaheart.png", null));
+			null, null));
 	}
 
 	// ===== 工厂辅助：普通 boolean 遗物 =====
@@ -186,6 +190,15 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 	private static RelicDisplayEntry blank() {
 		return new RelicDisplayEntry("", null, RelicDisplayEntry.SpecialType.NONE, -1,
 			"", "", entity -> false, null, null);
+	}
+
+	// ===== 根据条目解析对应的 MC 物品（优先用 Relic 绑定表，无则按 itemKey 注册表反查） =====
+	private Item resolveItem(RelicDisplayEntry entry) {
+		Item byRelic = entry.relic() != null ? RelicItemBase.byRelic(entry.relic()) : null;
+		if (byRelic != null) {
+			return byRelic;
+		}
+		return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, entry.itemKey()));
 	}
 
 	public RelicShowcaseScreen(RelicShowcaseMenu container, Inventory inventory, Component text) {
@@ -245,18 +258,6 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		RenderSystem.defaultBlendFunc();
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 328, 216, 328, 216);
-
-		// Overlay 渲染：遍历所有条目（跨页，只要 visible 就画）
-		for (int i = 0; i < ALL_ENTRIES.size(); i++) {
-			if (!isEntryOnPage(i)) continue;
-			RelicDisplayEntry entry = ALL_ENTRIES.get(i);
-			if (entry.overlayTex() == null || entry.overlayTex().isEmpty()) continue;
-			if (!entry.visibleTest().test(entity)) continue;
-			int sx = this.leftPos + slotX(i);
-			int sy = this.topPos + slotY(i);
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/" + entry.overlayTex()),
-				sx, sy, 0, 0, SLOT_SIZE, SLOT_SIZE, SLOT_SIZE, SLOT_SIZE);
-		}
 		RenderSystem.disableBlend();
 	}
 
@@ -380,19 +381,19 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		}
 		relicButtons.clear();
 
-		// 按当前页遍历条目创建按钮
+		// 按当前页遍历条目创建按钮：用 renderItem 渲染真实绑定物品，不再依赖自定义 atlas 纹理
 		for (int i = 0; i < ALL_ENTRIES.size(); i++) {
 			if (!isEntryOnPage(i)) continue;
 			RelicDisplayEntry entry = ALL_ENTRIES.get(i);
 			if (entry.guiKey().isEmpty()) continue;
-			if (entry.atlasBase().isEmpty()) continue;
 			final int entryIndex = i;
 			int sx = this.leftPos + slotX(entryIndex);
 			int sy = this.topPos + slotY(entryIndex);
-			WidgetSprites sprites = new WidgetSprites(
-				ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/" + entry.atlasBase()),
-				ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/" + entry.atlasBase() + "_highlighted"));
-			ImageButton btn = new ImageButton(sx, sy, SLOT_SIZE, SLOT_SIZE, sprites, e -> {
+			ItemStack stack = new ItemStack(resolveItem(entry));
+			WidgetSprites dummySprites = new WidgetSprites(
+				ResourceLocation.fromNamespaceAndPath("minecraft", "missingno"),
+				ResourceLocation.fromNamespaceAndPath("minecraft", "missingno"));
+			ImageButton btn = new ImageButton(sx, sy, SLOT_SIZE, SLOT_SIZE, dummySprites, e -> {
 				if (entry.buttonId() >= 0 && entry.visibleTest().test(entity)) {
 					PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(entry.buttonId(), x, y, z));
 					RelicShowcaseButtonMessage.handleButtonAction(entity, entry.buttonId(), x, y, z);
@@ -400,8 +401,16 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			}) {
 				@Override
 				public void renderWidget(GuiGraphics gg, int ggx, int ggy, float ticks) {
-					this.visible = entry.visibleTest().test(RelicShowcaseScreen.this.entity);
-					super.renderWidget(gg, ggx, ggy, ticks);
+					boolean visible = entry.visibleTest().test(RelicShowcaseScreen.this.entity);
+					this.visible = visible;
+					if (!visible) return;
+					int bx = this.getX();
+					int by = this.getY();
+					if (this.isHovered()) {
+						gg.fill(bx, by, bx + SLOT_SIZE, by + SLOT_SIZE, 0x60FFFFFF);
+					}
+					gg.renderItem(stack, bx, by);
+					gg.renderItemDecorations(RelicShowcaseScreen.this.font, stack, bx, by);
 				}
 			};
 			guistate.put("button:" + entry.guiKey(), btn);
