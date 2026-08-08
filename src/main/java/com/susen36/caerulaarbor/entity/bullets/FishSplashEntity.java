@@ -4,7 +4,6 @@ import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
 import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -52,7 +51,7 @@ public class FishSplashEntity extends BaseProjectile implements ItemSupplier {
 		if (this.getOwner() instanceof OceanIllusionEntity) {
 			entityHitResult.getEntity().invulnerableTime = 0;
 		}
-		EntityUtils.killSelf(this.level(), entityHitResult.getEntity(), this);
+		super.onHitEntity(entityHitResult);
 	}
 
 	@Override

@@ -474,17 +474,6 @@ public class EntityUtils {
 		return entity.getBbWidth() * entity.getBbHeight();
 	}
 
-	// 对 Martus 施加伤害逻辑
-	public static void hurtMartus(LevelAccessor world, Entity obj, Entity source, double num, double perc) {
-		if (obj == null)
-			return;
-		double amount;
-		amount = (obj instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc + num;
-		if (amount > 0) {
-			obj.hurt(CADamageTypes.source(obj.level(), CADamageTypes.INV_KILLER, source), (float) amount);
-		}
-	}
-
 	public static boolean isSameTeam(Entity a, Entity b) {
 		if (a == null || b == null)
 			return false;
@@ -504,17 +493,6 @@ public class EntityUtils {
 			Registries.ENTITY_TYPE,
 			ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")
 		);
-
-	// 触发自杀伤害
-	public static void killSelf(LevelAccessor world, Entity entity, Entity immediatesourceentity) {
-		if (entity == null || immediatesourceentity == null)
-			return;
-		entity.invulnerableTime = 0;
-		CaerulaArborMod.queueServerWork(2, () -> {
-			if (!immediatesourceentity.level().isClientSide())
-				immediatesourceentity.discard();
-		});
-	}
 
 	// 应用先锋增益
 	public static void vanguardBuff(LevelAccessor world, double x, double y, double z, Entity entity) {

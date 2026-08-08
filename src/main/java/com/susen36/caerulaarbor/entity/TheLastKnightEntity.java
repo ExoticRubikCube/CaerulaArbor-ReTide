@@ -32,7 +32,6 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
@@ -49,7 +48,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
-public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
+public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
@@ -267,13 +266,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     }
 
     @Override
-    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-        TheLastKnightEntity retval = CAEntities.THE_LAST_KNIGHT.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
-        return retval;
-    }
-
-    @Override
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
@@ -301,7 +293,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         super.aiStep();
         this.updateSwingTime();
     }
-
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -480,10 +471,5 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     @Override
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;
-    }
-
-    @Override
-    public boolean isFood(ItemStack stack) {
-        return false;
     }
 }

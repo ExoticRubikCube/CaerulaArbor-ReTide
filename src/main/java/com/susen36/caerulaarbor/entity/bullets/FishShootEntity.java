@@ -4,7 +4,6 @@ import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -45,11 +43,6 @@ public class FishShootEntity extends BaseProjectile implements ItemSupplier {
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack getItem() {
 		return PROJECTILE_ITEM;
-	}
-
-	@Override
-	public void onHitEntity(EntityHitResult entityHitResult) {
-		EntityUtils.killSelf(this.level(), entityHitResult.getEntity(), this);
 	}
 
 	@Override

@@ -9,7 +9,6 @@ import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.entity.IzumikOffspringEntity;
-import com.susen36.caerulaarbor.entity.MartusEntity;
 import com.susen36.caerulaarbor.entity.SkadiEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornTransformManager;
@@ -57,8 +56,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
-import java.util.Comparator;
-
 @EventBusSubscriber
 public class LivingDeathEventHandler {
 
@@ -84,7 +81,6 @@ public class LivingDeathEventHandler {
         handleMobDiedOnTrail(event);
         handlePlayerDiedFunc(event);
         handlePlayerDiedInOceanization(event);
-        handleSeabornKillMartus(event);
         handleSeabornTransform(event);
         handleTrailriteArmorSelfMend(event);
     }
@@ -584,30 +580,6 @@ public class LivingDeathEventHandler {
                 capability.player_oceanization = 0;
                 capability.syncPlayerVariables(entity);
             }
-        }
-    }
-
-    private static void handleSeabornKillMartus(LivingDeathEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (event.isCanceled()) return;
-
-        MartusEntity martus = world.getEntitiesOfClass(MartusEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream()
-                .sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
-
-        if (martus == null) return;
-
-        if (entity.getPersistentData().getBoolean("blessed")) {
-            EntityUtils.hurtMartus(world, martus, sourceentity, Math.max(Math.min((entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25, martus.getMaxHealth() * 0.4),
-                    martus.getMaxHealth()) * 0.05, 0);
-        } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && martus.getEntityData().get(MartusEntity.DATA_PHASE) >= 1) {
-            EntityUtils.hurtMartus(world, martus, sourceentity, Math.max(Math.min((entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.03, martus.getMaxHealth() * 0.025),
-                    martus.getMaxHealth() * 0.018), 0);
         }
     }
 

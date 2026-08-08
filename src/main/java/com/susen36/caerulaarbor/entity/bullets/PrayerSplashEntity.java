@@ -6,7 +6,6 @@ import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +23,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -57,11 +55,6 @@ public class PrayerSplashEntity extends BaseProjectile implements ItemSupplier {
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack getItem() {
 		return PROJECTILE_ITEM;
-	}
-
-	@Override
-	public void onHitEntity(EntityHitResult entityHitResult) {
-		EntityUtils.killSelf(this.level(), entityHitResult.getEntity(), this);
 	}
 
 	@Override

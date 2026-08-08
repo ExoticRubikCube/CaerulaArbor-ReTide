@@ -10,6 +10,7 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -50,6 +51,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.gameevent.*;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForgeMod;
@@ -58,8 +60,12 @@ import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class MartusEntity extends SeaMonster {
+    public static final TagKey<EntityType<?>> OCEAN_OFFSPRING = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+
+    private final DynamicGameEventListener<MartusDeathListener> dynamicDeathListener;
     private int releaseTime = 0;
 
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.STRING);
@@ -78,8 +84,10 @@ public class MartusEntity extends SeaMonster {
 
     public MartusEntity(EntityType<MartusEntity> type, Level world) {
         super(type, world);
+        this.dynamicDeathListener = new DynamicGameEventListener<>(new MartusDeathListener(this));
         xpReward = 64;
         setNoAi(false);
+        setNoGravity(true);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 10, true);
@@ -412,7 +420,7 @@ public class MartusEntity extends SeaMonster {
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 if (((Entity) MartusEntity.this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > ((Entity) MartusEntity.this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.02) {
-                                    EntityUtils.hurtMartus(world, MartusEntity.this, null, 0, 0.02);
+                                    MartusEntity.this.hurtMartus(null, 0, 0.02);
                                 }
                                 final int tick2 = ticks;
                                 CaerulaArborMod.queueServerWork(tick2, () -> {
@@ -555,7 +563,7 @@ public class MartusEntity extends SeaMonster {
         double vx = target.getX() - this.getX();
         double vy = target.getY() + target.getBbHeight() * 0.5 - (this.getY() + this.getBbHeight() * 0.5);
         double vz = target.getZ() - this.getZ();
-        double size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1) * 3;
+        double size = Math.clamp(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 1, 32) * 3;
         for (int index0 = 0; index0 < (int) size; index0++) {
             double particleX = this.getX() + vx / size * index0;
             double particleY = this.getY() + vy / size * index0 + this.getBbHeight() * 0.5;
@@ -576,12 +584,6 @@ public class MartusEntity extends SeaMonster {
     public void setNoGravity(boolean ignored) {
         super.setNoGravity(true);
     }
-
-    public void aiStep() {
-        super.aiStep();
-        this.setNoGravity(true);
-    }
-
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -695,5 +697,70 @@ public class MartusEntity extends SeaMonster {
     @Override
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;
+    }
+
+    @Override
+    public void updateDynamicGameEventListener(BiConsumer<DynamicGameEventListener<?>, ServerLevel> updater) {
+        super.updateDynamicGameEventListener(updater);
+        if (this.level() instanceof ServerLevel serverLevel) {
+            updater.accept(this.dynamicDeathListener, serverLevel);
+        }
+    }
+
+    public void hurtMartus(@Nullable Entity source, double num, double perc) {
+        double amount = this.getMaxHealth() * perc + num;
+        if (amount > 0) {
+            this.hurt(CADamageTypes.source(this.level(), CADamageTypes.INV_KILLER, source), (float) amount);
+        }
+    }
+
+    public void respondToNearbyCreatureDeath(Entity killedEntity, @Nullable Entity killer) {
+        float maxHp = this.getMaxHealth();
+        double targetHp = killedEntity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : 0;
+
+        if (killedEntity.getPersistentData().getBoolean("blessed")) {
+            double rawDamage = Mth.clamp(targetHp * 0.25, 0.0, maxHp * 0.4) * 0.05;
+            this.hurtMartus(killer, rawDamage, 0);
+        } else if (killedEntity.getType().is(OCEAN_OFFSPRING) && this.getEntityData().get(DATA_PHASE) >= 1) {
+            double rawDamage = Mth.clamp(targetHp * 0.03, maxHp * 0.018, maxHp * 0.025);
+            this.hurtMartus(killer, rawDamage, 0);
+        }
+    }
+
+    private static class MartusDeathListener implements GameEventListener {
+        private final MartusEntity martus;
+        private final PositionSource positionSource;
+
+        public MartusDeathListener(MartusEntity martus) {
+            this.martus = martus;
+            this.positionSource = new EntityPositionSource(martus, martus.getEyeHeight());
+        }
+
+        @Override
+        public PositionSource getListenerSource() {
+            return this.positionSource;
+        }
+
+        @Override
+        public int getListenerRadius() {
+            return 48;
+        }
+
+        @Override
+        public boolean handleGameEvent(ServerLevel level, Holder<GameEvent> event, GameEvent.Context context, Vec3 pos) {
+            if (event.is(GameEvent.ENTITY_DIE)) {
+                Entity sourceEntity = context.sourceEntity();
+                if (sourceEntity instanceof LivingEntity deadEntity && deadEntity != this.martus) {
+                    boolean isBlessed = deadEntity.getPersistentData().getBoolean("blessed");
+                    boolean isOcean = deadEntity.getType().is(MartusEntity.OCEAN_OFFSPRING);
+                    if (isBlessed || isOcean) {
+                        LivingEntity killer = deadEntity.getLastHurtByMob();
+                        this.martus.respondToNearbyCreatureDeath(deadEntity, killer);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

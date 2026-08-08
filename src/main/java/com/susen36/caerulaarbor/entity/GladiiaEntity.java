@@ -196,7 +196,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	}
 
 	private void hurtWithHunterAttack(Entity target, float amount) {
-		if (EntityUtils.getSize(target) < EntityUtils.getSize(this) * 2) {
+        if (target.getBoundingBox().getSize() < getBoundingBox().getSize() * 2) {
 			amount *= 1.3F;
 		}
 		if (EntityUtils.getHealthPerc(target) < EntityUtils.getHealthPerc(this)) {
@@ -211,10 +211,10 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		if (source.is(DamageTypes.DROWN))
 			return false;
 		Entity sourceEntity = source.getEntity();
-		if (sourceEntity != null && EntityUtils.getSize(sourceEntity) >= EntityUtils.getSize(this) * 2) {
-			amount *= 0.75F;
-		}
-		return super.hurt(source, amount);
+        if (sourceEntity != null && sourceEntity.getBoundingBox().getSize() >= getBoundingBox().getSize() * 2) {
+            amount *= 0.75F;
+        }
+        return super.hurt(source, amount);
 	}
 
 	@Override
