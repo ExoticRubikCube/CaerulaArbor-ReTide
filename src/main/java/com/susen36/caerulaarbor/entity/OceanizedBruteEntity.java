@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.advancements.AdvancementHolder;
@@ -151,7 +151,7 @@ public class OceanizedBruteEntity extends SeaMonster {
     @Override
     public boolean doHurtTarget(Entity target) {
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(10, () -> {
+            CaerulaArbor.queueServerWork(10, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.6) {
                     boolean damaged = target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -190,7 +190,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                             datEntSetI.getEntityData().set(DATA_SKILLP, 5);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 80, 0, false, false));
-                        CaerulaArborMod.queueServerWork(20, () -> {
+                        CaerulaArbor.queueServerWork(20, () -> {
                             if (this.isAlive()) {
                                 double sklp1;
                                 sklp1 = Math.max(
@@ -221,7 +221,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                                     if (entityiterator == this) {
                                         continue;
                                     }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                         if (!(((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)) {
                                             continue;
                                         }
@@ -281,12 +281,12 @@ public class OceanizedBruteEntity extends SeaMonster {
         String str;
         String name;
         if (sourceentity instanceof Player && !(sourceentity instanceof ServerPlayer plr1 && plr1.level() instanceof ServerLevel
-                && plr1.getAdvancements().getOrStartProgress(plr1.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "kill_brute"))).isDone())) {
+                && plr1.getAdvancements().getOrStartProgress(plr1.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "kill_brute"))).isDone())) {
             str = getPersistentData().getString("hurtPlayer");
             name = sourceentity.getDisplayName().getString();
             if (!str.contains(name)) {
                 if (sourceentity instanceof ServerPlayer player) {
-                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "kill_brute"));
+                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "kill_brute"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())

@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
@@ -125,7 +125,7 @@ public class WavecleaverItem extends Item implements GeoItem, SyncedAnimationIte
         if (!((Entity) entity instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
             if (itemstack.getItem() instanceof WavecleaverItem)
                 CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.wavelceaver.spin"));
-            CaerulaArborMod.queueServerWork(5, () -> {
+            CaerulaArbor.queueServerWork(5, () -> {
                 if (entity.isHolding(CAItems.WAVECLEAVER.get())) {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -153,7 +153,7 @@ public class WavecleaverItem extends Item implements GeoItem, SyncedAnimationIte
                                 }
                             }
                             final int tick2 = ticks;
-                            CaerulaArborMod.queueServerWork(tick2, () -> {
+                            CaerulaArbor.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
                                     timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                 }

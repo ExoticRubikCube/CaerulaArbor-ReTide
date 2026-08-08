@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
@@ -243,15 +243,15 @@ public class CAEnchantments {
     }
 
     private static ResourceKey<Enchantment> key(String name) {
-        return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, name));
+        return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, name));
     }
 
     private static TagKey<Item> tag(String path) {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, path));
     }
 
     private static ResourceKey<Item> itemKey(String name) {
-        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, name));
+        return ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, name));
     }
 
     /**

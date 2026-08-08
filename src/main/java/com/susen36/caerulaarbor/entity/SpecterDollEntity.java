@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -149,7 +149,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
                                     continue;
                                 }
                             }
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
                                 if (!(entityiterator == target)) {
                                     continue;
                                 }

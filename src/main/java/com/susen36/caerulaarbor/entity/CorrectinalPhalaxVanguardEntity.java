@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -112,14 +112,14 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
     @Override
     public boolean doHurtTarget(Entity target) {
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(9, () -> {
+            CaerulaArbor.queueServerWork(9, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_WARRIOR_ATTACK, this),
                             (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 }
             });
-            CaerulaArborMod.queueServerWork(14, () -> {
+            CaerulaArbor.queueServerWork(14, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 4.5) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_WARRIOR_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
@@ -166,12 +166,12 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
                             this.setAnimation("animation.correctional_phalanx _vanguard.swing");
                         }
                         this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY()), (target.getZ())));
-                        CaerulaArborMod.queueServerWork(11, () -> {
+                        CaerulaArbor.queueServerWork(11, () -> {
                             if (this.isAlive()) {
                                 vanguardSwing(1.8);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(21, () -> {
+                        CaerulaArbor.queueServerWork(21, () -> {
                             if (this.isAlive()) {
                                 vanguardSwing(2.1);
                             }

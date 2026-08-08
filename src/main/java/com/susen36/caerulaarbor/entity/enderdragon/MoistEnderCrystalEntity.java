@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity.enderdragon;
 
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.core.BlockPos;
@@ -264,7 +264,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
                         if (!(entityiterator instanceof LivingEntity)) {
                             continue;
                         }
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                             continue;
                         }
                         if (distanceTo(entityiterator) <= 4) {

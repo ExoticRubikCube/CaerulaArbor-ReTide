@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAConfigs;
@@ -72,7 +72,7 @@ public class PlayerEatEventHandler {
 		for (String configuredLightFood : CAConfigs.LIGHTS_FOOD.get()) {
 			separatorIndex = configuredLightFood.indexOf(", ");
 			if (separatorIndex < 0) {
-				CaerulaArborMod.LOGGER.warn("Wrong lights food config for item" + configuredLightFood);
+				CaerulaArbor.LOGGER.warn("Wrong lights food config for item" + configuredLightFood);
 				return;
 			}
 			String configuredItemId = configuredLightFood.substring(0, (int) separatorIndex);
@@ -80,7 +80,7 @@ public class PlayerEatEventHandler {
 				String lightRange = configuredLightFood.substring((int) (separatorIndex + 2));
 				separatorIndex = lightRange.indexOf("/");
 				if (separatorIndex < 0) {
-					CaerulaArborMod.LOGGER.warn("Wrong lights food config for item" + configuredLightFood);
+					CaerulaArbor.LOGGER.warn("Wrong lights food config for item" + configuredLightFood);
 					return;
 				}
 				try {

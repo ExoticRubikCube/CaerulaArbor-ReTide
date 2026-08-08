@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -160,19 +160,19 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             this.getEntityData().set(DATA_SKILLP_1, this.getEntityData().get(DATA_SKILLP_1) + 1);
             this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                     CASounds.SPECTER_ATTACK.get(), SoundSource.HOSTILE, 2.5F, 1);
-            CaerulaArborMod.queueServerWork(12, () -> {
+            CaerulaArbor.queueServerWork(12, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.SAW_CUT, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.45));
                 }
             });
-            CaerulaArborMod.queueServerWork(15, () -> {
+            CaerulaArbor.queueServerWork(15, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.SAW_CUT, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.5));
                 }
             });
-            CaerulaArborMod.queueServerWork(18, () -> {
+            CaerulaArbor.queueServerWork(18, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.SAW_CUT, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.45));
@@ -250,22 +250,22 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                         this.getEntityData().set(DATA_DURATION, (int) (dura + 45));
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 35, 0, false, false));
-                        CaerulaArborMod.queueServerWork(8, () -> {
+                        CaerulaArbor.queueServerWork(8, () -> {
                             if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_HEAVY.get(), SoundSource.NEUTRAL, 3, 1);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(15, () -> {
+                        CaerulaArbor.queueServerWork(15, () -> {
                             if (this.isAlive()) {
                                 this.performRangedAttack(2);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(25, () -> {
+                        CaerulaArbor.queueServerWork(25, () -> {
                             if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT_SPECT.get(), SoundSource.NEUTRAL, 3, 1);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(31, () -> {
+                        CaerulaArbor.queueServerWork(31, () -> {
                             if (this.isAlive()) {
                                 this.performRangedAttack(1.5);
                             }
@@ -306,7 +306,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if (!entityiterator.isAlive()) {
                             continue;
                         }
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "hunters")))) {
                             if (!(entityiterator instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY))) {
                                 perc = EntityUtils.getHealthPerc(entityiterator);
                                 if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
@@ -470,7 +470,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                     continue;
                 }
             }
-            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
                 if (!(entityiterator == target)) {
                     continue;
                 }

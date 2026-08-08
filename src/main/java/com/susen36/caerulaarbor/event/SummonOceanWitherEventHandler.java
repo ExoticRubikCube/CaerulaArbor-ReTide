@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.advancements.AdvancementHolder;
@@ -64,7 +64,7 @@ public class SummonOceanWitherEventHandler {
 					}
 				}
 				if (summonedOceanWither && entity instanceof ServerPlayer player) {
-					AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "tranquil_heights"));
+					AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "tranquil_heights"));
                     AdvancementProgress advancementProgress;
                     if (advancement != null) {
 						advancementProgress = player.getAdvancements().getOrStartProgress(advancement);

@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.mojang.serialization.MapCodec;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -209,7 +209,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                 if ((LevelAccessor) world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.START.get(), SoundSource.BLOCKS, 1, 1);
                 }
-                CaerulaArborMod.queueServerWork(25, () -> {
+                CaerulaArbor.queueServerWork(25, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip8
                             ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip8)
@@ -221,7 +221,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         }
                     }
                 });
-                CaerulaArborMod.queueServerWork(45, () -> {
+                CaerulaArbor.queueServerWork(45, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip16
                             ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip16)
@@ -233,7 +233,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         }
                     }
                 });
-                CaerulaArborMod.queueServerWork(55, () -> {
+                CaerulaArbor.queueServerWork(55, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip24
                             ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip24)
@@ -245,7 +245,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         }
                     }
                 });
-                CaerulaArborMod.queueServerWork(65, () -> {
+                CaerulaArbor.queueServerWork(65, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip32
                             ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip32)
@@ -256,7 +256,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 summonShooter(world, x, y, z, blockstate);
                                 final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                CaerulaArbor.queueServerWork(tick2, () -> {
                                     if (timedlooptotal > timedloopiterator + 1) {
                                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                     }
@@ -267,7 +267,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 summonShooter(world, x, y, z, blockstate);
                                 final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                CaerulaArbor.queueServerWork(tick2, () -> {
                                     if (timedlooptotal > timedloopiterator + 1) {
                                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                     }
@@ -278,7 +278,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 summonFirst(world, x, y, z, blockstate);
                                 final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                CaerulaArbor.queueServerWork(tick2, () -> {
                                     if (timedlooptotal > timedloopiterator + 1) {
                                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                     }
@@ -289,7 +289,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 summonFirst(world, x, y, z, blockstate);
                                 final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                CaerulaArbor.queueServerWork(tick2, () -> {
                                     if (timedlooptotal > timedloopiterator + 1) {
                                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                     }
@@ -302,7 +302,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 summonCreeper(world, x, y, z, blockstate);
                                 final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                CaerulaArbor.queueServerWork(tick2, () -> {
                                     if (timedlooptotal > timedloopiterator + 1) {
                                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                     }
@@ -316,7 +316,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         }
                     }
                 });
-                CaerulaArborMod.queueServerWork(95, () -> {
+                CaerulaArbor.queueServerWork(95, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip40
                             ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip40)
@@ -324,7 +324,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_4").getString())), false);
                         if ((Entity) entity instanceof ServerPlayer player) {
-                            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "operation_deepness"));
+                            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "operation_deepness"));
                             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                             if (!ap.isDone()) {
                                 for (String criteria : ap.getRemainingCriteria())
@@ -336,15 +336,15 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         final Vec3 center = new Vec3(x, y, z);
                         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                         for (Entity entityiterator : entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-                                    && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
+                                    && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet")))) {
                                 if (entityiterator instanceof Mob mob)
                                     mob.setTarget(mob);
                             }
                         }
                     }
                 });
-                CaerulaArborMod.queueServerWork(105, () -> {
+                CaerulaArbor.queueServerWork(105, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip52
                             ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip52)

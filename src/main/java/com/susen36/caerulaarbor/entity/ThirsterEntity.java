@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -174,7 +174,7 @@ public class ThirsterEntity extends SeaMonster {
                                 level.sendParticles(ParticleTypes.CLOUD, (x + d * Math.sin(angle)), (y + 0.5), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
                         }
                         final int tick2 = ticks;
-                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                        CaerulaArbor.queueServerWork(tick2, () -> {
                             if (timedlooptotal > timedloopiterator + 1) {
                                 timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                             }
@@ -186,7 +186,7 @@ public class ThirsterEntity extends SeaMonster {
                             (float) 2.5, 1);
                 }
                 final Vec3 center = new Vec3(x, y, z);
-                TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+                TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
                 List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(20),
                         e -> e.isAlive()
                                 && !(e.getType().is(oceanOffspringTag) && e != currentTarget)
@@ -289,7 +289,7 @@ public class ThirsterEntity extends SeaMonster {
                         if (this instanceof ThirsterEntity) {
                             this.setAnimation("animation.thirster.skill");
                         }
-                        CaerulaArborMod.queueServerWork(5, () -> {
+                        CaerulaArbor.queueServerWork(5, () -> {
                             Entity enemy1;
                             double num;
                             double tX = 0;
@@ -301,7 +301,7 @@ public class ThirsterEntity extends SeaMonster {
                                 final Vec3 center = new Vec3(x, y, z);
                                 List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(20), e -> true);
                                 for (LivingEntity entityiterator : entfound) {
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                         if (!(entityiterator == enemy1)) {
                                             continue;
                                         }
@@ -337,7 +337,7 @@ public class ThirsterEntity extends SeaMonster {
                                         tZ = tZ + entityiterator.getZ();
                                         if (world instanceof ServerLevel level)
                                             level.sendParticles(CAParticles.MOIST_BOOM.get(), (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 8, 0.75, 0.75, 0.75, 0.1);
-                                        CaerulaArborMod.queueServerWork(15, () -> {
+                                        CaerulaArbor.queueServerWork(15, () -> {
                                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0));
                                         });
                                         if (num <= 0) {
@@ -391,7 +391,7 @@ public class ThirsterEntity extends SeaMonster {
                             final Vec3 center = new Vec3(x, y, z);
                             List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(20), e -> true);
                             for (LivingEntity entityiterator : entfound) {
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                     if (!(entityiterator == enemy1)) {
                                         continue;
                                     }
@@ -491,7 +491,7 @@ public class ThirsterEntity extends SeaMonster {
 
         final Vec3 center = new Vec3(x, y, z);
         List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(20),
-                e -> !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))));
+                e -> !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))));
 
         for (LivingEntity entityiterator : nearbyEntities) {
             if (this.distanceToSqr(entityiterator) < 400) {
@@ -512,7 +512,7 @@ public class ThirsterEntity extends SeaMonster {
                         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.5), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
                 }
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }

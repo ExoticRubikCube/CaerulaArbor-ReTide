@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -276,7 +276,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                                         spawnLinearFangs(world, timedloopiterator + 1);
                                     }
                                     final int tick2 = ticks;
-                                    CaerulaArborMod.queueServerWork(tick2, () -> {
+                                    CaerulaArbor.queueServerWork(tick2, () -> {
                                         if (timedlooptotal > timedloopiterator + 1) {
                                             timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                         }
@@ -321,7 +321,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                                         }
                                     }
                                     final int tick2 = ticks;
-                                    CaerulaArborMod.queueServerWork(tick2, () -> {
+                                    CaerulaArbor.queueServerWork(tick2, () -> {
                                         if (timedlooptotal > timedloopiterator + 1) {
                                             timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                         }
@@ -353,7 +353,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 9, false, false));
                     assert Boolean.TRUE; //#dbg:EvokerSkill:evo_skl_2
-                    CaerulaArborMod.queueServerWork(10, () -> {
+                    CaerulaArbor.queueServerWork(10, () -> {
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 if (OceanizedEvokerEntity.this.isAlive()) {
@@ -419,7 +419,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                                     }
                                 }
                                 final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                CaerulaArbor.queueServerWork(tick2, () -> {
                                     if (timedlooptotal > timedloopiterator + 1) {
                                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                     }

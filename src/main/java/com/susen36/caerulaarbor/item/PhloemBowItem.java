@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
@@ -193,7 +193,7 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
             if (!((Entity) entity instanceof Player plrCldCheck32 && plrCldCheck32.getCooldowns().isOnCooldown(itemstack.getItem()))) {
                 if (((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || isCreativeMode(entity)) {
                     if (entity != null) {
-                        CaerulaArborMod.queueServerWork(24, () -> {
+                        CaerulaArbor.queueServerWork(24, () -> {
                             if ((((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || isCreativeMode(entity) || EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.METABOLISM), itemstack) != 0)
                                     && (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()
                                     || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem())) {

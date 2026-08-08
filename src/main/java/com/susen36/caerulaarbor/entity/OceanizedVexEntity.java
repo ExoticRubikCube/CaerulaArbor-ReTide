@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -51,11 +51,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -355,7 +352,7 @@ public class OceanizedVexEntity extends SeaMonster {
                     if (!(entityiterator instanceof LivingEntity)) {
                         continue;
                     }
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                         continue;
                     }
                     if (distanceTo(entityiterator) <= 4) {
@@ -379,7 +376,7 @@ public class OceanizedVexEntity extends SeaMonster {
                     if (slayer != null && this.distanceToSqr(slayer) <= 2.25) this.deathTime = 79;
                 }
             } catch (Exception e) {
-                CaerulaArborMod.LOGGER.debug("Invalid UUID for oceanized vex: {}", uuid);
+                CaerulaArbor.LOGGER.debug("Invalid UUID for oceanized vex: {}", uuid);
             }
         }
     }

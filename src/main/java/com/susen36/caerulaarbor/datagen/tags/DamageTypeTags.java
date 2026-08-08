@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen.tags;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -24,6 +24,6 @@ public interface DamageTypeTags {
     TagKey<DamageType> NEVER_TRIGGER_BOSS_PROTECTION = create("never_trigger_boss_protection");
 
     private static TagKey<DamageType> create(String pName) {
-        return TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, pName));
+        return TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, pName));
     }
 }

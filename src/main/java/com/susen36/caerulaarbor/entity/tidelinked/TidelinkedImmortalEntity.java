@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity.tidelinked;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -85,22 +85,22 @@ public class TidelinkedImmortalEntity extends AbstractTidelinkedEntity {
             if (target != null && this.distanceTo(target) <= 4) {
                 this.setAnimation("animation.tidelinked_immortal.combo");
                 this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY(), target.getZ()));
-                CaerulaArborMod.queueServerWork(17, () -> {
+                CaerulaArbor.queueServerWork(17, () -> {
                     if (this.isAlive()) {
                         this.repellerChop(target, 0.75F);
                     }
                 });
-                CaerulaArborMod.queueServerWork(23, () -> {
+                CaerulaArbor.queueServerWork(23, () -> {
                     if (this.isAlive()) {
                         this.repellerChop(target, 0.75F);
                     }
                 });
-                CaerulaArborMod.queueServerWork(35, () -> {
+                CaerulaArbor.queueServerWork(35, () -> {
                     if (this.isAlive()) {
                         this.repellerChop(target, 0.75F);
                     }
                 });
-                CaerulaArborMod.queueServerWork(42, () -> {
+                CaerulaArbor.queueServerWork(42, () -> {
                     if (this.isAlive()) {
                         this.repellerChop(target, 1.25F);
                     }

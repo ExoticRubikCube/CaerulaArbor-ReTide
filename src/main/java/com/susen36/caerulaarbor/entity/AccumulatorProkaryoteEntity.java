@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -171,7 +171,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
                 if ((Entity) this instanceof AccumulatorProkaryoteEntity datEntSetL)
                     datEntSetL.getEntityData().set(DATA_SPLIT, false);
                 if (!((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(CAMobEffects.MUTE))) {
-                    CaerulaArborMod.queueServerWork(10, () -> {
+                    CaerulaArbor.queueServerWork(10, () -> {
                         if (isInWater()) {
                             if (world instanceof ServerLevel level) {
                                 Entity entityToSpawn = CAEntities.ACCUMULATOR_CLONE.get().spawn(level,

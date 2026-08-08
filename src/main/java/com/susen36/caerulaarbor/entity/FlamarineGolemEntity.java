@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -156,7 +156,7 @@ public class FlamarineGolemEntity extends SeaMonster {
         double targetZ = target.getZ();
         if (!this.level().isClientSide()) {
             this.getEntityData().set(DATA_DURATION, 35);
-            CaerulaArborMod.queueServerWork(20, () -> {
+            CaerulaArbor.queueServerWork(20, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 5.75) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GOLEM_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -289,7 +289,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                         if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_DURATION, 40);
                         dura = 40;
-                        CaerulaArborMod.queueServerWork(20, () -> {
+                        CaerulaArbor.queueServerWork(20, () -> {
                             if (this.isAlive()) {
                                 Entity enemy1;
                                 double damage;
@@ -320,7 +320,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                                             continue;
                                         }
                                     }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
                                         if (!(entityiterator == enemy1)) {
                                             continue;
                                         }
@@ -355,12 +355,12 @@ public class FlamarineGolemEntity extends SeaMonster {
                             datEntSetI.getEntityData().set(DATA_DURATION, 60);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 30, 9, false, false));
-                        CaerulaArborMod.queueServerWork(22, () -> {
+                        CaerulaArbor.queueServerWork(22, () -> {
                             if (this.isAlive()) {
                                 this.combo(world, x, y, z, 5.75, 2);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(35, () -> {
+                        CaerulaArbor.queueServerWork(35, () -> {
                             if (this.isAlive()) {
                                 this.combo(world, x, y, z, 6.5, 2.5);
                             }
@@ -384,7 +384,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                                 dy = 0;
                                 for (int index2 = 0; index2 < 4; index2++) {
                                     block = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
-                                    if (block.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "flamarine_destroyable")))) {
+                                    if (block.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "flamarine_destroyable")))) {
                                         hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
                                         if (hardness <= 2.5 && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0) {
                                             {

@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -184,7 +184,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		if (!this.level().isClientSide()) {
 			this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 					CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 2.2F, 1);
-			CaerulaArborMod.queueServerWork(9, () -> {
+			CaerulaArbor.queueServerWork(9, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 5) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							CASounds.GLADIIA_ATTACK_HIT.get(), SoundSource.NEUTRAL, 2.75F, 1);
@@ -276,7 +276,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 							level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PRE.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
 						}
 						this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
-						CaerulaArborMod.queueServerWork(10, () -> {
+						CaerulaArbor.queueServerWork(10, () -> {
 							if (this.isAlive()) {
 								Entity ene = this.getTarget();
 								if (ene == null)
@@ -296,7 +296,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 									GladiiaEntity.spawnGladiiaLinkParticles(world, this, side);
 									this.hurtWithHunterAttack(side, (float) (damage * 3));
 								}
-								CaerulaArborMod.queueServerWork(10, () -> {
+								CaerulaArbor.queueServerWork(10, () -> {
 									if (world instanceof Level level) {
 										level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 3, 1);
 									}
@@ -347,14 +347,14 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 								entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 							}
 						}
-						CaerulaArborMod.queueServerWork(111, () -> {
+						CaerulaArbor.queueServerWork(111, () -> {
 							if (this.isAlive()) {
 								if (world instanceof Level level) {
 									level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PRE.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
 								}
 							}
 						});
-						CaerulaArborMod.queueServerWork(114, () -> {
+						CaerulaArbor.queueServerWork(114, () -> {
 							if (this.isAlive()) {
 								Entity ene = this.getTarget();
 								if (ene == null)

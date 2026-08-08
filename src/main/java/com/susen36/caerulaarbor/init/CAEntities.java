@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.client.model.entity.*;
 import com.susen36.caerulaarbor.client.renderer.entity.*;
 import com.susen36.caerulaarbor.entity.*;
@@ -51,7 +51,7 @@ import java.util.function.Supplier;
 
 @EventBusSubscriber
 public class CAEntities {
-    public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, CaerulaArborMod.MODID);
+    public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, CaerulaArbor.MODID);
     public static final List<DeferredHolder<EntityType<?>, ? extends EntityType<?>>> SEA_MONSTERS = new ArrayList<>();
     private static final LinkedHashMap<DeferredHolder<? extends EntityType<?>, ? extends EntityType<?>>, EntityRegistrationData> ENTITY_REGISTRATIONS = new LinkedHashMap<>();
     public static final DeferredHolder<EntityType<?>, EntityType<RunFishEntity>> RUN_FISH = register("run_fish", RunFishEntity.class,

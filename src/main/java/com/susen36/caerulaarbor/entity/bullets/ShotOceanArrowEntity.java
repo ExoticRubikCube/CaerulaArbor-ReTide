@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -72,7 +72,7 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
         if (!(entity == sourceentity)) {
             entity.invulnerableTime = 0;
         }
-        CaerulaArborMod.queueServerWork(10, () -> {
+        CaerulaArbor.queueServerWork(10, () -> {
             if (!level().isClientSide())
                 discard();
         });

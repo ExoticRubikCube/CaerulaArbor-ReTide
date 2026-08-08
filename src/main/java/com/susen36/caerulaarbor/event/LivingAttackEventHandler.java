@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
@@ -55,17 +55,17 @@ import java.util.List;
 public class LivingAttackEventHandler {
 
     private static final TagKey<EntityType<?>> INQUISITION = TagKey.create(Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition"));
+            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "inquisition"));
     private static final TagKey<EntityType<?>> HUMAN_SIDE = TagKey.create(Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside"));
     private static final TagKey<EntityType<?>> OCEAN_OFFSPRING = TagKey.create(Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
     private static final TagKey<EntityType<?>> OCEAN_PET = TagKey.create(Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"));
+            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet"));
     private static final TagKey<EntityType<?>> SKIP_MIGRATION = TagKey.create(Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "skip_migration"));
+            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "skip_migration"));
     private static final TagKey<EntityType<?>> IGNORE_MIGRATION = TagKey.create(Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "ignore_migration"));
+            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "ignore_migration"));
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEntityAttack(LivingIncomingDamageEvent event) {
@@ -253,7 +253,7 @@ public class LivingAttackEventHandler {
 
         if (sourceEntity instanceof ServerPlayer player) {
             var advancement = player.server.getAdvancements().get(
-                    ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "encounter_from_the_ocean"));
+                    ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "encounter_from_the_ocean"));
             if (advancement != null) {
                 var progress = player.getAdvancements().getOrStartProgress(advancement);
                 for (var criterion : progress.getRemainingCriteria()) {
@@ -325,7 +325,7 @@ public class LivingAttackEventHandler {
             if (playerVariables.relic_hand_FIREWORK && isFireworkWeapon(mainHandItem, registryName)
                     && player.getRandom().nextFloat() < 0.33F) {
                 world.playSound(null, player.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 3.6F, 1);
-                CaerulaArborMod.queueServerWork(10, () -> detonateFireworkRelic(world, target, targetPosition, player, amount));
+                CaerulaArbor.queueServerWork(10, () -> detonateFireworkRelic(world, target, targetPosition, player, amount));
             }
         }
 

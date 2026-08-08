@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.init;
 
 import com.mojang.datafixers.types.Type;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.block.blockentity.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
@@ -18,7 +18,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 @SuppressWarnings("DataFlowIssue")
 public class CABlockEntities {
-    public static final DeferredRegister<BlockEntityType<?>> REGISTRY = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, CaerulaArborMod.MODID);
+    public static final DeferredRegister<BlockEntityType<?>> REGISTRY = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, CaerulaArbor.MODID);
 
     private static DeferredHolder<BlockEntityType<?>, BlockEntityType<?>> register(String registryname, DeferredHolder<Block, ? extends Block> block, BlockEntityType.BlockEntitySupplier<?> supplier) {
         return REGISTRY.register(

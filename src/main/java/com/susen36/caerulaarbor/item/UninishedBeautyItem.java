@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -189,7 +189,7 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT_SPECT.get(), SoundSource.PLAYERS, (float) 2.4, 1);
             }
-            CaerulaArborMod.queueServerWork(12, () -> {
+            CaerulaArbor.queueServerWork(12, () -> {
                 if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_SPECT_1.get(), SoundSource.PLAYERS, (float) 2.4, 1);
                 }
@@ -211,7 +211,7 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
                             }
                         }
                         final int tick2 = ticks;
-                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                        CaerulaArbor.queueServerWork(tick2, () -> {
                             if (timedlooptotal > timedloopiterator + 1) {
                                 timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                             }

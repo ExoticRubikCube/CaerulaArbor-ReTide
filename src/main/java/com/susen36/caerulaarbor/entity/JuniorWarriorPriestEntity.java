@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -88,7 +88,7 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
     @Override
     public boolean doHurtTarget(Entity target) {
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(11, () -> {
+            CaerulaArbor.queueServerWork(11, () -> {
                 if (this.isAlive() && target.isAlive()) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_WARRIOR_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -113,7 +113,7 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
                     }
                     if ((Entity) this instanceof JuniorWarriorPriestEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_SKILL_P, 200);
-                    CaerulaArborMod.queueServerWork(15, () -> {
+                    CaerulaArbor.queueServerWork(15, () -> {
                         if (sourceentity.isAlive()) {
                             this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             if (world instanceof Level level) {

@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import com.susen36.caerulaarbor.network.send.RelicShowcaseButtonMessage;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -236,34 +236,34 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 328, 216, 328, 216);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 328, 216, 328, 216);
 
 		if (RelicUtils.hasLongevity(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/longevity.png"), this.leftPos + 172, this.topPos + 100, 0, 0, 16, 16, 16, 16);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/longevity.png"), this.leftPos + 172, this.topPos + 100, 0, 0, 16, 16, 16, 16);
 		}
 		if (RelicUtils.hasDurin(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/durin_diary.png"), this.leftPos + 268, this.topPos + 76, 0, 0, 16, 16, 16, 16);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/durin_diary.png"), this.leftPos + 268, this.topPos + 76, 0, 0, 16, 16, 16, 16);
 		}
 		if (RelicUtils.hasAllay(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/stonealley.png"), this.leftPos + 28, this.topPos + 100, 0, 0, 16, 16, 16, 16);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/stonealley.png"), this.leftPos + 28, this.topPos + 100, 0, 0, 16, 16, 16, 16);
 		}
 		if (RelicUtils.hasBatbed(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/itembatbed.png"), this.leftPos + 52, this.topPos + 100, 0, 0, 16, 16, 16, 16);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/itembatbed.png"), this.leftPos + 52, this.topPos + 100, 0, 0, 16, 16, 16, 16);
 		}
 		if (RelicUtils.hasOmnikey(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/omnikey.png"), this.leftPos + 124, this.topPos + 100, 0, 0, 16, 16, 16, 16);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/omnikey.png"), this.leftPos + 124, this.topPos + 100, 0, 0, 16, 16, 16, 16);
 		}
 		if (RelicUtils.hasScore(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/score.png"), this.leftPos + 76, this.topPos + 100, 0, 0, 16, 16, 16, 16);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/score.png"), this.leftPos + 76, this.topPos + 100, 0, 0, 16, 16, 16, 16);
 		}
 		if (RelicUtils.hasRescission(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/rescission.png"), this.leftPos + 100, this.topPos + 100, 0, 0, 16, 16, 16, 16);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/rescission.png"), this.leftPos + 100, this.topPos + 100, 0, 0, 16, 16, 16, 16);
 		}
 		if (RelicUtils.hasStare(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/guardianstare.png"), this.leftPos + 148, this.topPos + 100, 0, 0, 16, 16, 16, 16);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/guardianstare.png"), this.leftPos + 148, this.topPos + 100, 0, 0, 16, 16, 16, 16);
 		}
 		if (RelicUtils.hasHeart(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/caerulaheart.png"), this.leftPos + 76, this.topPos + 196, 0, 0, 16, 16, 16, 16);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/caerulaheart.png"), this.leftPos + 76, this.topPos + 196, 0, 0, 16, 16, 16, 16);
 		}
 		RenderSystem.disableBlend();
 	}
@@ -309,7 +309,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		}, this.font);
 		guistate.put("button:button_return", button_return);
 		this.addRenderableWidget(button_return);
-		imagebutton_relic_crown = new ImageButton(this.leftPos + 4, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_relic_crown"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_relic_crown_highlighted")), e -> {
+		imagebutton_relic_crown = new ImageButton(this.leftPos + 4, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_crown"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_crown_highlighted")), e -> {
 			if (RelicUtils.hasCrown(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(1, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 1, x, y, z);
@@ -323,7 +323,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_relic_crown", imagebutton_relic_crown);
 		this.addRenderableWidget(imagebutton_relic_crown);
-		imagebutton_relic_spear = new ImageButton(this.leftPos + 28, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_relic_spear"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_relic_spear_highlighted")), e -> {
+		imagebutton_relic_spear = new ImageButton(this.leftPos + 28, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_spear"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_spear_highlighted")), e -> {
 			if (RelicUtils.hasSpear(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(2, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 2, x, y, z);
@@ -337,7 +337,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_relic_spear", imagebutton_relic_spear);
 		this.addRenderableWidget(imagebutton_relic_spear);
-		imagebutton_kingsarmor = new ImageButton(this.leftPos + 100, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_kingsarmor"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_kingsarmor_highlighted")), e -> {
+		imagebutton_kingsarmor = new ImageButton(this.leftPos + 100, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kingsarmor"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kingsarmor_highlighted")), e -> {
 			if (RelicUtils.hasArmor(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(3, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 3, x, y, z);
@@ -351,7 +351,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_kingsarmor", imagebutton_kingsarmor);
 		this.addRenderableWidget(imagebutton_kingsarmor);
-		imagebutton_extension = new ImageButton(this.leftPos + 52, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_extension"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_extension_highlighted")), e -> {
+		imagebutton_extension = new ImageButton(this.leftPos + 52, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_extension"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_extension_highlighted")), e -> {
 			if (RelicUtils.hasExtension(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(4, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 4, x, y, z);
@@ -365,7 +365,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_extension", imagebutton_extension);
 		this.addRenderableWidget(imagebutton_extension);
-		imagebutton_kingcrystal = new ImageButton(this.leftPos + 76, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_kingcrystal"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_kingcrystal_highlighted")), e -> {
+		imagebutton_kingcrystal = new ImageButton(this.leftPos + 76, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kingcrystal"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kingcrystal_highlighted")), e -> {
 			if (RelicUtils.hasCrystal(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(5, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 5, x, y, z);
@@ -379,7 +379,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_kingcrystal", imagebutton_kingcrystal);
 		this.addRenderableWidget(imagebutton_kingcrystal);
-		imagebutton_archfiend_articraft = new ImageButton(this.leftPos + 124, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_archfiend_articraft"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_archfiend_articraft_highlighted")), e -> {
+		imagebutton_archfiend_articraft = new ImageButton(this.leftPos + 124, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archfiend_articraft"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archfiend_articraft_highlighted")), e -> {
 			if (RelicUtils.hasArtifact(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(6, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 6, x, y, z);
@@ -393,7 +393,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_archfiend_articraft", imagebutton_archfiend_articraft);
 		this.addRenderableWidget(imagebutton_archfiend_articraft);
-		imagebutton_archfi_flag = new ImageButton(this.leftPos + 148, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_archfi_flag"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_archfi_flag_highlighted")), e -> {
+		imagebutton_archfi_flag = new ImageButton(this.leftPos + 148, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archfi_flag"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archfi_flag_highlighted")), e -> {
 			if (RelicUtils.hasFlag(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(7, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 7, x, y, z);
@@ -407,7 +407,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_archfi_flag", imagebutton_archfi_flag);
 		this.addRenderableWidget(imagebutton_archfi_flag);
-		imagebutton_archifi_bed = new ImageButton(this.leftPos + 172, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_archifi_bed"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_archifi_bed_highlighted")), e -> {
+		imagebutton_archifi_bed = new ImageButton(this.leftPos + 172, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archifi_bed"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archifi_bed_highlighted")), e -> {
 			if (RelicUtils.hasBed(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(8, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 8, x, y, z);
@@ -421,7 +421,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_archifi_bed", imagebutton_archifi_bed);
 		this.addRenderableWidget(imagebutton_archifi_bed);
-		imagebutton_royalfate = new ImageButton(this.leftPos + 196, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_royalfate"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_royalfate_highlighted")), e -> {
+		imagebutton_royalfate = new ImageButton(this.leftPos + 196, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_royalfate"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_royalfate_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -431,7 +431,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_royalfate", imagebutton_royalfate);
 		this.addRenderableWidget(imagebutton_royalfate);
-		imagebutton_hand_spike = new ImageButton(this.leftPos + 4, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_spike"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_spike_highlighted")), e -> {
+		imagebutton_hand_spike = new ImageButton(this.leftPos + 4, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_spike"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_spike_highlighted")), e -> {
 			if (RelicUtils.hasThorns(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(10, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 10, x, y, z);
@@ -445,7 +445,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_hand_spike", imagebutton_hand_spike);
 		this.addRenderableWidget(imagebutton_hand_spike);
-		imagebutton_hand_reap = new ImageButton(this.leftPos + 28, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_reap"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_reap_highlighted")), e -> {
+		imagebutton_hand_reap = new ImageButton(this.leftPos + 28, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_reap"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_reap_highlighted")), e -> {
 			if (RelicUtils.hasStrangle(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(11, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 11, x, y, z);
@@ -459,7 +459,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_hand_reap", imagebutton_hand_reap);
 		this.addRenderableWidget(imagebutton_hand_reap);
-		imagebutton_hand_reap1 = new ImageButton(this.leftPos + 52, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_reap1"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_reap1_highlighted")), e -> {
+		imagebutton_hand_reap1 = new ImageButton(this.leftPos + 52, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_reap1"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_reap1_highlighted")), e -> {
 			if (RelicUtils.hasFertility(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(12, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 12, x, y, z);
@@ -473,7 +473,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_hand_reap1", imagebutton_hand_reap1);
 		this.addRenderableWidget(imagebutton_hand_reap1);
-		imagebutton_hand_smash = new ImageButton(this.leftPos + 100, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_smash"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_smash_highlighted")), e -> {
+		imagebutton_hand_smash = new ImageButton(this.leftPos + 100, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_smash"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_smash_highlighted")), e -> {
 			if (RelicUtils.hasBarren(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(13, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 13, x, y, z);
@@ -487,7 +487,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_hand_smash", imagebutton_hand_smash);
 		this.addRenderableWidget(imagebutton_hand_smash);
-		imagebutton_hand_swipe = new ImageButton(this.leftPos + 124, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_swipe"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_swipe_highlighted")), e -> {
+		imagebutton_hand_swipe = new ImageButton(this.leftPos + 124, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_swipe"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_swipe_highlighted")), e -> {
 			if (RelicUtils.hasSwipe(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(14, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 14, x, y, z);
@@ -501,7 +501,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_hand_swipe", imagebutton_hand_swipe);
 		this.addRenderableWidget(imagebutton_hand_swipe);
-		imagebutton_hand_curve = new ImageButton(this.leftPos + 148, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_curve"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_curve_highlighted")), e -> {
+		imagebutton_hand_curve = new ImageButton(this.leftPos + 148, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_curve"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_curve_highlighted")), e -> {
 			if (RelicUtils.getEngrave(entity) > 0) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(15, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 15, x, y, z);
@@ -515,7 +515,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_hand_curve", imagebutton_hand_curve);
 		this.addRenderableWidget(imagebutton_hand_curve);
-		imagebutton_hand_firework = new ImageButton(this.leftPos + 172, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_firework"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_firework_highlighted")), e -> {
+		imagebutton_hand_firework = new ImageButton(this.leftPos + 172, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_firework"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_firework_highlighted")), e -> {
 			if (RelicUtils.hasFirework(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(16, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 16, x, y, z);
@@ -529,7 +529,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_hand_firework", imagebutton_hand_firework);
 		this.addRenderableWidget(imagebutton_hand_firework);
-		imagebutton_crimson_contarct_0 = new ImageButton(this.leftPos + 4, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_crimson_contarct_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_crimson_contarct_0_highlighted")), e -> {
+		imagebutton_crimson_contarct_0 = new ImageButton(this.leftPos + 4, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_crimson_contarct_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_crimson_contarct_0_highlighted")), e -> {
 			if (RelicUtils.hasTreaty(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(17, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 17, x, y, z);
@@ -543,7 +543,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_crimson_contarct_0", imagebutton_crimson_contarct_0);
 		this.addRenderableWidget(imagebutton_crimson_contarct_0);
-		imagebutton_survivor_contarct = new ImageButton(this.leftPos + 28, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_survivor_contarct"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_survivor_contarct_highlighted")), e -> {
+		imagebutton_survivor_contarct = new ImageButton(this.leftPos + 28, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_survivor_contarct"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_survivor_contarct_highlighted")), e -> {
 			if (PlayerStateUtils.hasSurvivorCont(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(18, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 18, x, y, z);
@@ -557,7 +557,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_survivor_contarct", imagebutton_survivor_contarct);
 		this.addRenderableWidget(imagebutton_survivor_contarct);
-		imagebutton_cursed_emelight_0 = new ImageButton(this.leftPos + 4, this.topPos + 196, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cursed_emelight_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cursed_emelight_0_highlighted")), e -> {
+		imagebutton_cursed_emelight_0 = new ImageButton(this.leftPos + 4, this.topPos + 196, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_emelight_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_emelight_0_highlighted")), e -> {
 			if (RelicUtils.hasEmelight(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(19, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 19, x, y, z);
@@ -571,7 +571,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_cursed_emelight_0", imagebutton_cursed_emelight_0);
 		this.addRenderableWidget(imagebutton_cursed_emelight_0);
-		imagebutton_cursed_glowbody_0 = new ImageButton(this.leftPos + 28, this.topPos + 196, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cursed_glowbody_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cursed_glowbody_0_highlighted")), e -> {
+		imagebutton_cursed_glowbody_0 = new ImageButton(this.leftPos + 28, this.topPos + 196, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_glowbody_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_glowbody_0_highlighted")), e -> {
 			if (RelicUtils.hasGlowbody(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(20, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 20, x, y, z);
@@ -585,7 +585,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_cursed_glowbody_0", imagebutton_cursed_glowbody_0);
 		this.addRenderableWidget(imagebutton_cursed_glowbody_0);
-		imagebutton_cursed_research_0 = new ImageButton(this.leftPos + 52, this.topPos + 196, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cursed_research_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cursed_research_0_highlighted")), e -> {
+		imagebutton_cursed_research_0 = new ImageButton(this.leftPos + 52, this.topPos + 196, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_research_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_research_0_highlighted")), e -> {
 			if (RelicUtils.hasResearch(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(21, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 21, x, y, z);
@@ -599,7 +599,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_cursed_research_0", imagebutton_cursed_research_0);
 		this.addRenderableWidget(imagebutton_cursed_research_0);
-		imagebutton_beef_can = new ImageButton(this.leftPos + 4, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_beef_can"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_beef_can_highlighted")), e -> {
+		imagebutton_beef_can = new ImageButton(this.leftPos + 4, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_beef_can"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_beef_can_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -609,7 +609,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_beef_can", imagebutton_beef_can);
 		this.addRenderableWidget(imagebutton_beef_can);
-		imagebutton_bowl_seagrass = new ImageButton(this.leftPos + 28, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_bowl_seagrass"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_bowl_seagrass_highlighted")), e -> {
+		imagebutton_bowl_seagrass = new ImageButton(this.leftPos + 28, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_bowl_seagrass"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_bowl_seagrass_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -619,7 +619,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_bowl_seagrass", imagebutton_bowl_seagrass);
 		this.addRenderableWidget(imagebutton_bowl_seagrass);
-		imagebutton_orangestorm = new ImageButton(this.leftPos + 52, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_orangestorm"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_orangestorm_highlighted")), e -> {
+		imagebutton_orangestorm = new ImageButton(this.leftPos + 52, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_orangestorm"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_orangestorm_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -629,7 +629,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_orangestorm", imagebutton_orangestorm);
 		this.addRenderableWidget(imagebutton_orangestorm);
-		imagebutton_coffee_candy = new ImageButton(this.leftPos + 76, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_coffee_candy"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_coffee_candy_highlighted")), e -> {
+		imagebutton_coffee_candy = new ImageButton(this.leftPos + 76, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_coffee_candy"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_coffee_candy_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -639,7 +639,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_coffee_candy", imagebutton_coffee_candy);
 		this.addRenderableWidget(imagebutton_coffee_candy);
-		imagebutton_cherrycan = new ImageButton(this.leftPos + 124, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cherrycan"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_cherrycan_highlighted")), e -> {
+		imagebutton_cherrycan = new ImageButton(this.leftPos + 124, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cherrycan"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cherrycan_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -649,7 +649,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_cherrycan", imagebutton_cherrycan);
 		this.addRenderableWidget(imagebutton_cherrycan);
-		imagebutton_rainbow_candy = new ImageButton(this.leftPos + 100, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_rainbow_candy"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_rainbow_candy_highlighted")), e -> {
+		imagebutton_rainbow_candy = new ImageButton(this.leftPos + 100, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_rainbow_candy"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_rainbow_candy_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -659,7 +659,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_rainbow_candy", imagebutton_rainbow_candy);
 		this.addRenderableWidget(imagebutton_rainbow_candy);
-		imagebutton_boxcoffee = new ImageButton(this.leftPos + 148, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_boxcoffee"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_boxcoffee_highlighted")), e -> {
+		imagebutton_boxcoffee = new ImageButton(this.leftPos + 148, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_boxcoffee"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_boxcoffee_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -669,7 +669,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_boxcoffee", imagebutton_boxcoffee);
 		this.addRenderableWidget(imagebutton_boxcoffee);
-		imagebutton_musicboxsmall = new ImageButton(this.leftPos + 172, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_musicboxsmall"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_musicboxsmall_highlighted")), e -> {
+		imagebutton_musicboxsmall = new ImageButton(this.leftPos + 172, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_musicboxsmall"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_musicboxsmall_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -679,7 +679,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_musicboxsmall", imagebutton_musicboxsmall);
 		this.addRenderableWidget(imagebutton_musicboxsmall);
-		imagebutton_originium_iris = new ImageButton(this.leftPos + 220, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_originium_iris"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_originium_iris_highlighted")), e -> {
+		imagebutton_originium_iris = new ImageButton(this.leftPos + 220, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_originium_iris"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_originium_iris_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -689,7 +689,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_originium_iris", imagebutton_originium_iris);
 		this.addRenderableWidget(imagebutton_originium_iris);
-		imagebutton_flute = new ImageButton(this.leftPos + 196, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_flute"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_flute_highlighted")), e -> {
+		imagebutton_flute = new ImageButton(this.leftPos + 196, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_flute"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_flute_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -699,7 +699,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_flute", imagebutton_flute);
 		this.addRenderableWidget(imagebutton_flute);
-		imagebutton_voyageofsmall = new ImageButton(this.leftPos + 244, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_voyageofsmall"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_voyageofsmall_highlighted")), e -> {
+		imagebutton_voyageofsmall = new ImageButton(this.leftPos + 244, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_voyageofsmall"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_voyageofsmall_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -709,7 +709,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_voyageofsmall", imagebutton_voyageofsmall);
 		this.addRenderableWidget(imagebutton_voyageofsmall);
-		imagebutton_location_name = new ImageButton(this.leftPos + 292, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_location_name"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_location_name_highlighted")), e -> {
+		imagebutton_location_name = new ImageButton(this.leftPos + 292, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_location_name"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_location_name_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -719,7 +719,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_location_name", imagebutton_location_name);
 		this.addRenderableWidget(imagebutton_location_name);
-		imagebutton_kettle = new ImageButton(this.leftPos + 4, this.topPos + 100, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_kettle"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_kettle_highlighted")), e -> {
+		imagebutton_kettle = new ImageButton(this.leftPos + 4, this.topPos + 100, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kettle"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kettle_highlighted")), e -> {
 		}) {
 			@Override
 			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
@@ -729,7 +729,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_kettle", imagebutton_kettle);
 		this.addRenderableWidget(imagebutton_kettle);
-		imagebutton_hand_sword = new ImageButton(this.leftPos + 196, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_sword"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_sword_highlighted")), e -> {
+		imagebutton_hand_sword = new ImageButton(this.leftPos + 196, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_sword"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_sword_highlighted")), e -> {
 			if (RelicUtils.hasSword(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(35, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 35, x, y, z);
@@ -743,7 +743,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_hand_sword", imagebutton_hand_sword);
 		this.addRenderableWidget(imagebutton_hand_sword);
-		imagebutton_chitinknife = new ImageButton(this.leftPos + 52, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_chitinknife"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_chitinknife_highlighted")), e -> {
+		imagebutton_chitinknife = new ImageButton(this.leftPos + 52, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_chitinknife"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_chitinknife_highlighted")), e -> {
 			if (RelicUtils.hasChitin(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(36, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 36, x, y, z);
@@ -757,7 +757,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_chitinknife", imagebutton_chitinknife);
 		this.addRenderableWidget(imagebutton_chitinknife);
-		imagebutton_hand_speed = new ImageButton(this.leftPos + 76, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_speed"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_hand_speed_highlighted")), e -> {
+		imagebutton_hand_speed = new ImageButton(this.leftPos + 76, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_speed"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_speed_highlighted")), e -> {
 			if (RelicUtils.hasSpeed(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(37, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 37, x, y, z);
@@ -771,7 +771,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_hand_speed", imagebutton_hand_speed);
 		this.addRenderableWidget(imagebutton_hand_speed);
-		imagebutton_smelly_hemostatic = new ImageButton(this.leftPos + 76, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_smelly_hemostatic"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_smelly_hemostatic_highlighted")), e -> {
+		imagebutton_smelly_hemostatic = new ImageButton(this.leftPos + 76, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_smelly_hemostatic"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_smelly_hemostatic_highlighted")), e -> {
 			if (RelicUtils.hasHemost(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(38, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 38, x, y, z);
@@ -785,7 +785,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		};
 		guistate.put("button:imagebutton_smelly_hemostatic", imagebutton_smelly_hemostatic);
 		this.addRenderableWidget(imagebutton_smelly_hemostatic);
-		imagebutton_unripe_yearning = new ImageButton(this.leftPos + 100, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_unripe_yearning"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_unripe_yearning_highlighted")), e -> {
+		imagebutton_unripe_yearning = new ImageButton(this.leftPos + 100, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_unripe_yearning"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_unripe_yearning_highlighted")), e -> {
 			if (RelicUtils.hasYearning(entity)) {
 				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(39, x, y, z));
 				RelicShowcaseButtonMessage.handleButtonAction(entity, 39, x, y, z);

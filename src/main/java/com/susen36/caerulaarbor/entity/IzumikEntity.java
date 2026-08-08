@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
@@ -189,7 +189,7 @@ public class IzumikEntity extends SeaMonster {
         double targetY = target.getY();
         double targetZ = target.getZ();
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(7, () -> {
+            CaerulaArbor.queueServerWork(7, () -> {
                 this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                         CASounds.IZUMIK_ATTACK.get(), SoundSource.HOSTILE, 1,
                         (float) Mth.nextDouble(RandomSource.create(), 0.85, 0.15));
@@ -397,7 +397,7 @@ public class IzumikEntity extends SeaMonster {
                             this.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
                             if (world instanceof ServerLevel level)
                                 level.sendParticles(ParticleTypes.CLOUD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.6, 0.6, 0.6, 0.1);
-                            CaerulaArborMod.LOGGER.info("Izumik absorb offspr and grow to " + Math.round(grow + 1));
+                            CaerulaArbor.LOGGER.info("Izumik absorb offspr and grow to " + Math.round(grow + 1));
                         }
                     }
                 } else {
@@ -424,7 +424,7 @@ public class IzumikEntity extends SeaMonster {
                             this.setAnimation("animation.izumik.grow");
                         }
                     }
-                    CaerulaArborMod.queueServerWork(25, () -> {
+                    CaerulaArbor.queueServerWork(25, () -> {
                         double rate;
                         double range;
                         if (world instanceof Level level) {
@@ -442,7 +442,7 @@ public class IzumikEntity extends SeaMonster {
                         }
                         {
                             final Vec3 center = new Vec3(x, y, z);
-                            TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+                            TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
                             List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(range),
                                     e -> (e instanceof Mob || e instanceof Player)
                                             && !(e.getType().is(oceanOffspringTag) && e != this.getTarget()));
@@ -520,7 +520,7 @@ public class IzumikEntity extends SeaMonster {
                             if (this instanceof IzumikEntity) {
                                 this.setAnimation("animation.izumik.skill");
                             }
-                            CaerulaArborMod.queueServerWork(35, () -> {
+                            CaerulaArbor.queueServerWork(35, () -> {
                                 this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.03));
                                 if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
                                     this.getAttribute(CAAttributes.GENERAL_DEFENSE)
@@ -542,7 +542,7 @@ public class IzumikEntity extends SeaMonster {
                                     void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                         IzumikEntity.this.performShockAttack((timedloopiterator + 1) * 2);
                                         final int tick2 = ticks;
-                                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                                        CaerulaArbor.queueServerWork(tick2, () -> {
                                             if (timedlooptotal > timedloopiterator + 1) {
                                                 timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                             }
@@ -613,7 +613,7 @@ public class IzumikEntity extends SeaMonster {
     private void awardBoilingSeaAdvancement() {
         for (Entity playerEntity : new ArrayList<>(this.level().players())) {
             if (this.level().dimension() == playerEntity.level().dimension() && playerEntity instanceof ServerPlayer serverPlayer) {
-                AdvancementHolder advancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "boiling_sea"));
+                AdvancementHolder advancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "boiling_sea"));
                 AdvancementProgress advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
                 if (!advancementProgress.isDone()) {
                     for (String criteria : advancementProgress.getRemainingCriteria()) {
@@ -641,7 +641,7 @@ public class IzumikEntity extends SeaMonster {
         }
 
         final Vec3 center = new Vec3(x, y, z);
-        TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+        TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
         List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(r),
                 e -> (e instanceof Mob || e instanceof Player)
                         && !(e.getType().is(oceanOffspringTag) && e != this.getTarget()));
@@ -767,7 +767,7 @@ public class IzumikEntity extends SeaMonster {
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (!world.isClientSide() && world.getServer() != null) {
                     BlockPos bpLootTblWorld = BlockPos.containing(x, y, z);
-                    for (ItemStack itemstackiterator : world.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_izumik")))
+                    for (ItemStack itemstackiterator : world.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gameplay/relic_izumik")))
                             .getRandomItems(new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(bpLootTblWorld)).withParameter(LootContextParams.BLOCK_STATE, world.getBlockState(bpLootTblWorld))
                                     .withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(bpLootTblWorld)).create(LootContextParamSets.EMPTY))) {
                         if (world instanceof ServerLevel level) {

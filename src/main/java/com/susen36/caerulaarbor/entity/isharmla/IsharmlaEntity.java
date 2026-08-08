@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity.isharmla;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.ServerGeoAnimator;
 import com.susen36.caerulaarbor.client.model.entity.IsharmlaModel;
 import com.susen36.caerulaarbor.entity.GladiiaWhirlEntity;
@@ -195,7 +195,7 @@ public class IsharmlaEntity extends SeaMonster {
 		if (!this.level().isClientSide()) {
 			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()),
 					CASounds.ISHARMLA_ATTACK_PRE.get(), SoundSource.HOSTILE, 2.5F, 1);
-			CaerulaArborMod.queueServerWork(13, () -> {
+			CaerulaArbor.queueServerWork(13, () -> {
 				if (this.isAlive() && this.level() instanceof ServerLevel serverLevel) {
 					double sourceX = this.getX();
 					double sourceY = this.getY();
@@ -205,7 +205,7 @@ public class IsharmlaEntity extends SeaMonster {
 					}
 				}
 			});
-			CaerulaArborMod.queueServerWork(15, () -> {
+			CaerulaArbor.queueServerWork(15, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 32) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							CASounds.ISHARMLA_ATTACK_LAUNCH.get(), SoundSource.HOSTILE, 2.5F, 1);
@@ -216,7 +216,7 @@ public class IsharmlaEntity extends SeaMonster {
 							break;
 						}
 						final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-						TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+						TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
 						List<LivingEntity> foundEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
 								entity -> entity.isAlive()
 										&& entity != this
@@ -232,7 +232,7 @@ public class IsharmlaEntity extends SeaMonster {
 							if (this.distanceToSqr(entityIterator) <= 576) {
 								count++;
 								int delayTicks = 2 * count;
-								CaerulaArborMod.queueServerWork(delayTicks, () -> {
+								CaerulaArbor.queueServerWork(delayTicks, () -> {
 									isharmlaDroppedAttack(this.level(), entityIterator.getX(), entityIterator.getY(), entityIterator.getZ(), Mth.nextDouble(RandomSource.create(), 1.5, 3), 1);
 								});
 							}
@@ -251,7 +251,7 @@ public class IsharmlaEntity extends SeaMonster {
 		}
 		for (int index = 0; index < 20; index++) {
 			final double particleIndex = index;
-			CaerulaArborMod.queueServerWork(index, () -> {
+			CaerulaArbor.queueServerWork(index, () -> {
 				level.sendParticles(CAParticles.MOIST_BOOM.get(), x, y + 10 - particleIndex * 0.5, z, 1, 0, 0, 0, 0);
 				double angle = Math.toRadians(particleIndex * 9);
 				level.sendParticles(ParticleTypes.END_ROD, x + radius * Math.cos(angle), y, z + radius * Math.sin(angle), 1, 0, 0, 0, 0);
@@ -259,7 +259,7 @@ public class IsharmlaEntity extends SeaMonster {
 				level.sendParticles(ParticleTypes.END_ROD, x + radius * Math.cos(oppositeAngle), y + 0.125, z + radius * Math.sin(oppositeAngle), 1, 0, 0, 0, 0);
 			});
 		}
-		CaerulaArborMod.queueServerWork(20, () -> {
+		CaerulaArbor.queueServerWork(20, () -> {
 			Entity target = this.getTarget();
 			double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
 			level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_ATTACK_HIT.get(), SoundSource.HOSTILE, 2,
@@ -324,7 +324,7 @@ public class IsharmlaEntity extends SeaMonster {
 		for (Entity entityiterator : new ArrayList<>(world.players())) {
 			if ((level().dimension()) == (entityiterator.level().dimension())) {
 				if (entityiterator instanceof ServerPlayer player) {
-					AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "we_many_orienting"));
+					AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "we_many_orienting"));
 					AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 					if (!ap.isDone()) {
 						for (String criteria : ap.getRemainingCriteria())
@@ -427,8 +427,8 @@ public class IsharmlaEntity extends SeaMonster {
                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.15;
 				{
 					final Vec3 center = new Vec3(x, y, z);
-					TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
-					TagKey<EntityType<?>> bossOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring"));
+					TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
+					TagKey<EntityType<?>> bossOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring"));
 					List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32),
 							e -> e.isAlive()
 									&& e != this
@@ -504,7 +504,7 @@ public class IsharmlaEntity extends SeaMonster {
 							if ((Entity) this instanceof IsharmlaEntity datEntSetI)
 								datEntSetI.getEntityData().set(DATA_DURATION, 26);
 							dura = 26;
-							CaerulaArborMod.queueServerWork(10, () -> {
+							CaerulaArbor.queueServerWork(10, () -> {
 								this.performRangedAttack(32, 2.5);
 							});
 						}
@@ -525,7 +525,7 @@ public class IsharmlaEntity extends SeaMonster {
 								datEntSetI.getEntityData().set(DATA_DURATION, 40);
 							if (!this.level().isClientSide())
 								this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 30, 9, false, false));
-							CaerulaArborMod.queueServerWork(15, () -> {
+							CaerulaArbor.queueServerWork(15, () -> {
 								Entity enemy1;
 								double d;
 								enemy1 =  this.getTarget();
@@ -558,7 +558,7 @@ public class IsharmlaEntity extends SeaMonster {
 					if (this instanceof IsharmlaEntity datEntSetI)
 						datEntSetI.getEntityData().set(DATA_DURATION, 30);
 					dura = 30;
-					CaerulaArborMod.queueServerWork(15, () -> {
+					CaerulaArbor.queueServerWork(15, () -> {
 						double atk;
 						double count = 0;
 						atk = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
@@ -567,7 +567,7 @@ public class IsharmlaEntity extends SeaMonster {
 						}
 						{
 							final Vec3 center = new Vec3(x, y, z);
-							TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+							TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
 							List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8),
 									e -> e.getType().is(oceanOffspringTag) && e.getHealth() < e.getMaxHealth())
 									.stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
@@ -790,7 +790,7 @@ public class IsharmlaEntity extends SeaMonster {
 			if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 				if (!world.isClientSide() && world.getServer() != null) {
 					BlockPos bpLootTblWorld = BlockPos.containing(x, y, z);
-					for (ItemStack itemstackiterator : world.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_isharmla")))
+					for (ItemStack itemstackiterator : world.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gameplay/relic_isharmla")))
 							.getRandomItems(new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(bpLootTblWorld)).withParameter(LootContextParams.BLOCK_STATE, world.getBlockState(bpLootTblWorld))
 									.withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(bpLootTblWorld)).create(LootContextParamSets.EMPTY))) {
 						if (world instanceof ServerLevel level) {
@@ -903,7 +903,7 @@ public class IsharmlaEntity extends SeaMonster {
 		}
 
 		final Vec3 center = new Vec3(x, y, z);
-		TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+		TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
 		List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius),
 				e -> !(e.getType().is(oceanOffspringTag) && e != target));
 
@@ -992,7 +992,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 	private void transformParticleLoop(LevelAccessor world, double x, double y, double z, int startIter, int totalIter, int ticks, boolean expanding) {
 		final int currentIter = startIter;
-		CaerulaArborMod.queueServerWork(ticks, () -> {
+		CaerulaArbor.queueServerWork(ticks, () -> {
 			if (totalIter > currentIter + 1) {
 				for (int index0 = 0; index0 < 120; index0++) {
 					int radius = expanding ? currentIter : (10 - currentIter);

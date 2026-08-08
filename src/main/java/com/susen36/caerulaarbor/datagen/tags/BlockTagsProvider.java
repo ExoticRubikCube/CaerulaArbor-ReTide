@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen.tags;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -59,7 +59,7 @@ public class BlockTagsProvider extends TagsProvider.RegistryTagsProvider<Block> 
      * @return 方块标签 key
      */
     private static TagKey<Block> caBlockTag(String path) {
-        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
+        return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, path));
     }
 
     /**

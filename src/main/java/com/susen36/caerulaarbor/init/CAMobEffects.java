@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.potion.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
@@ -9,7 +9,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 @SuppressWarnings("unused")
 public class CAMobEffects {
-    public static final DeferredRegister<MobEffect> REGISTRY = DeferredRegister.create(BuiltInRegistries.MOB_EFFECT, CaerulaArborMod.MODID);
+    public static final DeferredRegister<MobEffect> REGISTRY = DeferredRegister.create(BuiltInRegistries.MOB_EFFECT, CaerulaArbor.MODID);
 
     public static final DeferredHolder<MobEffect, ? extends MobEffect> HAEMOPHILIA = REGISTRY.register("haemophilia", HaemophiliaMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> SANITY_IMMUE = REGISTRY.register("sanity_immue", SanityImmueMobEffect::new);

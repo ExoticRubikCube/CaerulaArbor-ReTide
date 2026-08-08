@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAEnchantments;
@@ -111,7 +111,7 @@ public class DisconcentrationEventHandler {
             return;
         }
 
-        if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+        if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
             return;
         }
 
@@ -154,7 +154,7 @@ public class DisconcentrationEventHandler {
         }
 
         if (player instanceof ServerPlayer serverPlayer) {
-            AdvancementHolder advancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_we_many"));
+            AdvancementHolder advancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "to_we_many"));
             AdvancementProgress advancementProgress = null;
             if (advancement != null) {
                 advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);

@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.client.model.entity.layer;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.helper.LittleHelperEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.entity.helper.LittleHelperEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class LittleHelperLayer extends GeoRenderLayer<LittleHelperEntity> {
-	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/little_helper_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/little_helper_lit.png");
 
 	public LittleHelperLayer(GeoRenderer<LittleHelperEntity> entityRenderer) {
 		super(entityRenderer);

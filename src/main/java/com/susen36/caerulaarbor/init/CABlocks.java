@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.init;
 
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.block.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
@@ -9,7 +9,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class CABlocks {
-    public static final DeferredRegister<Block> REGISTRY = DeferredRegister.create(BuiltInRegistries.BLOCK, CaerulaArborMod.MODID);
+    public static final DeferredRegister<Block> REGISTRY = DeferredRegister.create(BuiltInRegistries.BLOCK, CaerulaArbor.MODID);
 
     public static final DeferredHolder<Block, ? extends Block> EMERGENCY_LIGHT = REGISTRY.register("emergency_light", EmergencyLightBlock::new);
     public static final DeferredHolder<Block, ? extends Block> KINGS_ARMOR = REGISTRY.register("kings_armor", KingsArmorBlock::new);

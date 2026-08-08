@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.init;
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.block.item.*;
 import com.susen36.caerulaarbor.item.*;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -39,7 +39,7 @@ import java.util.function.Supplier;
 @SuppressWarnings({"unused", "SameParameterValue"})
 @EventBusSubscriber(value = Dist.CLIENT)
 public class CAItems {
-    public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(BuiltInRegistries.ITEM, CaerulaArborMod.MODID);
+    public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(BuiltInRegistries.ITEM, CaerulaArbor.MODID);
     public static final DeferredHolder<Item, ? extends Item> CAERULA_RECORDER = REGISTRY.register("caerula_recorder", CaerulaRecorderItem::new);
     public static final DeferredHolder<Item, ? extends Item> RELIC_CURSE_EMELIGHT = REGISTRY.register("relic_curse_emelight", RelicCurseEMELIGHTItem::new);
     public static final DeferredHolder<Item, ? extends Item> EMERGENCY_LIGHT = block(CABlocks.EMERGENCY_LIGHT);
@@ -674,7 +674,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> CHEST_FISH_FOOD = block(CABlocks.CHEST_FISH_FOOD);
 
     private static DeferredHolder<Item, ? extends Item> tooltipItem(String name, Supplier<Item> factory, int tooltipCount) {
-        TOOLTIP_COUNTS.put(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, name), tooltipCount);
+        TOOLTIP_COUNTS.put(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, name), tooltipCount);
         return REGISTRY.register(name, factory);
     }
 
@@ -689,23 +689,23 @@ public class CAItems {
     @SubscribeEvent
     public static void clientLoad(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            ItemProperties.register(MUSIC_BOX_FIXED.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "music_box_fixed_playing"),
+            ItemProperties.register(MUSIC_BOX_FIXED.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "music_box_fixed_playing"),
                     (itemStackToRender, clientWorld, living, itemEntityId) -> living instanceof Player player
                             && player.getCooldowns().isOnCooldown(itemStackToRender.getItem()) ? 1.0F : 0.0F);
             ItemProperties.register(CHITIN_SHIELD.get(), ResourceLocation.parse("blocking"), ItemProperties.getProperty(new ItemStack(Items.SHIELD), ResourceLocation.parse("blocking")));
             ItemProperties.register(COMPLEX_CHITIN_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(new ItemStack(Items.SHIELD), ResourceLocation.parse("blocking"))));
             ItemProperties.register(TIDELINKED_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(new ItemStack(Items.SHIELD), ResourceLocation.parse("blocking"))));
             ItemProperties.register(TRAILRITE_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(new ItemStack(Items.SHIELD), ResourceLocation.parse("blocking"))));
-            ItemProperties.register(CHITIN_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "chitin_bow_pulling"),
+            ItemProperties.register(CHITIN_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "chitin_bow_pulling"),
                     (itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
                             && living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
-            ItemProperties.register(COMPLEX_CHITIN_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "complex_chitin_bow_pulling"),
+            ItemProperties.register(COMPLEX_CHITIN_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "complex_chitin_bow_pulling"),
                     (itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
                             && living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
-            ItemProperties.register(TRAILRITE_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trailrite_bow_pulling"),
+            ItemProperties.register(TRAILRITE_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trailrite_bow_pulling"),
                     (itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
                             && living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
-            ItemProperties.register(PATH_SHAPER_SPAWNEGG.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "path_shaper_lingering"),
+            ItemProperties.register(PATH_SHAPER_SPAWNEGG.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "path_shaper_lingering"),
                     (itemStackToRender, clientWorld, living, itemEntityId) -> itemStackToRender.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("lingering") ? 1.0F : 0.0F);
         });
     }

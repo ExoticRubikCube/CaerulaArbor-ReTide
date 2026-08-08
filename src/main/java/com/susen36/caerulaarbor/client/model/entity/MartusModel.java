@@ -1,29 +1,29 @@
 package com.susen36.caerulaarbor.client.model.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.MartusEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class MartusModel extends GeoModel<MartusEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(MartusEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/martus.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "animations/martus.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(MartusEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/martus.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "geo/martus.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(MartusEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/martus.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/martus.png");
 	}
 
 	@Override

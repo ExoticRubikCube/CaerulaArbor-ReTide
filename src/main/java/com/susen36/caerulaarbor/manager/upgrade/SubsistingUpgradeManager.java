@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.manager.upgrade;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
@@ -29,7 +29,7 @@ public class SubsistingUpgradeManager {
 			if (MapVariables.get(world).evo_point_subsisting >= Math.pow(stra + 1, 3) * CAConfigs.COEFFICIENT.get()) {
 				for (Player entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer player) {
-						AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_experience_evolution"));
+						AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "to_experience_evolution"));
 						if (adv == null) continue;
 						AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 						if (!ap.isDone()) {
@@ -75,7 +75,7 @@ public class SubsistingUpgradeManager {
 		} else {
 			for (Player entityiterator : new ArrayList<>(world.players())) {
 				if (entityiterator instanceof ServerPlayer player) {
-					AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_terminate_evolution"));
+					AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "to_terminate_evolution"));
                     AdvancementProgress ap;
                     if (adv != null) {
 						ap = player.getAdvancements().getOrStartProgress(adv);
@@ -88,5 +88,21 @@ public class SubsistingUpgradeManager {
 			}
 			MapVariablesHandler.setEvoPoint(world, StrategyType.SUBSISTING, 1);
 		}
+	}
+
+	public static double getStraSubsis(LevelAccessor world) {
+		return MapVariables.get(world).strategy_subsisting;
+	}
+
+	public static String getDescrSubsis(LevelAccessor world) {
+		return Component.translatable("item.caerula_arbor.sample_subsisting.description_" + Math.round(MapVariables.get(world).strategy_subsisting)).getString();
+	}
+
+	public static String getCmdFeedback(long lvl) {
+		return Component.translatable("command.evolution.subsisting").getString().replace("<num>", "" + lvl);
+	}
+
+	public static String getDisplayName() {
+		return Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_subsisting").getString();
 	}
 }

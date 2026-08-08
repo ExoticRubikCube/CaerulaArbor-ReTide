@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.network.send;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.menu.InfoStrategyAllMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class EvoTreeButtonMessage implements CustomPacketPayload {
-	public static final Type<EvoTreeButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "evo_tree_button"));
+	public static final Type<EvoTreeButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "evo_tree_button"));
 	public static final StreamCodec<FriendlyByteBuf, EvoTreeButtonMessage> STREAM_CODEC = StreamCodec.of(
 			(buf, msg) -> EvoTreeButtonMessage.buffer(msg, buf),
 			EvoTreeButtonMessage::new

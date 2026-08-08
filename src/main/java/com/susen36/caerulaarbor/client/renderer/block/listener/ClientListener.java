@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.client.renderer.block.listener;
 
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.client.model.entity.ModelSealeatherChitinArmor;
 import com.susen36.caerulaarbor.client.renderer.block.*;
 import com.susen36.caerulaarbor.client.renderer.entity.ChitinComplexArmorRenderer;
@@ -37,7 +37,7 @@ import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import java.util.Collections;
 import java.util.Map;
 
-@EventBusSubscriber(modid = CaerulaArborMod.MODID)
+@EventBusSubscriber(modid = CaerulaArbor.MODID)
 public class ClientListener {
 	private static final IClientMobEffectExtensions HIDDEN_EFFECT_EXTENSIONS = new IClientMobEffectExtensions() {
 		@Override

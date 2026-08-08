@@ -6,9 +6,10 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.ReaperFishEntity;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.manager.upgrade.MigrationUpgradeManager;
+import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.menu.InfoStrategyMigrationMenu;
 import com.susen36.caerulaarbor.network.send.InfoStrategyReturnButtonMessage;
-import com.susen36.caerulaarbor.util.StrategyUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.PlainTextButton;
@@ -72,7 +73,7 @@ public class InfoStrategyMigrationScreen extends AbstractContainerScreen<InfoStr
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/sidebar.png"), this.leftPos + -3, this.topPos + -3, 0, 0, 262, 174, 262, 174);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/bg_migration.png"), this.leftPos, this.topPos, Mth.clamp((int) StrategyUtils.getStraMigration(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/bg_migration.png"), this.leftPos, this.topPos, Mth.clamp((int) MigrationUpgradeManager.getStraMigration(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
 
         double result = 18;
         double rate;
@@ -102,21 +103,37 @@ public class InfoStrategyMigrationScreen extends AbstractContainerScreen<InfoStr
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_migration.label_strategy_migration"), 1, -12, -16717080, false);
 		guiGraphics.drawString(this.font,
 
-				StrategyUtils.getDescrMigra(world), 1, 100, -1, false);
+				MigrationUpgradeManager.getDescrMigra(world), 1, 100, -1, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_migration.label_nothings_eternal_so_migrating"), 1, 4, -1, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_migration.label_proceed"), 1, 172, -1, false);
-		if (StrategyUtils.isSilence(world))
+		if (SilenceUpgradeManager.isSilence(world))
 			guiGraphics.drawString(this.font,
 
-					StrategyUtils.getSilenceMigration(world), 1, 116, -3407872, false);
-		if (MapVariables.get(world).if_sublimation)
+					SilenceUpgradeManager.getSilenceMigration(world), 1, 116, -3407872, false);
+		if (MapVariables.get(world).if_sublimation) {
+            String result = "";
+            double lvl = Math.min(MapVariables.get(world).strategy_migration, MapVariables.get(world).strategy_sublimation);
+            if (!(lvl < 1)) {
+                result = Component.translatable("evolution.caerula_aerbor.sublimation.migration." + (int) lvl).getString();
+            }
+            guiGraphics.drawString(this.font,
+
+                    result, 1, 132, -26113, false);
+        }
+		if (MapVariables.get(world).if_sublimation) {
+			String result = "";
+			double lvl = Math.min(MapVariables.get(world).strategy_migration, MapVariables.get(world).strategy_sublimation);
+			if (!(lvl < 1)) {
+				String key = "evolution.caerula_aerbor.sublimation.migration." + (int) lvl + "_1";
+				String desc = Component.translatable(key).getString();
+				if (!desc.equals(key)) {
+					result = desc;
+				}
+			}
 			guiGraphics.drawString(this.font,
 
-					StrategyUtils.getSublimationMig(world), 1, 132, -26113, false);
-		if (MapVariables.get(world).if_sublimation)
-			guiGraphics.drawString(this.font,
-
-					StrategyUtils.getSublimationMig2(world), 1, 148, -26113, false);
+					result, 1, 148, -26113, false);
+		}
 	}
 
 	@Override

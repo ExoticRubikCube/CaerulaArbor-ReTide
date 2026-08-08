@@ -1,11 +1,11 @@
 package com.susen36.caerulaarbor.client.renderer.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.client.model.entity.ModelFakerggShoot;
-import com.susen36.caerulaarbor.entity.bullets.FakerggShootEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.client.model.entity.ModelFakerggShoot;
+import com.susen36.caerulaarbor.entity.bullets.FakerggShootEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class FakerggShootRenderer extends EntityRenderer<FakerggShootEntity> {
-	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/fakebullet.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/fakebullet.png");
 	private final ModelFakerggShoot model;
 
 	public FakerggShootRenderer(EntityRendererProvider.Context context) {

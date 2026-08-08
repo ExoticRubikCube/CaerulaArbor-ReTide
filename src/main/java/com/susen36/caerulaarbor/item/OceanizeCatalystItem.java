@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class OceanizeCatalystItem extends Item {
 	private static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses"));
-	private static final TagKey<EntityType<?>> CANNOT_TRANSFORM = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_transform"));
+	private static final TagKey<EntityType<?>> CANNOT_TRANSFORM = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "cannot_transform"));
 
 	public OceanizeCatalystItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));

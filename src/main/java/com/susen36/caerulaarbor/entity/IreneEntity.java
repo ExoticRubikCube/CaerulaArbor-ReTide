@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -165,7 +165,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		if (!this.level().isClientSide()) {
 			this.getEntityData().set(DATA_SKILLP_1, this.getEntityData().get(DATA_SKILLP_1) + 1);
 			this.getEntityData().set(DATA_SKILLP_2, this.getEntityData().get(DATA_SKILLP_2) + 1);
-			CaerulaArborMod.queueServerWork(6, () -> {
+			CaerulaArbor.queueServerWork(6, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							CASounds.IRENE_ATTACK.get(), SoundSource.NEUTRAL, 2.5F,
@@ -177,7 +177,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 							CADamageTypes.source(this.level(), CADamageTypes.GENERIC_WARRIOR_ATTACK, this), this.applyLaunchPunishBonus(target, attackDamage));
 				}
 			});
-			CaerulaArborMod.queueServerWork(11, () -> {
+			CaerulaArbor.queueServerWork(11, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							CASounds.IRENE_ATTACK.get(), SoundSource.NEUTRAL, 2.5F,
@@ -222,7 +222,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		float damage = baseDamage;
 		if (target instanceof LivingEntity livingTarget && livingTarget.hasEffect(MobEffects.SLOW_FALLING)) {
 			damage *= 1.2F;
-			if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+			if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
 				damage *= 1.2F;
 				if (!livingTarget.level().isClientSide()) {
 					livingTarget.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 80, 1));
@@ -239,7 +239,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 			Entity currentTarget = this.getTarget();
 			boolean isPlayer = enemy instanceof Player;
 			boolean isTamed = enemy instanceof TamableAnimal tamable && tamable.isTame();
-			boolean isHumanSide = enemy.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")));
+			boolean isHumanSide = enemy.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")));
 			return !(isPlayer || isTamed || isHumanSide) || enemy == currentTarget;
 		}
 		return false;
@@ -349,7 +349,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 							datEntSetI.getEntityData().set(DATA_SKILLP_1, 0);
 						if ((Entity) this instanceof IreneEntity datEntSetI)
 							datEntSetI.getEntityData().set(DATA_DURATION, 27);
-						CaerulaArborMod.queueServerWork(10, () -> {
+						CaerulaArbor.queueServerWork(10, () -> {
 							if (this.isAlive()) {
 								if (world instanceof Level level) {
 									level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_FLY.get(), SoundSource.NEUTRAL, 3, 1);
@@ -363,7 +363,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 								if (enemy1 instanceof LivingEntity entity && !entity.level().isClientSide())
 									entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) (double) 30, 0));
 								enemy1.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity livingEntity6 && livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3)));
-								CaerulaArborMod.queueServerWork(6, () -> {
+								CaerulaArbor.queueServerWork(6, () -> {
 									if (world instanceof Level level) {
 										level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_GUN.get(), SoundSource.NEUTRAL, 3, 1);
 									}
@@ -388,7 +388,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 					datEntSetI.getEntityData().set(DATA_SKILLP_2, 0);
 				if ((Entity) this instanceof IreneEntity datEntSetI)
 					datEntSetI.getEntityData().set(DATA_DURATION, 70);
-				CaerulaArborMod.queueServerWork(9, () -> {
+				CaerulaArbor.queueServerWork(9, () -> {
 					if (this.isAlive()) {
 						double damage;
                         damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
@@ -409,7 +409,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 						}
 					}
 				});
-				CaerulaArborMod.queueServerWork(16, () -> {
+				CaerulaArbor.queueServerWork(16, () -> {
 					if (this.isAlive()) {
 						if (world instanceof Level level) {
 							level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_LOOP.get(), SoundSource.NEUTRAL, 2, 1);
@@ -417,7 +417,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 					}
 				});
 				for (int index0 = 0; index0 < 10; index0++) {
-					CaerulaArborMod.queueServerWork(Math.toIntExact(Math.round(20 + index0 * 3.778)), () -> {
+					CaerulaArbor.queueServerWork(Math.toIntExact(Math.round(20 + index0 * 3.778)), () -> {
 						if (this.isAlive()) {
 							Entity selected;
 							double damage;
@@ -458,7 +458,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 						}
 					});
 				}
-				CaerulaArborMod.queueServerWork(59, () -> {
+				CaerulaArbor.queueServerWork(59, () -> {
 					if (this.isAlive()) {
 						if (world instanceof Level level) {
 							level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_RELOAD.get(), SoundSource.NEUTRAL, 3, 1);

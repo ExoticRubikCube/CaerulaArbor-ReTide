@@ -6,7 +6,6 @@ import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.StrategyUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -26,7 +25,7 @@ public class SilenceUpgradeManager {
 		String num = "";
 		String prefix = "";
 		stra = MapVariables.get(world).strategy_silence;
-		if (StrategyUtils.canEnableSilence(world)) {
+		if (canEnableSilence(world)) {
 			MapVariablesHandler.addEvoPoint(world, StrategyType.SILENCE, point);
 			if (stra > 0) {
 				for (Player entityiterator : new ArrayList<>(world.players())) {
@@ -67,28 +66,28 @@ public class SilenceUpgradeManager {
 												SoundSource.NEUTRAL, 6, 1);
 								}
 								if (entityiterator instanceof Player player && !player.level().isClientSide())
-									player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_6").getString())), true);
+									player.displayClientMessage(Component.literal(getSilenceUnlockPlayerMsg(1)), true);
 							} else if (stra == 2) {
 								if (world instanceof Level level) {
 										level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.SILENCE2.get(),
 												SoundSource.NEUTRAL, 6, 1);
 								}
 								if (entityiterator instanceof Player player && !player.level().isClientSide())
-									player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_7").getString())), true);
+									player.displayClientMessage(Component.literal(getSilenceUnlockPlayerMsg(2)), true);
 							} else if (stra == 3) {
 								if (world instanceof Level level) {
 										level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.SILENCE3.get(),
 												SoundSource.NEUTRAL, 6, 1);
 								}
 								if (entityiterator instanceof Player player && !player.level().isClientSide())
-									player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_8").getString())), true);
+									player.displayClientMessage(Component.literal(getSilenceUnlockPlayerMsg(3)), true);
 							} else if (stra == 4) {
 								if (world instanceof Level level) {
 										level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.SILENCE4.get(),
 												SoundSource.NEUTRAL, 6, 1);
 								}
 								if (entityiterator instanceof Player player && !player.level().isClientSide())
-									player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_9").getString())), true);
+									player.displayClientMessage(Component.literal(getSilenceUnlockPlayerMsg(4)), true);
 							}
 						}
 					}
@@ -112,5 +111,54 @@ public class SilenceUpgradeManager {
 		} else {
 			MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, 0);
 		}
+	}
+
+	public static boolean isSilence(LevelAccessor world) {
+		return MapVariables.get(world).strategy_silence > 0;
+	}
+
+	public static boolean canEnableSilence(LevelAccessor world) {
+		return MapVariables.get(world).strategy_grow >= 4 && MapVariables.get(world).strategy_subsisting >= 4 && MapVariables.get(world).strategy_breed >= 4
+				&& MapVariables.get(world).strategy_migration >= 4 && MapVariables.get(world).silence_enabled;
+	}
+
+	public static double getStraSilence(LevelAccessor world) {
+		return MapVariables.get(world).strategy_silence;
+	}
+
+	public static String getSilenceMigration(LevelAccessor world) {
+		return Component.translatable("item.caerula_arbor.sample_migration.description_" + Math.round(MapVariables.get(world).strategy_silence + 5)).getString();
+	}
+
+	public static String getSilenceSubsis(LevelAccessor world) {
+		return Component.translatable("item.caerula_arbor.sample_subsisting.description_" + Math.round(MapVariables.get(world).strategy_silence + 5)).getString();
+	}
+
+	public static String getSilenceBreed(LevelAccessor world) {
+		return Component.translatable("item.caerula_arbor.sample_breed.description_" + Math.round(MapVariables.get(world).strategy_silence + 5)).getString();
+	}
+
+	public static String getSilenceGrow(LevelAccessor world) {
+		return Component.translatable("item.caerula_arbor.sample_grow.description_" + Math.round(MapVariables.get(world).strategy_silence + 5)).getString();
+	}
+
+	public static String getCmdFeedback(long lvl) {
+		return Component.translatable("command.evolution.silence").getString().replace("<num>", "" + lvl);
+	}
+
+	public static String getSilenceUnlockPlayerMsg(long lvl) {
+		if (lvl == 1) {
+			return Component.translatable("item.caerula_arbor.language_key.description_6").getString();
+		} else if (lvl == 2) {
+			return Component.translatable("item.caerula_arbor.language_key.description_7").getString();
+		} else if (lvl == 3) {
+			return Component.translatable("item.caerula_arbor.language_key.description_8").getString();
+		} else {
+			return Component.translatable("item.caerula_arbor.language_key.description_9").getString();
+		}
+	}
+
+	public static String getSilenceLockedMsg() {
+		return Component.translatable("item.caerula_arbor.language_key.description_5").getString();
 	}
 }

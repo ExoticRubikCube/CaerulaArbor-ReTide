@@ -4,9 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CAConfigs;
+import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.menu.InfoStrategyAllMenu;
 import com.susen36.caerulaarbor.network.send.InfoStrategyNavigationButtonMessage;
-import com.susen36.caerulaarbor.util.StrategyUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -50,7 +50,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
-		if (StrategyUtils.canEnableSilence(world))
+		if (SilenceUpgradeManager.canEnableSilence(world))
 			if (mouseX > leftPos + 3 && mouseX < leftPos + 27 && mouseY > topPos + -29 && mouseY < topPos + -5) {
                 String result = "";
                 if (!(MapVariables.get(world).strategy_silence >= 4)) {
@@ -87,7 +87,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/wetplayer.png"), this.leftPos, this.topPos, 0, 0, 200, 120, 200, 120);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/silence.png"), this.leftPos + 0, this.topPos + -34, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/silence.png"), this.leftPos + 0, this.topPos + -34, Mth.clamp((int) SilenceUpgradeManager.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
 
 		if (MapVariables.get(world).if_sublimation) {
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/sublimation.png"), this.leftPos + 35, this.topPos + -33, Mth.clamp((int) MapVariables.get(world).strategy_sublimation * 28, 0, 112), 0, 28, 32, 140, 32);

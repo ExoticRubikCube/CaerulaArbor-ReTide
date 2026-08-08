@@ -1,26 +1,26 @@
 package com.susen36.caerulaarbor.client.model.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.OceanziedWitchEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import software.bernie.geckolib.constant.DataTickets;
-import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanziedWitchModel extends GeoModel<OceanziedWitchEntity> {
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_witch.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_witch.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceanziedWitchEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/oceanized_witch.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "animations/oceanized_witch.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(OceanziedWitchEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/oceanized_witch.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "geo/oceanized_witch.geo.json");
 	}
 
 	@Override

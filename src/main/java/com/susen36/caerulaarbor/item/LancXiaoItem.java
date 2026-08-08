@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -83,7 +83,7 @@ public class LancXiaoItem extends SwordItem {
                             }
                             if (entity.distanceTo(entityiterator) <= 16) {
                                 count = count + 1;
-                                CaerulaArborMod.queueServerWork((int) (count * 2), () -> {
+                                CaerulaArbor.queueServerWork((int) (count * 2), () -> {
                                     if (entity.distanceTo(entityiterator) <= 16) {
                                         double atk;
                                         double tz;
@@ -123,7 +123,7 @@ public class LancXiaoItem extends SwordItem {
                 }
                 if (!entity.level().isClientSide())
                     entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 2, false, false));
-                CaerulaArborMod.queueServerWork((int) ((count + 2) * 2), () -> {
+                CaerulaArbor.queueServerWork((int) ((count + 2) * 2), () -> {
                     spawnTeleportLinkParticles(world, entity.getX(), entity.getY(), entity.getZ(), x, y, z);
                     {
                         Entity ent = entity;

@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -78,7 +78,7 @@ public class OilAndCreamItem extends Item {
             level.addFreshEntity(entityToSpawn);
         }
         if ((Entity) entity instanceof ServerPlayer player) {
-            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "but_i_refuse"));
+            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "but_i_refuse"));
             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
             if (!ap.isDone()) {
                 for (String criteria : ap.getRemainingCriteria())

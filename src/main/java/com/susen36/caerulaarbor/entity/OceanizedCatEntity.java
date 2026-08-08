@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -128,13 +128,13 @@ public class OceanizedCatEntity extends SeaMonster {
             this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                     SoundEvents.CAT_HISS, SoundSource.HOSTILE, 0.75F,
                     (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
-            CaerulaArborMod.queueServerWork(9, () -> {
+            CaerulaArbor.queueServerWork(9, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 }
             });
-            CaerulaArborMod.queueServerWork(14, () -> {
+            CaerulaArbor.queueServerWork(14, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));

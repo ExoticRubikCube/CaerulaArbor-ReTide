@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity.warden;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -133,7 +133,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		double targetY = target.getY();
 		double targetZ = target.getZ();
 		if (!this.level().isClientSide()) {
-			CaerulaArborMod.queueServerWork(10, () -> {
+			CaerulaArbor.queueServerWork(10, () -> {
 				if (target.isAlive() && this.distanceTo(target) <= 6) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							SoundEvents.WARDEN_ATTACK_IMPACT, SoundSource.HOSTILE,
@@ -196,7 +196,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			if (!(nearbyEntity instanceof Mob) && !(nearbyEntity instanceof Player)) {
 				continue;
 			}
-			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && nearbyEntity != target) {
+			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) && nearbyEntity != target) {
 				continue;
 			}
 			if (nearbyEntity == this) {
@@ -264,7 +264,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		double y = this.getY();
 		double z = this.getZ();
 
-		CaerulaArborMod.queueServerWork(10, () -> {
+		CaerulaArbor.queueServerWork(10, () -> {
 			if (world instanceof Level level) {
 				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 0.1F, 1);
 			}
@@ -278,7 +278,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			}
 		});
 
-		CaerulaArborMod.queueServerWork(20, () -> {
+		CaerulaArbor.queueServerWork(20, () -> {
 			if (world instanceof Level level) {
 				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 0.2F, 1);
 			}
@@ -292,7 +292,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			}
 		});
 
-		CaerulaArborMod.queueServerWork(32, () -> {
+		CaerulaArbor.queueServerWork(32, () -> {
 			if (world instanceof Level level) {
 				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 0.3F, 1);
 			}
@@ -306,7 +306,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			}
 		});
 
-		CaerulaArborMod.queueServerWork(35, () -> {
+		CaerulaArbor.queueServerWork(35, () -> {
 			if (world instanceof Level level) {
 				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 0.4F, 1);
 			}
@@ -320,7 +320,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			}
 		});
 
-		CaerulaArborMod.queueServerWork(38, () -> {
+		CaerulaArbor.queueServerWork(38, () -> {
 			if (world instanceof Level level) {
 				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 0.5F, 1);
 			}
@@ -334,13 +334,13 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			}
 		});
 
-		CaerulaArborMod.queueServerWork(40, () -> {
+		CaerulaArbor.queueServerWork(40, () -> {
 			if (world instanceof Level level) {
 				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 2, 1);
 			}
 		});
 
-		CaerulaArborMod.queueServerWork(47, () -> {
+		CaerulaArbor.queueServerWork(47, () -> {
 			boolean hasSound = false;
 			Vec3 center = new Vec3(x, y, z);
 			List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32), entity -> true);
@@ -348,7 +348,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 				if (!(nearbyEntity instanceof Mob) && !(nearbyEntity instanceof Player)) {
 					continue;
 				}
-				if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
 					continue;
 				}
 				if (nearbyEntity == this) {
@@ -405,7 +405,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 					if (nearbyEntity instanceof Player player && (player.isCreative() || player.isSpectator())) {
 						continue;
 					}
-					if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+					if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
 						continue;
 					}
 					if (!nearbyEntity.hasEffect(MobEffects.DARKNESS)) {
@@ -438,7 +438,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 					if (world instanceof Level level) {
 						level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 2, 1);
 					}
-					CaerulaArborMod.queueServerWork(30, () -> {
+					CaerulaArbor.queueServerWork(30, () -> {
 						if (this.isAlive()) {
 							if (world instanceof Level level) {
 								level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 2, 1);
@@ -457,7 +457,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 					this.entityData.set(DATA_DURATION, 45);
 					this.setAnimation(this.getAnimationPrefix() + ".combo");
 					this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY(), target.getZ()));
-					CaerulaArborMod.queueServerWork(12, () -> {
+					CaerulaArbor.queueServerWork(12, () -> {
 						Entity currentTarget = this.getTarget();
 						if (this.isAlive() && currentTarget != null) {
 							if (this.distanceTo(currentTarget) <= 4) {
@@ -467,7 +467,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 							currentTarget.push(0, 1.25, 0);
 						}
 					});
-					CaerulaArborMod.queueServerWork(20, () -> {
+					CaerulaArbor.queueServerWork(20, () -> {
 						if (world instanceof Level level) {
 							level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 2, 1);
 						}
@@ -475,7 +475,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 							this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 25, 9, false, false));
 						}
 					});
-					CaerulaArborMod.queueServerWork(27, () -> {
+					CaerulaArbor.queueServerWork(27, () -> {
 						if (world instanceof Level level) {
 							level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 2, 1);
 						}

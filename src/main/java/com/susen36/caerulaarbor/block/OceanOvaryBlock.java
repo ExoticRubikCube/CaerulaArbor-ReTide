@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAGameRules;
@@ -138,14 +138,14 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
 		ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         ItemStack fed = ItemStack.EMPTY;
-        if (entity.getMainHandItem().is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fish_food")))) {
+        if (entity.getMainHandItem().is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "fish_food")))) {
             fed = entity.getMainHandItem().copy();
         } else {
-            if (entity.getOffhandItem().is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fish_food")))) {
+            if (entity.getOffhandItem().is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "fish_food")))) {
                 fed = entity.getOffhandItem().copy();
             }
         }
-        if (fed.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fish_food")))) {
+        if (fed.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "fish_food")))) {
             if (blockstate.getValue(BLOCKSTATE) == 1) {
                 world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 0).setValue(OUTPUT, 0), 3);
                 world.playSound(null, pos, SoundEvents.PANDA_EAT, SoundSource.BLOCKS, 0.95F, 1.0F);

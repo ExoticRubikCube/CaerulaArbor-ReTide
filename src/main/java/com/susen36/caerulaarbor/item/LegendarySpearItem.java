@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.ItemUtils;
@@ -151,7 +151,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                     CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.lengendspear.swing2"));
                 if ((Entity) sourceentity instanceof Player player)
                     player.getCooldowns().addCooldown(itemstack.getItem(), 25);
-                CaerulaArborMod.queueServerWork(10, () -> {
+                CaerulaArbor.queueServerWork(10, () -> {
                     if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.NEUTRAL, (float) 3.5, 1);
                     }
@@ -175,7 +175,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                     CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.lengendspear.srike"));
                 if ((Entity) sourceentity instanceof Player player)
                     player.getCooldowns().addCooldown(itemstack.getItem(), 25);
-                CaerulaArborMod.queueServerWork(10, () -> {
+                CaerulaArbor.queueServerWork(10, () -> {
                     if (entity.isAlive()) {
                         if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT_GROUND, SoundSource.NEUTRAL, (float) 3.5, 1);
@@ -192,7 +192,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                     CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.lengendspear.swing"));
                 if ((Entity) sourceentity instanceof Player player)
                     player.getCooldowns().addCooldown(itemstack.getItem(), 25);
-                CaerulaArborMod.queueServerWork(10, () -> {
+                CaerulaArbor.queueServerWork(10, () -> {
                     if (entity.isAlive()) {
                         if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_THROW.value(), SoundSource.NEUTRAL, (float) 3.5, 1);
@@ -210,7 +210,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                     CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.lengendspear.stab"));
                 if ((Entity) sourceentity instanceof Player player)
                     player.getCooldowns().addCooldown(itemstack.getItem(), 25);
-                CaerulaArborMod.queueServerWork(10, () -> {
+                CaerulaArbor.queueServerWork(10, () -> {
                     if (entity.isAlive()) {
                         if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT, SoundSource.NEUTRAL, (float) 3.5, 1);

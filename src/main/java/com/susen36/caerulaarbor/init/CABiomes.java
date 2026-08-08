@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.init;
 
 import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Pair;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -32,7 +32,7 @@ import java.util.List;
 
 @EventBusSubscriber
 public class CABiomes {
-    public static final ResourceKey<Biome> BRANDED_LAND = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "branded_land"));
+    public static final ResourceKey<Biome> BRANDED_LAND = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "branded_land"));
 
     @SubscribeEvent
     public static void onServerAboutToStart(ServerAboutToStartEvent event) {

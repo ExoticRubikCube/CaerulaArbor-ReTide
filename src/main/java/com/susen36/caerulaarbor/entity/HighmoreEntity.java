@@ -4,7 +4,7 @@ import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.HighmoreShootEntity;
@@ -294,7 +294,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
         for (Entity entityiterator : new ArrayList<>(world.players())) {
             if ((level().dimension()) == (entityiterator.level().dimension())) {
                 if (entityiterator instanceof ServerPlayer player) {
-                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "speechless_break"));
+                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "speechless_break"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
@@ -316,7 +316,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
     public void awardPreciousDaysAdvancement() {
         for (Entity playerEntity : new ArrayList<>(this.level().players())) {
             if (this.level().dimension() == playerEntity.level().dimension() && playerEntity instanceof ServerPlayer serverPlayer) {
-                AdvancementHolder advancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "precious_days"));
+                AdvancementHolder advancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "precious_days"));
                 AdvancementProgress advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
                 if (!advancementProgress.isDone()) {
                     for (String criteria : advancementProgress.getRemainingCriteria()) {
@@ -390,7 +390,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                     if (entityiterator == this) {
                         continue;
                     }
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                         if (entityiterator != this.getTarget()) {
                             continue;
                         }
@@ -420,7 +420,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.HIGHMORE_PREAMBLE.get(), SoundSource.HOSTILE, 4, 1);
                         }
                         if (lvl == 0) {
-                            CaerulaArborMod.queueServerWork(15, () -> {
+                            CaerulaArbor.queueServerWork(15, () -> {
                                 if (!(null == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                                     this.multiShoot(world, x, y, z, (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null, 3);
                                 }
@@ -428,7 +428,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                             if ((Entity) this instanceof HighmoreEntity datEntSetI)
                                 datEntSetI.getEntityData().set(DATA_SKILLP_1, 200);
                         } else {
-                            CaerulaArborMod.queueServerWork(15, () -> {
+                            CaerulaArbor.queueServerWork(15, () -> {
                                 if (!(null == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                                     this.multiShoot(world, x, y, z, (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null, 5);
                                 }
@@ -450,7 +450,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                             this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 80, 0, false, false));
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 80, 0, false, false));
-                        CaerulaArborMod.queueServerWork(15, () -> {
+                        CaerulaArbor.queueServerWork(15, () -> {
                             push((Mth.nextDouble(RandomSource.create(), -0.3, 0.3)), (Mth.nextDouble(RandomSource.create(), 0, 0.3)), (Mth.nextDouble(RandomSource.create(), -0.3, 0.3)));
                             new Object() {
                                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -474,7 +474,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                                             level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 24 * Math.sin(Math.toRadians(3 * index0))), y, (z + 24 * Math.cos(Math.toRadians(3 * index0))), 3, 0.15, 0.15, 0.15, 0.1);
                                     }
                                     final int tick2 = ticks;
-                                    CaerulaArborMod.queueServerWork(tick2, () -> {
+                                    CaerulaArbor.queueServerWork(tick2, () -> {
                                         if (timedlooptotal > timedloopiterator + 1) {
                                             timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                         }
@@ -482,7 +482,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                                 }
                             }.timedLoop(0, 9, 3);
                         });
-                        CaerulaArborMod.queueServerWork(65, () -> {
+                        CaerulaArbor.queueServerWork(65, () -> {
                             highmoreBlast(world, x, y, z, this);
                         });
                         if (lvl == 0) {
@@ -638,7 +638,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
             LevelAccessor world = this.level();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (!world.isClientSide() && world.getServer() != null) {
-                    for (ItemStack itemstackiterator : world.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/highmore_relics")))
+                    for (ItemStack itemstackiterator : world.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gameplay/highmore_relics")))
                             .getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
                         if (world instanceof ServerLevel level) {
                             ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), itemstackiterator);
@@ -668,7 +668,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 400, 1, false, false));
                 this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 400, 0, false, false));
             }
-            CaerulaArborMod.queueServerWork(300, () -> {
+            CaerulaArbor.queueServerWork(300, () -> {
                 if (this.isAlive()) {
                     this.getEntityData().set(DATA_PHASE, 1);
                 }
@@ -686,7 +686,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 200, 1, false, false));
                 this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1, false, false));
             }
-            CaerulaArborMod.queueServerWork(150, () -> {
+            CaerulaArbor.queueServerWork(150, () -> {
                 if (this.isAlive()) {
                     this.getEntityData().set(DATA_PHASE, 2);
                 }
@@ -767,7 +767,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                     projectileLevel.addFreshEntity(entityToSpawn);
                 }
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }
@@ -784,7 +784,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                 if (entityiterator == entity) {
                     continue;
                 }
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                     if (!(entityiterator == (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                         continue;
                     }
@@ -798,7 +798,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HIGHMORE_ATTACK, entity), (float) ((entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity8.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (3.5 + (entity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0))));
                             final int tick2 = ticks;
-                            CaerulaArborMod.queueServerWork(tick2, () -> {
+                            CaerulaArbor.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
                                     timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                 }
@@ -828,7 +828,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
                     }
                 }
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }

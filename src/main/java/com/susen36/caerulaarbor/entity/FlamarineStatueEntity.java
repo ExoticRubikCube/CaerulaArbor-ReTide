@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -87,7 +87,7 @@ public class FlamarineStatueEntity extends SeaMonster {
     @Override
     public boolean doHurtTarget(Entity target) {
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(12, () -> {
+            CaerulaArbor.queueServerWork(12, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.5) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GOLEM_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));

@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.client.renderer.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.GunmuEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -17,7 +17,7 @@ public class GunmuRenderer extends HumanoidMobRenderer<GunmuEntity, HumanoidMode
 
 	@Override
 	public ResourceLocation getTextureLocation(GunmuEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/white.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/white.png");
 	}
 
 	@Override

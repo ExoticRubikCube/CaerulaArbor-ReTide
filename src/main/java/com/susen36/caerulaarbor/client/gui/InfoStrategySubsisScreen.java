@@ -6,9 +6,10 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.GuideAbyssalEntity;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
+import com.susen36.caerulaarbor.manager.upgrade.SubsistingUpgradeManager;
 import com.susen36.caerulaarbor.menu.InfoStrategySubsisMenu;
 import com.susen36.caerulaarbor.network.send.InfoStrategyReturnButtonMessage;
-import com.susen36.caerulaarbor.util.StrategyUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.PlainTextButton;
@@ -71,7 +72,7 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/sidebar.png"), this.leftPos + -3, this.topPos + -3, 0, 0, 262, 174, 262, 174);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/bg_subsis.png"), this.leftPos, this.topPos, Mth.clamp((int) StrategyUtils.getStraSubsis(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/bg_subsis.png"), this.leftPos, this.topPos, Mth.clamp((int) SubsistingUpgradeManager.getStraSubsis(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
 
         double result = 18;
         double rate;
@@ -102,20 +103,36 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_subsis.label_to_subsist_is_fundamental"), 1, 4, -1, false);
 		guiGraphics.drawString(this.font,
 
-				StrategyUtils.getDescrSubsis(world), 1, 100, -1, false);
+				SubsistingUpgradeManager.getDescrSubsis(world), 1, 100, -1, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_subsis.label_proceed"), 1, 172, -1, false);
-		if (StrategyUtils.isSilence(world))
+		if (SilenceUpgradeManager.isSilence(world))
 			guiGraphics.drawString(this.font,
 
-					StrategyUtils.getSilenceSubsis(world), 1, 116, -3407872, false);
-		if (MapVariables.get(world).if_sublimation)
+					SilenceUpgradeManager.getSilenceSubsis(world), 1, 116, -3407872, false);
+		if (MapVariables.get(world).if_sublimation) {
+            String result = "";
+            double lvl = Math.min(MapVariables.get(world).strategy_subsisting, MapVariables.get(world).strategy_sublimation);
+            if (!(lvl < 1)) {
+                result = Component.translatable("evolution.caerula_aerbor.sublimation.subsis." + (int) lvl).getString();
+            }
+            guiGraphics.drawString(this.font,
+
+                    result, 1, 132, -26113, false);
+        }
+		if (MapVariables.get(world).if_sublimation) {
+			String result = "";
+			double lvl = Math.min(MapVariables.get(world).strategy_subsisting, MapVariables.get(world).strategy_sublimation);
+			if (!(lvl < 1)) {
+				String key = "evolution.caerula_aerbor.sublimation.subsis." + (int) lvl + "_1";
+				String desc = Component.translatable(key).getString();
+				if (!desc.equals(key)) {
+					result = desc;
+				}
+			}
 			guiGraphics.drawString(this.font,
 
-					StrategyUtils.getSublimationSubsis(world), 1, 132, -26113, false);
-		if (MapVariables.get(world).if_sublimation)
-			guiGraphics.drawString(this.font,
-
-					StrategyUtils.getSublimationSubsis2(world), 1, 148, -26113, false);
+					result, 1, 148, -26113, false);
+		}
 	}
 
 	@Override

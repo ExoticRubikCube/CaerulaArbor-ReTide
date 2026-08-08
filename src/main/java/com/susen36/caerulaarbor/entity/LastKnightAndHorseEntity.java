@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -192,7 +192,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         if (sourceentity == null)
             return;
         if (sourceentity instanceof ServerPlayer player) {
-            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "kill_knight_and_horse"));
+            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "kill_knight_and_horse"));
             AdvancementProgress ap;
             if (adv != null) {
                 ap = player.getAdvancements().getOrStartProgress(adv);
@@ -214,7 +214,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                     LastKnightAndHorseEntity.this.setHealth((float) (LastKnightAndHorseEntity.this.getMaxHealth() * (1 - (timedloopiterator + 1) * 0.0125)));
                 }
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }
@@ -315,7 +315,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 32, 0, false, false));
                         this.setAnimation("animation.last_knight_horse.skill");
-                        CaerulaArborMod.queueServerWork(13, () -> {
+                        CaerulaArbor.queueServerWork(13, () -> {
                             Entity enemy1;
                             double damage;
                             damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
@@ -330,7 +330,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                                     if (entityiterator == this) {
                                         continue;
                                     }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"))) && !(entityiterator == enemy1)) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside"))) && !(entityiterator == enemy1)) {
                                         continue;
                                     }
                                     if (distanceTo(entityiterator) <= 4) {
@@ -344,7 +344,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BREAK, SoundSource.HOSTILE, 1, 1);
                                             }
                                         }
-                                        CaerulaArborMod.queueServerWork(7, () -> {
+                                        CaerulaArbor.queueServerWork(7, () -> {
                                             entityiterator.hurt(
                                                     CADamageTypes.source(world, CADamageTypes.LAST_KNIGHT_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
                                             if (entityiterator instanceof LivingEntity && !this.level().isClientSide())

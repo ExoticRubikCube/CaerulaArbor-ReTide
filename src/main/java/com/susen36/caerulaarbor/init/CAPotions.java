@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
@@ -8,7 +8,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class CAPotions {
-    public static final DeferredRegister<Potion> REGISTRY = DeferredRegister.create(BuiltInRegistries.POTION, CaerulaArborMod.MODID);
+    public static final DeferredRegister<Potion> REGISTRY = DeferredRegister.create(BuiltInRegistries.POTION, CaerulaArbor.MODID);
 
     public static final DeferredHolder<Potion, ? extends Potion> SANITY_IMMUE_POTION = REGISTRY.register("sanity_immue_potion", () -> new Potion(new MobEffectInstance(CAMobEffects.SANITY_IMMUE, 400, 0, false, true)));
     public static final DeferredHolder<Potion, ? extends Potion> INST_SANITY = REGISTRY.register("inst_sanity", () -> new Potion(new MobEffectInstance(CAMobEffects.INSTANT_SANITY, 1, 0, false, true)));

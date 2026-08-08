@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
@@ -262,7 +262,7 @@ public class AnchorMediumBlock extends Block {
                 dz = -36;
                 for (int index2 = 0; index2 < 73; index2++) {
                     target = (world.getBlockState(BlockPos.containing((double) x + dx, (double) y + dy, (double) z + dz)));
-                    if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail")))) {
+                    if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail")))) {
                         attr = target.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty getip30 ? target.getValue(getip30) : -1;
                         if (attr < 61) {
                             for (int index3 = 0; index3 < 11; index3++) {

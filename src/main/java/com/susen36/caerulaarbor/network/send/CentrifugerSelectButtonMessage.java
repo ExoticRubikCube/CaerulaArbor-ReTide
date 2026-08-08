@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.network.send;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class CentrifugerSelectButtonMessage implements CustomPacketPayload {
-	public static final Type<CentrifugerSelectButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "centrifuger_select_button"));
+	public static final Type<CentrifugerSelectButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "centrifuger_select_button"));
 	public static final StreamCodec<FriendlyByteBuf, CentrifugerSelectButtonMessage> STREAM_CODEC = StreamCodec.of(
 			(buf, msg) -> CentrifugerSelectButtonMessage.buffer(msg, buf),
 			CentrifugerSelectButtonMessage::new

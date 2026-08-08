@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
@@ -52,7 +52,7 @@ public class OceanPeduncleItem extends Item {
                 }
                 entity.push((Mth.nextDouble(RandomSource.create(), -0.1, 0.1)), (Mth.nextDouble(RandomSource.create(), 0, 0.1)), (Mth.nextDouble(RandomSource.create(), -0.1, 0.1)));
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }

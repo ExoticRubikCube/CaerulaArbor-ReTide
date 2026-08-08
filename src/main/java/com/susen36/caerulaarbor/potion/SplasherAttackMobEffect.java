@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.entity.bullets.FishSplashEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -45,7 +45,7 @@ public class SplasherAttackMobEffect extends MobEffect {
                 if ((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) < 5) {
                     continue;
                 }
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                     continue;
                 }
                 if (entityiterator instanceof Player && (ModCapabilities.getPlayerVariables(entityiterator)).player_oceanization >= 3) {
@@ -69,7 +69,7 @@ public class SplasherAttackMobEffect extends MobEffect {
                                 level.sendParticles(CAParticles.SEA_SPLASH.get(), (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * timedloopiterator),
                                         (entityiterator.getY() + 9 + ((y - (entityiterator.getY() + 9)) / 40) * timedloopiterator), (entityiterator.getZ() + ((z - entityiterator.getZ()) / 40) * timedloopiterator), 1, 0.1, 0.1, 0.1, 0.01);
                             final int tick2 = ticks;
-                            CaerulaArborMod.queueServerWork(tick2, () -> {
+                            CaerulaArbor.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
                                     timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                 }

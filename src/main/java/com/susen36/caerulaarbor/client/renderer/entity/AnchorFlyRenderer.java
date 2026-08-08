@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.client.model.entity.ModelAnchorFly;
 import com.susen36.caerulaarbor.entity.bullets.AnchorFlyEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class AnchorFlyRenderer extends EntityRenderer<AnchorFlyEntity> {
-	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/weapon_anchor_fly.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/weapon_anchor_fly.png");
 	private final ModelAnchorFly model;
 
 	public AnchorFlyRenderer(EntityRendererProvider.Context context) {

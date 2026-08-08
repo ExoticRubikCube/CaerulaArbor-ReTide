@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen.tags;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -198,7 +198,7 @@ public class ItemTagsProvider extends TagsProvider.RegistryTagsProvider<Item> {
      * @return 物品标签 key
      */
     private static TagKey<Item> caItemTag(String path) {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, path));
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen.tags;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABiomes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -43,7 +43,7 @@ public class BiomeTagsProvider extends TagsProvider.RegistryTagsProvider<Biome> 
      * @return biome 标签 key
      */
     private static TagKey<Biome> caBiomeTag(String path) {
-        return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
+        return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, path));
     }
 
     @Override

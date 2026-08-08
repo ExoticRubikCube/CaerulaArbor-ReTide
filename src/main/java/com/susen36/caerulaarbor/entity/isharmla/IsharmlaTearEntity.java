@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity.isharmla;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.client.Minecraft;
@@ -104,7 +104,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
                 .toList();
 
         for (Entity entityiterator : nearbyEntities) {
-            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                 continue;
             }
             if (!(entityiterator instanceof LivingEntity)) {

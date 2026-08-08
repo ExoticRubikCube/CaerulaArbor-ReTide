@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -88,7 +88,7 @@ public class CaerulaHeartItem extends Item {
                 capability.syncPlayerVariables(entity);
             }
             if (entity instanceof ServerPlayer player) {
-                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_we_many"));
+                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "to_we_many"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                 if (!ap.isDone()) {
                     for (String criteria : ap.getRemainingCriteria())

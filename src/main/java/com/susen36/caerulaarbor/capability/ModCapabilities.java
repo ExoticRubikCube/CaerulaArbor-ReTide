@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.capability;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.anchor.AnchorRecord;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 public class ModCapabilities {
 
-    private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, CaerulaArborMod.MODID);
+    private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, CaerulaArbor.MODID);
 
     public static final Supplier<AttachmentType<PlayerVariable>> PLAYER_VARIABLE = ATTACHMENT_TYPES.register("player_variables",
             () -> AttachmentType.serializable((IAttachmentHolder holder) -> new PlayerVariable()).build());

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.babel.BabelMod;
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
@@ -110,29 +110,29 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/caerularecord.png"), this.leftPos, this.topPos, 0, 0, 168, 166, 168, 166);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/caerularecord.png"), this.leftPos, this.topPos, 0, 0, 168, 166, 168, 166);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/target_health.png"), this.leftPos + 4, this.topPos + 30, 0, 0, 24, 16, 24, 16);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/target_health.png"), this.leftPos + 4, this.topPos + 30, 0, 0, 24, 16, 24, 16);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/target_shield.png"), this.leftPos + 4, this.topPos + 50, 0, 0, 24, 16, 24, 16);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/target_shield.png"), this.leftPos + 4, this.topPos + 50, 0, 0, 24, 16, 24, 16);
 
 		if (RelicUtils.hasDisoAttention(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/disoclution_attention.png"), this.leftPos + 96, this.topPos + 91, 0, 0, 64, 64, 64, 64);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_attention.png"), this.leftPos + 96, this.topPos + 91, 0, 0, 64, 64, 64, 64);
 		}
 		if (RelicUtils.hasDisoBlood(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/disoclution_blood.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_blood.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
 		}
 		if (PlayerStateUtils.isLightBright(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/light.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 		if (PlayerStateUtils.isLightWaving(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light_waving.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/light_waving.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 		if (PlayerStateUtils.isLightDim(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light_dim.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/light_dim.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 		if (PlayerStateUtils.isLightCeased(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light_extinguish.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/light_extinguish.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 
 		AbstractEPCapability currentElement = BabelAPI.getEP(entity).getCurrentElement();
@@ -146,15 +146,15 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		}
 
 		if (RelicUtils.hasDisoNeuro(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/disoclution_neuro.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_neuro.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
 		}
 		if (RelicUtils.hasDisoFlesh(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/disoclution_flesh.png"), this.leftPos + 99, this.topPos + 92, 0, 0, 64, 64, 64, 64);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_flesh.png"), this.leftPos + 99, this.topPos + 92, 0, 0, 64, 64, 64, 64);
 		}
 
         double result = 0;
         result = ModCapabilities.getPlayerVariables(entity).player_oceanization;
-        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/oceanize_icon.png"), this.leftPos + 137, this.topPos + 7, Mth.clamp((int) result * 24, 0, 72), 0, 24, 20, 96, 20);
+        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/oceanize_icon.png"), this.leftPos + 137, this.topPos + 7, Mth.clamp((int) result * 24, 0, 72), 0, 24, 20, 96, 20);
 
 		RenderSystem.disableBlend();
 	}
@@ -258,7 +258,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		}, this.font);
 		guistate.put("button:button_show_relic_ptc", button_show_relic_ptc);
 		this.addRenderableWidget(button_show_relic_ptc);
-		imagebutton_relic_icon = new ImageButton(this.leftPos + 6, this.topPos + 99, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_relic_icon"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_relic_icon_highlighted")), e -> {
+		imagebutton_relic_icon = new ImageButton(this.leftPos + 6, this.topPos + 99, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_icon"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_icon_highlighted")), e -> {
 			if (true) {
 				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(2, x, y, z));
 				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 2, x, y, z);
@@ -266,7 +266,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		});
 		guistate.put("button:imagebutton_relic_icon", imagebutton_relic_icon);
 		this.addRenderableWidget(imagebutton_relic_icon);
-		imagebutton_nurture_gene_set = new ImageButton(this.leftPos + 28, this.topPos + 99, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_nurture_gene_set"), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "overlay/atlas/imagebutton_nurture_gene_set_highlighted")), e -> {
+		imagebutton_nurture_gene_set = new ImageButton(this.leftPos + 28, this.topPos + 99, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_nurture_gene_set"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_nurture_gene_set_highlighted")), e -> {
 			if (PlayerStateUtils.canPlayerEvo(entity)) {
 				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(3, x, y, z));
 				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 3, x, y, z);

@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.client.Minecraft;
@@ -146,7 +146,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 60, 0, false, false));
                             this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
-                            CaerulaArborMod.queueServerWork(13, () -> {
+                            CaerulaArbor.queueServerWork(13, () -> {
                                 if (world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_DAMAGE, SoundSource.HOSTILE, 2, 1);
                                 }
@@ -288,7 +288,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                         datEntSetI.getEntityData().set(DATA_ROOT_Z, (int) Math.round(z));
                     if ((Entity) this instanceof ChitinGolemEntity datEntSetL)
                         datEntSetL.getEntityData().set(DATA_ROOTED, true);
-                    CaerulaArborMod.LOGGER.info(("Chitin Golem " + getDisplayName().getString() + "has recognize x:" + Math.round(x) + " z:" + Math.round(z) + " as base"));
+                    CaerulaArbor.LOGGER.info(("Chitin Golem " + getDisplayName().getString() + "has recognize x:" + Math.round(x) + " z:" + Math.round(z) + " as base"));
                 }
             } else if (Math.random() < 0.01 && !((Entity) this instanceof Mob mobEnt9 && mobEnt9.isAggressive())) {
                 rx = x - ((Entity) this instanceof ChitinGolemEntity datEntI ? datEntI.getEntityData().get(DATA_ROOT_X) : 0);

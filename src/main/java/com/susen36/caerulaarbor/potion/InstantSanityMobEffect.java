@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.registries.Registries;
@@ -25,7 +25,7 @@ public class InstantSanityMobEffect extends MobEffect {
 
     @Override
     public void applyInstantenousEffect(Entity source, Entity indirectSource, LivingEntity entity, int amplifier, double health) {
-        if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "immue_to_inst_sanity")))) {
+        if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "immue_to_inst_sanity")))) {
             SIHelper.causeSanityInjury(entity, 125 * ((double) amplifier + 1), SanityEvent.Hurt.Type.POTION);
         }
     }

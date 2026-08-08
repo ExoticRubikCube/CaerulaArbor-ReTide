@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.client.model.entity.layer;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.DepositerProkaryoteEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.entity.DepositerProkaryoteEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class DepositerProkaryoteLayer extends GeoRenderLayer<DepositerProkaryoteEntity> {
-	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/deposit_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/deposit_lit.png");
 
 	public DepositerProkaryoteLayer(GeoRenderer<DepositerProkaryoteEntity> entityRenderer) {
 		super(entityRenderer);

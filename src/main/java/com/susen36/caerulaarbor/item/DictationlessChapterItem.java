@@ -6,6 +6,10 @@ import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.init.CASounds;
+import com.susen36.caerulaarbor.manager.upgrade.BreedUpgradeManager;
+import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
+import com.susen36.caerulaarbor.manager.upgrade.MigrationUpgradeManager;
+import com.susen36.caerulaarbor.manager.upgrade.SubsistingUpgradeManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -103,25 +107,25 @@ public class DictationlessChapterItem extends Item {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.GROW1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.GROW, 0);
-                stra = Component.translatable("gui.caerula_arbor.evo_tree.label_sreategy_grow").getString();
+                stra = GrowUpgradeManager.getDisplayName();
             } else if (target == 1) {
                 if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBSISTING1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.SUBSISTING, 0);
-                stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_subsisting").getString();
+                stra = SubsistingUpgradeManager.getDisplayName();
             } else if (target == 2) {
                 if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.BREED1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.BREED, 0);
-                stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_breed").getString();
+                stra = BreedUpgradeManager.getDisplayName();
             } else if (target == 3) {
                 if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.MIGRATION1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.MIGRATION, 0);
-                stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_migration").getString();
+                stra = MigrationUpgradeManager.getDisplayName();
             }
             if (world instanceof ServerLevel level)
                 level.sendParticles(CAParticles.ENDSPEAKER_INV.get(), (x + 0.5), (y + 1), (z + 0.5), 32, 0.75, 1, 0.75, 0.15);

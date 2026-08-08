@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.client.model.entity.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.crawler.PocketSeaCreeperEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class PocketSeaCreeperPowerLayer extends GeoRenderLayer<PocketSeaCreeperEntity> {
-	private static final ResourceLocation POWER_LOCATION = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/pocket_sea_creeper_armor.png");
+	private static final ResourceLocation POWER_LOCATION = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/pocket_sea_creeper_armor.png");
 
 	public PocketSeaCreeperPowerLayer(GeoRenderer<PocketSeaCreeperEntity> entityRenderer) {
 		super(entityRenderer);

@@ -1,10 +1,9 @@
 package com.susen36.caerulaarbor.client.model.entity.layer;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-
-import com.susen36.caerulaarbor.entity.FleeFishEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.entity.FleeFishEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -14,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class FleeFishLayer extends GeoRenderLayer<FleeFishEntity> {
-	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/fleelit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/fleelit.png");
 
 	public FleeFishLayer(GeoRenderer<FleeFishEntity> entityRenderer) {
 		super(entityRenderer);

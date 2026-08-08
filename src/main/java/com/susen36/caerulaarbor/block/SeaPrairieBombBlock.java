@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -109,12 +109,12 @@ public class SeaPrairieBombBlock extends Block {
 			worked = true;
 		} else if (burn && this.burnTrail(world, target, x, y, z)) {
 			worked = true;
-		} else if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "blow_up")))) {
+		} else if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "blow_up")))) {
 			world.destroyBlock(BlockPos.containing(x, y, z), false);
 			worked = true;
 		}
 		if (worked && iter > 0.0) {
-			CaerulaArborMod.queueServerWork(1, () -> {
+			CaerulaArbor.queueServerWork(1, () -> {
 				for (int index0 = 0; index0 < 3; ++index0) {
 					for (int index1 = 0; index1 < 3; ++index1) {
 						for (int index2 = 0; index2 < 3; ++index2) {

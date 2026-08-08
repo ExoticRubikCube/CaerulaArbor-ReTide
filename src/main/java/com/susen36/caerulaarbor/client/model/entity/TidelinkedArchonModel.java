@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.client.model.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedArchonEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class TidelinkedArchonModel extends GeoModel<TidelinkedArchonEntity> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/tidelinked_archon.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/tidelinked_archon.png");
 
     @Override
     public ResourceLocation getAnimationResource(TidelinkedArchonEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/tidelinked_archon.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "animations/tidelinked_archon.animation.json");
     }
 
     @Override
     public ResourceLocation getModelResource(TidelinkedArchonEntity entity) {
-        return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/tidelinked_archon.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "geo/tidelinked_archon.geo.json");
     }
 
     @Override

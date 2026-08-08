@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.world.InteractionHand;
@@ -65,7 +65,7 @@ public class CannedBoiledWaterItem extends Item {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 entity.hurt(CADamageTypes.source(world, CADamageTypes.BOIL_WATER), 4);
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }

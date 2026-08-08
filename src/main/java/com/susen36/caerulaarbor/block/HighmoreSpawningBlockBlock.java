@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.mojang.serialization.MapCodec;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -137,7 +137,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
                 if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
                     world.setBlock(pos, bs.setValue(integerProp, value), 3);
             }
-            CaerulaArborMod.queueServerWork(40, () -> {
+            CaerulaArbor.queueServerWork(40, () -> {
                 if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.HIGHMORE_SPAWNING_BLOCK.get()
                         && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip6
                                 ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip6)

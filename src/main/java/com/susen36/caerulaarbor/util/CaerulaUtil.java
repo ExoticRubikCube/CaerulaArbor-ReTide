@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.util;
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -13,18 +13,15 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -116,7 +113,7 @@ public class CaerulaUtil {
 			return;
 		}
 		ItemStack mainhand = (entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY);
-		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "nethersea_protective")))) {
+		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_protective")))) {
 			return;
 		}
 		if (entity instanceof LivingEntity livingEntity && (ModCapabilities.getPlayerVariables(entity)).player_oceanization < 3) {
@@ -132,7 +129,7 @@ public class CaerulaUtil {
 			return;
 		}
 		ItemStack mainhand = (entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY);
-		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "nethersea_protective")))) {
+		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_protective")))) {
 			return;
 		}
 		if (entity instanceof LivingEntity livingEntity && (ModCapabilities.getPlayerVariables(entity)).player_oceanization < 2.85) {
@@ -149,7 +146,7 @@ public class CaerulaUtil {
 			if (world.getBlockState(pos).getDestroySpeed(world, BlockPos.ZERO) >= 0) {
 				for (Entity player : new ArrayList<>(world.players())) {
 					if (player instanceof ServerPlayer serverPlayer) {
-						AdvancementHolder advancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "start_of_calamity"));
+						AdvancementHolder advancement = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "start_of_calamity"));
 						AdvancementProgress progress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
 						if (!progress.isDone()) {
 							for (String criteria : progress.getRemainingCriteria()) {
@@ -189,9 +186,5 @@ public class CaerulaUtil {
 		int wildcardIndex = item.indexOf('*');
 		// 示例："minecraft:*" 可匹配 "minecraft:bow"，"minecraft:bow" 仅精确匹配，"*" 匹配任意注册名。
 		return wildcardIndex > 0 && name.startsWith(item.substring(0, wildcardIndex));
-	}
-
-	public static class Tags{
-		public static final TagKey<EntityType<?>> SEABORNS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
 	}
 }

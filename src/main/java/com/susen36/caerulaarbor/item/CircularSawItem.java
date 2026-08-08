@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.client.Minecraft;
@@ -182,7 +182,7 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT.get(), SoundSource.PLAYERS, 2, 1);
             }
-            CaerulaArborMod.queueServerWork(7, () -> {
+            CaerulaArbor.queueServerWork(7, () -> {
                 new Object() {
                     void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 3.5) {
@@ -190,7 +190,7 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
                                     * 0.35));
                         }
                         final int tick2 = ticks;
-                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                        CaerulaArbor.queueServerWork(tick2, () -> {
                             if (timedlooptotal > timedloopiterator + 1) {
                                 timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                             }

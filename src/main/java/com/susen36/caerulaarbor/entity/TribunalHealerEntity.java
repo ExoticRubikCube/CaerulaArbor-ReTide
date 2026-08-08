@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.entity.bullets.HealBullletEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -308,7 +308,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                     }
                     {
                         final Vec3 center = new Vec3(x, y, z);
-                        TagKey<EntityType<?>> homoSapiensTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "homo_sapiens"));
+                        TagKey<EntityType<?>> homoSapiensTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "homo_sapiens"));
                         List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8),
                                 e -> e != this && e.getType().is(homoSapiensTag));
                         for (LivingEntity entityiterator : entfound) {
@@ -317,7 +317,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                             if (this instanceof TribunalHealerEntity) {
                                 this.setAnimation("animation.tribunal_healer.concentratedheal");
                             }
-                            CaerulaArborMod.queueServerWork(20, () -> {
+                            CaerulaArbor.queueServerWork(20, () -> {
                                 if (this.isAlive()) {
                                     double atk1;
                                     double count1 = 0;
@@ -326,7 +326,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_STRONG.get(), SoundSource.NEUTRAL, 2, 1);
                                     }
                                     final Vec3 center1 = new Vec3(x, y, z);
-                                    TagKey<EntityType<?>> inquisitionTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition"));
+                                    TagKey<EntityType<?>> inquisitionTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "inquisition"));
                                     List<LivingEntity> entfound1 = world.getEntitiesOfClass(LivingEntity.class, new AABB(center1, center1).inflate(9),
                                                     e -> e.getType().is(inquisitionTag) && e.getHealth() < e.getMaxHealth())
                                             .stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center1))).toList();
@@ -366,7 +366,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                     if (this instanceof TribunalHealerEntity) {
                         this.setAnimation("animation.tribunal_healer.shockwave");
                     }
-                    CaerulaArborMod.queueServerWork(40, () -> {
+                    CaerulaArbor.queueServerWork(40, () -> {
                         if (this.isAlive()) {
                             double vx;
                             double vz;
@@ -376,7 +376,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                             }
                             {
                                 final Vec3 center = new Vec3((getX()), (getY()), (getZ()));
-                                TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+                                TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside"));
                                 List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(6),
                                         e -> !e.getType().is(humanSideTag)
                                                 && !(e instanceof TamableAnimal tamEnt && tamEnt.isTame()));
@@ -394,7 +394,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                                         entityiterator.push((0.85 / Math.max(vx, vx / dist)), 0.25, (0.85 / Math.max(vz, vz / dist)));
                                         if (!entityiterator.level().isClientSide())
                                             entityiterator.addEffect(new MobEffectInstance(CAMobEffects.MUTE, 60, 0, false, false));
-                                        CaerulaArborMod.queueServerWork(8, () -> {
+                                        CaerulaArbor.queueServerWork(8, () -> {
                                             if (this.isAlive()) {
                                                 entityiterator.hurt(this.damageSources().indirectMagic(this, null),
                                                         (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
@@ -403,7 +403,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                                     }
                                 }
                             }
-                            CaerulaArborMod.queueServerWork(7, () -> {
+                            CaerulaArbor.queueServerWork(7, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level level) {
                                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_ATTACK.get(), SoundSource.PLAYERS, (float) 1.25, 1);
@@ -416,7 +416,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
                                                             (getZ() + 1 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 6))), 2, 0.1, 0.15, 0.1, 0.1);
                                             }
                                             final int tick2 = ticks;
-                                            CaerulaArborMod.queueServerWork(tick2, () -> {
+                                            CaerulaArbor.queueServerWork(tick2, () -> {
                                                 if (timedlooptotal > timedloopiterator + 1) {
                                                     timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                                 }

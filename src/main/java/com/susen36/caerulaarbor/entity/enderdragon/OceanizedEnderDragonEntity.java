@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity.enderdragon;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.ServerGeoAnimator;
 import com.susen36.caerulaarbor.client.model.entity.OceanizedEnderDragonModel;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -549,18 +549,18 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
 					world.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_SKILL.get(), SoundSource.HOSTILE, (float) 2.5, 1);
 					for (int index0 = 0; index0 < 8; index0++) {
-						CaerulaArborMod.queueServerWork(12 + index0 * 5, () -> {
+						CaerulaArbor.queueServerWork(12 + index0 * 5, () -> {
 							if (this.isAlive()) {
 								MoistDragonBreathEntity.spawn(world, getX(), getY() + 3, getZ(), this, (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null, Mth.nextInt(RandomSource.create(), 0, 1));
 							}
 						});
 						if (P > 0.5) {
-							CaerulaArborMod.queueServerWork(14 + index0 * 5, () -> {
+							CaerulaArbor.queueServerWork(14 + index0 * 5, () -> {
 								if (this.isAlive()) {
 									MoistDragonBreathEntity.spawn(world, getX(), getY() + 3, getZ(), this, (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null, Mth.nextInt(RandomSource.create(), 0, 1));
 								}
 							});
-							CaerulaArborMod.queueServerWork(15 + index0 * 5, () -> {
+							CaerulaArbor.queueServerWork(15 + index0 * 5, () -> {
 								if (this.isAlive()) {
 									MoistDragonBreathEntity.spawn(world, getX(), getY() + 3, getZ(), this, (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null, Mth.nextInt(RandomSource.create(), 0, 1));
 								}
@@ -887,7 +887,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	}
 
 	private void normalAttack(LivingEntity target) {
-		CaerulaArborMod.queueServerWork(11, () -> {
+		CaerulaArbor.queueServerWork(11, () -> {
 				Vec3 viewVec = this.getViewVector(1.0F);
 				double sx = this.head.getX() - viewVec.x;
 				double sy = this.head.getY(0.5) + 0.5;
@@ -900,7 +900,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	}
 
 	private void superAttack(LivingEntity target) {
-		CaerulaArborMod.queueServerWork(11, () -> {
+		CaerulaArbor.queueServerWork(11, () -> {
 				Vec3 viewVec = this.getViewVector(1.0F);
 				double sx = this.head.getX() - viewVec.x;
 				double sy = this.head.getY(0.5) + 0.5;

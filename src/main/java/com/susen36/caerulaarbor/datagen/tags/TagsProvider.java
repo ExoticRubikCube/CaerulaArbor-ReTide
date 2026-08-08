@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen.tags;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -61,7 +61,7 @@ public final class TagsProvider {
         protected RegistryTagsProvider(PackOutput output, ResourceKey<? extends Registry<T>> registryKey,
                                        CompletableFuture<HolderLookup.Provider> lookupProvider,
                                        @Nullable ExistingFileHelper existingFileHelper) {
-            super(output, registryKey, lookupProvider, CaerulaArborMod.MODID, existingFileHelper);
+            super(output, registryKey, lookupProvider, CaerulaArbor.MODID, existingFileHelper);
             this.registryKey = registryKey;
         }
 
@@ -102,7 +102,7 @@ public final class TagsProvider {
          * @return 标签 key
          */
         protected TagKey<T> modTag(String tagPath) {
-            return TagKey.create(registryKey, location(CaerulaArborMod.MODID, tagPath));
+            return TagKey.create(registryKey, location(CaerulaArbor.MODID, tagPath));
         }
 
         /**

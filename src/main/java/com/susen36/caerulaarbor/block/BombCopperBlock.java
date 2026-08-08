@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -91,7 +91,7 @@ public class BombCopperBlock extends Block {
                     for (int index3 = 0; index3 < 15; index3++) {
                         target = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
                         if (new Vec3(dx, dy, dz).distanceTo(new Vec3(0, 0, 0)) <= 24) {
-                            if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "blow_up")))) {
+                            if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "blow_up")))) {
                                 world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
                             }
                             dy = dy + 1;
@@ -107,8 +107,8 @@ public class BombCopperBlock extends Block {
                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                 for (Entity entityiterator : entfound) {
                     if (new Vec3((x + 0.5), (y + 0.5), (z + 0.5)).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) <= 24) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-                                && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
+                                && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet")))) {
                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.BRAND_BOMB),
                                     (float) Math.clamp((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.1, 8, 48));
                         }

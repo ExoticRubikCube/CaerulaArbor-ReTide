@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -254,7 +254,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 25, 9, false, false));
                         push((getLookAngle().x * 0.25), 0.25, (getLookAngle().z * 0.25));
-                        CaerulaArborMod.queueServerWork(20, () -> {
+                        CaerulaArbor.queueServerWork(20, () -> {
                             if (this.isAlive() && !(((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == null)) {
                                 if (world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FOX_TELEPORT, SoundSource.HOSTILE, 1, 1);
@@ -269,7 +269,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                                 }
                             }
                         });
-                        CaerulaArborMod.queueServerWork(30, () -> {
+                        CaerulaArbor.queueServerWork(30, () -> {
                             if (this.isAlive()) {
                                 Entity enemy1;
                                 double damage;
@@ -285,7 +285,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                                         if (!(entityiterator instanceof LivingEntity)) {
                                             continue;
                                         }
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                             if (!(entityiterator == enemy1)) {
                                                 continue;
                                             }

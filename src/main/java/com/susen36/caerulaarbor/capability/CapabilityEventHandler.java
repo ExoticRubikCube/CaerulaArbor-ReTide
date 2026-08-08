@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.capability;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.network.receive.SavedDataSyncMessage;
@@ -14,7 +14,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-@EventBusSubscriber(modid = CaerulaArborMod.MODID)
+@EventBusSubscriber(modid = CaerulaArbor.MODID)
 public class CapabilityEventHandler {
 
     private CapabilityEventHandler() {

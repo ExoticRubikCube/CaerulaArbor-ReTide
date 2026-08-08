@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
@@ -146,7 +146,7 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                         world.setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
                 result = ItemInteractionResult.SUCCESS;
-            } else if (input.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gene")))) {
+            } else if (input.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gene")))) {
                 if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                     player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.note").getString())), true);
             }

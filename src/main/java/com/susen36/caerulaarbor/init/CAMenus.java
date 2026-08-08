@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.init;
 
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.menu.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.MenuType;
@@ -10,7 +10,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class CAMenus {
-	public static final DeferredRegister<MenuType<?>> REGISTRY = DeferredRegister.create(BuiltInRegistries.MENU, CaerulaArborMod.MODID);
+	public static final DeferredRegister<MenuType<?>> REGISTRY = DeferredRegister.create(BuiltInRegistries.MENU, CaerulaArbor.MODID);
 	public static final DeferredHolder<MenuType<?>, MenuType<CaerulaRecordGUIMenu>> CAERULA_RECORD_GUI = REGISTRY.register("caerula_record_gui", () -> IMenuTypeExtension.create(CaerulaRecordGUIMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<RelicShowcaseMenu>> RELIC_SHOWCASE = REGISTRY.register("relic_showcase", () -> IMenuTypeExtension.create(RelicShowcaseMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<InfoStrategySubsisMenu>> INFO_STRATEGY_SUBSIS = REGISTRY.register("info_strategy_subsis", () -> IMenuTypeExtension.create(InfoStrategySubsisMenu::new));

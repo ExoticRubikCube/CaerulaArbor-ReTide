@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.IzumikOffspringEntity;
 import com.susen36.caerulaarbor.entity.MartusEntity;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -50,10 +50,10 @@ public class AngerOfTideMobEffect extends MobEffect {
                 if (!(entityiterator instanceof LivingEntity)) {
                     continue;
                 }
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                     continue;
                 }
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sea_friend")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_friend")))) {
                     continue;
                 }
                 if (entityiterator instanceof Player) {

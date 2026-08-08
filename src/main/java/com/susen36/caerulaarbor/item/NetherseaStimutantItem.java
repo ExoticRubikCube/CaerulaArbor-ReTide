@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -73,7 +73,7 @@ public class NetherseaStimutantItem extends Item {
                 player.drop(emptyCup, false);
             }
         }
-        CaerulaArborMod.queueServerWork(240, () -> {
+        CaerulaArbor.queueServerWork(240, () -> {
             if (entity.isAlive() && entity.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY)) {
                 if (Math.random() < 0.5) {
                     if (!entity.level().isClientSide()) {

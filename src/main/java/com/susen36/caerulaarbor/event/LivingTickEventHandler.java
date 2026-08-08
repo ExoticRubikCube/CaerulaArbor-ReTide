@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
@@ -72,7 +72,7 @@ public class LivingTickEventHandler {
             double blesses_h = -1.0D;
             double d1;
             for (Mob entityiterator : world.getEntitiesOfClass(Mob.class, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
-                if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))))
+                if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))))
                     continue;
                 if (entityiterator instanceof MartusEntity) continue;
                 d1 = entity.distanceToSqr(entityiterator);
@@ -88,7 +88,7 @@ public class LivingTickEventHandler {
         } else {
             if (enemy instanceof EndspeakerEntity endspeaker && endspeaker.getPhase() < 3 && endspeaker.hasEffect(CAMobEffects.INVULNERABLE)) {
                 other = world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)),
-                        e -> e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
+                        e -> e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
                 ).stream().min(Comparator.comparingDouble(e -> e.distanceToSqr(enemy))).orElse(null);
             } else if (enemy instanceof OceanizedIllusionerEntity) {
                 other = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
@@ -118,15 +118,15 @@ public class LivingTickEventHandler {
         Entity curEnemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
 
         if (curEnemy != null && curEnemy.isAlive()) return;
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))))
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))))
             return;
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sea_friend"))))
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_friend"))))
             return;
 
         for (Monster entityiterator : world.getEntitiesOfClass(Monster.class, new AABB((x + 32), (y + 12), (z + 32), (x - 32), (y - 9), (z - 32)))) {
             if (entity.isInWater() ^ entityiterator.isInWater()) continue;
-            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))))
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet"))))
                     continue;
                 double dist = entity.distanceToSqr(entityiterator);
                 if (minDist == -1.0D || dist < minDist) {
@@ -144,8 +144,8 @@ public class LivingTickEventHandler {
         LevelAccessor world = event.getEntity().level();
         Entity entity = event.getEntity();
 
-        if (entity instanceof Monster && entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))
+        if (entity instanceof Monster && entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
+                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet")))
                 && world.getLevelData().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)) {
             if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.ANGER_OF_TIDE))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
@@ -162,7 +162,7 @@ public class LivingTickEventHandler {
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))))
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))))
         {
             handleMobTargeting(world, x, y, z, entity);
             handleMobBuffs(world, x, y, z, entity);
@@ -173,12 +173,12 @@ public class LivingTickEventHandler {
     private static void handleMobTargeting(LevelAccessor world, double x, double y, double z, Entity entity) {
         Entity enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
         if (enemy == null || !enemy.isAlive()) {
-            if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
+            if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
                 if (entity instanceof Monster && entity.tickCount % 40 == 5) {
                     final Vec3 center1 = new Vec3(x, y, z);
                     List<LivingEntity> entfound1 = world.getEntitiesOfClass(LivingEntity.class, new AABB(center1, center1).inflate(48 / 2d),
-                            e1 -> e1.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters")))
-                                    || e1.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))
+                            e1 -> e1.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "hunters")))
+                                    || e1.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "inquisition")))
                                     || e1 instanceof TheLastKnightEntity
                                     || e1 instanceof LastKnightAndHorseEntity);
                     for (LivingEntity entityiterator1 : entfound1) {
@@ -222,7 +222,7 @@ public class LivingTickEventHandler {
 
                 final Vec3 center = new Vec3(x, y, z);
                 List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(range / 2d),
-                        e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))));
+                        e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))));
                 for (LivingEntity entityiterator : entfound) {
                     amplifi = amplifi + ampStep;
                     if (amplifi >= maxAmp) {
@@ -264,7 +264,7 @@ public class LivingTickEventHandler {
     }
 
     private static void handleSublimationBuffs(LevelAccessor world, Entity entity) {
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))) {
             return;
         }
         if (world.isClientSide()) return;
@@ -288,8 +288,8 @@ public class LivingTickEventHandler {
             if (!entity.getPersistentData().getBoolean("sublimationBlessed") && finalMigra >= 3.0) {
                 float currentHealth = living.getHealth();
                 if (currentHealth < maxHealth * 0.3) {
-                    boolean isElite = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanelite")));
-                    boolean isTiny = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "tiny_seaborn")));
+                    boolean isElite = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite")));
+                    boolean isTiny = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "tiny_seaborn")));
                     entity.getPersistentData().putBoolean("sublimationBlessed", true);
 
                     if (!isTiny) {
@@ -315,7 +315,7 @@ public class LivingTickEventHandler {
     private static void handleNaturalEvolution(LevelAccessor world, double x, double y, double z, Entity entity) {
         if (!world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) return;
         if (entity.tickCount % 10 != 0) return;
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) return;
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet")))) return;
 
         if (Math.random() < 0.16 && !world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).isEmpty()) {
             double pnt = Mth.nextDouble(RandomSource.create(), 0, 0.005);

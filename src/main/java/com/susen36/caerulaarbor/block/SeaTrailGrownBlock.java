@@ -3,9 +3,9 @@ package com.susen36.caerulaarbor.block;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAGameRules;
+import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.util.CaerulaUtil;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import com.susen36.caerulaarbor.util.StrategyUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -151,12 +151,12 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 			if (world.getLevelData().isRaining() && random.nextFloat() < 0.5F) {
 				expand = 2;
 			}
-			if (StrategyUtils.isSilence(world)) {
+			if (SilenceUpgradeManager.isSilence(world)) {
 				expand = 3;
 			}
 			boolean valid = !this.hasLargeLivingEntityNearby(world, pos);
 			if (valid && growAge > 29 && longevity > 0 && random.nextFloat() * 100.0F < world.getGameRules().getInt(CAGameRules.SPREAD_RATE)) {
-				if (StrategyUtils.isSilence(world)) {
+				if (SilenceUpgradeManager.isSilence(world)) {
 					expand = 1;
 				}
 				if (random.nextFloat() < 0.2F) {

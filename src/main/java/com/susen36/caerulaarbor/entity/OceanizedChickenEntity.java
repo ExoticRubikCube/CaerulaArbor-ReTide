@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -285,7 +285,7 @@ public class OceanizedChickenEntity extends SeaMonster {
                 if (this instanceof OceanizedChickenEntity) {
                     this.setAnimation("animation.oceanized_chicken.lay");
                 }
-                CaerulaArborMod.queueServerWork(5, () -> {
+                CaerulaArbor.queueServerWork(5, () -> {
                     if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 1, 1);
                     }

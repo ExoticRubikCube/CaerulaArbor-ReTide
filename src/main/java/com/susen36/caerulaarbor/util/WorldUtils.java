@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.util;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAGameRules;
@@ -133,7 +133,7 @@ public class WorldUtils {
 		BlockPos belowPos = BlockPos.containing(x, y - 1, z);
 		BlockState belowState = world.getBlockState(belowPos);
 		return (belowState.isFaceSturdy(world, belowPos, Direction.UP)
-				|| belowState.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail_existable"))))
+				|| belowState.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail_existable"))))
 				&& belowState.getBlock() != CABlocks.SEA_TRAIL_SOLID.get();
 	}
 
@@ -159,7 +159,7 @@ public class WorldUtils {
 					target = world.getBlockState(BlockPos.containing(px, py, pz));
 					canBreak = false;
 					mayDrop = false;
-					if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail")))) {
+					if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail")))) {
 						canBreak = true;
 					} else if (target.getBlock() == CABlocks.OCEAN_OVARY.get()) {
 						canBreak = true;
@@ -186,7 +186,7 @@ public class WorldUtils {
 
 	//可以安排到那个BaseSeaborn
 	public static boolean canCommonSeabornSpawn(LevelAccessor world, double x, double y, double z) {
-		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "common_spawn_biome")))) {
+		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "common_spawn_biome")))) {
 			return false;
 		}
 		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
@@ -203,7 +203,7 @@ public class WorldUtils {
 
 	//或许放到其他 util 比较好？可以专门制作一个海嗣 util
 	public static boolean canDangerSeabornSpawn(LevelAccessor world, double x, double y, double z) {
-		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "danger_spawn_biome")))) {
+		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "danger_spawn_biome")))) {
 			return false;
 		}
 		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
@@ -220,7 +220,7 @@ public class WorldUtils {
 
 	//可疑
 	public static boolean canRareSeabornSpawn(LevelAccessor world, double x, double y, double z) {
-		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "rare_spawn_biome")))) {
+		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "rare_spawn_biome")))) {
 			return false;
 		}
 		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
@@ -241,7 +241,7 @@ public class WorldUtils {
 			if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 				ResourceKey<LootTable> lootTableKey = ResourceKey.create(
 						Registries.LOOT_TABLE,
-						ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_route")
+						ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gameplay/relic_route")
 				);
 				LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableKey);
 				LootParams lootParams = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
@@ -286,7 +286,7 @@ public class WorldUtils {
 			if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 				ResourceKey<LootTable> lootTableKey = ResourceKey.create(
 						Registries.LOOT_TABLE,
-						ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_tidebi")
+						ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gameplay/relic_tidebi")
 				);
 				LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableKey);
 				LootParams lootParams = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
@@ -371,7 +371,7 @@ public class WorldUtils {
 		if (CAConfigs.EXTERNAL_ERROSION.get() && (block.is(BlockTags.create(ResourceLocation.parse("forge:phayrilesh"))) || block.is(BlockTags.create(ResourceLocation.parse("spore:fungal_blocks"))))) {
 			return Math.random() < 0.33;
 		}
-		return block.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "organic")));
+		return block.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "organic")));
 	}
 
 	/**
@@ -411,7 +411,7 @@ public class WorldUtils {
 
 	//需要注释解释，或许可以移动到别的 util
 	public static boolean canSpawnUnderwaterSeaborn(LevelAccessor world, double x, double y, double z) {
-		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "underwater_spawn_biome")))) {
+		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "underwater_spawn_biome")))) {
 			return false;
 		}
 		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
@@ -422,7 +422,7 @@ public class WorldUtils {
 
 	//同上
 	public static boolean canSpawnMarineSeaborn(LevelAccessor world, double x, double y, double z) {
-		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "marine_spawn_biome")))) {
+		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "marine_spawn_biome")))) {
 			return false;
 		}
 		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {

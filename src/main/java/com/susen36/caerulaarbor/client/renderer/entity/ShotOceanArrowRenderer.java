@@ -1,11 +1,11 @@
 package com.susen36.caerulaarbor.client.renderer.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.client.model.entity.ModelOceanArrow;
-import com.susen36.caerulaarbor.entity.bullets.ShotOceanArrowEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.client.model.entity.ModelOceanArrow;
+import com.susen36.caerulaarbor.entity.bullets.ShotOceanArrowEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class ShotOceanArrowRenderer extends EntityRenderer<ShotOceanArrowEntity> {
-	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanarrow_model.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanarrow_model.png");
 	private final ModelOceanArrow model;
 
 	public ShotOceanArrowRenderer(EntityRendererProvider.Context context) {

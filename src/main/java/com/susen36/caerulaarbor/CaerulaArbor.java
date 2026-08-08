@@ -15,18 +15,16 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
 
 import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-@Mod(CaerulaArborMod.MODID)
-public class CaerulaArborMod {
+@Mod(CaerulaArbor.MODID)
+public class CaerulaArbor {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final String MODID = "caerula_arbor";
     private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
 
-    public CaerulaArborMod(IEventBus modEventBus, ModContainer modContainer) {
+    public CaerulaArbor(IEventBus modEventBus, ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.COMMON, CAConfigs.SPEC, "caerular_configs.toml");
         NeoForge.EVENT_BUS.register(this);
         CASounds.REGISTRY.register(modEventBus);
@@ -68,16 +66,14 @@ public class CaerulaArborMod {
     @SubscribeEvent
     public void tick(ServerTickEvent.Post event) {
         if (!workQueue.isEmpty()) {
-            List<Runnable> readyToRun = new ArrayList<>();
             workQueue.removeIf(work -> {
                 work.setValue(work.getValue() - 1);
                 if (work.getValue() <= 0) {
-                    readyToRun.add(work.getKey());
+                    work.getKey().run();
                     return true;
                 }
                 return false;
             });
-            readyToRun.forEach(Runnable::run);
         }
     }
 }

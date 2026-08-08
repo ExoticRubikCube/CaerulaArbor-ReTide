@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -220,7 +220,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
                             datEntSetI.getEntityData().set(DATA_SWALLOW_P, 200);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 9, false, false));
-                        CaerulaArborMod.queueServerWork(8, () -> {
+                        CaerulaArbor.queueServerWork(8, () -> {
                             if (this.isAlive()) {
                                 if (this.getTarget() != null) {
                                     if (this.getTarget().isAlive()) {

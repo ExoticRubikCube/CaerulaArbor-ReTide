@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -43,7 +43,7 @@ public class DispatchStickItem extends Item {
         final Vec3 center = new Vec3(player.getX(), player.getY(), player.getZ());
         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
         for (Entity entityiterator : entfound) {
-            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                 if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
                     livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE, 131072, 0, false, true));
             }
@@ -58,7 +58,7 @@ public class DispatchStickItem extends Item {
         final Vec3 center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
         for (Entity entityiterator : entfound) {
-            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && !(entity == entityiterator)) {
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) && !(entity == entityiterator)) {
                 if (entityiterator instanceof Mob mob && (Entity) entity instanceof LivingEntity ent)
                     mob.setTarget(ent);
             }

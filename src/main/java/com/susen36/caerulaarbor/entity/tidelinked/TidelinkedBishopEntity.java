@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity.tidelinked;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.TellerShotEntity;
@@ -284,7 +284,7 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
                     if (!this.level().isClientSide()) {
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 0, false, false));
                     }
-                    CaerulaArborMod.queueServerWork(33, () -> {
+                    CaerulaArbor.queueServerWork(33, () -> {
                         if (this.isAlive() && this.getHealth() < this.getMaxHealth()) {
                             Level projectileLevel = this.level();
                             if (!projectileLevel.isClientSide()) {

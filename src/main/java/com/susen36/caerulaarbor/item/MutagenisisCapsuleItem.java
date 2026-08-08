@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
@@ -59,7 +59,7 @@ public class MutagenisisCapsuleItem extends Item {
             }
             if (ocean + 1 > 2.9) {
                 if ((Entity) entity instanceof ServerPlayer player) {
-                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_pay"));
+                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "they_shall_pay"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
@@ -68,7 +68,7 @@ public class MutagenisisCapsuleItem extends Item {
                 }
             } else {
                 if ((Entity) entity instanceof ServerPlayer player) {
-                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_welcome"));
+                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "they_shall_welcome"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
@@ -77,7 +77,7 @@ public class MutagenisisCapsuleItem extends Item {
                 }
             }
         } else if ((Entity) entity instanceof ServerPlayer player) {
-            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_welcome"));
+            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "they_shall_welcome"));
             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
             if (!ap.isDone()) {
                 for (String criteria : ap.getRemainingCriteria())

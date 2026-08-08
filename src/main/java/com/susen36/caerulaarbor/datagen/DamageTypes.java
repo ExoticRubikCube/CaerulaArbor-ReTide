@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -307,7 +307,7 @@ public class DamageTypes {
     );
 
     private static ResourceKey<DamageType> create(String damageName, String pMsgId, DamageScaling pScaling, float pExhaustion) {
-        var resourceKey = ResourceKey.create(Registries.DAMAGE_TYPE, CaerulaArborMod.ModLoc(damageName));
+        var resourceKey = ResourceKey.create(Registries.DAMAGE_TYPE, CaerulaArbor.ModLoc(damageName));
         var damageType = new DamageType(pMsgId, pScaling, pExhaustion);
         if (DamageResKeysAndTypes == null) DamageResKeysAndTypes = new ArrayList<>();
         DamageResKeysAndTypes.add(new ResKeyAndType(resourceKey, damageType));
@@ -315,7 +315,7 @@ public class DamageTypes {
     }
 
     private static ResourceKey<DamageType> create(String damageName, String pMsgId, DamageScaling pScaling, float pExhaustion, DamageEffects damageEffects) {
-        var resourceKey = ResourceKey.create(Registries.DAMAGE_TYPE, CaerulaArborMod.ModLoc(damageName));
+        var resourceKey = ResourceKey.create(Registries.DAMAGE_TYPE, CaerulaArbor.ModLoc(damageName));
         var damageType = new DamageType(pMsgId, pScaling, pExhaustion,damageEffects);
         if (DamageResKeysAndTypes == null) DamageResKeysAndTypes = new ArrayList<>();
         DamageResKeysAndTypes.add(new ResKeyAndType(resourceKey, damageType));

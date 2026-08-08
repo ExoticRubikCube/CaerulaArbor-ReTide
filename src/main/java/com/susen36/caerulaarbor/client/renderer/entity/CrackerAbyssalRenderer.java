@@ -1,11 +1,11 @@
 
 package com.susen36.caerulaarbor.client.renderer.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.client.model.entity.CrackerAbyssalModel;
-import com.susen36.caerulaarbor.entity.CrackerAbyssalEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.client.model.entity.CrackerAbyssalModel;
+import com.susen36.caerulaarbor.entity.CrackerAbyssalEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -14,7 +14,7 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CrackerAbyssalRenderer extends GeoEntityRenderer<CrackerAbyssalEntity> {
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/reefbreaker.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/reefbreaker.png");
 
 	public CrackerAbyssalRenderer(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new CrackerAbyssalModel());

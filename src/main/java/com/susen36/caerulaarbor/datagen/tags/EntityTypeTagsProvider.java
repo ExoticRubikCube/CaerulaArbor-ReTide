@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen.tags;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -120,7 +120,7 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
      * @return 实体类型标签 key
      */
     private static TagKey<EntityType<?>> caEntityTypeTag(String path) {
-        return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
+        return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, path));
     }
 
     /**

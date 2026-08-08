@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.ShotOceanArrowEntity;
@@ -455,7 +455,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         }
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 20, 0));
-                        CaerulaArborMod.queueServerWork(18, () -> {
+                        CaerulaArbor.queueServerWork(18, () -> {
                             if (!isPassenger()) {
                                 if (!this.level().isClientSide())
                                     this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 2400, 0));

@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity.crawler;
 
 import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -128,7 +128,7 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
             List<LivingEntity> nearbyEntities = serverLevel.getEntitiesOfClass(
                     LivingEntity.class,
                     new AABB(centerPos, centerPos).inflate(3.0D),
-                    entity -> entity != this && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
+                    entity -> entity != this && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
             );
 
             for (LivingEntity entity : nearbyEntities) {

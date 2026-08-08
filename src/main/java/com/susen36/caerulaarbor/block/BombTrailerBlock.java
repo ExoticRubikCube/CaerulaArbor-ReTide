@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -88,7 +88,7 @@ public class BombTrailerBlock extends Block {
                     dy = -2;
                     for (int index3 = 0; index3 < 5; index3++) {
                         target = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
-                        if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "blow_up")))) {
+                        if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "blow_up")))) {
                             world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
                         }
                         dy = dy + 1;

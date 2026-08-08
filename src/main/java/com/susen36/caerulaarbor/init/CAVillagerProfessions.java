@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.init;
 
 import com.google.common.collect.ImmutableSet;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -18,9 +18,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class CAVillagerProfessions {
-    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(Registries.VILLAGER_PROFESSION, CaerulaArborMod.MODID);
-    public static final DeferredRegister<PoiType> POIS = DeferredRegister.create(Registries.POINT_OF_INTEREST_TYPE, CaerulaArborMod.MODID);
-    public static final ResourceKey<PoiType> CANNOT_GOODENOUGH_POI = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_goodenough"));
+    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(Registries.VILLAGER_PROFESSION, CaerulaArbor.MODID);
+    public static final DeferredRegister<PoiType> POIS = DeferredRegister.create(Registries.POINT_OF_INTEREST_TYPE, CaerulaArbor.MODID);
+    public static final ResourceKey<PoiType> CANNOT_GOODENOUGH_POI = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "cannot_goodenough"));
     public static final DeferredHolder<PoiType, PoiType> CANNOT_GOODENOUGH_POI_HOLDER = registerPoi("cannot_goodenough", CABlocks.BLOCK_RECORDER);
     public static final DeferredHolder<VillagerProfession, VillagerProfession> CANNOT_GOODENOUGH = registerProfession("cannot_goodenough", CANNOT_GOODENOUGH_POI_HOLDER,
             () -> SoundEvents.VILLAGER_WORK_CLERIC);
@@ -32,7 +32,7 @@ public class CAVillagerProfessions {
     private static DeferredHolder<VillagerProfession, VillagerProfession> registerProfession(String name, DeferredHolder<PoiType, PoiType> poiHolder, Supplier<SoundEvent> soundEvent) {
         return PROFESSIONS.register(name, () -> {
             Predicate<Holder<PoiType>> poiPredicate = poiTypeHolder -> poiTypeHolder.value() == poiHolder.value();
-            return new VillagerProfession(CaerulaArborMod.MODID + ":" + name, poiPredicate, poiPredicate, ImmutableSet.of(), ImmutableSet.of(), soundEvent.get());
+            return new VillagerProfession(CaerulaArbor.MODID + ":" + name, poiPredicate, poiPredicate, ImmutableSet.of(), ImmutableSet.of(), soundEvent.get());
         });
     }
 }

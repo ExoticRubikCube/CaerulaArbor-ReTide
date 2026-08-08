@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
@@ -96,7 +96,7 @@ public class RescissionItem extends Item {
                                 level.sendParticles(ParticleTypes.ASH, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 1, 1, 1, 0.5);
                             itemstack.shrink(1);
                             if (entityiterator instanceof Wolf) {
-                                CaerulaArborMod.queueServerWork(Mth.nextInt(RandomSource.create(), 40, 80), () -> {
+                                CaerulaArbor.queueServerWork(Mth.nextInt(RandomSource.create(), 40, 80), () -> {
                                     if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                                         player.displayClientMessage(Component.literal(("搂o" + Component.translatable("item.caerula_arbor.language_key.description_3").getString())), false);
                                 });

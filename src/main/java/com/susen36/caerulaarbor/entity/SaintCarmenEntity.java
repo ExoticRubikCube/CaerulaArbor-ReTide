@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.entity.bullets.CarmenBulletEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -144,7 +144,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         double targetY = target.getY();
         double targetZ = target.getZ();
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(9, () -> {
+            CaerulaArbor.queueServerWork(9, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
                     this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                             CASounds.CARMEN_MELEE.get(), SoundSource.NEUTRAL, 2.33F,
@@ -246,12 +246,12 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                         if ((Entity) this instanceof SaintCarmenEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_DURATION, 33);
                         dura = 33;
-                        CaerulaArborMod.queueServerWork(10, () -> {
+                        CaerulaArbor.queueServerWork(10, () -> {
                             if (this.isAlive()) {
                                 carmenTeleport(world, x, y, z);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(21, () -> {
+                        CaerulaArbor.queueServerWork(21, () -> {
                             if (this.isAlive()) {
                                 shoot(world, x, y, z, 2);
                             }
@@ -278,17 +278,17 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                         dura = 50;
                         push((getLookAngle().x * (-1.5)), 0, (getLookAngle().z * (-1.5)));
                         this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (getY() + 1.8), (target.getZ())));
-                        CaerulaArborMod.queueServerWork(12, () -> {
+                        CaerulaArbor.queueServerWork(12, () -> {
                             if (this.isAlive()) {
                                 shootAbundant(world, x, y, z, 1);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(23, () -> {
+                        CaerulaArbor.queueServerWork(23, () -> {
                             if (this.isAlive()) {
                                 shootAbundant(world, x, y, z, 2);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(35, () -> {
+                        CaerulaArbor.queueServerWork(35, () -> {
                             if (this.isAlive()) {
                                 shootAbundant(world, x, y, z, 3);
                             }
@@ -310,7 +310,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                             if ((Entity) this instanceof SaintCarmenEntity datEntSetI)
                                 datEntSetI.getEntityData().set(DATA_BULLET, (int) (bullet - 1));
                             this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (getY() + 1.8), (target.getZ())));
-                            CaerulaArborMod.queueServerWork(9, () -> {
+                            CaerulaArbor.queueServerWork(9, () -> {
                                 if (this.isAlive()) {
                                     shoot(world, x, y, z, 2);
                                 }

@@ -91,7 +91,7 @@ public class NetherseaChickenEggItem extends Item {
                     data.set(OceanizedChickenEntity.DATA_IS_CHILD, true);
                 }
             }
-            //CaerulaArborMod.LOGGER.info(("Summon chicken with rate: " + new java.text.DecimalFormat("##.##").format(fr) + " and with offset: " + new java.text.DecimalFormat("##.##").format(ooo)));
+            //CaerulaArbor.LOGGER.info(("Summon chicken with rate: " + new java.text.DecimalFormat("##.##").format(fr) + " and with offset: " + new java.text.DecimalFormat("##.##").format(ooo)));
         }
         return InteractionResult.SUCCESS;
     }

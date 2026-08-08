@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -109,7 +109,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
             int x = pos.getX();
             int y = pos.getY();
             int z = pos.getZ();
-            if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "deepmarine_spawn_biome")))) {
+            if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "deepmarine_spawn_biome")))) {
                 return false;
             }
             if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
@@ -170,7 +170,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
     @Override
     public boolean doHurtTarget(Entity target) {
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(12, () -> {
+            CaerulaArbor.queueServerWork(12, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.5) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -202,22 +202,18 @@ public class NucleicMaleficentEntity extends SeaMonster {
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 5 * Math.sin(angle)), (y + 0.33), (z + 5 * Math.cos(angle)), 3, 0.1, 0.1, 0.1, 0.2);
                 }
-                {
-                    final Vec3 center = new Vec3(x, y, z);
-                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                    for (Entity entityiterator : entfound) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && !(entityiterator == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
-                            continue;
-                        }
-                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 5) {
-                            if (!(entityiterator == this)) {
-                                if (entityiterator instanceof LivingEntity target) {
-                                    SIHelper.causeSanityInjury(target,
-                                            this,
-                                            (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 6,
-                                            SanityEvent.Hurt.Type.ENTITY);
-                                }
-                            }
+                final Vec3 center = new Vec3(x, y, z);
+                List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Mob entityiterator : entfound) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) && !(entityiterator == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
+                        continue;
+                    }
+                    if (distanceTo(entityiterator) < 5) {
+                        if (!(entityiterator == this)) {
+                            SIHelper.causeSanityInjury( entityiterator,
+                                    this,
+                                    (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 6,
+                                    SanityEvent.Hurt.Type.ENTITY);
                         }
                     }
                 }

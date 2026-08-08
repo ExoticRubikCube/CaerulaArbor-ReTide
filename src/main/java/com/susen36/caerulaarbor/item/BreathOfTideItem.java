@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -58,10 +58,10 @@ public class BreathOfTideItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "danger_spawn_biome")))) {
+        if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "danger_spawn_biome")))) {
             if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                 player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_1").getString())), true);
-            CaerulaArborMod.queueServerWork(20, () -> {
+            CaerulaArbor.queueServerWork(20, () -> {
                 if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                     player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_2").getString())), true);
             });

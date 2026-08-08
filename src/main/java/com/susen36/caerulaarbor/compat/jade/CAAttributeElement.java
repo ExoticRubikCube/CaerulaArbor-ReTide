@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.compat.jade;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -18,8 +18,8 @@ public class CAAttributeElement extends Element {
     private final boolean showDefense;
     private final boolean showResistance;
 
-    private static final ResourceLocation DEFENSE_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/defense.png");
-    private static final ResourceLocation MAGIC_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/magic_resistance.png");
+    private static final ResourceLocation DEFENSE_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/defense.png");
+    private static final ResourceLocation MAGIC_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/magic_resistance.png");
 
     public CAAttributeElement(double defense, double resistance) {
         defense = Math.ceil(defense);

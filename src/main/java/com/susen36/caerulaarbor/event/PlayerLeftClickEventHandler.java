@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.helper.LittleHelperEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -35,7 +35,7 @@ public class PlayerLeftClickEventHandler {
     }
 
     public static class HelperLeftClickMessage implements CustomPacketPayload {
-        public static final Type<HelperLeftClickMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "helper_left_click"));
+        public static final Type<HelperLeftClickMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "helper_left_click"));
         public static final StreamCodec<FriendlyByteBuf, HelperLeftClickMessage> STREAM_CODEC = StreamCodec.of(
                 (buf, msg) -> {
                 },

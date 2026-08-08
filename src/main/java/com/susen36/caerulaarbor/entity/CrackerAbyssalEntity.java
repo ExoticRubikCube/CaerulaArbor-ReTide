@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
@@ -165,7 +165,7 @@ public class CrackerAbyssalEntity extends SeaMonster {
             double amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER) ? this.getEffect(CAMobEffects.REEF_CRACKER).getAmplifier() : -1;
             int nextAmplifier = amplifier < 0 ? 0 : Math.min((int) amplifier + 1, 14);
             this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER, 120, nextAmplifier, false, false));
-            CaerulaArborMod.queueServerWork(12, () -> {
+            CaerulaArbor.queueServerWork(12, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -201,14 +201,14 @@ public class CrackerAbyssalEntity extends SeaMonster {
                     }
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 40, 0, false, false));
-                    CaerulaArborMod.queueServerWork(10, () -> {
+                    CaerulaArbor.queueServerWork(10, () -> {
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2, 1);
                         }
                         final Vec3 center = new Vec3(x, y, z);
                         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                         for (Entity entityiterator : entfound) {
-                            if ((!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) || ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)
+                            if ((!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) || ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)
                                     && (entityiterator instanceof Mob || entityiterator instanceof Player)) {
                                 if (distanceTo(entityiterator) <= 3) {
                                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)

@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity.wither;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.bullets.WitherShootPreEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -250,9 +250,9 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 20, 0, false, false));
             }
             this.setAnimation("animation.oceanzied_wither.skill");
-            CaerulaArborMod.queueServerWork(4, () -> this.rimedWitherShoot(world));
-            CaerulaArborMod.queueServerWork(13, () -> this.gatlinWitherShoot(world, x, y, z));
-            CaerulaArborMod.queueServerWork(12, () -> this.gatlinWitherShoot(world, x, y, z));
+            CaerulaArbor.queueServerWork(4, () -> this.rimedWitherShoot(world));
+            CaerulaArbor.queueServerWork(13, () -> this.gatlinWitherShoot(world, x, y, z));
+            CaerulaArbor.queueServerWork(12, () -> this.gatlinWitherShoot(world, x, y, z));
         }
 
         if (this.tickCount % 10 == 0 && WorldUtils.canGrief(world)) {
@@ -311,7 +311,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
                 shootWitherSkull(world, OceanizedWitherEntity.this, 0.1, Math.cos(Math.toRadians(angle)), Mth.nextDouble(RandomSource.create(), -0.25, 0.25), Math.sin(Math.toRadians(angle)), 5, 0.35, getX(),
                         getY() + Mth.nextDouble(RandomSource.create(), 0.25, 3), getZ());
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }
@@ -395,7 +395,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
                 rng = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 shootWitherSkull(world, OceanizedWitherEntity.this, 0.15, 0, -1, 0, 6, 0.35, x + dist * Math.cos(rng), y + Mth.nextDouble(RandomSource.create(), 4, 8), z + dist * Math.sin(rng));
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }

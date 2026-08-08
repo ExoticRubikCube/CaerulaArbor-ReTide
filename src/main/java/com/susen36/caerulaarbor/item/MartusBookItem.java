@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -120,7 +120,7 @@ public class MartusBookItem extends Item implements GeoItem, SyncedAnimationItem
                     if ((Entity) entity instanceof Player player)
                         player.giveExperienceLevels(-(5));
                 }
-                CaerulaArborMod.queueServerWork(10, () -> {
+                CaerulaArbor.queueServerWork(10, () -> {
                     world.playSound(null, entity.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 2, 1);
                     entity.setHealth((float) Math.max(entity.getMaxHealth() * 0.5 + 1, entity.getHealth()));
                     entity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION, 400, 0, false, false));

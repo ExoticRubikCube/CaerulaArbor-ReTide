@@ -1,12 +1,12 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@EventBusSubscriber(modid = CaerulaArborMod.MODID)
+@EventBusSubscriber(modid = CaerulaArbor.MODID)
 public final class CACompostableItems {
     private CACompostableItems() {
     }

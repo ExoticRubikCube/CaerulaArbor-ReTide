@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -41,7 +41,7 @@ public class PersonnelTransporterItem extends Item {
 		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	}
 
-	public static final TagKey<EntityType<?>> HOMO_SAPIENS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "portable"));
+	public static final TagKey<EntityType<?>> HOMO_SAPIENS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "portable"));
     public static final String emptyNameHolder = "apocata";
     public static final String TAG_NAME = "name";
     public static final String TAG_PERC = "perc";
@@ -73,7 +73,7 @@ public class PersonnelTransporterItem extends Item {
             if (name.isEmpty() || name.equals(emptyNameHolder)){
                 ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(type);
                 String id = key.toString();
-                CaerulaArborMod.LOGGER.info("store {}", id);
+                CaerulaArbor.LOGGER.info("store {}", id);
                 if(pPlayer.getMainHandItem().getItem() == pStack.getItem()) {
                     CustomData.update(DataComponents.CUSTOM_DATA, pPlayer.getMainHandItem(), tag2 -> {
                         tag2.putString(TAG_NAME, id);

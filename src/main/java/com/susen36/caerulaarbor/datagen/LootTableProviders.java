@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -226,7 +226,7 @@ public final class LootTableProviders {
         public void generate(@NotNull BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
             for (TableDef table : tables) {
                 ResourceKey<LootTable> key = ResourceKey.create(Registries.LOOT_TABLE,
-                        ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, table.path()));
+                        ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, table.path()));
                 output.accept(key, table(table, registries));
             }
         }

@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.client.model.entity.ModelBulletProjectile;
 import com.susen36.caerulaarbor.entity.bullets.CarmenBulletEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class CarmenBulletRenderer extends EntityRenderer<CarmenBulletEntity> {
-	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/carmen_bullet.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/carmen_bullet.png");
 	private final ModelBulletProjectile model;
 
 	public CarmenBulletRenderer(EntityRendererProvider.Context context) {

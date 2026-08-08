@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -77,7 +77,7 @@ public class AbandonedShootEntity extends BaseProjectile implements ItemSupplier
             final Vec3 center = new Vec3(x, y, z);
             List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
             for (Entity entityiterator : entfound) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                     continue;
                 }
                 if (!(entityiterator instanceof LivingEntity)) {
@@ -107,7 +107,7 @@ public class AbandonedShootEntity extends BaseProjectile implements ItemSupplier
             final Vec3 center = new Vec3((x + 0.5), (y + 0.5), (z + 0.5));
             List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
             for (Entity entityiterator : entfound) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                     continue;
                 }
                 if (!(entityiterator instanceof LivingEntity)) {

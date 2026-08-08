@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
@@ -71,7 +71,7 @@ public class EliteCavairItem extends Item {
         }
         SIHelper.causeSanityInjury(entity, 45, SanityEvent.Hurt.Type.FOOD);
         if ((Entity) entity instanceof ServerPlayer player) {
-            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "but_i_refuse"));
+            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "but_i_refuse"));
             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
             if (!ap.isDone()) {
                 for (String criteria : ap.getRemainingCriteria())

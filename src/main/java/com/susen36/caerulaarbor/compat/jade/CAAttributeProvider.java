@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.compat.jade;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 
 import com.susen36.caerulaarbor.init.CAAttributes;
 import net.minecraft.resources.ResourceLocation;
@@ -15,7 +15,7 @@ import snownee.jade.api.config.IPluginConfig;
 public enum CAAttributeProvider implements IEntityComponentProvider {
     INSTANCE;
 
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "attribute_provider");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "attribute_provider");
 
     @Override
     public void appendTooltip(ITooltip iTooltip, EntityAccessor entityAccessor, IPluginConfig iPluginConfig) {

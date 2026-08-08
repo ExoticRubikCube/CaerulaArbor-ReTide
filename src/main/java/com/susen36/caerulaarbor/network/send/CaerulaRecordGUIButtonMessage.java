@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.network.send;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.menu.PlayerEvoMenu;
@@ -22,7 +22,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class CaerulaRecordGUIButtonMessage implements CustomPacketPayload {
-	public static final Type<CaerulaRecordGUIButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "caerula_record_gui_button"));
+	public static final Type<CaerulaRecordGUIButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "caerula_record_gui_button"));
 	public static final StreamCodec<FriendlyByteBuf, CaerulaRecordGUIButtonMessage> STREAM_CODEC = StreamCodec.of(
 			(buf, msg) -> CaerulaRecordGUIButtonMessage.buffer(msg, buf),
 			CaerulaRecordGUIButtonMessage::new

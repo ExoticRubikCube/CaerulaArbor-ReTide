@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -67,7 +67,7 @@ public class HealBullletEntity extends BaseProjectile implements ItemSupplier {
         if (entity != null) {
             if (!level().isClientSide())
                 discard();
-            CaerulaArborMod.queueServerWork(16, () -> {
+            CaerulaArbor.queueServerWork(16, () -> {
                 if (entity.isAlive()) {
                     double atk;
                     double count = 0;
@@ -76,7 +76,7 @@ public class HealBullletEntity extends BaseProjectile implements ItemSupplier {
                         final Vec3 center = new Vec3(x, y, z);
                         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                         for (Entity entityiterator : entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "homo_sapiens")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "homo_sapiens")))) {
                                 if ((entityiterator instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
                                     if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
                                         livingEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 1));

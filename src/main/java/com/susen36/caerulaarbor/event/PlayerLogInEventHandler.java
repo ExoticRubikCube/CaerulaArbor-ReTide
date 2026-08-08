@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import net.minecraft.advancements.AdvancementHolder;
@@ -18,8 +18,8 @@ public class PlayerLogInEventHandler {
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 		if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-			ResourceLocation relicBanNoticeId = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "ban_relic_notice");
-			ResourceLocation surgingWavesNoticeId = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "surging_waves_notice");
+			ResourceLocation relicBanNoticeId = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "ban_relic_notice");
+			ResourceLocation surgingWavesNoticeId = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "surging_waves_notice");
 
 			if (CAConfigs.RELIC_BAN.get()) {
 				AdvancementHolder relicBanNoticeAdvancement = serverPlayer.server.getAdvancements().get(relicBanNoticeId);

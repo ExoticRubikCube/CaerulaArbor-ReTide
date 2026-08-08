@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.util;
 
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
@@ -196,7 +196,7 @@ public class EntityUtils {
 				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
 					livingEntity.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
 			}
-			if (entity.tickCount % gap == 0 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "immue_to_nethersea_brand")))) {
+			if (entity.tickCount % gap == 0 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "immue_to_nethersea_brand")))) {
 				if (entity instanceof Player) {
 					if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.DEPTH_STRIDER), a0) != 0) {
 						lvl1 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.DEPTH_STRIDER), a0);
@@ -233,8 +233,8 @@ public class EntityUtils {
 		final Vec3 searchCenter = new Vec3(x, y, z);
 		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(searchCenter, searchCenter).inflate(32 / 2d),
 				e -> e != center && e.getType().is(SEA_BORN)
-						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
-						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))));
+						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))
+						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet"))));
 		for (LivingEntity entityiterator : entfound) {
 			count = count + 1;
 		}
@@ -246,8 +246,8 @@ public class EntityUtils {
 		final Vec3 center = new Vec3(x, y, z);
 		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d),
 				e -> e.getType().is(SEA_BORN)
-						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
-						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))));
+						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))
+						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet"))));
 		for (LivingEntity entityiterator : entfound) {
 			count = count + 1;
 		}
@@ -334,7 +334,7 @@ public class EntityUtils {
 				if (entityiterator == exception1) {
 					continue;
 				}
-				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sea_friend")))) {
+				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_friend")))) {
 					continue;
 				}
 				if (new Object() {
@@ -486,12 +486,12 @@ public class EntityUtils {
 	// 人类实体标签
 	public static final TagKey<EntityType<?>> HUMAN = TagKey.create(
 			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")
 		);
 
 	public static final TagKey<EntityType<?>> SEA_BORN = TagKey.create(
 			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sea_bron")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_bron")
 		);
 
 	// 应用先锋增益
@@ -504,7 +504,7 @@ public class EntityUtils {
 				{
 					final Vec3 center = new Vec3(x, y, z);
 					List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
-							e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "phalax"))));
+							e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "phalax"))));
 					for (LivingEntity entityiterator : entfound) {
 						less = less + 1;
 						if (less >= 10) {

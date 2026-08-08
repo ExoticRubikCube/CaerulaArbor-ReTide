@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.client.model.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.crawler.PocketSeaCrawlerEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -11,14 +11,14 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class PocketSeaCrawlerModel extends GeoModel<PocketSeaCrawlerEntity> {
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/pocket_sea_crawlerfish.png");
-	private static final ResourceLocation TEXTURE_CHARGED = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/nourished_crawler.png");
-	private static final ResourceLocation MODEL_NORMAL = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/pocket_sea_cawler.geo.json");
-	private static final ResourceLocation MODEL_CHARGED = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/nourished_crawler.geo.json");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/pocket_sea_crawlerfish.png");
+	private static final ResourceLocation TEXTURE_CHARGED = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/nourished_crawler.png");
+	private static final ResourceLocation MODEL_NORMAL = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "geo/pocket_sea_cawler.geo.json");
+	private static final ResourceLocation MODEL_CHARGED = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "geo/nourished_crawler.geo.json");
 
 	@Override
 	public ResourceLocation getAnimationResource(PocketSeaCrawlerEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/pocket_sea_creeper.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "animations/pocket_sea_creeper.animation.json");
 	}
 
 	@Override

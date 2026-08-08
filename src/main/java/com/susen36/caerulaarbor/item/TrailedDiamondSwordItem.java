@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -50,7 +50,7 @@ public class TrailedDiamondSwordItem extends SwordItem {
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), (entity.getY() + entity.getBbHeight() * 0.5), entity.getZ(), 11, 1.2, 1.5, 1.2, 0.1);
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }

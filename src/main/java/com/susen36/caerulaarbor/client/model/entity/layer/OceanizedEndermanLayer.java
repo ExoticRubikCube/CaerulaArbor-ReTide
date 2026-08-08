@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.client.model.entity.layer;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.OceanizedEndermanEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.entity.OceanizedEndermanEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -13,8 +13,8 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedEndermanLayer extends GeoRenderLayer<OceanizedEndermanEntity> {
-	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/enderman_lit.png");
-	private static final ResourceLocation LAYER_CREEPER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/enderman_creeper_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/enderman_lit.png");
+	private static final ResourceLocation LAYER_CREEPER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/enderman_creeper_lit.png");
 
 	public OceanizedEndermanLayer(GeoRenderer<OceanizedEndermanEntity> entityRenderer) {
 		super(entityRenderer);

@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -164,7 +164,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                             this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false));
-                            CaerulaArborMod.queueServerWork(16, () -> {
+                            CaerulaArbor.queueServerWork(16, () -> {
                                 if (this.isAlive()) {
                                     if (distanceTo(sourceentity) <= 5) {
                                         sourceentity.hurt(
@@ -179,7 +179,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                     }
                                     double ddd;
                                     ddd = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.25;
-                                    if (sourceentity instanceof LivingEntity && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))
+                                    if (sourceentity instanceof LivingEntity && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))
                                             && distanceTo(sourceentity) <= 3) {
                                         sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ddd);
                                         if (!this.level().isClientSide())
@@ -323,13 +323,13 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                         }
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 40, 0, false, false));
-                        CaerulaArborMod.queueServerWork(10, () -> {
+                        CaerulaArbor.queueServerWork(10, () -> {
                             spinAttack(1.5);
                         });
-                        CaerulaArborMod.queueServerWork(14, () -> {
+                        CaerulaArbor.queueServerWork(14, () -> {
                             spinAttack(2);
                         });
-                        CaerulaArborMod.queueServerWork(20, () -> {
+                        CaerulaArbor.queueServerWork(20, () -> {
                             spinAttack(1.5);
                         });
                         if (SpecterEntity.isSpecterAround(world, x, y, z)) {
@@ -353,7 +353,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
             GladiiaEntity.healFromGladiia(world, x, y, z, this);
             if (tickCount % 10 == 0) {
                 final Vec3 center = new Vec3(x, y, z);
-                TagKey<EntityType<?>> huntersTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters"));
+                TagKey<EntityType<?>> huntersTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "hunters"));
                 List<LivingEntity> nearbyHunters = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
                         e -> e.isAlive() && e.getType().is(huntersTag));
                 for (LivingEntity entityiterator : nearbyHunters) {
@@ -387,7 +387,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         Entity target = this.getTarget();
         double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * damageMultiplier;
         Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-        TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+        TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside"));
         List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(3),
                 entity -> entity.isAlive()
                         && ((entity == target || (entity instanceof Mob mobEnt && mobEnt.getTarget() == this))

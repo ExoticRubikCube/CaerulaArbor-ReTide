@@ -1,11 +1,11 @@
 package com.susen36.caerulaarbor.client.renderer.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.client.model.entity.ModelHighmoreShoot;
-import com.susen36.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.client.model.entity.ModelHighmoreShoot;
+import com.susen36.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class HighmoreShootRenderer extends EntityRenderer<HighmoreShootEntity> {
-	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/highmore_spell.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/highmore_spell.png");
 	private final ModelHighmoreShoot model;
 
 	public HighmoreShootRenderer(EntityRendererProvider.Context context) {

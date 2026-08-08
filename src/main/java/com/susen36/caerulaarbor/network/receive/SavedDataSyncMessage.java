@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.network.receive;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.world.WorldVariables;
 import net.minecraft.core.HolderLookup;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class SavedDataSyncMessage implements CustomPacketPayload {
-	public static final Type<SavedDataSyncMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "saved_data_sync"));
+	public static final Type<SavedDataSyncMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "saved_data_sync"));
 	public static final StreamCodec<FriendlyByteBuf, SavedDataSyncMessage> STREAM_CODEC = StreamCodec.of(
 			SavedDataSyncMessage::encode,
 			SavedDataSyncMessage::decode

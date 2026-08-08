@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.TellerShotEntity;
@@ -261,7 +261,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
                     if (this instanceof FirstTellerEntity) {
                         this.setAnimation("animation.firstspeak.skill");
                     }
-                    CaerulaArborMod.queueServerWork(10, () -> {
+                    CaerulaArbor.queueServerWork(10, () -> {
                         Mob mobEnt = this;
                         if (!(mobEnt.getTarget() == null)) {
                             if ((Entity) mobEnt.getTarget() instanceof LivingEntity entity && !this.level().isClientSide())

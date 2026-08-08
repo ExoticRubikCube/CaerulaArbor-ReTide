@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
@@ -117,7 +117,7 @@ public abstract class AbstractOvaryBlock extends Block implements SimpleWaterlog
 	private void grantOvaryAdvancement(LevelAccessor world) {
 		for (Entity entityiterator : new ArrayList<>(world.players())) {
 			if (entityiterator instanceof ServerPlayer player) {
-				AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "extension_of_calamity"));
+				AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "extension_of_calamity"));
                 AdvancementProgress ap;
                 if (adv != null) {
 					ap = player.getAdvancements().getOrStartProgress(adv);

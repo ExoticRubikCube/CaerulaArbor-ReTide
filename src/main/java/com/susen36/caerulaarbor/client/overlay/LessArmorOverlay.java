@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.client.overlay;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -23,11 +23,11 @@ public class LessArmorOverlay {
 		if (player.hasEffect(BabelMobEffects.LESS_ARMOR)) {
 			int amplifier = player.getEffect(BabelMobEffects.LESS_ARMOR).getAmplifier();
 			if (amplifier <= 4) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/low_armor_ui.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/low_armor_ui.png");
 			} else if (amplifier <= 9) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/less_armor_ui.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/less_armor_ui.png");
 			} else {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/least_armor_ui.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/least_armor_ui.png");
 			}
 		}
 		if (texture != null) {

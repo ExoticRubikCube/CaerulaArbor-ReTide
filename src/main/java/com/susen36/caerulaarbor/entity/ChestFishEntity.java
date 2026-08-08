@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -156,7 +156,7 @@ public class ChestFishEntity extends SeaMonster {
 	public void die(DamageSource source) {
 		super.die(source);
 		if (source.getEntity() instanceof ServerPlayer player) {
-			AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "treasures"));
+			AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "treasures"));
 			AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
 			if (!progress.isDone()) {
 				for (String criteria : progress.getRemainingCriteria())

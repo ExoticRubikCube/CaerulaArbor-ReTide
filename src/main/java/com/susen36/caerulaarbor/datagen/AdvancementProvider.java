@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.datagen;
 
 import com.google.gson.JsonObject;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
@@ -228,7 +228,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
      * @return 资源 ID 字符串（格式：namespace:path）
      */
     private static String modLoc(String path) {
-        return CaerulaArborMod.MODID + ":" + path;
+        return CaerulaArbor.MODID + ":" + path;
     }
 
     /**

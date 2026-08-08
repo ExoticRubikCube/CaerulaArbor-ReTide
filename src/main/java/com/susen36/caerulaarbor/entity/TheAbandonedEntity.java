@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.AbandonedShootEntity;
@@ -122,7 +122,7 @@ public class TheAbandonedEntity extends SeaMonster {
     @Override
     public boolean doHurtTarget(Entity target) {
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(10, () -> {
+            CaerulaArbor.queueServerWork(10, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
                     target.hurt(CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 }
@@ -174,7 +174,7 @@ public class TheAbandonedEntity extends SeaMonster {
                 if (this instanceof TheAbandonedEntity) {
                     this.setAnimation("animation.the_abandoned.shoot");
                 }
-                CaerulaArborMod.queueServerWork(23, () -> {
+                CaerulaArbor.queueServerWork(23, () -> {
                     if (this.isAlive()) {
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -198,7 +198,7 @@ public class TheAbandonedEntity extends SeaMonster {
                                     }
                                 }
                                 final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                CaerulaArbor.queueServerWork(tick2, () -> {
                                     if (timedlooptotal > timedloopiterator + 1) {
                                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                     }

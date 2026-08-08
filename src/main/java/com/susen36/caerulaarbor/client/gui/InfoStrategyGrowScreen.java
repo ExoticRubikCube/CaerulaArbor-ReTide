@@ -6,9 +6,10 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.crawler.PocketSeaCreeperEntity;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
+import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.menu.InfoStrategyGrowMenu;
 import com.susen36.caerulaarbor.network.send.InfoStrategyReturnButtonMessage;
-import com.susen36.caerulaarbor.util.StrategyUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.PlainTextButton;
@@ -72,7 +73,7 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/sidebar.png"), this.leftPos + -3, this.topPos + -3, 0, 0, 262, 174, 262, 174);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/bg_grow.png"), this.leftPos, this.topPos, Mth.clamp((int) StrategyUtils.getStraGrow(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/bg_grow.png"), this.leftPos, this.topPos, Mth.clamp((int) GrowUpgradeManager.getStraGrow(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
 
         double result = 18;
         double rate;
@@ -103,20 +104,36 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_grow.label_grow"), 1, 4, -1, false);
 		guiGraphics.drawString(this.font,
 
-				StrategyUtils.getDescrGrow(world), 1, 100, -1, false);
+				GrowUpgradeManager.getDescrGrow(world), 1, 100, -1, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_grow.label_proceed"), 1, 172, -1, false);
-		if (StrategyUtils.isSilence(world))
+		if (SilenceUpgradeManager.isSilence(world))
 			guiGraphics.drawString(this.font,
 
-					StrategyUtils.getSilenceGrow(world), 1, 116, -3407872, false);
-		if (MapVariables.get(world).if_sublimation)
+					SilenceUpgradeManager.getSilenceGrow(world), 1, 116, -3407872, false);
+		if (MapVariables.get(world).if_sublimation) {
+            String result = "";
+            double lvl = Math.min(MapVariables.get(world).strategy_grow, MapVariables.get(world).strategy_sublimation);
+            if (!(lvl < 1)) {
+                result = Component.translatable("evolution.caerula_aerbor.sublimation.grow." + (int) lvl).getString();
+            }
+            guiGraphics.drawString(this.font,
+
+                    result, 1, 132, -26113, false);
+        }
+		if (MapVariables.get(world).if_sublimation) {
+			String result = "";
+			double lvl = Math.min(MapVariables.get(world).strategy_grow, MapVariables.get(world).strategy_sublimation);
+			if (!(lvl < 1)) {
+				String key = "evolution.caerula_aerbor.sublimation.grow." + (int) lvl + "_1";
+				String desc = Component.translatable(key).getString();
+				if (!desc.equals(key)) {
+					result = desc;
+				}
+			}
 			guiGraphics.drawString(this.font,
 
-					StrategyUtils.getSublimationGrow(world), 1, 132, -26113, false);
-		if (MapVariables.get(world).if_sublimation)
-			guiGraphics.drawString(this.font,
-
-					StrategyUtils.getSublimationGrow2(world), 1, 148, -26113, false);
+					result, 1, 148, -26113, false);
+		}
 	}
 
 	@Override

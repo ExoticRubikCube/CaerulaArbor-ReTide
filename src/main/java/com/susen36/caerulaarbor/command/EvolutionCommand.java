@@ -5,11 +5,7 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.manager.upgrade.BreedUpgradeManager;
-import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
-import com.susen36.caerulaarbor.manager.upgrade.MigrationUpgradeManager;
-import com.susen36.caerulaarbor.manager.upgrade.SubsistingUpgradeManager;
-import com.susen36.caerulaarbor.util.StrategyUtils;
+import com.susen36.caerulaarbor.manager.upgrade.*;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -63,8 +59,7 @@ public class EvolutionCommand {
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
                 MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, 0);
             }
-            info = Component.translatable("command.evolution.grow").getString();
-            info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
+            info = GrowUpgradeManager.getCmdFeedback(Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             {
                 final String success = info;
                 final boolean informAdmins = true;
@@ -106,8 +101,7 @@ public class EvolutionCommand {
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
                 MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, 0);
             }
-            info = Component.translatable("command.evolution.breed").getString();
-            info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
+            info = BreedUpgradeManager.getCmdFeedback(Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             {
                 final String success = info;
                 final boolean informAdmins = true;
@@ -149,8 +143,7 @@ public class EvolutionCommand {
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
                 MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, 0);
             }
-            info = Component.translatable("command.evolution.migration").getString();
-            info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
+            info = MigrationUpgradeManager.getCmdFeedback(Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             {
                 final String success = info;
                 final boolean informAdmins = true;
@@ -192,8 +185,7 @@ public class EvolutionCommand {
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
                 MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, 0);
             }
-            info = Component.translatable("command.evolution.subsisting").getString();
-            info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
+            info = SubsistingUpgradeManager.getCmdFeedback(Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             {
                 final String success = info;
                 final boolean informAdmins = true;
@@ -213,39 +205,39 @@ public class EvolutionCommand {
 
             if (entity != null) {
                 String info;
-                if (StrategyUtils.canEnableSilence(world)) {
-                    MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
-                    if (DoubleArgumentType.getDouble(arguments, "lvl") == 1) {
+                long lvl = Math.round(DoubleArgumentType.getDouble(arguments, "lvl"));
+                if (SilenceUpgradeManager.canEnableSilence(world)) {
+                    MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, lvl);
+                    if (lvl == 1) {
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SILENCE1.get(), SoundSource.NEUTRAL, 6, 1);
                         }
                         if (entity instanceof Player player && !player.level().isClientSide())
-                            player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_6").getString())), true);
-                    } else if (DoubleArgumentType.getDouble(arguments, "lvl") == 2) {
+                            player.displayClientMessage(Component.literal(SilenceUpgradeManager.getSilenceUnlockPlayerMsg(1)), true);
+                    } else if (lvl == 2) {
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SILENCE2.get(), SoundSource.NEUTRAL, 6, 1);
                         }
                         if (entity instanceof Player player && !player.level().isClientSide())
-                            player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_7").getString())), true);
-                    } else if (DoubleArgumentType.getDouble(arguments, "lvl") == 3) {
+                            player.displayClientMessage(Component.literal(SilenceUpgradeManager.getSilenceUnlockPlayerMsg(2)), true);
+                    } else if (lvl == 3) {
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SILENCE3.get(), SoundSource.NEUTRAL, 6, 1);
                         }
                         if (entity instanceof Player player && !player.level().isClientSide())
-                            player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_8").getString())), true);
-                    } else if (DoubleArgumentType.getDouble(arguments, "lvl") == 4) {
+                            player.displayClientMessage(Component.literal(SilenceUpgradeManager.getSilenceUnlockPlayerMsg(3)), true);
+                    } else if (lvl == 4) {
                         if ((LevelAccessor) world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SILENCE4.get(), SoundSource.NEUTRAL, 6, 1);
                         }
                         if (entity instanceof Player player && !player.level().isClientSide())
-                            player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_9").getString())), true);
+                            player.displayClientMessage(Component.literal(SilenceUpgradeManager.getSilenceUnlockPlayerMsg(4)), true);
                     }
                 } else {
                     if (entity instanceof Player player && !player.level().isClientSide())
-                        player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_5").getString())), true);
+                        player.displayClientMessage(Component.literal(SilenceUpgradeManager.getSilenceLockedMsg()), true);
                 }
-                info = Component.translatable("command.evolution.silence").getString();
-                info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
+                info = SilenceUpgradeManager.getCmdFeedback(lvl);
                 {
                     final String success = info;
                     final boolean informAdmins = true;
@@ -277,15 +269,14 @@ public class EvolutionCommand {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_1.get(), SoundSource.NEUTRAL, 4, 1);
                     }
                 }
-                String info = Component.translatable("command.evolution.sublimation").getString();
-                info = info.replace("<num>", "" + Math.round(doneLvl));
+                String info = SublimationUpgradeManger.getCmdFeedback(Math.round(doneLvl));
                 {
                     final String success = info;
                     final boolean informAdmins = true;
                     arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
                 }
             } else {
-                String info = Component.translatable("command.evolution.sublimation.fail").getString();
+                String info = SublimationUpgradeManger.getCmdFail();
                 {
                     final String success = info;
                     final boolean informAdmins = true;
@@ -303,7 +294,7 @@ public class EvolutionCommand {
 
             MapVariables.get(world).if_sublimation = false;
             MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, 0);
-            String info = Component.translatable("command.evolution.sublimation.ban").getString();
+            String info = SublimationUpgradeManger.getCmdBan();
             {
                 final String success = info;
                 final boolean informAdmins = true;
@@ -321,8 +312,9 @@ public class EvolutionCommand {
             if (entity != null)
                 entity.getDirection();
 
+            long lvl = Math.round(DoubleArgumentType.getDouble(arguments, "lvl"));
             if (MapVariables.get(world).if_sublimation) {
-                MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
+                MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, lvl);
                 if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                     if ((LevelAccessor) world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_2.get(), SoundSource.NEUTRAL, 4, 1);
@@ -332,15 +324,14 @@ public class EvolutionCommand {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_1.get(), SoundSource.NEUTRAL, 4, 1);
                     }
                 }
-                String info = Component.translatable("command.evolution.sublimation").getString();
-                info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
+                String info = SublimationUpgradeManger.getCmdFeedback(lvl);
                 {
                     final String success = info;
                     final boolean informAdmins = true;
                     arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
                 }
             } else {
-                String info = Component.translatable("command.evolution.sublimation.fail").getString();
+                String info = SublimationUpgradeManger.getCmdFail();
                 {
                     final String success = info;
                     final boolean informAdmins = true;

@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -211,7 +211,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
                     if (this instanceof ApostleProkaryoteEntity) {
                         this.setAnimation("animation.apostle.skill");
                     }
-                    CaerulaArborMod.queueServerWork(17, () -> {
+                    CaerulaArbor.queueServerWork(17, () -> {
                         if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.HOSTILE, 1, 1);
                         }

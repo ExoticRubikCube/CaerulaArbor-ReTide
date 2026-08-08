@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.client.overlay;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
@@ -37,18 +37,18 @@ public class RelicFuncShowOverlay {
 
             double result = 0;
             result = (ModCapabilities.getPlayerVariables(entity)).player_king_suit;
-            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/icon_king.png"), 6, 8, Mth.clamp((int) result * 16, 0, 32), 0, 16, 16, 48, 16);
+            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/icon_king.png"), 6, 8, Mth.clamp((int) result * 16, 0, 32), 0, 16, 16, 48, 16);
 
             double result3 = 0;
             result3 = (ModCapabilities.getPlayerVariables(entity)).player_demon_suit;
-            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/icon_artifi.png"), 22, 8, Mth.clamp((int) result3 * 16, 0, 32), 0, 16, 16, 48, 16);
+            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/icon_artifi.png"), 22, 8, Mth.clamp((int) result3 * 16, 0, 32), 0, 16, 16, 48, 16);
 
             boolean result1 = false;
             if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.TIDE_OF_CHITIN)) {
                 result1 = true;
             }
             if (result1) {
-				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/icon_chitin.png"), 38, 8, 0, 0, 16, 16, 16, 16);
+				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/icon_chitin.png"), 38, 8, 0, 0, 16, 16, 16, 16);
 			}
 		}
 	}

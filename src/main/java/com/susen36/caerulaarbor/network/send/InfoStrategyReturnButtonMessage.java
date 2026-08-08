@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.network.send;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.menu.InfoStrategyAllMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class InfoStrategyReturnButtonMessage implements CustomPacketPayload {
-	public static final Type<InfoStrategyReturnButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "info_strategy_return_button"));
+	public static final Type<InfoStrategyReturnButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "info_strategy_return_button"));
 	public static final StreamCodec<FriendlyByteBuf, InfoStrategyReturnButtonMessage> STREAM_CODEC = StreamCodec.of(
 			(buf, msg) -> InfoStrategyReturnButtonMessage.buffer(msg, buf),
 			InfoStrategyReturnButtonMessage::new

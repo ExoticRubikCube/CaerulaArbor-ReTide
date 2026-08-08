@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.warden.OceanizedWardenisEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -61,7 +61,7 @@ import java.util.Optional;
 public class IzumikOffspringEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.STRING);
-	private static final TagKey<EntityType<?>> ENTITY_TAG = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "izumik_discovers"));
+	private static final TagKey<EntityType<?>> ENTITY_TAG = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "izumik_discovers"));
 	public String animationprocedure = "empty";
 
 	public IzumikOffspringEntity(Level world) {
@@ -199,7 +199,7 @@ public class IzumikOffspringEntity extends SeaMonster {
                         }
                     }
                         if (success) {
-                            CaerulaArborMod.LOGGER.info(("offspring at " + x + " " + y + " " + z + " changes"));
+                            CaerulaArbor.LOGGER.info(("offspring at " + x + " " + y + " " + z + " changes"));
                             if (world instanceof ServerLevel level)
                                 level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
                             if (!level().isClientSide())
@@ -260,7 +260,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 						}
 					}
 				}
-				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
 					continue;
 				}
 				if (distanceTo(entityiterator) <= 2) {
@@ -270,7 +270,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 						}
 					}
 					if (success) {
-						CaerulaArborMod.LOGGER.info(("offspring at " + x + " " + y + " " + z + " changes"));
+						CaerulaArbor.LOGGER.info(("offspring at " + x + " " + y + " " + z + " changes"));
 						if (world instanceof ServerLevel level)
 							level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
 						if (!level().isClientSide())

@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.mojang.serialization.MapCodec;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -44,7 +44,7 @@ public class HugeLilyBlock extends BaseEntityBlock implements SimpleWaterloggedB
 	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-	private static final net.minecraft.tags.TagKey<Block> TRAIL_TAG = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail"));
+	private static final net.minecraft.tags.TagKey<Block> TRAIL_TAG = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail"));
 
 	public HugeLilyBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.FUNGUS).strength(24f, 64f).lightLevel(s -> 2).noOcclusion().randomTicks().pushReaction(PushReaction.BLOCK).isRedstoneConductor((bs, br, bp) -> false));

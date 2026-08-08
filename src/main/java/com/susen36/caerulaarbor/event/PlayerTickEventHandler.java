@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.event;
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -106,11 +106,11 @@ public class PlayerTickEventHandler {
         if (!CAConfigs.RELIC_BAN.get()) return;
 
         ItemStack mainHandItem = (entity.getMainHandItem()).copy();
-        if (mainHandItem.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_advanced")))) {
+        if (mainHandItem.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "relic_advanced")))) {
             entity.getMainHandItem().setCount(0);
         }
         mainHandItem = (entity.getOffhandItem()).copy();
-        if (mainHandItem.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_advanced")))) {
+        if (mainHandItem.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "relic_advanced")))) {
             entity.getOffhandItem().setCount(0);
         }
 
@@ -185,7 +185,7 @@ public class PlayerTickEventHandler {
         double y = entity.getY();
         double z = entity.getZ();
 
-        if (!world.getBlockState(BlockPos.containing(x, y - 0.5, z)).is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "nethersea_walker_functions")))) return;
+        if (!world.getBlockState(BlockPos.containing(x, y - 0.5, z)).is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions")))) return;
 
         ItemStack boots = (entity.getItemBySlot(EquipmentSlot.FEET)).copy();
         if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), boots) != 0) {

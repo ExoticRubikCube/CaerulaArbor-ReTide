@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +22,7 @@ public final class CAJukeboxSongs {
     private static ResourceKey<JukeboxSong> key(String id) {
         return ResourceKey.create(
             Registries.JUKEBOX_SONG,
-            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, id)
+            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, id)
         );
     }
 

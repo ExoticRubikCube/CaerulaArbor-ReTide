@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.client.model.entity.ModelFleefishBullet;
 import com.susen36.caerulaarbor.entity.bullets.TellerShotEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class TellerShotRenderer extends EntityRenderer<TellerShotEntity> {
-	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/teller.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/teller.png");
 	private final ModelFleefishBullet model;
 
 	public TellerShotRenderer(EntityRendererProvider.Context context) {

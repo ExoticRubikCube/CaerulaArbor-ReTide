@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.mojang.serialization.MapCodec;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
@@ -147,7 +147,7 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
                     if (!(entityiterator instanceof LivingEntity)) {
                         continue;
                     }
-                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
+                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))) {
                         continue;
                     }
                     if (new Vec3(((double) x + 0.5), ((double) y + 1), ((double) z + 0.5)).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) < 24) {

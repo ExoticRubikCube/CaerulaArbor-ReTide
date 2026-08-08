@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.manager.spwan;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.TribunalHealerEntity;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class SeabornTransformManager {
-	private static final TagKey<EntityType<?>> HOMO_SAPIENS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "homo_sapiens"));
+	private static final TagKey<EntityType<?>> HOMO_SAPIENS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "homo_sapiens"));
 
 	private static final List<TransformRule> STANDARD_TRANSFORM_RULES = List.of(
 			new TransformRule(entity -> entity instanceof Villager livingEntity && !livingEntity.isBaby() || matchesEntityType(entity, "guardvillagers:guard"), 0.375,
@@ -78,7 +78,7 @@ public class SeabornTransformManager {
 		if (entity instanceof Player ||getEntityTypeId(entity).contains("touhou_little_maid:maid")) {
 			return false;
 		}
-		if (!(entity instanceof LivingEntity livEnt2 && livEnt2.getType().is(EntityTypeTags.UNDEAD) || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_transform"))))
+		if (!(entity instanceof LivingEntity livEnt2 && livEnt2.getType().is(EntityTypeTags.UNDEAD) || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "cannot_transform"))))
 				&& world.getLevelData().getGameRules().getBoolean(CAGameRules.OCEANIZATION_MODE) && !(entity instanceof LivingEntity livEnt5 && livEnt5.isBaby())) {
 			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CAConfigs.CLONE_NUM.get()) * 2) {
 				return false;

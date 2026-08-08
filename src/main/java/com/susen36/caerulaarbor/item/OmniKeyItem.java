@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.util.ItemUtils;
@@ -95,7 +95,7 @@ public class OmniKeyItem extends Item {
                 if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CHAIN_STEP, SoundSource.NEUTRAL, 1, 1);
                 }
-                CaerulaArborMod.queueServerWork(20, () -> {
+                CaerulaArbor.queueServerWork(20, () -> {
                     {
                         BlockPos pos = BlockPos.containing(x, y, z);
                         BlockState bs = world.getBlockState(pos);

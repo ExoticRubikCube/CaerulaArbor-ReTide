@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -169,7 +169,7 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 	}
 
 	private void scheduleAreaAttack(ItemStack itemstack, LivingEntity attacker, double x, double y, double z) {
-		CaerulaArborMod.queueServerWork(10, () -> {
+		CaerulaArbor.queueServerWork(10, () -> {
 			if (attacker.getMainHandItem() != itemstack) {
 				return;
 			}

@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -186,7 +186,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
     @Override
     public boolean doHurtTarget(Entity target) {
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(9, () -> {
+            CaerulaArbor.queueServerWork(9, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.5) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -257,7 +257,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
             double sy = sourceentity.getY();
             double sz = sourceentity.getZ();
             if (isValidTeleportPlace(world, sx, sy, sz)) {
-                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) || this.getTarget() == sourceentity) {
+                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) || this.getTarget() == sourceentity) {
                     this.teleportTo(x, y, z, sx, sy, sz);
                     if (sourceentity instanceof LivingEntity target) {
                         SIHelper.causeSanityInjury(target,
@@ -358,7 +358,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                     if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDERMAN_STARE, SoundSource.HOSTILE, 1, 1);
                     }
-                    CaerulaArborMod.queueServerWork(13, () -> {
+                    CaerulaArbor.queueServerWork(13, () -> {
                         Entity enemy1;
                         enemy1 = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
                         if (!(enemy1 == null)) {
@@ -384,7 +384,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                                             if (!(entityiterator instanceof Mob)) {
                                                 continue;
                                             }
-                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                                 if (!(((Entity) OceanizedEndermanEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)) {
                                                     continue;
                                                 }
@@ -399,7 +399,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                                     }
                                 }
                                 final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                CaerulaArbor.queueServerWork(tick2, () -> {
                                     if (timedlooptotal > timedloopiterator + 1) {
                                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                     }

@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.ShotOceanArrowEntity;
@@ -276,7 +276,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                                     }
                                 }
                                 final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                CaerulaArbor.queueServerWork(tick2, () -> {
                                     if (timedlooptotal > timedloopiterator + 1) {
                                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                     }

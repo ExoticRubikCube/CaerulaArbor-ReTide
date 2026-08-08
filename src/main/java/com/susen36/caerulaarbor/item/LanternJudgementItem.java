@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
@@ -119,7 +119,7 @@ public class LanternJudgementItem extends Item {
                                 (z + 2 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 3))), 4, 0.15, 0.2, 0.15, 0.1);
                 }
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }
@@ -130,7 +130,7 @@ public class LanternJudgementItem extends Item {
             final Vec3 center = new Vec3(x, y, z);
             List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(36 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
             for (Entity entityiterator : entfound) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))) && entity.distanceTo(entityiterator) <= 18) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet"))) && entity.distanceTo(entityiterator) <= 18) {
                     if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())
                         entity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 200, 0, false, false));
                     if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())

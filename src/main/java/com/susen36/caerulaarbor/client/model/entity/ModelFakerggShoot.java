@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.client.model.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -15,7 +15,7 @@ import net.minecraft.world.entity.Entity;
 // 面向 Minecraft 1.17 及以上版本导出，使用 Mojang 映射
 // 将此类粘贴到你的模组中，并生成所需的全部导入语句
 public class ModelFakerggShoot<T extends Entity> extends EntityModel<T> {
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fakergg_shoot"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "fakergg_shoot"), "main");
 	public final ModelPart ball;
 
 	public ModelFakerggShoot(ModelPart root) {

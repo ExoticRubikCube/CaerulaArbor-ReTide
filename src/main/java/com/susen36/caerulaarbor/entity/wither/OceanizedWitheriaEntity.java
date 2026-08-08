@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity.wither;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -140,18 +140,18 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 65, 0, false, false));
             }
             this.setAnimation("animation.oceanzied_witheria.skill");
-            CaerulaArborMod.queueServerWork(20, () -> {
+            CaerulaArbor.queueServerWork(20, () -> {
                 if (this.isAlive()) {
                     timedLoop(0, 15, 1);
                 }
             });
-            CaerulaArborMod.queueServerWork(27, () -> {
+            CaerulaArbor.queueServerWork(27, () -> {
                 if (this.isAlive()) {
                     this.purchaseEnemy();
                     this.witheriaSweep(-2, 0.75);
                 }
             });
-            CaerulaArborMod.queueServerWork(30, () -> {
+            CaerulaArbor.queueServerWork(30, () -> {
                 if (this.isAlive()) {
                     this.purchaseEnemy();
                     if (this.entityData.get(DATA_DURATION) <= 0) {
@@ -173,7 +173,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
                     this.witheriaSweep(-2, 0.75);
                 }
             });
-            CaerulaArborMod.queueServerWork(48, () -> {
+            CaerulaArbor.queueServerWork(48, () -> {
                 if (this.isAlive()) {
                     this.purchaseEnemy();
                     this.witheriaSweep(0, 1.5);
@@ -190,7 +190,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 999, 9, false, false));
             }
             this.setAnimation("animation.oceanzied_witheria.byebye");
-            CaerulaArborMod.queueServerWork(100, () -> {
+            CaerulaArbor.queueServerWork(100, () -> {
                 if (!this.level().isClientSide()) {
                     this.discard();
                 }
@@ -373,7 +373,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         }
         final int nextDelay = ticks;
         final int nextIterator = timedloopiterator + 1;
-        CaerulaArborMod.queueServerWork(nextDelay, () -> {
+        CaerulaArbor.queueServerWork(nextDelay, () -> {
             if (this.isAlive() && timedlooptotal > nextIterator) {
                 timedLoop(nextIterator, timedlooptotal, nextDelay);
             }

@@ -2,8 +2,8 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.util.CaerulaUtil;
-import com.susen36.caerulaarbor.util.StrategyUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -116,7 +116,7 @@ public class SeaTrailGrowingBlock extends Block implements SimpleWaterloggedBloc
 		if (world.getLevelData().isThundering()) {
 			expand = 2;
 		}
-		if (StrategyUtils.isSilence(world)) {
+		if (SilenceUpgradeManager.isSilence(world)) {
 			expand = 3;
 		}
 		int growAge = blockstate.getValue(GROW_AGE);

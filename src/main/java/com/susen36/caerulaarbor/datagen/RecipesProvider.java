@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.datagen;
 
 import com.google.gson.JsonObject;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -254,7 +254,7 @@ public class RecipesProvider extends RecipeProvider {
      * @return 配方 ID
      */
     private static ResourceLocation modLoc(String path) {
-        return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, path);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.network.send;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.menu.*;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
@@ -17,7 +17,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class InfoStrategyNavigationButtonMessage implements CustomPacketPayload {
-	public static final Type<InfoStrategyNavigationButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "info_strategy_navigation_button"));
+	public static final Type<InfoStrategyNavigationButtonMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "info_strategy_navigation_button"));
 	public static final StreamCodec<FriendlyByteBuf, InfoStrategyNavigationButtonMessage> STREAM_CODEC = StreamCodec.of(
 			(buf, msg) -> InfoStrategyNavigationButtonMessage.buffer(msg, buf),
 			InfoStrategyNavigationButtonMessage::new

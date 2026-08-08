@@ -1,11 +1,11 @@
 package com.susen36.caerulaarbor.entity.tidelinked;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.util.CaerulaUtil;
+import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerBossEvent;
@@ -74,8 +74,8 @@ public class TidelinkedArchonEntity extends AbstractTidelinkedEntity {
         if (sourceentity != null && this.isAlive() && this.getEntityData().get(DATA_SKILLP) <= 0 && !this.hasEffect(CAMobEffects.FAKE_DEATH) && this.distanceTo(sourceentity) <= 6) {
             Vec3 attackCenter = new Vec3((x + 1.8 * getLookAngle().x), (y + 1.5), (z + 1.8 * getLookAngle().z));
             List<LivingEntity> targets = world.getEntitiesOfClass(LivingEntity.class, new AABB(attackCenter, attackCenter).inflate(5),
-                    e -> e.getType().is(CaerulaUtil.Tags.SEABORNS) && this.getTarget() == e
-                        || !e.getType().is(CaerulaUtil.Tags.SEABORNS) && (e instanceof Mob || e instanceof Player));
+                    e -> e.getType().is(EntityUtils.SEA_BORN) && this.getTarget() == e
+                        || !e.getType().is(EntityUtils.SEA_BORN) && (e instanceof Mob || e instanceof Player));
             int strongTargets = 0;
             for (LivingEntity entityiterator : targets) {
                 if (entityiterator != this && entityiterator.getMaxHealth() >= 10) {
@@ -85,7 +85,7 @@ public class TidelinkedArchonEntity extends AbstractTidelinkedEntity {
             if (strongTargets >= 2 || this.getHealth() < this.getMaxHealth() * 0.5) {
                 this.setAnimation("animation.tidelinked_archon.enchantattack");
                 this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(sourceentity.getX(), sourceentity.getY(), sourceentity.getZ()));
-                CaerulaArborMod.queueServerWork(12, () -> {
+                CaerulaArbor.queueServerWork(12, () -> {
                     world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2, 1);
                     for (LivingEntity entityiterator : targets) {
                         entityiterator.hurt(

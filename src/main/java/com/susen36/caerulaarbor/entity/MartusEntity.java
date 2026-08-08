@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
@@ -236,7 +236,7 @@ public class MartusEntity extends SeaMonster {
                     }
                 }
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }
@@ -298,13 +298,13 @@ public class MartusEntity extends SeaMonster {
                         if (entityiterator.hasEffect(CAMobEffects.GUIDED_EVO)) {
                             num = num + 1;
                             this.spawnParticleLink(entityiterator);
-                            CaerulaArborMod.queueServerWork(3, () -> {
+                            CaerulaArbor.queueServerWork(3, () -> {
                                 this.spawnParticleLink(entityiterator);
                             });
-                            CaerulaArborMod.queueServerWork(6, () -> {
+                            CaerulaArbor.queueServerWork(6, () -> {
                                 this.spawnParticleLink(entityiterator);
                             });
-                            CaerulaArborMod.queueServerWork(9, () -> {
+                            CaerulaArbor.queueServerWork(9, () -> {
                                 this.spawnParticleLink(entityiterator);
                             });
                         }
@@ -349,7 +349,7 @@ public class MartusEntity extends SeaMonster {
                             if (!(entityiterator instanceof Mob livEnt1)) {
                                 continue;
                             }
-                            if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                 continue;
                             }
                             if (entityiterator instanceof MartusEntity) {
@@ -423,14 +423,14 @@ public class MartusEntity extends SeaMonster {
                                     MartusEntity.this.hurtMartus(null, 0, 0.02);
                                 }
                                 final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                CaerulaArbor.queueServerWork(tick2, () -> {
                                     if (timedlooptotal > timedloopiterator + 1) {
                                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                                     }
                                 });
                             }
                         }.timedLoop(0, 10, 20);
-                        CaerulaArborMod.queueServerWork(10, () -> {
+                        CaerulaArbor.queueServerWork(10, () -> {
                             {
                                 final Vec3 center = new Vec3(x, y, z);
                                 List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(32), e -> true);
@@ -438,8 +438,8 @@ public class MartusEntity extends SeaMonster {
                                     if (!entityiterator.isAlive()) {
                                         continue;
                                     }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
+                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))) {
                                         if (!this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1));
                                         if (!this.level().isClientSide())
@@ -461,7 +461,7 @@ public class MartusEntity extends SeaMonster {
                     if (this instanceof MartusEntity) {
                         this.setAnimation("animation.martus.reject");
                     }
-                    CaerulaArborMod.queueServerWork(15, () -> {
+                    CaerulaArbor.queueServerWork(15, () -> {
                         Entity tgt_ent;
                         double max_h = 0;
                         tgt_ent = this.getTarget();
@@ -473,7 +473,7 @@ public class MartusEntity extends SeaMonster {
                                 if (!(entityiterator instanceof Mob)) {
                                     continue;
                                 }
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                     continue;
                                 }
                                 if (entityiterator instanceof LivingEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.SUB_HAEMO)) {

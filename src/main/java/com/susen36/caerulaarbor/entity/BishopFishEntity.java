@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -181,7 +181,7 @@ public class BishopFishEntity extends SeaMonster {
                                         0.1);
                         }
                         final int tick2 = ticks;
-                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                        CaerulaArbor.queueServerWork(tick2, () -> {
                             if (timedlooptotal > timedloopiterator + 1) {
                                 timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                             }
@@ -189,7 +189,7 @@ public class BishopFishEntity extends SeaMonster {
                     }
                 }.timedLoop(0, 10, 2);
                 for (Entity entityiterator : world.getEntities(this, new AABB((x + 20), (y - 4), (z + 20), (x - 20), (y + 8), (z - 20)))) {
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                         if (!(entityiterator == this.getTarget())) {
                             continue;
                         }
@@ -440,7 +440,7 @@ public class BishopFishEntity extends SeaMonster {
                             level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), SoundEvents.AMBIENT_UNDERWATER_ENTER, SoundSource.NEUTRAL, (float) 1.5, 1);
                         }
                         for (Entity entityiterator : world.getEntities(BishopFishEntity.this, new AABB((x + 18), y, (z + 18), (x - 18), (y + 12), (z - 18)))) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                 if (!(entityiterator == ((Entity) BishopFishEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                                     continue;
                                 }
@@ -454,7 +454,7 @@ public class BishopFishEntity extends SeaMonster {
                             }
                         }
                         final int tick2 = ticks;
-                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                        CaerulaArbor.queueServerWork(tick2, () -> {
                             if (timedlooptotal > timedloopiterator + 1) {
                                 timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                             }
@@ -599,7 +599,7 @@ public class BishopFishEntity extends SeaMonster {
             LevelAccessor world = this.level();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (!world.isClientSide() && world.getServer() != null) {
-                    for (ItemStack itemstackiterator : world.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_bishop")))
+                    for (ItemStack itemstackiterator : world.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gameplay/relic_bishop")))
                             .getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
                         if (world instanceof ServerLevel level) {
                             ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), itemstackiterator);

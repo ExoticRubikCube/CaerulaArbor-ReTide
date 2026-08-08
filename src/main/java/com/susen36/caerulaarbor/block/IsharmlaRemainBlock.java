@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.SkadiCorruptedEntity;
 import com.susen36.caerulaarbor.entity.SkadiEntity;
 import com.susen36.caerulaarbor.entity.isharmla.IsharmlaEntity;
@@ -189,7 +189,7 @@ public class IsharmlaRemainBlock extends Block {
                         ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                         ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
                         if ((Entity) entity instanceof ServerPlayer player) {
-                            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "unlock_calamity"));
+                            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "unlock_calamity"));
                             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                             if (!ap.isDone()) {
                                 for (String criteria : ap.getRemainingCriteria())

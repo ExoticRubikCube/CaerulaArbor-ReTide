@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen.tags;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.datagen.DamageTypes;
 import com.susen36.caerulaarbor.util.DatagenUtils;
 import net.minecraft.core.HolderLookup;
@@ -37,7 +37,7 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
     );
 
     protected DamageTypeTagsProvider(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> future, @Nullable ExistingFileHelper existingFileHelper) {
-        super(pOutput, Registries.DAMAGE_TYPE, future, CaerulaArborMod.MODID, existingFileHelper);
+        super(pOutput, Registries.DAMAGE_TYPE, future, CaerulaArbor.MODID, existingFileHelper);
     }
 
     /**

@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -124,7 +124,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (tickCount % 20 == 0 && (world.getBlockState(BlockPos.containing(this.getX(), this.getY(), this.getZ()))).is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sea_trail")))) {
+        if (tickCount % 20 == 0 && (world.getBlockState(BlockPos.containing(this.getX(), this.getY(), this.getZ()))).is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_trail")))) {
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 1));
         }

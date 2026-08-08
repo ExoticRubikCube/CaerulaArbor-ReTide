@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.compat.jade;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +16,7 @@ import snownee.jade.api.config.IPluginConfig;
 public enum CAHotKettleProvider implements IBlockComponentProvider {
     INSTANCE;
 
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hot_kettle");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "hot_kettle");
 
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {

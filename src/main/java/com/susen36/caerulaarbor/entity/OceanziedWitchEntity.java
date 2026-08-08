@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.ThrowablePotionEntity;
@@ -229,7 +229,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
                 final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                 for (Entity entityiterator : entfound) {
-                    if (Math.random() < 0.33 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                    if (Math.random() < 0.33 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                         double xx = entityiterator.getX();
                         double yy = entityiterator.getY() + entityiterator.getBbHeight();
                         double zz = entityiterator.getZ();
@@ -377,14 +377,14 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
                         datEntSetI.getEntityData().set(DATA_SKILLP, 250);
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 60, 0, false, false));
-                    CaerulaArborMod.queueServerWork(14, this::shootRandomPotion);
-                    CaerulaArborMod.queueServerWork(19, this::shootRandomPotion);
-                    CaerulaArborMod.queueServerWork(23, this::shootRandomPotion);
-                    CaerulaArborMod.queueServerWork(28, this::shootRandomPotion);
-                    CaerulaArborMod.queueServerWork(29, this::shootRandomPotion);
-                    CaerulaArborMod.queueServerWork(34, this::shootRandomPotion);
-                    CaerulaArborMod.queueServerWork(36, this::shootRandomPotion);
-                    CaerulaArborMod.queueServerWork(41, this::shootRandomPotion);
+                    CaerulaArbor.queueServerWork(14, this::shootRandomPotion);
+                    CaerulaArbor.queueServerWork(19, this::shootRandomPotion);
+                    CaerulaArbor.queueServerWork(23, this::shootRandomPotion);
+                    CaerulaArbor.queueServerWork(28, this::shootRandomPotion);
+                    CaerulaArbor.queueServerWork(29, this::shootRandomPotion);
+                    CaerulaArbor.queueServerWork(34, this::shootRandomPotion);
+                    CaerulaArbor.queueServerWork(36, this::shootRandomPotion);
+                    CaerulaArbor.queueServerWork(41, this::shootRandomPotion);
                 }
             } else {
                 if ((Entity) this instanceof OceanziedWitchEntity datEntSetI)

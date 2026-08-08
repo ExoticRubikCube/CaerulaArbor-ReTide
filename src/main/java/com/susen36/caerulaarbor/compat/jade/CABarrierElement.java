@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.compat.jade;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +14,7 @@ import snownee.jade.overlay.OverlayRenderer;
 public class CABarrierElement extends Element {
     private final String barrier;
 
-    private static final ResourceLocation BARRIER_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/living_barrier.png");
+    private static final ResourceLocation BARRIER_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/living_barrier.png");
 
     public CABarrierElement(double barrier) {
         barrier = Math.ceil(barrier);

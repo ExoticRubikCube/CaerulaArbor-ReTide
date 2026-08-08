@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -62,7 +62,7 @@ public class  FirstTellerSkillMobEffect extends MobEffect {
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, (z - 2.5), 64, 2, 0.2, 0.1, 0.1);
                 final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
+                CaerulaArbor.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
                         timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                     }
@@ -91,7 +91,7 @@ public class  FirstTellerSkillMobEffect extends MobEffect {
             }
             ayk = enemy instanceof LivingEntity livingEntity13 && livingEntity13.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity13.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
             for (Entity entityiterator : world.getEntities(entity, new AABB((x + 2.5), (y + 4), (z + 2.5), (x - 2.5), y, (z - 2.5)))) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                     continue;
                 }
                 if (entityiterator instanceof Player && (ModCapabilities.getPlayerVariables(entityiterator)).player_oceanization >= 3) {

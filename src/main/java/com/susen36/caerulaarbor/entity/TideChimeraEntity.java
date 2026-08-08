@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -172,7 +172,7 @@ public class TideChimeraEntity extends SeaMonster {
         double targetY = target.getY();
         double targetZ = target.getZ();
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(8, () -> {
+            CaerulaArbor.queueServerWork(8, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 4) {
                     if (target instanceof LivingEntity livingTarget) {
                         BabelAPI.hurtElemental(
@@ -203,7 +203,7 @@ public class TideChimeraEntity extends SeaMonster {
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             if (!(sourceentity instanceof Player) && !(sourceentity instanceof ApocataEntity)) {
-                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                     {
                         final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
                         List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16), e -> true);
@@ -211,7 +211,7 @@ public class TideChimeraEntity extends SeaMonster {
                             if (entityiterator == this) {
                                 continue;
                             }
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                 if (entityiterator instanceof Mob entity && sourceentity instanceof LivingEntity ent)
                                     entity.setTarget(ent);
                             }
@@ -258,7 +258,7 @@ public class TideChimeraEntity extends SeaMonster {
         double radius = 3.0D;
         List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AABB(centerPos, centerPos).inflate(radius), entity -> entity != this).stream().sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(centerPos))).toList();
         for (Entity entity : nearbyEntities) {
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                 continue;
             }
             if (!(entity instanceof LivingEntity)) {
@@ -281,7 +281,7 @@ public class TideChimeraEntity extends SeaMonster {
         if (this instanceof TideChimeraEntity) {
             this.setAnimation("animation.super_apocata.start");
         }
-        CaerulaArborMod.queueServerWork(36, () -> {
+        CaerulaArbor.queueServerWork(36, () -> {
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level level) {
                     if (!level.isClientSide()) {
@@ -292,21 +292,21 @@ public class TideChimeraEntity extends SeaMonster {
                 }
             }
         });
-        CaerulaArborMod.queueServerWork(60, () -> {
+        CaerulaArbor.queueServerWork(60, () -> {
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_JUMP, SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }
         });
-        CaerulaArborMod.queueServerWork(66, () -> {
+        CaerulaArbor.queueServerWork(66, () -> {
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_JUMP, SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }
         });
-        CaerulaArborMod.queueServerWork(83, () -> {
+        CaerulaArbor.queueServerWork(83, () -> {
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.HOSTILE, (float) 2.5, 1);
@@ -428,17 +428,17 @@ public class TideChimeraEntity extends SeaMonster {
                     maySummon = true;
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 600, 0, false, false));
-                    CaerulaArborMod.queueServerWork(10, () -> {
+                    CaerulaArbor.queueServerWork(10, () -> {
                         summonRandomChimera(world, x, y, z);
                     });
                 } else if (perc <= 0.5 && tap >= 2) {
                     maySummon = true;
-                    CaerulaArborMod.queueServerWork(10, () -> {
+                    CaerulaArbor.queueServerWork(10, () -> {
                         summonRandomChimera(world, x, y, z);
                     });
                 } else if (perc <= 0.75 && tap >= 3) {
                     maySummon = true;
-                    CaerulaArborMod.queueServerWork(10, () -> {
+                    CaerulaArbor.queueServerWork(10, () -> {
                         summonRandomChimera(world, x, y, z);
                     });
                 }
@@ -468,7 +468,7 @@ public class TideChimeraEntity extends SeaMonster {
                             datEntSetI.getEntityData().set(DATA_SKILL_P, 300);
                         if ((Entity) this instanceof TideChimeraEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_DURATION, 28);
-                        CaerulaArborMod.queueServerWork(12, () -> {
+                        CaerulaArbor.queueServerWork(12, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof ServerLevel level)
                                     level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
@@ -478,7 +478,7 @@ public class TideChimeraEntity extends SeaMonster {
                                 this.distributeBullets(world, x, y, z);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(13, () -> {
+                        CaerulaArbor.queueServerWork(13, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof ServerLevel level)
                                     level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
@@ -488,7 +488,7 @@ public class TideChimeraEntity extends SeaMonster {
                                 this.distributeBullets(world, x, y, z);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(14, () -> {
+                        CaerulaArbor.queueServerWork(14, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof ServerLevel level)
                                     level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
@@ -522,7 +522,7 @@ public class TideChimeraEntity extends SeaMonster {
                 }
                 for (Entity entityiterator : world.getEntities(this, new AABB((x - 6.5), (y - 2), (z - 6.5), (x + 6.5), (y + 5), (z + 6.5)))) {
                     if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6.5) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                             if (!(entityiterator == this.getTarget())) {
                                 continue;
                             }

@@ -3,9 +3,9 @@ package com.susen36.caerulaarbor.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
+import com.susen36.caerulaarbor.manager.upgrade.*;
 import com.susen36.caerulaarbor.menu.EvoTreeMenu;
 import com.susen36.caerulaarbor.network.send.EvoTreeButtonMessage;
-import com.susen36.caerulaarbor.util.StrategyUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.PlainTextButton;
@@ -44,25 +44,25 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		if (mouseX > leftPos + 33 && mouseX < leftPos + 158 && mouseY > topPos + 108 && mouseY < topPos + 140)
-			guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getDescrGrow(world)), mouseX, mouseY);
+			guiGraphics.renderTooltip(font, Component.literal(GrowUpgradeManager.getDescrGrow(world)), mouseX, mouseY);
 		if (mouseX > leftPos + 33 && mouseX < leftPos + 158 && mouseY > topPos + 68 && mouseY < topPos + 100)
-			guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getDescrBreed(world)), mouseX, mouseY);
+			guiGraphics.renderTooltip(font, Component.literal(BreedUpgradeManager.getDescrBreed(world)), mouseX, mouseY);
 		if (mouseX > leftPos + 33 && mouseX < leftPos + 158 && mouseY > topPos + 28 && mouseY < topPos + 61)
-			guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getDescrSubsis(world)), mouseX, mouseY);
+			guiGraphics.renderTooltip(font, Component.literal(SubsistingUpgradeManager.getDescrSubsis(world)), mouseX, mouseY);
 		if (mouseX > leftPos + 33 && mouseX < leftPos + 158 && mouseY > topPos + 148 && mouseY < topPos + 181)
-			guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getDescrMigra(world)), mouseX, mouseY);
-		if (StrategyUtils.isSilence(world))
+			guiGraphics.renderTooltip(font, Component.literal(MigrationUpgradeManager.getDescrMigra(world)), mouseX, mouseY);
+		if (SilenceUpgradeManager.isSilence(world))
 			if (mouseX > leftPos + 176 && mouseX < leftPos + 200 && mouseY > topPos + 33 && mouseY < topPos + 57)
-				guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getSilenceSubsis(world)), mouseX, mouseY);
-		if (StrategyUtils.isSilence(world))
+				guiGraphics.renderTooltip(font, Component.literal(SilenceUpgradeManager.getSilenceSubsis(world)), mouseX, mouseY);
+		if (SilenceUpgradeManager.isSilence(world))
 			if (mouseX > leftPos + 175 && mouseX < leftPos + 196 && mouseY > topPos + 116 && mouseY < topPos + 133)
-				guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getSilenceGrow(world)), mouseX, mouseY);
-		if (StrategyUtils.isSilence(world))
+				guiGraphics.renderTooltip(font, Component.literal(SilenceUpgradeManager.getSilenceGrow(world)), mouseX, mouseY);
+		if (SilenceUpgradeManager.isSilence(world))
 			if (mouseX > leftPos + 175 && mouseX < leftPos + 193 && mouseY > topPos + 78 && mouseY < topPos + 92)
-				guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getSilenceBreed(world)), mouseX, mouseY);
-		if (StrategyUtils.isSilence(world))
+				guiGraphics.renderTooltip(font, Component.literal(SilenceUpgradeManager.getSilenceBreed(world)), mouseX, mouseY);
+		if (SilenceUpgradeManager.isSilence(world))
 			if (mouseX > leftPos + 175 && mouseX < leftPos + 199 && mouseY > topPos + 151 && mouseY < topPos + 175)
-				guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getSilenceMigration(world)), mouseX, mouseY);
+				guiGraphics.renderTooltip(font, Component.literal(SilenceUpgradeManager.getSilenceMigration(world)), mouseX, mouseY);
 	}
 
 	@Override
@@ -95,13 +95,13 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
         }
         guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_arrow.png"), this.leftPos + 14, this.topPos + 160, Mth.clamp((int) result4 * 161, 0, 161), 0, 161, 8, 322, 8);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete_subs.png"), this.leftPos + 32, this.topPos + 28, Mth.clamp((int) StrategyUtils.getStraSubsis(world) * 128, 0, 512), 0, 128, 32, 640, 32);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete_subs.png"), this.leftPos + 32, this.topPos + 28, Mth.clamp((int) SubsistingUpgradeManager.getStraSubsis(world) * 128, 0, 512), 0, 128, 32, 640, 32);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 68, Mth.clamp((int) StrategyUtils.getStraBreed(world) * 128, 0, 512), 0, 128, 32, 640, 32);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 68, Mth.clamp((int) BreedUpgradeManager.getStraBreed(world) * 128, 0, 512), 0, 128, 32, 640, 32);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete_grow.png"), this.leftPos + 32, this.topPos + 108, Mth.clamp((int) StrategyUtils.getStraGrow(world) * 128, 0, 512), 0, 128, 32, 640, 32);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete_grow.png"), this.leftPos + 32, this.topPos + 108, Mth.clamp((int) GrowUpgradeManager.getStraGrow(world) * 128, 0, 512), 0, 128, 32, 640, 32);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete_mig.png"), this.leftPos + 32, this.topPos + 148, Mth.clamp((int) StrategyUtils.getStraMigration(world) * 128, 0, 512), 0, 128, 32, 640, 32);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete_mig.png"), this.leftPos + 32, this.topPos + 148, Mth.clamp((int) MigrationUpgradeManager.getStraMigration(world) * 128, 0, 512), 0, 128, 32, 640, 32);
 
         double result1 = 0;
         if (MapVariables.get(world).strategy_silence >= 1) {
@@ -109,7 +109,7 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
         }
         guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/side_arrow.png"), this.leftPos + 176, this.topPos + 42, 0, Mth.clamp((int) result1 * 123, 0, 123), 39, 123, 39, 246);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/silence.png"), this.leftPos + 208, this.topPos + 86, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/silence.png"), this.leftPos + 208, this.topPos + 86, Mth.clamp((int) SilenceUpgradeManager.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
 
         if (MapVariables.get(world).if_sublimation) {
             guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/sublimation.png"), this.leftPos + 239, this.topPos + 87, Mth.clamp((int) MapVariables.get(world).strategy_sublimation * 28, 0, 112), 0, 28, 32, 140, 32);

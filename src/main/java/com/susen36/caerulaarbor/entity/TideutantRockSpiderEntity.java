@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -219,7 +219,7 @@ public class TideutantRockSpiderEntity extends SeaMonster implements ElementalAt
                     }
                     if ((Entity) this instanceof TideutantRockSpiderEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_DURATION, 20);
-                    CaerulaArborMod.queueServerWork(11, () -> {
+                    CaerulaArbor.queueServerWork(11, () -> {
                         if (this.isAlive()) {
                             if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ZOMBIE_DESTROY_EGG, SoundSource.HOSTILE, 1, 1);

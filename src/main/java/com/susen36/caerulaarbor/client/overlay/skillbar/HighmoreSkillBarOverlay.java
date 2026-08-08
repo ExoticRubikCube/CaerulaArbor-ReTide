@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.client.overlay.skillbar;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.HighmoreEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -52,7 +52,7 @@ public class HighmoreSkillBarOverlay {
             } else if (ind < 0) {
                 ind = 0;
             }
-            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/highmore_skill_bar.png"), 8, h / 2 + -41, Mth.clamp((int) ind * 4, 0, 340), 0, 4, 87, 344, 87);
+            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/highmore_skill_bar.png"), 8, h / 2 + -41, Mth.clamp((int) ind * 4, 0, 340), 0, 4, 87, 344, 87);
 
 		}
 	}

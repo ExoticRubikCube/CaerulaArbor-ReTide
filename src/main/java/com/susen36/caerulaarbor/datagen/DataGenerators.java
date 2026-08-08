@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.datagen.tags.TagsProvider;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 数据生成器总入口，负责在 {@link GatherDataEvent} 中注册所有 datagen provider
  */
-@EventBusSubscriber(modid = CaerulaArborMod.MODID)
+@EventBusSubscriber(modid = CaerulaArbor.MODID)
 public class DataGenerators {
     /**
      * 注册全部数据生成任务
@@ -47,7 +47,7 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), new GlobalLootModifierProvider(
                 output,
                 lookupProvider,
-                CaerulaArborMod.MODID
+                CaerulaArbor.MODID
         ));
 
         // biome modifiers

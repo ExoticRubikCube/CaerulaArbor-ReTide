@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
@@ -43,11 +43,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
 
 import javax.annotation.Nullable;
 
@@ -190,7 +187,7 @@ public class ScreamChestFishEntity extends SeaMonster {
             return;
         if (((Entity) this instanceof ScreamChestFishEntity datEntI ? datEntI.getEntityData().get(DATA_SCREAM_TICK) : 0) > 0) {
             if (sourceentity instanceof ServerPlayer player) {
-                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "i_scream"));
+                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "i_scream"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                 if (!ap.isDone()) {
                     for (String criteria : ap.getRemainingCriteria())
@@ -273,7 +270,7 @@ public class ScreamChestFishEntity extends SeaMonster {
                     }
                     for (Entity entityiterator : world.getEntities(this, new AABB((x - 5), (y - 2), (z - 5), (x + 5), (y + 3), (z + 5)))) {
                         if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 5) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                 if (!(entityiterator == this.getTarget())) {
                                     continue;
                                 }

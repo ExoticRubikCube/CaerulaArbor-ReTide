@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.mojang.serialization.MapCodec;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -48,7 +48,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-	private static final net.minecraft.tags.TagKey<Block> TRAIL_TAG = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail"));
+	private static final net.minecraft.tags.TagKey<Block> TRAIL_TAG = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail"));
 
 	public ViviparousLilyBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.FUNGUS).instabreak().lightLevel(s -> 1).noCollission().noOcclusion().randomTicks().pushReaction(PushReaction.DESTROY).isRedstoneConductor((bs, br, bp) -> false));
@@ -173,7 +173,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 			}
 			world.sendParticles(ParticleTypes.EXPLOSION_EMITTER, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 2, 0.1D, 0.1D, 0.1D, 0.1D);
 			world.setBlock(pos, blockstate.setValue(DATA_ANIMATION, 1), 3);
-			CaerulaArborMod.queueServerWork(20, () -> {
+			CaerulaArbor.queueServerWork(20, () -> {
 				if (world.getBlockState(pos).getBlock() == CABlocks.VIVIPAROUS_LILY.get()) {
 					world.setBlock(pos, CABlocks.HUGE_LILY.get().withPropertiesOf(blockstate), 3);
 				}

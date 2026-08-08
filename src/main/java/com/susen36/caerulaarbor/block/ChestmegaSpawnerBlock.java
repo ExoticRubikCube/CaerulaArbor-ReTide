@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.mojang.serialization.MapCodec;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
@@ -166,7 +166,7 @@ public class ChestmegaSpawnerBlock extends BaseEntityBlock implements SimpleWate
 		world.setBlock(pos, world.getBlockState(pos).setValue(DATA_ANIMATION, 1), 3);
 
 		Direction facing = blockstate.getValue(FACING);
-		CaerulaArborMod.queueServerWork(15, () -> {
+		CaerulaArbor.queueServerWork(15, () -> {
 			world.destroyBlock(pos, false);
 			if (world instanceof Level level) {
 				level.playSound(null, pos, SoundEvents.ENDER_CHEST_CLOSE, SoundSource.BLOCKS, 1, 1);

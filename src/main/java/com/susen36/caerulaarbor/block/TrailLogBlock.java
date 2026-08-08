@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.util.CaerulaUtil;
 import net.minecraft.core.BlockPos;
@@ -41,7 +41,7 @@ public class TrailLogBlock extends Block {
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 64);
 	public static final IntegerProperty LONGEVITY = IntegerProperty.create("longevity", 0, 16);
-	private static final TagKey<Block> CANNOT_COVER = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_cover"));
+	private static final TagKey<Block> CANNOT_COVER = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "cannot_cover"));
 
 	public TrailLogBlock() {
 		super(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).sound(SoundType.WOOD).strength(3f, 5f).speedFactor(0.9f));

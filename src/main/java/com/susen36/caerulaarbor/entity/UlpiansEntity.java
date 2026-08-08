@@ -1,11 +1,15 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
+import com.susen36.caerulaarbor.init.CADamageTypes;
+import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -46,9 +50,6 @@ import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.babel.api.BabelAPI;
-import com.susen36.babel.elemental.base.AbstractEPCapability;
 
 import java.util.List;
 
@@ -149,14 +150,14 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
             this.getEntityData().set(DATA_DURATION, this.getEntityData().get(DATA_DURATION) + 30);
             this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                     CASounds.ANCHOR_PRE.get(), SoundSource.HOSTILE, 2.2F, 1);
-            CaerulaArborMod.queueServerWork(14, () -> {
+            CaerulaArbor.queueServerWork(14, () -> {
                 if (this.isAlive()) {
                     Entity currentTarget = this.getTarget();
                     double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                     this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                             CASounds.ANCHOR_ATTACK.get(), SoundSource.HOSTILE, 2.75F, 1);
                     final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-                    TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+                    TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
                     List<LivingEntity> foundEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
                             entity -> entity.isAlive()
                                     && entity != this
@@ -240,7 +241,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                 datEntSetI.getEntityData().set(DATA_BONUS, (int) (bns + 1));
             {
                 final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-                TagKey<EntityType<?>> huntersTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters"));
+                TagKey<EntityType<?>> huntersTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "hunters"));
                 List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
                         e -> e.isAlive() && e.getType().is(huntersTag));
                 for (LivingEntity entityiterator : entfound) {
@@ -294,14 +295,14 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
                         this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
-                        CaerulaArborMod.queueServerWork(13, () -> {
+                        CaerulaArbor.queueServerWork(13, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PULL_THROW.get(), SoundSource.NEUTRAL, 3, 1);
                                 }
                             }
                         });
-                        CaerulaArborMod.queueServerWork(20, () -> {
+                        CaerulaArbor.queueServerWork(20, () -> {
                             if (this.isAlive()) {
                                 Entity enemy1;
                                 double damage;
@@ -315,7 +316,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 }
                                 {
                                     final Vec3 center = new Vec3((getX()), (getY()), (getZ()));
-                                    TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+                                    TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside"));
                                     List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(6),
                                             e -> e != this
                                                     && !((e instanceof Player || (e instanceof TamableAnimal tamEnt && tamEnt.isTame())) && e != enemy1)
@@ -331,13 +332,13 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 }
                             }
                         });
-                        CaerulaArborMod.queueServerWork(24, () -> {
+                        CaerulaArbor.queueServerWork(24, () -> {
                             if (this.isAlive()) {
                                 Entity enemy1 = this.getTarget();
                                 double r = 4.5;
                                 {
                                     final Vec3 center = new Vec3(x, y, z);
-                                    TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+                                    TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside"));
                                     List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(4.5),
                                             e -> e.isAlive()
                                                     && e != this
@@ -354,7 +355,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 }
                             }
                         });
-                        CaerulaArborMod.queueServerWork(26, () -> {
+                        CaerulaArbor.queueServerWork(26, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PULL_PULL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
@@ -391,12 +392,12 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_SKILL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
                         }
-                        CaerulaArborMod.queueServerWork(16, () -> {
+                        CaerulaArbor.queueServerWork(16, () -> {
                             if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_THROW.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                             }
                         });
-                        CaerulaArborMod.queueServerWork(22, () -> {
+                        CaerulaArbor.queueServerWork(22, () -> {
                             if (this.isAlive()) {
                                 Entity enemy1;
                                 double perc;
@@ -422,7 +423,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 nowZ = getZ();
                                 {
                                     final Vec3 center = new Vec3(noeX, nowY, nowZ);
-                                    TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+                                    TagKey<EntityType<?>> humanSideTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside"));
                                     List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(6),
                                             e -> e != this
                                                     && e != enemy1

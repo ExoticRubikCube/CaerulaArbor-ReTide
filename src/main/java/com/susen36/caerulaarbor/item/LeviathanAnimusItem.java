@@ -5,7 +5,6 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
-import com.susen36.caerulaarbor.util.StrategyUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -68,7 +67,7 @@ public class LeviathanAnimusItem extends Item {
                 world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_14").getString())), false);
             itemstack.shrink(1);
         } else {
-            if (MapVariables.get(world).strategy_silence < 4 && StrategyUtils.canEnableSilence(world)) {
+            if (MapVariables.get(world).strategy_silence < 4 && SilenceUpgradeManager.canEnableSilence(world)) {
                 SilenceUpgradeManager.applySilenceUpgrade(world, 99999999);
                 itemstack.shrink(1);
             } else {

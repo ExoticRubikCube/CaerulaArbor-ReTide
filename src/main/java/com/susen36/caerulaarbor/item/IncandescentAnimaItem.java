@@ -4,7 +4,7 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
-import com.susen36.caerulaarbor.util.StrategyUtils;
+import com.susen36.caerulaarbor.manager.upgrade.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -99,7 +99,7 @@ public class IncandescentAnimaItem extends Item {
                 }
             }
             if (!finished) {
-                if (StrategyUtils.canEnableSilence(world)) {
+                if (SilenceUpgradeManager.canEnableSilence(world)) {
                     lvl1 = MapVariables.get(world).strategy_silence;
                     if (lvl1 > 0) {
                         maxium_lvl = lvl1 - 1;
@@ -141,7 +141,7 @@ public class IncandescentAnimaItem extends Item {
                         if (lvl1 == maxium_lvl) {
                             MapVariablesHandler.setStrategyLevel(world, StrategyType.GROW, maxium_lvl - 1);
                             MapVariablesHandler.setEvoPoint(world, StrategyType.GROW, 0);
-                            stra = Component.translatable("gui.caerula_arbor.evo_tree.label_sreategy_grow").getString();
+                            stra = GrowUpgradeManager.getDisplayName();
                             info = info_raw.replace("{stra}", stra);
                             shouldBroadCast = true;
                             if (!world.isClientSide() && world.getServer() != null)
@@ -150,7 +150,7 @@ public class IncandescentAnimaItem extends Item {
                         if (lvl2 == maxium_lvl) {
                             MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBSISTING, maxium_lvl - 1);
                             MapVariablesHandler.setEvoPoint(world, StrategyType.SUBSISTING, 0);
-                            stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_subsisting").getString();
+                            stra = SubsistingUpgradeManager.getDisplayName();
                             info = info_raw.replace("{stra}", stra);
                             shouldBroadCast = true;
                             if (!world.isClientSide() && world.getServer() != null)
@@ -159,7 +159,7 @@ public class IncandescentAnimaItem extends Item {
                         if (lvl3 == maxium_lvl) {
                             MapVariablesHandler.setStrategyLevel(world, StrategyType.BREED, maxium_lvl - 1);
                             MapVariablesHandler.setEvoPoint(world, StrategyType.BREED, 0);
-                            stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_breed").getString();
+                            stra = BreedUpgradeManager.getDisplayName();
                             info = info_raw.replace("{stra}", stra);
                             shouldBroadCast = true;
                             if (!world.isClientSide() && world.getServer() != null)
@@ -168,7 +168,7 @@ public class IncandescentAnimaItem extends Item {
                         if (lvl4 == maxium_lvl) {
                             MapVariablesHandler.setStrategyLevel(world, StrategyType.MIGRATION, maxium_lvl - 1);
                             MapVariablesHandler.setStrategyLevel(world, StrategyType.MIGRATION, 0);
-                            stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_migration").getString();
+                            stra = MigrationUpgradeManager.getDisplayName();
                             info = info_raw.replace("{stra}", stra);
                             shouldBroadCast = true;
                             if (!world.isClientSide() && world.getServer() != null)

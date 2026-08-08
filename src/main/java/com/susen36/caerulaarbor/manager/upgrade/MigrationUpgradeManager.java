@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.manager.upgrade;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
@@ -29,7 +29,7 @@ public class MigrationUpgradeManager {
 			if (MapVariables.get(world).evo_point_migration >= Math.pow(stra + 1, 3) * CAConfigs.COEFFICIENT.get()) {
 				for (Player entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer player) {
-						AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_experience_evolution"));
+						AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "to_experience_evolution"));
 						if (adv == null) continue;
 						AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 						if (!ap.isDone()) {
@@ -75,7 +75,7 @@ public class MigrationUpgradeManager {
 		} else {
 			for (Player entityiterator : new ArrayList<>(world.players())) {
 				if (entityiterator instanceof ServerPlayer player) {
-					AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_terminate_evolution"));
+					AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "to_terminate_evolution"));
 					if (adv == null) continue;
 					AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 					if (!ap.isDone()) {
@@ -86,5 +86,21 @@ public class MigrationUpgradeManager {
 			}
 			MapVariablesHandler.setEvoPoint(world, StrategyType.MIGRATION, 0);
 		}
+	}
+
+	public static double getStraMigration(LevelAccessor world) {
+		return MapVariables.get(world).strategy_migration;
+	}
+
+	public static String getDescrMigra(LevelAccessor world) {
+		return Component.translatable("item.caerula_arbor.sample_migration.description_" + Math.round(MapVariables.get(world).strategy_migration)).getString();
+	}
+
+	public static String getCmdFeedback(long lvl) {
+		return Component.translatable("command.evolution.migration").getString().replace("<num>", "" + lvl);
+	}
+
+	public static String getDisplayName() {
+		return Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_migration").getString();
 	}
 }

@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.entity.OceanizedEvokerEntity;
@@ -20,12 +20,12 @@ public class TotemEventHandler {
 		}
 
 		if (event.getEntity() instanceof OceanizedEvokerEntity oceanizedEvoker) {
-			CaerulaArborMod.queueServerWork(2, () -> {
+			CaerulaArbor.queueServerWork(2, () -> {
 				if (oceanizedEvoker.isAlive() && !oceanizedEvoker.level().isClientSide()) {
 					oceanizedEvoker.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 20, 0, false, false));
 				}
 			});
-			CaerulaArborMod.queueServerWork(5, () -> {
+			CaerulaArbor.queueServerWork(5, () -> {
 				if (oceanizedEvoker.isAlive()) {
 					oceanizedEvoker.setHealth((float) (oceanizedEvoker.getMaxHealth() * 0.65));
 				}

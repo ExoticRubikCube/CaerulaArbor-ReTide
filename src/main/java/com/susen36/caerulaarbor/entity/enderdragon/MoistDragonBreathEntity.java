@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity.enderdragon;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
@@ -393,7 +393,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                     Entity recentVictim;
                     Entity recentAttacker;
                     if (owner instanceof OceanizedEnderinaEntity) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                             if (!(entityiterator == target)) {
                                 result = false;
                             }

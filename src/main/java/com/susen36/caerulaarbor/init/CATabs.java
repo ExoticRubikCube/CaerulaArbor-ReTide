@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -14,7 +14,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 @EventBusSubscriber
 public class CATabs {
-    public static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, CaerulaArborMod.MODID);
+    public static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, CaerulaArbor.MODID);
     public static final DeferredHolder<CreativeModeTab, ? extends CreativeModeTab> CAERULA_ITEMS = REGISTRY.register("caerula_items",
             () -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caerula_items")).icon(() -> new ItemStack(CAItems.CAERULA_RECORDER.get())).displayItems((parameters, tabData) -> {
                 tabData.accept(CAItems.CAERULA_RECORDER.get());

@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.core.BlockPos;
@@ -175,7 +175,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
             damage *= 1.75F;
         }
         //TODO:为什么没有else?
-        if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+        if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
             damage *= 1.5F;
         }
         return damage;
@@ -243,17 +243,17 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
                         if (this instanceof TheLastKnightEntity) {
                             this.setAnimation("animation.last_knight.skill");
                         }
-                        CaerulaArborMod.queueServerWork(27, () -> {
+                        CaerulaArbor.queueServerWork(27, () -> {
                             if (this.isAlive()) {
                                 this.performCrossAttack();
                             }
                         });
-                        CaerulaArborMod.queueServerWork(45, () -> {
+                        CaerulaArbor.queueServerWork(45, () -> {
                             if (this.isAlive()) {
                                 this.performCrossAttack();
                             }
                         });
-                        CaerulaArborMod.queueServerWork(57, () -> {
+                        CaerulaArbor.queueServerWork(57, () -> {
                             if (this.isAlive()) {
                                 this.performCrossAttack();
                             }
@@ -442,7 +442,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
 
         for (Entity entityiterator : world.getEntities(this, new AABB((x + 16), (y + 4), (z + 1.5), (x - 16), (y - 2), (z - 1.5)))) {
             if (entityiterator instanceof LivingEntity) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
                     if (!(entityiterator == target)) {
                         continue;
                     }
@@ -453,7 +453,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
 
         for (Entity entityiterator : world.getEntities(this, new AABB((x + 1.5), (y + 4), (z + 16), (x - 1.5), (y - 2), (z - 16)))) {
             if (entityiterator instanceof LivingEntity) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
                     if (!(entityiterator == target)) {
                         continue;
                     }

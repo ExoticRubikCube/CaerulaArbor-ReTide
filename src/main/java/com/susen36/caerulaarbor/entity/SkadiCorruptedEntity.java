@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
@@ -203,7 +203,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
     @Override
     public boolean doHurtTarget(Entity target) {
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(24, () -> {
+            CaerulaArbor.queueServerWork(24, () -> {
                 if (this.isAlive() && isCorruptedDurative() && target.isAlive() && this.distanceTo(target) <= 2.25) {
                     double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                     final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
@@ -212,7 +212,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                         if (entityIterator == this) {
                             continue;
                         }
-                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                             continue;
                         }
                         if (this.distanceToSqr(entityIterator) <= 9) {
@@ -451,7 +451,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                         final Vec3 center = new Vec3(x, y, z);
                         List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24), e -> true);
                         for (LivingEntity entityiterator : entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                 if (!(entityiterator == enemy1)) {
                                     continue;
                                 }
@@ -513,11 +513,11 @@ public class SkadiCorruptedEntity extends SeaMonster {
                         mayBonus = false;
                         isSeaborn = false;
                         if (distanceToSqr(entityiterator) <= 256) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
                                 mayBonus = true;
                                 isSeaborn = true;
                             }
-                            if (phase <= 1 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
+                            if (phase <= 1 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
                                 mayBonus = true;
                                 isSeaborn = false;
                             }
@@ -549,8 +549,8 @@ public class SkadiCorruptedEntity extends SeaMonster {
                                     entityiterator.getPersistentData().putBoolean("corruptedBonus2", true);
                                 }
                                 if (phase > 0.5 && isSeaborn) {
-                                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
-                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
+                                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))
+                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet")))) {
                                         if (entityiterator instanceof Mob entity && enemy1 instanceof LivingEntity ent)
                                             entity.setTarget(ent);
                                     }

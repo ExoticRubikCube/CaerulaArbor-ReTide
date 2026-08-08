@@ -5,7 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -77,7 +77,7 @@ public class BiomeModifiersProvider implements DataProvider {
         addSpawn(modifiers, "umbrella_abyssal_biome_modifier", anyBiome(), "caerula_arbor:umbrella_abyssal", 45, 1, 2);
 
         Path root = output.getOutputFolder(PackOutput.Target.DATA_PACK)
-                .resolve(CaerulaArborMod.MODID)
+                .resolve(CaerulaArbor.MODID)
                 .resolve("neoforge")
                 .resolve("biome_modifier");
         var futures = ImmutableList.<CompletableFuture<?>>builder();
@@ -191,6 +191,6 @@ public class BiomeModifiersProvider implements DataProvider {
      */
     @Override
     public @NotNull String getName() {
-        return "Biome Modifiers: " + CaerulaArborMod.MODID;
+        return "Biome Modifiers: " + CaerulaArbor.MODID;
     }
 }

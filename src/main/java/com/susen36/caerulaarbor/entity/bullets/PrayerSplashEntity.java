@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.CompassionPrayerEntity;
 import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -82,7 +82,7 @@ public class PrayerSplashEntity extends BaseProjectile implements ItemSupplier {
                         if (entity == entityiterator) {
                             continue;
                         }
-						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
 							if (entityiterator instanceof LivingEntity livingEntity && livingEntity.getHealth() < livingEntity.getMaxHealth()) {
 								if (entityiterator.isAlive()) {
                                     livingEntity.heal((float) atk);

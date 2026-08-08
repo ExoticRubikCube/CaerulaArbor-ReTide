@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.potion;
 
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
@@ -102,7 +102,7 @@ public class InfestedMobEffect extends MobEffect {
             }
             SIHelper.causeSanityInjury(entity, 750 * ((double) amplifier + 1), SanityEvent.Hurt.Type.POTION);
             if ((Entity) entity instanceof ServerPlayer player) {
-                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_welcome"));
+                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "they_shall_welcome"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                 if (!ap.isDone()) {
                     for (String criteria : ap.getRemainingCriteria())
@@ -111,7 +111,7 @@ public class InfestedMobEffect extends MobEffect {
             }
             if ((double) amplifier >= 2) {
                 if ((Entity) entity instanceof ServerPlayer player) {
-                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_pay"));
+                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "they_shall_pay"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())

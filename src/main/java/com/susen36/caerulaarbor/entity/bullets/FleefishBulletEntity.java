@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.sounds.SoundEvents;
@@ -44,7 +44,7 @@ public class FleefishBulletEntity extends BaseProjectile implements ItemSupplier
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
-        CaerulaArborMod.queueServerWork(10, () -> {
+        CaerulaArbor.queueServerWork(10, () -> {
             if (!level().isClientSide())
                 discard();
         });

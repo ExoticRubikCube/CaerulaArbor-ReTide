@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.manager.upgrade;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
@@ -29,7 +29,7 @@ public class GrowUpgradeManager {
 			if (MapVariables.get(world).evo_point_grow >= Math.pow(stra + 1, 3) * CAConfigs.COEFFICIENT.get()) {
 				for (Player entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer player) {
-						AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_experience_evolution"));
+						AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "to_experience_evolution"));
 						if (adv == null) continue;
 						AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 						if (!ap.isDone()) {
@@ -75,7 +75,7 @@ public class GrowUpgradeManager {
 		} else {
 			for (Player entityiterator : new ArrayList<>(world.players())) {
 				if (entityiterator instanceof ServerPlayer player) {
-					AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_terminate_evolution"));
+					AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "to_terminate_evolution"));
 					if (adv == null) continue;
 					AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 					if (!ap.isDone()) {
@@ -86,5 +86,21 @@ public class GrowUpgradeManager {
 			}
 			MapVariablesHandler.setEvoPoint(world, StrategyType.GROW, 1);
 		}
+	}
+
+	public static double getStraGrow(LevelAccessor world) {
+		return MapVariables.get(world).strategy_grow;
+	}
+
+	public static String getDescrGrow(LevelAccessor world) {
+		return Component.translatable("item.caerula_arbor.sample_grow.description_" + Math.round(MapVariables.get(world).strategy_grow)).getString();
+	}
+
+	public static String getCmdFeedback(long lvl) {
+		return Component.translatable("command.evolution.grow").getString().replace("<num>", "" + lvl);
+	}
+
+	public static String getDisplayName() {
+		return Component.translatable("gui.caerula_arbor.evo_tree.label_sreategy_grow").getString();
 	}
 }

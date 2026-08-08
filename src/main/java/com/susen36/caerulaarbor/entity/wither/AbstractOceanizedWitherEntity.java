@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.entity.wither;
 import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -454,7 +454,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster implement
             adjustedDz = dz / module * acceleration;
         }
 
-        CaerulaArborMod.queueServerWork(Mth.nextInt(RandomSource.create(), 0, 4), () -> {
+        CaerulaArbor.queueServerWork(Mth.nextInt(RandomSource.create(), 0, 4), () -> {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WITHER_SHOOT, SoundSource.HOSTILE, 0.85F, 1);
             }

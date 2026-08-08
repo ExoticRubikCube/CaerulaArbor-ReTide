@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -102,7 +102,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
     @Override
     public boolean doHurtTarget(Entity target) {
         if (!this.level().isClientSide()) {
-            CaerulaArborMod.queueServerWork(10, () -> {
+            CaerulaArbor.queueServerWork(10, () -> {
                 if (this.isAlive() && target.isAlive()) {
                     target.hurt(
                             CADamageTypes.source(this.level(), CADamageTypes.GENERIC_WARRIOR_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -125,7 +125,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
                         if (this instanceof CorrectionalPhalanxyInfantryEntity) {
                             this.setAnimation("animation.correctional_phalanx _infantry.heavyattack");
                         }
-                        CaerulaArborMod.queueServerWork(20, () -> {
+                        CaerulaArbor.queueServerWork(20, () -> {
                             sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.GENERIC_WARRIOR_ATTACK),
                                     (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
                             sourceentity.push((getLookAngle().x * 0.64), 0, (getLookAngle().z * 0.64));
@@ -182,12 +182,12 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
                             this.setAnimation("animation.correctional_phalanx _infantry.swing");
                         }
                         this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY()), (target.getZ())));
-                        CaerulaArborMod.queueServerWork(16, () -> {
+                        CaerulaArbor.queueServerWork(16, () -> {
                             if (this.isAlive()) {
                                 final Vec3 center = new Vec3((this.getX() + 2 * getLookAngle().x), (this.getY() + 2 * getLookAngle().y), (this.getZ() + 2 * getLookAngle().z));
                                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                                 for (Entity entityiterator : entfound) {
-                                    if (!(entityiterator instanceof Mob) || entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))) {
+                                    if (!(entityiterator instanceof Mob) || entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "inquisition")))) {
                                         if (!(entityiterator == this.getTarget())) {
                                             continue;
                                         }

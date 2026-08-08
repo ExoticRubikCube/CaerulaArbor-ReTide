@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.client.model.entity.layer;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 
 import com.susen36.caerulaarbor.entity.OceanizedVindicatorEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedVindicatorLayer extends GeoRenderLayer<OceanizedVindicatorEntity> {
-	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/ocean_vindic.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/ocean_vindic.png");
 
 	public OceanizedVindicatorLayer(GeoRenderer<OceanizedVindicatorEntity> entityRenderer) {
 		super(entityRenderer);

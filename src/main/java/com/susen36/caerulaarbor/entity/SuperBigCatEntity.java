@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -130,12 +130,12 @@ public class SuperBigCatEntity extends SeaMonster {
             this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                     SoundEvents.CAT_HISS, SoundSource.HOSTILE, 1,
                     (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
-            CaerulaArborMod.queueServerWork(9, () -> {
+            CaerulaArbor.queueServerWork(9, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 10) {
                     superCatRanged(targetX, targetY, targetZ);
                 }
             });
-            CaerulaArborMod.queueServerWork(14, () -> {
+            CaerulaArbor.queueServerWork(14, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 15) {
                     superCatRanged(targetX, targetY, targetZ);
                 }
@@ -154,7 +154,7 @@ public class SuperBigCatEntity extends SeaMonster {
             if (!(entityIterator instanceof Mob) && !(entityIterator instanceof Player)) {
                 continue;
             }
-            if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != target) {
+            if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) && entityIterator != target) {
                 continue;
             }
             if (entityIterator == this) {

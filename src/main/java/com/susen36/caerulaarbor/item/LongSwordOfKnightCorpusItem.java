@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
@@ -89,7 +89,7 @@ public class LongSwordOfKnightCorpusItem extends SwordItem {
 
 	public float applyDamageBonus(Entity target, float baseDamage) {
 		float damage = baseDamage;
-		if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+		if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
 			damage *= 1.5F;
 		}
 		if (target instanceof LivingEntity livingTarget && livingTarget.getHealth() < livingTarget.getMaxHealth() * 0.33F) {

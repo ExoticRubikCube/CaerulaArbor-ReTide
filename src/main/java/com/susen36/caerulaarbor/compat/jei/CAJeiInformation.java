@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.compat.jei;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 
 import com.susen36.caerulaarbor.init.CAItems;
 import mezz.jei.api.IModPlugin;
@@ -17,7 +17,7 @@ import java.util.List;
 public class CAJeiInformation implements IModPlugin {
 	@Override
 	public ResourceLocation getPluginUid() {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "information");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "information");
 	}
 
 	@Override

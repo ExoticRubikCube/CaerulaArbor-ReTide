@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.compat.jei;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -25,7 +25,7 @@ import java.util.List;
 public class CABrewingRecipes implements IModPlugin {
 	@Override
 	public ResourceLocation getPluginUid() {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "brewing_recipes");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "brewing_recipes");
 	}
 
 	@Override

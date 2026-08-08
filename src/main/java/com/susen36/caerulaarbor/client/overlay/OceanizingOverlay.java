@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.client.overlay;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -23,11 +23,11 @@ public class OceanizingOverlay {
 		if (player.hasEffect(CAMobEffects.INFESTED)) {
 			int amplifier = player.getEffect(CAMobEffects.INFESTED).getAmplifier();
 			if (amplifier == 0) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/transforming0.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/transforming0.png");
 			} else if (amplifier == 1) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/transforming1.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/transforming1.png");
 			} else if (amplifier > 1) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/transforming2.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/transforming2.png");
 			}
 		}
 		if (texture != null) {

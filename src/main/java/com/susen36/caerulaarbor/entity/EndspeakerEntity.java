@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
@@ -759,7 +759,7 @@ public class EndspeakerEntity extends SeaMonster {
 					continue;
 				}
 				if (entity instanceof ServerPlayer player) {
-					AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "silent_interruption"));
+					AdvancementHolder advancement = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "silent_interruption"));
 					AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
 					if (!progress.isDone()) {
 						for (String criteria : progress.getRemainingCriteria()) {
@@ -807,7 +807,7 @@ public class EndspeakerEntity extends SeaMonster {
 				if (!(candidate instanceof Monster || candidate instanceof Player)) {
 					continue;
 				}
-				if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "endspeaker_edible")))) {
+				if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "endspeaker_edible")))) {
 					if (candidate instanceof BaselayerAbyssalEntity && hasAbility(world, 0)) {
 						continue;
 					} else if (candidate instanceof PredatorAbyssalEntity && hasAbility(world, 1)) {
@@ -865,7 +865,7 @@ public class EndspeakerEntity extends SeaMonster {
         final Vec3 center = new Vec3(targetX, targetY, targetZ);
         List<LivingEntity> affectedEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(2 * radius), candidate -> true);
         for (LivingEntity candidate : affectedEntities) {
-            if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffpsring"))) && candidate instanceof Player) {
+            if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanoffpsring"))) && candidate instanceof Player) {
                 continue;
             }
             if ((ModCapabilities.getPlayerVariables(this)).player_oceanization > 2) {
@@ -1217,8 +1217,8 @@ public class EndspeakerEntity extends SeaMonster {
 			this.setAnimation("animation.endspeaker_2.skill");
 			this.setDuration(36);
 			this.setSkillCooldown(170);
-			CaerulaArborMod.queueServerWork(9, () -> this.executePhaseTwoSkillWave(8, 4, 1.75));
-			CaerulaArborMod.queueServerWork(19, () -> this.executePhaseTwoSkillWave(10, 9, 2.25));
+			CaerulaArbor.queueServerWork(9, () -> this.executePhaseTwoSkillWave(8, 4, 1.75));
+			CaerulaArbor.queueServerWork(19, () -> this.executePhaseTwoSkillWave(10, 9, 2.25));
 		}
 	}
 
@@ -1243,16 +1243,16 @@ public class EndspeakerEntity extends SeaMonster {
 			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 9, false, false));
 			this.setSkillCooldown(280);
 			this.setDuration(60);
-			CaerulaArborMod.queueServerWork(16, this::teleportToTarget);
-			CaerulaArborMod.queueServerWork(19, () -> this.executePhaseThreeChop(this.getX(), this.getY(), this.getZ(), false));
-			CaerulaArborMod.queueServerWork(21, this::teleportToTarget);
-			CaerulaArborMod.queueServerWork(24, () -> this.executePhaseThreeChop(this.getX(), this.getY(), this.getZ(), false));
-			CaerulaArborMod.queueServerWork(26, this::teleportToTarget);
-			CaerulaArborMod.queueServerWork(30, () -> this.executePhaseThreeChop(this.getX(), this.getY(), this.getZ(), true));
-			CaerulaArborMod.queueServerWork(34, this::teleportToTarget);
-			CaerulaArborMod.queueServerWork(37, () -> this.executePhaseThreeChop(this.getX(), this.getY(), this.getZ(), true));
-			CaerulaArborMod.queueServerWork(41, () -> this.teleportTo(this.getX(), this.getY(), this.getZ()));
-			CaerulaArborMod.queueServerWork(44, () -> this.executePhaseThreeChop(this.getX(), this.getY(), this.getZ(), true));
+			CaerulaArbor.queueServerWork(16, this::teleportToTarget);
+			CaerulaArbor.queueServerWork(19, () -> this.executePhaseThreeChop(this.getX(), this.getY(), this.getZ(), false));
+			CaerulaArbor.queueServerWork(21, this::teleportToTarget);
+			CaerulaArbor.queueServerWork(24, () -> this.executePhaseThreeChop(this.getX(), this.getY(), this.getZ(), false));
+			CaerulaArbor.queueServerWork(26, this::teleportToTarget);
+			CaerulaArbor.queueServerWork(30, () -> this.executePhaseThreeChop(this.getX(), this.getY(), this.getZ(), true));
+			CaerulaArbor.queueServerWork(34, this::teleportToTarget);
+			CaerulaArbor.queueServerWork(37, () -> this.executePhaseThreeChop(this.getX(), this.getY(), this.getZ(), true));
+			CaerulaArbor.queueServerWork(41, () -> this.teleportTo(this.getX(), this.getY(), this.getZ()));
+			CaerulaArbor.queueServerWork(44, () -> this.executePhaseThreeChop(this.getX(), this.getY(), this.getZ(), true));
 		}
 	}
 
@@ -1288,7 +1288,7 @@ public class EndspeakerEntity extends SeaMonster {
 		List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8), entity -> true);
 		for (LivingEntity nearbyEntity : nearbyEntities) {
 			LivingEntity livingTarget = nearbyEntity;
-			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
 				if (nearbyEntity != target) {
 					continue;
 				}
@@ -1338,7 +1338,7 @@ public class EndspeakerEntity extends SeaMonster {
 		Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
 		List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius / 2d), entity -> true);
 		for (LivingEntity nearbyEntity : nearbyEntities) {
-			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
 				if (nearbyEntity != target) {
 					continue;
 				}

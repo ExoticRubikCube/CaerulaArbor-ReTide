@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.HighmoreEntity;
 import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -80,12 +80,12 @@ public class HighmoreShootEntity extends BaseProjectile implements ItemSupplier 
 		}
 		if (!(sourceentity == entity)) {
 			if ((sourceentity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 0) {
-				CaerulaArborMod.queueServerWork(3, () -> {
+				CaerulaArbor.queueServerWork(3, () -> {
 					new Object() {
 						void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
 							entity.hurt(CADamageTypes.source(world, CADamageTypes.HIGHMORE_ATTACK, sourceentity), (float) (sourceentity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
 							final int tick2 = ticks;
-							CaerulaArborMod.queueServerWork(tick2, () -> {
+							CaerulaArbor.queueServerWork(tick2, () -> {
 								if (timedlooptotal > timedloopiterator + 1) {
 									timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
 								}
@@ -94,13 +94,13 @@ public class HighmoreShootEntity extends BaseProjectile implements ItemSupplier 
 					}.timedLoop(0, 2, 3);
 				});
 			} else if ((sourceentity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 1) {
-				CaerulaArborMod.queueServerWork(3, () -> {
+				CaerulaArbor.queueServerWork(3, () -> {
 					new Object() {
 						void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
 							LivingEntity livingEntity9 = (LivingEntity) sourceentity;
 							entity.hurt(CADamageTypes.source(world, CADamageTypes.HIGHMORE_ATTACK, sourceentity), (float) (livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
 							final int tick2 = ticks;
-							CaerulaArborMod.queueServerWork(tick2, () -> {
+							CaerulaArbor.queueServerWork(tick2, () -> {
 								if (timedlooptotal > timedloopiterator + 1) {
 									timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
 								}
@@ -109,13 +109,13 @@ public class HighmoreShootEntity extends BaseProjectile implements ItemSupplier 
 					}.timedLoop(0, 4, 3);
 				});
 			} else {
-				CaerulaArborMod.queueServerWork(3, () -> {
+				CaerulaArbor.queueServerWork(3, () -> {
 					new Object() {
 						void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
 							LivingEntity livingEntity14 = (LivingEntity) sourceentity;
 							entity.hurt(CADamageTypes.source(world, CADamageTypes.HIGHMORE_ATTACK, sourceentity), (float) (livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
 							final int tick2 = ticks;
-							CaerulaArborMod.queueServerWork(tick2, () -> {
+							CaerulaArbor.queueServerWork(tick2, () -> {
 								if (timedlooptotal > timedloopiterator + 1) {
 									timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
 								}
@@ -124,7 +124,7 @@ public class HighmoreShootEntity extends BaseProjectile implements ItemSupplier 
 					}.timedLoop(0, 6, 3);
 				});
 			}
-			CaerulaArborMod.queueServerWork(10, () -> {
+			CaerulaArbor.queueServerWork(10, () -> {
 				if (!level().isClientSide())
 					discard();
 			});

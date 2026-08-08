@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen.worldgen;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -242,6 +242,6 @@ public final class WorldgenKeys {
      * @return 注册 key
      */
     private static <T> ResourceKey<T> modKey(ResourceKey<? extends Registry<T>> registry, String path) {
-        return ResourceKey.create(registry, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
+        return ResourceKey.create(registry, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, path));
     }
 }

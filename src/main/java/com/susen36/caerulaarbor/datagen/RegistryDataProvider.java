@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.datagen;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.datagen.worldgen.WorldgenProvider;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import net.minecraft.core.HolderLookup;
@@ -35,6 +35,6 @@ public class RegistryDataProvider extends DatapackBuiltinEntriesProvider {
      * @param provider 上游注册表查询 provider
      */
     public RegistryDataProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
-        super(output, provider, BUILDER, Set.of("minecraft", CaerulaArborMod.MODID));
+        super(output, provider, BUILDER, Set.of("minecraft", CaerulaArbor.MODID));
     }
 }

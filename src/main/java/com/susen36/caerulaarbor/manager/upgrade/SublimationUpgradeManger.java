@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.manager.upgrade;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
@@ -34,9 +34,9 @@ public class SublimationUpgradeManger {
             for (Player entityiterator : new ArrayList<>(world.players())) {
                 if (!(entityiterator instanceof ServerPlayer serverPlayer)) continue;
                 _player = serverPlayer;
-                _adv = _player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fifth_touch"));
+                _adv = _player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "fifth_touch"));
                 if (_adv == null) {
-                    CaerulaArborMod.LOGGER.error("Missing advancement: {}:fifth_touch", CaerulaArborMod.MODID);
+                    CaerulaArbor.LOGGER.error("Missing advancement: {}:fifth_touch", CaerulaArbor.MODID);
                     continue;
                 }
                 _ap = _player.getAdvancements().getOrStartProgress(_adv);
@@ -93,9 +93,9 @@ public class SublimationUpgradeManger {
                 for (Player entityiterator : new ArrayList<>(world.players())) {
                     if (!(entityiterator instanceof ServerPlayer)) continue;
                     _player = (ServerPlayer) entityiterator;
-                    _adv = _player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "absurd_of_evolution"));
+                    _adv = _player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "absurd_of_evolution"));
                     if (_adv == null) {
-                        CaerulaArborMod.LOGGER.error("Missing advancement: {}:absurd_of_evolution", CaerulaArborMod.MODID);
+                        CaerulaArbor.LOGGER.error("Missing advancement: {}:absurd_of_evolution", CaerulaArbor.MODID);
                         continue;
                     }
                     _ap = _player.getAdvancements().getOrStartProgress(_adv);
@@ -105,8 +105,32 @@ public class SublimationUpgradeManger {
                     }
                 }
             }
-        } else {
+		} else {
             MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, 0.0);
         }
+    }
+
+    public static boolean isSublimation(LevelAccessor world) {
+        return MapVariables.get(world).strategy_sublimation > 0;
+    }
+
+    public static double getStraSublimation(LevelAccessor world) {
+        return MapVariables.get(world).strategy_sublimation;
+    }
+
+    public static String getDescrSublimation(LevelAccessor world) {
+        return Component.translatable("item.caerula_arbor.sample_sublimation.description_" + Math.round(MapVariables.get(world).strategy_sublimation)).getString();
+    }
+
+    public static String getCmdFeedback(long lvl) {
+        return Component.translatable("command.evolution.sublimation").getString().replace("<num>", "" + lvl);
+    }
+
+    public static String getCmdFail() {
+        return Component.translatable("command.evolution.sublimation.fail").getString();
+    }
+
+    public static String getCmdBan() {
+        return Component.translatable("command.evolution.sublimation.ban").getString();
     }
 }
