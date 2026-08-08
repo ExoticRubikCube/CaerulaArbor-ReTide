@@ -232,11 +232,10 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         this.setNoGravity(true);
     }
 
-
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
-        builder = builder.add(Attributes.MAX_HEALTH, 24);
+        builder = builder.add(Attributes.MAX_HEALTH, 12);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 14);
         builder = builder.add(Attributes.FOLLOW_RANGE, 36);

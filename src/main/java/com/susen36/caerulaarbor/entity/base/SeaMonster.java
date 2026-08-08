@@ -16,13 +16,6 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		super(entityType, level);
 	}
 
-	/*
-	 @Deprecated
-    public final boolean canBreatheUnderwater() {
-        return this.getType().is(EntityTypeTags.CAN_BREATHE_UNDER_WATER);
-    }
-    */
-
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.DROWN))

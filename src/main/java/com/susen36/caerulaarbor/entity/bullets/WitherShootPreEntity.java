@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
+import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.entity.wither.AbstractOceanizedWitherEntity;
 import com.susen36.caerulaarbor.entity.wither.OceanizedWitherEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -10,7 +11,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -95,7 +95,7 @@ public class WitherShootPreEntity extends BaseProjectile implements ItemSupplier
         double y = this.getY();
         double z = this.getZ();
         Entity entity = this.getOwner();
-        if (entity != null && this != null) {
+        if (entity != null) {
             Entity target;
             Entity otherOne;
             Entity otherTwo;

@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = {LivingEntity.class}, priority = 65536)
 public abstract class AddEffectMixin {
@@ -72,6 +73,14 @@ public abstract class AddEffectMixin {
         }
         if (me.hasEffect(CAMobEffects.INVULNERABLE) && !(me instanceof MartusEntity)) {
             ci.cancel();
+        }
+    }
+
+    @Inject(method = "canBeSeenAsEnemy", at = @At("HEAD"), cancellable = true)
+    public void fakeDeathCannotBeSeenAsEnemy(CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity me = (LivingEntity) (Object) this;
+        if (me.hasEffect(CAMobEffects.FAKE_DEATH)) {
+            cir.setReturnValue(false);
         }
     }
 }
