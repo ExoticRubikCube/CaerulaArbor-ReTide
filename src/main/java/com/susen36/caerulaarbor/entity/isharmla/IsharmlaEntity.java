@@ -266,7 +266,7 @@ public class IsharmlaEntity extends SeaMonster {
 					(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1));
 			Vec3 center = new Vec3(x, y, z);
 			List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius),
-					entity -> !(entity.getType().is(EntityUtils.OCEAN_OFFSPRING) && entity != target));
+					entity -> !(entity.getType().is(EntityUtils.SEA_BORN) && entity != target));
 			for (LivingEntity entityIterator : entities) {
 				if (center.distanceToSqr(entityIterator.position()) <= radius * radius) {
 					entityIterator.hurt(

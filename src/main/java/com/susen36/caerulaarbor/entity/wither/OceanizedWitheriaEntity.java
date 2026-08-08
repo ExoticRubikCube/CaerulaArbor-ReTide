@@ -347,7 +347,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             if (entityiterator == this) {
                 continue;
             }
-            if (entityiterator.getType().is(EntityUtils.OCEAN_OFFSPRING)) {
+            if (entityiterator.getType().is(EntityUtils.SEA_BORN)) {
                 if (!(entityiterator == target)) {
                     continue;
                 }

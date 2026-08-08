@@ -118,7 +118,7 @@ public class EntityUtils {
 			return;
 		}
 		MapVariables mapVars = MapVariables.get(world);
-		if (entity.getType().is(OCEAN_OFFSPRING)) {
+		if (entity.getType().is(SEA_BORN)) {
 			if (mapVars.strategy_silence >= 2) {
 				living.setHealth((float) (living.getHealth() + living.getMaxHealth() * 0.0025));
 			} else if (mapVars.strategy_subsisting >= 3) {
@@ -232,7 +232,7 @@ public class EntityUtils {
 		double count = 0;
 		final Vec3 searchCenter = new Vec3(x, y, z);
 		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(searchCenter, searchCenter).inflate(32 / 2d),
-				e -> e != center && e.getType().is(OCEAN_OFFSPRING)
+				e -> e != center && e.getType().is(SEA_BORN)
 						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
 						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))));
 		for (LivingEntity entityiterator : entfound) {
@@ -245,7 +245,7 @@ public class EntityUtils {
 		double count = 0;
 		final Vec3 center = new Vec3(x, y, z);
 		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d),
-				e -> e.getType().is(OCEAN_OFFSPRING)
+				e -> e.getType().is(SEA_BORN)
 						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
 						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))));
 		for (LivingEntity entityiterator : entfound) {
@@ -323,7 +323,7 @@ public class EntityUtils {
 		double minDist = -1.0D;
 		double d;
 		for (LivingEntity entityiterator : world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 42), (y + 40), (z + 42), (x - 42), (y - 40), (z - 42)))) {
-			if (entityiterator.getType().is(OCEAN_OFFSPRING)) {
+			if (entityiterator.getType().is(SEA_BORN)) {
 				continue;
 			}
 			d = obj.distanceToSqr(entityiterator);
@@ -489,9 +489,9 @@ public class EntityUtils {
 			ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")
 		);
 
-	public static final TagKey<EntityType<?>> OCEAN_OFFSPRING = TagKey.create(
+	public static final TagKey<EntityType<?>> SEA_BORN = TagKey.create(
 			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sea_bron")
 		);
 
 	// 应用先锋增益
