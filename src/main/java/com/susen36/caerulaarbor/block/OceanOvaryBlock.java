@@ -40,7 +40,7 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
 
 	public OceanOvaryBlock() {
-		super(BlockBehaviour.Properties.of().sound(SoundType.SCULK_SENSOR).strength(6f, 18f).lightLevel(s -> (new Object() {
+		super(BlockBehaviour.Properties.of().sound(SoundType.SCULK_SENSOR).strength(0.5f, 0.5f).lightLevel(s -> (new Object() {
 			public int getLightLevel() {
 				if (s.getValue(BLOCKSTATE) == 1)
 					return 0;
@@ -101,14 +101,8 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 		if (world.getDifficulty() != Difficulty.PEACEFUL && !(world.getBlockFloorHeight(pos.above()) > 0) && !(world.getBlockFloorHeight(pos.above(2)) > 0)) {
 			boolean finished = false;
 			if (blockstate.getValue(BLOCKSTATE) == 0) {
-				double rate = 0.05D;
 				double strategyBreed = MapVariables.get(world).strategy_breed;
-				if (strategyBreed >= 2) {
-					rate = 0.08D;
-				}
-				if (strategyBreed >= 4) {
-					rate = 0.1D;
-				}
+				double rate = 0.05D * (1.0D + 0.075D * strategyBreed);
 				int output = blockstate.getValue(OUTPUT);
 				if (random.nextFloat() < output * 0.005F) {
 					double cloneLimit = Math.min(CAConfigs.CLONE_NUM.get(), world.getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT));

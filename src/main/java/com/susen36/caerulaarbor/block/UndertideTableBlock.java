@@ -1,4 +1,3 @@
-
 package com.susen36.caerulaarbor.block;
 
 import net.minecraft.core.BlockPos;
@@ -24,4 +23,5 @@ public class UndertideTableBlock extends Block {
 	public int getLightBlock(BlockState state, BlockGetter worldIn, BlockPos pos) {
 		return 0;
 	}
+
 }

@@ -16,6 +16,12 @@ public class MapVariables extends SavedData {
 
     public static final String DATA_NAME = "caerula_arbor_mapvars";
     public static MapVariables clientSide = new MapVariables();
+    private static volatile MapVariables serverSide = null;
+
+    public static MapVariables getCurrentSafe() {
+        MapVariables srv = serverSide;
+        return srv != null ? srv : clientSide;
+    }
 
     public double evo_point_grow = 0;
     public double evo_point_subsisting = 0;
@@ -94,7 +100,9 @@ public class MapVariables extends SavedData {
         if (world instanceof ServerLevelAccessor serverLevelAccessor) {
             ServerLevel overworld = serverLevelAccessor.getLevel().getServer().getLevel(Level.OVERWORLD);
             if (overworld != null) {
-                return overworld.getDataStorage().computeIfAbsent(new SavedData.Factory<>(MapVariables::new, (tag, provider) -> MapVariables.load(tag)), DATA_NAME);
+                MapVariables inst = overworld.getDataStorage().computeIfAbsent(new SavedData.Factory<>(MapVariables::new, (tag, provider) -> MapVariables.load(tag)), DATA_NAME);
+                serverSide = inst;
+                return inst;
             }
         }
         return clientSide;

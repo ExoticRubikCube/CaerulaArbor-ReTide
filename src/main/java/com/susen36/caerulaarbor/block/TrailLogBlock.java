@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.util.CaerulaUtil;
 import net.minecraft.core.BlockPos;
@@ -22,7 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
@@ -91,8 +91,10 @@ public class TrailLogBlock extends Block {
 			world.setBlock(pos, blockstate.setValue(GROW_AGE, growAge + 1), 3);
 		}
 		if (growAge > 30 && growAge < 64 && longevity > 0) {
+			double strategyGrow = MapVariables.get(world).strategy_grow;
+			float effectiveSpreadRate = 0.2F * 0.9F * (1.0F + 0.10F * (float) strategyGrow);
 			for (Direction direction : Direction.values()) {
-				if (random.nextFloat() < 0.2F) {
+				if (random.nextFloat() < effectiveSpreadRate) {
 					int spreadLongevity = random.nextFloat() < 0.5F ? longevity - 1 : longevity;
 					BlockPos targetPos = pos.relative(direction);
 					BlockState targetBlock = world.getBlockState(targetPos);

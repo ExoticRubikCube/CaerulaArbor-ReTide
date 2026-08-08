@@ -1,6 +1,7 @@
 
 package com.susen36.caerulaarbor.block;
 
+import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.util.CaerulaUtil;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -104,11 +105,13 @@ public class TrailPulseBlock extends Block {
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
 		BlockState seaTrailInitState = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
+		double strategyGrow = MapVariables.get(world).strategy_grow;
+		float effectiveSpreadRate = 0.25F * 0.9F * (1.0F + 0.10F * (float) strategyGrow);
 		boolean put = false;
 		for (Direction direction : Direction.Plane.HORIZONTAL) {
 			for (int dy = 0; dy <= 2; dy++) {
 				for (int dist = 1; dist <= 2; dist++) {
-					if (random.nextFloat() < 0.25F) {
+					if (random.nextFloat() < effectiveSpreadRate) {
 						BlockPos targetPos = pos.offset(direction.getStepX() * dist, dy, direction.getStepZ() * dist);
 						if (this.tryPlaceSeaTrailInit(world, targetPos, seaTrailInitState)) {
 							put = true;
@@ -125,7 +128,7 @@ public class TrailPulseBlock extends Block {
 			}
 			for (int dist = 1; dist <= 2 && !put; dist++) {
 				BlockPos dropPos = pos.offset(direction.getStepX() * dist, -1, direction.getStepZ() * dist);
-				if (random.nextFloat() < 0.25F && this.canDropTrail(world, dropPos, seaTrailInitState)) {
+				if (random.nextFloat() < effectiveSpreadRate && this.canDropTrail(world, dropPos, seaTrailInitState)) {
 					FallingBlockEntity.fall(world, dropPos, seaTrailInitState);
 					put = true;
 				}
@@ -135,20 +138,20 @@ public class TrailPulseBlock extends Block {
 			}
 		}
 		if (!put) {
-			put = this.tryDropDiagonalTrail(world, pos.offset(1, -1, 1), random, seaTrailInitState);
+			put = this.tryDropDiagonalTrail(world, pos.offset(1, -1, 1), random, seaTrailInitState, effectiveSpreadRate);
 		}
 		if (!put) {
-			put = this.tryDropDiagonalTrail(world, pos.offset(1, -1, -1), random, seaTrailInitState);
+			put = this.tryDropDiagonalTrail(world, pos.offset(1, -1, -1), random, seaTrailInitState, effectiveSpreadRate);
 		}
 		if (!put) {
-			put = this.tryDropDiagonalTrail(world, pos.offset(-1, -1, 1), random, seaTrailInitState);
+			put = this.tryDropDiagonalTrail(world, pos.offset(-1, -1, 1), random, seaTrailInitState, effectiveSpreadRate);
 		}
 		if (!put) {
-			put = this.tryDropDiagonalTrail(world, pos.offset(-1, -1, -1), random, seaTrailInitState);
+			put = this.tryDropDiagonalTrail(world, pos.offset(-1, -1, -1), random, seaTrailInitState, effectiveSpreadRate);
 		}
 		if (!put) {
 			for (Direction direction : Direction.values()) {
-				if (random.nextFloat() < 0.25F) {
+				if (random.nextFloat() < effectiveSpreadRate) {
 					BlockPos targetPos = pos.relative(direction);
 					BlockState targetState = world.getBlockState(targetPos);
 					if (WorldUtils.isOrganic(targetState)) {
@@ -206,8 +209,8 @@ public class TrailPulseBlock extends Block {
 		return true;
 	}
 
-	private boolean tryDropDiagonalTrail(ServerLevel world, BlockPos pos, RandomSource random, BlockState seaTrailInitState) {
-		if (random.nextFloat() < 0.25F && this.canDropTrail(world, pos, seaTrailInitState)) {
+	private boolean tryDropDiagonalTrail(ServerLevel world, BlockPos pos, RandomSource random, BlockState seaTrailInitState, float effectiveSpreadRate) {
+		if (random.nextFloat() < effectiveSpreadRate && this.canDropTrail(world, pos, seaTrailInitState)) {
 			FallingBlockEntity.fall(world, pos, seaTrailInitState);
 			return true;
 		}

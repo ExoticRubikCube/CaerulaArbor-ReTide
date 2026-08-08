@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
@@ -154,11 +155,15 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 			if (SilenceUpgradeManager.isSilence(world)) {
 				expand = 3;
 			}
+			double strategyGrow = MapVariables.get(world).strategy_grow;
+			int boostedExpand = Math.max(1, (int) Math.round(expand * (1.0 + 0.10 * strategyGrow)));
 			boolean valid = !this.hasLargeLivingEntityNearby(world, pos);
-			if (valid && growAge > 29 && longevity > 0 && random.nextFloat() * 100.0F < world.getGameRules().getInt(CAGameRules.SPREAD_RATE)) {
+			float effectiveSpreadRate = world.getGameRules().getInt(CAGameRules.SPREAD_RATE) * 0.9f * (1.0f + 0.10f * (float) strategyGrow);
+			if (valid && growAge > 29 && longevity > 0 && random.nextFloat() * 100.0F < effectiveSpreadRate) {
 				if (SilenceUpgradeManager.isSilence(world)) {
 					expand = 1;
 				}
+				boostedExpand = Math.max(1, (int) Math.round(expand * (1.0 + 0.10 * strategyGrow)));
 				if (random.nextFloat() < 0.2F) {
 					Direction spreadDirection = this.getRandomHorizontalDirection(random);
 					BlockPos targetPos = pos.relative(spreadDirection);
@@ -191,7 +196,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 					}
 				}
 			}
-			int nextGrowAge = growAge + expand;
+			int nextGrowAge = growAge + boostedExpand;
 			if (nextGrowAge <= 64) {
 				world.setBlock(pos, blockstate.setValue(GROW_AGE, nextGrowAge), 3);
 			}

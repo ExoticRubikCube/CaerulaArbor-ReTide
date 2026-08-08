@@ -20,7 +20,7 @@ import net.minecraft.world.level.material.PushReaction;
 public class RedOvaryBlock extends AbstractOvaryBlock {
 
 	public RedOvaryBlock() {
-		super(BlockBehaviour.Properties.of().sound(SoundType.SCULK_SENSOR).strength(6f, 18f).lightLevel(s -> 4).requiresCorrectToolForDrops().speedFactor(0.9f).jumpFactor(0.9f).noOcclusion().pushReaction(PushReaction.BLOCK)
+		super(BlockBehaviour.Properties.of().sound(SoundType.SCULK_SENSOR).strength(0.5f, 0.5f).lightLevel(s -> 4).requiresCorrectToolForDrops().speedFactor(0.9f).jumpFactor(0.9f).noOcclusion().pushReaction(PushReaction.BLOCK)
 				.hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true).isRedstoneConductor((bs, br, bp) -> false));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OUTPUT, 0).setValue(WATERLOGGED, false));
 	}
@@ -50,14 +50,8 @@ public class RedOvaryBlock extends AbstractOvaryBlock {
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
 		if (world.getDifficulty() != Difficulty.PEACEFUL && !(world.getBlockFloorHeight(pos.above()) > 0) && !(world.getBlockFloorHeight(pos.above(2)) > 0)) {
-			double rate = 0.5D;
 			double strategyBreed = MapVariables.get(world).strategy_breed;
-			if (strategyBreed >= 2) {
-				rate = 0.65D;
-			}
-			if (strategyBreed >= 4) {
-				rate = 0.7D;
-			}
+			double rate = 0.5D * (1.0D + 0.075D * strategyBreed);
 			int output = blockstate.getValue(OUTPUT);
 			if (random.nextFloat() < output * 0.005F) {
 				double cloneLimit = Math.min(world.getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT), CAConfigs.CLONE_NUM.get());

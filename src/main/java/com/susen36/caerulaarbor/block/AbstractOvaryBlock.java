@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
@@ -140,5 +142,29 @@ public abstract class AbstractOvaryBlock extends Block implements SimpleWaterlog
 			SeabornSpawnManager.summonRandomSeaborn(world, getDestroySpawnRate(), x + 0.5, y + 1.5, z + 0.5);
 		}
 		return retval;
+	}
+
+	@Override
+	public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+		float progress = super.getDestroyProgress(state, player, level, pos);
+		if (level instanceof LevelAccessor levelAccessor) {
+			double subsistingLevel = MapVariables.get(levelAccessor).strategy_subsisting;
+			if (subsistingLevel > 0.0) {
+				return progress / (float) (1.0 + 0.15 * subsistingLevel);
+			}
+		}
+		return progress;
+	}
+
+	@Override
+	public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion) {
+		float baseResistance = super.getExplosionResistance(state, level, pos,explosion);
+		if (level instanceof LevelAccessor levelAccessor) {
+			double subsistingLevel = MapVariables.get(levelAccessor).strategy_subsisting;
+			if (subsistingLevel > 0.0) {
+				return baseResistance * (float) (1.0 + 0.1 * subsistingLevel);
+			}
+		}
+		return baseResistance;
 	}
 }
