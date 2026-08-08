@@ -1,10 +1,10 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -20,9 +20,9 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 
-public class MeatCanItem extends Item {
+public class MeatCanItem extends RelicItemBase {
 	public MeatCanItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(14).saturationModifier(0.25f).build()));
+		super(Relic.FEATURED_CANNED_MEAT, new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(14).saturationModifier(0.25f).build()));
 	}
 
 	@Override
@@ -33,8 +33,6 @@ public class MeatCanItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.meat_can.description_0"));
-		list.add(Component.translatable("item.caerula_arbor.meat_can.description_1"));
 	}
 
 	@Override

@@ -4,8 +4,8 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
@@ -32,18 +32,18 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 
-public class CaerulaHeartItem extends Item {
+public class CaerulaHeartItem extends RelicItemBase {
 	public CaerulaHeartItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(Relic.CURSED_HEART, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
 		Entity entity = itemstack.getEntityRepresentation();
-		String hoverText = ItemUtils.getCursedDescription(itemstack);
-        for (String line : hoverText.split("\n")) {
-            list.add(Component.literal(line));
+		String hoverText = null;
+        if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
+            list.add(Component.translatable("item.caerula_arbor.cursed.used"));
         }
     }
 

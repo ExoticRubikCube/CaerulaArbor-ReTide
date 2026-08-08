@@ -16,58 +16,177 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMenu> {
 	private final static HashMap<String, Object> guistate = RelicShowcaseMenu.guistate;
 	private final Level world;
 	private final int x, y, z;
 	private final Player entity;
+
+	// ===== 网格 & 分页 =====
+	private static final int SLOT_ORIGIN_X = 4;
+	private static final int SLOT_ORIGIN_Y = 4;
+	private static final int SLOT_SIZE = 16;
+	private static final int SLOT_STEP = 24;
+	private static final int COLS_PER_PAGE = 13;
+	private static final int ROWS_PER_PAGE = 8;
+	private static final int PAGE_SIZE = COLS_PER_PAGE * ROWS_PER_PAGE;
+	private int currentPage = 0;
+	private int totalPages;
+
+	// ===== 滑动 & 拖拽 =====
+	private static final int DRAG_THRESHOLD = 40;
+	private boolean isDragging;
+	private int dragStartX;
+	private int dragAccum;
+
+	// ===== 控件 =====
 	Button button_return;
-	ImageButton imagebutton_relic_crown;
-	ImageButton imagebutton_relic_spear;
-	ImageButton imagebutton_kingsarmor;
-	ImageButton imagebutton_extension;
-	ImageButton imagebutton_kingcrystal;
-	ImageButton imagebutton_archfiend_articraft;
-	ImageButton imagebutton_archfi_flag;
-	ImageButton imagebutton_archifi_bed;
-	ImageButton imagebutton_royalfate;
-	ImageButton imagebutton_hand_spike;
-	ImageButton imagebutton_hand_reap;
-	ImageButton imagebutton_hand_reap1;
-	ImageButton imagebutton_hand_smash;
-	ImageButton imagebutton_hand_swipe;
-	ImageButton imagebutton_hand_curve;
-	ImageButton imagebutton_hand_firework;
-	ImageButton imagebutton_crimson_contarct_0;
-	ImageButton imagebutton_survivor_contarct;
-	ImageButton imagebutton_cursed_emelight_0;
-	ImageButton imagebutton_cursed_glowbody_0;
-	ImageButton imagebutton_cursed_research_0;
-	ImageButton imagebutton_beef_can;
-	ImageButton imagebutton_bowl_seagrass;
-	ImageButton imagebutton_orangestorm;
-	ImageButton imagebutton_coffee_candy;
-	ImageButton imagebutton_cherrycan;
-	ImageButton imagebutton_rainbow_candy;
-	ImageButton imagebutton_boxcoffee;
-	ImageButton imagebutton_musicboxsmall;
-	ImageButton imagebutton_originium_iris;
-	ImageButton imagebutton_flute;
-	ImageButton imagebutton_voyageofsmall;
-	ImageButton imagebutton_location_name;
-	ImageButton imagebutton_kettle;
-	ImageButton imagebutton_hand_sword;
-	ImageButton imagebutton_chitinknife;
-	ImageButton imagebutton_hand_speed;
-	ImageButton imagebutton_smelly_hemostatic;
-	ImageButton imagebutton_unripe_yearning;
+	Button button_prev_page;
+	Button button_next_page;
+	final List<ImageButton> relicButtons = new ArrayList<>();
+
+	// ===== 显示条目（按原 init 创建顺序，保持布局语义） =====
+	private record RelicDisplayEntry(
+		String guiKey,
+		Relic relic,
+		SpecialType special,
+		int buttonId,
+		String atlasBase,
+		String itemKey,
+		Predicate<Entity> visibleTest,
+		String overlayTex,
+		int[] labelPos  // [offsetX, offsetY, shadowColor, textColor] or null
+	) {
+		enum SpecialType { NONE, SURVIVOR, AROMATIC }
+	}
+
+	private static final List<RelicDisplayEntry> ALL_ENTRIES;
+	static {
+		ALL_ENTRIES = new ArrayList<>();
+		// ===== 第 1 行 =====
+		ALL_ENTRIES.add(e("imagebutton_relic_crown",          Relic.KING_CROWN,                1,  "imagebutton_relic_crown",          "relic_crown"));
+		ALL_ENTRIES.add(e("imagebutton_relic_spear",          Relic.KING_SPEAR,                2,  "imagebutton_relic_spear",          "kings_spear"));
+		ALL_ENTRIES.add(e("imagebutton_extension",            Relic.KING_EXTENSION,            4,  "imagebutton_extension",            "kings_extension"));
+		ALL_ENTRIES.add(e("imagebutton_kingcrystal",          Relic.KING_CRYSTAL,              5,  "imagebutton_kingcrystal",          "kings_crystal"));
+		ALL_ENTRIES.add(e("imagebutton_kingsarmor",           Relic.KING_ARMOR,                3,  "imagebutton_kingsarmor",           "kings_armour"));
+		ALL_ENTRIES.add(e("imagebutton_archfiend_articraft",  Relic.SARKAZ_KING_ARTIFACT,      6,  "imagebutton_archfiend_articraft",  "archfiends_artifact"));
+		ALL_ENTRIES.add(e("imagebutton_archfi_flag",          Relic.SARKAZ_KING_FLAG,          7,  "imagebutton_archfi_flag",          "archfiends_flag"));
+		ALL_ENTRIES.add(e("imagebutton_archifi_bed",          Relic.SARKAZ_KING_BED,           8,  "imagebutton_archifi_bed",          "archfiends_bed"));
+		ALL_ENTRIES.add(e("imagebutton_royalfate",            Relic.ROYALFATE,                -1,  "imagebutton_royalfate",            "royal_fate"));
+		ALL_ENTRIES.add(e("imagebutton_hand_sword",           Relic.HAND_SWORD,               35,  "imagebutton_hand_sword",           "hand_sword"));
+		// ===== 第 2 行 =====
+		ALL_ENTRIES.add(e("imagebutton_hand_spike",           Relic.HAND_THORNS,              10,  "imagebutton_hand_spike",           "hand_of_thorns"));
+		ALL_ENTRIES.add(e("imagebutton_hand_reap",            Relic.HAND_STRANGLE,            11,  "imagebutton_hand_reap",            "hand_of_strangle"));
+		ALL_ENTRIES.add(e("imagebutton_hand_reap1",           Relic.HAND_FERTILITY,           12,  "imagebutton_hand_reap1",           "hand_of_fertiliy"));
+		ALL_ENTRIES.add(e("imagebutton_hand_speed",           Relic.HAND_SPEED,               37,  "imagebutton_hand_speed",           "hand_of_speed"));
+		ALL_ENTRIES.add(e("imagebutton_hand_smash",           Relic.HAND_OF_PULVERIZATION,    13,  "imagebutton_hand_smash",           "hand_of_barren"));
+		ALL_ENTRIES.add(e("imagebutton_hand_swipe",           Relic.HAND_SWIPE,               14,  "imagebutton_hand_swipe",           "hand_of_spotless"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_hand_curve", Relic.HAND_ENGRAVE, RelicDisplayEntry.SpecialType.NONE, 15,
+			"imagebutton_hand_curve", "hand_of_engrave",
+			entity -> RelicUtils.getRelic(Relic.HAND_ENGRAVE, entity) > 0,
+			null, new int[]{157, 36, -16777165, -1})); // label at (157/156, 36)
+		ALL_ENTRIES.add(e("imagebutton_hand_firework",        Relic.HAND_FIREWORK,            16,  "imagebutton_hand_firework",        "hand_of_firework"));
+		ALL_ENTRIES.add(blank());
+		ALL_ENTRIES.add(blank());
+		// ===== 第 3 行 =====
+		ALL_ENTRIES.add(e("imagebutton_crimson_contarct_0",   Relic.TREATY,                   17,  "imagebutton_crimson_contarct_0",   "crimson_treaty"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_survivor_contarct", null, RelicDisplayEntry.SpecialType.SURVIVOR, 18,
+			"imagebutton_survivor_contarct", "survivor_contract",
+			PlayerStateUtils::hasSurvivorCont,
+			null, new int[]{37, 60, -12829636, -1}));
+		ALL_ENTRIES.add(e("imagebutton_chitinknife",          Relic.LEGEND_CHITIN,            36,  "imagebutton_chitinknife",          "chitin_knife"));
+		ALL_ENTRIES.add(e("imagebutton_smelly_hemostatic",    Relic.HEMOST,                   38,  "imagebutton_smelly_hemostatic",    "smelly_hemostatic"));
+		ALL_ENTRIES.add(e("imagebutton_unripe_yearning",      Relic.YEARNING,                 39,  "imagebutton_unripe_yearning",      "unripe_yearning"));
+		ALL_ENTRIES.add(blank());
+		ALL_ENTRIES.add(blank());
+		ALL_ENTRIES.add(blank());
+		ALL_ENTRIES.add(blank());
+		ALL_ENTRIES.add(blank());
+		// ===== 第 4 行 =====
+		ALL_ENTRIES.add(e("imagebutton_beef_can",             Relic.FEATURED_CANNED_MEAT,     -1, "imagebutton_beef_can",             "meat_can"));
+		ALL_ENTRIES.add(e("imagebutton_bowl_seagrass",        Relic.SEAWEED_SALAD,            -1, "imagebutton_bowl_seagrass",        "bowl_seagrass"));
+		ALL_ENTRIES.add(e("imagebutton_orangestorm",          Relic.ORANGE_STORM,             -1, "imagebutton_orangestorm",          "golden_storm"));
+		ALL_ENTRIES.add(e("imagebutton_coffee_candy",         Relic.COFFEE_PLAINS_COFFEE_CANDY, -1, "imagebutton_coffee_candy",      "coffee_candy"));
+		ALL_ENTRIES.add(e("imagebutton_rainbow_candy",        Relic.UTIL_RAINBOW,             -1, "imagebutton_rainbow_candy",        "rainbow_candy"));
+		ALL_ENTRIES.add(e("imagebutton_cherrycan",            Relic.PITTS_ASSORTED_FRUITS,    -1, "imagebutton_cherrycan",            "canned_cherry"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_boxcoffee", null, RelicDisplayEntry.SpecialType.AROMATIC, -1,
+			"imagebutton_boxcoffee", "aromatic_coffee",
+			PlayerStateUtils::hasAromatic, null, null));
+		ALL_ENTRIES.add(e("imagebutton_musicboxsmall",        Relic.UTIL_MUSICBOX,            -1, "imagebutton_musicboxsmall",        "solo_music_box"));
+		ALL_ENTRIES.add(e("imagebutton_flute",                Relic.WEIRD_FLUTE,              -1, "imagebutton_flute",                "odd_flute"));
+		ALL_ENTRIES.add(e("imagebutton_originium_iris",       Relic.UTIL_IRIS,                -1, "imagebutton_originium_iris",       "redstone_iris_flower"));
+		// ===== 第 5 行 =====
+		ALL_ENTRIES.add(e("imagebutton_kettle",               Relic.HOT_WATER_KETTLE,         -1, "imagebutton_kettle",               "kettle"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_alley", Relic.UTIL_ALLEY, RelicDisplayEntry.SpecialType.NONE, -1,
+			"imagebutton_alley", "allay_sculpture",
+			entity -> RelicUtils.hasRelic(Relic.UTIL_ALLEY, entity),
+			"stonealley.png", null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_batbed", Relic.VAMPIRES_BED, RelicDisplayEntry.SpecialType.NONE, -1,
+			"imagebutton_batbed", "bat_bed",
+			entity -> RelicUtils.hasRelic(Relic.VAMPIRES_BED, entity),
+			"itembatbed.png", null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_score", Relic.UTIL_SCORE, RelicDisplayEntry.SpecialType.NONE, -1,
+			"imagebutton_score", "score",
+			entity -> RelicUtils.hasRelic(Relic.UTIL_SCORE, entity),
+			"score.png", null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_rescission", Relic.UTIL_RESCISSION, RelicDisplayEntry.SpecialType.NONE, -1,
+			"imagebutton_rescission", "rescission",
+			entity -> RelicUtils.hasRelic(Relic.UTIL_RESCISSION, entity),
+			"rescission.png", null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_omnikey", Relic.UTIL_OMNIKEY, RelicDisplayEntry.SpecialType.NONE, -1,
+			"imagebutton_omnikey", "omni_key",
+			entity -> RelicUtils.hasRelic(Relic.UTIL_OMNIKEY, entity),
+			"omnikey.png", null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_stare", Relic.UTIL_STARE, RelicDisplayEntry.SpecialType.NONE, -1,
+			"imagebutton_stare", "guardian_stare",
+			entity -> RelicUtils.hasRelic(Relic.UTIL_STARE, entity),
+			"guardianstare.png", null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_longevity", Relic.PROOF_OF_LONGEVITY, RelicDisplayEntry.SpecialType.NONE, -1,
+			"imagebutton_longevity", "proof_of_longevity",
+			entity -> RelicUtils.hasRelic(Relic.PROOF_OF_LONGEVITY, entity),
+			"longevity.png", null));
+		ALL_ENTRIES.add(blank());
+		ALL_ENTRIES.add(blank());
+		// ===== 第 6 行（翻页第 2 页开始） =====
+		ALL_ENTRIES.add(e("imagebutton_voyageofsmall",        Relic.PURE_GOLD_EXPEDITION,     -1, "imagebutton_voyageofsmall",        "voyage_of_gold"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_piglin_diary", Relic.DURIN_OVERGROUND_ODYSSEY, RelicDisplayEntry.SpecialType.NONE, -1,
+			"imagebutton_piglin_diary", "piglin_diary",
+			entity -> RelicUtils.hasRelic(Relic.DURIN_OVERGROUND_ODYSSEY, entity),
+			"durin_diary.png", null));
+		ALL_ENTRIES.add(e("imagebutton_location_name",        Relic.UTIL_TOPONYM,             -1, "imagebutton_location_name",        "toponym_textology"));
+		ALL_ENTRIES.add(e("imagebutton_cursed_emelight_0",    Relic.CURSED_EMELIGHT,          19, "imagebutton_cursed_emelight_0",    "relic_curse_emelight"));
+		ALL_ENTRIES.add(e("imagebutton_cursed_glowbody_0",    Relic.CURSED_GLOWBODY,          20, "imagebutton_cursed_glowbody_0",    "relic_cursed_glowbody"));
+		ALL_ENTRIES.add(e("imagebutton_cursed_research_0",    Relic.CURSED_RESEARCH,          21, "imagebutton_cursed_research_0",    "relic_cursed_research"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_cursed_heart", Relic.CURSED_HEART, RelicDisplayEntry.SpecialType.NONE, -1,
+			"imagebutton_cursed_heart", "caerula_heart",
+			entity -> RelicUtils.hasRelic(Relic.CURSED_HEART, entity),
+			"caerulaheart.png", null));
+	}
+
+	// ===== 工厂辅助：普通 boolean 遗物 =====
+	private static RelicDisplayEntry e(String guiKey, Relic relic, int buttonId, String atlasBase, String itemKey) {
+		return new RelicDisplayEntry(guiKey, relic, RelicDisplayEntry.SpecialType.NONE, buttonId,
+			atlasBase, itemKey,
+			entity -> RelicUtils.hasRelic(relic, entity),
+			null, null);
+	}
+
+	// ===== 工厂辅助：占位空格子 =====
+	private static RelicDisplayEntry blank() {
+		return new RelicDisplayEntry("", null, RelicDisplayEntry.SpecialType.NONE, -1,
+			"", "", entity -> false, null, null);
+	}
 
 	public RelicShowcaseScreen(RelicShowcaseMenu container, Inventory inventory, Component text) {
 		super(container, inventory, text);
@@ -78,157 +197,45 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		this.entity = container.entity;
 		this.imageWidth = 328;
 		this.imageHeight = 216;
+		this.totalPages = (ALL_ENTRIES.size() + PAGE_SIZE - 1) / PAGE_SIZE;
+		if (this.totalPages < 1) this.totalPages = 1;
+	}
+
+	// ===== 根据条目索引计算网格坐标 =====
+	private int slotX(int entryIndex) {
+		int within = entryIndex - currentPage * PAGE_SIZE;
+		int col = within % COLS_PER_PAGE;
+		return SLOT_ORIGIN_X + col * SLOT_STEP;
+	}
+	private int slotY(int entryIndex) {
+		int within = entryIndex - currentPage * PAGE_SIZE;
+		int row = within / COLS_PER_PAGE;
+		return SLOT_ORIGIN_Y + row * SLOT_STEP;
+	}
+	private boolean isEntryOnPage(int entryIndex) {
+		return entryIndex >= currentPage * PAGE_SIZE && entryIndex < (currentPage + 1) * PAGE_SIZE;
 	}
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground(guiGraphics,mouseX,mouseY,partialTicks);
+		this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.KING_CROWN, entity))
-			if (mouseX > leftPos + 4 && mouseX < leftPos + 20 && mouseY > topPos + 4 && mouseY < topPos + 20)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.relic_crown").getString() + ": " + Component.translatable("item.caerula_arbor.relic_crown.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.KING_SPEAR, entity))
-			if (mouseX > leftPos + 28 && mouseX < leftPos + 44 && mouseY > topPos + 4 && mouseY < topPos + 20)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.kings_spear").getString() + ": " + Component.translatable("item.caerula_arbor.kings_spear.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.KING_ARMOR, entity))
-			if (mouseX > leftPos + 100 && mouseX < leftPos + 116 && mouseY > topPos + 4 && mouseY < topPos + 20)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.kings_armour").getString() + ": " + Component.translatable("item.caerula_arbor.kings_armour.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.KING_EXTENSION, entity))
-			if (mouseX > leftPos + 52 && mouseX < leftPos + 68 && mouseY > topPos + 4 && mouseY < topPos + 20)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.kings_extension").getString() + ": " + Component.translatable("item.caerula_arbor.kings_extension.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.KING_CRYSTAL, entity))
-			if (mouseX > leftPos + 76 && mouseX < leftPos + 92 && mouseY > topPos + 4 && mouseY < topPos + 20)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.kings_crystal").getString() + ": " + Component.translatable("item.caerula_arbor.kings_crystal.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.SARKAZ_KING_ARTIFACT, entity))
-			if (mouseX > leftPos + 124 && mouseX < leftPos + 140 && mouseY > topPos + 4 && mouseY < topPos + 20)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.archfiends_artifact").getString() + ": " + Component.translatable("item.caerula_arbor.archfiends_artifact.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.SARKAZ_KING_FLAG, entity))
-			if (mouseX > leftPos + 148 && mouseX < leftPos + 164 && mouseY > topPos + 4 && mouseY < topPos + 20)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.archfiends_flag").getString() + ": " + Component.translatable("item.caerula_arbor.archfiends_flag.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.SARKAZ_KING_BED, entity))
-			if (mouseX > leftPos + 172 && mouseX < leftPos + 188 && mouseY > topPos + 4 && mouseY < topPos + 20)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.archfiends_bed").getString() + ": " + Component.translatable("item.caerula_arbor.archfiends_bed.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.ROYALFATE, entity))
-			if (mouseX > leftPos + 196 && mouseX < leftPos + 212 && mouseY > topPos + 4 && mouseY < topPos + 20)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.royal_fate").getString() + ": " + Component.translatable("item.caerula_arbor.royal_fate.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.HAND_THORNS, entity))
-			if (mouseX > leftPos + 4 && mouseX < leftPos + 20 && mouseY > topPos + 28 && mouseY < topPos + 44)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.hand_of_thorns").getString() + ": " + Component.translatable("item.caerula_arbor.hand_of_thorns.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.HAND_STRANGLE, entity))
-			if (mouseX > leftPos + 28 && mouseX < leftPos + 44 && mouseY > topPos + 28 && mouseY < topPos + 44)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.hand_of_strangle").getString() + ": " + Component.translatable("item.caerula_arbor.hand_of_strangle.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.HAND_FERTILITY, entity))
-			if (mouseX > leftPos + 52 && mouseX < leftPos + 68 && mouseY > topPos + 28 && mouseY < topPos + 44)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.hand_of_fertiliy").getString() + ": " + Component.translatable("item.caerula_arbor.hand_of_fertiliy.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.HAND_SPEED, entity))
-			if (mouseX > leftPos + 76 && mouseX < leftPos + 92 && mouseY > topPos + 28 && mouseY < topPos + 44)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.hand_of_speed").getString() + ": " + Component.translatable("item.caerula_arbor.hand_of_speed.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.HAND_OF_PULVERIZATION, entity))
-			if (mouseX > leftPos + 100 && mouseX < leftPos + 116 && mouseY > topPos + 28 && mouseY < topPos + 44)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.hand_of_barren").getString() + ": " + Component.translatable("item.caerula_arbor.hand_of_barren.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.HAND_SWIPE, entity))
-			if (mouseX > leftPos + 124 && mouseX < leftPos + 140 && mouseY > topPos + 28 && mouseY < topPos + 44)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.hand_of_spotless").getString() + ": " + Component.translatable("item.caerula_arbor.hand_of_spotless.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.getRelic(Relic.HAND_ENGRAVE, entity) > 0)
-			if (mouseX > leftPos + 148 && mouseX < leftPos + 164 && mouseY > topPos + 28 && mouseY < topPos + 44)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.hand_of_engrave").getString() + ": " + Component.translatable("item.caerula_arbor.hand_of_engrave.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.HAND_FIREWORK, entity))
-			if (mouseX > leftPos + 172 && mouseX < leftPos + 188 && mouseY > topPos + 28 && mouseY < topPos + 44)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.hand_of_firework").getString() + ": " + Component.translatable("item.caerula_arbor.hand_of_firework.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.TREATY, entity))
-			if (mouseX > leftPos + 4 && mouseX < leftPos + 20 && mouseY > topPos + 52 && mouseY < topPos + 68)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.crimson_treaty").getString() + ": " + Component.translatable("item.caerula_arbor.crimson_treaty.description_0").getString()), mouseX, mouseY);
-		if (PlayerStateUtils.hasSurvivorCont(entity))
-			if (mouseX > leftPos + 28 && mouseX < leftPos + 44 && mouseY > topPos + 52 && mouseY < topPos + 68)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.survivor_contract").getString() + ": " + Component.translatable("item.caerula_arbor.survivor_contract.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.CURSED_EMELIGHT, entity))
-			if (mouseX > leftPos + 4 && mouseX < leftPos + 20 && mouseY > topPos + 196 && mouseY < topPos + 212)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.relic_curse_emelight").getString() + ": " + Component.translatable("item.caerula_arbor.relic_curse_emelight.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.CURSED_GLOWBODY, entity))
-			if (mouseX > leftPos + 28 && mouseX < leftPos + 44 && mouseY > topPos + 196 && mouseY < topPos + 212)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.relic_cursed_glowbody").getString() + ": " + Component.translatable("item.caerula_arbor.relic_cursed_glowbody.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.CURSED_RESEARCH, entity))
-			if (mouseX > leftPos + 52 && mouseX < leftPos + 68 && mouseY > topPos + 196 && mouseY < topPos + 212)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.relic_cursed_research").getString() + ": " + Component.translatable("item.caerula_arbor.relic_cursed_research.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.FEATURED_CANNED_MEAT, entity))
-			if (mouseX > leftPos + 4 && mouseX < leftPos + 20 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.meat_can").getString() + ": " + Component.translatable("item.caerula_arbor.meat_can.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.SEAWEED_SALAD, entity))
-			if (mouseX > leftPos + 28 && mouseX < leftPos + 44 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.bowl_seagrass").getString() + ": " + Component.translatable("item.caerula_arbor.bowl_seagrass.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.ORANGE_STORM, entity))
-			if (mouseX > leftPos + 52 && mouseX < leftPos + 68 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.golden_storm").getString() + ": " + Component.translatable("item.caerula_arbor.golden_storm.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.COFFEE_PLAINS_COFFEE_CANDY, entity))
-			if (mouseX > leftPos + 76 && mouseX < leftPos + 92 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.coffee_candy").getString() + ": " + Component.translatable("item.caerula_arbor.coffee_candy.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.PITTS_ASSORTED_FRUITS, entity))
-			if (mouseX > leftPos + 124 && mouseX < leftPos + 140 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.canned_cherry").getString() + ": " + Component.translatable("item.caerula_arbor.canned_cherry.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.UTIL_RAINBOW, entity))
-			if (mouseX > leftPos + 100 && mouseX < leftPos + 116 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.rainbow_candy").getString() + ": " + Component.translatable("item.caerula_arbor.rainbow_candy.description_0").getString()), mouseX, mouseY);
-		if (PlayerStateUtils.hasAromatic(entity))
-			if (mouseX > leftPos + 148 && mouseX < leftPos + 164 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.aromatic_coffee").getString() + ": " + Component.translatable("item.caerula_arbor.aromatic_coffee.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.UTIL_MUSICBOX, entity))
-			if (mouseX > leftPos + 172 && mouseX < leftPos + 188 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.solo_music_box").getString() + ": " + Component.translatable("item.caerula_arbor.solo_music_box.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.UTIL_IRIS, entity))
-			if (mouseX > leftPos + 220 && mouseX < leftPos + 236 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.redstone_iris_flower").getString() + ": " + Component.translatable("item.caerula_arbor.redstone_iris_flower.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.WEIRD_FLUTE, entity))
-			if (mouseX > leftPos + 196 && mouseX < leftPos + 212 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.odd_flute").getString() + ": " + Component.translatable("item.caerula_arbor.odd_flute.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.PURE_GOLD_EXPEDITION, entity))
-			if (mouseX > leftPos + 244 && mouseX < leftPos + 260 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.voyage_of_gold").getString() + ": " + Component.translatable("item.caerula_arbor.voyage_of_gold.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.DURIN_OVERGROUND_ODYSSEY, entity))
-			if (mouseX > leftPos + 268 && mouseX < leftPos + 284 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.piglin_diary").getString() + ": " + Component.translatable("item.caerula_arbor.piglin_diary.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.UTIL_TOPONYM, entity))
-			if (mouseX > leftPos + 292 && mouseX < leftPos + 308 && mouseY > topPos + 76 && mouseY < topPos + 92)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.toponym_textology").getString() + ": " + Component.translatable("item.caerula_arbor.toponym_textology.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.HOT_WATER_KETTLE, entity))
-			if (mouseX > leftPos + 4 && mouseX < leftPos + 20 && mouseY > topPos + 100 && mouseY < topPos + 116)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.kettle").getString() + ": " + Component.translatable("item.caerula_arbor.kettle.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.LEGEND_CHITIN, entity))
-			if (mouseX > leftPos + 52 && mouseX < leftPos + 68 && mouseY > topPos + 52 && mouseY < topPos + 68)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.chitin_knife").getString() + ": " + Component.translatable("item.caerula_arbor.chitin_knife.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.UTIL_ALLAY, entity))
-			if (mouseX > leftPos + 28 && mouseX < leftPos + 44 && mouseY > topPos + 100 && mouseY < topPos + 116)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.allay_sculpture").getString() + ": " + Component.translatable("item.caerula_arbor.allay_sculpture.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.VAMPIRES_BED, entity))
-			if (mouseX > leftPos + 52 && mouseX < leftPos + 68 && mouseY > topPos + 100 && mouseY < topPos + 116)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.bat_bed").getString() + ": " + Component.translatable("item.caerula_arbor.bat_bed.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.UTIL_OMNIKEY, entity))
-			if (mouseX > leftPos + 124 && mouseX < leftPos + 140 && mouseY > topPos + 100 && mouseY < topPos + 116)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.omni_key").getString() + ": " + Component.translatable("item.caerula_arbor.omni_key.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.UTIL_SCORE, entity))
-			if (mouseX > leftPos + 76 && mouseX < leftPos + 92 && mouseY > topPos + 100 && mouseY < topPos + 116)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.score").getString() + ": " + Component.translatable("item.caerula_arbor.score.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.UTIL_RESCISSION, entity))
-			if (mouseX > leftPos + 100 && mouseX < leftPos + 116 && mouseY > topPos + 100 && mouseY < topPos + 116)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.rescission").getString() + ": " + Component.translatable("item.caerula_arbor.rescission.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.UTIL_STARE, entity))
-			if (mouseX > leftPos + 148 && mouseX < leftPos + 164 && mouseY > topPos + 100 && mouseY < topPos + 116)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.guardian_stare").getString() + ": " + Component.translatable("item.caerula_arbor.guardian_stare.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.HAND_SWORD, entity))
-			if (mouseX > leftPos + 196 && mouseX < leftPos + 212 && mouseY > topPos + 28 && mouseY < topPos + 44)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.hand_sword").getString() + ": " + Component.translatable("item.caerula_arbor.hand_sword.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.CURSED_HEART, entity))
-			if (mouseX > leftPos + 76 && mouseX < leftPos + 92 && mouseY > topPos + 196 && mouseY < topPos + 212)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.caerula_heart").getString() + ": " + Component.translatable("item.caerula_arbor.caerula_heart.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.HEMOST, entity))
-			if (mouseX > leftPos + 76 && mouseX < leftPos + 92 && mouseY > topPos + 52 && mouseY < topPos + 68)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.smelly_hemostatic").getString() + ": " + Component.translatable("item.caerula_arbor.smelly_hemostatic.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.PROOF_OF_LONGEVITY, entity))
-			if (mouseX > leftPos + 172 && mouseX < leftPos + 188 && mouseY > topPos + 100 && mouseY < topPos + 116)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.proof_of_longevity").getString() + ": " + Component.translatable("item.caerula_arbor.proof_of_longevity.description_0").getString()), mouseX, mouseY);
-		if (RelicUtils.hasRelic(Relic.YEARNING, entity))
-			if (mouseX > leftPos + 100 && mouseX < leftPos + 116 && mouseY > topPos + 52 && mouseY < topPos + 68)
-                guiGraphics.renderTooltip(font, Component.literal(Component.translatable("item.caerula_arbor.unripe_yearning").getString() + ": " + Component.translatable("item.caerula_arbor.unripe_yearning.description_0").getString()), mouseX, mouseY);
+
+		// Tooltip 渲染：遍历当前页条目
+		for (int i = 0; i < ALL_ENTRIES.size(); i++) {
+			if (!isEntryOnPage(i)) continue;
+			RelicDisplayEntry entry = ALL_ENTRIES.get(i);
+			if (entry.guiKey().isEmpty()) continue;
+			if (!entry.visibleTest().test(entity)) continue;
+			int sx = this.leftPos + slotX(i);
+			int sy = this.topPos + slotY(i);
+			if (mouseX >= sx && mouseX < sx + SLOT_SIZE && mouseY >= sy && mouseY < sy + SLOT_SIZE) {
+				String title = Component.translatable("item.caerula_arbor." + entry.itemKey()).getString();
+				String desc = Component.translatable("item.caerula_arbor." + entry.itemKey() + ".description_0").getString();
+				guiGraphics.renderTooltip(font, Component.literal(title + ": " + desc), mouseX, mouseY);
+			}
+		}
 	}
 
 	@Override
@@ -239,32 +246,16 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 328, 216, 328, 216);
 
-		if (RelicUtils.hasRelic(Relic.PROOF_OF_LONGEVITY, entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/longevity.png"), this.leftPos + 172, this.topPos + 100, 0, 0, 16, 16, 16, 16);
-		}
-		if (RelicUtils.hasRelic(Relic.DURIN_OVERGROUND_ODYSSEY, entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/durin_diary.png"), this.leftPos + 268, this.topPos + 76, 0, 0, 16, 16, 16, 16);
-		}
-		if (RelicUtils.hasRelic(Relic.UTIL_ALLAY, entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/stonealley.png"), this.leftPos + 28, this.topPos + 100, 0, 0, 16, 16, 16, 16);
-		}
-		if (RelicUtils.hasRelic(Relic.VAMPIRES_BED, entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/itembatbed.png"), this.leftPos + 52, this.topPos + 100, 0, 0, 16, 16, 16, 16);
-		}
-		if (RelicUtils.hasRelic(Relic.UTIL_OMNIKEY, entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/omnikey.png"), this.leftPos + 124, this.topPos + 100, 0, 0, 16, 16, 16, 16);
-		}
-		if (RelicUtils.hasRelic(Relic.UTIL_SCORE, entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/score.png"), this.leftPos + 76, this.topPos + 100, 0, 0, 16, 16, 16, 16);
-		}
-		if (RelicUtils.hasRelic(Relic.UTIL_RESCISSION, entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/rescission.png"), this.leftPos + 100, this.topPos + 100, 0, 0, 16, 16, 16, 16);
-		}
-		if (RelicUtils.hasRelic(Relic.UTIL_STARE, entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/guardianstare.png"), this.leftPos + 148, this.topPos + 100, 0, 0, 16, 16, 16, 16);
-		}
-		if (RelicUtils.hasRelic(Relic.CURSED_HEART, entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/caerulaheart.png"), this.leftPos + 76, this.topPos + 196, 0, 0, 16, 16, 16, 16);
+		// Overlay 渲染：遍历所有条目（跨页，只要 visible 就画）
+		for (int i = 0; i < ALL_ENTRIES.size(); i++) {
+			if (!isEntryOnPage(i)) continue;
+			RelicDisplayEntry entry = ALL_ENTRIES.get(i);
+			if (entry.overlayTex() == null || entry.overlayTex().isEmpty()) continue;
+			if (!entry.visibleTest().test(entity)) continue;
+			int sx = this.leftPos + slotX(i);
+			int sy = this.topPos + slotY(i);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/" + entry.overlayTex()),
+				sx, sy, 0, 0, SLOT_SIZE, SLOT_SIZE, SLOT_SIZE, SLOT_SIZE);
 		}
 		RenderSystem.disableBlend();
 	}
@@ -275,569 +266,177 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			this.minecraft.player.closeContainer();
 			return true;
 		}
+		// 左右方向键翻页
+		if (key == 263 && currentPage > 0) {
+			setPage(currentPage - 1);
+			return true;
+		}
+		if (key == 262 && currentPage < totalPages - 1) {
+			setPage(currentPage + 1);
+			return true;
+		}
 		return super.keyPressed(key, b, c);
+	}
+
+	@Override
+	public boolean mouseScrolled(double mx, double my, double hDelta, double vDelta) {
+		// 水平/垂直滚轮皆可翻页：右/下 = 下一页
+		double delta = Math.abs(hDelta) > Math.abs(vDelta) ? hDelta : vDelta;
+		if (delta < 0 && currentPage < totalPages - 1) {
+			setPage(currentPage + 1);
+			return true;
+		}
+		if (delta > 0 && currentPage > 0) {
+			setPage(currentPage - 1);
+			return true;
+		}
+		return super.mouseScrolled(mx, my, hDelta, vDelta);
+	}
+
+	@Override
+	public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
+		if (button == 0) {
+			int ix = (int) mx;
+			if (!isDragging) {
+				isDragging = true;
+				dragStartX = ix;
+				dragAccum = 0;
+			} else {
+				dragAccum += ix - lastMouseX;
+			}
+			lastMouseX = ix;
+			if (dragAccum <= -DRAG_THRESHOLD && currentPage < totalPages - 1) {
+				setPage(currentPage + 1);
+				dragAccum = 0;
+				isDragging = false;
+				return true;
+			}
+			if (dragAccum >= DRAG_THRESHOLD && currentPage > 0) {
+				setPage(currentPage - 1);
+				dragAccum = 0;
+				isDragging = false;
+				return true;
+			}
+		}
+		return super.mouseDragged(mx, my, button, dx, dy);
+	}
+	private int lastMouseX;
+
+	@Override
+	public boolean mouseClicked(double mx, double my, int button) {
+		if (button == 0) {
+			isDragging = false;
+			dragAccum = 0;
+			lastMouseX = (int) mx;
+		}
+		return super.mouseClicked(mx, my, button);
+	}
+
+	@Override
+	public boolean mouseReleased(double mx, double my, int button) {
+		isDragging = false;
+		dragAccum = 0;
+		return super.mouseReleased(mx, my, button);
 	}
 
 	@Override
 	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.relic_showcase.label_relic_showcase"), 4, -12, -1, false);
-		if (RelicUtils.getRelic(Relic.HAND_ENGRAVE, entity) > 0)
-			guiGraphics.drawString(this.font,
+		// 页码
+		String pageLabel = (currentPage + 1) + "/" + totalPages;
+		guiGraphics.drawString(this.font, pageLabel, imageWidth - 30, -12, -1, false);
+		// 数值标签：HAND_ENGRAVE / SURVIVOR
+		for (int i = 0; i < ALL_ENTRIES.size(); i++) {
+			if (!isEntryOnPage(i)) continue;
+			RelicDisplayEntry entry = ALL_ENTRIES.get(i);
+			if (entry.labelPos() == null) continue;
+			if (!entry.visibleTest().test(entity)) continue;
+			int[] lp = entry.labelPos();
+			String text = switch (entry.special()) {
+				case SURVIVOR -> EntityUtils.getPlayerSurvconta(entity);
+				case NONE -> entry.relic() == Relic.HAND_ENGRAVE ? EntityUtils.getPlayerEnrave(entity) : "";
+				default -> "";
+			};
+			if (!text.isEmpty()) {
+				int pageCol = (i - currentPage * PAGE_SIZE) % COLS_PER_PAGE;
+				int pageRow = (i - currentPage * PAGE_SIZE) / COLS_PER_PAGE;
+				int lx = SLOT_ORIGIN_X + pageCol * SLOT_STEP + 1;
+				int ly = SLOT_ORIGIN_Y + pageRow * SLOT_STEP + 20;
+				guiGraphics.drawString(this.font, text, lx - 1, ly - 1, lp[2], false);
+				guiGraphics.drawString(this.font, text, lx, ly - 1, lp[3], false);
+			}
+		}
+	}
 
-					EntityUtils.getPlayerEnrave(entity), 157, 36, -16777165, false);
-		if (RelicUtils.getRelic(Relic.HAND_ENGRAVE, entity) > 0)
-			guiGraphics.drawString(this.font,
+	private void setPage(int page) {
+		this.currentPage = Math.max(0, Math.min(totalPages - 1, page));
+		rebuildButtons();
+	}
 
-					EntityUtils.getPlayerEnrave(entity), 156, 36, -1, false);
-		if (PlayerStateUtils.hasSurvivorCont(entity))
-			guiGraphics.drawString(this.font,
+	private void rebuildButtons() {
+		// 移除旧按钮
+		for (ImageButton btn : relicButtons) {
+			this.removeWidget(btn);
+		}
+		relicButtons.clear();
 
-					EntityUtils.getPlayerSurvconta(entity), 37, 60, -12829636, false);
-		if (PlayerStateUtils.hasSurvivorCont(entity))
-			guiGraphics.drawString(this.font,
+		// 按当前页遍历条目创建按钮
+		for (int i = 0; i < ALL_ENTRIES.size(); i++) {
+			if (!isEntryOnPage(i)) continue;
+			RelicDisplayEntry entry = ALL_ENTRIES.get(i);
+			if (entry.guiKey().isEmpty()) continue;
+			if (entry.atlasBase().isEmpty()) continue;
+			final int entryIndex = i;
+			int sx = this.leftPos + slotX(entryIndex);
+			int sy = this.topPos + slotY(entryIndex);
+			WidgetSprites sprites = new WidgetSprites(
+				ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/" + entry.atlasBase()),
+				ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/" + entry.atlasBase() + "_highlighted"));
+			ImageButton btn = new ImageButton(sx, sy, SLOT_SIZE, SLOT_SIZE, sprites, e -> {
+				if (entry.buttonId() >= 0 && entry.visibleTest().test(entity)) {
+					PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(entry.buttonId(), x, y, z));
+					RelicShowcaseButtonMessage.handleButtonAction(entity, entry.buttonId(), x, y, z);
+				}
+			}) {
+				@Override
+				public void renderWidget(GuiGraphics gg, int ggx, int ggy, float ticks) {
+					this.visible = entry.visibleTest().test(RelicShowcaseScreen.this.entity);
+					super.renderWidget(gg, ggx, ggy, ticks);
+				}
+			};
+			guistate.put("button:" + entry.guiKey(), btn);
+			this.addRenderableWidget(btn);
+			relicButtons.add(btn);
+		}
 
-					EntityUtils.getPlayerSurvconta(entity), 36, 60, -1, false);
+		// 翻页按钮状态
+		if (button_prev_page != null) button_prev_page.active = currentPage > 0;
+		if (button_next_page != null) button_next_page.active = currentPage < totalPages - 1;
 	}
 
 	@Override
 	public void init() {
 		super.init();
-		button_return = new PlainTextButton(this.leftPos + 292, this.topPos + 204, 24, 20, Component.translatable("gui.caerula_arbor.relic_showcase.button_return"), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(0, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 0, x, y, z);
-			}
+
+		// 返回按钮
+		button_return = new PlainTextButton(this.leftPos + 292, this.topPos + 204, 24, 20,
+			Component.translatable("gui.caerula_arbor.relic_showcase.button_return"), e -> {
+			PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(0, x, y, z));
+			RelicShowcaseButtonMessage.handleButtonAction(entity, 0, x, y, z);
 		}, this.font);
 		guistate.put("button:button_return", button_return);
 		this.addRenderableWidget(button_return);
-		imagebutton_relic_crown = new ImageButton(this.leftPos + 4, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_crown"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_crown_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.KING_CROWN, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(1, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 1, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.KING_CROWN, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_relic_crown", imagebutton_relic_crown);
-		this.addRenderableWidget(imagebutton_relic_crown);
-		imagebutton_relic_spear = new ImageButton(this.leftPos + 28, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_spear"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_spear_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.KING_SPEAR, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(2, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 2, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.KING_SPEAR, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_relic_spear", imagebutton_relic_spear);
-		this.addRenderableWidget(imagebutton_relic_spear);
-		imagebutton_kingsarmor = new ImageButton(this.leftPos + 100, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kingsarmor"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kingsarmor_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.KING_ARMOR, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(3, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 3, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.KING_ARMOR, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_kingsarmor", imagebutton_kingsarmor);
-		this.addRenderableWidget(imagebutton_kingsarmor);
-		imagebutton_extension = new ImageButton(this.leftPos + 52, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_extension"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_extension_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.KING_EXTENSION, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(4, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 4, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.KING_EXTENSION, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_extension", imagebutton_extension);
-		this.addRenderableWidget(imagebutton_extension);
-		imagebutton_kingcrystal = new ImageButton(this.leftPos + 76, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kingcrystal"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kingcrystal_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.KING_CRYSTAL, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(5, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 5, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.KING_CRYSTAL, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_kingcrystal", imagebutton_kingcrystal);
-		this.addRenderableWidget(imagebutton_kingcrystal);
-		imagebutton_archfiend_articraft = new ImageButton(this.leftPos + 124, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archfiend_articraft"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archfiend_articraft_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.SARKAZ_KING_ARTIFACT, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(6, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 6, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.SARKAZ_KING_ARTIFACT, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_archfiend_articraft", imagebutton_archfiend_articraft);
-		this.addRenderableWidget(imagebutton_archfiend_articraft);
-		imagebutton_archfi_flag = new ImageButton(this.leftPos + 148, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archfi_flag"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archfi_flag_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.SARKAZ_KING_FLAG, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(7, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 7, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.SARKAZ_KING_FLAG, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_archfi_flag", imagebutton_archfi_flag);
-		this.addRenderableWidget(imagebutton_archfi_flag);
-		imagebutton_archifi_bed = new ImageButton(this.leftPos + 172, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archifi_bed"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_archifi_bed_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.SARKAZ_KING_BED, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(8, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 8, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.SARKAZ_KING_BED, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_archifi_bed", imagebutton_archifi_bed);
-		this.addRenderableWidget(imagebutton_archifi_bed);
-		imagebutton_royalfate = new ImageButton(this.leftPos + 196, this.topPos + 4, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_royalfate"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_royalfate_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.ROYALFATE, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_royalfate", imagebutton_royalfate);
-		this.addRenderableWidget(imagebutton_royalfate);
-		imagebutton_hand_spike = new ImageButton(this.leftPos + 4, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_spike"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_spike_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.HAND_THORNS, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(10, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 10, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.HAND_THORNS, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_hand_spike", imagebutton_hand_spike);
-		this.addRenderableWidget(imagebutton_hand_spike);
-		imagebutton_hand_reap = new ImageButton(this.leftPos + 28, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_reap"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_reap_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.HAND_STRANGLE, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(11, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 11, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.HAND_STRANGLE, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_hand_reap", imagebutton_hand_reap);
-		this.addRenderableWidget(imagebutton_hand_reap);
-		imagebutton_hand_reap1 = new ImageButton(this.leftPos + 52, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_reap1"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_reap1_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.HAND_FERTILITY, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(12, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 12, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.HAND_FERTILITY, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_hand_reap1", imagebutton_hand_reap1);
-		this.addRenderableWidget(imagebutton_hand_reap1);
-		imagebutton_hand_smash = new ImageButton(this.leftPos + 100, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_smash"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_smash_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.HAND_OF_PULVERIZATION, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(13, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 13, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.HAND_OF_PULVERIZATION, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_hand_smash", imagebutton_hand_smash);
-		this.addRenderableWidget(imagebutton_hand_smash);
-		imagebutton_hand_swipe = new ImageButton(this.leftPos + 124, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_swipe"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_swipe_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.HAND_SWIPE, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(14, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 14, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.HAND_SWIPE, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_hand_swipe", imagebutton_hand_swipe);
-		this.addRenderableWidget(imagebutton_hand_swipe);
-		imagebutton_hand_curve = new ImageButton(this.leftPos + 148, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_curve"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_curve_highlighted")), e -> {
-			if (RelicUtils.getRelic(Relic.HAND_ENGRAVE, entity) > 0) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(15, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 15, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.getRelic(Relic.HAND_ENGRAVE, entity) > 0;
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_hand_curve", imagebutton_hand_curve);
-		this.addRenderableWidget(imagebutton_hand_curve);
-		imagebutton_hand_firework = new ImageButton(this.leftPos + 172, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_firework"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_firework_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.HAND_FIREWORK, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(16, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 16, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.HAND_FIREWORK, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_hand_firework", imagebutton_hand_firework);
-		this.addRenderableWidget(imagebutton_hand_firework);
-		imagebutton_crimson_contarct_0 = new ImageButton(this.leftPos + 4, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_crimson_contarct_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_crimson_contarct_0_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.TREATY, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(17, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 17, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.TREATY, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_crimson_contarct_0", imagebutton_crimson_contarct_0);
-		this.addRenderableWidget(imagebutton_crimson_contarct_0);
-		imagebutton_survivor_contarct = new ImageButton(this.leftPos + 28, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_survivor_contarct"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_survivor_contarct_highlighted")), e -> {
-			if (PlayerStateUtils.hasSurvivorCont(entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(18, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 18, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = PlayerStateUtils.hasSurvivorCont(entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_survivor_contarct", imagebutton_survivor_contarct);
-		this.addRenderableWidget(imagebutton_survivor_contarct);
-		imagebutton_cursed_emelight_0 = new ImageButton(this.leftPos + 4, this.topPos + 196, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_emelight_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_emelight_0_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.CURSED_EMELIGHT, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(19, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 19, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.CURSED_EMELIGHT, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_cursed_emelight_0", imagebutton_cursed_emelight_0);
-		this.addRenderableWidget(imagebutton_cursed_emelight_0);
-		imagebutton_cursed_glowbody_0 = new ImageButton(this.leftPos + 28, this.topPos + 196, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_glowbody_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_glowbody_0_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.CURSED_GLOWBODY, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(20, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 20, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.CURSED_GLOWBODY, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_cursed_glowbody_0", imagebutton_cursed_glowbody_0);
-		this.addRenderableWidget(imagebutton_cursed_glowbody_0);
-		imagebutton_cursed_research_0 = new ImageButton(this.leftPos + 52, this.topPos + 196, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_research_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cursed_research_0_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.CURSED_RESEARCH, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(21, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 21, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.CURSED_RESEARCH, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_cursed_research_0", imagebutton_cursed_research_0);
-		this.addRenderableWidget(imagebutton_cursed_research_0);
-		imagebutton_beef_can = new ImageButton(this.leftPos + 4, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_beef_can"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_beef_can_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.FEATURED_CANNED_MEAT, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_beef_can", imagebutton_beef_can);
-		this.addRenderableWidget(imagebutton_beef_can);
-		imagebutton_bowl_seagrass = new ImageButton(this.leftPos + 28, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_bowl_seagrass"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_bowl_seagrass_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.SEAWEED_SALAD, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_bowl_seagrass", imagebutton_bowl_seagrass);
-		this.addRenderableWidget(imagebutton_bowl_seagrass);
-		imagebutton_orangestorm = new ImageButton(this.leftPos + 52, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_orangestorm"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_orangestorm_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.ORANGE_STORM, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_orangestorm", imagebutton_orangestorm);
-		this.addRenderableWidget(imagebutton_orangestorm);
-		imagebutton_coffee_candy = new ImageButton(this.leftPos + 76, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_coffee_candy"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_coffee_candy_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.COFFEE_PLAINS_COFFEE_CANDY, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_coffee_candy", imagebutton_coffee_candy);
-		this.addRenderableWidget(imagebutton_coffee_candy);
-		imagebutton_cherrycan = new ImageButton(this.leftPos + 124, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cherrycan"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_cherrycan_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.PITTS_ASSORTED_FRUITS, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_cherrycan", imagebutton_cherrycan);
-		this.addRenderableWidget(imagebutton_cherrycan);
-		imagebutton_rainbow_candy = new ImageButton(this.leftPos + 100, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_rainbow_candy"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_rainbow_candy_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.UTIL_RAINBOW, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_rainbow_candy", imagebutton_rainbow_candy);
-		this.addRenderableWidget(imagebutton_rainbow_candy);
-		imagebutton_boxcoffee = new ImageButton(this.leftPos + 148, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_boxcoffee"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_boxcoffee_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = PlayerStateUtils.hasAromatic(entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_boxcoffee", imagebutton_boxcoffee);
-		this.addRenderableWidget(imagebutton_boxcoffee);
-		imagebutton_musicboxsmall = new ImageButton(this.leftPos + 172, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_musicboxsmall"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_musicboxsmall_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.UTIL_MUSICBOX, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_musicboxsmall", imagebutton_musicboxsmall);
-		this.addRenderableWidget(imagebutton_musicboxsmall);
-		imagebutton_originium_iris = new ImageButton(this.leftPos + 220, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_originium_iris"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_originium_iris_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.UTIL_IRIS, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_originium_iris", imagebutton_originium_iris);
-		this.addRenderableWidget(imagebutton_originium_iris);
-		imagebutton_flute = new ImageButton(this.leftPos + 196, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_flute"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_flute_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.WEIRD_FLUTE, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_flute", imagebutton_flute);
-		this.addRenderableWidget(imagebutton_flute);
-		imagebutton_voyageofsmall = new ImageButton(this.leftPos + 244, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_voyageofsmall"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_voyageofsmall_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.PURE_GOLD_EXPEDITION, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_voyageofsmall", imagebutton_voyageofsmall);
-		this.addRenderableWidget(imagebutton_voyageofsmall);
-		imagebutton_location_name = new ImageButton(this.leftPos + 292, this.topPos + 76, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_location_name"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_location_name_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.UTIL_TOPONYM, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_location_name", imagebutton_location_name);
-		this.addRenderableWidget(imagebutton_location_name);
-		imagebutton_kettle = new ImageButton(this.leftPos + 4, this.topPos + 100, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kettle"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_kettle_highlighted")), e -> {
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.HOT_WATER_KETTLE, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_kettle", imagebutton_kettle);
-		this.addRenderableWidget(imagebutton_kettle);
-		imagebutton_hand_sword = new ImageButton(this.leftPos + 196, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_sword"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_sword_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.HAND_SWORD, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(35, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 35, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.HAND_SWORD, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_hand_sword", imagebutton_hand_sword);
-		this.addRenderableWidget(imagebutton_hand_sword);
-		imagebutton_chitinknife = new ImageButton(this.leftPos + 52, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_chitinknife"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_chitinknife_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.LEGEND_CHITIN, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(36, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 36, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.LEGEND_CHITIN, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_chitinknife", imagebutton_chitinknife);
-		this.addRenderableWidget(imagebutton_chitinknife);
-		imagebutton_hand_speed = new ImageButton(this.leftPos + 76, this.topPos + 28, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_speed"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_hand_speed_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.HAND_SPEED, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(37, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 37, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.HAND_SPEED, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_hand_speed", imagebutton_hand_speed);
-		this.addRenderableWidget(imagebutton_hand_speed);
-		imagebutton_smelly_hemostatic = new ImageButton(this.leftPos + 76, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_smelly_hemostatic"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_smelly_hemostatic_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.HEMOST, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(38, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 38, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.HEMOST, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_smelly_hemostatic", imagebutton_smelly_hemostatic);
-		this.addRenderableWidget(imagebutton_smelly_hemostatic);
-		imagebutton_unripe_yearning = new ImageButton(this.leftPos + 100, this.topPos + 52, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_unripe_yearning"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_unripe_yearning_highlighted")), e -> {
-			if (RelicUtils.hasRelic(Relic.YEARNING, entity)) {
-				PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(39, x, y, z));
-				RelicShowcaseButtonMessage.handleButtonAction(entity, 39, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = RelicUtils.hasRelic(Relic.YEARNING, entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_unripe_yearning", imagebutton_unripe_yearning);
-		this.addRenderableWidget(imagebutton_unripe_yearning);
-		imagebutton_relic_crown.visible = RelicUtils.hasRelic(Relic.KING_CROWN, entity);
-		imagebutton_relic_spear.visible = RelicUtils.hasRelic(Relic.KING_SPEAR, entity);
-		imagebutton_kingsarmor.visible = RelicUtils.hasRelic(Relic.KING_ARMOR, entity);
-		imagebutton_extension.visible = RelicUtils.hasRelic(Relic.KING_EXTENSION, entity);
-		imagebutton_kingcrystal.visible = RelicUtils.hasRelic(Relic.KING_CRYSTAL, entity);
-		imagebutton_archfiend_articraft.visible = RelicUtils.hasRelic(Relic.SARKAZ_KING_ARTIFACT, entity);
-		imagebutton_archfi_flag.visible = RelicUtils.hasRelic(Relic.SARKAZ_KING_FLAG, entity);
-		imagebutton_archifi_bed.visible = RelicUtils.hasRelic(Relic.SARKAZ_KING_BED, entity);
-		imagebutton_royalfate.visible = RelicUtils.hasRelic(Relic.ROYALFATE, entity);
-		imagebutton_hand_spike.visible = RelicUtils.hasRelic(Relic.HAND_THORNS, entity);
-		imagebutton_hand_reap.visible = RelicUtils.hasRelic(Relic.HAND_STRANGLE, entity);
-		imagebutton_hand_reap1.visible = RelicUtils.hasRelic(Relic.HAND_FERTILITY, entity);
-		imagebutton_hand_smash.visible = RelicUtils.hasRelic(Relic.HAND_OF_PULVERIZATION, entity);
-		imagebutton_hand_swipe.visible = RelicUtils.hasRelic(Relic.HAND_SWIPE, entity);
-		imagebutton_hand_curve.visible = RelicUtils.getRelic(Relic.HAND_ENGRAVE, entity) > 0;
-		imagebutton_hand_firework.visible = RelicUtils.hasRelic(Relic.HAND_FIREWORK, entity);
-		imagebutton_crimson_contarct_0.visible = RelicUtils.hasRelic(Relic.TREATY, entity);
-		imagebutton_survivor_contarct.visible = PlayerStateUtils.hasSurvivorCont(entity);
-		imagebutton_cursed_emelight_0.visible = RelicUtils.hasRelic(Relic.CURSED_EMELIGHT, entity);
-		imagebutton_cursed_glowbody_0.visible = RelicUtils.hasRelic(Relic.CURSED_GLOWBODY, entity);
-		imagebutton_cursed_research_0.visible = RelicUtils.hasRelic(Relic.CURSED_RESEARCH, entity);
-		imagebutton_beef_can.visible = RelicUtils.hasRelic(Relic.FEATURED_CANNED_MEAT, entity);
-		imagebutton_bowl_seagrass.visible = RelicUtils.hasRelic(Relic.SEAWEED_SALAD, entity);
-		imagebutton_orangestorm.visible = RelicUtils.hasRelic(Relic.ORANGE_STORM, entity);
-		imagebutton_coffee_candy.visible = RelicUtils.hasRelic(Relic.COFFEE_PLAINS_COFFEE_CANDY, entity);
-		imagebutton_cherrycan.visible = RelicUtils.hasRelic(Relic.PITTS_ASSORTED_FRUITS, entity);
-		imagebutton_rainbow_candy.visible = RelicUtils.hasRelic(Relic.UTIL_RAINBOW, entity);
-		imagebutton_boxcoffee.visible = PlayerStateUtils.hasAromatic(entity);
-		imagebutton_musicboxsmall.visible = RelicUtils.hasRelic(Relic.UTIL_MUSICBOX, entity);
-		imagebutton_originium_iris.visible = RelicUtils.hasRelic(Relic.UTIL_IRIS, entity);
-		imagebutton_flute.visible = RelicUtils.hasRelic(Relic.WEIRD_FLUTE, entity);
-		imagebutton_voyageofsmall.visible = RelicUtils.hasRelic(Relic.PURE_GOLD_EXPEDITION, entity);
-		imagebutton_location_name.visible = RelicUtils.hasRelic(Relic.UTIL_TOPONYM, entity);
-		imagebutton_kettle.visible = RelicUtils.hasRelic(Relic.HOT_WATER_KETTLE, entity);
-		imagebutton_hand_sword.visible = RelicUtils.hasRelic(Relic.HAND_SWORD, entity);
-		imagebutton_chitinknife.visible = RelicUtils.hasRelic(Relic.LEGEND_CHITIN, entity);
-		imagebutton_hand_speed.visible = RelicUtils.hasRelic(Relic.HAND_SPEED, entity);
-		imagebutton_smelly_hemostatic.visible = RelicUtils.hasRelic(Relic.HEMOST, entity);
-		imagebutton_unripe_yearning.visible = RelicUtils.hasRelic(Relic.YEARNING, entity);
+
+		// 上一页
+		button_prev_page = new PlainTextButton(this.leftPos + 4, this.topPos + 204, 16, 16,
+			Component.literal("◀"), e -> setPage(currentPage - 1), this.font);
+		this.addRenderableWidget(button_prev_page);
+
+		// 下一页
+		button_next_page = new PlainTextButton(this.leftPos + 24, this.topPos + 204, 16, 16,
+			Component.literal("▶"), e -> setPage(currentPage + 1), this.font);
+		this.addRenderableWidget(button_next_page);
+
+		rebuildButtons();
 	}
 }

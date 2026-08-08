@@ -4,7 +4,7 @@ import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAJukeboxSongs;
-import com.susen36.caerulaarbor.util.ItemUtils;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,18 +26,18 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 
-public class ScoreItem extends Item {
+public class ScoreItem extends RelicItemBase {
 	public ScoreItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).jukeboxPlayable(CAJukeboxSongs.SCORE));
+		super(Relic.UTIL_SCORE, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).jukeboxPlayable(CAJukeboxSongs.SCORE));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
-        for (String line : hoverText.split("\n")) {
-            list.add(Component.literal(line));
-        }
+		String hoverText = null;
+		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
+			list.add(Component.translatable("item.caerula_arbor.relics.used"));
+		}
     }
 
 	@Override

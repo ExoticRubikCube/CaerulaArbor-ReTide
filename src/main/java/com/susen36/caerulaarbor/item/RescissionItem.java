@@ -1,4 +1,3 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
@@ -6,7 +5,7 @@ import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.util.ItemUtils;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -30,7 +29,6 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -38,18 +36,18 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class RescissionItem extends Item {
+public class RescissionItem extends RelicItemBase {
 	public RescissionItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+		super(Relic.UTIL_RESCISSION, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-        String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
-        for (String line : hoverText.split("\n")) {
-            list.add(Component.literal(line));
-        }
+        String hoverText = null;
+		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
+			list.add(Component.translatable("item.caerula_arbor.relics.used"));
+		}
     }
 
 	@Override

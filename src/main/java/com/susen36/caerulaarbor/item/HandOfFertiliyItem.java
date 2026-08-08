@@ -4,6 +4,7 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,16 +25,14 @@ import net.minecraft.world.level.LevelAccessor;
 import java.util.List;
 
 
-public class HandOfFertiliyItem extends Item {
+public class HandOfFertiliyItem extends RelicItemBase {
 	public HandOfFertiliyItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(Relic.HAND_FERTILITY, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.hand_of_fertiliy.description_0"));
-		list.add(Component.translatable("item.caerula_arbor.hand_of_fertiliy.description_1"));
 	}
 
 	@Override

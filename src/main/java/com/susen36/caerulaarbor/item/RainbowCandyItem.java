@@ -1,9 +1,10 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -23,16 +24,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 
-public class RainbowCandyItem extends Item {
+public class RainbowCandyItem extends RelicItemBase {
 	public RainbowCandyItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build()));
+		super(Relic.UTIL_RAINBOW, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build()));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.rainbow_candy.description_0"));
-		list.add(Component.translatable("item.caerula_arbor.rainbow_candy.description_1"));
 	}
 
 	@Override
@@ -59,6 +58,8 @@ public class RainbowCandyItem extends Item {
         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 		capability.player_util_RAINBOW = true;
 		capability.syncPlayerVariables(entity);
+        Relic.UTIL_RAINBOW.set(capability, 1);
+        capability.syncPlayerVariables(entity);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

@@ -1,10 +1,10 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -29,16 +29,14 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.util.List;
 
 
-public class CannedCherryItem extends Item {
+public class CannedCherryItem extends RelicItemBase {
 	public CannedCherryItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.1f).alwaysEdible().build()));
+		super(Relic.PITTS_ASSORTED_FRUITS, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.1f).alwaysEdible().build()));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.canned_cherry.description_0"));
-		list.add(Component.translatable("item.caerula_arbor.canned_cherry.description_1"));
 	}
 
 	@Override

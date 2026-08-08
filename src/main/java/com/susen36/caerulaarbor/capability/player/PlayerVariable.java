@@ -18,7 +18,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.susen36.caerulaarbor.init.CARelics.*;
+import static com.susen36.caerulaarbor.init.CARelics.RELICS_REGISTRY;
 
 public class PlayerVariable implements INBTSerializable<CompoundTag> {
 
@@ -201,7 +201,7 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
         PEVO_NODE_eunectes = nbt.getDouble("PEVO_NODE_eunectes");
         PEVO_NODE_less_armor = nbt.getDouble("PEVO_NODE_less_armor");
 
-        /* 新格式优先：relics 子 tag 全量读 */
+        /* 新格式：relics 子 tag 全量读 */
         if (nbt.contains("relics", Tag.TAG_COMPOUND)) {
             CompoundTag relicsTag = nbt.getCompound("relics");
             for (String rawKey : relicsTag.getAllKeys()) {
@@ -209,68 +209,6 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
                     net.minecraft.resources.ResourceLocation.parse(rawKey));
                 int lvl = relicsTag.getInt(rawKey);
                 setRelic(key, lvl);
-            }
-        } else {
-            /* 老存档迁移：扁平 relic_xxx key → 注册表 ResourceKey。数值型 double 型原字段以 (int) 截断和原 switch 保持一致。 */
-            migrateLegacyBoolean(nbt, "relic_cursed_EMELIGHT", CURSED_EMELIGHT.getKey());
-            migrateLegacyBoolean(nbt, "relic_cursed_GLOWBODY", CURSED_GLOWBODY.getKey());
-            migrateLegacyBoolean(nbt, "relic_cursed_RESEARCH", CURSED_RESEARCH.getKey());
-            migrateLegacyBoolean(nbt, "relic_cursed_HEART", CURSED_HEART.getKey());
-            migrateLegacyBoolean(nbt, "relic_king_CROWN", KING_CROWN.getKey());
-            migrateLegacyBoolean(nbt, "relic_king_ARMOR", KING_ARMOR.getKey());
-            migrateLegacyBoolean(nbt, "relic_king_SPEAR", KING_SPEAR.getKey());
-            migrateLegacyBoolean(nbt, "relic_king_EXTENSION", KING_EXTENSION.getKey());
-            migrateLegacyBoolean(nbt, "relic_king_CRYSTAL", KING_CRYSTAL.getKey());
-            migrateLegacyBoolean(nbt, "relic_royalfate", ROYALFATE.getKey());
-            migrateLegacyBoolean(nbt, "relic_hand_THORNS", HAND_THORNS.getKey());
-            migrateLegacyBoolean(nbt, "relic_hand_STRANGLE", HAND_STRANGLE.getKey());
-            migrateLegacyBoolean(nbt, "relic_hand_FERTILITY", HAND_FERTILITY.getKey());
-            migrateLegacyBoolean(nbt, "relic_hand_SPEED", HAND_SPEED.getKey());
-            migrateLegacyBoolean(nbt, "relic_hand_BARREN", HAND_OF_PULVERIZATION.getKey());
-            migrateLegacyBoolean(nbt, "relic_hand_SWIPE", HAND_SWIPE.getKey());
-            migrateLegacyBoolean(nbt, "relic_hand_FIREWORK", HAND_FIREWORK.getKey());
-            migrateLegacyBoolean(nbt, "relic_hand_SWORD", HAND_SWORD.getKey());
-            migrateLegacyBoolean(nbt, "relic_archfi_ARTIFACT", SARKAZ_KING_ARTIFACT.getKey());
-            migrateLegacyBoolean(nbt, "relic_archfi_FLAG", SARKAZ_KING_FLAG.getKey());
-            migrateLegacyBoolean(nbt, "relic_archfi_BED", SARKAZ_KING_BED.getKey());
-            migrateLegacyBoolean(nbt, "relic_archifi_RYLFATE", SARKAZ_KING_RYLFATE.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_MEATCAN", FEATURED_CANNED_MEAT.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_SEAGRASS", SEAWEED_SALAD.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_ORANGE", ORANGE_STORM.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_COFFEE", COFFEE_PLAINS_COFFEE_CANDY.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_BERRIES", PITTS_ASSORTED_FRUITS.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_MUSICBOX", UTIL_MUSICBOX.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_IRIS", UTIL_IRIS.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_FLUTE", WEIRD_FLUTE.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_VOYGOLD", PURE_GOLD_EXPEDITION.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_DURIN", DURIN_OVERGROUND_ODYSSEY.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_TOPONYM", UTIL_TOPONYM.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_KETTLE", HOT_WATER_KETTLE.getKey());
-            migrateLegacyBoolean(nbt, "relic_legend_CHITIN", LEGEND_CHITIN.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_ALLEY", UTIL_ALLEY.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_BATBED", VAMPIRES_BED.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_LONGEVITY", PROOF_OF_LONGEVITY.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_OMNIKEY", UTIL_OMNIKEY.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_score", UTIL_SCORE.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_RESCISSION", UTIL_RESCISSION.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_STARE", UTIL_STARE.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_ALLAY", UTIL_ALLAY.getKey());
-            migrateLegacyBoolean(nbt, "relic_util_RAINBOW", UTIL_RAINBOW.getKey());
-            migrateLegacyBoolean(nbt, "relic_diso", DISO.getKey());
-            migrateLegacyBoolean(nbt, "relic_diso_FLESH", DISO_FLESH.getKey());
-            migrateLegacyBoolean(nbt, "relic_diso_BLOOD", DISO_BLOOD.getKey());
-            migrateLegacyBoolean(nbt, "relic_diso_NEURO", DISO_NEURO.getKey());
-            migrateLegacyBoolean(nbt, "relic_diso_ATTENTION", DISO_ATTENTION.getKey());
-            migrateLegacyBoolean(nbt, "relic_ahnd_SWIPE", AHND_SWIPE.getKey());
-            migrateLegacyBoolean(nbt, "relic_hanshand_SPIKE", HANSHAND_SPIKE.getKey());
-            migrateLegacyBoolean(nbt, "relic_TREATY", TREATY.getKey());
-            migrateLegacyBoolean(nbt, "relic_HEMOST", HEMOST.getKey());
-            migrateLegacyBoolean(nbt, "relic_YEARNING", YEARNING.getKey());
-            if (nbt.contains("relic_hand_ENGRAVE", Tag.TAG_ANY_NUMERIC)) {
-                setRelic(HAND_ENGRAVE.getKey(), (int) nbt.getDouble("relic_hand_ENGRAVE"));
-            }
-            if (nbt.contains("relic_SURVIVOR", Tag.TAG_ANY_NUMERIC)) {
-                setRelic(SURVIVOR_CONTRACT.getKey(), (int) nbt.getDouble("relic_SURVIVOR"));
             }
         }
     }

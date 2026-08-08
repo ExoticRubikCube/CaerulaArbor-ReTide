@@ -5,9 +5,13 @@ import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.block.item.*;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.item.*;
+import com.susen36.caerulaarbor.item.relic.ActivateParams;
+import com.susen36.caerulaarbor.item.relic.SimpleRelicItem;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -70,9 +74,27 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_ARTIFACT = REGISTRY.register("archfiends_artifact", ArchfiendsArtifactItem::new);
     public static final DeferredHolder<Item, ? extends Item> HAND_OF_FIREWORK = REGISTRY.register("hand_of_firework", HandOfFireworkItem::new);
     public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_FLAG = REGISTRY.register("archfiends_flag", ArchfiendsFlagItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_ENGRAVE = REGISTRY.register("hand_of_engrave", HandOfEngraveItem::new);
+    public static final DeferredHolder<Item, ? extends Item> HAND_OF_ENGRAVE = REGISTRY.register("hand_of_engrave",
+            SimpleRelicItem.simpleNumericNeg1(Relic.HAND_ENGRAVE, Rarity.EPIC,
+                    () -> ActivateParams.builder()
+                            .mode(ActivateParams.ActivateMode.BELOW_ZERO)
+                            .setValue(0)
+                            .sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
+                            .particle(ParticleTypes.CLOUD, 72)
+                            .showOverlay(true)
+                            .shrink(false)
+                            .build()));
     public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_BED = REGISTRY.register("archfiends_bed", ArchfiendsBedItem::new);
-    public static final DeferredHolder<Item, ? extends Item> SURVIVOR_CONTRACT = REGISTRY.register("survivor_contract", SurvivorContractItem::new);
+    public static final DeferredHolder<Item, ? extends Item> SURVIVOR_CONTRACT = REGISTRY.register("survivor_contract",
+            SimpleRelicItem.simpleNumericNeg1(Relic.SURVIVOR_CONTRACT, Rarity.EPIC,
+                    () -> ActivateParams.builder()
+                            .mode(ActivateParams.ActivateMode.BELOW_ZERO)
+                            .setValue(0)
+                            .sound(SoundEvents.BEACON_ACTIVATE, 3.2F, 1F)
+                            .particle(ParticleTypes.GLOW, 72)
+                            .showOverlay(true)
+                            .shrink(false)
+                            .build()));
     public static final DeferredHolder<Item, ? extends Item> ROYAL_FATE = REGISTRY.register("royal_fate", RoyalFateItem::new);
     public static final DeferredHolder<Item, ? extends Item> BLOCK_FATE = block(CABlocks.BLOCK_FATE);
     public static final DeferredHolder<Item, ? extends Item> CRIMSON_TREATY = REGISTRY.register("crimson_treaty", CrimsonTreatyItem::new);
@@ -184,7 +206,16 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> OCEAN_CRYSTAL_BLOCK = block(CABlocks.OCEAN_CRYSTAL_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> COMPLEX_CHITIN_BLOCK = block(CABlocks.COMPLEX_CHITIN_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> GUARDIAN_STARE = REGISTRY.register("guardian_stare", GuardianStareItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_SWORD = REGISTRY.register("hand_sword", HandSwordItem::new);
+    public static final DeferredHolder<Item, ? extends Item> HAND_SWORD = REGISTRY.register("hand_sword",
+            SimpleRelicItem.simpleBoolean(Relic.HAND_SWORD, Rarity.EPIC,
+                    () -> ActivateParams.builder()
+                            .mode(ActivateParams.ActivateMode.NOT_GAINED)
+                            .setValue(1)
+                            .sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
+                            .particle(ParticleTypes.CLOUD, 72)
+                            .showOverlay(true)
+                            .shrink(false)
+                            .build()));
     public static final DeferredHolder<Item, ? extends Item> TIDE_OBSERVATION = block(CABlocks.TIDE_OBSERVATION);
     public static final DeferredHolder<Item, ? extends Item> SAMPLE_BREED = REGISTRY.register("sample_breed", SampleBreedItem::new);
     public static final DeferredHolder<Item, ? extends Item> ANCHOR_LOWER = block(CABlocks.ANCHOR_LOWER);
@@ -672,6 +703,16 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_PRESERVED_EGG = tooltipItem("nethersea_preserved_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).alwaysEdible().effect(() -> new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 400, 1, false, true), 1.0F).effect(() -> new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 60, 0, false, false), 1.0F).build())), 1);
     public static final DeferredHolder<Item, ? extends Item> SEA_PRAIRIE_BOMB = block(CABlocks.SEA_PRAIRIE_BOMB);
     public static final DeferredHolder<Item, ? extends Item> CHEST_FISH_FOOD = block(CABlocks.CHEST_FISH_FOOD);
+    public static final DeferredHolder<Item, ? extends Item> LEGEND_CHITIN = REGISTRY.register("legend_chitin", SimpleRelicItem.simpleBoolean(Relic.LEGEND_CHITIN));
+    public static final DeferredHolder<Item, ? extends Item> UTIL_ALLAY = REGISTRY.register("util_allay", SimpleRelicItem.simpleBoolean(Relic.UTIL_ALLAY));
+    public static final DeferredHolder<Item, ? extends Item> DISO = REGISTRY.register("diso", SimpleRelicItem.simpleBoolean(Relic.DISO));
+    public static final DeferredHolder<Item, ? extends Item> DISO_FLESH = REGISTRY.register("diso_flesh", SimpleRelicItem.simpleBoolean(Relic.DISO_FLESH));
+    public static final DeferredHolder<Item, ? extends Item> DISO_BLOOD = REGISTRY.register("diso_blood", SimpleRelicItem.simpleBoolean(Relic.DISO_BLOOD));
+    public static final DeferredHolder<Item, ? extends Item> DISO_NEURO = REGISTRY.register("diso_neuro", SimpleRelicItem.simpleBoolean(Relic.DISO_NEURO));
+    public static final DeferredHolder<Item, ? extends Item> DISO_ATTENTION = REGISTRY.register("diso_attention", SimpleRelicItem.simpleBoolean(Relic.DISO_ATTENTION));
+    public static final DeferredHolder<Item, ? extends Item> AHND_SWIPE = REGISTRY.register("ahnd_swipe", SimpleRelicItem.simpleBoolean(Relic.AHND_SWIPE));
+    public static final DeferredHolder<Item, ? extends Item> HANSHAND_SPIKE = REGISTRY.register("hanshand_spike", SimpleRelicItem.simpleBoolean(Relic.HANSHAND_SPIKE));
+    public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_RYLFATE = REGISTRY.register("sarkaz_king_rylfate", SimpleRelicItem.simpleBoolean(Relic.SARKAZ_KING_RYLFATE));
 
     private static DeferredHolder<Item, ? extends Item> tooltipItem(String name, Supplier<Item> factory, int tooltipCount) {
         TOOLTIP_COUNTS.put(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, name), tooltipCount);

@@ -1,4 +1,3 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.api.event.SanityEvent;
@@ -6,7 +5,7 @@ import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
-import com.susen36.caerulaarbor.util.ItemUtils;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -29,9 +28,9 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 
-public class RelicCursedGLOWBODYItem extends Item {
+public class RelicCursedGLOWBODYItem extends RelicItemBase {
 	public RelicCursedGLOWBODYItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(Relic.CURSED_GLOWBODY, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -47,10 +46,10 @@ public class RelicCursedGLOWBODYItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-        String hoverText = ItemUtils.getCursedDescription(itemstack);
-        for (String line : hoverText.split("\n")) {
-            list.add(Component.literal(line));
-        }
+        String hoverText = null;
+		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
+			list.add(Component.translatable("item.caerula_arbor.cursed.used"));
+		}
     }
 
 	@Override

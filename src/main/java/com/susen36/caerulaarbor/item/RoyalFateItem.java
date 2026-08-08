@@ -1,10 +1,10 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,9 +36,9 @@ import net.neoforged.api.distmarker.OnlyIn;
 import java.util.List;
 
 
-public class RoyalFateItem extends Item {
+public class RoyalFateItem extends RelicItemBase {
 	public RoyalFateItem() {
-		super(new Item.Properties().stacksTo(2).fireResistant().rarity(Rarity.EPIC));
+		super(Relic.ROYALFATE, new Item.Properties().stacksTo(2).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -50,8 +50,6 @@ public class RoyalFateItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.royal_fate.description_0"));
-		list.add(Component.translatable("item.caerula_arbor.royal_fate.description_1"));
 	}
 
 	@Override
@@ -100,7 +98,7 @@ public class RoyalFateItem extends Item {
         {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.SARKAZ_KING_RYLFATE.set(capability, setval ? 1 : 0);
+            Relic.ROYALFATE.set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
         }
         return ar;

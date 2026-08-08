@@ -1,9 +1,9 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,16 +24,14 @@ import net.minecraft.world.level.LevelAccessor;
 import java.util.List;
 
 
-public class UnripeYearningItem extends Item {
+public class UnripeYearningItem extends RelicItemBase {
 	public UnripeYearningItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(Relic.YEARNING, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.unripe_yearning.description_0"));
-		list.add(Component.translatable("item.caerula_arbor.unripe_yearning.description_1"));
 	}
 
 	@Override

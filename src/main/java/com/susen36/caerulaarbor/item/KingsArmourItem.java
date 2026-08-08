@@ -1,7 +1,8 @@
-
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import com.susen36.caerulaarbor.util.RelicUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,16 +28,14 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.util.List;
 
 
-public class KingsArmourItem extends Item {
+public class KingsArmourItem extends RelicItemBase {
 	public KingsArmourItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(Relic.KING_ARMOR, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.kings_armour.description_0"));
-		list.add(Component.translatable("item.caerula_arbor.kings_armour.description_1"));
 	}
 
 	@Override

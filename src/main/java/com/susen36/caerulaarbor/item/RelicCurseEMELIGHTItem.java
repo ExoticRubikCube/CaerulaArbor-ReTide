@@ -1,11 +1,10 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.util.ItemUtils;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,18 +36,18 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.util.List;
 
 
-public class RelicCurseEMELIGHTItem extends Item {
+public class RelicCurseEMELIGHTItem extends RelicItemBase {
 	public RelicCurseEMELIGHTItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(Relic.CURSED_EMELIGHT, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-        String hoverText = ItemUtils.getCursedDescription(itemstack);
-        for (String line : hoverText.split("\n")) {
-            list.add(Component.literal(line));
-        }
+        String hoverText = null;
+		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
+			list.add(Component.translatable("item.caerula_arbor.cursed.used"));
+		}
     }
 
 	@Override

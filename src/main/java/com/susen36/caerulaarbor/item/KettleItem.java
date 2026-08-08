@@ -1,10 +1,10 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -27,16 +27,14 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import java.util.List;
 
 
-public class KettleItem extends Item {
+public class KettleItem extends RelicItemBase {
 	public KettleItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+		super(Relic.HOT_WATER_KETTLE, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.kettle.description_0"));
-		list.add(Component.translatable("item.caerula_arbor.kettle.description_1"));
 	}
 
 	@Override

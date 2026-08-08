@@ -25,23 +25,17 @@ public class ItemUtils {
 	}
 
 	public static String getCursedDescription(ItemStack itemstack) {
-		String first_two;
-		String locId;
-		locId = itemstack.getDescriptionId();
-		first_two = Component.translatable((locId + ".description_0")).getString() + "\n" + Component.translatable((locId + ".description_1")).getString();
 		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-			return first_two + "\n" + Component.translatable("item.caerula_arbor.cursed.used").getString();
+			return Component.translatable("item.caerula_arbor.cursed.used").getString();
 		}
-		return first_two;
+		return "";
 	}
 
 	public static String getOneUseItemDescription(ItemStack itemstack) {
-		String locId = itemstack.getDescriptionId();
-		String first_two = Component.translatable((locId + ".description_0")).getString() + "\n" + Component.translatable((locId + ".description_1")).getString();
 		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-			return first_two + "\n" + Component.translatable("item.caerula_arbor.relics.used").getString();
+			return Component.translatable("item.caerula_arbor.relics.used").getString();
 		}
-		return first_two;
+		return "";
 	}
 
 	/**

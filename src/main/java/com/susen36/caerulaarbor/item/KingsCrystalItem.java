@@ -1,10 +1,10 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,16 +34,14 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.util.List;
 
 
-public class KingsCrystalItem extends Item {
+public class KingsCrystalItem extends RelicItemBase {
 	public KingsCrystalItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
+		super(Relic.KING_CRYSTAL, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.kings_crystal.description_0"));
-		list.add(Component.translatable("item.caerula_arbor.kings_crystal.description_1"));
 	}
 
 	@Override

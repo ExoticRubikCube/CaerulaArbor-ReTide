@@ -1,10 +1,10 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -30,9 +30,9 @@ import net.minecraft.world.level.LevelAccessor;
 import java.util.List;
 
 
-public class VoyageOfGoldItem extends Item {
+public class VoyageOfGoldItem extends RelicItemBase {
 	public VoyageOfGoldItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(Relic.PURE_GOLD_EXPEDITION, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -40,15 +40,15 @@ public class VoyageOfGoldItem extends Item {
 		super.appendHoverText(itemstack, context, list, flag);
 		Entity entity = itemstack.getEntityRepresentation();
         String hoverText;
-        String first_two;
+        String extra_lines;
         String locId;
         locId = itemstack.getDescriptionId();
-        first_two = Component.translatable((locId + ".description_0")).getString() + "\n" + Component.translatable((locId + ".description_1")).getString() + "\n" + Component.translatable((locId + ".description_2")).getString() + "\n"
+        extra_lines = Component.translatable((locId + ".description_2")).getString() + "\n"
                 + Component.translatable((locId + ".description_3")).getString();
         if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-            hoverText = first_two + "\n" + Component.translatable("item.caerula_arbor.relics.used").getString();
+            hoverText = extra_lines + "\n" + Component.translatable("item.caerula_arbor.relics.used").getString();
         } else {
-            hoverText = first_two;
+            hoverText = extra_lines;
         }
         for (String line : hoverText.split("\n")) {
             list.add(Component.literal(line));

@@ -1,11 +1,10 @@
-
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.util.ItemUtils;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -33,19 +32,17 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import java.util.List;
 
 
-public class OmniKeyItem extends Item {
+public class OmniKeyItem extends RelicItemBase {
 	public OmniKeyItem() {
-		super(new Item.Properties().durability(64).rarity(Rarity.UNCOMMON));
+		super(Relic.UTIL_OMNIKEY, new Item.Properties().durability(64).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
-		if (hoverText != null) {
-			for (String line : hoverText.split("\n")) {
-				list.add(Component.literal(line));
-			}
+		String hoverText = null;
+		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
+			list.add(Component.translatable("item.caerula_arbor.relics.used"));
 		}
 	}
 
