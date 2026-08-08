@@ -102,7 +102,7 @@ public class OceanizedSheepEntity extends SeaMonster {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundEvents.SHEEP_HURT;
 	}
 

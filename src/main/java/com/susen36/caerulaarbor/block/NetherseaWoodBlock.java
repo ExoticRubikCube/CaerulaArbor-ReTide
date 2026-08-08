@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.util.CaerulaUtil;
+import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
@@ -74,7 +73,7 @@ public class NetherseaWoodBlock extends Block {
 	@Override
 	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player entity, boolean willHarvest, FluidState fluid) {
 		boolean retval = super.onDestroyedByPlayer(blockstate, world, pos, entity, willHarvest, fluid);
-		CaerulaUtil.pokeSlightly(world, pos.getX(), pos.getY(), pos.getZ(), entity);
+		PlayerStateUtils.pokeSlightly(world, pos.getX(), pos.getY(), pos.getZ(), entity);
 		return retval;
 	}
 

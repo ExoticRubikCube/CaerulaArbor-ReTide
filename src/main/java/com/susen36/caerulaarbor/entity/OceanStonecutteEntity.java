@@ -1,11 +1,11 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FishShootEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -21,9 +22,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -51,19 +51,24 @@ import software.bernie.geckolib.animation.AnimationState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, Bucketable {
-	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ChiselerFishEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ChiselerFishEntity.class, EntityDataSerializers.STRING);
+public class OceanStonecutteEntity extends SeaMonster implements RangedAttackMob, Bucketable {
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanStonecutteEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanStonecutteEntity.class, EntityDataSerializers.STRING);
+	private static final ResourceLocation SLOW_MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "ocean_stonecutte_slow");
+	private static final ResourceLocation RESISTANCE_MODIFIER_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "ocean_stonecutte_resistance");
+	private static final AttributeModifier SLOW_MODIFIER = new AttributeModifier(SLOW_MODIFIER_ID, -0.45, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+	private static final AttributeModifier RESISTANCE_MODIFIER = new AttributeModifier(RESISTANCE_MODIFIER_ID, 10.0, AttributeModifier.Operation.ADD_VALUE);
 	private boolean swinging;
 	private long lastSwing;
 	private boolean fromBucket;
 	public String animationprocedure = "empty";
+	private int defenseDuration;
 
-	public ChiselerFishEntity(Level world) {
-		this(CAEntities.CHISELER_FISH.get(), world);
+	public OceanStonecutteEntity(Level world) {
+		this(CAEntities.OCEAN_STONECUTTE.get(), world);
 	}
 
-	public ChiselerFishEntity(EntityType<ChiselerFishEntity> type, Level world) {
+	public OceanStonecutteEntity(EntityType<OceanStonecutteEntity> type, Level world) {
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
@@ -77,13 +82,40 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 		builder.define(DATA_ANIMATION, "undefined");
 	}
 
+	private void applyDefenseBoost() {
+		if (!this.level().isClientSide() && this.defenseDuration <= 0) {
+			this.defenseDuration = 400;
+			this.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(SLOW_MODIFIER);
+			this.getAttribute(Attributes.ARMOR).addTransientModifier(RESISTANCE_MODIFIER);
+		}
+	}
+
+	private void tickDefenseTimers() {
+		if (!this.level().isClientSide()) {
+			if (this.defenseDuration > 0) {
+				this.defenseDuration--;
+				if (this.defenseDuration <= 0) {
+					this.getAttribute(Attributes.ARMOR).removeModifier(RESISTANCE_MODIFIER_ID);
+					this.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(SLOW_MODIFIER_ID);
+				}
+			}
+		}
+	}
+
+	private void reapplyModifiersOnLoad() {
+		if (!this.level().isClientSide() && this.defenseDuration > 0) {
+			this.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(SLOW_MODIFIER_ID);
+			this.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(SLOW_MODIFIER);
+			this.getAttribute(Attributes.ARMOR).removeModifier(RESISTANCE_MODIFIER_ID);
+			this.getAttribute(Attributes.ARMOR).addTransientModifier(RESISTANCE_MODIFIER);
+		}
+	}
+
 	@Override
 	public void setTarget(@Nullable LivingEntity target) {
 		super.setTarget(target);
-		if (target != null && !this.level().isClientSide() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL)) {
-			this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 3, false, false));
-			this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 1));
-			this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 800, 0, false, false));
+		if (target != null) {
+			this.applyDefenseBoost();
 		}
 	}
 
@@ -105,7 +137,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.8));
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(16, new FloatGoal(this));
-		this.goalSelector.addGoal(1, new ChiselerFishEntity.RangedAttackGoal(this, 1.25, 50, 18f) {
+		this.goalSelector.addGoal(1, new OceanStonecutteEntity.RangedAttackGoal(this, 1.25, 50, 18f) {
 			@Override
 			public boolean canContinueToUse() {
 				return this.canUse();
@@ -163,7 +195,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 			this.target = null;
 			this.seeTime = 0;
 			this.attackTime = -1;
-			 ((ChiselerFishEntity)rangedAttackMob).entityData.set(DATA_SHOOT, false);
+			 ((OceanStonecutteEntity)rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 
 		public boolean requiresUpdateEveryTick() {
@@ -186,10 +218,10 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
 			if (--this.attackTime == 0) {
 				if (!flag) {
-					((ChiselerFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+					((OceanStonecutteEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 					return;
 				}
-				((ChiselerFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
+				((OceanStonecutteEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
 				float f = (float) Math.sqrt(d0) / this.attackRadius;
 				float f1 = Mth.clamp(f, 0.1F, 1.0F);
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -197,7 +229,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 			} else if (this.attackTime < 0) {
 				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
-				((ChiselerFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+				((OceanStonecutteEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 	}
 
@@ -225,6 +257,9 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.DROWN))
 			return false;
+		if (this.defenseDuration > 0) {
+			amount = amount * 0.6F;
+		}
 		return super.hurt(source, amount);
 	}
 
@@ -232,12 +267,15 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("FromBucket", this.fromBucket());
+		compound.putInt("DefenseDuration", this.defenseDuration);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.setFromBucket(compound.getBoolean("FromBucket"));
+		this.defenseDuration = compound.getInt("DefenseDuration");
+		this.reapplyModifiersOnLoad();
 	}
 
 	@Override
@@ -263,7 +301,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 
 	@Override
 	public ItemStack getBucketItemStack() {
-		return new ItemStack(CAItems.BUCKET_CHISELER.get());
+		return new ItemStack(CAItems.BUCKET_OCEAN_STONECUTTE.get());
 	}
 
 	@Override
@@ -289,12 +327,9 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this.isAggressive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL)) {
-			if (!this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2, false, false));
-				this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 1));
-				this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 800, 0, false, false));
-			}
+		this.tickDefenseTimers();
+		if (this.isAggressive() && this.getTarget() != null) {
+			this.applyDefenseBoost();
 		}
         this.refreshDimensions();
 	}
@@ -310,7 +345,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 	}
 
 	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
-		event.register(CAEntities.CHISELER_FISH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		event.register(CAEntities.OCEAN_STONECUTTE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -332,12 +367,12 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.chiseler.move"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.ocean_stonecutte.move"));
 			}
 			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.chiseler.die"));
+				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.ocean_stonecutte.die"));
 			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.chiseler.idle"));
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.ocean_stonecutte.idle"));
 		}
 		return PlayState.STOP;
 	}
@@ -352,7 +387,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 		}
 		if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.chiseler.attack"));
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.ocean_stonecutte.attack"));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -374,15 +409,6 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 		}
 		prevAnim = this.animationprocedure;
 		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(ChiselerFishEntity.RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
-		}
 	}
 
 	public String getSyncedAnimation() {

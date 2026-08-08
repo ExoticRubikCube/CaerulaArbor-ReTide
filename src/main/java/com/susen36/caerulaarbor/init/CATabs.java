@@ -305,7 +305,7 @@ public class CATabs {
                 tabData.accept(CAItems.APOSTLE_PROKARYOTE_SPAWN_EGG.get());
                 tabData.accept(CAItems.THE_ABANDONED_SPAWN_EGG.get());
                 tabData.accept(CAItems.BONE_FISH_SPAWN_EGG.get());
-                tabData.accept(CAItems.CHISELER_FISH_SPAWN_EGG.get());
+                tabData.accept(CAItems.OCEAN_STONECUTTE_SPAWN_EGG.get());
                 tabData.accept(CAItems.PREGNANT_FISH_SPAWN_EGG.get());
                 tabData.accept(CAItems.FAKE_OFFSPRING_SPAWN_EGG.get());
                 tabData.accept(CAItems.FLEE_FISH_SPAWN_EGG.get());
@@ -567,7 +567,7 @@ public class CATabs {
             tabData.accept(CAItems.RECORD_MARE_NATUS.get());
             tabData.accept(CAItems.BUCKET_RUNFISH.get());
             tabData.accept(CAItems.BUCKET_SLIDER.get());
-            tabData.accept(CAItems.BUCKET_CHISELER.get());
+            tabData.accept(CAItems.BUCKET_OCEAN_STONECUTTE.get());
             tabData.accept(CAItems.BUCKET_FLOATER.get());
             tabData.accept(CAItems.BUCKET_BONEFISH.get());
             tabData.accept(CAItems.BUCKET_COLLECTOR.get());

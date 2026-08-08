@@ -425,7 +425,7 @@ public class LivingHurtEventHandler {
             } else {
                 regName = BuiltInRegistries.ENTITY_TYPE.getKey(sourceentity.getType()).toString();
                 for (String stringiterator : CAConfigs.CRIMSON_TREATY.get()) {
-                    if (CaerulaUtil.matchesRegistryName(stringiterator, regName)) {
+                    if (PlayerStateUtils.matchesRegistryName(stringiterator, regName)) {
                         valid = true;
                         break;
                     }

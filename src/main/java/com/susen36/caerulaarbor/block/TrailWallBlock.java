@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.util.CaerulaUtil;
+import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -18,7 +18,7 @@ public class TrailWallBlock extends WallBlock {
 
 	@Override
 	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player entity, boolean willHarvest, FluidState fluid) {
-        CaerulaUtil.pokeSlightly(world, pos.getX(), pos.getY(), pos.getZ(), entity);
+        PlayerStateUtils.pokeSlightly(world, pos.getX(), pos.getY(), pos.getZ(), entity);
 		return super.onDestroyedByPlayer(blockstate, world, pos, entity, willHarvest, fluid);
 	}
 }

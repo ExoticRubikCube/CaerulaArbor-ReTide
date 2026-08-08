@@ -47,7 +47,7 @@ public class BiomeModifiersProvider implements DataProvider {
         addSpawn(modifiers, "bone_fish_biome_modifier", anyBiome(), "caerula_arbor:bone_fish", 60, 4, 6);
         addFeature(modifiers, "burnt_trails_biome_modifier", biomes("caerula_arbor:branded_land"), features("caerula_arbor:burnt_trails"), "surface_structures");
         addSpawn(modifiers, "chest_fish_biome_modifier", biomes("birch_forest", "flower_forest", "forest", "old_growth_birch_forest", "beach", "snowy_beach", "stony_shore", "caerula_arbor:branded_land"), "caerula_arbor:chest_fish", 3, 1, 1);
-        addSpawn(modifiers, "chiseler_fish_biome_modifier", anyBiome(), "caerula_arbor:chiseler_fish", 45, 1, 4);
+        addSpawn(modifiers, "ocean_stonecutte_biome_modifier", anyBiome(), "caerula_arbor:ocean_stonecutte", 45, 1, 4);
         addSpawn(modifiers, "collector_prokaryote_biome_modifier", anyBiome(), "caerula_arbor:collector_prokaryote", 60, 2, 4);
         addSpawn(modifiers, "cracker_abyssal_biome_modifier", anyBiome(), "caerula_arbor:cracker_abyssal", 25, 1, 1);
         addSpawn(modifiers, "pocket_sea_creeper_biome_modifier", anyBiome(), "caerula_arbor:pocket_sea_creeper", 40, 1, 1);

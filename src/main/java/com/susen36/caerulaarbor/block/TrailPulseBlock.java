@@ -3,8 +3,8 @@ package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.util.CaerulaUtil;
 import com.susen36.caerulaarbor.util.EntityUtils;
+import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -242,7 +242,7 @@ public class TrailPulseBlock extends Block {
 	@Override
 	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player entity, boolean willHarvest, FluidState fluid) {
 		boolean retval = super.onDestroyedByPlayer(blockstate, world, pos, entity, willHarvest, fluid);
-		CaerulaUtil.pokePlayer(world, pos.getX(), pos.getY(), pos.getZ(), entity);
+		PlayerStateUtils.pokePlayer(world, pos.getX(), pos.getY(), pos.getZ(), entity);
 		return retval;
 	}
 

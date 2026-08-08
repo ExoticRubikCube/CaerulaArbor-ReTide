@@ -3,15 +3,12 @@ package com.susen36.caerulaarbor.util;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -22,20 +19,6 @@ public class ItemUtils {
 
 	private ItemUtils() {
 		throw new UnsupportedOperationException("Utility class");
-	}
-
-	public static String getCursedDescription(ItemStack itemstack) {
-		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-			return Component.translatable("item.caerula_arbor.cursed.used").getString();
-		}
-		return "";
-	}
-
-	public static String getOneUseItemDescription(ItemStack itemstack) {
-		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-			return Component.translatable("item.caerula_arbor.relics.used").getString();
-		}
-		return "";
 	}
 
 	/**

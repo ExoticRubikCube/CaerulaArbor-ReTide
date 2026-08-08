@@ -187,6 +187,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
             if (livingEntity.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE))
                 livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
             if (!this.level().isClientSide()) {
+                //TODO 99999应该怎么替代
                 this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 99999, 2));
                 this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 99999, 2));
                 this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 99999, 0));

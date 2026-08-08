@@ -109,8 +109,8 @@ public class CAEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<BoneFishEntity>> BONE_FISH = register("bone_fish", BoneFishEntity.class,
             EntityType.Builder.<BoneFishEntity>of(BoneFishEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.7f, 0.7f));
-    public static final DeferredHolder<EntityType<?>, EntityType<ChiselerFishEntity>> CHISELER_FISH = register("chiseler_fish", ChiselerFishEntity.class,
-            EntityType.Builder.<ChiselerFishEntity>of(ChiselerFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
+    public static final DeferredHolder<EntityType<?>, EntityType<OceanStonecutteEntity>> OCEAN_STONECUTTE = register("ocean_stonecutte", OceanStonecutteEntity.class,
+            EntityType.Builder.<OceanStonecutteEntity>of(OceanStonecutteEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 0.6f));
     public static final DeferredHolder<EntityType<?>, EntityType<FakerggShootEntity>> FAKERGG_SHOOT = register("fakergg_shoot", FakerggShootEntity.class,
             EntityType.Builder.<FakerggShootEntity>of(FakerggShootEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
@@ -452,7 +452,7 @@ public class CAEntities {
         addAttributeRegistration(CRACKER_ABYSSAL, CrackerAbyssalEntity::createAttributes);
         addAttributeRegistration(COLLECTOR_PROKARYOTE, CollectorProkaryoteEntity::createAttributes);
         addAttributeRegistration(BONE_FISH, BoneFishEntity::createAttributes);
-        addAttributeRegistration(CHISELER_FISH, ChiselerFishEntity::createAttributes);
+        addAttributeRegistration(OCEAN_STONECUTTE, OceanStonecutteEntity::createAttributes);
         addAttributeRegistration(PREGNANT_FISH, PregnantFishEntity::createAttributes);
         addAttributeRegistration(FAKE_OFFSPRING, FakeOffspringEntity::createAttributes);
         addAttributeRegistration(FLEE_FISH, FleeFishEntity::createAttributes);
@@ -575,7 +575,7 @@ public class CAEntities {
         markSummonable(CRACKER_ABYSSAL);
         markSummonable(COLLECTOR_PROKARYOTE);
         markSummonable(BONE_FISH);
-        markSummonable(CHISELER_FISH);
+        markSummonable(OCEAN_STONECUTTE);
         markSummonable(PREGNANT_FISH);
         markSummonable(FAKE_OFFSPRING);
         markSummonable(FLEE_FISH);
@@ -649,7 +649,7 @@ public class CAEntities {
         addSpawnPlacementRegistration(CRACKER_ABYSSAL, CrackerAbyssalEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(COLLECTOR_PROKARYOTE, CollectorProkaryoteEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(BONE_FISH, BoneFishEntity::registerSpawnPlacements);
-        addSpawnPlacementRegistration(CHISELER_FISH, ChiselerFishEntity::registerSpawnPlacements);
+        addSpawnPlacementRegistration(OCEAN_STONECUTTE, OceanStonecutteEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(PREGNANT_FISH, PregnantFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(FLEE_FISH, FleeFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(FIRST_TO_TALK, FirstTellerEntity::registerSpawnPlacements);
@@ -779,7 +779,7 @@ public class CAEntities {
             addRenderer(CAEntities.CRACKER_ABYSSAL, CrackerAbyssalRenderer::new);
             addRenderer(CAEntities.COLLECTOR_PROKARYOTE, CollectorProkaryoteRenderer::new);
             addRenderer(CAEntities.BONE_FISH, BoneFishRenderer::new);
-            addRenderer(CAEntities.CHISELER_FISH, ChiselerFishRenderer::new);
+            addRenderer(CAEntities.OCEAN_STONECUTTE, OceanStonecutteRenderer::new);
             addRenderer(CAEntities.FAKERGG_SHOOT, FakerggShootRenderer::new);
             addRenderer(CAEntities.PREGNANT_FISH, PregnantFishRenderer::new);
             addRenderer(CAEntities.FAKE_OFFSPRING, FakeOffspringRenderer::new);

@@ -239,7 +239,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> TRANSFORM_CELL = REGISTRY.register("transform_cell", TransformCellItem::new);
     public static final DeferredHolder<Item, ? extends Item> BONE_FISH_SPAWN_EGG = REGISTRY.register("bone_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.BONE_FISH, -10066177, -1, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> BLOCK_RECORDER = block(CABlocks.BLOCK_RECORDER);
-    public static final DeferredHolder<Item, ? extends Item> CHISELER_FISH_SPAWN_EGG = REGISTRY.register("chiseler_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.CHISELER_FISH, -10053121, -1, new Item.Properties()));
+    public static final DeferredHolder<Item, ? extends Item> OCEAN_STONECUTTE_SPAWN_EGG = REGISTRY.register("ocean_stonecutte_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEAN_STONECUTTE, -10053121, -1, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> PREGNANT_FISH_SPAWN_EGG = REGISTRY.register("pregnant_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.PREGNANT_FISH, -10066177, -404566, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> FAKE_OFFSPRING_SPAWN_EGG = REGISTRY.register("fake_offspring_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.FAKE_OFFSPRING, -856596, -6711916, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> FLEE_FISH_SPAWN_EGG = REGISTRY.register("flee_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.FLEE_FISH, -16764007, -29083, new Item.Properties()));
@@ -295,8 +295,8 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> TRAIL_DEBRIS = block(CABlocks.TRAIL_DEBRIS);
     public static final DeferredHolder<Item, ? extends Item> TRAILRITE_BLOCK = block(CABlocks.TRAILRITE_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> APOSTLE_PROKARYOTE_SPAWN_EGG = REGISTRY.register("apostle_prokaryote_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.APOSTLE_PROKARYOTE, -15191057, -3933705, new Item.Properties()));
-    public static final DeferredHolder<Item, ? extends Item> BUCKET_CHISELER = REGISTRY.register("bucket_chiseler",
-            () -> new MobBucketItem(CAEntities.CHISELER_FISH.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+    public static final DeferredHolder<Item, ? extends Item> BUCKET_OCEAN_STONECUTTE = REGISTRY.register("bucket_ocean_stonecutte",
+            () -> new MobBucketItem(CAEntities.OCEAN_STONECUTTE.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> BUCKET_FLOATER = REGISTRY.register("bucket_floater",
             () -> new MobBucketItem(CAEntities.FLOATER_PROKARYOTE.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> BUCKET_BONEFISH = REGISTRY.register("bucket_bonefish",

@@ -29,7 +29,7 @@ public class SeabornSpawnManager {
 
 	@SuppressWarnings("rawtypes")
 	private static final DeferredHolder[] LAND_NORMAL_POOL = {
-		CAEntities.CHISELER_FISH,
+		CAEntities.OCEAN_STONECUTTE,
 		CAEntities.FLY_FISH,
 		CAEntities.PREDATOR_ABYSSAL,
 		CAEntities.FAKE_OFFSPRING,

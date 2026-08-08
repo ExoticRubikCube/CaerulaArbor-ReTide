@@ -15,8 +15,8 @@ import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornTransformManager;
 import com.susen36.caerulaarbor.manager.upgrade.BreedUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
-import com.susen36.caerulaarbor.util.CaerulaUtil;
 import com.susen36.caerulaarbor.util.EntityUtils;
+import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -430,7 +430,7 @@ public class LivingDeathEventHandler {
                 } else {
                     String rname = BuiltInRegistries.ITEM.getKey((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem()).toString();
                     for (String stringiterator : CAConfigs.HAND_ENGRAVE.get()) {
-                        if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
+                        if (PlayerStateUtils.matchesRegistryName(stringiterator, rname)) {
                             validweapon = true;
                             break;
                         }

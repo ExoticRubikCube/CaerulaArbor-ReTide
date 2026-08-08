@@ -3,8 +3,8 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
-import com.susen36.caerulaarbor.util.CaerulaUtil;
 import com.susen36.caerulaarbor.util.EntityUtils;
+import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -231,7 +231,7 @@ public class BaselayerAbyssalEntity extends SeaMonster {
             if (CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
                 if (WorldUtils.canGrief(world)) {
                     if (((Entity) this instanceof BaselayerAbyssalEntity datEntI ? datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) <= 0) {
-                        CaerulaUtil.replaceTrail(world, CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
+                        PlayerStateUtils.replaceTrail(world, CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
                     }
                 }
             }

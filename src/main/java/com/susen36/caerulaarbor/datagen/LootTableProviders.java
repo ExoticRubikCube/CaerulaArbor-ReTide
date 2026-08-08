@@ -2385,7 +2385,7 @@ public final class LootTableProviders {
         }
 
         private static TableDef echiselerFish() {
-            return table("entities/chiseler_fish",
+            return table("entities/ocean_stonecutte",
                     pool(number(1.0F), null, cond(),
                             entry("caerula_arbor:shell_of_stonecutter", 25, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:claw", 45, cond(), setCount(u(1.0F, 1.0F))),

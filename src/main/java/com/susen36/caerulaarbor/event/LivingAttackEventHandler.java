@@ -13,8 +13,8 @@ import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SubsistingUpgradeManager;
-import com.susen36.caerulaarbor.util.CaerulaUtil;
 import com.susen36.caerulaarbor.util.EntityUtils;
+import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -360,7 +360,7 @@ public class LivingAttackEventHandler {
 
     private static boolean matchesConfiguredItem(Iterable<? extends String> configuredItems, String registryName) {
         for (var configuredItem : configuredItems) {
-            if (CaerulaUtil.matchesRegistryName(configuredItem, registryName)) {
+            if (PlayerStateUtils.matchesRegistryName(configuredItem, registryName)) {
                 return true;
             }
         }
