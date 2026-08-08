@@ -126,7 +126,7 @@ public class LivingTickEventHandler {
         for (Monster entityiterator : world.getEntitiesOfClass(Monster.class, new AABB((x + 32), (y + 12), (z + 32), (x - 32), (y - 9), (z - 32)))) {
             if (entity.isInWater() ^ entityiterator.isInWater()) continue;
             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet"))))
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"))))
                     continue;
                 double dist = entity.distanceToSqr(entityiterator);
                 if (minDist == -1.0D || dist < minDist) {
@@ -145,7 +145,7 @@ public class LivingTickEventHandler {
         Entity entity = event.getEntity();
 
         if (entity instanceof Monster && entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
-                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet")))
+                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")))
                 && world.getLevelData().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)) {
             if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.ANGER_OF_TIDE))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
@@ -264,7 +264,7 @@ public class LivingTickEventHandler {
     }
 
     private static void handleSublimationBuffs(LevelAccessor world, Entity entity) {
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {
             return;
         }
         if (world.isClientSide()) return;
@@ -315,7 +315,7 @@ public class LivingTickEventHandler {
     private static void handleNaturalEvolution(LevelAccessor world, double x, double y, double z, Entity entity) {
         if (!world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) return;
         if (entity.tickCount % 10 != 0) return;
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet")))) return;
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")))) return;
 
         if (Math.random() < 0.16 && !world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).isEmpty()) {
             double pnt = Mth.nextDouble(RandomSource.create(), 0, 0.005);

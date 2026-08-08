@@ -549,8 +549,8 @@ public class SkadiCorruptedEntity extends SeaMonster {
                                     entityiterator.getPersistentData().putBoolean("corruptedBonus2", true);
                                 }
                                 if (phase > 0.5 && isSeaborn) {
-                                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))
-                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet")))) {
+                                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))
+                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")))) {
                                         if (entityiterator instanceof Mob entity && enemy1 instanceof LivingEntity ent)
                                             entity.setTarget(ent);
                                     }

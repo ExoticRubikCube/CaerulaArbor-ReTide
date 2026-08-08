@@ -428,7 +428,7 @@ public class IsharmlaEntity extends SeaMonster {
 				{
 					final Vec3 center = new Vec3(x, y, z);
 					TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
-					TagKey<EntityType<?>> bossOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring"));
+					TagKey<EntityType<?>> bossOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss"));
 					List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32),
 							e -> e.isAlive()
 									&& e != this

@@ -203,7 +203,7 @@ public class LivingDeathEventHandler {
             return;
         }
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {
             return;
         }
 
@@ -282,7 +282,7 @@ public class LivingDeathEventHandler {
 
         if (sourceentity instanceof Player && EntityUtils.canPlayerEvo(sourceentity)) {
             double r0 = 0, r1 = 0, r2 = 0;
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {
                 r0 = 0.5; r1 = 0.25; r2 = 0.125;
             } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite")))) {
                 r0 = 0.3; r1 = 0.075; r2 = 0.0075;

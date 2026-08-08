@@ -61,7 +61,7 @@ public class LivingAttackEventHandler {
     private static final TagKey<EntityType<?>> OCEAN_OFFSPRING = TagKey.create(Registries.ENTITY_TYPE,
             ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
     private static final TagKey<EntityType<?>> OCEAN_PET = TagKey.create(Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet"));
+            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"));
     private static final TagKey<EntityType<?>> SKIP_MIGRATION = TagKey.create(Registries.ENTITY_TYPE,
             ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "skip_migration"));
     private static final TagKey<EntityType<?>> IGNORE_MIGRATION = TagKey.create(Registries.ENTITY_TYPE,

@@ -226,16 +226,21 @@ public class EntityUtils {
 	}
 
 	//需要评估是否下放到海嗣的基类
-	public static double getSeabornAround(LevelAccessor world, double x, double y, double z, Entity center) {
-		if (center == null)
+	public static double getSeabornAround(Level world, double x, double y, double z, Entity center) {
+		if (center == null) {
 			return 0;
-		double count = 0;
+		}
 		final Vec3 searchCenter = new Vec3(x, y, z);
-		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(searchCenter, searchCenter).inflate(32 / 2d),
-				e -> e != center && e.getType().is(SEA_BORN)
-						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))
-						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet"))));
-		for (LivingEntity entityiterator : entfound) {
+		List<LivingEntity> entfound = world.getEntitiesOfClass(
+				LivingEntity.class,
+				new AABB(searchCenter, searchCenter).inflate(16.0),
+				e -> e != center
+						&& e.getType().is(SEA_BORN)
+						&& !e.getType().is(SEA_BORN_BOSS)
+						&& !e.getType().is(SEA_BORN_PET)
+		);
+		double count = 0;
+		for (LivingEntity ignored : entfound) {
 			count = count + 1;
 		}
 		return count;
@@ -246,8 +251,8 @@ public class EntityUtils {
 		final Vec3 center = new Vec3(x, y, z);
 		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d),
 				e -> e.getType().is(SEA_BORN)
-						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bossoffspring")))
-						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanpet"))));
+						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))
+						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"))));
 		for (LivingEntity entityiterator : entfound) {
 			count = count + 1;
 		}
@@ -494,6 +499,15 @@ public class EntityUtils {
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_bron")
 		);
 
+	private static final TagKey<EntityType<?>> SEA_BORN_BOSS = TagKey.create(
+			Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")
+	);
+
+	private static final TagKey<EntityType<?>> SEA_BORN_PET = TagKey.create(
+			Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")
+	);
 	// 应用先锋增益
 	public static void vanguardBuff(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
