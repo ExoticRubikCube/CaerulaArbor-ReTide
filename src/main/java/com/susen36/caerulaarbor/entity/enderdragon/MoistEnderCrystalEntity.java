@@ -5,7 +5,6 @@ import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArborMod;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -286,7 +285,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
                 enderina.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER),
                         (float) ((enderina instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.25));
             } else {
-                EntityUtils.heal(enderina, (enderina.getMaxHealth()) * 0.05);
+                enderina.heal((float) ((enderina.getMaxHealth()) * 0.05));
                 BabelAPI.healToFull(enderina, AbstractEPCapability.EPType.NERVOUS);
             }
         }

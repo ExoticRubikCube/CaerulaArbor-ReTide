@@ -587,8 +587,8 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 						if (crystal != null && crystal.isAlive()) {
 							if (this.getEntityData().get(DATA_REVIVE_TICK) <= 0) {
 								this.crytsalToEnderina(crystal, this);
-								EntityUtils.heal(this, this.getMaxHealth() * 0.01);
-							} else {
+                                heal((float) (this.getMaxHealth() * 0.01));
+                            } else {
 								crystal.getNavigation().moveTo(getX(), getY(), getZ(), 0.5);
 							}
 						} else {
@@ -949,8 +949,8 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 				if (!nearbyEntity.level().isClientSide()) {
 					nearbyEntity.discard();
 				}
-				EntityUtils.heal(this, this.getMaxHealth() * 0.05F);
-				if (this.level() instanceof ServerLevel level) {
+                heal((float) ((double) (this.getMaxHealth() * 0.05F)));
+                if (this.level() instanceof ServerLevel level) {
 					level.sendParticles(ParticleTypes.DRAGON_BREATH, nearbyEntity.getX(), nearbyEntity.getY() + 0.5, nearbyEntity.getZ(), 16, 0.5, 0.5, 0.5, 0.1);
 				}
 			}

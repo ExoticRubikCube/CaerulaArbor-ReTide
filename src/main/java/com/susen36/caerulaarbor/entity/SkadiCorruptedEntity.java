@@ -500,7 +500,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                     healPerc = 0.2;
                 }
                 if (phase <= 1) {
-                    EntityUtils.heal(this, ddd * healPerc * 3);
+                    heal((float) (ddd * healPerc * 3));
                     if (phase > 0.5) {
                         if ((Entity) this instanceof SkadiCorruptedEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_DEAL, (int) (((Entity) this instanceof SkadiCorruptedEntity datEntI ? datEntI.getEntityData().get(DATA_DEAL) : 0) - ddd * healPerc * 3));
@@ -525,7 +525,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                                 continue;
                             }
                             if (mayBonus) {
-                                EntityUtils.heal(entityiterator, ddd * healPerc);
+                                entityiterator.heal((float) (ddd * healPerc));
                                 if (phase == 1 && !entityiterator.getPersistentData().getBoolean("corruptedBonus1")) {
                                     if (entityiterator.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                                         entityiterator.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(

@@ -493,7 +493,7 @@ public class LivingHurtEventHandler {
                     }
                     if (sourceentity instanceof LivingEntity living && !entity.level().isClientSide()) {
                         living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 120, 3, false, false));
-                        EntityUtils.heal(living, living.getMaxHealth() * 0.1);
+                        living.heal((float) (living.getMaxHealth() * 0.1));
                     }
                 }
             }

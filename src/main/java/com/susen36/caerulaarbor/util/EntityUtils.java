@@ -7,7 +7,10 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CADamageTypes;
+import com.susen36.caerulaarbor.init.CAEnchantments;
+import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -45,25 +48,6 @@ public class EntityUtils {
 
 	private EntityUtils() {
 		throw new UnsupportedOperationException("Utility class");
-	}
-
-	// TODO: 评估是否迁移到更合适的粒子工具位置
-	public static void spawnLinkParticles(LevelAccessor world, Entity a, Entity b) {
-		if (a == null || b == null || !(world instanceof ServerLevel level))
-			return;
-        double dx = a.getX() - b.getX();
-		double dy = a.getY() - b.getY();
-		double dz = a.getZ() - b.getZ();
-		for (int i = 0; i < 40; i++) {
-			if (Math.random() < 0.1) {
-				double t = 0.025 * i;
-				level.sendParticles(CAParticles.INV_PTC_BLUE.get(),
-					b.getX() + dx * t,
-					b.getY() + dy * t + 1,
-					b.getZ() + dz * t,
-					1, 0.1, 0.1, 0.1, 0.01);
-			}
-		}
 	}
 
 	public static boolean canPlayerEvo(Entity entity) {
@@ -112,17 +96,12 @@ public class EntityUtils {
 		return entity != null && entity.isAlive();
 	}
 
-	public static void heal(LivingEntity entity, double amount) {
-		if (entity != null)
-			entity.heal((float) amount);
-	}
-
 	public static void healWithParticles(LevelAccessor world, Entity entity, double flatAmount, double maxHealthMultiplier) {
 		if (entity == null || !entity.isAlive())
 			return;
 		if (entity instanceof LivingEntity living) {
 			double maxHealth = living.getMaxHealth();
-			heal(living, maxHealth * maxHealthMultiplier + flatAmount);
+			living.heal((float) (maxHealth * maxHealthMultiplier + flatAmount));
 			if (world instanceof ServerLevel level) {
 				level.sendParticles(ParticleTypes.CHERRY_LEAVES,
 					entity.getX(), entity.getY() + 1, entity.getZ(),

@@ -8,6 +8,7 @@ import com.susen36.caerulaarbor.entity.bullets.TellerShotEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -205,7 +206,22 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
     }
 
     public void spawnLinkParticles(Entity linkedEntity) {
-        EntityUtils.spawnLinkParticles(this.level(), this, linkedEntity);
+        LevelAccessor world = this.level();
+        if (this == null || linkedEntity == null || !(world instanceof ServerLevel level))
+            return;
+        double dx = getX() - linkedEntity.getX();
+        double dy = getY() - linkedEntity.getY();
+        double dz = getZ() - linkedEntity.getZ();
+        for (int i = 0; i < 40; i++) {
+            if (Math.random() < 0.1) {
+                double t = 0.025 * i;
+                level.sendParticles(CAParticles.INV_PTC_BLUE.get(),
+                    linkedEntity.getX() + dx * t,
+                    linkedEntity.getY() + dy * t + 1,
+                    linkedEntity.getZ() + dz * t,
+                    1, 0.1, 0.1, 0.1, 0.01);
+            }
+        }
     }
 
     @Override

@@ -15,7 +15,7 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
 
     public double player_light = 100.0;
     public double player_lives = CAConfigs.LP_INIT.get();
-    public double player_maxlive = CAConfigs.LP_LIMIT.get();
+    public double player_maxlive = CAConfigs.LP_INIT.get();
     public double player_shield = 0;
     public double disoclusion = 0;
     public boolean show_stats = true;
@@ -209,10 +209,29 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
 
     public void readNBT(Tag tag) {
         CompoundTag nbt = (CompoundTag) tag;
-        player_light = nbt.getDouble("player_light");
-        player_lives = nbt.getDouble("player_lives");
-        player_maxlive = nbt.getDouble("player_maxlive");
-        player_shield = nbt.getDouble("player_shield");
+        if (nbt.contains("player_light", Tag.TAG_ANY_NUMERIC)) {
+            player_light = nbt.getDouble("player_light");
+        }
+        if (nbt.contains("player_lives", Tag.TAG_ANY_NUMERIC)) {
+            player_lives = nbt.getDouble("player_lives");
+        }
+        if (player_lives < 1.0D) {
+            player_lives = 1.0D;
+        }
+        if (nbt.contains("player_maxlive", Tag.TAG_ANY_NUMERIC)) {
+            player_maxlive = nbt.getDouble("player_maxlive");
+        }
+        if (player_maxlive < CAConfigs.LP_INIT.get()) {
+            player_maxlive = CAConfigs.LP_INIT.get();
+        } else if (player_maxlive > CAConfigs.LP_LIMIT.get()) {
+            player_maxlive = CAConfigs.LP_LIMIT.get();
+        }
+        if (player_lives > player_maxlive) {
+            player_lives = player_maxlive;
+        }
+        if (nbt.contains("player_shield", Tag.TAG_ANY_NUMERIC)) {
+            player_shield = nbt.getDouble("player_shield");
+        }
         disoclusion = nbt.getDouble("disoclusion");
         show_stats = nbt.getBoolean("show_stats");
         relic_cursed_EMELIGHT = nbt.getBoolean("relic_cursed_EMELIGHT");

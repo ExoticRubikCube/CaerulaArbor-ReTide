@@ -573,8 +573,8 @@ public class IsharmlaEntity extends SeaMonster {
 									.stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
 							for (LivingEntity entityiterator : entfound) {
 								if (entityiterator.getHealth() < entityiterator.getMaxHealth()) {
-									EntityUtils.heal(entityiterator, atk);
-									if (world instanceof ServerLevel level)
+                                    entityiterator.heal((float) atk);
+                                    if (world instanceof ServerLevel level)
 										level.sendParticles(ParticleTypes.HAPPY_VILLAGER, (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 24, 0.75, 0.75, 0.75, 0.1);
 									if (!(this == entityiterator)) {
 										count = count + 1;

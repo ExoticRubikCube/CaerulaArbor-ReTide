@@ -25,7 +25,7 @@ public class HandAnchorItem extends PickaxeItem {
 	);
 
 	public HandAnchorItem() {
-		super(TIER, new Item.Properties().fireResistant().attributes(PickaxeItem.createAttributes(TIER, 1, -3f)));
+		super(TIER, new Item.Properties().fireResistant().attributes(PickaxeItem.createAttributes(TIER, 8, -3.4f)));
 	}
 
 	@Override

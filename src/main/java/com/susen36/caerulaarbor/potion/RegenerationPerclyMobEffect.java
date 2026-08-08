@@ -1,7 +1,6 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,8 +12,8 @@ public class RegenerationPerclyMobEffect extends MobEffect {
 
 	@Override
 	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        EntityUtils.heal(entity, entity.getMaxHealth() * 0.0025 * ((double) amplifier + 1));
-	    return true;
+        entity.heal((float) (entity.getMaxHealth() * 0.0025 * ((double) amplifier + 1)));
+        return true;
     }
 
 	@Override
