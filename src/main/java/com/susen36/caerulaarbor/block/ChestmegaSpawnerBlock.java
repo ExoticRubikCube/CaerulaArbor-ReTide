@@ -158,44 +158,46 @@ public class ChestmegaSpawnerBlock extends BaseEntityBlock implements SimpleWate
 	}
 
 	private InteractionResult summonMegachest(LevelAccessor world, BlockPos pos, BlockState blockstate) {
-		if (blockstate.getValue(BLOCKSTATE) != 0) {
-			return InteractionResult.PASS;
-		}
-
-		world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 1), 3);
-		world.setBlock(pos, world.getBlockState(pos).setValue(DATA_ANIMATION, 1), 3);
-
-		Direction facing = blockstate.getValue(FACING);
-		CaerulaArbor.queueServerWork(15, () -> {
-			world.destroyBlock(pos, false);
-			if (world instanceof Level level) {
-				level.playSound(null, pos, SoundEvents.ENDER_CHEST_CLOSE, SoundSource.BLOCKS, 1, 1);
+		if (!world.isClientSide()) {
+			if (blockstate.getValue(BLOCKSTATE) != 0) {
+				return InteractionResult.PASS;
 			}
-			if (world instanceof ServerLevel level) {
-				Entity entityToSpawn = CAEntities.MEGA_CHEST.get().spawn(level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
-				if (entityToSpawn != null) {
-					switch (facing) {
-						case NORTH -> {
-							entityToSpawn.setYRot(-180);
-							entityToSpawn.setYBodyRot(-180);
-							entityToSpawn.setYHeadRot(-180);
-						}
-						case WEST -> {
-							entityToSpawn.setYRot(90);
-							entityToSpawn.setYBodyRot(90);
-							entityToSpawn.setYHeadRot(90);
-						}
-						case EAST -> {
-							entityToSpawn.setYRot(-90);
-							entityToSpawn.setYBodyRot(-90);
-							entityToSpawn.setYHeadRot(-90);
-						}
-						default -> {
+
+			world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 1), 3);
+			world.setBlock(pos, world.getBlockState(pos).setValue(DATA_ANIMATION, 1), 3);
+
+			Direction facing = blockstate.getValue(FACING);
+			CaerulaArbor.queueServerWork(15, () -> {
+				world.destroyBlock(pos, false);
+				if (world instanceof Level level) {
+					level.playSound(null, pos, SoundEvents.ENDER_CHEST_CLOSE, SoundSource.BLOCKS, 1, 1);
+				}
+				if (world instanceof ServerLevel level) {
+					Entity entityToSpawn = CAEntities.MEGA_CHEST.get().spawn(level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+					if (entityToSpawn != null) {
+						switch (facing) {
+							case NORTH -> {
+								entityToSpawn.setYRot(-180);
+								entityToSpawn.setYBodyRot(-180);
+								entityToSpawn.setYHeadRot(-180);
+							}
+							case WEST -> {
+								entityToSpawn.setYRot(90);
+								entityToSpawn.setYBodyRot(90);
+								entityToSpawn.setYHeadRot(90);
+							}
+							case EAST -> {
+								entityToSpawn.setYRot(-90);
+								entityToSpawn.setYBodyRot(-90);
+								entityToSpawn.setYHeadRot(-90);
+							}
+							default -> {
+							}
 						}
 					}
 				}
-			}
-		});
+			});
+		}
 
 		return InteractionResult.SUCCESS;
 	}
