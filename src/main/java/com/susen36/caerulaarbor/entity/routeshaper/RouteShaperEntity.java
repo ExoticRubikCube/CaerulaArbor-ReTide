@@ -67,7 +67,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 			final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
 			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
 			for (Entity entityiterator : entfound) {
-				if (entityiterator instanceof RouteFractalEntity) {
+				if (entityiterator instanceof RouteFractalEntity fractal && fractal.hasOwner(this.getUUID())) {
 					entityiterator.hurt(entityiterator.level().damageSources().fellOutOfWorld(), 999999);
 				}
 			}

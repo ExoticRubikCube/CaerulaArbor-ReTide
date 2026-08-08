@@ -61,7 +61,7 @@ public class EntityUtils {
 					b.getX() + dx * t,
 					b.getY() + dy * t + 1,
 					b.getZ() + dz * t,
-					3, 0.1, 0.1, 0.1, 0.01);
+					1, 0.1, 0.1, 0.1, 0.01);
 			}
 		}
 	}

@@ -138,6 +138,9 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 			Entity entityToSpawn = this.getSummonedFractalType().spawn(serverLevel, BlockPos.containing(this.getX() + offsetX, this.getY(), this.getZ() + offsetZ), MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(this.level().getRandom().nextFloat() * 360F);
+				if (entityToSpawn instanceof AbstractFractalEntity fractal) {
+					fractal.setOwner(this);
+				}
 			}
 			serverLevel.sendParticles(ParticleTypes.CLOUD, this.getX() + offsetX, this.getY(), this.getZ() + offsetZ, 48, 0.5, 1, 0.5, 0.1);
 		}
@@ -283,7 +286,9 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 					.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center)))
 					.toList();
 				for (AbstractFractalEntity nearbyEntity : nearbyEntities) {
-					nearbyEntity.setTarget(attacker);
+					if (nearbyEntity.hasOwner(this.getUUID())) {
+						nearbyEntity.setTarget(attacker);
+					}
 				}
 			}
 		}

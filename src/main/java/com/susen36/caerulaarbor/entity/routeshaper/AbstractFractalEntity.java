@@ -19,16 +19,16 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.*;
@@ -41,19 +41,23 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class AbstractFractalEntity extends SeaMonster {
 	protected static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractFractalEntity.class, EntityDataSerializers.STRING);
 	protected static final EntityDataAccessor<Integer> DATA_ATTACK_SKILLP = SynchedEntityData.defineId(AbstractFractalEntity.class, EntityDataSerializers.INT);
-	protected static final EntityDataAccessor<String> DATA_OWNER = SynchedEntityData.defineId(AbstractFractalEntity.class, EntityDataSerializers.STRING);
 	public String animationprocedure = "empty";
 	protected String prevAnim = "empty";
 	protected boolean swinging;
 	protected long lastSwing;
+	@Nullable
+	private UUID ownerUUID;
 
 	protected AbstractFractalEntity(EntityType<? extends AbstractFractalEntity> entityType, Level level) {
 		super(entityType, level);
@@ -67,7 +71,6 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		super.defineSynchedData(builder);
 		builder.define(DATA_ANIMATION, "undefined");
 		builder.define(DATA_ATTACK_SKILLP, 0);
-		builder.define(DATA_OWNER, "null");
 	}
 
 	protected abstract EntityType<?> getSummonedFractalType();
@@ -75,19 +78,21 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+		this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal());
+		this.targetSelector.addGoal(2, new OwnerHurtTargetGoal());
+		this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.5, false));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, false, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, false, false));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, false, false));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, false, false));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, false, false));
-		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, false, false));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, false, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, false, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, false, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, false, false));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Illusioner.class, false, false));
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pillager.class, false, false));
+		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Vindicator.class, false, false));
+		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Witch.class, false, false));
+		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Piglin.class, false, false));
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, false, false));
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, false, false));
+		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.5));
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 	}
@@ -100,21 +105,32 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		this.entityData.set(DATA_ATTACK_SKILLP, attackSkillp);
 	}
 
-	protected String getOwner() {
-		return this.entityData.get(DATA_OWNER);
+	@Nullable
+	public UUID getOwnerUUID() {
+		return this.ownerUUID;
 	}
 
-	protected void setOwner(String owner) {
-		this.entityData.set(DATA_OWNER, owner);
-	}
-
-	protected void handleSuccessfulAttack() {
-		if (this.getAttackSkillp() >= 2) {
-			this.summonFractal();
-			this.setAttackSkillp(0);
-		} else {
-			this.setAttackSkillp(this.getAttackSkillp() + 1);
+	@Nullable
+	public LivingEntity getOwner() {
+		if (this.ownerUUID != null && this.level() instanceof ServerLevel serverLevel) {
+			Entity entity = serverLevel.getEntity(this.ownerUUID);
+			if (entity instanceof LivingEntity livingEntity) {
+				return livingEntity;
+			}
 		}
+		return null;
+	}
+
+	public void setOwner(@Nullable LivingEntity owner) {
+		this.ownerUUID = owner == null ? null : owner.getUUID();
+	}
+
+	public void setOwnerUUID(@Nullable UUID ownerUUID) {
+		this.ownerUUID = ownerUUID;
+	}
+
+	public boolean hasOwner(UUID ownerUUID) {
+		return ownerUUID.equals(this.ownerUUID);
 	}
 
 	protected void summonFractal() {
@@ -140,6 +156,9 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 			Entity entityToSpawn = this.getSummonedFractalType().spawn(serverLevel, BlockPos.containing(this.getX() + offsetX, this.getY(), this.getZ() + offsetZ), MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(this.level().getRandom().nextFloat() * 360F);
+				if (entityToSpawn instanceof AbstractFractalEntity fractal) {
+					fractal.setOwnerUUID(this.ownerUUID);
+				}
 			}
 			serverLevel.sendParticles(ParticleTypes.CLOUD, this.getX() + offsetX, this.getY(), this.getZ() + offsetZ, 48, 0.5, 1, 0.5, 0.1);
 		}
@@ -242,7 +261,12 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	public boolean doHurtTarget(Entity target) {
 		boolean flag = super.doHurtTarget(target);
 		if (flag) {
-			this.handleSuccessfulAttack();
+			if (this.getAttackSkillp() >= 2) {
+				this.summonFractal();
+				this.setAttackSkillp(0);
+			} else {
+				this.setAttackSkillp(this.getAttackSkillp() + 1);
+			}
 		}
 		return flag;
 	}
@@ -251,7 +275,9 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("AttackCount", this.getAttackSkillp());
-		compound.putString("Owner", this.getOwner());
+		if (this.ownerUUID != null) {
+			compound.putUUID("Owner", this.ownerUUID);
+		}
 	}
 
 	@Override
@@ -259,8 +285,8 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("AttackCount"))
 			this.setAttackSkillp(compound.getInt("AttackCount"));
-		if (compound.contains("Owner"))
-			this.setOwner(compound.getString("Owner"));
+		if (compound.hasUUID("Owner"))
+			this.ownerUUID = compound.getUUID("Owner");
 	}
 
 	@Override
@@ -289,5 +315,69 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	@Override
 	public void setAnimationProcedure(String animation) {
 		this.animationprocedure = animation;
+	}
+
+	private class OwnerHurtByTargetGoal extends TargetGoal {
+		@Nullable
+		private LivingEntity ownerLastHurtBy;
+		private int timestamp;
+
+		private OwnerHurtByTargetGoal() {
+			super(AbstractFractalEntity.this, false);
+			this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+		}
+
+		@Override
+		public boolean canUse() {
+			LivingEntity owner = AbstractFractalEntity.this.getOwner();
+			if (owner != null && owner.isAlive()) {
+				this.ownerLastHurtBy = owner.getLastHurtByMob();
+				int newTimestamp = owner.getLastHurtByMobTimestamp();
+				return newTimestamp != this.timestamp && this.ownerLastHurtBy != owner && this.canAttack(this.ownerLastHurtBy, TargetingConditions.DEFAULT);
+			}
+			return false;
+		}
+
+		@Override
+		public void start() {
+			AbstractFractalEntity.this.setTarget(this.ownerLastHurtBy);
+			LivingEntity owner = AbstractFractalEntity.this.getOwner();
+			if (owner != null) {
+				this.timestamp = owner.getLastHurtByMobTimestamp();
+			}
+			super.start();
+		}
+	}
+
+	private class OwnerHurtTargetGoal extends TargetGoal {
+		@Nullable
+		private LivingEntity ownerLastHurt;
+		private int timestamp;
+
+		private OwnerHurtTargetGoal() {
+			super(AbstractFractalEntity.this, false);
+			this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+		}
+
+		@Override
+		public boolean canUse() {
+			LivingEntity owner = AbstractFractalEntity.this.getOwner();
+			if (owner != null && owner.isAlive()) {
+				this.ownerLastHurt = owner.getLastHurtMob();
+				int newTimestamp = owner.getLastHurtMobTimestamp();
+				return newTimestamp != this.timestamp && this.ownerLastHurt != owner && this.canAttack(this.ownerLastHurt, TargetingConditions.DEFAULT);
+			}
+			return false;
+		}
+
+		@Override
+		public void start() {
+			AbstractFractalEntity.this.setTarget(this.ownerLastHurt);
+			LivingEntity owner = AbstractFractalEntity.this.getOwner();
+			if (owner != null) {
+				this.timestamp = owner.getLastHurtMobTimestamp();
+			}
+			super.start();
+		}
 	}
 }

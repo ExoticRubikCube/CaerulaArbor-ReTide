@@ -1,20 +1,20 @@
 package com.susen36.caerulaarbor.entity.crawler;
 
 
+import com.susen36.caerulaarbor.entity.ai.MoveToTargetGoal;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -22,6 +22,7 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import java.util.EnumSet;
 
 public class PocketSeaCrawlerEntity extends AbstractPocketSeaCrawlerEntity {
+    private int pendingExplosions;
 
 	public PocketSeaCrawlerEntity(Level world) {
 		this(CAEntities.POCKET_SEA_CRAWLER.get(), world);
@@ -29,16 +30,13 @@ public class PocketSeaCrawlerEntity extends AbstractPocketSeaCrawlerEntity {
 
 	public PocketSeaCrawlerEntity(EntityType<PocketSeaCrawlerEntity> type, Level world) {
 		super(type, world);
-		maxSwell = 15;
+		maxSwell = 10;
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, true) {
-			@Override
-			protected void checkAndPerformAttack(LivingEntity target) {}
-		});
+		this.goalSelector.addGoal(1, new MoveToTargetGoal(this, 1, true));
 		this.goalSelector.addGoal(2, new CrawlerExplodeGoal(this));
 	}
 
@@ -48,12 +46,15 @@ public class PocketSeaCrawlerEntity extends AbstractPocketSeaCrawlerEntity {
 			return false;
 		float healthBeforeDamage = this.getHealth();
 		boolean damaged = super.hurt(source, amount);
-		if (damaged && amount <= healthBeforeDamage) {
-			double accumulatedDamage = this.getEntityData().get(DATA_DEAL) + amount;
-			this.getEntityData().set(DATA_DEAL, (int) accumulatedDamage);
-			if (accumulatedDamage >= this.getMaxHealth() * 0.15) {
+		float actualDamage = healthBeforeDamage - this.getHealth();
+		if (damaged && actualDamage > 0.0F) {
+			float damageThreshold = this.getMaxHealth() * 0.15F;
+			float accumulatedDamage = this.getEntityData().get(DATA_DEAL) + actualDamage;
+			int newExplosions = Mth.floor(accumulatedDamage / damageThreshold);
+			this.getEntityData().set(DATA_DEAL, accumulatedDamage - newExplosions * damageThreshold);
+			if (newExplosions > 0) {
+				this.pendingExplosions += newExplosions;
 				this.setSwellDir(1);
-				this.getEntityData().set(DATA_DEAL, 0);
 			}
 		}
 		return damaged;
@@ -62,23 +63,22 @@ public class PocketSeaCrawlerEntity extends AbstractPocketSeaCrawlerEntity {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Deal", this.entityData.get(DATA_DEAL));
-		compound.putBoolean("Charged", this.entityData.get(DATA_CHARGED));
+		compound.putInt("PendingExplosions", this.pendingExplosions);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Deal")) {
-			this.entityData.set(DATA_DEAL, compound.getInt("Deal"));
-		}
-		if (compound.contains("Charged")) {
-			this.entityData.set(DATA_CHARGED, compound.getBoolean("Charged"));
+		if (compound.contains("PendingExplosions")) {
+			this.pendingExplosions = compound.getInt("PendingExplosions");
+			if (this.pendingExplosions > 0) {
+				this.setSwellDir(1);
+			}
 		}
 	}
 
 	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
-		event.register(CAEntities.POCKET_SEA_CREEPER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		event.register(CAEntities.POCKET_SEA_CRAWLER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -109,7 +109,7 @@ public class PocketSeaCrawlerEntity extends AbstractPocketSeaCrawlerEntity {
 
 		@Override
 		public boolean canUse() {
-			return this.crawler.getSwellDir() > 0;
+			return this.crawler.pendingExplosions > 0;
 		}
 
 		@Override
@@ -123,6 +123,7 @@ public class PocketSeaCrawlerEntity extends AbstractPocketSeaCrawlerEntity {
 			this.crawler.setSwellDir(-1);
 			this.swell = 0;
 			this.oldSwell = 0;
+			this.crawler.getEntityData().set(PocketSeaCrawlerEntity.DATA_SWELL, 0);
 			this.crawler.setAggressive(false);
 		}
 
@@ -147,8 +148,14 @@ public class PocketSeaCrawlerEntity extends AbstractPocketSeaCrawlerEntity {
 			this.crawler.getEntityData().set(PocketSeaCrawlerEntity.DATA_SWELL, this.swell);
 
 			if (this.swell >= this.crawler.maxSwell) {
-				this.swell = this.crawler.maxSwell;
-				this.crawler.explode();
+				while (this.crawler.pendingExplosions > 0) {
+					this.crawler.explode(false);
+					this.crawler.pendingExplosions--;
+				}
+				this.swell = 0;
+				this.oldSwell = 0;
+				this.crawler.getEntityData().set(PocketSeaCrawlerEntity.DATA_SWELL, 0);
+				this.crawler.setSwellDir(-1);
 			}
 		}
 	}

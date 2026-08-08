@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import com.susen36.caerulaarbor.entity.base.PolarMountRider;
+import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FakerggShootEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -45,7 +45,7 @@ import software.bernie.geckolib.animation.*;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, PolarMountRider {
+public class PregnantFishEntity extends SeaMonster implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
@@ -86,6 +86,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.6));
+		this.goalSelector.addGoal(13, new MountGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(16, new FloatGoal(this));
 		this.goalSelector.addGoal(1, new PregnantFishEntity.RangedAttackGoal(this, 1.25, 80, 14f) {

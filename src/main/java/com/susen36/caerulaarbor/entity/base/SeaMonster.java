@@ -35,14 +35,4 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		return this.cache;
 	}
 
-	@Override
-	public void aiStep() {
-		super.aiStep();
-		if (!this.level().isClientSide()) {
-			if (this instanceof PolarMountRider rider) {
-				rider.tickMountBehavior();
-			}
-		}
-	}
-
 }

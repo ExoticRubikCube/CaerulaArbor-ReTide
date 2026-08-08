@@ -23,10 +23,13 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.*;
@@ -39,6 +42,7 @@ import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.UUID;
 
 public abstract class AbstractTidelinkedEntity extends SeaMonster implements ElementalAttacker {
@@ -75,7 +79,9 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
+        this.targetSelector.addGoal(1, new BishopHurtByTargetGoal());
+        this.targetSelector.addGoal(2, new BishopHurtTargetGoal());
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
                 return super.canUse() && !AbstractTidelinkedEntity.this.isFaking();
@@ -86,7 +92,7 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
                 return super.canContinueToUse() && !AbstractTidelinkedEntity.this.isFaking();
             }
         });
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false) {
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false) {
             @Override
             public boolean canUse() {
                 return super.canUse() && !AbstractTidelinkedEntity.this.isFaking();
@@ -97,16 +103,16 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
                 return super.canContinueToUse() && !AbstractTidelinkedEntity.this.isFaking();
             }
         });
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
-        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
-        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
-        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-        this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
-        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
-        this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
-        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
+        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
+        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
+        this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
+        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
+        this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
+        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
+        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
+        this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(15, new RandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(16, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(17, new FloatGoal(this));
@@ -238,7 +244,7 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
             }
             TidelinkedBishopEntity bishop = this.getLinkedBishop();
             if (bishop instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
-                EntityUtils.spawnLinkParticles(this.level(), this, bishop);
+                bishop.spawnLinkParticles(this);
                 if (MapVariables.get(this.level()).strategy_silence >= 3) {
                     if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
                         this.getAttribute(CAAttributes.MISSRATE).setBaseValue(40);
@@ -365,5 +371,79 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
     @Override
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;
+    }
+
+    private class BishopHurtByTargetGoal extends TargetGoal {
+        @Nullable
+        private LivingEntity bishopLastHurtBy;
+        private int timestamp;
+
+        private BishopHurtByTargetGoal() {
+            super(AbstractTidelinkedEntity.this, false);
+            this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+        }
+
+        @Override
+        public boolean canUse() {
+            TidelinkedBishopEntity bishop = AbstractTidelinkedEntity.this.getLinkedBishop();
+            if (bishop != null && !AbstractTidelinkedEntity.this.isFaking()) {
+                this.bishopLastHurtBy = bishop.getLastHurtByMob();
+                int newTimestamp = bishop.getLastHurtByMobTimestamp();
+                return newTimestamp != this.timestamp && this.canAttack(this.bishopLastHurtBy, TargetingConditions.DEFAULT);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return !AbstractTidelinkedEntity.this.isFaking() && super.canContinueToUse();
+        }
+
+        @Override
+        public void start() {
+            AbstractTidelinkedEntity.this.setTarget(this.bishopLastHurtBy);
+            TidelinkedBishopEntity bishop = AbstractTidelinkedEntity.this.getLinkedBishop();
+            if (bishop != null) {
+                this.timestamp = bishop.getLastHurtByMobTimestamp();
+            }
+            super.start();
+        }
+    }
+
+    private class BishopHurtTargetGoal extends TargetGoal {
+        @Nullable
+        private LivingEntity bishopLastHurt;
+        private int timestamp;
+
+        private BishopHurtTargetGoal() {
+            super(AbstractTidelinkedEntity.this, false);
+            this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+        }
+
+        @Override
+        public boolean canUse() {
+            TidelinkedBishopEntity bishop = AbstractTidelinkedEntity.this.getLinkedBishop();
+            if (bishop != null && !AbstractTidelinkedEntity.this.isFaking()) {
+                this.bishopLastHurt = bishop.getLastHurtMob();
+                int newTimestamp = bishop.getLastHurtMobTimestamp();
+                return newTimestamp != this.timestamp && this.canAttack(this.bishopLastHurt, TargetingConditions.DEFAULT);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return !AbstractTidelinkedEntity.this.isFaking() && super.canContinueToUse();
+        }
+
+        @Override
+        public void start() {
+            AbstractTidelinkedEntity.this.setTarget(this.bishopLastHurt);
+            TidelinkedBishopEntity bishop = AbstractTidelinkedEntity.this.getLinkedBishop();
+            if (bishop != null) {
+                this.timestamp = bishop.getLastHurtMobTimestamp();
+            }
+            super.start();
+        }
     }
 }

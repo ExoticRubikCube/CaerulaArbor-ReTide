@@ -231,17 +231,14 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		return false;
 	}
 
-	public static SoundEvent HURT_SOUND = CASounds.CASTER_HURT.get();
-	public static SoundEvent DIE_SOUND = CASounds.CASTER_DIE.get();
-
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return HURT_SOUND;
+		return CASounds.CASTER_HURT.get();
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return DIE_SOUND;
+		return CASounds.CASTER_DIE.get();
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.base.PolarMountRider;
+import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.AbandonedShootEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -39,7 +39,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
 
-public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
+public class TheAbandonedEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.INT);
@@ -84,7 +84,8 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.6, false));
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.6, false));
+		this.goalSelector.addGoal(3, new MountGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));

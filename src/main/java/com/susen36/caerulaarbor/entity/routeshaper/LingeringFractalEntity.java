@@ -10,12 +10,12 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 public class LingeringFractalEntity extends AbstractFractalEntity {
 	public LingeringFractalEntity(Level world) {
@@ -35,19 +35,21 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		LevelAccessor world = this.level();
+		Level world = this.level();
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		if (tickCount > 1200 && tickCount % 20 == 7) {
-			if (world.getEntitiesOfClass(LineringPathshaperEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).size() > 3) {
+		if (world instanceof ServerLevel level && tickCount > 1200 && tickCount % 20 == 7) {
+			UUID ownerUUID = this.getOwnerUUID();
+			Entity owner = ownerUUID == null ? null : level.getEntity(ownerUUID);
+			if (owner instanceof LineringPathshaperEntity lingeringPathshaper && lingeringPathshaper.isDeadOrDying()) {
 				final Vec3 center = new Vec3(x, y, z);
-				List<LingeringFractalEntity> entfound = world.getEntitiesOfClass(LingeringFractalEntity.class, new AABB(center, center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-				for (LingeringFractalEntity fractal : entfound) {
-					fractal.discard();
-				}
-				if (world instanceof ServerLevel level) {
-					Entity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+				List<LingeringFractalEntity> entfound = world.getEntitiesOfClass(LingeringFractalEntity.class, new AABB(center, center).inflate(64 / 2d), fractal -> fractal.hasOwner(ownerUUID)).stream().sorted(Comparator.comparing(Entity::getUUID)).toList();
+				if (entfound.size() > 3 && entfound.getFirst() == this) {
+					for (LingeringFractalEntity fractal : entfound) {
+						fractal.discard();
+					}
+					LineringPathshaperEntity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {
 						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 					}

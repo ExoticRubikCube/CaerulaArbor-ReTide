@@ -44,7 +44,7 @@ public class PocketSeaCreeperEntity extends AbstractPocketSeaCrawlerEntity {
 			SoundEvent soundevent = itemstack.is(Items.FIRE_CHARGE) ? SoundEvents.FIRECHARGE_USE : SoundEvents.FLINTANDSTEEL_USE;
 			this.level().playSound(player, this.getX(), this.getY(), this.getZ(), soundevent, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
 			if (!this.level().isClientSide) {
-				this.explode();
+				this.setSwellDir(1);
 				if (!itemstack.isDamageableItem()) {
 					itemstack.shrink(1);
 				} else {
@@ -152,7 +152,11 @@ public class PocketSeaCreeperEntity extends AbstractPocketSeaCrawlerEntity {
 
 			if (this.swell >= this.maxSwell) {
 				this.swell = this.maxSwell;
-				this.creeper.explode();
+				this.creeper.explode(true);
+				this.creeper.setSwellDir(-1);
+				this.swell = 0;
+				this.oldSwell = 0;
+				this.creeper.getEntityData().set(PocketSeaCreeperEntity.DATA_SWELL, 0);
 			}
 		}
 	}

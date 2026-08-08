@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.base.PolarMountRider;
+import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -51,7 +51,7 @@ import software.bernie.geckolib.animation.AnimationState;
 import java.util.Comparator;
 import java.util.List;
 
-public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider {
+public class CrackerAbyssalEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.STRING);
     public String animationprocedure = "empty";
@@ -115,7 +115,8 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
                 return super.canContinueToUse() && WorldUtils.canGrief(world);
             }
         });
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1, true));
+		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1, true));
+		this.goalSelector.addGoal(4, new MountGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
         this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));

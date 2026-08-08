@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.CaerulaArborMod;
-import com.susen36.caerulaarbor.entity.base.RavagerMountRider;
+import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.ThrowablePotionEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -64,7 +64,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
-public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
+public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.INT);
@@ -107,6 +107,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
         this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(13, new MountGoal(this, OceanizedRavagerEntity.class, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
         this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(16, new FloatGoal(this));
         this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 50, 4f) {

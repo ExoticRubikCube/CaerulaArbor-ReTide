@@ -204,6 +204,10 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
         return entity instanceof Mob mob ? mob : null;
     }
 
+    public void spawnLinkParticles(Entity linkedEntity) {
+        EntityUtils.spawnLinkParticles(this.level(), this, linkedEntity);
+    }
+
     @Override
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
@@ -296,7 +300,7 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
             }
             Entity repeller = this.getLinkedRepeller();
             if (repeller instanceof LivingEntity repellerLiving && repellerLiving.hasEffect(CAMobEffects.FAKE_DEATH)) {
-                EntityUtils.spawnLinkParticles(this.level(), this, repeller);
+                this.spawnLinkParticles(repeller);
                 if (MapVariables.get(this.level()).strategy_silence >= 3) {
                     if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
                         this.getAttribute(CAAttributes.MISSRATE).setBaseValue(30);

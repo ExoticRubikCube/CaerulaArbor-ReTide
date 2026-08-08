@@ -45,7 +45,7 @@ import java.util.List;
 public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implements ElementalAttacker {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Float> DATA_DEAL = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.FLOAT);
     public static final EntityDataAccessor<Boolean> DATA_CHARGED = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> DATA_SWELL_DIR = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SWELL = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.INT);
@@ -63,7 +63,7 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
         super.defineSynchedData(builder);
         builder.define(DATA_SHOOT, false);
         builder.define(DATA_ANIMATION, "undefined");
-        builder.define(DATA_DEAL, 0);
+        builder.define(DATA_DEAL, 0.0F);
         builder.define(DATA_CHARGED, false);
         builder.define(DATA_SWELL_DIR, -1);
         builder.define(DATA_SWELL, 0);
@@ -108,7 +108,7 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
         return super.hurt(source, amount);
     }
 
-    protected void explode() {
+    protected void explode(boolean damagesSelf) {
         if (!this.level().isClientSide) {
 
             ServerLevel serverLevel = (ServerLevel) this.level();
@@ -137,13 +137,15 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
 
             this.spawnLingeringCloud();
 
-            float selfDamage = this.getMaxHealth() * 0.3F;
-            if (this.getHealth() <= selfDamage) {
-                this.dead = true;
-                this.triggerOnDeathMobEffects(Entity.RemovalReason.KILLED);
-                this.discard();
-            } else {
-                this.setHealth(this.getHealth() - selfDamage);
+            if (damagesSelf) {
+                float selfDamage = this.getMaxHealth() * 0.3F;
+                if (this.getHealth() <= selfDamage) {
+                    this.dead = true;
+                    this.triggerOnDeathMobEffects(Entity.RemovalReason.KILLED);
+                    this.discard();
+                } else {
+                    this.setHealth(this.getHealth() - selfDamage);
+                }
             }
         }
     }
@@ -201,7 +203,7 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Deal", this.entityData.get(DATA_DEAL));
+        compound.putFloat("Deal", this.entityData.get(DATA_DEAL));
         compound.putBoolean("Charged", this.entityData.get(DATA_CHARGED));
     }
 
@@ -209,7 +211,7 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Deal")) {
-            this.entityData.set(DATA_DEAL, compound.getInt("Deal"));
+            this.entityData.set(DATA_DEAL, compound.getFloat("Deal"));
         }
         if (compound.contains("Charged")) {
             this.entityData.set(DATA_CHARGED, compound.getBoolean("Charged"));
