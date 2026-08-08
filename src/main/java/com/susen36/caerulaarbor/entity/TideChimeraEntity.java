@@ -283,7 +283,7 @@ public class TideChimeraEntity extends SeaMonster {
         }
         CaerulaArbor.queueServerWork(36, () -> {
             if (this.isAlive()) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                     if (!level.isClientSide()) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, (float) 2.5, 1);
                     } else {
@@ -294,21 +294,21 @@ public class TideChimeraEntity extends SeaMonster {
         });
         CaerulaArbor.queueServerWork(60, () -> {
             if (this.isAlive()) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_JUMP, SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }
         });
         CaerulaArbor.queueServerWork(66, () -> {
             if (this.isAlive()) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_JUMP, SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }
         });
         CaerulaArbor.queueServerWork(83, () -> {
             if (this.isAlive()) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }

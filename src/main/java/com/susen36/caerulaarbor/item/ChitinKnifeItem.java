@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
@@ -20,7 +21,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
@@ -44,21 +44,21 @@ public class ChitinKnifeItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!ModCapabilities.getPlayerVariables(entity).relic_legend_CHITIN) {
-            if ((LevelAccessor) world instanceof Level level) {
+        if (!Relic.LEGEND_CHITIN.gained(entity)) {
+            if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BELL_BLOCK, SoundSource.NEUTRAL, (float) 3.5, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel level)
+            if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.DOLPHIN, x, y, z, 72, 1, 1, 1, 0.1);
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                capability.relic_legend_CHITIN = setval;
+                Relic.LEGEND_CHITIN.set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-            if ((LevelAccessor) world instanceof ServerLevel level) {
+            if (world instanceof ServerLevel level) {
                 ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.OCEAN_TRIM_TEMPLATE.get()));
                 entityToSpawn.setPickUpDelay(5);
                 entityToSpawn.setUnlimitedLifetime();

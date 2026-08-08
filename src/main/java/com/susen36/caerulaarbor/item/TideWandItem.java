@@ -110,7 +110,7 @@ public class TideWandItem extends Item {
                 if ((Entity) entity instanceof Player player)
                     player.giveExperiencePoints(-(5));
             }
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GUARDIAN_ATTACK, SoundSource.PLAYERS, 1, 1);
             }
             if ((Entity) entity instanceof Player player)

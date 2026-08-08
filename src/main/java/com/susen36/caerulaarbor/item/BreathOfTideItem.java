@@ -20,7 +20,6 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
@@ -71,7 +70,7 @@ public class BreathOfTideItem extends Item {
         } else {
             if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                 player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight").getString())), false);
-            if ((LevelAccessor) world instanceof ServerLevel level) {
+            if (world instanceof ServerLevel level) {
                 CAEntities.THE_LAST_KNIGHT.get().spawn(level, BlockPos.containing(x + Mth.nextInt(RandomSource.create(), -5, 5), y + 3, z + Mth.nextInt(RandomSource.create(), -5, 5)), MobSpawnType.MOB_SUMMONED);
             }
             itemstack.shrink(1);

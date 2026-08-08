@@ -128,7 +128,7 @@ public class PocketSeaDollBlock extends BaseEntityBlock implements SimpleWaterlo
 		int z = pos.getZ();
         ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         if (entity instanceof LivingEntity livingEntity && livingEntity.isHolding(Items.FLINT_AND_STEEL)) {
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CREEPER_PRIMED, SoundSource.BLOCKS, 1, 1);
             }
 			int value = 1;

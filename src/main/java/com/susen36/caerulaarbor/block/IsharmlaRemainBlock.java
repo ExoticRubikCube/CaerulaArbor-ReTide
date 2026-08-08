@@ -183,7 +183,7 @@ public class IsharmlaRemainBlock extends Block {
                         if (skadi instanceof LivingEntity livingEntity && !entity.level().isClientSide())
                             entity.addEffect(new MobEffectInstance(CAMobEffects.ISHARMLA_CURSE, 99999, 0));
                         IsharmlaEntity.sendLinkParticlesToEntity(world, x, y, z, skadi);
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_PLACE.get(), SoundSource.BLOCKS, 3, 1);
                         }
                         ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
@@ -217,11 +217,11 @@ public class IsharmlaRemainBlock extends Block {
                         player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.isharmla_remain.notice").getString())), true);
                 }
             } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.TEAR_ISHARMLA.get()) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.BLOCKS, 3, 1);
                 }
                 ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 24, 1, 1, 1, 0.1);
                 for (int index3 = 0; index3 < 3; index3++) {
                     for (int index4 = 0; index4 < 3; index4++) {

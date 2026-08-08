@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.client.Minecraft;
@@ -20,7 +21,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.util.List;
@@ -45,15 +45,15 @@ public class AlleySculptureItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ALLAY_AMBIENT_WITH_ITEM, SoundSource.NEUTRAL, (float) 3.5, 1);
         }
-        if ((LevelAccessor) world instanceof ServerLevel level)
+        if (world instanceof ServerLevel level)
             level.sendParticles(ParticleTypes.RAIN, x, y, z, 72, 1, 1, 1, 0.1);
         {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            capability.relic_util_ALLEY = setval;
+            Relic.UTIL_ALLEY.set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
         }
         {

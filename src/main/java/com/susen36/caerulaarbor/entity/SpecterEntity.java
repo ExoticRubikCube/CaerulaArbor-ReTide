@@ -194,7 +194,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_SPECT_SKILL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
         }
         this.setAnimation("animation.specter.start");

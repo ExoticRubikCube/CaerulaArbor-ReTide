@@ -64,7 +64,7 @@ public class OcarinaItem extends Item {
             double py;
             double pz;
             double bs;
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), CASounds.OCARINO.get(), SoundSource.PLAYERS, 1, 1);
             }
             if ((Entity) entity instanceof Player player)
@@ -89,14 +89,14 @@ public class OcarinaItem extends Item {
                                                 world.setBlock(pos, blockState.setValue(integerProp, value), 3);
                                         }
                                         if (Math.random() < 0.05) {
-                                            if ((LevelAccessor) world instanceof ServerLevel level) {
+                                            if (world instanceof ServerLevel level) {
                                                 Entity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(level, BlockPos.containing(px, py + 1, pz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                                 }
                                             }
                                         } else {
-                                            if ((LevelAccessor) world instanceof ServerLevel level) {
+                                            if (world instanceof ServerLevel level) {
                                                 Entity entityToSpawn = CAEntities.ROUTE_SHAPER.get().spawn(level, BlockPos.containing(px, py + 1, pz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -129,7 +129,7 @@ public class OcarinaItem extends Item {
                                         ItemStack stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
                                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                                     }
-                                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                                    if (world instanceof ServerLevel level) {
                                         EndspeakerEntity.spawnForPhase(level, BlockPos.containing(px, py, pz), MobSpawnType.MOB_SUMMONED, 0);
                                     }
                                 } else if (cradle.getBlock() == CABlocks.MIZUKI_STATUE.get()) {
@@ -144,7 +144,7 @@ public class OcarinaItem extends Item {
                                         if (world instanceof ServerLevel _level) {
                                             itemstack.hurtAndBreak(1, _level, null, _item -> itemstack.setDamageValue(0));
                                         }
-                                        if ((LevelAccessor) world instanceof ServerLevel level) {
+                                        if (world instanceof ServerLevel level) {
                                             Entity entityToSpawn = CAEntities.IZUMIK.get().spawn(level, BlockPos.containing(px, py, pz), MobSpawnType.MOB_SUMMONED);
                                             if (entityToSpawn != null) {
                                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -184,7 +184,7 @@ public class OcarinaItem extends Item {
                                             }
                                         }
                                     }
-                                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                                    if (world instanceof ServerLevel level) {
                                         Entity entityToSpawn = CAEntities.TIDELINKED_BISHOP.get().spawn(level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
                                         if (entityToSpawn != null) {
                                             entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -217,7 +217,7 @@ public class OcarinaItem extends Item {
                                         world.setBlock(bp, blockState, 3);
                                     }
                                     found = true;
-                                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                                    if (world instanceof ServerLevel level) {
                                         Entity entityToSpawn = CAEntities.BISHOP_FISH.get().spawn(level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
                                         if (entityToSpawn != null) {
                                             entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);

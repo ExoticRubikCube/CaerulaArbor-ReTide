@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -42,7 +43,7 @@ public class SurvivorContractItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (ModCapabilities.getPlayerVariables(entity).relic_SURVIVOR < 0) {
+        if (Relic.SURVIVOR_CONTRACT.get(entity) < 0) {
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BEACON_ACTIVATE, SoundSource.NEUTRAL, (float) 3.2, 1);
             }
@@ -53,7 +54,7 @@ public class SurvivorContractItem extends Item {
             {
                 double setval = 0;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                capability.relic_SURVIVOR = setval;
+                Relic.SURVIVOR_CONTRACT.set(capability, (int) setval);
                 capability.syncPlayerVariables(entity);
             }
         }

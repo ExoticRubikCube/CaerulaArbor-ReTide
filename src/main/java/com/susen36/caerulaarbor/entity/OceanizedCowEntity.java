@@ -141,11 +141,11 @@ public class OceanizedCowEntity extends SeaMonster {
         if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedCowEntity datEntL1 && datEntL1.getEntityData().get(DATA_SKILL)) {
             if (entity instanceof OceanizedCowEntity datEntSetL)
                 datEntSetL.getEntityData().set(DATA_SKILL, false);
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.MOOSHROOM_SHEAR, SoundSource.PLAYERS, 1, 1);
             }
             for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 3, 5); index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel level) {
+                if (world instanceof ServerLevel level) {
                     ItemEntity entityToSpawn = new ItemEntity(level, x, (y + 0.65), z, new ItemStack(CABlocks.TRAIL_MUSHROOM.get()));
                     entityToSpawn.setPickUpDelay(10);
                     level.addFreshEntity(entityToSpawn);

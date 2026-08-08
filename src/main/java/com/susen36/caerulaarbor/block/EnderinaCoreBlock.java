@@ -98,7 +98,7 @@ public class EnderinaCoreBlock extends Block {
                         if (bs.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty booleanProp)
                             world.setBlock(pos, bs.setValue(booleanProp, true), 3);
                     }
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, curPos, SoundEvents.ENDER_DRAGON_GROWL, SoundSource.BLOCKS, 2, 1);
                     }
                 }
@@ -112,7 +112,7 @@ public class EnderinaCoreBlock extends Block {
                     if (!entityiterator.level().isClientSide())
                         entityiterator.discard();
                     count = count + 1;
-                    if ((LevelAccessor) world instanceof ServerLevel level)
+                    if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.EXPLOSION, (entityiterator.getX()), (entityiterator.getY() + 1), (entityiterator.getZ()), 2, 0.1, 0.1, 0.1, 1);
                     if (count >= 4) {
                         break;
@@ -120,19 +120,19 @@ public class EnderinaCoreBlock extends Block {
                 }
             }
             if (count >= 4) {
-                if ((LevelAccessor) world instanceof ServerLevel level) {
+                if (world instanceof ServerLevel level) {
                     LightningBolt entityToSpawn = EntityType.LIGHTNING_BOLT.create(level);
                     entityToSpawn.moveTo(Vec3.atBottomCenterOf(BlockPos.containing(x, y, z)));
                     entityToSpawn.setVisualOnly(true);
                     level.addFreshEntity(entityToSpawn);
                 }
-                if ((LevelAccessor) world instanceof ServerLevel level) {
+                if (world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.OCEANIZED_ENDERINA.get().spawn(level, BlockPos.containing(x, (double) y + 1, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, curPos, CASounds.CASTER_SKILL.get(), SoundSource.BLOCKS, 2, 1);
                 }
                 world.destroyBlock(curPos, false);

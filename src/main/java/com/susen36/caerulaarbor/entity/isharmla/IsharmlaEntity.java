@@ -318,7 +318,7 @@ public class IsharmlaEntity extends SeaMonster {
 		}
 		if (!this.level().isClientSide())
 			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 60, 9, false, false));
-		if ((LevelAccessor) world instanceof Level level) {
+		if (world instanceof Level level) {
 			level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TO_HUMAN.get(), SoundSource.HOSTILE, 2, 1);
 		}
 		for (Entity entityiterator : new ArrayList<>(world.players())) {
@@ -392,7 +392,7 @@ public class IsharmlaEntity extends SeaMonster {
 				this.IS_ANGERED = true;
 			}
 		}
-		LevelAccessor world = this.level();
+		Level world = this.level();
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();

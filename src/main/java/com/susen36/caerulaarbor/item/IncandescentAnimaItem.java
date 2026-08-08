@@ -90,10 +90,10 @@ public class IncandescentAnimaItem extends Item {
                     info = Component.translatable("item.caerula_arbor.incandescent_anima.cooldown").getString();
                     if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                         player.displayClientMessage(Component.literal(info), true);
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 3, 1);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel level)
+                    if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.ASH, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
                     finished = true;
                 }
@@ -129,10 +129,10 @@ public class IncandescentAnimaItem extends Item {
                         info = Component.translatable("item.caerula_arbor.incandescent_anima.fail").getString();
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal(info), true);
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 3, 1);
                         }
-                        if ((LevelAccessor) world instanceof ServerLevel level)
+                        if (world instanceof ServerLevel level)
                             level.sendParticles(ParticleTypes.ASH, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
                         finished = true;
                     } else {
@@ -179,10 +179,10 @@ public class IncandescentAnimaItem extends Item {
                 if (!finished) {
                     if (shouldBroadCast) {
                         MapVariablesHandler.setIncandescentUseTick(world, gameTick);
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_SPAWN, SoundSource.PLAYERS, 3, 1);
                         }
-                        if ((LevelAccessor) world instanceof ServerLevel level)
+                        if (world instanceof ServerLevel level)
                             level.sendParticles(ParticleTypes.END_ROD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
                         itemstack.shrink(1);
                     }

@@ -224,7 +224,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         if (mainHand.getItem() == CAItems.OCEAN_CHITIN.get() && isLowHealth) {
             LivingEntity living = (LivingEntity) entity;
             living.setHealth((float) (living.getHealth() + living.getMaxHealth() * 0.25));
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
             }
             if (!isCreative) {
@@ -234,7 +234,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         } else if (mainHand.getItem() == CAItems.CHITIN_INGOT.get() && isLowHealth) {
             if (entity instanceof LivingEntity livingEntity)
                 livingEntity.setHealth((float) (livingEntity.getHealth() + livingEntity.getMaxHealth() * 0.5));
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
             }
             if (!isCreative) {
@@ -242,7 +242,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
             }
             return InteractionResult.SUCCESS;
         } else if (mainHand.getItem() == CABlocks.COMPLEX_CHITIN_BLOCK.get().asItem() && mainHand.getCount() >= 3) {
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                 if (!level.isClientSide()) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.PLAYERS, (float) 1.5, 1);
                 } else {
@@ -251,7 +251,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
             }
             if (!entity.level().isClientSide())
                 entity.discard();
-            if ((LevelAccessor) world instanceof ServerLevel level) {
+            if (world instanceof ServerLevel level) {
                 Entity entityToSpawn = CAEntities.COMPLEX_CHITIN_GOLEM.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(entity.getYRot());

@@ -271,7 +271,7 @@ public class MartusEntity extends SeaMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -533,7 +533,7 @@ public class MartusEntity extends SeaMonster {
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
-    private void martusTimedSpawn(LevelAccessor world, double x, double y, double z) {
+    private void martusTimedSpawn(Level world, double x, double y, double z) {
         if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
             for (int index0 = 0; index0 < 2; index0++) {
                 SeabornSpawnManager.summonRandomSeaborn(world, 0.33, x, y, z);

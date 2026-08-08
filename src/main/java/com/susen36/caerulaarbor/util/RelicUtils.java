@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.util;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -26,234 +27,234 @@ public class RelicUtils {
 	}
 
 	public static boolean hasSpear(Entity entity) {
-		return getPlayerVariables(entity).relic_king_SPEAR;
+		return Relic.KING_SPEAR.gained(entity);
 	}
 
 	public static boolean hasArmor(Entity entity) {
-		return getPlayerVariables(entity).relic_king_ARMOR;
+		return Relic.KING_ARMOR.gained(entity);
 	}
 
 	public static boolean hasExtension(Entity entity) {
-		return getPlayerVariables(entity).relic_king_EXTENSION;
+		return Relic.KING_EXTENSION.gained(entity);
 	}
 
 	public static boolean hasCrystal(Entity entity) {
-		return getPlayerVariables(entity).relic_king_CRYSTAL;
+		return Relic.KING_CRYSTAL.gained(entity);
 	}
 
 	public static boolean hasThorns(Entity entity) {
-		return getPlayerVariables(entity).relic_hand_THORNS;
+		return Relic.HAND_THORNS.gained(entity);
 	}
 
 	public static boolean hasStrangle(Entity entity) {
-		return getPlayerVariables(entity).relic_hand_STRANGLE;
+		return Relic.HAND_STRANGLE.gained(entity);
 	}
 
 	public static boolean hasFertility(Entity entity) {
-		return getPlayerVariables(entity).relic_hand_FERTILITY;
+		return Relic.HAND_FERTILITY.gained(entity);
 	}
 
 	public static boolean hasSpeed(Entity entity) {
-		return getPlayerVariables(entity).relic_hand_SPEED;
+		return Relic.HAND_SPEED.gained(entity);
 	}
 
 	public static boolean hasBarren(Entity entity) {
-		return getPlayerVariables(entity).relic_hand_BARREN;
+		return Relic.HAND_OF_PULVERIZATION.gained(entity);
 	}
 
 	public static boolean hasSwipe(Entity entity) {
-		return getPlayerVariables(entity).relic_hand_SWIPE;
+		return Relic.HAND_SWIPE.gained(entity);
 	}
 
 	public static boolean hasArtifact(Entity entity) {
-		return getPlayerVariables(entity).relic_archfi_ARTIFACT;
+		return Relic.SARKAZ_KING_ARTIFACT.gained(entity);
 	}
 
 	public static boolean hasFirework(Entity entity) {
-		return getPlayerVariables(entity).relic_hand_FIREWORK;
+		return Relic.HAND_FIREWORK.gained(entity);
 	}
 
 	public static boolean hasFlag(Entity entity) {
-		return getPlayerVariables(entity).relic_archfi_FLAG;
+		return Relic.SARKAZ_KING_FLAG.gained(entity);
 	}
 
 	public static double getEngrave(Entity entity) {
-		return getPlayerVariables(entity).relic_hand_ENGRAVE;
+		return Relic.HAND_ENGRAVE.get(entity);
 	}
 
 	public static boolean hasBed(Entity entity) {
-		return getPlayerVariables(entity).relic_archfi_BED;
+		return Relic.SARKAZ_KING_BED.gained(entity);
 	}
 
 	public static double getSurvivor(Entity entity) {
-		return getPlayerVariables(entity).relic_SURVIVOR;
+		return Relic.SURVIVOR_CONTRACT.get(entity);
 	}
 
 	public static boolean hasTreaty(Entity entity) {
-		return getPlayerVariables(entity).relic_TREATY;
+		return Relic.TREATY.gained(entity);
 	}
 
 	public static boolean hasRylfate(Entity entity) {
-		return getPlayerVariables(entity).relic_archifi_RYLFATE;
+		return Relic.SARKAZ_KING_RYLFATE.gained(entity);
 	}
 
 	public static boolean hasMeatcan(Entity entity) {
-		return getPlayerVariables(entity).relic_util_MEATCAN;
+		return Relic.FEATURED_CANNED_MEAT.gained(entity);
 	}
 
 	public static boolean hasSeagrass(Entity entity) {
-		return getPlayerVariables(entity).relic_util_SEAGRASS;
+		return Relic.SEAWEED_SALAD.gained(entity);
 	}
 
 	public static boolean hasOrange(Entity entity) {
-		return getPlayerVariables(entity).relic_util_ORANGE;
+		return Relic.ORANGE_STORM.gained(entity);
 	}
 
 	public static boolean hasCoffee(Entity entity) {
-		return getPlayerVariables(entity).relic_util_COFFEE;
+		return Relic.COFFEE_PLAINS_COFFEE_CANDY.gained(entity);
 	}
 
 	public static boolean hasBerries(Entity entity) {
-		return getPlayerVariables(entity).relic_util_BERRIES;
+		return Relic.PITTS_ASSORTED_FRUITS.gained(entity);
 	}
 
 	public static boolean hasMusicbox(Entity entity) {
-		return getPlayerVariables(entity).relic_util_MUSICBOX;
+		return Relic.UTIL_MUSICBOX.gained(entity);
 	}
 
 	public static boolean hasIris(Entity entity) {
-		return getPlayerVariables(entity).relic_util_IRIS;
+		return Relic.UTIL_IRIS.gained(entity);
 	}
 
 	public static boolean hasFlute(Entity entity) {
-		return getPlayerVariables(entity).relic_util_FLUTE;
+		return Relic.WEIRD_FLUTE.gained(entity);
 	}
 
 	public static boolean hasVoygold(Entity entity) {
-		return getPlayerVariables(entity).relic_util_VOYGOLD;
+		return Relic.PURE_GOLD_EXPEDITION.gained(entity);
 	}
 
 	public static boolean hasDurin(Entity entity) {
-		return getPlayerVariables(entity).relic_util_DURIN;
+		return Relic.DURIN_OVERGROUND_ODYSSEY.gained(entity);
 	}
 
 	public static boolean hasToponym(Entity entity) {
-		return getPlayerVariables(entity).relic_util_TOPONYM;
+		return Relic.UTIL_TOPONYM.gained(entity);
 	}
 
 	public static boolean hasKettle(Entity entity) {
-		return getPlayerVariables(entity).relic_util_KETTLE;
+		return Relic.HOT_WATER_KETTLE.gained(entity);
 	}
 
 	public static boolean hasChitin(Entity entity) {
-		return getPlayerVariables(entity).relic_legend_CHITIN;
+		return Relic.LEGEND_CHITIN.gained(entity);
 	}
 
 	public static boolean hasAlley(Entity entity) {
-		return getPlayerVariables(entity).relic_util_ALLEY;
+		return Relic.UTIL_ALLEY.gained(entity);
 	}
 
 	public static boolean hasBatbed(Entity entity) {
-		return getPlayerVariables(entity).relic_util_BATBED;
+		return Relic.VAMPIRES_BED.gained(entity);
 	}
 
 	public static boolean hasLongevity(Entity entity) {
-		return getPlayerVariables(entity).relic_util_LONGEVITY;
+		return Relic.PROOF_OF_LONGEVITY.gained(entity);
 	}
 
 	public static boolean hasOmnikey(Entity entity) {
-		return getPlayerVariables(entity).relic_util_OMNIKEY;
+		return Relic.UTIL_OMNIKEY.gained(entity);
 	}
 
 	public static boolean hasScore(Entity entity) {
-		return getPlayerVariables(entity).relic_util_score;
+		return Relic.UTIL_SCORE.gained(entity);
 	}
 
 	public static boolean hasRescission(Entity entity) {
-		return getPlayerVariables(entity).relic_util_RESCISSION;
+		return Relic.UTIL_RESCISSION.gained(entity);
 	}
 
 	public static boolean hasStare(Entity entity) {
-		return getPlayerVariables(entity).relic_util_STARE;
+		return Relic.UTIL_STARE.gained(entity);
 	}
 
 	public static boolean hasSword(Entity entity) {
-		return getPlayerVariables(entity).relic_hand_SWORD;
+		return Relic.HAND_SWORD.gained(entity);
 	}
 
 	public static boolean hasEmelight(Entity entity) {
-		return getPlayerVariables(entity).relic_cursed_EMELIGHT;
+		return Relic.CURSED_EMELIGHT.gained(entity);
 	}
 
 	public static boolean hasGlowbody(Entity entity) {
-		return getPlayerVariables(entity).relic_cursed_GLOWBODY;
+		return Relic.CURSED_GLOWBODY.gained(entity);
 	}
 
 	public static boolean hasResearch(Entity entity) {
-		return getPlayerVariables(entity).relic_cursed_RESEARCH;
+		return Relic.CURSED_RESEARCH.gained(entity);
 	}
 
 	public static boolean hasCrown(Entity entity) {
-		return getPlayerVariables(entity).relic_king_CROWN;
+		return Relic.KING_CROWN.gained(entity);
 	}
 
 	public static boolean hasHeart(Entity entity) {
-		return getPlayerVariables(entity).relic_cursed_HEART;
+		return Relic.CURSED_HEART.gained(entity);
 	}
 
 	public static boolean hasHemost(Entity entity) {
-		return getPlayerVariables(entity).relic_HEMOST;
+		return Relic.HEMOST.gained(entity);
 	}
 
 	public static boolean hasYearning(Entity entity) {
-		return getPlayerVariables(entity).relic_YEARNING;
+		return Relic.YEARNING.gained(entity);
 	}
 
 	public static boolean hasAllay(Entity entity) {
-		return getPlayerVariables(entity).relic_util_ALLAY;
+		return Relic.UTIL_ALLAY.gained(entity);
 	}
 
 	public static boolean hasRainbow(Entity entity) {
-		return getPlayerVariables(entity).relic_util_RAINBOW;
+		return Relic.UTIL_RAINBOW.gained(entity);
 	}
 
 	public static boolean hasDiso(Entity entity) {
-		return getPlayerVariables(entity).relic_diso;
+		return Relic.DISO.gained(entity);
 	}
 
 	public static boolean hasDisoFlesh(Entity entity) {
-		return getPlayerVariables(entity).relic_diso_FLESH;
+		return Relic.DISO_FLESH.gained(entity);
 	}
 
 	public static boolean hasDisoBlood(Entity entity) {
-		return getPlayerVariables(entity).relic_diso_BLOOD;
+		return Relic.DISO_BLOOD.gained(entity);
 	}
 
 	public static boolean hasDisoNeuro(Entity entity) {
-		return getPlayerVariables(entity).relic_diso_NEURO;
+		return Relic.DISO_NEURO.gained(entity);
 	}
 
 	public static boolean hasAhndSwipe(Entity entity) {
-		return getPlayerVariables(entity).relic_ahnd_SWIPE;
+		return Relic.AHND_SWIPE.gained(entity);
 	}
 
 	public static boolean hasDisoAttention(Entity entity) {
-		return getPlayerVariables(entity).relic_diso_ATTENTION;
+		return Relic.DISO_ATTENTION.gained(entity);
 	}
 
 	public static boolean hasHanshandSpike(Entity entity) {
-		return getPlayerVariables(entity).relic_hanshand_SPIKE;
+		return Relic.HANSHAND_SPIKE.gained(entity);
 	}
 
 	public static boolean hasRoyalfate(Entity entity) {
-		return getPlayerVariables(entity).relic_royalfate;
+		return Relic.ROYALFATE.gained(entity);
 	}
 
 	public static void gainArmor(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
 		if (entity == null)
 			return;
 		PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(entity);
-		if (playerVariables.relic_king_ARMOR)
+		if (Relic.KING_ARMOR.gained(playerVariables))
 			return;
 
 		BlockPos pos = BlockPos.containing(x, y, z);
@@ -266,8 +267,7 @@ public class RelicUtils {
 			level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-		capability.relic_king_ARMOR = true;
-		capability.syncPlayerVariables(entity);
+		Relic.KING_ARMOR.gainAndSync(capability, entity);
 
 		if (world.isClientSide())
 			Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
@@ -293,8 +293,7 @@ public class RelicUtils {
 					serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 			}
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			capability.relic_king_SPEAR = true;
-			capability.syncPlayerVariables(entity);
+			Relic.KING_SPEAR.gainAndSync(capability, entity);
 			if (world.isClientSide())
 				Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
 		}

@@ -142,7 +142,7 @@ public class OperationTableBlock extends Block {
                                             world.setBlock(pos, bs.setValue(integerProp, value), 3);
                                     }
                                     ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                                    if ((LevelAccessor) world instanceof Level level) {
+                                    if (world instanceof Level level) {
                                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.BLOCKS, 1, 1);
                                     }
                                     result = ItemInteractionResult.SUCCESS;
@@ -170,7 +170,7 @@ public class OperationTableBlock extends Block {
                                             player.getAdvancements().award(adv, criteria);
                                     }
                                 }
-                                if ((LevelAccessor) world instanceof Level level) {
+                                if (world instanceof Level level) {
                                     if (!level.isClientSide()) {
                                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ZOMBIE_CONVERTED_TO_DROWNED, SoundSource.BLOCKS, 1, 1);
                                     } else {
@@ -188,7 +188,7 @@ public class OperationTableBlock extends Block {
                                     if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
                                         world.setBlock(pos, bs.setValue(integerProp, value), 3);
                                 }
-                                if ((LevelAccessor) world instanceof ServerLevel level) {
+                                if (world instanceof ServerLevel level) {
                                     ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), output);
                                     entityToSpawn.setPickUpDelay(10);
                                     entityToSpawn.setUnlimitedLifetime();

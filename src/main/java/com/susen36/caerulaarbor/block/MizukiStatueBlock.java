@@ -144,9 +144,9 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
         if ((entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.MIZUKI_DETERMINATION.get()
                 && (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1) == 1) {
             (entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-            if ((LevelAccessor) world instanceof ServerLevel level)
+            if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.END_ROD, (x + 0.5), (y + 2), (z + 0.5), 48, 2, 2, 2, 0.15);
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 2, 1);
             }
             {

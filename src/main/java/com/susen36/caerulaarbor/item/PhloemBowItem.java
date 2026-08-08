@@ -155,9 +155,9 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
                         offhandStack.set(DataComponents.ENCHANTMENTS, mutable.toImmutable());
                     }
                 }
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 3, 1);
                 }
                 valid = false;
@@ -181,9 +181,9 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
                         offhandStack.set(DataComponents.ENCHANTMENTS, mutable.toImmutable());
                     }
                 }
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 3, 1);
                 }
                 valid = false;
@@ -197,7 +197,7 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
                             if ((((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || isCreativeMode(entity) || EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.METABOLISM), itemstack) != 0)
                                     && (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()
                                     || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem())) {
-                                if ((LevelAccessor) world instanceof Level level1) {
+                                if (world instanceof Level level1) {
                                         level1.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, (float) 1.8, 1);
                                 }
                                 if (!isCreativeMode(entity)) {
@@ -230,7 +230,7 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
                     }
                     if (itemstack.getItem() instanceof PhloemBowItem)
                         CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putString("geckoAnim", "animation.bluebow.pull"));
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_QUICK_CHARGE_1.value(), SoundSource.NEUTRAL, (float) 1.8, 1);
                     }
                     if ((Entity) entity instanceof Player player)

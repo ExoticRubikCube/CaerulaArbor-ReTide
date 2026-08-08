@@ -115,7 +115,7 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
 			if (!((Entity) entity instanceof Player player) || !player.getAbilities().instabuild) {
 				if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
 					if (bs == 0) {
-						if ((LevelAccessor) world instanceof ServerLevel level) {
+						if (world instanceof ServerLevel level) {
 							ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CABlocks.CHEST_FISH_FOOD.get()));
 							entityToSpawn.setPickUpDelay(10);
 							level.addFreshEntity(entityToSpawn);

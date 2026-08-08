@@ -302,7 +302,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
-        if ((LevelAccessor) world instanceof ServerLevel level) {
+        if (world instanceof ServerLevel level) {
             LivingEntity entityToSpawn = CAEntities.OCEANIZED_RAVAGER.get().spawn(level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -342,7 +342,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();

@@ -350,7 +350,7 @@ public class PlayerEvoButtonMessage implements CustomPacketPayload {
                 }
             }
             if (quantity_cost > 0) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.TAP.get(), SoundSource.PLAYERS, 2, 1);
                 }
                 {
@@ -375,7 +375,7 @@ public class PlayerEvoButtonMessage implements CustomPacketPayload {
                 }
             }
             if (quality_cost > 0) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.ALERT.get(), SoundSource.PLAYERS, 2, 1);
                 }
                 double setval = quality - quality_cost;

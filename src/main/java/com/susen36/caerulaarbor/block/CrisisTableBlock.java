@@ -149,7 +149,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
             double y = pos.getY();
             double z = pos.getZ();
             if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 1) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.START.get(), SoundSource.BLOCKS, 1, 1);
                 }
                 {
@@ -165,7 +165,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
             double y = pos.getY();
             double z = pos.getZ();
             if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 1) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.QUIT.get(), SoundSource.BLOCKS, 1, 1);
                 }
                 {
@@ -206,7 +206,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                     if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
                         world.setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.START.get(), SoundSource.BLOCKS, 1, 1);
                 }
                 CaerulaArbor.queueServerWork(25, () -> {
@@ -216,7 +216,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             : -1) == 1) {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_0").getString())), false);
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 1, 1);
                         }
                     }
@@ -228,7 +228,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             : -1) == 1) {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_1").getString())), false);
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 1, 1);
                         }
                     }
@@ -240,7 +240,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             : -1) == 1) {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_2").getString())), false);
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 1, 1);
                         }
                     }
@@ -311,7 +311,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         }.timedLoop(0, (int) creeper, (int) gap);
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_3").getString())), false);
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.ALERT.get(), SoundSource.BLOCKS, 3, 1);
                         }
                     }
@@ -349,7 +349,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip52
                             ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip52)
                             : -1) == 1) {
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.QUIT.get(), SoundSource.BLOCKS, 1, 1);
                         }
                     }

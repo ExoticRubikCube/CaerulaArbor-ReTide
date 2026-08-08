@@ -158,7 +158,7 @@ public class SeaPrairieBombBlock extends Block {
 			}
 			if (consume) {
 				world.setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
-				if ((LevelAccessor) world instanceof Level level) {
+				if (world instanceof Level level) {
 					level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.BLOCKS, 3.0f, 1.0f);
 				}
 			} else {
@@ -188,7 +188,7 @@ public class SeaPrairieBombBlock extends Block {
 			}
 			if (shouldConsume) {
 				world.setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
-				if ((LevelAccessor) world instanceof Level level) {
+				if (world instanceof Level level) {
 					level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 3.0f, 1.0f);
 				}
 				ItemStack ist = entity.getMainHandItem();

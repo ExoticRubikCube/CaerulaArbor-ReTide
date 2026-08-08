@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
@@ -49,7 +50,7 @@ public class CannedCherryItem extends Item {
 		{
 		boolean setval = true;
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-		capability.relic_util_BERRIES = setval;
+		Relic.PITTS_ASSORTED_FRUITS.set(capability, setval ? 1 : 0);
 		capability.syncPlayerVariables(entity);
 	}
 		if (itemstack.isEmpty()) {

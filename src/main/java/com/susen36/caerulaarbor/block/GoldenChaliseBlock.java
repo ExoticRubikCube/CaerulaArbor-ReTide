@@ -176,7 +176,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                 capability.syncPlayerVariables(entity);
                         }
                         ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).setCount(0);
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = ItemInteractionResult.SUCCESS;
@@ -192,7 +192,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                             ItemStack stktoremove = new ItemStack(CAItems.REDSTONE_INGOT.get());
                             player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                         }
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = ItemInteractionResult.SUCCESS;
@@ -208,7 +208,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                 capability.syncPlayerVariables(entity);
                         }
                         ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).setCount(0);
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = ItemInteractionResult.SUCCESS;
@@ -224,7 +224,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                             ItemStack stktoremove = new ItemStack(CAItems.REDSTONIUM.get());
                             player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                         }
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = ItemInteractionResult.SUCCESS;
@@ -244,18 +244,18 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                         capability.plauyer_balance = setval;
                                         capability.syncPlayerVariables(entity);
                                 }
-                                if ((LevelAccessor) world instanceof ServerLevel level) {
+                                if (world instanceof ServerLevel level) {
                                     ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONIUM.get()));
                                     entityToSpawn.setPickUpDelay(10);
                                     level.addFreshEntity(entityToSpawn);
                                 }
-                                if ((LevelAccessor) world instanceof Level level) {
+                                if (world instanceof Level level) {
                                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                                 }
                                 res = ItemInteractionResult.SUCCESS;
                             } else if (balance >= 1) {
                                 for (int index0 = 0; index0 < (int) balance; index0++) {
-                                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                                    if (world instanceof ServerLevel level) {
                                         ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONE_INGOT.get()));
                                         entityToSpawn.setPickUpDelay(10);
                                         level.addFreshEntity(entityToSpawn);
@@ -268,7 +268,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                         capability.plauyer_balance = setval;
                                         capability.syncPlayerVariables(entity);
                                 }
-                                if ((LevelAccessor) world instanceof Level level) {
+                                if (world instanceof Level level) {
                                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                                 }
                                 res = ItemInteractionResult.SUCCESS;
@@ -281,12 +281,12 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                     capability.plauyer_balance = setval;
                                     capability.syncPlayerVariables(entity);
                             }
-                            if ((LevelAccessor) world instanceof ServerLevel level) {
+                            if (world instanceof ServerLevel level) {
                                 ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONE_INGOT.get()));
                                 entityToSpawn.setPickUpDelay(10);
                                 level.addFreshEntity(entityToSpawn);
                             }
-                            if ((LevelAccessor) world instanceof Level level) {
+                            if (world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                             }
                             res = ItemInteractionResult.SUCCESS;

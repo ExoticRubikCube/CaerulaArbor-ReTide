@@ -81,10 +81,10 @@ public class BrokenSeaItem extends SwordItem {
         double count = 0;
         if (!((Entity) entity instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
             if (entity.isShiftKeyDown() && ((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 5) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL_RELEASE.get(), SoundSource.PLAYERS, 2, 1);
                 }
-                if ((LevelAccessor) world instanceof ServerLevel level) {
+                if (world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -127,7 +127,7 @@ public class BrokenSeaItem extends SwordItem {
                     }
                 }
                 if (count > 0 && !world.isClientSide()) {
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.PLAYERS, 2, 1);
                     }
                     if (!(new Object() {

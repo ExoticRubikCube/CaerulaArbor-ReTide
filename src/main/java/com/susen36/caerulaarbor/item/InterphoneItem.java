@@ -21,6 +21,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -89,7 +93,7 @@ public class InterphoneItem extends Item {
 					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "inquisition")))) {
 						num = num + 1;
 						entityiterator.getPersistentData().putString("recentCommander", name);
-						EntityUtils.clearTarget(entityiterator);
+						this.clearTarget(entityiterator);
 						if (entityiterator instanceof Mob mob)
 							mob.getNavigation().moveTo((tx + Mth.nextDouble(RandomSource.create(), -2, 2)), tY, (tz + Mth.nextDouble(RandomSource.create(), -2, 2)), 1);
 					}
@@ -154,7 +158,7 @@ public class InterphoneItem extends Item {
 							if (WorldUtils.isValidHumanoidPlace(world, tx + dx, tY, tz + dz)) {
 								num = num + 1;
 								entityiterator.getPersistentData().putString("recentCommander", name);
-								EntityUtils.clearTarget(entityiterator);
+								this.clearTarget(entityiterator);
 								entityiterator.teleportTo(tx + dx, tY, tz + dz);
 								if (entityiterator instanceof ServerPlayer serverPlayer)
 									serverPlayer.connection.teleport(tx + dx, tY, tz + dz, entityiterator.getYRot(), entityiterator.getXRot());
@@ -217,6 +221,30 @@ public class InterphoneItem extends Item {
             }
         }
         return InteractionResult.SUCCESS;
+	}
+
+	public void clearTarget(Entity entity) {
+		if (entity instanceof LivingEntity living) {
+			Brain<?> brain = living.getBrain();
+			brain.eraseMemory(MemoryModuleType.ANGRY_AT);
+			brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
+			brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
+			brain.eraseMemory(MemoryModuleType.HURT_BY);
+			if (living instanceof Mob mob) {
+				mob.setTarget(null);
+				mob.setLastHurtByMob(null);
+				mob.setAggressive(false);
+				mob.setLastHurtByPlayer(null);
+			}
+			if (living instanceof Animal animal) {
+				animal.setTarget(null);
+			}
+			if (living instanceof NeutralMob n) {
+				n.stopBeingAngry();
+				n.setPersistentAngerTarget(null);
+				n.setRemainingPersistentAngerTime(0);
+			}
+		}
 	}
 
 	@Override

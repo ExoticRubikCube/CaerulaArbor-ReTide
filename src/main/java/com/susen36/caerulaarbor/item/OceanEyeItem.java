@@ -41,7 +41,7 @@ public class OceanEyeItem extends Item {
 		double y = entity.getY();
 		double z = entity.getZ();
 		SIHelper.causeSanityInjury(entity, 325, SanityEvent.Hurt.Type.FOOD);
-		if ((LevelAccessor) world instanceof ServerLevel level) {
+		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 72, 1, 2, 1, 0.1);
 		}
 		return retval;

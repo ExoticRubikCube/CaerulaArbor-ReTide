@@ -159,7 +159,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_PLACE.get(), SoundSource.HOSTILE, 2, 1);
         }
         if (this instanceof IsharmlaTearEntity) {

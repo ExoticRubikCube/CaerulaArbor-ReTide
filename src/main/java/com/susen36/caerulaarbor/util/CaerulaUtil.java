@@ -32,7 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 import java.util.ArrayList;
-
+//TODO 需要合并进PlayerStateUtils
 public class CaerulaUtil {
 
 	private CaerulaUtil() {

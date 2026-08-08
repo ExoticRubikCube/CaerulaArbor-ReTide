@@ -207,7 +207,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                     player.setItemInHand(InteractionHand.MAIN_HAND, setstack);
                     player.getInventory().setChanged();
                 }
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BUCKET_FILL, SoundSource.NEUTRAL, 1, 1);
                 }
                 result = ItemInteractionResult.SUCCESS;
@@ -223,7 +223,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                 ItemStack setstack = new ItemStack(CAItems.OCEANGLASS_CUP.get()).copy();
                     setstack.setCount(1);
                     ItemHandlerHelper.giveItemToPlayer(player, setstack);
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BUCKET_FILL, SoundSource.NEUTRAL, 1, 1);
                 }
                 result = ItemInteractionResult.SUCCESS;
@@ -280,7 +280,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             world.setBlock(pos, bs.setValue(booleanProp, true), 3);
                     }
                     ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                         if (!level.isClientSide()) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.REDSTONE_TORCH_BURNOUT, SoundSource.NEUTRAL, 2, 1);
                         } else {
@@ -306,7 +306,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             BlockState bs = world.getBlockState(pos);
                             if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
                                 world.setBlock(pos, bs.setValue(booleanProp, false), 3);
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
                         }
                         result = ItemInteractionResult.SUCCESS;
@@ -321,7 +321,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                         if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
                             world.setBlock(pos, bs.setValue(booleanProp, false), 3);
 
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
                         }
                         result = ItemInteractionResult.SUCCESS;
@@ -342,7 +342,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             ItemStack setstack = new ItemStack(Blocks.WET_SPONGE).copy();
                                 setstack.setCount(1);
                                 ItemHandlerHelper.giveItemToPlayer(player, setstack);
-                            if ((LevelAccessor) world instanceof Level level) {
+                            if (world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EMPTY, SoundSource.NEUTRAL, 1, 1);
                             }
                             result = ItemInteractionResult.SUCCESS;
@@ -360,7 +360,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             ItemStack setstack2 = new ItemStack(CAItems.EMPTY_CAN.get()).copy();
                                 setstack2.setCount(1);
                                 ItemHandlerHelper.giveItemToPlayer(player, setstack2);
-                            if ((LevelAccessor) world instanceof Level level) {
+                            if (world instanceof Level level) {
                                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.LAVA_EXTINGUISH, SoundSource.NEUTRAL, 1, 1);
                             }
                             result = ItemInteractionResult.SUCCESS;
@@ -376,7 +376,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             ItemStack setstack = new ItemStack(CAItems.BOILED_EGG.get()).copy();
                             setstack.setCount(1);
                             ItemHandlerHelper.giveItemToPlayer(player, setstack);
-                            if ((LevelAccessor) world instanceof Level level) {
+                            if (world instanceof Level level) {
                                 if (!level.isClientSide()) {
                                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BREWING_STAND_BREW, SoundSource.NEUTRAL, 2, 1);
                                 } else {

@@ -914,7 +914,7 @@ public class EndspeakerEntity extends SeaMonster {
 	}
 
 	protected void spawnSeabornWave(double eliteChance, int spawnCount) {
-		LevelAccessor world = this.level();
+		Level world = this.level();
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();

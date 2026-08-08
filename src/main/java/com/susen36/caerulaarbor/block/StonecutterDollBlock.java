@@ -128,7 +128,7 @@ public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWater
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_DEATH, SoundSource.BLOCKS, 1, 1);
             }
             {

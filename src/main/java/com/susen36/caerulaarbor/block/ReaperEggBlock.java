@@ -171,20 +171,20 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
                 if (bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
                     world.setBlock(pos, bs.setValue(integerProp, value), 3);
             }
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_EGG_CRACK, SoundSource.BLOCKS, 1, 1);
             }
         }
         if ((blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty getip13 ? blockstate.getValue(getip13) : -1) >= 2
                 && (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty getip15 ? blockstate.getValue(getip15) : -1) >= 10) {
             world.destroyBlock(BlockPos.containing(x, y, z), false);
-            if ((LevelAccessor) world instanceof ServerLevel level) {
+            if (world instanceof ServerLevel level) {
                 Entity entityToSpawn = CAEntities.REAPER_PET.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
             }
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_EGG_HATCH, SoundSource.BLOCKS, 1, 1);
             }
         }

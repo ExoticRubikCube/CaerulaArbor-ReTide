@@ -13,10 +13,13 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,14 +42,20 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
@@ -423,7 +432,26 @@ public class TidelinkedBishopEntity extends SeaMonster implements RangedAttackMo
         if (this.deathTime == 20) {
             this.remove(RemovalReason.KILLED);
             this.dropExperience(this.getKillCredit());
-            WorldUtils.dropRelicTidebi(this.level(), this.getX(), this.getY(), this.getZ());
+            dropRelicTidebi(this.level(), this.getX(), this.getY(), this.getZ());
+        }
+    }
+
+    public static void dropRelicTidebi(LevelAccessor world, double x, double y, double z) {
+        if (world instanceof ServerLevel level) {
+            if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+                ResourceKey<LootTable> lootTableKey = ResourceKey.create(
+                        Registries.LOOT_TABLE,
+                        ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gameplay/relic_tidebi")
+                );
+                LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableKey);
+                LootParams lootParams = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
+                for (ItemStack itemstackiterator : lootTable.getRandomItems(lootParams)) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
+                    entityToSpawn.setPickUpDelay(10);
+                    entityToSpawn.setUnlimitedLifetime();
+                    level.addFreshEntity(entityToSpawn);
+                }
+            }
         }
     }
 

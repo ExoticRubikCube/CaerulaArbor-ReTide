@@ -1,87 +1,41 @@
 package com.susen36.caerulaarbor.capability.player;
 
 import com.susen36.caerulaarbor.init.CAConfigs;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.network.receive.PlayerVariablesSyncMessage;
+import com.susen36.caerulaarbor.relic.RelicType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.susen36.caerulaarbor.init.CARelics.*;
+
 public class PlayerVariable implements INBTSerializable<CompoundTag> {
 
+    /* ========== 非遗物基础状态（保留原样） ========== */
     public double player_light = 100.0;
     public double player_lives = CAConfigs.LP_INIT.get();
     public double player_maxlive = CAConfigs.LP_INIT.get();
     public double player_shield = 0;
     public double disoclusion = 0;
     public boolean show_stats = true;
-    public boolean relic_cursed_EMELIGHT = false;
-    public boolean relic_cursed_GLOWBODY = false;
-    public boolean relic_cursed_RESEARCH = false;
-    public boolean relic_king_CROWN = false;
-    public boolean relic_king_ARMOR = false;
-    public boolean relic_king_SPEAR = false;
-    public boolean relic_king_EXTENSION = false;
     public boolean kingShowPtc = true;
-    public boolean relic_king_CRYSTAL = false;
-    public boolean relic_hand_THORNS = false;
-    public boolean relic_hand_STRANGLE = false;
-    public boolean relic_hand_FERTILITY = false;
-    public boolean relic_hand_SPEED = false;
-    public boolean relic_hand_BARREN = false;
-    public boolean relic_hand_SWIPE = false;
-    public boolean relic_archfi_ARTIFACT = false;
-    public boolean relic_hand_FIREWORK = false;
-    public boolean relic_archfi_FLAG = false;
-    public double relic_hand_ENGRAVE = -1.0;
-    public boolean relic_archfi_BED = false;
-    public double relic_SURVIVOR = -1.0;
-    public boolean relic_TREATY = false;
-    public boolean relic_archifi_RYLFATE = false;
-    public boolean relic_util_MEATCAN = false;
-    public boolean relic_util_SEAGRASS = false;
-    public boolean relic_util_ORANGE = false;
-    public boolean relic_util_COFFEE = false;
-    public boolean relic_util_BERRIES = false;
+    public ItemStack chitin_knife_selected = ItemStack.EMPTY;
     public boolean player_util_RAINBOW = false;
     public boolean player_util_AROMATIC = false;
-    public boolean relic_util_MUSICBOX = false;
-    public boolean relic_util_IRIS = false;
-    public boolean relic_util_FLUTE = false;
-    public boolean relic_util_VOYGOLD = false;
-    public boolean relic_util_DURIN = false;
-    public boolean relic_util_TOPONYM = false;
-    public boolean relic_util_KETTLE = false;
-    public boolean relic_legend_CHITIN = false;
-    public ItemStack chitin_knife_selected = ItemStack.EMPTY;
-    public boolean relic_util_ALLEY = false;
-    public boolean relic_util_BATBED = false;
-    public boolean relic_util_LONGEVITY = false;
-    public boolean relic_util_OMNIKEY = false;
-    public boolean relic_util_score = false;
-    public boolean relic_util_RESCISSION = false;
-    public boolean relic_util_STARE = false;
-    public boolean relic_hand_SWORD = false;
-    public boolean relic_util_ALLAY = false;
-    public boolean relic_util_RAINBOW = false;
-    public boolean relic_diso = false;
-    public boolean relic_diso_FLESH = false;
-    public boolean relic_diso_BLOOD = false;
-    public boolean relic_diso_NEURO = false;
-    public boolean relic_ahnd_SWIPE = false;
-    public boolean relic_diso_ATTENTION = false;
-    public boolean relic_hanshand_SPIKE = false;
-    public boolean relic_royalfate = false;
     public double player_king_suit = 0;
     public double player_demon_suit = 0;
     public double player_oceanization = 0;
-    public boolean relic_cursed_HEART = false;
-    public boolean relic_HEMOST = false;
-    public boolean relic_YEARNING = false;
     public double plauyer_balance = 0;
     public boolean can_player_evo = false;
     public double reserve_quantity = 0;
@@ -105,6 +59,36 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
     public double PEVO_NODE_eunectes = 0;
     public double PEVO_NODE_less_armor = 0;
 
+    /* ========== 遗物注册制存储 ========== */
+    private final Map<ResourceKey<RelicType>, Integer> relicLevels = new HashMap<>();
+
+    /**
+     * 注册制 getter：按 ResourceKey 查遗物等级。
+     * 若玩家尚未持有该 key（包括存档迁移前没读到的），返回对应 RelicType 的默认值。
+     */
+    public int getRelic(ResourceKey<RelicType> key) {
+        Integer stored = relicLevels.get(key);
+        if (stored != null) {
+            return stored;
+        }
+        RelicType type = RELICS_REGISTRY.get(key);
+        return type == null ? 0 : type.defaultLevel();
+    }
+
+    /**
+     * 注册制 setter：统一 clamp，然后入 map（若和默认值相等就 remove 节省 NBT 空间）。
+     */
+    public void setRelic(ResourceKey<RelicType> key, int level) {
+        RelicType type = RELICS_REGISTRY.get(key);
+        int clamped = (type == null) ? level : Mth.clamp(level, type.minLevel(), type.maxLevel());
+        int def = (type == null) ? 0 : type.defaultLevel();
+        if (clamped == def) {
+            relicLevels.remove(key);
+        } else {
+            relicLevels.put(key, clamped);
+        }
+    }
+
     public void syncPlayerVariables(Entity entity) {
         if (entity instanceof ServerPlayer serverPlayer) {
             PacketDistributor.sendToPlayer(serverPlayer, new PlayerVariablesSyncMessage(this));
@@ -119,69 +103,13 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
         nbt.putDouble("player_shield", player_shield);
         nbt.putDouble("disoclusion", disoclusion);
         nbt.putBoolean("show_stats", show_stats);
-        nbt.putBoolean("relic_cursed_EMELIGHT", relic_cursed_EMELIGHT);
-        nbt.putBoolean("relic_cursed_GLOWBODY", relic_cursed_GLOWBODY);
-        nbt.putBoolean("relic_cursed_RESEARCH", relic_cursed_RESEARCH);
-        nbt.putBoolean("relic_king_CROWN", relic_king_CROWN);
-        nbt.putBoolean("relic_king_ARMOR", relic_king_ARMOR);
-        nbt.putBoolean("relic_king_SPEAR", relic_king_SPEAR);
-        nbt.putBoolean("relic_king_EXTENSION", relic_king_EXTENSION);
         nbt.putBoolean("kingShowPtc", kingShowPtc);
-        nbt.putBoolean("relic_king_CRYSTAL", relic_king_CRYSTAL);
-        nbt.putBoolean("relic_hand_THORNS", relic_hand_THORNS);
-        nbt.putBoolean("relic_hand_STRANGLE", relic_hand_STRANGLE);
-        nbt.putBoolean("relic_hand_FERTILITY", relic_hand_FERTILITY);
-        nbt.putBoolean("relic_hand_SPEED", relic_hand_SPEED);
-        nbt.putBoolean("relic_hand_BARREN", relic_hand_BARREN);
-        nbt.putBoolean("relic_hand_SWIPE", relic_hand_SWIPE);
-        nbt.putBoolean("relic_archfi_ARTIFACT", relic_archfi_ARTIFACT);
-        nbt.putBoolean("relic_hand_FIREWORK", relic_hand_FIREWORK);
-        nbt.putBoolean("relic_archfi_FLAG", relic_archfi_FLAG);
-        nbt.putDouble("relic_hand_ENGRAVE", relic_hand_ENGRAVE);
-        nbt.putBoolean("relic_archfi_BED", relic_archfi_BED);
-        nbt.putDouble("relic_SURVIVOR", relic_SURVIVOR);
-        nbt.putBoolean("relic_TREATY", relic_TREATY);
-        nbt.putBoolean("relic_archifi_RYLFATE", relic_archifi_RYLFATE);
-        nbt.putBoolean("relic_util_MEATCAN", relic_util_MEATCAN);
-        nbt.putBoolean("relic_util_SEAGRASS", relic_util_SEAGRASS);
-        nbt.putBoolean("relic_util_ORANGE", relic_util_ORANGE);
-        nbt.putBoolean("relic_util_COFFEE", relic_util_COFFEE);
-        nbt.putBoolean("relic_util_BERRIES", relic_util_BERRIES);
+        nbt.put("chitin_knife_selected", chitin_knife_selected.saveOptional(null));
         nbt.putBoolean("player_util_RAINBOW", player_util_RAINBOW);
         nbt.putBoolean("player_util_AROMATIC", player_util_AROMATIC);
-        nbt.putBoolean("relic_util_MUSICBOX", relic_util_MUSICBOX);
-        nbt.putBoolean("relic_util_IRIS", relic_util_IRIS);
-        nbt.putBoolean("relic_util_FLUTE", relic_util_FLUTE);
-        nbt.putBoolean("relic_util_VOYGOLD", relic_util_VOYGOLD);
-        nbt.putBoolean("relic_util_DURIN", relic_util_DURIN);
-        nbt.putBoolean("relic_util_TOPONYM", relic_util_TOPONYM);
-        nbt.putBoolean("relic_util_KETTLE", relic_util_KETTLE);
-        nbt.putBoolean("relic_legend_CHITIN", relic_legend_CHITIN);
-        nbt.put("chitin_knife_selected", chitin_knife_selected.saveOptional(null));
-        nbt.putBoolean("relic_util_ALLEY", relic_util_ALLEY);
-        nbt.putBoolean("relic_util_BATBED", relic_util_BATBED);
-        nbt.putBoolean("relic_util_LONGEVITY", relic_util_LONGEVITY);
-        nbt.putBoolean("relic_util_OMNIKEY", relic_util_OMNIKEY);
-        nbt.putBoolean("relic_util_score", relic_util_score);
-        nbt.putBoolean("relic_util_RESCISSION", relic_util_RESCISSION);
-        nbt.putBoolean("relic_util_STARE", relic_util_STARE);
-        nbt.putBoolean("relic_hand_SWORD", relic_hand_SWORD);
-        nbt.putBoolean("relic_util_ALLAY", relic_util_ALLAY);
-        nbt.putBoolean("relic_util_RAINBOW", relic_util_RAINBOW);
-        nbt.putBoolean("relic_diso", relic_diso);
-        nbt.putBoolean("relic_diso_FLESH", relic_diso_FLESH);
-        nbt.putBoolean("relic_diso_BLOOD", relic_diso_BLOOD);
-        nbt.putBoolean("relic_diso_NEURO", relic_diso_NEURO);
-        nbt.putBoolean("relic_ahnd_SWIPE", relic_ahnd_SWIPE);
-        nbt.putBoolean("relic_diso_ATTENTION", relic_diso_ATTENTION);
-        nbt.putBoolean("relic_hanshand_SPIKE", relic_hanshand_SPIKE);
-        nbt.putBoolean("relic_royalfate", relic_royalfate);
         nbt.putDouble("player_king_suit", player_king_suit);
         nbt.putDouble("player_demon_suit", player_demon_suit);
         nbt.putDouble("player_oceanization", player_oceanization);
-        nbt.putBoolean("relic_cursed_HEART", relic_cursed_HEART);
-        nbt.putBoolean("relic_HEMOST", relic_HEMOST);
-        nbt.putBoolean("relic_YEARNING", relic_YEARNING);
         nbt.putDouble("plauyer_balance", plauyer_balance);
         nbt.putBoolean("can_player_evo", can_player_evo);
         nbt.putDouble("reserve_quantity", reserve_quantity);
@@ -204,11 +132,20 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
         nbt.putBoolean("PEVO_NEXUS_expo_shield", PEVO_NEXUS_expo_shield);
         nbt.putDouble("PEVO_NODE_eunectes", PEVO_NODE_eunectes);
         nbt.putDouble("PEVO_NODE_less_armor", PEVO_NODE_less_armor);
+
+        /* 新格式：relics 子 tag，存非默认等级的遗物（key 用资源名） */
+        CompoundTag relicsTag = new CompoundTag();
+        for (Map.Entry<ResourceKey<RelicType>, Integer> e : relicLevels.entrySet()) {
+            relicsTag.putInt(e.getKey().location().toString(), e.getValue());
+        }
+        nbt.put("relics", relicsTag);
         return nbt;
     }
 
     public void readNBT(Tag tag) {
         CompoundTag nbt = (CompoundTag) tag;
+        relicLevels.clear();
+
         if (nbt.contains("player_light", Tag.TAG_ANY_NUMERIC)) {
             player_light = nbt.getDouble("player_light");
         }
@@ -234,69 +171,13 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
         }
         disoclusion = nbt.getDouble("disoclusion");
         show_stats = nbt.getBoolean("show_stats");
-        relic_cursed_EMELIGHT = nbt.getBoolean("relic_cursed_EMELIGHT");
-        relic_cursed_GLOWBODY = nbt.getBoolean("relic_cursed_GLOWBODY");
-        relic_cursed_RESEARCH = nbt.getBoolean("relic_cursed_RESEARCH");
-        relic_king_CROWN = nbt.getBoolean("relic_king_CROWN");
-        relic_king_ARMOR = nbt.getBoolean("relic_king_ARMOR");
-        relic_king_SPEAR = nbt.getBoolean("relic_king_SPEAR");
-        relic_king_EXTENSION = nbt.getBoolean("relic_king_EXTENSION");
         kingShowPtc = nbt.getBoolean("kingShowPtc");
-        relic_king_CRYSTAL = nbt.getBoolean("relic_king_CRYSTAL");
-        relic_hand_THORNS = nbt.getBoolean("relic_hand_THORNS");
-        relic_hand_STRANGLE = nbt.getBoolean("relic_hand_STRANGLE");
-        relic_hand_FERTILITY = nbt.getBoolean("relic_hand_FERTILITY");
-        relic_hand_SPEED = nbt.getBoolean("relic_hand_SPEED");
-        relic_hand_BARREN = nbt.getBoolean("relic_hand_BARREN");
-        relic_hand_SWIPE = nbt.getBoolean("relic_hand_SWIPE");
-        relic_archfi_ARTIFACT = nbt.getBoolean("relic_archfi_ARTIFACT");
-        relic_hand_FIREWORK = nbt.getBoolean("relic_hand_FIREWORK");
-        relic_archfi_FLAG = nbt.getBoolean("relic_archfi_FLAG");
-        relic_hand_ENGRAVE = nbt.getDouble("relic_hand_ENGRAVE");
-        relic_archfi_BED = nbt.getBoolean("relic_archfi_BED");
-        relic_SURVIVOR = nbt.getDouble("relic_SURVIVOR");
-        relic_TREATY = nbt.getBoolean("relic_TREATY");
-        relic_archifi_RYLFATE = nbt.getBoolean("relic_archifi_RYLFATE");
-        relic_util_MEATCAN = nbt.getBoolean("relic_util_MEATCAN");
-        relic_util_SEAGRASS = nbt.getBoolean("relic_util_SEAGRASS");
-        relic_util_ORANGE = nbt.getBoolean("relic_util_ORANGE");
-        relic_util_COFFEE = nbt.getBoolean("relic_util_COFFEE");
-        relic_util_BERRIES = nbt.getBoolean("relic_util_BERRIES");
+        chitin_knife_selected = ItemStack.parseOptional(null, nbt.getCompound("chitin_knife_selected"));
         player_util_RAINBOW = nbt.getBoolean("player_util_RAINBOW");
         player_util_AROMATIC = nbt.getBoolean("player_util_AROMATIC");
-        relic_util_MUSICBOX = nbt.getBoolean("relic_util_MUSICBOX");
-        relic_util_IRIS = nbt.getBoolean("relic_util_IRIS");
-        relic_util_FLUTE = nbt.getBoolean("relic_util_FLUTE");
-        relic_util_VOYGOLD = nbt.getBoolean("relic_util_VOYGOLD");
-        relic_util_DURIN = nbt.getBoolean("relic_util_DURIN");
-        relic_util_TOPONYM = nbt.getBoolean("relic_util_TOPONYM");
-        relic_util_KETTLE = nbt.getBoolean("relic_util_KETTLE");
-        relic_legend_CHITIN = nbt.getBoolean("relic_legend_CHITIN");
-        chitin_knife_selected = ItemStack.parseOptional(null, nbt.getCompound("chitin_knife_selected"));
-        relic_util_ALLEY = nbt.getBoolean("relic_util_ALLEY");
-        relic_util_BATBED = nbt.getBoolean("relic_util_BATBED");
-        relic_util_LONGEVITY = nbt.getBoolean("relic_util_LONGEVITY");
-        relic_util_OMNIKEY = nbt.getBoolean("relic_util_OMNIKEY");
-        relic_util_score = nbt.getBoolean("relic_util_score");
-        relic_util_RESCISSION = nbt.getBoolean("relic_util_RESCISSION");
-        relic_util_STARE = nbt.getBoolean("relic_util_STARE");
-        relic_hand_SWORD = nbt.getBoolean("relic_hand_SWORD");
-        relic_util_ALLAY = nbt.getBoolean("relic_util_ALLAY");
-        relic_util_RAINBOW = nbt.getBoolean("relic_util_RAINBOW");
-        relic_diso = nbt.getBoolean("relic_diso");
-        relic_diso_FLESH = nbt.getBoolean("relic_diso_FLESH");
-        relic_diso_BLOOD = nbt.getBoolean("relic_diso_BLOOD");
-        relic_diso_NEURO = nbt.getBoolean("relic_diso_NEURO");
-        relic_ahnd_SWIPE = nbt.getBoolean("relic_ahnd_SWIPE");
-        relic_diso_ATTENTION = nbt.getBoolean("relic_diso_ATTENTION");
-        relic_hanshand_SPIKE = nbt.getBoolean("relic_hanshand_SPIKE");
-        relic_royalfate = nbt.getBoolean("relic_royalfate");
         player_king_suit = nbt.getDouble("player_king_suit");
         player_demon_suit = nbt.getDouble("player_demon_suit");
         player_oceanization = nbt.getDouble("player_oceanization");
-        relic_cursed_HEART = nbt.getBoolean("relic_cursed_HEART");
-        relic_HEMOST = nbt.getBoolean("relic_HEMOST");
-        relic_YEARNING = nbt.getBoolean("relic_YEARNING");
         plauyer_balance = nbt.getDouble("plauyer_balance");
         can_player_evo = nbt.getBoolean("can_player_evo");
         reserve_quantity = nbt.getDouble("reserve_quantity");
@@ -319,6 +200,85 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
         PEVO_NEXUS_expo_shield = nbt.getBoolean("PEVO_NEXUS_expo_shield");
         PEVO_NODE_eunectes = nbt.getDouble("PEVO_NODE_eunectes");
         PEVO_NODE_less_armor = nbt.getDouble("PEVO_NODE_less_armor");
+
+        /* 新格式优先：relics 子 tag 全量读 */
+        if (nbt.contains("relics", Tag.TAG_COMPOUND)) {
+            CompoundTag relicsTag = nbt.getCompound("relics");
+            for (String rawKey : relicsTag.getAllKeys()) {
+                ResourceKey<RelicType> key = ResourceKey.create(CARelics.RELICS_REGISTRY_KEY,
+                    net.minecraft.resources.ResourceLocation.parse(rawKey));
+                int lvl = relicsTag.getInt(rawKey);
+                setRelic(key, lvl);
+            }
+        } else {
+            /* 老存档迁移：扁平 relic_xxx key → 注册表 ResourceKey。数值型 double 型原字段以 (int) 截断和原 switch 保持一致。 */
+            migrateLegacyBoolean(nbt, "relic_cursed_EMELIGHT", CURSED_EMELIGHT.getKey());
+            migrateLegacyBoolean(nbt, "relic_cursed_GLOWBODY", CURSED_GLOWBODY.getKey());
+            migrateLegacyBoolean(nbt, "relic_cursed_RESEARCH", CURSED_RESEARCH.getKey());
+            migrateLegacyBoolean(nbt, "relic_cursed_HEART", CURSED_HEART.getKey());
+            migrateLegacyBoolean(nbt, "relic_king_CROWN", KING_CROWN.getKey());
+            migrateLegacyBoolean(nbt, "relic_king_ARMOR", KING_ARMOR.getKey());
+            migrateLegacyBoolean(nbt, "relic_king_SPEAR", KING_SPEAR.getKey());
+            migrateLegacyBoolean(nbt, "relic_king_EXTENSION", KING_EXTENSION.getKey());
+            migrateLegacyBoolean(nbt, "relic_king_CRYSTAL", KING_CRYSTAL.getKey());
+            migrateLegacyBoolean(nbt, "relic_royalfate", ROYALFATE.getKey());
+            migrateLegacyBoolean(nbt, "relic_hand_THORNS", HAND_THORNS.getKey());
+            migrateLegacyBoolean(nbt, "relic_hand_STRANGLE", HAND_STRANGLE.getKey());
+            migrateLegacyBoolean(nbt, "relic_hand_FERTILITY", HAND_FERTILITY.getKey());
+            migrateLegacyBoolean(nbt, "relic_hand_SPEED", HAND_SPEED.getKey());
+            migrateLegacyBoolean(nbt, "relic_hand_BARREN", HAND_OF_PULVERIZATION.getKey());
+            migrateLegacyBoolean(nbt, "relic_hand_SWIPE", HAND_SWIPE.getKey());
+            migrateLegacyBoolean(nbt, "relic_hand_FIREWORK", HAND_FIREWORK.getKey());
+            migrateLegacyBoolean(nbt, "relic_hand_SWORD", HAND_SWORD.getKey());
+            migrateLegacyBoolean(nbt, "relic_archfi_ARTIFACT", SARKAZ_KING_ARTIFACT.getKey());
+            migrateLegacyBoolean(nbt, "relic_archfi_FLAG", SARKAZ_KING_FLAG.getKey());
+            migrateLegacyBoolean(nbt, "relic_archfi_BED", SARKAZ_KING_BED.getKey());
+            migrateLegacyBoolean(nbt, "relic_archifi_RYLFATE", SARKAZ_KING_RYLFATE.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_MEATCAN", FEATURED_CANNED_MEAT.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_SEAGRASS", SEAWEED_SALAD.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_ORANGE", ORANGE_STORM.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_COFFEE", COFFEE_PLAINS_COFFEE_CANDY.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_BERRIES", PITTS_ASSORTED_FRUITS.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_MUSICBOX", UTIL_MUSICBOX.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_IRIS", UTIL_IRIS.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_FLUTE", WEIRD_FLUTE.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_VOYGOLD", PURE_GOLD_EXPEDITION.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_DURIN", DURIN_OVERGROUND_ODYSSEY.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_TOPONYM", UTIL_TOPONYM.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_KETTLE", HOT_WATER_KETTLE.getKey());
+            migrateLegacyBoolean(nbt, "relic_legend_CHITIN", LEGEND_CHITIN.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_ALLEY", UTIL_ALLEY.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_BATBED", VAMPIRES_BED.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_LONGEVITY", PROOF_OF_LONGEVITY.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_OMNIKEY", UTIL_OMNIKEY.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_score", UTIL_SCORE.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_RESCISSION", UTIL_RESCISSION.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_STARE", UTIL_STARE.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_ALLAY", UTIL_ALLAY.getKey());
+            migrateLegacyBoolean(nbt, "relic_util_RAINBOW", UTIL_RAINBOW.getKey());
+            migrateLegacyBoolean(nbt, "relic_diso", DISO.getKey());
+            migrateLegacyBoolean(nbt, "relic_diso_FLESH", DISO_FLESH.getKey());
+            migrateLegacyBoolean(nbt, "relic_diso_BLOOD", DISO_BLOOD.getKey());
+            migrateLegacyBoolean(nbt, "relic_diso_NEURO", DISO_NEURO.getKey());
+            migrateLegacyBoolean(nbt, "relic_diso_ATTENTION", DISO_ATTENTION.getKey());
+            migrateLegacyBoolean(nbt, "relic_ahnd_SWIPE", AHND_SWIPE.getKey());
+            migrateLegacyBoolean(nbt, "relic_hanshand_SPIKE", HANSHAND_SPIKE.getKey());
+            migrateLegacyBoolean(nbt, "relic_TREATY", TREATY.getKey());
+            migrateLegacyBoolean(nbt, "relic_HEMOST", HEMOST.getKey());
+            migrateLegacyBoolean(nbt, "relic_YEARNING", YEARNING.getKey());
+            if (nbt.contains("relic_hand_ENGRAVE", Tag.TAG_ANY_NUMERIC)) {
+                setRelic(HAND_ENGRAVE.getKey(), (int) nbt.getDouble("relic_hand_ENGRAVE"));
+            }
+            if (nbt.contains("relic_SURVIVOR", Tag.TAG_ANY_NUMERIC)) {
+                setRelic(SURVIVOR_CONTRACT.getKey(), (int) nbt.getDouble("relic_SURVIVOR"));
+            }
+        }
+    }
+
+    private void migrateLegacyBoolean(CompoundTag nbt, String oldKey, ResourceKey<RelicType> newKey) {
+        if (nbt.contains(oldKey, Tag.TAG_ANY_NUMERIC)) {
+            setRelic(newKey, nbt.getBoolean(oldKey) ? 1 : 0);
+        }
     }
 
     @Override

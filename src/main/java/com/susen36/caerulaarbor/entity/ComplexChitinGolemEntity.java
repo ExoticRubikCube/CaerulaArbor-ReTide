@@ -227,7 +227,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         }
         if (scale > 0) {
             this.setHealth((float) (this.getHealth() + this.getMaxHealth() * scale));
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
             }
             return InteractionResult.SUCCESS;

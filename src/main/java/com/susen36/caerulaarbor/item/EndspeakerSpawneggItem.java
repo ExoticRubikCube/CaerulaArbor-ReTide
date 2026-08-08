@@ -58,7 +58,7 @@ public class EndspeakerSpawneggItem extends DeferredSpawnEggItem {
                 tgtX = x + 0.5;
                 tgtY = y + 0.5;
                 tgtZ = z + 0.5;
-                if ((LevelAccessor) world instanceof ServerLevel level) {
+                if (world instanceof ServerLevel level) {
                     EndspeakerEntity.spawnForPhase(level, BlockPos.containing(tgtX, tgtY, tgtZ), MobSpawnType.MOB_SUMMONED, (int) phase);
                 }
                 item.shrink(1);

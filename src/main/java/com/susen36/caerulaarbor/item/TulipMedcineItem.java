@@ -49,7 +49,7 @@ public class TulipMedcineItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if ((LevelAccessor) world instanceof ServerLevel level)
+        if (world instanceof ServerLevel level)
 			level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.15);
 		double setval = 0;
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);

@@ -162,7 +162,7 @@ public class MartusBookItem extends Item implements GeoItem, SyncedAnimationItem
             if ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) <= (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
                 if (entity instanceof Player player)
                     player.getCooldowns().addCooldown(itemstack.getItem(), 1200);
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 2, 1);
                 }
                 if (entity instanceof LivingEntity livingEntity)

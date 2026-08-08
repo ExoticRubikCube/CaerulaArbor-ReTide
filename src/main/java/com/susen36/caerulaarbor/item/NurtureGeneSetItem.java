@@ -48,7 +48,7 @@ public class NurtureGeneSetItem extends Item {
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
             capability.can_player_evo = setval;
             capability.syncPlayerVariables(entity);
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 2, 1);
             }
         }

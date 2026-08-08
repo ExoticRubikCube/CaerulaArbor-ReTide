@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.caerulaarbor.CaerulaArborMod;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
@@ -47,8 +47,8 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 64);
 	public static final IntegerProperty LONGEVITY = IntegerProperty.create("longevity", 0, 16);
-	private static final TagKey<Block> CANNOT_COVER = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_cover"));
-	private static final TagKey<Block> ERRODABLE = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "errodable"));
+	private static final TagKey<Block> CANNOT_COVER = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "cannot_cover"));
+	private static final TagKey<Block> ERRODABLE = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "errodable"));
 	private static final TagKey<Block> FORGE_STONE = BlockTags.create(ResourceLocation.parse("forge:stone"));
 
 	public SeaTrailGrownBlock() {

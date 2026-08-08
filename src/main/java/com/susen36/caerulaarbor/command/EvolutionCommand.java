@@ -48,11 +48,11 @@ public class EvolutionCommand {
             String info;
             MapVariablesHandler.setStrategyLevel(world, StrategyType.GROW, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.GROW2.get(), SoundSource.NEUTRAL, 4, 1);
                 }
             } else if (DoubleArgumentType.getDouble(arguments, "lvl") > 0) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.GROW1.get(), SoundSource.NEUTRAL, 4, 1);
                 }
             }
@@ -90,11 +90,11 @@ public class EvolutionCommand {
             String info;
             MapVariablesHandler.setStrategyLevel(world, StrategyType.BREED, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.BREED2.get(), SoundSource.NEUTRAL, 4, 1);
                 }
             } else if (DoubleArgumentType.getDouble(arguments, "lvl") > 0) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.BREED1.get(), SoundSource.NEUTRAL, 4, 1);
                 }
             }
@@ -132,11 +132,11 @@ public class EvolutionCommand {
             String info;
             MapVariablesHandler.setStrategyLevel(world, StrategyType.MIGRATION, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.MIGRATION2.get(), SoundSource.NEUTRAL, 4, 1);
                 }
             } else if (DoubleArgumentType.getDouble(arguments, "lvl") > 0) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.MIGRATION1.get(), SoundSource.NEUTRAL, 4, 1);
                 }
             }
@@ -174,11 +174,11 @@ public class EvolutionCommand {
             String info;
             MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBSISTING, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBSISTING2.get(), SoundSource.NEUTRAL, 4, 1);
                 }
             } else if (DoubleArgumentType.getDouble(arguments, "lvl") > 0) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBSISTING1.get(), SoundSource.NEUTRAL, 4, 1);
                 }
             }
@@ -209,25 +209,25 @@ public class EvolutionCommand {
                 if (SilenceUpgradeManager.canEnableSilence(world)) {
                     MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, lvl);
                     if (lvl == 1) {
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SILENCE1.get(), SoundSource.NEUTRAL, 6, 1);
                         }
                         if (entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal(SilenceUpgradeManager.getSilenceUnlockPlayerMsg(1)), true);
                     } else if (lvl == 2) {
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SILENCE2.get(), SoundSource.NEUTRAL, 6, 1);
                         }
                         if (entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal(SilenceUpgradeManager.getSilenceUnlockPlayerMsg(2)), true);
                     } else if (lvl == 3) {
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SILENCE3.get(), SoundSource.NEUTRAL, 6, 1);
                         }
                         if (entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal(SilenceUpgradeManager.getSilenceUnlockPlayerMsg(3)), true);
                     } else if (lvl == 4) {
-                        if ((LevelAccessor) world instanceof Level level) {
+                        if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.SILENCE4.get(), SoundSource.NEUTRAL, 6, 1);
                         }
                         if (entity instanceof Player player && !player.level().isClientSide())
@@ -261,11 +261,11 @@ public class EvolutionCommand {
                 double doneLvl = Math.min(MapVariables.get(world).strategy_sublimation + 1.0, 4.0);
                 MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, doneLvl);
                 if (doneLvl >= 3) {
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_2.get(), SoundSource.NEUTRAL, 4, 1);
                     }
                 } else if (doneLvl > 0) {
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_1.get(), SoundSource.NEUTRAL, 4, 1);
                     }
                 }
@@ -316,11 +316,11 @@ public class EvolutionCommand {
             if (MapVariables.get(world).if_sublimation) {
                 MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, lvl);
                 if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_2.get(), SoundSource.NEUTRAL, 4, 1);
                     }
                 } else if (DoubleArgumentType.getDouble(arguments, "lvl") > 0) {
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_1.get(), SoundSource.NEUTRAL, 4, 1);
                     }
                 }

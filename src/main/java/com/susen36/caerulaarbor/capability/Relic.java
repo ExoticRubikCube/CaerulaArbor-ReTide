@@ -1,11 +1,25 @@
 package com.susen36.caerulaarbor.capability;
 
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
+import com.susen36.caerulaarbor.relic.RelicType;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
+import java.util.EnumMap;
 import java.util.function.Consumer;
 
+/**
+ * Relic 枚举作为「编译期常量门面层」保留（共 56 个遗物）。
+ * <p>
+ * 设计要点：
+ * <ol>
+ *   <li>minLevel / maxLevel / defaultLevel 仍保留在枚举构造器内（供 Relic.modify 级别的 clamp 前置判定使用；PlayerVariable.setRelic 会做最终二次 clamp）</li>
+ *   <li>底层存储已全部迁入 PlayerVariable.relicLevels（Map&lt;ResourceKey&lt;RelicType&gt;, Integer&gt;），通过 BY_ENUM 静态表把 56 个枚举常量一一绑定到 CARelics 注册表 Key</li>
+ *   <li>对外 API（get / gained / reset / set / gain / modify 等方法签名）完全不变，59 个调用方无需改动</li>
+ * </ol>
+ */
 public enum Relic {
     FEATURED_CANNED_MEAT,
     SEAWEED_SALAD,
@@ -79,69 +93,81 @@ public enum Relic {
         this.defaultLevel = defaultLevel;
     }
 
+    /**
+     * 56 个枚举常量 → 注册制 ResourceKey 的绑定表。
+     * 放在独立 static{} 块里避免枚举构造器阶段跨类引用静态字段的顺序风险。
+     */
+    private static final EnumMap<Relic, ResourceKey<RelicType>> BY_ENUM = new EnumMap<>(Relic.class);
+
+    static {
+        BY_ENUM.put(FEATURED_CANNED_MEAT, CARelics.FEATURED_CANNED_MEAT.getKey());
+        BY_ENUM.put(SEAWEED_SALAD, CARelics.SEAWEED_SALAD.getKey());
+        BY_ENUM.put(ORANGE_STORM, CARelics.ORANGE_STORM.getKey());
+        BY_ENUM.put(COFFEE_PLAINS_COFFEE_CANDY, CARelics.COFFEE_PLAINS_COFFEE_CANDY.getKey());
+        BY_ENUM.put(PITTS_ASSORTED_FRUITS, CARelics.PITTS_ASSORTED_FRUITS.getKey());
+        BY_ENUM.put(CURSED_EMELIGHT, CARelics.CURSED_EMELIGHT.getKey());
+        BY_ENUM.put(CURSED_GLOWBODY, CARelics.CURSED_GLOWBODY.getKey());
+        BY_ENUM.put(CURSED_RESEARCH, CARelics.CURSED_RESEARCH.getKey());
+        BY_ENUM.put(CURSED_HEART, CARelics.CURSED_HEART.getKey());
+        BY_ENUM.put(KING_CROWN, CARelics.KING_CROWN.getKey());
+        BY_ENUM.put(KING_ARMOR, CARelics.KING_ARMOR.getKey());
+        BY_ENUM.put(KING_SPEAR, CARelics.KING_SPEAR.getKey());
+        BY_ENUM.put(KING_EXTENSION, CARelics.KING_EXTENSION.getKey());
+        BY_ENUM.put(KING_CRYSTAL, CARelics.KING_CRYSTAL.getKey());
+        BY_ENUM.put(ROYALFATE, CARelics.ROYALFATE.getKey());
+        BY_ENUM.put(HAND_THORNS, CARelics.HAND_THORNS.getKey());
+        BY_ENUM.put(HAND_STRANGLE, CARelics.HAND_STRANGLE.getKey());
+        BY_ENUM.put(HAND_FERTILITY, CARelics.HAND_FERTILITY.getKey());
+        BY_ENUM.put(HAND_SPEED, CARelics.HAND_SPEED.getKey());
+        BY_ENUM.put(HAND_OF_PULVERIZATION, CARelics.HAND_OF_PULVERIZATION.getKey());
+        BY_ENUM.put(HAND_SWIPE, CARelics.HAND_SWIPE.getKey());
+        BY_ENUM.put(SARKAZ_KING_ARTIFACT, CARelics.SARKAZ_KING_ARTIFACT.getKey());
+        BY_ENUM.put(HAND_FIREWORK, CARelics.HAND_FIREWORK.getKey());
+        BY_ENUM.put(SARKAZ_KING_FLAG, CARelics.SARKAZ_KING_FLAG.getKey());
+        BY_ENUM.put(HAND_ENGRAVE, CARelics.HAND_ENGRAVE.getKey());
+        BY_ENUM.put(SARKAZ_KING_BED, CARelics.SARKAZ_KING_BED.getKey());
+        BY_ENUM.put(SURVIVOR_CONTRACT, CARelics.SURVIVOR_CONTRACT.getKey());
+        BY_ENUM.put(TREATY, CARelics.TREATY.getKey());
+        BY_ENUM.put(SARKAZ_KING_RYLFATE, CARelics.SARKAZ_KING_RYLFATE.getKey());
+        BY_ENUM.put(UTIL_MUSICBOX, CARelics.UTIL_MUSICBOX.getKey());
+        BY_ENUM.put(UTIL_IRIS, CARelics.UTIL_IRIS.getKey());
+        BY_ENUM.put(WEIRD_FLUTE, CARelics.WEIRD_FLUTE.getKey());
+        BY_ENUM.put(PURE_GOLD_EXPEDITION, CARelics.PURE_GOLD_EXPEDITION.getKey());
+        BY_ENUM.put(DURIN_OVERGROUND_ODYSSEY, CARelics.DURIN_OVERGROUND_ODYSSEY.getKey());
+        BY_ENUM.put(UTIL_TOPONYM, CARelics.UTIL_TOPONYM.getKey());
+        BY_ENUM.put(HOT_WATER_KETTLE, CARelics.HOT_WATER_KETTLE.getKey());
+        BY_ENUM.put(LEGEND_CHITIN, CARelics.LEGEND_CHITIN.getKey());
+        BY_ENUM.put(UTIL_ALLEY, CARelics.UTIL_ALLEY.getKey());
+        BY_ENUM.put(VAMPIRES_BED, CARelics.VAMPIRES_BED.getKey());
+        BY_ENUM.put(PROOF_OF_LONGEVITY, CARelics.PROOF_OF_LONGEVITY.getKey());
+        BY_ENUM.put(UTIL_OMNIKEY, CARelics.UTIL_OMNIKEY.getKey());
+        BY_ENUM.put(UTIL_SCORE, CARelics.UTIL_SCORE.getKey());
+        BY_ENUM.put(UTIL_RESCISSION, CARelics.UTIL_RESCISSION.getKey());
+        BY_ENUM.put(UTIL_STARE, CARelics.UTIL_STARE.getKey());
+        BY_ENUM.put(HAND_SWORD, CARelics.HAND_SWORD.getKey());
+        BY_ENUM.put(UTIL_ALLAY, CARelics.UTIL_ALLAY.getKey());
+        BY_ENUM.put(UTIL_RAINBOW, CARelics.UTIL_RAINBOW.getKey());
+        BY_ENUM.put(DISO, CARelics.DISO.getKey());
+        BY_ENUM.put(DISO_FLESH, CARelics.DISO_FLESH.getKey());
+        BY_ENUM.put(DISO_BLOOD, CARelics.DISO_BLOOD.getKey());
+        BY_ENUM.put(DISO_NEURO, CARelics.DISO_NEURO.getKey());
+        BY_ENUM.put(DISO_ATTENTION, CARelics.DISO_ATTENTION.getKey());
+        BY_ENUM.put(AHND_SWIPE, CARelics.AHND_SWIPE.getKey());
+        BY_ENUM.put(HANSHAND_SPIKE, CARelics.HANSHAND_SPIKE.getKey());
+        BY_ENUM.put(HEMOST, CARelics.HEMOST.getKey());
+        BY_ENUM.put(YEARNING, CARelics.YEARNING.getKey());
+    }
+
+    public ResourceKey<RelicType> getRegistryKey() {
+        return BY_ENUM.get(this);
+    }
+
     public int get(Entity player) {
         return get(ModCapabilities.getPlayerVariables(player));
     }
 
     public int get(PlayerVariable variables) {
-        return switch (this) {
-            case FEATURED_CANNED_MEAT -> variables.relic_util_MEATCAN ? 1 : 0;
-            case SEAWEED_SALAD -> variables.relic_util_SEAGRASS ? 1 : 0;
-            case ORANGE_STORM -> variables.relic_util_ORANGE ? 1 : 0;
-            case COFFEE_PLAINS_COFFEE_CANDY -> variables.relic_util_COFFEE ? 1 : 0;
-            case PITTS_ASSORTED_FRUITS -> variables.relic_util_BERRIES ? 1 : 0;
-            case CURSED_EMELIGHT -> variables.relic_cursed_EMELIGHT ? 1 : 0;
-            case CURSED_GLOWBODY -> variables.relic_cursed_GLOWBODY ? 1 : 0;
-            case CURSED_RESEARCH -> variables.relic_cursed_RESEARCH ? 1 : 0;
-            case KING_CROWN -> variables.relic_king_CROWN ? 1 : 0;
-            case KING_ARMOR -> variables.relic_king_ARMOR ? 1 : 0;
-            case KING_SPEAR -> variables.relic_king_SPEAR ? 1 : 0;
-            case KING_EXTENSION -> variables.relic_king_EXTENSION ? 1 : 0;
-            case KING_CRYSTAL -> variables.relic_king_CRYSTAL ? 1 : 0;
-            case HAND_THORNS -> variables.relic_hand_THORNS ? 1 : 0;
-            case HAND_STRANGLE -> variables.relic_hand_STRANGLE ? 1 : 0;
-            case HAND_FERTILITY -> variables.relic_hand_FERTILITY ? 1 : 0;
-            case HAND_SPEED -> variables.relic_hand_SPEED ? 1 : 0;
-            case HAND_OF_PULVERIZATION -> variables.relic_hand_BARREN ? 1 : 0;
-            case HAND_SWIPE -> variables.relic_hand_SWIPE ? 1 : 0;
-            case SARKAZ_KING_ARTIFACT -> variables.relic_archfi_ARTIFACT ? 1 : 0;
-            case HAND_FIREWORK -> variables.relic_hand_FIREWORK ? 1 : 0;
-            case SARKAZ_KING_FLAG -> variables.relic_archfi_FLAG ? 1 : 0;
-            case HAND_ENGRAVE -> (int) variables.relic_hand_ENGRAVE;
-            case SARKAZ_KING_BED -> variables.relic_archfi_BED ? 1 : 0;
-            case SURVIVOR_CONTRACT -> (int) variables.relic_SURVIVOR;
-            case TREATY -> variables.relic_TREATY ? 1 : 0;
-            case SARKAZ_KING_RYLFATE -> variables.relic_archifi_RYLFATE ? 1 : 0;
-            case UTIL_MUSICBOX -> variables.relic_util_MUSICBOX ? 1 : 0;
-            case UTIL_IRIS -> variables.relic_util_IRIS ? 1 : 0;
-            case WEIRD_FLUTE -> variables.relic_util_FLUTE ? 1 : 0;
-            case PURE_GOLD_EXPEDITION -> variables.relic_util_VOYGOLD ? 1 : 0;
-            case DURIN_OVERGROUND_ODYSSEY -> variables.relic_util_DURIN ? 1 : 0;
-            case UTIL_TOPONYM -> variables.relic_util_TOPONYM ? 1 : 0;
-            case HOT_WATER_KETTLE -> variables.relic_util_KETTLE ? 1 : 0;
-            case LEGEND_CHITIN -> variables.relic_legend_CHITIN ? 1 : 0;
-            case UTIL_ALLEY -> variables.relic_util_ALLEY ? 1 : 0;
-            case VAMPIRES_BED -> variables.relic_util_BATBED ? 1 : 0;
-            case PROOF_OF_LONGEVITY -> variables.relic_util_LONGEVITY ? 1 : 0;
-            case UTIL_OMNIKEY -> variables.relic_util_OMNIKEY ? 1 : 0;
-            case UTIL_SCORE -> variables.relic_util_score ? 1 : 0;
-            case UTIL_RESCISSION -> variables.relic_util_RESCISSION ? 1 : 0;
-            case UTIL_STARE -> variables.relic_util_STARE ? 1 : 0;
-            case HAND_SWORD -> variables.relic_hand_SWORD ? 1 : 0;
-            case UTIL_ALLAY -> variables.relic_util_ALLAY ? 1 : 0;
-            case UTIL_RAINBOW -> variables.relic_util_RAINBOW ? 1 : 0;
-            case DISO -> variables.relic_diso ? 1 : 0;
-            case DISO_FLESH -> variables.relic_diso_FLESH ? 1 : 0;
-            case DISO_BLOOD -> variables.relic_diso_BLOOD ? 1 : 0;
-            case DISO_NEURO -> variables.relic_diso_NEURO ? 1 : 0;
-            case AHND_SWIPE -> variables.relic_ahnd_SWIPE ? 1 : 0;
-            case DISO_ATTENTION -> variables.relic_diso_ATTENTION ? 1 : 0;
-            case HANSHAND_SPIKE -> variables.relic_hanshand_SPIKE ? 1 : 0;
-            case ROYALFATE -> variables.relic_royalfate ? 1 : 0;
-            case CURSED_HEART -> variables.relic_cursed_HEART ? 1 : 0;
-            case HEMOST -> variables.relic_HEMOST ? 1 : 0;
-            case YEARNING -> variables.relic_YEARNING ? 1 : 0;
-        };
+        return variables.getRelic(getRegistryKey());
     }
 
     public boolean gained(Entity player) {
@@ -166,64 +192,7 @@ public enum Relic {
 
     public void set(PlayerVariable variables, int level) {
         int clampedLevel = Mth.clamp(level, minLevel, maxLevel);
-        switch (this) {
-            case FEATURED_CANNED_MEAT -> variables.relic_util_MEATCAN = clampedLevel > 0;
-            case SEAWEED_SALAD -> variables.relic_util_SEAGRASS = clampedLevel > 0;
-            case ORANGE_STORM -> variables.relic_util_ORANGE = clampedLevel > 0;
-            case COFFEE_PLAINS_COFFEE_CANDY -> variables.relic_util_COFFEE = clampedLevel > 0;
-            case PITTS_ASSORTED_FRUITS -> variables.relic_util_BERRIES = clampedLevel > 0;
-            case CURSED_EMELIGHT -> variables.relic_cursed_EMELIGHT = clampedLevel > 0;
-            case CURSED_GLOWBODY -> variables.relic_cursed_GLOWBODY = clampedLevel > 0;
-            case CURSED_RESEARCH -> variables.relic_cursed_RESEARCH = clampedLevel > 0;
-            case KING_CROWN -> variables.relic_king_CROWN = clampedLevel > 0;
-            case KING_ARMOR -> variables.relic_king_ARMOR = clampedLevel > 0;
-            case KING_SPEAR -> variables.relic_king_SPEAR = clampedLevel > 0;
-            case KING_EXTENSION -> variables.relic_king_EXTENSION = clampedLevel > 0;
-            case KING_CRYSTAL -> variables.relic_king_CRYSTAL = clampedLevel > 0;
-            case HAND_THORNS -> variables.relic_hand_THORNS = clampedLevel > 0;
-            case HAND_STRANGLE -> variables.relic_hand_STRANGLE = clampedLevel > 0;
-            case HAND_FERTILITY -> variables.relic_hand_FERTILITY = clampedLevel > 0;
-            case HAND_SPEED -> variables.relic_hand_SPEED = clampedLevel > 0;
-            case HAND_OF_PULVERIZATION -> variables.relic_hand_BARREN = clampedLevel > 0;
-            case HAND_SWIPE -> variables.relic_hand_SWIPE = clampedLevel > 0;
-            case SARKAZ_KING_ARTIFACT -> variables.relic_archfi_ARTIFACT = clampedLevel > 0;
-            case HAND_FIREWORK -> variables.relic_hand_FIREWORK = clampedLevel > 0;
-            case SARKAZ_KING_FLAG -> variables.relic_archfi_FLAG = clampedLevel > 0;
-            case HAND_ENGRAVE -> variables.relic_hand_ENGRAVE = clampedLevel;
-            case SARKAZ_KING_BED -> variables.relic_archfi_BED = clampedLevel > 0;
-            case SURVIVOR_CONTRACT -> variables.relic_SURVIVOR = clampedLevel;
-            case TREATY -> variables.relic_TREATY = clampedLevel > 0;
-            case SARKAZ_KING_RYLFATE -> variables.relic_archifi_RYLFATE = clampedLevel > 0;
-            case UTIL_MUSICBOX -> variables.relic_util_MUSICBOX = clampedLevel > 0;
-            case UTIL_IRIS -> variables.relic_util_IRIS = clampedLevel > 0;
-            case WEIRD_FLUTE -> variables.relic_util_FLUTE = clampedLevel > 0;
-            case PURE_GOLD_EXPEDITION -> variables.relic_util_VOYGOLD = clampedLevel > 0;
-            case DURIN_OVERGROUND_ODYSSEY -> variables.relic_util_DURIN = clampedLevel > 0;
-            case UTIL_TOPONYM -> variables.relic_util_TOPONYM = clampedLevel > 0;
-            case HOT_WATER_KETTLE -> variables.relic_util_KETTLE = clampedLevel > 0;
-            case LEGEND_CHITIN -> variables.relic_legend_CHITIN = clampedLevel > 0;
-            case UTIL_ALLEY -> variables.relic_util_ALLEY = clampedLevel > 0;
-            case VAMPIRES_BED -> variables.relic_util_BATBED = clampedLevel > 0;
-            case PROOF_OF_LONGEVITY -> variables.relic_util_LONGEVITY = clampedLevel > 0;
-            case UTIL_OMNIKEY -> variables.relic_util_OMNIKEY = clampedLevel > 0;
-            case UTIL_SCORE -> variables.relic_util_score = clampedLevel > 0;
-            case UTIL_RESCISSION -> variables.relic_util_RESCISSION = clampedLevel > 0;
-            case UTIL_STARE -> variables.relic_util_STARE = clampedLevel > 0;
-            case HAND_SWORD -> variables.relic_hand_SWORD = clampedLevel > 0;
-            case UTIL_ALLAY -> variables.relic_util_ALLAY = clampedLevel > 0;
-            case UTIL_RAINBOW -> variables.relic_util_RAINBOW = clampedLevel > 0;
-            case DISO -> variables.relic_diso = clampedLevel > 0;
-            case DISO_FLESH -> variables.relic_diso_FLESH = clampedLevel > 0;
-            case DISO_BLOOD -> variables.relic_diso_BLOOD = clampedLevel > 0;
-            case DISO_NEURO -> variables.relic_diso_NEURO = clampedLevel > 0;
-            case AHND_SWIPE -> variables.relic_ahnd_SWIPE = clampedLevel > 0;
-            case DISO_ATTENTION -> variables.relic_diso_ATTENTION = clampedLevel > 0;
-            case HANSHAND_SPIKE -> variables.relic_hanshand_SPIKE = clampedLevel > 0;
-            case ROYALFATE -> variables.relic_royalfate = clampedLevel > 0;
-            case CURSED_HEART -> variables.relic_cursed_HEART = clampedLevel > 0;
-            case HEMOST -> variables.relic_HEMOST = clampedLevel > 0;
-            case YEARNING -> variables.relic_YEARNING = clampedLevel > 0;
-        }
+        variables.setRelic(getRegistryKey(), clampedLevel);
     }
 
     public void gain(Entity player) {

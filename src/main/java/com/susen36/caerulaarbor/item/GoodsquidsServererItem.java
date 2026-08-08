@@ -44,17 +44,17 @@ public class GoodsquidsServererItem extends Item {
             if (itemstack.getDamageValue() >= 799) {
                 if (Math.random() < 0.2) {
                     if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
-                        if ((LevelAccessor) world instanceof Level level && !level.isClientSide())
+                        if (world instanceof Level level && !level.isClientSide())
                             level.explode(null, x, y, z, 12, Level.ExplosionInteraction.BLOCK);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                    if (world instanceof ServerLevel level) {
                         LightningBolt entityToSpawn = EntityType.LIGHTNING_BOLT.create(level);
                         if (entityToSpawn != null) {
                             entityToSpawn.moveTo(Vec3.atBottomCenterOf(BlockPos.containing(x, y, z)));
                             level.addFreshEntity(entityToSpawn);
                         }
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel level)
+                    if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 6, 4, 4, 4, 0);
                     if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 3, 1);

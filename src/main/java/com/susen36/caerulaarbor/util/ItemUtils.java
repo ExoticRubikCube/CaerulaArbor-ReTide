@@ -35,14 +35,6 @@ public class ItemUtils {
 		return first_two;
 	}
 
-	public static boolean isFilledwithPersonnel(ItemStack itemstack) {
-		String name = itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("name");
-		if ((name).equals("apocata")) {
-			return false;
-		}
-		return !(name).isEmpty();
-	}
-
 	public static String getOneUseItemDescription(ItemStack itemstack) {
 		String locId = itemstack.getDescriptionId();
 		String first_two = Component.translatable((locId + ".description_0")).getString() + "\n" + Component.translatable((locId + ".description_1")).getString();

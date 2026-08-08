@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
@@ -45,15 +46,15 @@ public class RelicCursedRESEARCHItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-            if (!ModCapabilities.getPlayerVariables(entity).relic_cursed_RESEARCH) {
+            if (!Relic.CURSED_RESEARCH.gained(entity)) {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                capability.relic_cursed_RESEARCH = setval;
+                Relic.CURSED_RESEARCH.set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);
                 }
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
                 if (world.isClientSide())
                     Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);

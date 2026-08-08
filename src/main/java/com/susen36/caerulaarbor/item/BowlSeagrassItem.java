@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -39,7 +40,7 @@ public class BowlSeagrassItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 200, 0));
 		boolean setval = true;
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-		capability.relic_util_SEAGRASS = setval;
+		Relic.SEAWEED_SALAD.set(capability, setval ? 1 : 0);
 		capability.syncPlayerVariables(entity);
 		if (itemstack.isEmpty()) {
 			return retval;

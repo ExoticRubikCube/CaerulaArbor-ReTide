@@ -221,10 +221,10 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
                 if ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
                     LivingEntity livingEntity = (LivingEntity) entity;
                     livingEntity.setHealth(livingEntity.getMaxHealth());
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FOX_EAT, SoundSource.PLAYERS, 1, 1);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel level)
+                    if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 8, 0.6, 0.6, 0.6, 0.1);
                     ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     return InteractionResult.SUCCESS;

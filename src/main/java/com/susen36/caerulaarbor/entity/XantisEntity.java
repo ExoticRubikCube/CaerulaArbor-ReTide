@@ -218,7 +218,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
             isNiubi = this.getEntityData().get(DATA_NIUBI);
             if (isNiubi) {
                 this.getEntityData().set(DATA_NIUBI, false);
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.LARGE_SMOKE, x, (y + 0.5), z, 32, 0.5, 0.5, 0.5, 0.1);
                 return InteractionResult.SUCCESS;
             }

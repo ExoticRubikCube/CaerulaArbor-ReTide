@@ -7,7 +7,6 @@ import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -345,7 +344,7 @@ public abstract class AbstractTidelinkedEntity extends SeaMonster implements Ele
         if (this.deathTime == 22) {
             this.remove(RemovalReason.KILLED);
             this.dropExperience(this.getKillCredit());
-            WorldUtils.dropRelicTidebi(this.level(), this.getX(), this.getY(), this.getZ());
+            TidelinkedBishopEntity.dropRelicTidebi(this.level(), this.getX(), this.getY(), this.getZ());
         }
     }
 

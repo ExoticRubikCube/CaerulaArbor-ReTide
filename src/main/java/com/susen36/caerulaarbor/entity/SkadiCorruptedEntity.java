@@ -86,7 +86,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
         setPersistenceRequired();
     }
 
-    public static void corruptedSpawnMobs(LevelAccessor world, double x, double y, double z, double count) {
+    public static void corruptedSpawnMobs(Level world, double x, double y, double z, double count) {
         double spawnX;
         double spawnY;
         double spawnZ;
@@ -309,7 +309,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();

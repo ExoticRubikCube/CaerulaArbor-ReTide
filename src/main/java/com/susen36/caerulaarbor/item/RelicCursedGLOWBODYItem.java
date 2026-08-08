@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.util.ItemUtils;
@@ -84,7 +85,7 @@ public class RelicCursedGLOWBODYItem extends Item {
 
 		if (!isUsed) {
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			if (!capability.relic_cursed_GLOWBODY) {
+			if (!Relic.CURSED_GLOWBODY.gained(capability)) {
 				double x = entity.getX();
 				double y = entity.getY();
 				double z = entity.getZ();
@@ -95,7 +96,7 @@ public class RelicCursedGLOWBODYItem extends Item {
 					serverLevel.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1.0, 1.0, 1.0, 1.0);
 				}
 
-				capability.relic_cursed_GLOWBODY = true;
+				Relic.CURSED_GLOWBODY.set(capability, 1);
 				capability.syncPlayerVariables(entity);
 
 				if (world.isClientSide()) {

@@ -132,7 +132,7 @@ public class TidelinkedWandItem extends Item {
                 if ((Entity) entity instanceof Player player)
                     player.giveExperiencePoints(-(10));
             }
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GUARDIAN_ATTACK, SoundSource.PLAYERS, (float) 1.25, 1);
             }
             if ((Entity) entity instanceof Player player)

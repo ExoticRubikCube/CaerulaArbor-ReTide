@@ -241,7 +241,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
 		if (this.deathTime == 20) {
 			this.remove(FeederProkaryoteEntity.RemovalReason.KILLED);
 			this.dropExperience(this.getKillCredit());
-            LevelAccessor world = this.level();
+            Level world = this.level();
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();

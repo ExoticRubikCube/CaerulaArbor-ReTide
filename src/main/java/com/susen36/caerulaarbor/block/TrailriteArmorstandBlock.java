@@ -133,7 +133,7 @@ public class TrailriteArmorstandBlock extends BaseEntityBlock implements SimpleW
         if (entity == null)
             return;
         if (entity instanceof Player) {
-            if ((LevelAccessor) world instanceof ServerLevel level) {
+            if (world instanceof ServerLevel level) {
                 Entity entityToSpawn = CAEntities.FLAMARINE_GOLEM.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);

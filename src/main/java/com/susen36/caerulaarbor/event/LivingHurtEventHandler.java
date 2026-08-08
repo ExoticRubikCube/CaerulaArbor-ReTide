@@ -5,6 +5,7 @@ import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.*;
@@ -418,7 +419,7 @@ public class LivingHurtEventHandler {
         boolean valid = false;
         String regName;
 
-        if (entity instanceof Player player && ModCapabilities.getPlayerVariables(player).relic_TREATY) {
+        if (entity instanceof Player player && Relic.TREATY.gained(player)) {
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:nether_mobs")))) {
                 valid = true;
             } else {

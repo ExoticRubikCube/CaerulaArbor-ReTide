@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.event;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -15,7 +16,7 @@ public class LivingExpDropEventHandler {
 		Player sourceentity = event.getAttackingPlayer();
 		if (sourceentity == null)
 			return;
-		if (ModCapabilities.getPlayerVariables(sourceentity).relic_king_EXTENSION) {
+		if (Relic.KING_EXTENSION.gained(sourceentity)) {
 			if (ModCapabilities.getPlayerVariables(sourceentity).player_lives <= 1) {
 				event.setDroppedExperience((int) (event.getDroppedExperience() * 1.5));
 			}

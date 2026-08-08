@@ -43,9 +43,9 @@ public class OceanPeduncleItem extends Item {
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 SIHelper.causeSanityInjury(entity, 20, SanityEvent.Hurt.Type.FOOD);
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.9), z, 16, 0.55, 1, 0.55, 0.1);
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                     if (level.isClientSide()) {
                         level.playLocalSound(x, y, z, SoundEvents.SLIME_SQUISH_SMALL, SoundSource.PLAYERS, 1, 1, false);
                     }

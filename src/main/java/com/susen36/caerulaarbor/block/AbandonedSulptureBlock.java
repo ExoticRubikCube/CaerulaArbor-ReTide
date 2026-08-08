@@ -152,7 +152,7 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
                     }
                     if (new Vec3(((double) x + 0.5), ((double) y + 1), ((double) z + 0.5)).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) < 24) {
                         world.destroyBlock(BlockPos.containing(x, y, z), false);
-                        if ((LevelAccessor) world instanceof ServerLevel level) {
+                        if (world instanceof ServerLevel level) {
                             Entity entityToSpawn = CAEntities.THE_ABANDONED.get().spawn(level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -172,7 +172,7 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if ((LevelAccessor) world instanceof ServerLevel level) {
+        if (world instanceof ServerLevel level) {
             Entity entityToSpawn = CAEntities.THE_ABANDONED.get().spawn(level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);

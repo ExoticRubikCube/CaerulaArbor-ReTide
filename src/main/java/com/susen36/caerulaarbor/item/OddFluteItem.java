@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -65,7 +66,7 @@ public class OddFluteItem extends Item {
 		double z = entity.getZ();
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             for (int index0 = 0; index0 < 7; index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
             }
             if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
@@ -73,7 +74,7 @@ public class OddFluteItem extends Item {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                capability.relic_util_FLUTE = setval;
+                Relic.WEIRD_FLUTE.set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
@@ -83,7 +84,7 @@ public class OddFluteItem extends Item {
         }
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.NOTE, x, y, z, 1, 1, 1, 1, 1);
                 final int tick2 = ticks;
                 CaerulaArbor.queueServerWork(tick2, () -> {

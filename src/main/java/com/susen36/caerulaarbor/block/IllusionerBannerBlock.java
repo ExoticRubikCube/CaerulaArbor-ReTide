@@ -150,7 +150,7 @@ public class IllusionerBannerBlock extends BaseEntityBlock implements SimpleWate
         state = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1;
         if (state == 0) {
             if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
-                if ((LevelAccessor) world instanceof ServerLevel level) {
+                if (world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.OCEANIZED_ILLUSIONER.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);

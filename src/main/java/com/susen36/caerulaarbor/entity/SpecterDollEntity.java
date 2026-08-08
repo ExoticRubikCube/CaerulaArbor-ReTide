@@ -104,10 +104,10 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SPECTER_DOLL_AMBIENT.get(), SoundSource.NEUTRAL, 3, 1);
         }
-        if ((LevelAccessor) world instanceof ServerLevel level)
+        if (world instanceof ServerLevel level)
             level.sendParticles(CAParticles.SPECTER_GLITTER.get(), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);
         return retval;
     }

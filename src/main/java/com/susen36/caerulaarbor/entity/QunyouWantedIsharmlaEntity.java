@@ -128,7 +128,7 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         if (this instanceof QunyouWantedIsharmlaEntity) {
             this.setAnimation("animation.isharmla.to_monster");
         }
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TO_MONSTERR.get(), SoundSource.HOSTILE, 2, 1);
         }
         return retval;

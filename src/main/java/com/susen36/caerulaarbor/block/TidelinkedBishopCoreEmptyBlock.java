@@ -53,7 +53,7 @@ public class TidelinkedBishopCoreEmptyBlock extends Block {
                     itemStack2 = ItemStack.EMPTY;
                 }
                 itemStack2.shrink(1);
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                     if (!level.isClientSide()) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.BLOCKS, 2.0f, 1.0f);
                     } else {

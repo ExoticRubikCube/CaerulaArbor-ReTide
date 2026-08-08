@@ -42,7 +42,7 @@ public class OceanglassCupItem extends Item {
                 ItemHandlerHelper.giveItemToPlayer(player, setstack);
             }
             itemstack.shrink(1);
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
             }
         }

@@ -98,9 +98,9 @@ public class LancXiaoItem extends SwordItem {
                                         ent.teleportTo(tx, ty, tz);
                                         if (ent instanceof ServerPlayer serverPlayer)
                                             serverPlayer.connection.teleport(tx, ty, tz, ent.getYRot(), ent.getXRot());
-                                        if ((LevelAccessor) world instanceof ServerLevel level)
+                                        if (world instanceof ServerLevel level)
                                             level.sendParticles(CAParticles.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
-                                        if ((LevelAccessor) world instanceof Level level) {
+                                        if (world instanceof Level level) {
                                                 level.playSound(null, BlockPos.containing(tx, ty, tz), CASounds.ENDSPEAKER_ATTACK_HIT.get(), SoundSource.PLAYERS, (float) 1.5, 1);
                                         }
                                         entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ENDSPEAKER_ATTACK, entity), (float) (atk * 2));
@@ -118,7 +118,7 @@ public class LancXiaoItem extends SwordItem {
                 }
             }
             if (count > 0) {
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.SKILL_RELEASE.get(), SoundSource.PLAYERS, (float) 0.75, 1);
                 }
                 if (!entity.level().isClientSide())

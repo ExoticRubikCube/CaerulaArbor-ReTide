@@ -280,25 +280,6 @@ public class WorldUtils {
 		return true;
 	}
 
-	//TODO:或许可以下放
-	public static void dropRelicTidebi(LevelAccessor world, double x, double y, double z) {
-		if (world instanceof ServerLevel level) {
-			if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-				ResourceKey<LootTable> lootTableKey = ResourceKey.create(
-						Registries.LOOT_TABLE,
-						ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gameplay/relic_tidebi")
-				);
-				LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableKey);
-				LootParams lootParams = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
-				for (ItemStack itemstackiterator : lootTable.getRandomItems(lootParams)) {
-					ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
-					entityToSpawn.setPickUpDelay(10);
-					entityToSpawn.setUnlimitedLifetime();
-					level.addFreshEntity(entityToSpawn);
-				}
-			}
-		}
-	}
 
 	//还行，暂时不动代码本身，但是真的需要放在这里吗。再评估有没有更合适的位置
 	/**

@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.ItemUtils;
@@ -62,7 +63,7 @@ public class RescissionItem extends Item {
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            capability.relic_util_RESCISSION = setval;
+            Relic.UTIL_RESCISSION.set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
             if (entity instanceof Player player)
                 player.giveExperienceLevels(2);
@@ -92,7 +93,7 @@ public class RescissionItem extends Item {
                             if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                                 player.displayClientMessage(Component.literal((entityiterator.getDisplayName().getString() + Component.translatable("item.caerula_arbor.language_key.description_2").getString())), false);
                             livEnt11.removeEffect(CAMobEffects.UNTAME_CONFIRM);
-                            if ((LevelAccessor) world instanceof ServerLevel level)
+                            if (world instanceof ServerLevel level)
                                 level.sendParticles(ParticleTypes.ASH, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 1, 1, 1, 0.5);
                             itemstack.shrink(1);
                             if (entityiterator instanceof Wolf) {

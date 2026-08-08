@@ -5,6 +5,7 @@ import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CAConfigs;
@@ -116,28 +117,28 @@ public class PlayerTickEventHandler {
 
         if (entity.tickCount % 20 == 10) {
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            capability.relic_hand_ENGRAVE = -1;
-            capability.relic_SURVIVOR = -1;
-            capability.relic_king_CROWN = false;
-            capability.relic_king_ARMOR = false;
-            capability.relic_king_SPEAR = false;
-            capability.relic_king_EXTENSION = false;
-            capability.relic_king_CRYSTAL = false;
-            capability.relic_archfi_FLAG = false;
-            capability.relic_archfi_BED = false;
-            capability.relic_archifi_RYLFATE = false;
-            capability.relic_archfi_ARTIFACT = false;
-            capability.relic_hand_THORNS = false;
-            capability.relic_hand_STRANGLE = false;
-            capability.relic_hand_FERTILITY = false;
-            capability.relic_hand_SPEED = false;
-            capability.relic_hand_BARREN = false;
-            capability.relic_hand_SWIPE = false;
-            capability.relic_hand_FIREWORK = false;
-            capability.relic_hand_SWORD = false;
-            capability.relic_legend_CHITIN = false;
-            capability.relic_YEARNING = false;
-            capability.relic_TREATY = false;
+            Relic.HAND_ENGRAVE.set(capability, -1);
+            Relic.SURVIVOR_CONTRACT.set(capability, -1);
+            Relic.KING_CROWN.set(capability, 0);
+            Relic.KING_ARMOR.set(capability, 0);
+            Relic.KING_SPEAR.set(capability, 0);
+            Relic.KING_EXTENSION.set(capability, 0);
+            Relic.KING_CRYSTAL.set(capability, 0);
+            Relic.SARKAZ_KING_FLAG.set(capability, 0);
+            Relic.SARKAZ_KING_BED.set(capability, 0);
+            Relic.SARKAZ_KING_RYLFATE.set(capability, 0);
+            Relic.SARKAZ_KING_ARTIFACT.set(capability, 0);
+            Relic.HAND_THORNS.set(capability, 0);
+            Relic.HAND_STRANGLE.set(capability, 0);
+            Relic.HAND_FERTILITY.set(capability, 0);
+            Relic.HAND_SPEED.set(capability, 0);
+            Relic.HAND_OF_PULVERIZATION.set(capability, 0);
+            Relic.HAND_SWIPE.set(capability, 0);
+            Relic.HAND_FIREWORK.set(capability, 0);
+            Relic.HAND_SWORD.set(capability, 0);
+            Relic.LEGEND_CHITIN.set(capability, 0);
+            Relic.YEARNING.set(capability, 0);
+            Relic.TREATY.set(capability, 0);
             capability.syncPlayerVariables(entity);
         }
     }
@@ -154,7 +155,7 @@ public class PlayerTickEventHandler {
         if (entity == null) return;
         if (entity.tickCount % 20 != 0) return;
 
-        if (ModCapabilities.getPlayerVariables(entity).relic_hand_SWIPE) {
+        if (Relic.HAND_SWIPE.gained(entity)) {
             if (!((entity.getOffhandItem()).getItem() == net.minecraft.world.item.Items.BRUSH)) return;
 
             if (entity.hasEffect(MobEffects.REGENERATION)) {
@@ -323,15 +324,15 @@ public class PlayerTickEventHandler {
         if (capability.player_lives > 1) return;
 
         double suitKing = 0;
-        if (capability.relic_king_SPEAR) {
+        if (Relic.KING_SPEAR.gained(capability)) {
             suitKing = suitKing + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BOOST, 20, 1, false, false));
         }
-        if (capability.relic_king_ARMOR) {
+        if (Relic.KING_ARMOR.gained(capability)) {
             suitKing = suitKing + 1;
         }
-        if (capability.relic_king_EXTENSION) {
+        if (Relic.KING_EXTENSION.gained(capability)) {
             suitKing = suitKing + 1;
             double amplifi = Math.ceil(entity.getMaxHealth() / 20);
             if (amplifi > 24) amplifi = 24;
@@ -340,7 +341,7 @@ public class PlayerTickEventHandler {
                     entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20, (int) amplifi, false, false));
             }
         }
-        if (capability.relic_king_CROWN) {
+        if (Relic.KING_CROWN.gained(capability)) {
             suitKing = suitKing + 1;
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BREATH, 20, suitKing < 3 ? 0 : 2, false, false));
@@ -356,7 +357,7 @@ public class PlayerTickEventHandler {
 
     private static void handleHandSpeed(Player entity, LevelAccessor world, double x, double y, double z) {
         ItemStack mainHandItem = (entity.getMainHandItem()).copy();
-        if (ModCapabilities.getPlayerVariables(entity).relic_hand_SPEED) {
+        if (Relic.HAND_SPEED.gained(entity)) {
             if (mainHandItem.getItem() instanceof PickaxeItem || mainHandItem.is(ItemTags.create(ResourceLocation.parse("minecraft:pickaxes")))) {
                 boolean valid = true;
                 final Vec3 center = new Vec3(x, y, z);
@@ -384,17 +385,17 @@ public class PlayerTickEventHandler {
             return;
 
         double suitArchfi = 0;
-        if (capability.relic_archfi_FLAG) {
+        if (Relic.SARKAZ_KING_FLAG.gained(capability)) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.FLAG_SWINGS, 20, 2, false, false));
         }
-        if (capability.relic_archfi_BED) {
+        if (Relic.SARKAZ_KING_BED.gained(capability)) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KEEP_BEDDING, 20, 0, false, false));
         }
-        if (capability.relic_archfi_ARTIFACT) {
+        if (Relic.SARKAZ_KING_ARTIFACT.gained(capability)) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SACREFICE, 20, suitArchfi < 3 ? 0 : 2, false, false));
@@ -409,15 +410,15 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleEngraveAndSurvivor(Player entity) {
-        if (ModCapabilities.getPlayerVariables(entity).relic_hand_ENGRAVE > 0) {
+        if (Relic.HAND_ENGRAVE.get(entity) > 0) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.ENGRAVED_TRIUMPH, 20,
-                        (int) (ModCapabilities.getPlayerVariables(entity).relic_hand_ENGRAVE - 1), false, false));
+                        (int) (Relic.HAND_ENGRAVE.get(entity) - 1), false, false));
         }
-        if (ModCapabilities.getPlayerVariables(entity).relic_SURVIVOR > 0) {
+        if (Relic.SURVIVOR_CONTRACT.get(entity) > 0) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SURVIVORS_GUIDE, 20,
-                        (int) (ModCapabilities.getPlayerVariables(entity).relic_SURVIVOR - 1), false, false));
+                        (int) (Relic.SURVIVOR_CONTRACT.get(entity) - 1), false, false));
         }
     }
 
@@ -465,14 +466,14 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleRelicHemost(Player entity) {
-        if (ModCapabilities.getPlayerVariables(entity).relic_HEMOST) {
+        if (Relic.HEMOST.gained(entity)) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.HEMOSTATIC, 20, 0, false, false));
         }
     }
 
     private static void handleRelicYearning(Player entity) {
-        if (ModCapabilities.getPlayerVariables(entity).relic_YEARNING) {
+        if (Relic.YEARNING.gained(entity)) {
             if (!(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() == ItemStack.EMPTY.getItem())) {
                 double amplifi = Math.min(Math.floor(entity.experienceLevel * 0.25), 64);
                 if (amplifi >= 1 && !entity.level().isClientSide()) {

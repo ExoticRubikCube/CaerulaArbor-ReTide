@@ -136,16 +136,16 @@ public class OceanizedSheepEntity extends SeaMonster {
 		if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedSheepEntity datEntL1 && datEntL1.getEntityData().get(DATA_FUR)) {
 			if (entity instanceof OceanizedSheepEntity datEntSetL)
 				datEntSetL.getEntityData().set(DATA_FUR, false);
-			if ((LevelAccessor) world instanceof Level level) {
+			if (world instanceof Level level) {
 				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1, 1);
 			}
-			if ((LevelAccessor) world instanceof ServerLevel level) {
+			if (world instanceof ServerLevel level) {
 				ItemEntity entityToSpawn = new ItemEntity(level, x, (y + 0.65), z, new ItemStack(Blocks.WHITE_WOOL));
 				entityToSpawn.setPickUpDelay(10);
 				level.addFreshEntity(entityToSpawn);
 			}
 			for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 1, 3); index0++) {
-				if ((LevelAccessor) world instanceof ServerLevel level) {
+				if (world instanceof ServerLevel level) {
 					ItemEntity entityToSpawn = new ItemEntity(level, x, (y + 0.65), z, new ItemStack(CAItems.SEA_TRAIL_MOR.get()));
 					entityToSpawn.setPickUpDelay(10);
 					level.addFreshEntity(entityToSpawn);

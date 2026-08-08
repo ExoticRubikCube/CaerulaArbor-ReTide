@@ -108,13 +108,13 @@ public class LanternJudgementItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_ACTIVATE, SoundSource.PLAYERS, 1, 1);
         }
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 for (int index0 = 0; index0 < 120; index0++) {
-                    if ((LevelAccessor) world instanceof ServerLevel level)
+                    if (world instanceof ServerLevel level)
                         level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 2 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 3))), y,
                                 (z + 2 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 3))), 4, 0.15, 0.2, 0.15, 0.1);
                 }

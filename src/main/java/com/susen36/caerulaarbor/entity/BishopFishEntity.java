@@ -321,7 +321,7 @@ public class BishopFishEntity extends SeaMonster {
         setNoGravity(true);
         if (!this.level().isClientSide())
             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 80, 1, false, false));
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_EMERGE, SoundSource.HOSTILE, 3, 1);
         }
         this.setAnimation("animation.bishop.start1");
@@ -369,7 +369,7 @@ public class BishopFishEntity extends SeaMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();

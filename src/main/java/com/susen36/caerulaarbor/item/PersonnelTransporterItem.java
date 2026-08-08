@@ -49,7 +49,7 @@ public class PersonnelTransporterItem extends Item {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public boolean isFoil(ItemStack itemstack) {
-		return ItemUtils.isFilledwithPersonnel(itemstack);
+		return isFilledwithPersonnel(itemstack);
 	}
 
 	@Override
@@ -110,6 +110,14 @@ public class PersonnelTransporterItem extends Item {
             });
         }
         return InteractionResult.PASS;
+    }
+
+    public static boolean isFilledwithPersonnel(ItemStack itemstack) {
+        String name = itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("name");
+        if ((name).equals("apocata")) {
+            return false;
+        }
+        return !(name).isEmpty();
     }
 
     @Nullable

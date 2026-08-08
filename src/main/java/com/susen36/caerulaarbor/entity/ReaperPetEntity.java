@@ -236,7 +236,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		if (((Entity) this instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == sourceentity) {
 			if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
 					&& ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
-				if ((LevelAccessor) world instanceof ServerLevel level)
+				if (world instanceof ServerLevel level)
 					level.sendParticles(ParticleTypes.HEART, x, y, z, 4, 0.8, 0.5, 0.8, 0.3);
 				this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                 this.getNavigation().stop();
@@ -248,7 +248,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 				if ((Entity) this instanceof LivingEntity entity)
 					entity.setHealth((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
 				((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-				if ((LevelAccessor) world instanceof Level level) {
+				if (world instanceof Level level) {
 					level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.NEUTRAL, 1, 1);
 				}
 				return InteractionResult.SUCCESS;
@@ -256,7 +256,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 				if ((Entity) this instanceof LivingEntity entity && !this.level().isClientSide())
 					this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
 				((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
-				if ((LevelAccessor) world instanceof Level level) {
+				if (world instanceof Level level) {
 					level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.NEUTRAL, 1, 1);
 				}
 				return InteractionResult.SUCCESS;

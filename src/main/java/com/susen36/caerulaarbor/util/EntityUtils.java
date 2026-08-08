@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.util;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
@@ -222,7 +223,7 @@ public class EntityUtils {
 	public static String getPlayerSurvconta(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).relic_SURVIVOR);
+		return "" + Math.round(Relic.SURVIVOR_CONTRACT.get(entity));
 	}
 
 	//需要评估是否下放到海嗣的基类
@@ -234,10 +235,7 @@ public class EntityUtils {
 		List<LivingEntity> entfound = world.getEntitiesOfClass(
 				LivingEntity.class,
 				new AABB(searchCenter, searchCenter).inflate(16.0),
-				e -> e != center
-						&& e.getType().is(SEA_BORN)
-						&& !e.getType().is(SEA_BORN_BOSS)
-						&& !e.getType().is(SEA_BORN_PET)
+				e -> e != center && e.getType().is(SEA_BORN) && !e.getType().is(SEA_BORN_BOSS) && !e.getType().is(SEA_BORN_PET)
 		);
 		double count = 0;
 		for (LivingEntity ignored : entfound) {
@@ -246,14 +244,11 @@ public class EntityUtils {
 		return count;
 	}
 
-	public static double getSeabornNum(LevelAccessor world, double x, double y, double z) {
+	public static double getSeabornNum(Level world, double x, double y, double z) {
 		double count = 0;
 		final Vec3 center = new Vec3(x, y, z);
-		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d),
-				e -> e.getType().is(SEA_BORN)
-						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))
-						&& !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"))));
-		for (LivingEntity entityiterator : entfound) {
+		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d), e -> e.getType().is(SEA_BORN) && !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss"))) && !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"))));
+		for (LivingEntity ignored : entfound) {
 			count = count + 1;
 		}
 		return count;
@@ -318,7 +313,7 @@ public class EntityUtils {
 	public static String getPlayerEnrave(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).relic_hand_ENGRAVE);
+		return "" + Math.round(Relic.HAND_ENGRAVE.get(entity));
 	}
 
 	public static Entity getNearestEnemy(LevelAccessor world, double x, double y, double z, Entity exception0, Entity exception1, Entity obj) {
@@ -565,31 +560,6 @@ public class EntityUtils {
 			return;
 		offset = offset.normalize().scale(1.5);
 		another.push(offset.x, offset.y, offset.z);
-	}
-
-	// 清除实体当前目标
-	public static void clearTarget(Entity entity) {
-		if (entity instanceof LivingEntity living) {
-			Brain<?> brain = living.getBrain();
-			brain.eraseMemory(MemoryModuleType.ANGRY_AT);
-			brain.eraseMemory(MemoryModuleType.ATTACK_TARGET);
-			brain.eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
-			brain.eraseMemory(MemoryModuleType.HURT_BY);
-			if (living instanceof Mob mob) {
-				mob.setTarget(null);
-				mob.setLastHurtByMob(null);
-				mob.setAggressive(false);
-				mob.setLastHurtByPlayer(null);
-			}
-			if (living instanceof Animal animal) {
-				animal.setTarget(null);
-			}
-			if (living instanceof NeutralMob n) {
-				n.stopBeingAngry();
-				n.setPersistentAngerTarget(null);
-				n.setRemainingPersistentAngerTime(0);
-			}
-		}
 	}
 
 }

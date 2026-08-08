@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.client.Minecraft;
@@ -62,10 +63,10 @@ public class RoyalFateItem extends Item {
         ItemStack itemstack = ar.getObject();
         double lives_left;
         if (ModCapabilities.getPlayerVariables(entity).player_maxlive > 1) {
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_DEATH, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel level)
+            if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.END_ROD, x, y, z, 72, 1, 1, 1, 1);
             if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
@@ -99,7 +100,7 @@ public class RoyalFateItem extends Item {
         {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            capability.relic_archifi_RYLFATE = setval;
+            Relic.SARKAZ_KING_RYLFATE.set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
         }
         return ar;

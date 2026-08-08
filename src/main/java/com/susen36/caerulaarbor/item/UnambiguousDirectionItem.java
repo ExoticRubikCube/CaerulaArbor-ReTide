@@ -107,7 +107,7 @@ public class UnambiguousDirectionItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         if (!(entity instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_THROW.get(), SoundSource.PLAYERS, (float) 1.8, 1);
             }
             Level projectileLevel = entity.level();

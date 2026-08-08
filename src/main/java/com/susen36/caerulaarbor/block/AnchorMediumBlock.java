@@ -22,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -148,7 +147,7 @@ public class AnchorMediumBlock extends Block {
                         return prop instanceof EnumProperty ep && ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) bs.getValue(ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
                     }
                 }.getDirection(blockstate))) {
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_ACTIVATE, SoundSource.NEUTRAL, 2, 1);
                     }
                     {
@@ -242,18 +241,18 @@ public class AnchorMediumBlock extends Block {
                     if (bs.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty booleanProp)
                         world.setBlock(blockPos, bs.setValue(booleanProp, false), 3);
                 }
-                if ((LevelAccessor) world instanceof Level level) {
+                if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_DEACTIVATE, SoundSource.NEUTRAL, 2, 1);
                 }
             }
             for (int index0 = 0; index0 < 24; index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + Mth.nextDouble(RandomSource.create(), -36, 37)), y, ((double) z + -36), 4, 0.5, 4, 0.5, 0.1);
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + Mth.nextDouble(RandomSource.create(), -36, 37)), y, ((double) z + 37), 4, 0.5, 4, 0.5, 0.1);
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + -36), y, ((double) z + Mth.nextDouble(RandomSource.create(), -36, 25)), 4, 0.5, 4, 0.5, 0.1);
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + 37), y, ((double) z + Mth.nextDouble(RandomSource.create(), -36, 37)), 4, 0.5, 4, 0.5, 0.1);
             }
             dy = -21 + (blockstate.getBlock().getStateDefinition().getProperty("detect_y") instanceof IntegerProperty getip27 ? blockstate.getValue(getip27) : -1);
@@ -337,7 +336,7 @@ public class AnchorMediumBlock extends Block {
                 }
             }.getDirection(blockstate))) {
                 if (blockstate.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty getbp5 && blockstate.getValue(getbp5)) {
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_DEACTIVATE, SoundSource.NEUTRAL, 2, 1);
                     }
                     {
@@ -399,7 +398,7 @@ public class AnchorMediumBlock extends Block {
                                 : Direction.NORTH;
                     }
                 }.getDirection(blockstate))) {
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_ACTIVATE, SoundSource.NEUTRAL, 2, 1);
                     }
                     {

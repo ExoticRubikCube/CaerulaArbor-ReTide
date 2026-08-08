@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
@@ -71,7 +72,7 @@ public class VoyageOfGoldItem extends Item {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                capability.relic_util_VOYGOLD = setval;
+                Relic.PURE_GOLD_EXPEDITION.set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if ((LevelAccessor) world instanceof Level level) {

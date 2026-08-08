@@ -43,6 +43,7 @@ public class CaerulaArbor {
         CAMenus.REGISTRY.register(modEventBus);
         CAAttributes.REGISTRY.register(modEventBus);
         ModCapabilities.register(modEventBus);
+        CARelics.register(modEventBus);
         CALootModifier.init(modEventBus);
         CAGameRules.init();
         modEventBus.addListener(CapabilityEventHandler::registerBlockCapabilities);

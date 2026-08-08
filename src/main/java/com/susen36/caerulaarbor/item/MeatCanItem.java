@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
@@ -42,10 +43,10 @@ public class MeatCanItem extends Item {
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 0));
-		if (!ModCapabilities.getPlayerVariables(entity).relic_util_MEATCAN) {
+		if (!Relic.FEATURED_CANNED_MEAT.gained(entity)) {
 			boolean setval = true;
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			capability.relic_util_MEATCAN = setval;
+			Relic.FEATURED_CANNED_MEAT.set(capability, setval ? 1 : 0);
 			capability.syncPlayerVariables(entity);
 		}
 		if (itemstack.isEmpty()) {

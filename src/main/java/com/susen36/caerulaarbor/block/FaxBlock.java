@@ -88,7 +88,7 @@ public class FaxBlock extends Block {
                         player.giveExperienceLevels(-(5));
                 }
                 ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if ((LevelAccessor) world instanceof ServerLevel level) {
+                if (world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.JUNIOR_WARRIOR_PRIEST.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -103,7 +103,7 @@ public class FaxBlock extends Block {
                         player.giveExperienceLevels(-(7));
                 }
                 ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if ((LevelAccessor) world instanceof ServerLevel level) {
+                if (world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.WARRIOR_PRIEST.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -119,7 +119,7 @@ public class FaxBlock extends Block {
                 }
                 ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 if (Math.random() < 0.5) {
-                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                    if (world instanceof ServerLevel level) {
                         Entity entityToSpawn = CAEntities.CORRECTIONAL_PHALAX_VANGUARD.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5),
                                 MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
@@ -127,7 +127,7 @@ public class FaxBlock extends Block {
                         }
                     }
                 } else {
-                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                    if (world instanceof ServerLevel level) {
                         Entity entityToSpawn = CAEntities.CORRECTIONAL_PHALANXY_INFANTRY.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5),
                                 MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
@@ -145,14 +145,14 @@ public class FaxBlock extends Block {
                 }
                 ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 if (Math.random() < 0.5) {
-                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                    if (world instanceof ServerLevel level) {
                         Entity entityToSpawn = CAEntities.TRIBUNAL_HEALER.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                         }
                     }
                 } else {
-                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                    if (world instanceof ServerLevel level) {
                         Entity entityToSpawn = CAEntities.TRIBUNAL_HEALER.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -168,9 +168,9 @@ public class FaxBlock extends Block {
                         player.giveExperienceLevels(-(11));
                 }
                 ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.sendParticles(CAParticles.PURPLE_FLAME.get(), ((double) x + 0.5), ((double) y + 1.5), ((double) z + 0.5), 32, 0.75, 0.75, 0.75, 0.1);
-                if ((LevelAccessor) world instanceof ServerLevel level) {
+                if (world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.IRENE.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);

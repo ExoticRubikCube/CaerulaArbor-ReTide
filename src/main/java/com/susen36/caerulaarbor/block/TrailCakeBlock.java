@@ -185,14 +185,14 @@ public class TrailCakeBlock extends Block implements SimpleWaterloggedBlock {
                 || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/knives")))
                 || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/knives")))) {
             for (int index0 = 0; index0 < (4 - (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip13 ? blockstate.getValue(getip13) : -1)); index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel level) {
+                if (world instanceof ServerLevel level) {
                     ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), new ItemStack(CAItems.TRAIL_CAKE_PIECE.get()));
                     entityToSpawn.setPickUpDelay(10);
                     level.addFreshEntity(entityToSpawn);
                 }
             }
             world.destroyBlock(BlockPos.containing(x, y, z), false);
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHEEP_SHEAR, SoundSource.NEUTRAL, 1, 1);
             }
         } else {

@@ -49,7 +49,7 @@ public class MusicBoxFixedItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), CASounds.PCEANWISH.get(), SoundSource.MUSIC, (float) 2.5, 1);
         }
         if ((Entity) entity instanceof Player player)

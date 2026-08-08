@@ -156,7 +156,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
                         if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
                             world.setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                    if (world instanceof ServerLevel level) {
                         Entity entityToSpawn = CAEntities.HIGHMORE.get().spawn(level, BlockPos.containing(x + 0.5, y + 1, z + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -182,10 +182,10 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
             if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 1) {
                 if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()) {
                     world.setBlock(BlockPos.containing(x, y, z), CABlocks.HIGHMORE_SPAWNBLOCK.get().defaultBlockState(), 3);
-                    if ((LevelAccessor) world instanceof Level level) {
+                    if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, (float) 1.5, 1);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel level)
+                    if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.WAX_ON, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 16, 2, 2, 2, 0.15);
                     for (int index0 = 0; index0 < 16; index0++) {
                         {

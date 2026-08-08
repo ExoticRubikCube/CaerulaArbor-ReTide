@@ -246,7 +246,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();

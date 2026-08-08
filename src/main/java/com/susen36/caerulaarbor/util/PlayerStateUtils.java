@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.util;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.world.entity.Entity;
 
@@ -43,7 +44,7 @@ public class PlayerStateUtils {
 	}
 
 	public static double getSurvivor(Entity entity) {
-		return getPlayerVariables(entity).relic_SURVIVOR;
+		return Relic.SURVIVOR_CONTRACT.get(entity);
 	}
 
 	public static boolean hasSurvivorCont(Entity entity) {

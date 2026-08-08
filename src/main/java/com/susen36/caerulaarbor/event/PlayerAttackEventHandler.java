@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.event;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -22,7 +23,7 @@ public class PlayerAttackEventHandler {
 			return;
 		}
 
-		if (!ModCapabilities.getPlayerVariables(attacker).relic_hand_BARREN) {
+		if (!Relic.HAND_OF_PULVERIZATION.gained(attacker)) {
 			return;
 		}
 

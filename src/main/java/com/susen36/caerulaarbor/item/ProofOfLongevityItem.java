@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -42,15 +43,15 @@ public class ProofOfLongevityItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_WARPED_FOREST_MOOD.value(), SoundSource.NEUTRAL, (float) 3.5, 1);
         }
-        if ((LevelAccessor) world instanceof ServerLevel level)
+        if (world instanceof ServerLevel level)
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 0.1);
         {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            capability.relic_util_LONGEVITY = setval;
+            Relic.PROOF_OF_LONGEVITY.set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
         }
         {

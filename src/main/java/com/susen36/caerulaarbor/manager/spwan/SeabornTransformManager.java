@@ -69,7 +69,7 @@ public class SeabornTransformManager {
 					Math.random() < 0.02 ? CAEntities.OCEANIZED_WARDENIS.get() : CAEntities.OCEANIZED_WARDEN.get())),
 			new TransformRule(entity -> entity instanceof Cat || entity instanceof Ocelot, 0.5, CAEntities.OCEANIZED_CAT.get()));
 
-	public static boolean transformToSeaborn(LevelAccessor world, double x, double y, double z, Entity entity) {
+	public static boolean transformToSeaborn(Level world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return false;
 		boolean trans = false;
