@@ -480,14 +480,14 @@ public class LivingHurtEventHandler {
         if (sourceentity instanceof Player player && damagesource.is(DamageTypes.PLAYER_ATTACK)) {
             ItemStack item_temp = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (item_temp.getItem() instanceof HoeItem || item_temp.is(ItemTags.create(ResourceLocation.parse("minecraft:hoes")))) {
-                if (RelicUtils.hasFertility(player)) {
+                if (RelicUtils.hasRelic(Relic.HAND_FERTILITY, player)) {
                     entity.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, sourceentity), (float) ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.075));
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.SQUID_INK, x, y, z, 8, 0.75, 0.9, 0.75, 0.1);
                 }
             }
             if (item_temp.getItem() instanceof SwordItem || item_temp.is(ItemTags.create(ResourceLocation.parse("minecraft:swords")))) {
-                if (RelicUtils.hasSword(player)) {
+                if (RelicUtils.hasRelic(Relic.HAND_SWORD, player)) {
                     if (!(entity instanceof LivingEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.ROCK_BREAK))) {
                         if (entity instanceof LivingEntity living && !entity.level().isClientSide())
                             living.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 120, 1));
@@ -510,7 +510,7 @@ public class LivingHurtEventHandler {
         if (sourceentity == null) return;
 
         if (entity instanceof Player && entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0) >= 5) {
-            if (entity instanceof Player player && RelicUtils.hasThorns(player)) {
+            if (entity instanceof Player player && RelicUtils.hasRelic(Relic.HAND_THORNS, player)) {
                 if (!entity.isShiftKeyDown() && sourceentity.isAlive() && entity.isAlive()) {
                     if (!(sourceentity instanceof Player)) {
                         if (!damagesource.is(CADamageTypes.HAND_SPIKE) && !damagesource.is(DamageTypes.THORNS) && !damagesource.is(CADamageTypes.GUNMU_DAMAGE)) {

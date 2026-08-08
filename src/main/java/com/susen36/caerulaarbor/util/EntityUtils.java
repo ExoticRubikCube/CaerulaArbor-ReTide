@@ -27,9 +27,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -55,7 +52,7 @@ public class EntityUtils {
 		if (entity == null)
 			return false;
 		return (ModCapabilities.getPlayerVariables(entity)).can_player_evo
-				&& (RelicUtils.hasDiso(entity) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
+				&& (RelicUtils.hasRelic(Relic.DISO, entity) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
 	}
 
 	public static Entity catchNearestEnemy(LevelAccessor world, double x, double y, double z, Entity obj) {

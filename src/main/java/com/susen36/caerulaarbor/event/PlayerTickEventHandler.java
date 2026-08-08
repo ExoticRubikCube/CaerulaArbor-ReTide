@@ -205,7 +205,7 @@ public class PlayerTickEventHandler {
         double tickCount = entity.tickCount;
 
         if (PlayerStateUtils.isNexusNoRejectionSelected(entity)) {
-            if (RelicUtils.hasDiso(entity)) {
+            if (RelicUtils.hasRelic(Relic.DISO, entity)) {
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                 capability.disoclusion = -1;
                 capability.syncPlayerVariables(entity);
