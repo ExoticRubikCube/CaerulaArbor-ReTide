@@ -14,7 +14,6 @@ import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -38,8 +37,6 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -85,7 +82,7 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 
 	public EndspeakerEntity(EntityType<? extends EndspeakerEntity> entityType, Level level) {
 		super(entityType, level);
-		this.bossInfo = new ServerBossEvent(this.getBossBarName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
+		this.bossInfo = new ServerBossEvent(this.getTypeName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 		this.setNoAi(false);
 		this.setPersistenceRequired();
 	}
@@ -211,10 +208,6 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 		};
 	}
 
-	protected Component getBossBarName() {
-		return this.getTypeName();
-	}
-
 	protected void updatePhaseRuntimeProperties() {
 		this.xpReward = switch (this.getPhase()) {
 			case 2 -> 48;
@@ -230,17 +223,10 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 		if (this.bossInfo != null) {
 			this.bossInfo.setColor(this.getPhase() >= 2 ? ServerBossEvent.BossBarColor.WHITE : ServerBossEvent.BossBarColor.BLUE);
 			this.bossInfo.setOverlay(this.getPhaseBossBarOverlay());
-			this.bossInfo.setName(this.getBossBarName());
+			this.bossInfo.setName(this.getTypeName());
 			float maxHealth = this.getMaxHealth();
 			float progress = maxHealth <= 0.0F ? 0.0F : Mth.clamp(this.getHealth() / maxHealth, 0.0F, 1.0F);
 			this.bossInfo.setProgress(progress);
-		}
-	}
-
-	private void setAttributeBaseValue(Holder<Attribute> attribute, double value) {
-		AttributeInstance instance = this.getAttribute(attribute);
-		if (instance != null) {
-			instance.setBaseValue(value);
 		}
 	}
 
@@ -251,35 +237,35 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 			case 3 -> 224.0D;
 			default -> 16.0D;
 		};
-		this.setAttributeBaseValue(Attributes.MAX_HEALTH, maxHealth);
+		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHealth);
 
-		this.setAttributeBaseValue(Attributes.MOVEMENT_SPEED, switch (this.getPhase()) {
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(switch (this.getPhase()) {
 			case 1, 3 -> 0.16D;
 			case 2 -> 0.18D;
             default -> 0.15D;
 		});
 
-		this.setAttributeBaseValue(Attributes.ARMOR, switch (this.getPhase()) {
+		this.getAttribute(Attributes.ARMOR).setBaseValue(switch (this.getPhase()) {
 			case 1 -> 5.0D;
 			case 2 -> 6.0D;
 			case 3 -> 8.0D;
 			default -> 0.0D;
 		});
 
-		this.setAttributeBaseValue(Attributes.ATTACK_DAMAGE, switch (this.getPhase()) {
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(switch (this.getPhase()) {
 			case 1 -> 7.0D;
 			case 2 -> 9.0D;
 			case 3 -> 11.0D;
 			default -> 1.0D;
 		});
 
-		this.setAttributeBaseValue(Attributes.FOLLOW_RANGE, switch (this.getPhase()) {
+		this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(switch (this.getPhase()) {
 			case 2 -> 32.0D;
 			case 1, 3 -> 36.0D;
 			default -> 16.0D;
 		});
 
-		this.setAttributeBaseValue(Attributes.KNOCKBACK_RESISTANCE, this.getPhase() == 0 ? 0.0D : 10.0D);
+		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(this.getPhase() == 0 ? 0.0D : 10.0D);
 
 		if (this.getHealth() > maxHealth) {
 			this.setHealth((float) maxHealth);

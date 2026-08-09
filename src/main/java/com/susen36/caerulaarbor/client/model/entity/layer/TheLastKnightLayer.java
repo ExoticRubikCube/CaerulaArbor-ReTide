@@ -13,7 +13,8 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class TheLastKnightLayer extends GeoRenderLayer<TheLastKnightEntity> {
-	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/last_knight_lit_0.png");
+	private static final ResourceLocation LAYER_KNIGHT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/last_knight_lit_0.png");
+	private static final ResourceLocation LAYER_HORSE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/last_knight_lit.png");
 
 	public TheLastKnightLayer(GeoRenderer<TheLastKnightEntity> entityRenderer) {
 		super(entityRenderer);
@@ -21,7 +22,8 @@ public class TheLastKnightLayer extends GeoRenderLayer<TheLastKnightEntity> {
 
 	@Override
 	public void render(PoseStack poseStack, TheLastKnightEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-		RenderType glowRenderType = RenderType.eyes(LAYER);
+		ResourceLocation layer = animatable.getPhase() == 1 ? LAYER_HORSE : LAYER_KNIGHT;
+		RenderType glowRenderType = RenderType.eyes(layer);
 		getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 	}
 }

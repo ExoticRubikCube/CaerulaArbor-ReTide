@@ -1,12 +1,15 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.caerulaarbor.entity.TheLastKnightEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
@@ -47,9 +50,15 @@ public class LastKnightSpawnerItem extends DeferredSpawnEggItem {
             return InteractionResult.PASS;
         if (entity.isShiftKeyDown()) {
             if (world instanceof ServerLevel level) {
-                Entity entityToSpawn = CAEntities.LAST_KNIGHT_AND_HORSE.get().spawn(level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.THE_LAST_KNIGHT.get().spawn(level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                    if (entityToSpawn instanceof TheLastKnightEntity knight) {
+                        knight.setPhase(1);
+                        knight.setDuration(40);
+                        knight.setAnimation("animation.last_knight_horse.start");
+                        knight.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 40, 9, false, false));
+                    }
                 }
             }
         } else {

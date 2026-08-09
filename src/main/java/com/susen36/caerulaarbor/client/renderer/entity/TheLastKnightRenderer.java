@@ -1,11 +1,11 @@
 
 package com.susen36.caerulaarbor.client.renderer.entity;
 
-import com.susen36.caerulaarbor.entity.TheLastKnightEntity;
-import com.susen36.caerulaarbor.client.model.entity.layer.TheLastKnightLayer;
-import com.susen36.caerulaarbor.client.model.entity.TheLastKnightModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.client.model.entity.TheLastKnightModel;
+import com.susen36.caerulaarbor.client.model.entity.layer.TheLastKnightLayer;
+import com.susen36.caerulaarbor.entity.TheLastKnightEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -27,6 +27,7 @@ public class TheLastKnightRenderer extends GeoEntityRenderer<TheLastKnightEntity
 
 	@Override
 	public void preRender(PoseStack poseStack, TheLastKnightEntity entity, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
+		this.shadowRadius = entity.getPhase() == 1 ? 1.2f : 1f;
 		float scale = 1f;
 		this.scaleHeight = scale;
 		this.scaleWidth = scale;

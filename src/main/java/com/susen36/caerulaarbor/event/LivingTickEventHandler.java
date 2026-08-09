@@ -179,8 +179,7 @@ public class LivingTickEventHandler {
                     List<LivingEntity> entfound1 = world.getEntitiesOfClass(LivingEntity.class, new AABB(center1, center1).inflate(48 / 2d),
                             e1 -> e1.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "hunters")))
                                     || e1.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "inquisition")))
-                                    || e1 instanceof TheLastKnightEntity
-                                    || e1 instanceof LastKnightAndHorseEntity);
+                                    || e1 instanceof TheLastKnightEntity);
                     for (LivingEntity entityiterator1 : entfound1) {
                         if (entity instanceof Mob entity1)
                             entity1.setTarget(entityiterator1);

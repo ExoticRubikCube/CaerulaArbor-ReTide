@@ -16,14 +16,14 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @EventBusSubscriber
 public class CustomBossBarEventHandler {
 	public static final Map<BossEvent, BossBarRenderContext> CACHE = new HashMap<>();
+	public static final Map<BossEvent, String> CACHE_NAME = new HashMap<>();
+	public static final Map<BossEvent, BossEvent.BossBarColor> CACHE_COLOR = new HashMap<>();
+	public static final Map<BossEvent, BossEvent.BossBarOverlay> CACHE_OVERLAY = new HashMap<>();
 	public static final Set<BossEvent> BLACK_LIST = new HashSet<>();
 
     public static final ResourceLocation GENERIC = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/generic_bossbar.png");
@@ -36,7 +36,7 @@ public class CustomBossBarEventHandler {
     public static final ResourceLocation HIGHMORE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/highmore_bossbar.png");
     public static final ResourceLocation IZUMIK = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/izumik_bossbar.png");
     public static final ResourceLocation MARTUS = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/martus_bossbar.png");
-    public static final ResourceLocation LAST_KNIGHT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/last_knight_bossbar.png");
+    public static final ResourceLocation LAST_KNIGHT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/the_last_knight_bossbar.png");
     public static final ResourceLocation CORRUPTED = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/corrupted_bossbar.png");
     public static final ResourceLocation PURIFIED = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/corrupted_bossbar_purify.png");
     public static final ResourceLocation ISHARMLA_HUMAN = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/isharmla_bossbar.png");
@@ -145,9 +145,9 @@ public class CustomBossBarEventHandler {
         INDEX.add(Pair.of("entity.caerula_arbor.tidelinked_archon", CONTEXT_TIDELINKED_ARCHON));
         INDEX.add(Pair.of("entity.caerula_arbor.highmore",CONTEXT_HIGHMORE));
         INDEX.add(Pair.of("entity.caerula_arbor.the_last_knight",CONTEXT_TIDE_HUNT));
+        INDEX.add(Pair.of("entity.caerula_arbor.last_knight_and_horse",CONTEXT_LAST_KNIGHT));
         INDEX.add(Pair.of("entity.caerula_arbor.martus",CONTEXT_MARTUS));
         INDEX.add(Pair.of("entity.caerula_arbor.izumik",CONTEXT_IZUMIK));
-        INDEX.add(Pair.of("entity.caerula_arbor.last_knight_and_horse",CONTEXT_LAST_KNIGHT));
         INDEX.add(Pair.of("entity.caerula_arbor.flamarine_golem",CONTEXT_FLAMARINE));
         INDEX.add(Pair.of("entity.caerula_arbor.oceanized_wither",CONTEXT_WITHER));
         INDEX.add(Pair.of("entity.caerula_arbor.oceanized_witheria",CONTEXT_WITHERIA));
@@ -162,7 +162,22 @@ public class CustomBossBarEventHandler {
 
     @Nullable
     public static BossBarRenderContext getContext(BossEvent bossEvent){
-        if(CACHE.containsKey(bossEvent)) return CACHE.get(bossEvent);
+        if(CACHE.containsKey(bossEvent)) {
+            String cachedName = CACHE_NAME.get(bossEvent);
+            BossEvent.BossBarColor cachedColor = CACHE_COLOR.get(bossEvent);
+            BossEvent.BossBarOverlay cachedOverlay = CACHE_OVERLAY.get(bossEvent);
+            String currentName = bossEvent.getName().getString();
+            BossEvent.BossBarColor currentColor = bossEvent.getColor();
+            BossEvent.BossBarOverlay currentOverlay = bossEvent.getOverlay();
+            if (Objects.equals(cachedName, currentName) && cachedColor == currentColor && cachedOverlay == currentOverlay) {
+                return CACHE.get(bossEvent);
+            } else {
+                CACHE.remove(bossEvent);
+                CACHE_NAME.remove(bossEvent);
+                CACHE_COLOR.remove(bossEvent);
+                CACHE_OVERLAY.remove(bossEvent);
+            }
+        }
         if(BLACK_LIST.contains(bossEvent)) return null;
         String display_name = bossEvent.getName().getString();
         BossBarRenderContext context = null;
@@ -189,8 +204,12 @@ public class CustomBossBarEventHandler {
 	        	context = CONTEXT_GENERIC;
 	        }
         }
-        if(context != null) CACHE.put(bossEvent, context);
-        else BLACK_LIST.add(bossEvent);
+        if(context != null) {
+            CACHE.put(bossEvent, context);
+            CACHE_NAME.put(bossEvent, bossEvent.getName().getString());
+            CACHE_COLOR.put(bossEvent, bossEvent.getColor());
+            CACHE_OVERLAY.put(bossEvent, bossEvent.getOverlay());
+        } else BLACK_LIST.add(bossEvent);
         return context;
     }
 
