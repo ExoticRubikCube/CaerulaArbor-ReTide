@@ -7,18 +7,11 @@ import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.util.EntityUtils;
-import net.minecraft.commands.CommandSource;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -150,36 +143,6 @@ public class EntityJoinLevelEventHandler {
                 final LevelAccessor finalWorld = world;
                 CaerulaArbor.queueServerWork(10, () -> {
                     if (!(finalEntity instanceof LivingEntity livEnt29 && livEnt29.hasEffect(CAMobEffects.POWER_OF_ANCHOR))) {
-                        if (MapVariables.get(finalWorld).strategy_breed > 0) {
-                            if (!finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))
-                                    && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanspawn")))
-                                    && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")))
-                                    && finalEntity.getPersistentData().getBoolean("caerulaNaturalSpawn")) {
-                                if (EntityUtils.getFellowAround(finalWorld, finalX, finalY, finalZ, finalEntity) < 5) {
-                                    if (Math.random() < 0.05 + 0.05 * MapVariables.get(finalWorld).strategy_breed) {
-                                        if (!finalEntity.level().isClientSide() && finalEntity.getServer() != null) {
-                                            finalEntity.getServer().getCommands().performPrefixedCommand(
-                                                    new CommandSourceStack(CommandSource.NULL, finalEntity.position(), finalEntity.getRotationVector(), finalEntity.level() instanceof ServerLevel ? (ServerLevel) finalEntity.level() : null, 4, finalEntity.getName().getString(),
-                                                            finalEntity.getDisplayName(), finalEntity.level().getServer(), finalEntity),
-                                                    ("summon " + BuiltInRegistries.ENTITY_TYPE.getKey(finalEntity.getType()) + " ~" + Mth.nextDouble(RandomSource.create(), -1, 1) + " ~ ~" + Mth.nextDouble(RandomSource.create(), -1, 1)));
-                                        }
-                                    }
-                                    if (EntityUtils.getFellowAround(finalWorld, finalX, finalY, finalZ, finalEntity) < 5) {
-                                        if (MapVariables.get(finalWorld).strategy_breed >= 3) {
-                                            if (Math.random() < 0.05 * (MapVariables.get(finalWorld).strategy_breed - 2)) {
-                                                if (!finalEntity.level().isClientSide() && finalEntity.getServer() != null) {
-                                                    finalEntity.getServer().getCommands().performPrefixedCommand(
-                                                            new CommandSourceStack(CommandSource.NULL, finalEntity.position(), finalEntity.getRotationVector(), finalEntity.level() instanceof ServerLevel ? (ServerLevel) finalEntity.level() : null, 4,
-                                                                    finalEntity.getName().getString(), finalEntity.getDisplayName(), finalEntity.level().getServer(), finalEntity),
-                                                            ("summon " + BuiltInRegistries.ENTITY_TYPE.getKey(finalEntity.getType()) + " ~" + Mth.nextDouble(RandomSource.create(), -1, 1) + " ~ ~"
-                                                                    + Mth.nextDouble(RandomSource.create(), -1, 1)));
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
                         if (finalEntity instanceof LivingEntity livingEntity41 && livingEntity41.getAttributes().hasAttribute(CAAttributes.EVOLVED))
                             livingEntity41.getAttribute(CAAttributes.EVOLVED).setBaseValue(1);
                     }

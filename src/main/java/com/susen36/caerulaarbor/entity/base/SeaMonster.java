@@ -6,18 +6,22 @@ import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -26,11 +30,18 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
 	private static final TagKey<Block> NETHERSEA_WALKER = BlockTags.create(
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions"));
+	private static final TagKey<EntityType<?>> SEA_BORN_BOSS = TagKey.create(Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss"));
+	private static final TagKey<EntityType<?>> OCEANSPAWN = TagKey.create(Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanspawn"));
+	private static final TagKey<EntityType<?>> SEA_BORN_PET = TagKey.create(Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"));
 	private static final ResourceLocation SILENCE_SPEED_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "silence_movement_speed");
 	private static final ResourceLocation BOOST_ATTACK_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "boost_of_silence_attack_damage");
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -114,6 +125,59 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		}
 	}
 
+
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
+		if (!world.isClientSide()) {
+			double breedLevel = MapVariables.get(world).strategy_breed;
+			if (breedLevel > 0 && !this.isRemoved() && (reason == MobSpawnType.NATURAL || reason == MobSpawnType.CHUNK_GENERATION) && !this.getType().is(SEA_BORN_BOSS) && !this.getType().is(OCEANSPAWN) && !this.getType().is(SEA_BORN_PET)) {
+				BreedGroupData breedData;
+				if (livingdata instanceof BreedGroupData existing) {
+					existing.groupSize++;
+					breedData = existing;
+				} else {
+					breedData = new BreedGroupData(1);
+					retval = breedData;
+				}
+				ServerLevel level = world.getLevel();
+				double x = this.getX();
+				double y = this.getY();
+				double z = this.getZ();
+				RandomSource random = this.getRandom();
+
+				if (breedData.groupSize < 5 && random.nextDouble() < 0.05 + 0.05 * breedLevel) {
+					Entity dup = this.getType().create(level);
+					if (dup != null) {
+						double ox = Mth.nextDouble(random, -1, 1);
+						double oz = Mth.nextDouble(random, -1, 1);
+						dup.setPos(x + ox, y, z + oz);
+						if (dup instanceof Mob mob) {
+							mob.finalizeSpawn(level, level.getCurrentDifficultyAt(dup.blockPosition()), MobSpawnType.SPAWNER, breedData);
+						}
+						level.addFreshEntity(dup);
+						breedData.groupSize++;
+					}
+				}
+
+				if (breedLevel >= 3 && breedData.groupSize < 5 && random.nextDouble() < 0.05 * (breedLevel - 2)) {
+					Entity dup = this.getType().create(level);
+					if (dup != null) {
+						double ox = Mth.nextDouble(random, -1, 1);
+						double oz = Mth.nextDouble(random, -1, 1);
+						dup.setPos(x + ox, y, z + oz);
+						if (dup instanceof Mob mob) {
+							mob.finalizeSpawn(level, level.getCurrentDifficultyAt(dup.blockPosition()), MobSpawnType.SPAWNER, breedData);
+						}
+						level.addFreshEntity(dup);
+						breedData.groupSize++;
+					}
+				}
+			}
+		}
+		return retval;
+	}
+
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
@@ -131,5 +195,13 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 			}
 		}
 		return baseFactor;
+	}
+
+	public static class BreedGroupData implements SpawnGroupData {
+		public int groupSize;
+
+		public BreedGroupData(int groupSize) {
+			this.groupSize = groupSize;
+		}
 	}
 }
