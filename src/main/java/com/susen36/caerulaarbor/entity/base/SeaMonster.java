@@ -2,24 +2,37 @@ package com.susen36.caerulaarbor.entity.base;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.List;
+
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
 	private static final TagKey<Block> NETHERSEA_WALKER = BlockTags.create(
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions"));
+	private static final ResourceLocation SILENCE_SPEED_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "silence_movement_speed");
+	private static final ResourceLocation BOOST_ATTACK_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "boost_of_silence_attack_damage");
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
 	protected SeaMonster(EntityType<? extends Monster> entityType, Level level) {
@@ -31,6 +44,74 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		if (source.is(DamageTypes.DROWN))
 			return false;
 		return super.hurt(source, amount);
+	}
+
+	@Override
+	public void aiStep() {
+		super.aiStep();
+		if (!this.level().isClientSide()) {
+			MapVariables variables = MapVariables.get(this.level());
+			double silenceLevel = variables.strategy_silence;
+
+			if (silenceLevel > 0) {
+				int amplifier = (int) (silenceLevel - 1);
+				AttributeInstance attackAttr = this.getAttribute(Attributes.ATTACK_DAMAGE);
+				if (silenceLevel >= 3) {
+					if (attackAttr.getModifier(BOOST_ATTACK_ID) == null) {
+						double attackBonus = 0.25D * silenceLevel;
+						attackAttr.addTransientModifier(new AttributeModifier(BOOST_ATTACK_ID, attackBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+					}
+					if (!this.hasEffect(CAMobEffects.STRENGTH_OF_CROWD)) {
+						double amplifi = -1;
+						double range = silenceLevel >= 4 ? 64 : 32;
+						double maxAmp = silenceLevel >= 4 ? 29 : 9;
+						int ampStep = silenceLevel >= 4 ? 2 : 1;
+						Vec3 center = this.position();
+						List<LivingEntity> entfound = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(range / 2d),
+								e -> e != this && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))));
+						for (LivingEntity ignored : entfound) {
+							amplifi = amplifi + ampStep;
+							if (amplifi >= maxAmp) {
+								amplifi = maxAmp;
+								break;
+							}
+						}
+						if (amplifi >= 0) {
+							this.addEffect(new MobEffectInstance(CAMobEffects.STRENGTH_OF_CROWD, -1, (int) amplifi, false, false));
+						}
+					}
+				} else if (this.getHealth() < this.getMaxHealth() * 0.5) {
+					if (attackAttr.getModifier(BOOST_ATTACK_ID) == null) {
+						double attackBonus = 0.25D * silenceLevel;
+						attackAttr.addTransientModifier(new AttributeModifier(BOOST_ATTACK_ID, attackBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+					}
+				} else {
+					if (attackAttr.getModifier(BOOST_ATTACK_ID) != null) {
+						attackAttr.removeModifier(BOOST_ATTACK_ID);
+					}
+					this.removeEffect(CAMobEffects.STRENGTH_OF_CROWD);
+				}
+
+				if (this.tickCount % 10 == 0) {
+					AttributeInstance speedAttr = this.getAttribute(Attributes.MOVEMENT_SPEED);
+					if (this.isAggressive()) {
+						if (speedAttr.getModifier(SILENCE_SPEED_ID) == null) {
+							double speedBonus = 0.05D * silenceLevel;
+							speedAttr.addTransientModifier(new AttributeModifier(SILENCE_SPEED_ID, speedBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+						}
+					} else if (speedAttr.getModifier(SILENCE_SPEED_ID) != null) {
+						speedAttr.removeModifier(SILENCE_SPEED_ID);
+					}
+				}
+
+				if (!this.isAggressive() && this.getHealth() < this.getMaxHealth()) {
+					int interval = 50 >> amplifier;
+					if (this.tickCount % interval == 0) {
+						this.heal(1.0F);
+					}
+				}
+			}
+		}
 	}
 
 	@Override

@@ -25,6 +25,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -183,7 +184,13 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 	}
 
 	private int getRandomActiveEffect() {
-		List<MobEffectInstance> effects = new ArrayList<>(this.getActiveEffects());
+		List<MobEffectInstance> effects = new ArrayList<>();
+		for (MobEffectInstance e : this.getActiveEffects()) {
+			MobEffectCategory cat = e.getEffect().value().getCategory();
+			if (cat == MobEffectCategory.HARMFUL || cat == MobEffectCategory.NEUTRAL) {
+				effects.add(e);
+			}
+		}
 		if (effects.isEmpty()) {
 			return 0xFF0F48D0;
 		}
@@ -195,16 +202,19 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 
 	private void applyActivePotionEffects(LivingEntity target) {
 		for (MobEffectInstance ownEffect : this.getActiveEffects()) {
-			int scaledDuration = Mth.clamp((int) (ownEffect.getDuration() * 0.25F), 1, Integer.MAX_VALUE);
-			MobEffectInstance applied = new MobEffectInstance(
-					ownEffect.getEffect(),
-					scaledDuration,
-					ownEffect.getAmplifier(),
-					ownEffect.isAmbient(),
-					ownEffect.isVisible(),
-					ownEffect.showIcon()
-			);
-			target.addEffect(applied, this);
+			MobEffectCategory cat = ownEffect.getEffect().value().getCategory();
+			if (cat == MobEffectCategory.HARMFUL || cat == MobEffectCategory.NEUTRAL) {
+				int scaledDuration = Mth.clamp((int) (ownEffect.getDuration() * 0.25F), 1, Integer.MAX_VALUE);
+				MobEffectInstance applied = new MobEffectInstance(
+						ownEffect.getEffect(),
+						scaledDuration,
+						ownEffect.getAmplifier(),
+						ownEffect.isAmbient(),
+						ownEffect.isVisible(),
+						ownEffect.showIcon()
+				);
+				target.addEffect(applied, this);
+			}
 		}
 	}
 

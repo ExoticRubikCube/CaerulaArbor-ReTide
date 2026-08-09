@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.block.doll;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.crawler.PocketSeaCrawlerEntity;
+import com.susen36.caerulaarbor.entity.crawler.PocketSeaCreeperEntity;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
@@ -29,7 +29,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-public class PocketSeaDollBlock extends SeaBornDollBlock<PocketSeaCrawlerEntity> {
+public class PocketSeaDollBlock extends SeaBornDollBlock<PocketSeaCreeperEntity> {
 	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 2);
 
 	public PocketSeaDollBlock() {
@@ -59,8 +59,8 @@ public class PocketSeaDollBlock extends SeaBornDollBlock<PocketSeaCrawlerEntity>
 	}
 
 	@Override
-	protected PocketSeaCrawlerEntity createEntity(ServerLevel level) {
-		return new PocketSeaCrawlerEntity(CAEntities.POCKET_SEA_CRAWLER.get(), level);
+	protected PocketSeaCreeperEntity createEntity(ServerLevel level) {
+		return new PocketSeaCreeperEntity(CAEntities.POCKET_SEA_CREEPER.get(), level);
 	}
 
 	@Override

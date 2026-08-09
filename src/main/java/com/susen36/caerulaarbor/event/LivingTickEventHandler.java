@@ -200,68 +200,10 @@ public class LivingTickEventHandler {
 
         if (entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.POWER_OF_ANCHOR)) return;
 
-        if (MapVariables.get(world).strategy_silence > 0) {
-            handleSilenceBuffs(world, x, y, z, entity);
-        }
-
         handleSublimationBuffs(world, entity);
     }
 
-    private static void handleSilenceBuffs(LevelAccessor world, double x, double y, double z, Entity entity) {
-        if (MapVariables.get(world).strategy_silence >= 3) {
-            if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.BOOST_OF_SILENCE))) {
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE, -1, (int) (MapVariables.get(world).strategy_silence - 1)));
-            }
 
-            if (!(entity instanceof LivingEntity livEnt6 && livEnt6.hasEffect(CAMobEffects.STRENGTH_OF_CROWD))) {
-                double amplifi = -1;
-                double range = MapVariables.get(world).strategy_silence >= 4 ? 64 : 32;
-                double maxAmp = MapVariables.get(world).strategy_silence >= 4 ? 29 : 9;
-                int ampStep = MapVariables.get(world).strategy_silence >= 4 ? 2 : 1;
-
-                final Vec3 center = new Vec3(x, y, z);
-                List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(range / 2d),
-                        e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))));
-                for (LivingEntity entityiterator : entfound) {
-                    amplifi = amplifi + ampStep;
-                    if (amplifi >= maxAmp) {
-                        amplifi = maxAmp;
-                        break;
-                    }
-                }
-
-                if (amplifi >= 0) {
-                    if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.STRENGTH_OF_CROWD, -1, (int) amplifi, false, false));
-                }
-            }
-        } else {
-            if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-                if (!(entity instanceof LivingEntity _livEnt16 && _livEnt16.hasEffect(CAMobEffects.BOOST_OF_SILENCE))) {
-                    if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE, -1, (int) (MapVariables.get(world).strategy_silence - 1)));
-                }
-            } else {
-                if (entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(CAMobEffects.BOOST_OF_SILENCE);
-            }
-            if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CAMobEffects.STRENGTH_OF_CROWD);
-        }
-
-        if (!(entity instanceof LivingEntity _livEnt20 && _livEnt20.hasEffect(MobEffects.REGENERATION)) && !(entity instanceof MartusEntity)) {
-            if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1, (int) (MapVariables.get(world).strategy_silence - 1)));
-        }
-
-        if (entity instanceof Mob _mobEnt23 && _mobEnt23.isAggressive()) {
-            if (!_mobEnt23.hasEffect(MobEffects.MOVEMENT_SPEED)) {
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, -1, (int) (MapVariables.get(world).strategy_silence - 1)));
-            }
-        }
-    }
 
     private static void handleSublimationBuffs(LevelAccessor world, Entity entity) {
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {

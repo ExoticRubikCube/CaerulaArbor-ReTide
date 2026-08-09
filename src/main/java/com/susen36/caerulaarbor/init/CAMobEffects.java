@@ -38,7 +38,6 @@ public class CAMobEffects {
     public static final DeferredHolder<MobEffect, ? extends MobEffect> COOLDOWN_SINAL = REGISTRY.register("cooldown_sinal", CooldownSinalMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> REEF_CRACKER = REGISTRY.register("reef_cracker", ReefCrackerMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> FLESHDEFORMITY = REGISTRY.register("fleshdeformity", FleshdeformityMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> BOOST_OF_SILENCE = REGISTRY.register("boost_of_silence", BoostOfSilenceMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> STRENGTH_OF_CROWD = REGISTRY.register("strength_of_crowd", StrengthOfCrowdMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> INFESTED = REGISTRY.register("infested", InfestedMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> INVULNERABLE = REGISTRY.register("invulnerable", InvulnerableMobEffect::new);

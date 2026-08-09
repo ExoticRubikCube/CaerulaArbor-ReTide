@@ -1,4 +1,3 @@
-
 package com.susen36.caerulaarbor.potion;
 
 import net.minecraft.resources.ResourceLocation;

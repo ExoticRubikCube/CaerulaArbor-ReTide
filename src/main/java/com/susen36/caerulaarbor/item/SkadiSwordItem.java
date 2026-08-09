@@ -14,6 +14,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -97,16 +99,21 @@ public class SkadiSwordItem extends SwordItem {
 		list.add(Component.translatable("item.caerula_arbor.skadi_sword.description_2"));
 	}
 
+	private static final ResourceLocation SKADI_ATTACK_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "skadi_sword_attack");
+
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-		if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
-            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.BOOST_OF_SILENCE))) {
-                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE, 10, 6, false, false));
-                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 10, 2, false, false));
-            }
-        }
+		if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide()) {
+			AttributeInstance attackAttr = livingEntity.getAttribute(Attributes.ATTACK_DAMAGE);
+			if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
+				if (attackAttr.getModifier(SKADI_ATTACK_ID) == null) {
+					attackAttr.addTransientModifier(new AttributeModifier(SKADI_ATTACK_ID, 0.25D * 7.0D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+				}
+				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 10, 2, false, false));
+			} else if (attackAttr.getModifier(SKADI_ATTACK_ID) != null) {
+				attackAttr.removeModifier(SKADI_ATTACK_ID);
+			}
+		}
 	}
 }

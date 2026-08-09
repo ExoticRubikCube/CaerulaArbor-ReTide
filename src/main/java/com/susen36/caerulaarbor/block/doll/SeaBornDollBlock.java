@@ -101,10 +101,10 @@ public abstract class SeaBornDollBlock<T extends Mob> extends BaseEntityBlock im
 					entity.setPos(sx, sy, sz);
 					entity.getAttribute(Attributes.SCALE).setBaseValue(this.getSpawnScale());
 					float yRot = switch (facing) {
-						case NORTH -> -90.0F;
-						case SOUTH -> 90.0F;
-						case WEST -> 0.0F;
-						case EAST -> -180.0F;
+						case NORTH -> 180.0F;
+						case SOUTH -> 0.0F;
+						case WEST -> 90.0F;
+						case EAST -> -90.0F;
 						default -> 0.0F;
 					};
 					entity.setYRot(yRot);

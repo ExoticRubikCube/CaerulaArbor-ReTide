@@ -1,13 +1,16 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -57,13 +60,19 @@ public class AegirSwordItem extends SwordItem {
 		list.add(Component.translatable("item.caerula_arbor.aegir_sword.description_1"));
 	}
 
+	private static final ResourceLocation AEGIR_ATTACK_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "aegir_sword_attack");
+
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-		if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
-			if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.BOOST_OF_SILENCE))) {
-				if (entity instanceof LivingEntity living && !entity.level().isClientSide())
-					living.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE, 10, 1, false, false));
+		if (entity instanceof LivingEntity livingEntity && !entity.level().isClientSide()) {
+			AttributeInstance attackAttr = livingEntity.getAttribute(Attributes.ATTACK_DAMAGE);
+			if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
+				if (attackAttr.getModifier(AEGIR_ATTACK_ID) == null) {
+					attackAttr.addTransientModifier(new AttributeModifier(AEGIR_ATTACK_ID, 0.25D * 2.0D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+				}
+			} else if (attackAttr.getModifier(AEGIR_ATTACK_ID) != null) {
+				attackAttr.removeModifier(AEGIR_ATTACK_ID);
 			}
 		}
 	}
