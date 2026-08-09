@@ -18,7 +18,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -71,12 +70,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss {
 		this.setPersistenceRequired();
 	}
 
-        protected abstract SoundEvent getAmbientSoundEvent();
-
-        protected abstract SoundEvent getHurtSoundEvent();
-
-        protected abstract SoundEvent getDeathSoundEvent();
-
 	protected abstract String getAnimationPrefix();
 
 	protected abstract int getAttackAnimationLength();
@@ -107,23 +100,8 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss {
 	}
 
 	@Override
-	public SoundEvent getAmbientSound() {
-                return this.getAmbientSoundEvent();
-	}
-
-	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
 		this.playSound(SoundEvents.WARDEN_STEP, 0.15F, 1);
-	}
-
-	@Override
-	public SoundEvent getHurtSound(DamageSource source) {
-                return this.getHurtSoundEvent();
-	}
-
-	@Override
-	public SoundEvent getDeathSound() {
-                return this.getDeathSoundEvent();
 	}
 
 	@Override

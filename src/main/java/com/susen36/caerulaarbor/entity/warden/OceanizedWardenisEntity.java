@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
@@ -24,17 +25,17 @@ public class OceanizedWardenisEntity extends AbstractOceanizedWardenEntity {
 	}
 
 	@Override
-        protected SoundEvent getAmbientSoundEvent() {
-                return CASounds.WARDENIS_IDLE.get();
+        protected SoundEvent getAmbientSound() {
+		return CASounds.WARDENIS_IDLE.get();
 	}
 
 	@Override
-	protected SoundEvent getHurtSoundEvent() {
+	protected SoundEvent getHurtSound(DamageSource source) {
 		return CASounds.WARDENIS_HURT.get();
 	}
 
 	@Override
-        protected SoundEvent getDeathSoundEvent() {
+        protected SoundEvent getDeathSound() {
                 return CASounds.WARDENIS_DIE.get();
 	}
 
