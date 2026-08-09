@@ -3,12 +3,12 @@ package com.susen36.caerulaarbor.event;
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.entity.ai.StrengthOfCrowdGoal;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
+import com.susen36.caerulaarbor.manager.upgrade.SubsistingUpgradeManager;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,9 +17,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.GoalSelector;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.LevelAccessor;
@@ -37,7 +34,6 @@ public class EntityJoinLevelEventHandler {
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
         handleMobInit(event);
         handleBornFunc(event);
-        handleSeaMonsterGoals(event);
     }
 
     private static void handleMobInit(EntityJoinLevelEvent event) {
@@ -81,8 +77,8 @@ public class EntityJoinLevelEventHandler {
                             .setBaseValue(((entity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? livingEntity3.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
             }
             if ((entity instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(CAAttributes.EVOLVED) ? livingEntity5.getAttribute(CAAttributes.EVOLVED).getBaseValue() : 0) == 0) {
-                health_index = 1 + 0.3 * MapVariables.get(world).strategy_subsisting;
-                attack_index = 1 + 0.25 * MapVariables.get(world).strategy_grow;
+                health_index = SubsistingUpgradeManager.getSubsistHealthMultiplier(MapVariables.get(world).strategy_subsisting);
+                attack_index = GrowUpgradeManager.getGrowAttackMultiplier(MapVariables.get(world).strategy_grow);
                 armor_index = 1;
                 n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)), 18);
                 if (n > 0) {
@@ -121,16 +117,16 @@ public class EntityJoinLevelEventHandler {
                 if (entity instanceof LivingEntity livingEntity22 && livingEntity22.getAttributes().hasAttribute(Attributes.ARMOR))
                     livingEntity22.getAttribute(Attributes.ARMOR)
                             .setBaseValue((((entity instanceof LivingEntity livingEntity21 && livingEntity21.getAttributes().hasAttribute(Attributes.ARMOR) ? livingEntity21.getAttribute(Attributes.ARMOR).getBaseValue() : 0)
-                                    + 2 * MapVariables.get(world).strategy_subsisting) * armor_index));
+                                    + SubsistingUpgradeManager.getSubsistArmorBonus(MapVariables.get(world).strategy_subsisting)) * armor_index));
                 if (entity instanceof LivingEntity livingEntity24 && livingEntity24.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
                     livingEntity24.getAttribute(CAAttributes.GENERAL_DEFENSE)
                             .setBaseValue((((entity instanceof LivingEntity livingEntity23 && livingEntity23.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
                                     ? livingEntity23.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
-                                    : 0) + 1 * MapVariables.get(world).strategy_subsisting) * armor_index));
+                                    : 0) + SubsistingUpgradeManager.getSubsistDefenseBonus(MapVariables.get(world).strategy_subsisting)) * armor_index));
                 if (entity instanceof LivingEntity livingEntity26 && livingEntity26.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
                     livingEntity26.getAttribute(Attributes.ARMOR_TOUGHNESS)
                             .setBaseValue((((entity instanceof LivingEntity livingEntity25 && livingEntity25.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS) ? livingEntity25.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue() : 0)
-                                    + 2 * MapVariables.get(world).strategy_subsisting) * armor_index));
+                                    + SubsistingUpgradeManager.getSubsistArmorBonus(MapVariables.get(world).strategy_subsisting)) * armor_index));
                 if (entity instanceof LivingEntity livingEntity28 && livingEntity28.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                     livingEntity28.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                             ((entity instanceof LivingEntity livingEntity27 && livingEntity27.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity27.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * attack_index));
@@ -163,27 +159,27 @@ public class EntityJoinLevelEventHandler {
                 if (entity instanceof LivingEntity livingEntity48 && livingEntity48.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                     livingEntity48.getAttribute(Attributes.MAX_HEALTH)
                             .setBaseValue(((entity instanceof LivingEntity livingEntity47 && livingEntity47.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity47.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0)
-                                    * (1 + 0.3 * MapVariables.get(world).strategy_subsisting)));
+                                    * SubsistingUpgradeManager.getSubsistHealthMultiplier(MapVariables.get(world).strategy_subsisting)));
                 if (entity instanceof LivingEntity livingEntity)
                     livingEntity.setHealth(
                             (float) ((entity instanceof LivingEntity livingEntity49 && livingEntity49.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity49.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * percentage));
                 if (entity instanceof LivingEntity livingEntity52 && livingEntity52.getAttributes().hasAttribute(Attributes.ARMOR))
                     livingEntity52.getAttribute(Attributes.ARMOR)
                             .setBaseValue(((entity instanceof LivingEntity livingEntity51 && livingEntity51.getAttributes().hasAttribute(Attributes.ARMOR) ? livingEntity51.getAttribute(Attributes.ARMOR).getBaseValue() : 0)
-                                    + 2 * MapVariables.get(world).strategy_subsisting));
+                                    + SubsistingUpgradeManager.getSubsistArmorBonus(MapVariables.get(world).strategy_subsisting)));
                 if (entity instanceof LivingEntity livingEntity54 && livingEntity54.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
                     livingEntity54.getAttribute(CAAttributes.GENERAL_DEFENSE)
                             .setBaseValue(((entity instanceof LivingEntity livingEntity53 && livingEntity53.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
                                     ? livingEntity53.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
-                                    : 0) + 2 * MapVariables.get(world).strategy_subsisting));
+                                    : 0) + SubsistingUpgradeManager.getSubsistDefenseBonus(MapVariables.get(world).strategy_subsisting)));
                 if (entity instanceof LivingEntity livingEntity56 && livingEntity56.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
                     livingEntity56.getAttribute(Attributes.ARMOR_TOUGHNESS)
                             .setBaseValue(((entity instanceof LivingEntity livingEntity55 && livingEntity55.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS) ? livingEntity55.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue() : 0)
-                                    + 2 * MapVariables.get(world).strategy_subsisting));
+                                    + SubsistingUpgradeManager.getSubsistArmorBonus(MapVariables.get(world).strategy_subsisting)));
                 if (entity instanceof LivingEntity livingEntity58 && livingEntity58.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                     livingEntity58.getAttribute(Attributes.ATTACK_DAMAGE)
                             .setBaseValue(((entity instanceof LivingEntity livingEntity57 && livingEntity57.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity57.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
-                                    * (1 + 0.25 * MapVariables.get(world).strategy_grow)));
+                                    * GrowUpgradeManager.getGrowAttackMultiplier(MapVariables.get(world).strategy_grow)));
                 n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)), 18);
                 if (n > 0) {
                     n = 1 + 0.01 * n * 2;
@@ -293,23 +289,5 @@ public class EntityJoinLevelEventHandler {
             if (entity instanceof LivingEntity livingEntity72 && livingEntity72.getAttributes().hasAttribute(CAAttributes.EVOLVED))
                 livingEntity72.getAttribute(CAAttributes.EVOLVED).setBaseValue(1);
         }
-    }
-
-    private static void handleSeaMonsterGoals(EntityJoinLevelEvent event) {
-        Entity entity = event.getEntity();
-        if (event.getLevel().isClientSide() || !(entity instanceof SeaMonster seaMonster)) return;
-
-        if (!hasGoal(seaMonster.targetSelector, StrengthOfCrowdGoal.class)) {
-            seaMonster.targetSelector.addGoal(3, new StrengthOfCrowdGoal(seaMonster));
-        }
-    }
-
-    private static boolean hasGoal(GoalSelector selector, Class<? extends Goal> goalClass) {
-        for (WrappedGoal wrappedGoal : selector.getAvailableGoals()) {
-            if (goalClass.isInstance(wrappedGoal.getGoal())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

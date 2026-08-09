@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.entity.base;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
+import com.susen36.caerulaarbor.entity.ai.StrengthOfCrowdGoal;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -35,8 +36,7 @@ import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_BOSS;
 import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_MINION;
 
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
-	private static final TagKey<Block> NETHERSEA_WALKER = BlockTags.create(
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions"));
+	private static final TagKey<Block> NETHERSEA_WALKER = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions"));
 
 	private static final ResourceLocation SILENCE_SPEED_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "silence_movement_speed");
 	private static final ResourceLocation BOOST_ATTACK_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "boost_of_silence_attack_damage");
@@ -48,6 +48,12 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 	}
 
 	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.targetSelector.addGoal(3, new StrengthOfCrowdGoal(this));
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.DROWN))
 			return false;
@@ -56,10 +62,7 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 
 	@Override
 	public void die(DamageSource source) {
-		if (!this.level().isClientSide()
-				&& !this.getPersistentData().getBoolean("caerula.sublimationRevived")
-				&& !this.getType().is(SEA_BORN_BOSS)
-				&& !this.getType().is(SEA_BORN_MINION)) {
+		if (!this.level().isClientSide() && !this.getPersistentData().getBoolean("caerula.sublimationRevived") && !this.getType().is(SEA_BORN_BOSS) && !this.getType().is(SEA_BORN_MINION)) {
 			MapVariables vars = MapVariables.get(this.level());
 			double subl = vars.strategy_sublimation;
 			if (subl <= 0.0) {

@@ -94,8 +94,74 @@ public class SubsistingUpgradeManager {
 		return MapVariables.get(world).strategy_subsisting;
 	}
 
+	public static double getSubsistHealthMultiplier(double level) {
+		return 1.0D + 0.3D * level;
+	}
+
+	public static int getSubsistHealthPct(double level) {
+		return 30 * (int) level;
+	}
+
+	public static int getSubsistArmorBonus(double level) {
+		return 2 * (int) level;
+	}
+
+	public static int getSubsistDefenseBonus(double level) {
+		return 1 * (int) level;
+	}
+
+	public static int getSubsistResistLevel(double level) {
+		if (level >= 3) {
+			return (int) level - 3;
+		}
+		return -1;
+	}
+
+	public static int getSilenceHealLevel(double silenceLevel) {
+		return (int) silenceLevel;
+	}
+
+	public static int getSilenceThornsPct(double silenceLevel) {
+		if (silenceLevel >= 3) {
+			return 15 * ((int) silenceLevel - 2);
+		}
+		return 0;
+	}
+
 	public static String getDescrSubsis(LevelAccessor world) {
-		return Component.translatable("item.caerula_arbor.sample_subsisting.description_" + Math.round(MapVariables.get(world).strategy_subsisting)).getString();
+		double level = MapVariables.get(world).strategy_subsisting;
+		if (level <= 0) {
+			return Component.translatable("item.caerula_arbor.sample_subsisting.description_0").getString();
+		}
+		int hp = getSubsistHealthPct(level);
+		int armor = getSubsistArmorBonus(level);
+		int def = getSubsistDefenseBonus(level);
+		int resist = getSubsistResistLevel(level);
+		if (resist >= 0) {
+			return Component.translatable("item.caerula_arbor.sample_subsisting.description_with_resist",
+					hp, armor, def, resist + 1).getString();
+		}
+		return Component.translatable("item.caerula_arbor.sample_subsisting.description_basic",
+				hp, armor, def).getString();
+	}
+
+	public static String getDescrSilenceSubsis(LevelAccessor world) {
+		double silenceLevel = MapVariables.get(world).strategy_silence;
+		int healLvl = getSilenceHealLevel(silenceLevel);
+		int thornsPct = getSilenceThornsPct(silenceLevel);
+		if (thornsPct > 0) {
+			return Component.translatable("item.caerula_arbor.sample_subsisting.silence_with_thorns",
+					toRoman(healLvl), thornsPct).getString();
+		}
+		return Component.translatable("item.caerula_arbor.sample_subsisting.silence_basic",
+				toRoman(healLvl)).getString();
+	}
+
+	private static String toRoman(int lvl) {
+		if (lvl == 1) return "I";
+		if (lvl == 2) return "II";
+		if (lvl == 3) return "III";
+		return "IV";
 	}
 
 	public static String getCmdFeedback(long lvl) {

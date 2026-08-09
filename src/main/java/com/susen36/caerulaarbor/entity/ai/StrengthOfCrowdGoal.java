@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.entity.ai;
 
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.manager.upgrade.MigrationUpgradeManager;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -47,23 +48,10 @@ public class StrengthOfCrowdGoal extends TargetGoal {
 
     protected void alertOthers() {
         Level level = this.seaMonster.level();
-        double silenceLevel = MapVariables.get(level).strategy_silence;
-        double rangeXZ;
-        double rangeY;
-
-        if (silenceLevel >= 4) {
-            rangeXZ = 128.0D;
-            rangeY = 64.0D;
-        } else if (silenceLevel >= 3) {
-            rangeXZ = 96.0D;
-            rangeY = 48.0D;
-        } else if (silenceLevel >= 2) {
-            rangeXZ = 64.0D;
-            rangeY = 32.0D;
-        } else {
-            rangeXZ = 32.0D;
-            rangeY = 32.0D;
-        }
+        double migrationLevel = MapVariables.get(level).strategy_migration;
+        int[] range = MigrationUpgradeManager.getMigrationRange(migrationLevel);
+        double rangeXZ = range[0];
+        double rangeY = range[1];
 
         AABB aabb = AABB.unitCubeFromLowerCorner(this.mob.position()).inflate(rangeXZ, rangeY, rangeXZ);
         List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, aabb, EntitySelector.NO_SPECTATORS);

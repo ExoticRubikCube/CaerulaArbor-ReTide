@@ -92,8 +92,56 @@ public class GrowUpgradeManager {
 		return MapVariables.get(world).strategy_grow;
 	}
 
+	public static int getGrowAttackPct(double level) {
+		return 25 * (int) level;
+	}
+
+	public static double getGrowAttackMultiplier(double level) {
+		return 1.0D + 0.25D * level;
+	}
+
+	public static int getGrowMagicPct(double level) {
+		if (level >= 3) {
+			return 20 * ((int) level - 2);
+		}
+		return 0;
+	}
+
+	public static double getGrowMagicMultiplier(double level) {
+		if (level >= 3) {
+			return 0.2D * (level - 2.0D);
+		}
+		return 0.0D;
+	}
+
+	public static int getSilenceGrowBonusPct(double silenceLevel) {
+		return 25 * (int) silenceLevel;
+	}
+
+	public static boolean isSilenceGrowFullHpTrigger(double silenceLevel) {
+		return silenceLevel >= 3;
+	}
+
 	public static String getDescrGrow(LevelAccessor world) {
-		return Component.translatable("item.caerula_arbor.sample_grow.description_" + Math.round(MapVariables.get(world).strategy_grow)).getString();
+		double level = MapVariables.get(world).strategy_grow;
+		if (level <= 0) {
+			return Component.translatable("item.caerula_arbor.sample_grow.description_0").getString();
+		}
+		int atk = getGrowAttackPct(level);
+		int magic = getGrowMagicPct(level);
+		if (magic > 0) {
+			return Component.translatable("item.caerula_arbor.sample_grow.description_with_magic", atk, magic).getString();
+		}
+		return Component.translatable("item.caerula_arbor.sample_grow.description_basic", atk).getString();
+	}
+
+	public static String getDescrSilenceGrow(LevelAccessor world) {
+		double silenceLevel = MapVariables.get(world).strategy_silence;
+		int bonusPct = getSilenceGrowBonusPct(silenceLevel);
+		if (isSilenceGrowFullHpTrigger(silenceLevel)) {
+			return Component.translatable("item.caerula_arbor.sample_grow.silence_full_hp", bonusPct).getString();
+		}
+		return Component.translatable("item.caerula_arbor.sample_grow.silence_below_half", bonusPct).getString();
 	}
 
 	public static String getCmdFeedback(long lvl) {

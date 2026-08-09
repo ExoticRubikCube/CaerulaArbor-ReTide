@@ -38,7 +38,7 @@ public class IsharmlaPart extends CAPartEntity<IsharmlaEntity> {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
+    public @NotNull EntityDimensions getDimensions(Pose pose) {
         return this.parentMob.isMonster() ? super.getDimensions(pose) : EntityDimensions.fixed(0.0F, 0.0F);
     }
 

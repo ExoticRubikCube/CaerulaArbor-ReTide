@@ -10,6 +10,7 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SublimationUpgradeManger;
 import com.susen36.caerulaarbor.util.*;
 import net.minecraft.core.BlockPos;
@@ -452,15 +453,17 @@ public class LivingHurtEventHandler {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getNewDamage();
+        double growLevel = MapVariables.get(world).strategy_grow;
 
         if (sourceentity == null) return;
 
-        if (MapVariables.get(world).strategy_grow >= 3) {
+        if (growLevel >= 3) {
+            double magicMult = GrowUpgradeManager.getGrowMagicMultiplier(growLevel);
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
                     && !damagesource.is(CADamageTypes.OCEAN_MAGIC)) {
                 if (entity.isAlive() && sourceentity.isAlive()) {
                     entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
-                            (float) (amount * 0.2 * (MapVariables.get(world).strategy_grow - 2)));
+                            (float) (amount * magicMult));
                 }
             }
         }

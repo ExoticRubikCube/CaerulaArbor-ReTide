@@ -1,0 +1,84 @@
+Caerula Arbor - i18n 工具说明
+==============================
+
+三份基准与两份自动化脚本的分工：
+
+  基准源（需人工维护，脚本永不覆盖）
+  ├─ zh_cn.json  简体中文
+  └─ en_us.json  英文
+
+  自动产物（由脚本生成，不要手动编辑）
+  ├─ zh_tw.json / zh_hk.json / zh_mo.json    由 i18n_zh_trad.py（中文繁简）生成
+  └─ ru_ru / ja_jp / it_it / fr_fr / de_de / es_es   由 i18n_argos_translate.py（英文→其他语种离线翻译）生成
+
+
+一、i18n_zh_trad.py   ——  中文繁简细分（OpenCC，本地秒级）
+============================================================
+
+功能：
+  以 zh_cn.json（简体中文基准）为源，基于 OpenCC 词库一次生成三种繁体地区变种。
+  只处理中文，绝不碰英文或其他语言。
+
+依赖：
+  pip install opencc-python-reimplemented
+  （首次运行若缺依赖，脚本会自动 pip 安装）
+
+运行：
+  python tools/i18n_zh_trad.py
+
+目标输出（写入 lang/ 目录）：
+  - zh_tw.json   台湾繁体，使用 s2twp（含词汇修正：伺服器、程式碼、記憶體、支援、軟體、螢幕）
+  - zh_hk.json   香港繁体，首选 s2hkp；opencc-python-reimplemented 缺 s2hkp 时自动回退到 s2twp
+  - zh_mo.json   澳门繁体，直接复用 s2twp（澳门与台湾术语差异极小）
+
+特点：
+  * 秒级完成，零网络请求，无限流
+  * 递归处理整个 JSON，嵌套 dict/list 中的文本均可被转换
+  * 输出严格 UTF-8 no BOM，文件末尾无多余换行
+
+
+二、i18n_argos_translate.py   ——  英文 → 其他语种（Argos 本地离线翻译）
+==========================================================================
+
+功能：
+  以 en_us.json（英文基准）为源，批量生成俄语 / 日语 / 意大利语 / 法语 /
+  德语 / 西班牙语 共 6 份外语语言包。
+
+原理：
+  使用 argostranslate（Argos Translate）加载 OpenNMT 预训练离线语言包
+  （.argosmodel）。除首次下载模型包外，推理阶段 100% 本地离线，纯 CPU 可跑，
+  速度是网页翻译接口的 5~20 倍，零限流。
+
+依赖：
+  pip install argostranslate
+  （首次运行若缺依赖，脚本会自动 pip 安装）
+
+运行：
+  python tools/i18n_argos_translate.py
+
+目标输出：
+  - ru_ru.json   俄语        (Argos code: ru)
+  - ja_jp.json   日语        (Argos code: ja)
+  - it_it.json   意大利语    (Argos code: it)
+  - fr_fr.json   法语        (Argos code: fr)
+  - de_de.json   德语        (Argos code: de)
+  - es_es.json   西班牙语    (Argos code: es)
+
+重要特性：
+  1) 语言包自动安装：首次遇到 en->xx 时自动从官方索引下载模型
+     （单包 50~300MB，6 种语言首次总流量约 400MB~1.2GB）。
+     模型一旦安装，之后完全离线，不再消耗任何流量。
+
+  2) 占位符护罩：翻译前将 %1$d / %2$s / %1$d%% / {} 等格式占位符替换为 ◆N◆，
+     翻译后严格还原；兼容引擎把 ◆ 扭曲为「」『』＜＞或全角数字（０-９）的异常情况。
+
+  3) 增量模式：若目标文件已存在，相同 key 直接复用已有翻译，
+     仅翻译 en_us.json 中新增的 key；增量运行几乎秒级完成。
+
+  4) 失败保护：单条翻译异常时保留英文原文并跳过，整体流程不中断。
+     支持 Ctrl+C 中断（已完成结果立即落盘，下次走增量续传）。
+
+时长说明：
+  * 首次运行：前几分钟下载模型（有下载进度条）；实际推理 2245 条 × 6 语种
+    在 4 核 8 线程 CPU 上约 3~6 分钟完成。
+  * 后续增量运行：通常秒级完成。

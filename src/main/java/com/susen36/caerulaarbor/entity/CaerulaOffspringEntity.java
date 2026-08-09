@@ -99,7 +99,7 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return SoundEvents.SQUID_HURT;
 	}
 

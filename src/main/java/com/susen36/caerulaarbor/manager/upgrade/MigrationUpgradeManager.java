@@ -92,8 +92,55 @@ public class MigrationUpgradeManager {
 		return MapVariables.get(world).strategy_migration;
 	}
 
+	public static int[] getMigrationRange(double migrationLevel) {
+		if (migrationLevel >= 4) {
+			return new int[]{128, 64};
+		} else if (migrationLevel >= 3) {
+			return new int[]{96, 48};
+		} else if (migrationLevel >= 2) {
+			return new int[]{64, 32};
+		} else {
+			return new int[]{32, 32};
+		}
+	}
+
+	public static int getSilenceMigrationMovePct(double silenceLevel) {
+		return 5 * (int) silenceLevel;
+	}
+
+	public static int getSilenceMigrationCrowdBonusPct(double silenceLevel) {
+		if (silenceLevel >= 3) {
+			return 5 * ((int) silenceLevel - 2);
+		}
+		return 0;
+	}
+
+	public static int getSilenceMigrationMaxStacks(double silenceLevel) {
+		if (silenceLevel >= 3) {
+			return 5 * ((int) silenceLevel - 1);
+		}
+		return 0;
+	}
+
 	public static String getDescrMigra(LevelAccessor world) {
-		return Component.translatable("item.caerula_arbor.sample_migration.description_" + Math.round(MapVariables.get(world).strategy_migration)).getString();
+		double level = MapVariables.get(world).strategy_migration;
+		if (level <= 0) {
+			return Component.translatable("item.caerula_arbor.sample_migration.description_0").getString();
+		}
+		int[] range = getMigrationRange(level);
+		return Component.translatable("item.caerula_arbor.sample_migration.description_call", range[0], range[1], range[0]).getString();
+	}
+
+	public static String getDescrSilenceMigra(LevelAccessor world) {
+		double silenceLevel = MapVariables.get(world).strategy_silence;
+		int movePct = getSilenceMigrationMovePct(silenceLevel);
+		int crowdPct = getSilenceMigrationCrowdBonusPct(silenceLevel);
+		int maxStacks = getSilenceMigrationMaxStacks(silenceLevel);
+		if (crowdPct > 0) {
+			return Component.translatable("item.caerula_arbor.sample_migration.silence_with_crowd",
+					movePct, crowdPct, maxStacks).getString();
+		}
+		return Component.translatable("item.caerula_arbor.sample_migration.silence_basic", movePct).getString();
 	}
 
 	public static String getCmdFeedback(long lvl) {

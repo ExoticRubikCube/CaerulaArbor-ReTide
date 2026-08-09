@@ -127,19 +127,19 @@ public class SilenceUpgradeManager {
 	}
 
 	public static String getSilenceMigration(LevelAccessor world) {
-		return Component.translatable("item.caerula_arbor.sample_migration.description_" + Math.round(MapVariables.get(world).strategy_silence + 5)).getString();
+		return MigrationUpgradeManager.getDescrSilenceMigra(world);
 	}
 
 	public static String getSilenceSubsis(LevelAccessor world) {
-		return Component.translatable("item.caerula_arbor.sample_subsisting.description_" + Math.round(MapVariables.get(world).strategy_silence + 5)).getString();
+		return SubsistingUpgradeManager.getDescrSilenceSubsis(world);
 	}
 
 	public static String getSilenceBreed(LevelAccessor world) {
-		return Component.translatable("item.caerula_arbor.sample_breed.description_" + Math.round(MapVariables.get(world).strategy_silence + 5)).getString();
+		return BreedUpgradeManager.getDescrSilenceBreed(world);
 	}
 
 	public static String getSilenceGrow(LevelAccessor world) {
-		return Component.translatable("item.caerula_arbor.sample_grow.description_" + Math.round(MapVariables.get(world).strategy_silence + 5)).getString();
+		return GrowUpgradeManager.getDescrSilenceGrow(world);
 	}
 
 	public static String getCmdFeedback(long lvl) {

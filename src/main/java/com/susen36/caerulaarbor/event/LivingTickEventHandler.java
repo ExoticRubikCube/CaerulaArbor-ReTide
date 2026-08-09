@@ -15,6 +15,7 @@ import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.manager.upgrade.MigrationUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
+import com.susen36.caerulaarbor.manager.upgrade.SubsistingUpgradeManager;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -160,10 +161,12 @@ public class LivingTickEventHandler {
     }
 
     private static void handleMobBuffs(LevelAccessor world, double x, double y, double z, Entity entity) {
-        if (MapVariables.get(world).strategy_subsisting >= 3) {
+        double subsistingLevel = MapVariables.get(world).strategy_subsisting;
+        int resistLvl = SubsistingUpgradeManager.getSubsistResistLevel(subsistingLevel);
+        if (resistLvl >= 0) {
             if (!(entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(MobEffects.DAMAGE_RESISTANCE))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, -1, (int) (MapVariables.get(world).strategy_subsisting - 3)));
+                    _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, -1, resistLvl));
             }
         }
 

@@ -92,8 +92,45 @@ public class BreedUpgradeManager {
 		return MapVariables.get(world).strategy_breed;
 	}
 
+	public static int getBreedExtraOnePct(double level) {
+		return 5 + 5 * (int) level;
+	}
+
+	public static int getBreedExtraTwoPct(double level) {
+		if (level >= 3) {
+			return 5 * ((int) level - 2);
+		}
+		return 0;
+	}
+
+	public static int getSilenceBreedSummonPct(double silenceLevel) {
+		return (int) silenceLevel;
+	}
+
+	public static boolean isSilenceBreedEliteEnabled(double silenceLevel) {
+		return silenceLevel >= 3;
+	}
+
 	public static String getDescrBreed(LevelAccessor world) {
-		return Component.translatable("item.caerula_arbor.sample_breed.description_" + Math.round(MapVariables.get(world).strategy_breed)).getString();
+		double level = MapVariables.get(world).strategy_breed;
+		if (level <= 0) {
+			return Component.translatable("item.caerula_arbor.sample_breed.description_0").getString();
+		}
+		int one = getBreedExtraOnePct(level);
+		int two = getBreedExtraTwoPct(level);
+		if (two > 0) {
+			return Component.translatable("item.caerula_arbor.sample_breed.description_with_two", one, two).getString();
+		}
+		return Component.translatable("item.caerula_arbor.sample_breed.description_basic", one).getString();
+	}
+
+	public static String getDescrSilenceBreed(LevelAccessor world) {
+		double silenceLevel = MapVariables.get(world).strategy_silence;
+		int summonPct = getSilenceBreedSummonPct(silenceLevel);
+		if (isSilenceBreedEliteEnabled(silenceLevel)) {
+			return Component.translatable("item.caerula_arbor.sample_breed.silence_with_elite", summonPct).getString();
+		}
+		return Component.translatable("item.caerula_arbor.sample_breed.silence_basic", summonPct).getString();
 	}
 
 	public static String getCmdFeedback(long lvl) {

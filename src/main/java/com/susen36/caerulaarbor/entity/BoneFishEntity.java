@@ -144,7 +144,7 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundEvents.SALMON_HURT;
 	}
 
