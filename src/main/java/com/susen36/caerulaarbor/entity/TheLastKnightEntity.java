@@ -60,6 +60,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
     protected static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.STRING);
@@ -69,6 +70,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
     protected static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> DATA_ADDITION = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
+    protected static final TagKey<EntityType<?>> IS_HUMANSIDE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside"));
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     protected boolean swinging;
@@ -261,8 +263,15 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
     }
 
     @Override
+    public void heal(float healAmount) {
+        if(this.getPhase() != 1){
+            super.heal(healAmount);
+        }
+    }
+
+    @Override
     public void setHealth(float pHealth) {
-        if (this.getPhase() == 0 && pHealth <= 0.0F && this.canTransitionToNextPhase()) {
+        if (pHealth <= 0.0F && this.canTransitionToNextPhase()) {
             super.setHealth(1.0F);
             if (this.bossInfo != null) {
                 float maxHealth = this.getMaxHealth();
@@ -323,12 +332,8 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
         return this.getEvolveTime() > 0;
     }
 
-    protected boolean hasNextPhase() {
-        return this.getPhase() == 0;
-    }
-
     protected boolean canTransitionToNextPhase() {
-        return this.hasNextPhase() && !this.isEvolving();
+        return this.getPhase() == 0 && !this.isEvolving();
     }
 
     public int getDuration() {
@@ -415,7 +420,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, damageSource, recentlyHit);
-        if (this.getPhase() == 1 || !this.hasNextPhase()) {
+        if (this.getPhase() == 1 || !(this.getPhase() == 0)) {
             this.spawnAtLocation(new ItemStack(CAItems.KNIGHT_CORPSE.get()));
         }
     }
@@ -469,42 +474,34 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
     }
 
     private void performCrossAttack() {
-        Level world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        double damage = this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 2;
+        Level level = this.level();
         Entity target = this.getTarget();
-        for (int index0 = 0; index0 < 96; index0++) {
-            if (world instanceof ServerLevel level) {
-                level.sendParticles(ParticleTypes.ENCHANTED_HIT, x - 12 + index0 * 0.25, y, z + 2, 2, 0, 0.5, 0, 0.1);
-                level.sendParticles(ParticleTypes.ENCHANTED_HIT, x - 12 + index0 * 0.25, y, z - 2, 2, 0, 0.5, 0, 0.1);
-                level.sendParticles(ParticleTypes.ENCHANTED_HIT, x + 2, y, z - 12 + index0 * 0.25, 2, 0, 0.5, 0, 0.1);
-                level.sendParticles(ParticleTypes.ENCHANTED_HIT, x - 2, y, z - 12 + index0 * 0.25, 2, 0, 0.5, 0, 0.1);
+        float damage = (float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 2.0);
+        DamageSource source = CADamageTypes.source(level, CADamageTypes.LAST_KNIGHT_ATTACK, this);
+
+        for (int i = 0; i < 96; ++i) {
+            double d = -12.0 + i * 0.25;
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, this.getX() + d, this.getY(), this.getZ() + 2.0, 2, 0.0, 0.5, 0.0, 0.1);
+                serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, this.getX() + d, this.getY(), this.getZ() - 2.0, 2, 0.0, 0.5, 0.0, 0.1);
+                serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, this.getX() + 2.0, this.getY(), this.getZ() + d, 2, 0.0, 0.5, 0.0, 0.1);
+                serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, this.getX() - 2.0, this.getY(), this.getZ() + d, 2, 0.0, 0.5, 0.0, 0.1);
             }
         }
-        if (world instanceof Level level) {
-            level.playSound(null, BlockPos.containing(x, y, z), CASounds.LAST_KNIGHT_ATTACK.get(), SoundSource.HOSTILE, 5, 1);
+        level.playSound(null, this.blockPosition(), CASounds.LAST_KNIGHT_ATTACK.get(), SoundSource.HOSTILE, 5.0F, 1.0F);
+
+        double cx = this.getX();
+        double cy = this.getY();
+        double cz = this.getZ();
+        AABB axisX = new AABB(cx - 16.0, cy - 2.0, cz - 1.5, cx + 16.0, cy + 4.0, cz + 1.5);
+        AABB axisZ = new AABB(cx - 1.5, cy - 2.0, cz - 16.0, cx + 1.5, cy + 4.0, cz + 16.0);
+        Predicate<LivingEntity> filter = living -> !living.getType().is(IS_HUMANSIDE) || living == target;
+
+        for (LivingEntity living : level.getEntitiesOfClass(LivingEntity.class, axisX, filter)) {
+            living.hurt(source, this.applyFrozenExecutionBonus(living, damage));
         }
-        for (Entity entityiterator : world.getEntities(this, new AABB(x + 16, y + 4, z + 1.5, x - 16, y - 2, z - 1.5))) {
-            if (entityiterator instanceof LivingEntity) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
-                    if (!(entityiterator == target)) {
-                        continue;
-                    }
-                }
-                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.LAST_KNIGHT_ATTACK, this), this.applyFrozenExecutionBonus(entityiterator, (float) damage));
-            }
-        }
-        for (Entity entityiterator : world.getEntities(this, new AABB(x + 1.5, y + 4, z + 16, x - 1.5, y - 2, z - 16))) {
-            if (entityiterator instanceof LivingEntity) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
-                    if (!(entityiterator == target)) {
-                        continue;
-                    }
-                }
-                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.LAST_KNIGHT_ATTACK, this), this.applyFrozenExecutionBonus(entityiterator, (float) damage));
-            }
+        for (LivingEntity living : level.getEntitiesOfClass(LivingEntity.class, axisZ, filter)) {
+            living.hurt(source, this.applyFrozenExecutionBonus(living, damage));
         }
     }
 
@@ -671,11 +668,11 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
         return Mob.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.20)
                 .add(NeoForgeMod.SWIM_SPEED, 8)
-                .add(CAAttributes.GENERAL_DEFENSE, 20)
+                .add(CAAttributes.GENERAL_DEFENSE, 10)
                 .add(CAAttributes.MAGIC_RESISTANCE, 60)
                 .add(Attributes.MAX_HEALTH, 400.0)
                 .add(Attributes.ARMOR, 24)
-                .add(Attributes.ATTACK_DAMAGE, 20)
+                .add(Attributes.ATTACK_DAMAGE, 12)
                 .add(Attributes.FOLLOW_RANGE, 36)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 10)
                 .add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000.0);
@@ -694,7 +691,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
                     }
                     if (!this.level().isClientSide() && evolveTime == 1) {
                         this.setPhase(1);
-                        this.setHealth(this.getMaxHealth());
+                        this.setHealth(this.getMaxHealth() * 0.25F);
                         this.setAnimation("animation.last_knight_horse.start");
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 40, 9, false, false));
                     }
@@ -737,8 +734,6 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
                         }
                     }
                 }
-                setTicksFrozen(0);
-                this.removeEffect(CAMobEffects.FROZEN);
             }
         } else if (this.getPhase() == 1) {
             if (this.isAlive()) {
@@ -821,8 +816,8 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
                                         }
                                         CaerulaArbor.queueServerWork(7, () -> {
                                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.LAST_KNIGHT_ATTACK, this), (float) (this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 2));
-                                            if (entityiterator instanceof LivingEntity && !this.level().isClientSide()) {
-                                                this.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 150, 0, false, false));
+                                            if (entityiterator instanceof LivingEntity livingVictim && !this.level().isClientSide()) {
+                                                livingVictim.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 150, 0, false, false));
                                             }
                                             entityiterator.push(0, -1, 0);
                                         });
@@ -834,6 +829,8 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
                 }
             }
         }
+        setTicksFrozen(0);
+        this.removeEffect(CAMobEffects.FROZEN);
         this.updatePhaseRuntimeProperties();
     }
 

@@ -33,7 +33,6 @@ public class CAMobEffects {
     public static final DeferredHolder<MobEffect, ? extends MobEffect> SPLASHER_ATTACK = REGISTRY.register("splasher_attack", SplasherAttackMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> INSTANT_SANITY = REGISTRY.register("instant_sanity", InstantSanityMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> SANITY_HEAL = REGISTRY.register("sanity_heal", SanityHealMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> ROCK_BREAK = REGISTRY.register("rock_break", RockBreakMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> POWER_OF_ANCHOR = REGISTRY.register("power_of_anchor", PowerOfAnchorMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> COOLDOWN_SINAL = REGISTRY.register("cooldown_sinal", CooldownSinalMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> REEF_CRACKER = REGISTRY.register("reef_cracker", ReefCrackerMobEffect::new);

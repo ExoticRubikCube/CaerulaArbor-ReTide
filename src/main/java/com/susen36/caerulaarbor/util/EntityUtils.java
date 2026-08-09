@@ -48,6 +48,17 @@ public class EntityUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
+	private static final class OceanQueryCache {
+		LevelAccessor level;
+		long tick;
+		double x;
+		double y;
+		double z;
+		boolean result;
+		boolean valid;
+	}
+	private static final OceanQueryCache OCEAN_QUERY_CACHE = new OceanQueryCache();
+
 	public static boolean canPlayerEvo(Entity entity) {
 		if (entity == null)
 			return false;
@@ -244,7 +255,7 @@ public class EntityUtils {
 	public static double getSeabornNum(Level world, double x, double y, double z) {
 		double count = 0;
 		final Vec3 center = new Vec3(x, y, z);
-		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d), e -> e.getType().is(SEA_BORN) && !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss"))) && !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"))));
+		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d), e -> e.getType().is(SEA_BORN) && !e.getType().is(SEA_BORN_BOSS) && !e.getType().is(SEA_BORN_PET));
 		for (LivingEntity ignored : entfound) {
 			count = count + 1;
 		}
@@ -488,7 +499,7 @@ public class EntityUtils {
 
 	public static final TagKey<EntityType<?>> SEA_BORN = TagKey.create(
 			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_bron")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")
 		);
 
 	public static final TagKey<EntityType<?>> SEA_BORN_BOSS = TagKey.create(
@@ -499,6 +510,11 @@ public class EntityUtils {
 	public static final TagKey<EntityType<?>> SEA_BORN_MINION = TagKey.create(
 			Registries.ENTITY_TYPE,
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_minion")
+	);
+
+	public static final TagKey<EntityType<?>> SEA_BORN_PET = TagKey.create(
+			Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")
 	);
 
 	// 应用先锋增益
@@ -528,14 +544,32 @@ public class EntityUtils {
 	}
 
 	public static boolean isOceanizedPlayerNearby(LevelAccessor world, double x, double y, double z) {
-		final Vec3 center = new Vec3(x, y, z);
-		List<Player> entfound = world.getEntitiesOfClass(Player.class, new AABB(center, center).inflate(72 / 2d), e -> true);
-		for (Player entityiterator : entfound) {
-			if (ModCapabilities.getPlayerVariables(entityiterator).player_oceanization >= 2.9) {
-				return false;
+		long currentTick = world instanceof Level level ? level.getGameTime() : -1L;
+		if (OCEAN_QUERY_CACHE.valid
+				&& OCEAN_QUERY_CACHE.level == world
+				&& OCEAN_QUERY_CACHE.tick == currentTick
+				&& Math.abs(OCEAN_QUERY_CACHE.x - x) < 1.0E-5D
+				&& Math.abs(OCEAN_QUERY_CACHE.y - y) < 1.0E-5D
+				&& Math.abs(OCEAN_QUERY_CACHE.z - z) < 1.0E-5D) {
+			return OCEAN_QUERY_CACHE.result;
+		}
+		double half = 36.0D;
+		AABB aabb = new AABB(x - half, y - half, z - half, x + half, y + half, z + half);
+		boolean result = true;
+		for (Player player : world.getEntitiesOfClass(Player.class, aabb)) {
+			if (ModCapabilities.getPlayerVariables(player).player_oceanization >= 2.9D) {
+				result = false;
+				break;
 			}
 		}
-		return true;
+		OCEAN_QUERY_CACHE.valid = true;
+		OCEAN_QUERY_CACHE.level = world;
+		OCEAN_QUERY_CACHE.tick = currentTick;
+		OCEAN_QUERY_CACHE.x = x;
+		OCEAN_QUERY_CACHE.y = y;
+		OCEAN_QUERY_CACHE.z = z;
+		OCEAN_QUERY_CACHE.result = result;
+		return result;
 	}
 
 	// 应用环绕运动

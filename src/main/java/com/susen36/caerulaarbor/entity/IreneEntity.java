@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -225,10 +226,10 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 			if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
 				damage *= 1.2F;
 				if (!livingTarget.level().isClientSide()) {
-					livingTarget.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 80, 1));
+					livingTarget.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 80, 1));
 				}
 			} else if (!livingTarget.level().isClientSide()) {
-				livingTarget.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 60, 0));
+				livingTarget.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 60, 0));
 			}
 		}
 		return damage;

@@ -305,7 +305,7 @@ public class CAEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<OceanizedWitheriaEntity>> OCEANIZED_WITHERIA = register("oceanized_witheria", OceanizedWitheriaEntity.class, EntityType.Builder.<OceanizedWitheriaEntity>of(OceanizedWitheriaEntity::new, MobCategory.MONSTER)
             .setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).fireImmune().sized(0.7f, 2.5f));
     public static final DeferredHolder<EntityType<?>, EntityType<TheLastKnightEntity>> THE_LAST_KNIGHT = register("the_last_knight", TheLastKnightEntity.class, EntityType.Builder.<TheLastKnightEntity>of(TheLastKnightEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-            .setTrackingRange(16).setUpdateInterval(3).fireImmune().sized(1.0f, 3.2f));
+            .setTrackingRange(16).setUpdateInterval(3).fireImmune().sized(1.0f, 3.4f));
     public static final DeferredHolder<EntityType<?>, EntityType<RocinanteEntity>> ROCINANTE = register("rocinante", RocinanteEntity.class,
             EntityType.Builder.<RocinanteEntity>of(RocinanteEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(1.2f, 3f).attach(EntityAttachment.PASSENGER, 0f, 2.5f, 0f));

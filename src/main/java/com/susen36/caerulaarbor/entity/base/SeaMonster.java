@@ -6,7 +6,6 @@ import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -37,8 +36,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_BOSS;
-import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_MINION;
+import static com.susen36.caerulaarbor.util.EntityUtils.*;
 
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
 	private static final TagKey<Block> NETHERSEA_WALKER = BlockTags.create(
@@ -112,26 +110,21 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 						double attackBonus = 0.25D * silenceLevel;
 						attackAttr.addTransientModifier(new AttributeModifier(BOOST_ATTACK_ID, attackBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 					}
-					if (!this.hasEffect(CAMobEffects.STRENGTH_OF_CROWD)) {
-						double amplifi = -1;
-						double range = silenceLevel >= 4 ? 64 : 32;
-						double maxAmp = silenceLevel >= 4 ? 29 : 9;
+					if (!this.hasEffect(CAMobEffects.STRENGTH_OF_CROWD) && this.random.nextFloat() < 0.2F) {
+						double range = silenceLevel >= 4 ? 64.0D : 32.0D;
+						double maxAmp = silenceLevel >= 4 ? 29.0D : 9.0D;
 						int ampStep = silenceLevel >= 4 ? 2 : 1;
 						Vec3 center = this.position();
-						List<LivingEntity> entfound = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(range / 2d),
-								e -> e != this && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))));
-						for (LivingEntity ignored : entfound) {
-							amplifi = amplifi + ampStep;
-							if (amplifi >= maxAmp) {
-								amplifi = maxAmp;
-								break;
-							}
-						}
-						if (amplifi >= 0) {
+						double half = range * 0.5D;
+						AABB aabb = new AABB(center.x - half, center.y - half, center.z - half, center.x + half, center.y + half, center.z + half);
+						List<LivingEntity> entfound = this.level().getEntitiesOfClass(LivingEntity.class, aabb,
+								e -> e != this && e.getType().is(SEA_BORN));
+						double amplifi = Math.min(Math.max(-1.0D, entfound.size() * ampStep - 1.0D), maxAmp);
+						if (amplifi >= 0.0D) {
 							this.addEffect(new MobEffectInstance(CAMobEffects.STRENGTH_OF_CROWD, -1, (int) amplifi, false, false));
 						}
 					}
-				} else if (this.getHealth() < this.getMaxHealth() * 0.5) {
+				} else if (this.getHealth() < this.getMaxHealth() * 0.5F) {
 					if (attackAttr.getModifier(BOOST_ATTACK_ID) == null) {
 						double attackBonus = 0.25D * silenceLevel;
 						attackAttr.addTransientModifier(new AttributeModifier(BOOST_ATTACK_ID, attackBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));

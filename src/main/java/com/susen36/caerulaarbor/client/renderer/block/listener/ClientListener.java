@@ -98,7 +98,6 @@ public class ClientListener {
 			CAMobEffects.TIDE_OF_CHITIN.get(),
 			CAMobEffects.SANIDY_DEFENDER.get(),
 			CAMobEffects.UNTAME_CONFIRM.get(),
-			CAMobEffects.ROCK_BREAK.get(),
 			CAMobEffects.POWER_OF_ANCHOR.get(),
 			CAMobEffects.COOLDOWN_SINAL.get(),
 			CAMobEffects.FLESHDEFORMITY.get(),

@@ -488,9 +488,9 @@ public class LivingHurtEventHandler {
             }
             if (item_temp.getItem() instanceof SwordItem || item_temp.is(ItemTags.create(ResourceLocation.parse("minecraft:swords")))) {
                 if (RelicUtils.hasRelic(Relic.HAND_SWORD, player)) {
-                    if (!(entity instanceof LivingEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.ROCK_BREAK))) {
+                    if (!(entity instanceof LivingEntity livEnt11 && livEnt11.hasEffect(BabelMobEffects.LESS_ARMOR))) {
                         if (entity instanceof LivingEntity living && !entity.level().isClientSide())
-                            living.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 120, 1));
+                            living.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 120, 1));
                     }
                     if (sourceentity instanceof LivingEntity living && !entity.level().isClientSide()) {
                         living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 120, 3, false, false));
@@ -776,7 +776,7 @@ public class LivingHurtEventHandler {
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "warriors")))) {
             if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK, 100, 0, false, false));
+                livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 100, 0, false, false));
         }
 
         if (entity instanceof JuniorWarriorPriestEntity) {
