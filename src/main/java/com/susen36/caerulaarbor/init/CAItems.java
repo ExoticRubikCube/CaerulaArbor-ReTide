@@ -233,7 +233,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> TRAILED_GOLDEN_SWORD = REGISTRY.register("trailed_golden_sword", TrailedGoldenSwordItem::new);
     public static final DeferredHolder<Item, ? extends Item> TRAIL_CREAM = REGISTRY.register("trail_cream", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> CRACKER_ABYSSAL_SPAWN_EGG = REGISTRY.register("cracker_abyssal_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.CRACKER_ABYSSAL, -16436298, -2056595, new Item.Properties()));
-    public static final DeferredHolder<Item, ? extends Item> DISPATCH_STICK = REGISTRY.register("dispatch_stick", DispatchStickItem::new);
     public static final DeferredHolder<Item, ? extends Item> COLLECTOR_PROKARYOTE_SPAWN_EGG = REGISTRY.register("collector_prokaryote_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.COLLECTOR_PROKARYOTE, -16776961, -16316408, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> BROKEN_CELL_CLUSTER = REGISTRY.register("broken_cell_cluster", BrokenCellClusterItem::new);
     public static final DeferredHolder<Item, ? extends Item> CELL_CLUSTER = REGISTRY.register("cell_cluster", CellClusterItem::new);

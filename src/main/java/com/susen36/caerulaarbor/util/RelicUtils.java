@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
 public class RelicUtils {
-
+	//TODO:准备迁移到巴别塔lib
 	private RelicUtils() {
 		throw new UnsupportedOperationException("Utility class");
 	}

@@ -3,6 +3,8 @@ package com.susen36.caerulaarbor.event;
 import com.susen36.babel.api.BabelAPI;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
+import com.susen36.caerulaarbor.entity.ai.StrengthOfCrowdGoal;
+import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CAGameRules;
@@ -15,6 +17,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.LevelAccessor;
@@ -32,6 +37,7 @@ public class EntityJoinLevelEventHandler {
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
         handleMobInit(event);
         handleBornFunc(event);
+        handleSeaMonsterGoals(event);
     }
 
     private static void handleMobInit(EntityJoinLevelEvent event) {
@@ -287,5 +293,23 @@ public class EntityJoinLevelEventHandler {
             if (entity instanceof LivingEntity livingEntity72 && livingEntity72.getAttributes().hasAttribute(CAAttributes.EVOLVED))
                 livingEntity72.getAttribute(CAAttributes.EVOLVED).setBaseValue(1);
         }
+    }
+
+    private static void handleSeaMonsterGoals(EntityJoinLevelEvent event) {
+        Entity entity = event.getEntity();
+        if (event.getLevel().isClientSide() || !(entity instanceof SeaMonster seaMonster)) return;
+
+        if (!hasGoal(seaMonster.targetSelector, StrengthOfCrowdGoal.class)) {
+            seaMonster.targetSelector.addGoal(3, new StrengthOfCrowdGoal(seaMonster));
+        }
+    }
+
+    private static boolean hasGoal(GoalSelector selector, Class<? extends Goal> goalClass) {
+        for (WrappedGoal wrappedGoal : selector.getAvailableGoals()) {
+            if (goalClass.isInstance(wrappedGoal.getGoal())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

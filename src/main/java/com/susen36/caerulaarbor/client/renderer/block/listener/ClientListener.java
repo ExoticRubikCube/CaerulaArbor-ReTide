@@ -102,7 +102,6 @@ public class ClientListener {
 			CAMobEffects.COOLDOWN_SINAL.get(),
 			CAMobEffects.FLESHDEFORMITY.get(),
 			CAMobEffects.STRENGTH_OF_CROWD.get(),
-			CAMobEffects.ANGER_OF_TIDE.get(),
 			CAMobEffects.DEDUCT_ONE_SANITY.get(),
 			CAMobEffects.FIRST_TELLER_SKILL.get(),
 			CAMobEffects.PET_REAP.get(),

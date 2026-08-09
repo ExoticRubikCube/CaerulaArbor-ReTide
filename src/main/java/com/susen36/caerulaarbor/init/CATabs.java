@@ -571,7 +571,6 @@ public class CATabs {
             tabData.accept(CAItems.BUCKET_FLOATER.get());
             tabData.accept(CAItems.BUCKET_BONEFISH.get());
             tabData.accept(CAItems.BUCKET_COLLECTOR.get());
-            tabData.accept(CAItems.DISPATCH_STICK.get());
         } else if (tabData.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
             tabData.accept(CAItems.SKADI_SPAWN_EGG.get());
             tabData.accept(CAItems.ULPIANS_SPAWN_EGG.get());

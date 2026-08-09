@@ -15,7 +15,9 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
 
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Mod(CaerulaArbor.MODID)
@@ -67,14 +69,18 @@ public class CaerulaArbor {
     @SubscribeEvent
     public void tick(ServerTickEvent.Post event) {
         if (!workQueue.isEmpty()) {
+            List<Runnable> pending = new ArrayList<>();
             workQueue.removeIf(work -> {
                 work.setValue(work.getValue() - 1);
                 if (work.getValue() <= 0) {
-                    work.getKey().run();
+                    pending.add(work.getKey());
                     return true;
                 }
                 return false;
             });
+            for (Runnable action : pending) {
+                action.run();
+            }
         }
     }
 }

@@ -73,7 +73,6 @@ public class TidelinkedBishopEntity extends SeaMonsterBoss implements RangedAtta
     private long lastSwing;
     private final boolean variant;
 
-
     public TidelinkedBishopEntity(Level world) {
         this(CAEntities.TIDELINKED_BISHOP.get(), world, false);
     }

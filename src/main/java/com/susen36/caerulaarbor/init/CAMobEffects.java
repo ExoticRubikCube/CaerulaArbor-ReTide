@@ -40,7 +40,6 @@ public class CAMobEffects {
     public static final DeferredHolder<MobEffect, ? extends MobEffect> STRENGTH_OF_CROWD = REGISTRY.register("strength_of_crowd", StrengthOfCrowdMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> INFESTED = REGISTRY.register("infested", InfestedMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> INVULNERABLE = REGISTRY.register("invulnerable", InvulnerableMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> ANGER_OF_TIDE = REGISTRY.register("anger_of_tide", AngerOfTideMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> DEDUCT_ONE_SANITY = REGISTRY.register("deduct_one_sanity", DeductOneSanityMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ADD_ATTACK_PERCLY = REGISTRY.register("add_attack_percly", AddAttackPerclyMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> FIRST_TELLER_SKILL = REGISTRY.register("first_teller_skill", FirstTellerSkillMobEffect::new);

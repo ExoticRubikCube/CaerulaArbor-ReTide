@@ -8,7 +8,6 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 @EventBusSubscriber
 public class EntityAnimationFactory {
-
 	@SubscribeEvent
 	public static void onEntityTick(EntityTickEvent.Post event) {
 		if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof SyncedAnimationEntity syncable) {

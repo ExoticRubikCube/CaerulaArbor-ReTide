@@ -5,6 +5,8 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.entity.*;
+import com.susen36.caerulaarbor.entity.ai.SeabornAggressiveTargetGoal;
+import com.susen36.caerulaarbor.entity.ai.SeabornCounterTargetGoal;
 import com.susen36.caerulaarbor.entity.enderdragon.MoistEnderCrystalEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedBishopEntity;
@@ -13,6 +15,7 @@ import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.manager.upgrade.MigrationUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
+import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -23,7 +26,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -33,17 +36,55 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import java.util.Comparator;
-import java.util.List;
 
 @EventBusSubscriber
 public class LivingTickEventHandler {
 
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Post event) {
+        handleModeGoals(event);
         handleChangeAttackGoal(event);
-        handleDefensiveMode(event);
-        handleSeabornAggresive(event);
         handleMobTick(event);
+    }
+
+    private static void handleModeGoals(EntityTickEvent.Post event) {
+        Entity entity = event.getEntity();
+        if (entity.level().isClientSide()) {
+            return;
+        }
+        if (!(entity instanceof Mob mob)) {
+            return;
+        }
+        if (entity.tickCount % 20 != 0) {
+            return;
+        }
+        boolean isSeaborn = entity.getType().is(EntityUtils.SEA_BORN);
+        boolean isSeabornPet = entity.getType().is(EntityUtils.SEA_BORN_PET);
+        boolean isSeaFriend = entity.getType().is(EntityUtils.SEA_FRIEND);
+        if (isSeaborn && !isSeabornPet && entity.level().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)) {
+            boolean alreadyAdded = false;
+            for (WrappedGoal goal : mob.targetSelector.getAvailableGoals()) {
+                if (goal.getGoal() instanceof SeabornAggressiveTargetGoal) {
+                    alreadyAdded = true;
+                    break;
+                }
+            }
+            if (!alreadyAdded) {
+                mob.targetSelector.addGoal(8, new SeabornAggressiveTargetGoal(mob));
+            }
+        }
+        if (!isSeaborn && !isSeaFriend && entity.level().getGameRules().getBoolean(CAGameRules.DEFENSIVE_MODE)) {
+            boolean alreadyAdded = false;
+            for (WrappedGoal goal : mob.targetSelector.getAvailableGoals()) {
+                if (goal.getGoal() instanceof SeabornCounterTargetGoal) {
+                    alreadyAdded = true;
+                    break;
+                }
+            }
+            if (!alreadyAdded) {
+                mob.targetSelector.addGoal(9, new SeabornCounterTargetGoal(mob));
+            }
+        }
     }
 
     //TODO 可能需要下放
@@ -103,57 +144,6 @@ public class LivingTickEventHandler {
         }
     }
 
-    private static void handleDefensiveMode(EntityTickEvent.Post event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        Entity entity = event.getEntity();
-
-        if (entity.tickCount % 30 != 15) return;
-        if (!world.getLevelData().getGameRules().getBoolean(CAGameRules.DEFENSIVE_MODE)) return;
-
-        double minDist = -1.0D;
-        Entity enemy = null;
-        Entity curEnemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-
-        if (curEnemy != null && curEnemy.isAlive()) return;
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))))
-            return;
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_friend"))))
-            return;
-
-        for (Monster entityiterator : world.getEntitiesOfClass(Monster.class, new AABB((x + 32), (y + 12), (z + 32), (x - 32), (y - 9), (z - 32)))) {
-            if (entity.isInWater() ^ entityiterator.isInWater()) continue;
-            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"))))
-                    continue;
-                double dist = entity.distanceToSqr(entityiterator);
-                if (minDist == -1.0D || dist < minDist) {
-                    minDist = dist;
-                    enemy = entityiterator;
-                }
-            }
-        }
-
-        if (entity instanceof Mob _entity && enemy instanceof LivingEntity _ent)
-            _entity.setTarget(_ent);
-    }
-
-    private static void handleSeabornAggresive(EntityTickEvent.Post event) {
-        LevelAccessor world = event.getEntity().level();
-        Entity entity = event.getEntity();
-
-        if (entity instanceof Monster && entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
-                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")))
-                && world.getLevelData().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)) {
-            if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.ANGER_OF_TIDE))) {
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE, 20, 0, false, false));
-            }
-        }
-    }
-
     //TODO有性能问题
     private static void handleMobTick(EntityTickEvent.Post event) {
         LevelAccessor world = event.getEntity().level();
@@ -164,28 +154,8 @@ public class LivingTickEventHandler {
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))))
         {
-            handleMobTargeting(world, x, y, z, entity);
             handleMobBuffs(world, x, y, z, entity);
             handleNaturalEvolution(world, x, y, z, entity);
-        }
-    }
-
-    private static void handleMobTargeting(LevelAccessor world, double x, double y, double z, Entity entity) {
-        Entity enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-        if (enemy == null || !enemy.isAlive()) {
-            if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
-                if (entity instanceof Monster && entity.tickCount % 40 == 5) {
-                    final Vec3 center1 = new Vec3(x, y, z);
-                    List<LivingEntity> entfound1 = world.getEntitiesOfClass(LivingEntity.class, new AABB(center1, center1).inflate(48 / 2d),
-                            e1 -> e1.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "hunters")))
-                                    || e1.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "inquisition")))
-                                    || e1 instanceof TheLastKnightEntity);
-                    for (LivingEntity entityiterator1 : entfound1) {
-                        if (entity instanceof Mob entity1)
-                            entity1.setTarget(entityiterator1);
-                    }
-                }
-            }
         }
     }
 
@@ -201,8 +171,6 @@ public class LivingTickEventHandler {
 
         handleSublimationBuffs(world, entity);
     }
-
-
 
     private static void handleSublimationBuffs(LevelAccessor world, Entity entity) {
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {

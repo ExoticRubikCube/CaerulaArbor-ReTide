@@ -44,9 +44,8 @@ public class ItemUtils {
 				itemstack.enchant(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SYNESTHESIA), EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.SHARPNESS), entity.getOffhandItem()));
 				Holder<Enchantment> sharpness = CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.SHARPNESS);
 				EnchantmentHelper.updateEnchantments(entity.getOffhandItem(), enchantments -> enchantments.removeIf(enchantment -> enchantment.equals(sharpness)));
-				if (world instanceof ServerLevel level)
-					level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
 				if (world instanceof Level level) {
+					if (world instanceof ServerLevel serverLevel) serverLevel.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
 					level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 3, 1);
 				}
 			}

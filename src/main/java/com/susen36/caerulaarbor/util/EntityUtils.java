@@ -342,7 +342,7 @@ public class EntityUtils {
 				if (entityiterator == exception1) {
 					continue;
 				}
-				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_friend")))) {
+				if (entityiterator.getType().is(SEA_FRIEND)) {
 					continue;
 				}
 				if (new Object() {
@@ -515,6 +515,11 @@ public class EntityUtils {
 	public static final TagKey<EntityType<?>> SEA_BORN_PET = TagKey.create(
 			Registries.ENTITY_TYPE,
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")
+	);
+
+	public static final TagKey<EntityType<?>> SEA_FRIEND = TagKey.create(
+			Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_friend")
 	);
 
 	// 应用先锋增益

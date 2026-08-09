@@ -47,8 +47,8 @@ public class OceanizedWardenEntity extends AbstractOceanizedWardenEntity {
 	}
 
 	@Override
-        protected SoundEvent getDeathSound() {
-                return SoundEvents.WARDEN_DEATH;
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.WARDEN_DEATH;
 	}
 
 	@Override

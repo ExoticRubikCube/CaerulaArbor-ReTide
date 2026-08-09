@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.entity.base;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +16,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -27,16 +25,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.*;
+import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_BOSS;
+import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_MINION;
 
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
 	private static final TagKey<Block> NETHERSEA_WALKER = BlockTags.create(
@@ -110,20 +106,6 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 						double attackBonus = 0.25D * silenceLevel;
 						attackAttr.addTransientModifier(new AttributeModifier(BOOST_ATTACK_ID, attackBonus, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 					}
-					if (!this.hasEffect(CAMobEffects.STRENGTH_OF_CROWD) && this.random.nextFloat() < 0.2F) {
-						double range = silenceLevel >= 4 ? 64.0D : 32.0D;
-						double maxAmp = silenceLevel >= 4 ? 29.0D : 9.0D;
-						int ampStep = silenceLevel >= 4 ? 2 : 1;
-						Vec3 center = this.position();
-						double half = range * 0.5D;
-						AABB aabb = new AABB(center.x - half, center.y - half, center.z - half, center.x + half, center.y + half, center.z + half);
-						List<LivingEntity> entfound = this.level().getEntitiesOfClass(LivingEntity.class, aabb,
-								e -> e != this && e.getType().is(SEA_BORN));
-						double amplifi = Math.min(Math.max(-1.0D, entfound.size() * ampStep - 1.0D), maxAmp);
-						if (amplifi >= 0.0D) {
-							this.addEffect(new MobEffectInstance(CAMobEffects.STRENGTH_OF_CROWD, -1, (int) amplifi, false, false));
-						}
-					}
 				} else if (this.getHealth() < this.getMaxHealth() * 0.5F) {
 					if (attackAttr.getModifier(BOOST_ATTACK_ID) == null) {
 						double attackBonus = 0.25D * silenceLevel;
@@ -133,7 +115,6 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 					if (attackAttr.getModifier(BOOST_ATTACK_ID) != null) {
 						attackAttr.removeModifier(BOOST_ATTACK_ID);
 					}
-					this.removeEffect(CAMobEffects.STRENGTH_OF_CROWD);
 				}
 
 				if (this.tickCount % 10 == 0) {

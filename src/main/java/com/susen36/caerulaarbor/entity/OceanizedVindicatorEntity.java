@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.caerulaarbor.entity.ai.MountGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -13,7 +12,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -111,11 +109,6 @@ public class OceanizedVindicatorEntity extends SeaMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        if ((getDisplayName().getString()).equals("Johnny")) {
-            if (!this.level().isClientSide() && !this.hasEffect(CAMobEffects.ANGER_OF_TIDE)) {
-                this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE, 20, 0, false, false));
-            }
-        }
         this.refreshDimensions();
     }
 
