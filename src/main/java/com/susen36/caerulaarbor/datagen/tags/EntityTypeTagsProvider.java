@@ -62,8 +62,8 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
-        addSeaMonsterSubclassesToTag(SEA_BORN);
-        addEntityTypesToTag(SEA_BORN_BOSS, CAEntities.SUPER_SLIDER, CAEntities.ROUTE_SHAPER, CAEntities.BISHOP_FISH, CAEntities.TIDELINKED_BISHOP, CAEntities.TIDELINKED_IMMORTAL, CAEntities.MEGA_CHEST, CAEntities.FIRST_TO_TALK, CAEntities.HIGHMORE, CAEntities.OCEANIZED_BRUTE, CAEntities.IZUMIK, CAEntities.MARTUS, CAEntities.OCEANIZED_WARDEN, CAEntities.SUPER_BIG_CAT, CAEntities.OCEANIZED_WARDENIS, CAEntities.OCEANIZED_WITHER, CAEntities.OCEANIZED_WITHERIA, CAEntities.ENDSPEAKER, CAEntities.LINGERING_PATHSHAPER, CAEntities.TIDE_CHIMERA, CAEntities.SKADI_CORRUPTED, CAEntities.OCEANIZED_ILLUSIONER, CAEntities.ISHARMLA, CAEntities.COMPASSION_PRAYER, CAEntities.OCEANIZED_ENDERINA, CAEntities.OCEANIZED_ENDER_DRAGON, CAEntities.THIRSTER);
+        addSeaMonsterSubclassesToTag();
+        addSeaMonsterBossSubclassesToTag();
         addEntityTypesToTag(CANNOT_TRANSFORM, EntityType.IRON_GOLEM, CAEntities.CHITIN_GOLEM, EntityType.SNOW_GOLEM, EntityType.SLIME, EntityType.MAGMA_CUBE, EntityType.STRIDER, EntityType.VEX);
         addTagsToTag(CANNOT_TRANSFORM, SEA_BORN, GOLEMS, HUNTERS, SEA_FRIEND);
         addEntityTypesToTag(ENDSPEAKER_EDIBLE, CAEntities.BASELAYER_ABYSSAL, CAEntities.CRACKER_ABYSSAL, CAEntities.GUIDE_ABYSSAL, CAEntities.PREDATOR_ABYSSAL, CAEntities.SPLASHER_ABYSSAL, CAEntities.UMBRELLA_ABYSSAL);
@@ -166,9 +166,20 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
      * 遍历 CAEntities.SEA_MONSTERS（在注册时通过 SeaMonster.class.isAssignableFrom 自动收集），
      * 将所有 SeaMonster 及其子类实体加入目标标签。新增 SeaMonster 子类无需手动维护标签列表。
      */
-    private void addSeaMonsterSubclassesToTag(TagKey<EntityType<?>> targetTag) {
-        var appender = tag(targetTag);
+    private void addSeaMonsterSubclassesToTag() {
+        var appender = tag(EntityTypeTagsProvider.SEA_BORN);
         for (DeferredHolder<EntityType<?>, ?> holder : CAEntities.SEA_MONSTERS) {
+            appender.add(entityTypeKey(holder));
+        }
+    }
+
+    /**
+     * 遍历 CAEntities.SEA_MONSTER_BOSSES（在注册时通过 SeaMonsterBoss.class.isAssignableFrom 自动收集），
+     * 将所有 SeaMonsterBoss 及其子类实体加入目标标签。新增 Boss 无需手动维护标签列表。
+     */
+    private void addSeaMonsterBossSubclassesToTag() {
+        var appender = tag(EntityTypeTagsProvider.SEA_BORN_BOSS);
+        for (DeferredHolder<EntityType<?>, ?> holder : CAEntities.SEA_MONSTER_BOSSES) {
             appender.add(entityTypeKey(holder));
         }
     }

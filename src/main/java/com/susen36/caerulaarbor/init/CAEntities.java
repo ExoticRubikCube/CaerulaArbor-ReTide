@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.client.model.entity.*;
 import com.susen36.caerulaarbor.client.renderer.entity.*;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.entity.bullets.*;
 import com.susen36.caerulaarbor.entity.crawler.PocketSeaCrawlerEntity;
 import com.susen36.caerulaarbor.entity.crawler.PocketSeaCreeperEntity;
@@ -53,6 +54,7 @@ import java.util.function.Supplier;
 public class CAEntities {
     public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, CaerulaArbor.MODID);
     public static final List<DeferredHolder<EntityType<?>, ? extends EntityType<?>>> SEA_MONSTERS = new ArrayList<>();
+    public static final List<DeferredHolder<EntityType<?>, ? extends EntityType<?>>> SEA_MONSTER_BOSSES = new ArrayList<>();
     private static final LinkedHashMap<DeferredHolder<? extends EntityType<?>, ? extends EntityType<?>>, EntityRegistrationData> ENTITY_REGISTRATIONS = new LinkedHashMap<>();
     public static final DeferredHolder<EntityType<?>, EntityType<RunFishEntity>> RUN_FISH = register("run_fish", RunFishEntity.class,
             EntityType.Builder.<RunFishEntity>of(RunFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
@@ -673,6 +675,9 @@ public class CAEntities {
         ENTITY_REGISTRATIONS.put(entityType, new EntityRegistrationData());
         if (SeaMonster.class.isAssignableFrom(entityClass)) {
             SEA_MONSTERS.add(entityType);
+        }
+        if (SeaMonsterBoss.class.isAssignableFrom(entityClass)) {
+            SEA_MONSTER_BOSSES.add(entityType);
         }
         return entityType;
     }
