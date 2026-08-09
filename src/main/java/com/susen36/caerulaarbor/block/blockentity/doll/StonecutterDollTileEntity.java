@@ -1,6 +1,6 @@
-package com.susen36.caerulaarbor.block.blockentity;
+package com.susen36.caerulaarbor.block.blockentity.doll;
 
-import com.susen36.caerulaarbor.block.StonecutterDollBlock;
+import com.susen36.caerulaarbor.block.doll.StonecutterDollBlock;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,38 +45,45 @@ public class StonecutterDollTileEntity extends RandomizableContainerBlockEntity 
 	}
 
 	private PlayState predicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(StonecutterDollBlock.DATA_ANIMATION));
-		if (animationprocedure.equals("0")) {
-			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
-		}
-		return PlayState.STOP;
+		PlayState result;
+		result = PlayState.STOP;
+		return result;
 	}
 
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(StonecutterDollBlock.DATA_ANIMATION));
-		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
-			if (!animationprocedure.equals(prevAnim))
+		BlockState bs = this.getBlockState();
+		String animationprocedure = ("" + bs.getValue(StonecutterDollBlock.DATA_ANIMATION));
+		PlayState result;
+		if (!animationprocedure.equals("0")) {
+			String originalPrev = this.prevAnim;
+			if (!animationprocedure.equals(originalPrev)) {
 				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				if (this.getBlockState().getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp)
-					level.setBlock(this.getBlockPos(), this.getBlockState().setValue(integerProp, 0), 3);
-				event.getController().forceAnimationReset();
+				event.getController().setAnimation(RawAnimation.begin().thenPlay(animationprocedure));
+				this.prevAnim = animationprocedure;
 			}
-		} else if (animationprocedure.equals("0")) {
-			prevAnim = "0";
-			return PlayState.STOP;
+			if (animationprocedure.equals(originalPrev) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+				if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp)
+					level.setBlock(this.getBlockPos(), bs.setValue(integerProp, 0), 3);
+				event.getController().forceAnimationReset();
+				this.prevAnim = "0";
+			}
+			result = PlayState.CONTINUE;
+		} else {
+			if (!this.prevAnim.equals("0")) {
+				event.getController().forceAnimationReset();
+				this.prevAnim = "0";
+			}
+			result = PlayState.STOP;
 		}
-		prevAnim = animationprocedure;
-		return PlayState.CONTINUE;
+		return result;
 	}
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<StonecutterDollTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<StonecutterDollTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override

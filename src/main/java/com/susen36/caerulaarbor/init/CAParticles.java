@@ -1,10 +1,14 @@
 package com.susen36.caerulaarbor.init;
 
+import com.mojang.serialization.MapCodec;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.client.particle.*;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -36,7 +40,12 @@ public class  CAParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ENDSPEAKER_PARTICLE = REGISTRY.register("endspeaker_particle", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> ENDSPEAKER_INV = REGISTRY.register("endspeaker_inv", () -> new SimpleParticleType(true));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SEA_SPLASH = REGISTRY.register("sea_splash", () -> new SimpleParticleType(false));
-    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SEA_RIPPLE = REGISTRY.register("sea_ripple", () -> new SimpleParticleType(true));
+    public static final DeferredHolder<ParticleType<?>, ParticleType<ColorParticleOption>> SEA_RIPPLE = REGISTRY.register("sea_ripple", () -> new ParticleType<ColorParticleOption>(true) {
+        @Override
+        public MapCodec<ColorParticleOption> codec() { return ColorParticleOption.codec(this); }
+        @Override
+        public StreamCodec<? super RegistryFriendlyByteBuf, ColorParticleOption> streamCodec() { return ColorParticleOption.streamCodec(this); }
+    });
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> LARGE_DOLPHIN = REGISTRY.register("large_dolphin", () -> new SimpleParticleType(true));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPECTER_GLITTER = REGISTRY.register("specter_glitter", () -> new SimpleParticleType(false));
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPECTER_CHARS = REGISTRY.register("specter_chars", () -> new SimpleParticleType(false));

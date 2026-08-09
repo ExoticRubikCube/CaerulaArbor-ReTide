@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.init;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.block.*;
+import com.susen36.caerulaarbor.block.doll.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredHolder;

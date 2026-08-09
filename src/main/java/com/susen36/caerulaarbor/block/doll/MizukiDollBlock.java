@@ -1,11 +1,13 @@
-package com.susen36.caerulaarbor.block;
+package com.susen36.caerulaarbor.block.doll;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
+
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -21,10 +23,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class MizukiDollBlock extends Block implements SimpleWaterloggedBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
 
 	public MizukiDollBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.CALCITE).strength(1f, 9999f).lightLevel(s -> 4).noOcclusion().isRedstoneConductor((bs, br, bp) -> false));
-		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false).setValue(POWERED, false));
 	}
 
 	@Override
@@ -50,13 +53,34 @@ public class MizukiDollBlock extends Block implements SimpleWaterloggedBlock {
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
-		builder.add(FACING, WATERLOGGED);
+		builder.add(FACING, WATERLOGGED, POWERED);
 	}
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		boolean flag = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
-		return super.getStateForPlacement(context).setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, flag);
+		return super.getStateForPlacement(context).setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, flag).setValue(POWERED, context.getLevel().hasNeighborSignal(context.getClickedPos()));
+	}
+
+	@Override
+	protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+		super.onPlace(state, level, pos, oldState, isMoving);
+		if (!oldState.is(state.getBlock())) {
+			this.checkPoweredState(level, pos, state);
+		}
+	}
+
+	@Override
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+		super.neighborChanged(state, level, pos, block, fromPos, isMoving);
+		this.checkPoweredState(level, pos, state);
+	}
+
+	private void checkPoweredState(Level level, BlockPos pos, BlockState state) {
+		boolean hasSignal = level.hasNeighborSignal(pos);
+		if (state.getValue(POWERED) != hasSignal) {
+			level.setBlock(pos, state.setValue(POWERED, hasSignal), 2);
+		}
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class SoloMusicBoxItem extends RelicItemBase {
         ItemStack itemstack = ar.getObject();
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             for (int index0 = 0; index0 < 8; index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel level)
+                if (world instanceof ServerLevel level)
                     level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
             }
             boolean setval = true;

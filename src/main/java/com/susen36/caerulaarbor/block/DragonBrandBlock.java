@@ -34,15 +34,15 @@ public class DragonBrandBlock extends Block {
 	}
 
 	@Override
-	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
+	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		super.useItemOn(itemstack, blockstate, world, pos, player, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
         ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.GLASS_BOTTLE) {
+        if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.GLASS_BOTTLE) {
             world.setBlock(BlockPos.containing(x, y, z), CABlocks.SEA_TRAIL_SOLID.get().defaultBlockState(), 3);
-            ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+            ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.BLOCKS, 1, 1);
             }

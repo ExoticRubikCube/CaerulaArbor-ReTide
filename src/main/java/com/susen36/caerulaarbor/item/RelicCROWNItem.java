@@ -52,10 +52,10 @@ public class RelicCROWNItem extends RelicItemBase {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         if (!Relic.KING_CROWN.gained(entity)) {
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel level)
+            if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
             {
                 boolean setval = true;

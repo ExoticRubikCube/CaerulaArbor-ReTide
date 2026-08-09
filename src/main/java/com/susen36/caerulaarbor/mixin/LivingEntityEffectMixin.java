@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = {LivingEntity.class}, priority = 65536)
-public abstract class AddEffectMixin {
+public abstract class LivingEntityEffectMixin {
     @ModifyVariable(
             method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z",
             at = @At("HEAD"),
@@ -83,4 +83,5 @@ public abstract class AddEffectMixin {
             cir.setReturnValue(false);
         }
     }
+
 }

@@ -75,8 +75,8 @@ public class ViviparousLilyTileEntity extends RandomizableContainerBlockEntity i
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<ViviparousLilyTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<ViviparousLilyTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override

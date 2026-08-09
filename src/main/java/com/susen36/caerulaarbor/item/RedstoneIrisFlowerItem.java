@@ -19,7 +19,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
@@ -57,16 +56,16 @@ public class RedstoneIrisFlowerItem extends RelicItemBase {
 		double y = entity.getY();
 		double z = entity.getZ();
         for (int index0 = 0; index0 < 16; index0++) {
-            if ((LevelAccessor) world instanceof ServerLevel level)
+            if (world instanceof ServerLevel level)
                 level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
         }
         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
         Relic.UTIL_IRIS.set(capability, 1);
         capability.syncPlayerVariables(entity);
-        if ((LevelAccessor) world instanceof Level level) {
+        if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
         }
-        if ((LevelAccessor) world instanceof ServerLevel level)
+        if (world instanceof ServerLevel level)
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 1);
         itemstack.shrink(1);
         return retval;

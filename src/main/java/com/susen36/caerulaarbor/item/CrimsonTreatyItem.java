@@ -19,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
@@ -42,10 +41,10 @@ public class CrimsonTreatyItem extends RelicItemBase {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         if (!Relic.TREATY.gained(entity)) {
-            if ((LevelAccessor) world instanceof Level level) {
+            if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel level)
+            if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.FLAME, x, y, z, 72, 1, 1, 1, 1);
             {
                 boolean setval = true;

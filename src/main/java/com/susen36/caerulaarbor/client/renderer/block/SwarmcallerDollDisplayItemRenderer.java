@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.client.renderer.block;
 
-import com.susen36.caerulaarbor.block.item.SwarmcallerDollDisplayItem;
-import com.susen36.caerulaarbor.client.model.block.SwarmcallerDollDisplayModel;
+import com.susen36.caerulaarbor.block.item.doll.SwarmcallerDollDisplayItem;
+import com.susen36.caerulaarbor.client.model.block.doll.SwarmcallerDollDisplayModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;

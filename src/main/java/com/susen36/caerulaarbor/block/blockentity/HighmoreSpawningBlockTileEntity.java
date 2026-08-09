@@ -83,8 +83,8 @@ public class HighmoreSpawningBlockTileEntity extends RandomizableContainerBlockE
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<HighmoreSpawningBlockTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<HighmoreSpawningBlockTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override

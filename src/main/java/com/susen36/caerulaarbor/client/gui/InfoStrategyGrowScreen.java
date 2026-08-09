@@ -23,7 +23,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
@@ -50,7 +49,7 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(guiGraphics,mouseX,mouseY,partialTicks);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-        if (((Entity) ((LevelAccessor) world instanceof Level level ? new PocketSeaCreeperEntity(CAEntities.POCKET_SEA_CREEPER.get(), level) : null)) instanceof LivingEntity livingEntity) {
+        if (((Entity) (world instanceof Level level ? new PocketSeaCreeperEntity(CAEntities.POCKET_SEA_CREEPER.get(), level) : null)) instanceof LivingEntity livingEntity) {
 			InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphics, this.leftPos + 9, this.topPos + 76, this.leftPos + 49, this.topPos + 116, 20, 0f, 0f + (float) Math.atan((this.leftPos + 29 - mouseX) / 40.0), (float) Math.atan((this.topPos + 47 - mouseY) / 40.0), livingEntity);
 		}
 		this.renderTooltip(guiGraphics, mouseX, mouseY);

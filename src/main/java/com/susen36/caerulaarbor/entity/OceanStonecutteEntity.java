@@ -75,6 +75,16 @@ public class OceanStonecutteEntity extends SeaMonster implements RangedAttackMob
 		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 	}
 
+	public OceanStonecutteEntity(EntityType<OceanStonecutteEntity> type, Level world, boolean fromDoll) {
+		super(type, world);
+		xpReward = 4;
+		setNoAi(false);
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
+		if (fromDoll) {
+			this.getAttribute(Attributes.SCALE).setBaseValue(0.8F);
+		}
+	}
+
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);

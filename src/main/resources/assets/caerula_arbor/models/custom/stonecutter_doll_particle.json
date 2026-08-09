@@ -1,6 +1,6 @@
 {
-  "parent": "caerula_arbor:displaysettings/chiseler_block",
+  "parent": "caerula_arbor:displaysettings/stonecutter_doll",
   "textures": {
-    "particle": "caerula_arbor:block/chieslerfish"
+    "particle": "caerula_arbor:block/stonecutter_doll"
   }
 }

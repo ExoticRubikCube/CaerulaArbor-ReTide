@@ -1,6 +1,6 @@
 {
-  "parent": "caerula_arbor:displaysettings/umbrella_block",
+  "parent": "caerula_arbor:displaysettings/swarmcaller_doll",
   "textures": {
-    "particle": "caerula_arbor:block/umbrella"
+    "particle": "caerula_arbor:block/swarmcaller_doll"
   }
 }

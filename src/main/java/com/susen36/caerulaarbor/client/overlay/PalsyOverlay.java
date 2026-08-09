@@ -8,10 +8,7 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -24,14 +21,8 @@ public class PalsyOverlay {
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		int w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
 		int h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
-		Level world = null;
-		double x = 0;
-		double y = 0;
-		double z = 0;
 		Player entity = Minecraft.getInstance().player;
-		if (entity != null) {
-            entity.level();
-        }
+
 		RenderSystem.disableDepthTest();
 		RenderSystem.depthMask(false);
 		RenderSystem.enableBlend();
@@ -40,7 +31,7 @@ public class PalsyOverlay {
 		RenderSystem.setShaderColor(1, 1, 1, 1);
         boolean result = false;
         if (entity != null) {
-            result = ((Entity) entity instanceof LivingEntity livingEntity0) && livingEntity0.hasEffect(BabelMobEffects.NUMB);
+            result = entity.hasEffect(BabelMobEffects.NUMB);
         }
         if (result) {
 			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/palsy.png"), w / 2 + 5, h / 2 + -8, 0, 0, 16, 16, 16, 16);

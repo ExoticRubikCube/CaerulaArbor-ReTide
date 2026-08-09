@@ -30,14 +30,6 @@ import java.util.Map;
  * 和 3 个方法（ensureInitialized/tickAnimation/calcBoneRecursive）抽出来，后续 Hydra/Leviathan 等
  * 任何 {@code extends Entity} 且实现 {@link GeoAnimatable} 的多段 / 有子实体的实体可直接复用。
  * <p>
- * 核心原则：
- * 1. 双端安全：内部只做纯数学矩阵（PoseStack + RenderUtil），无 GL/无渲染绑定，
- *    服务端 / 客户端（子实体需要时）均可调用；但实际业务调用方建议自行加 level.isClientSide 判定。
- * 2. 100% 官方 API 路径：
- *    - 动画 tick：完全复制 AnimatableManager 的 startedAt/updatedAt + AnimationState.animationTick
- *    - 矩阵顺序：PoseStack push→RenderUtil.* 五个静态方法→pop，与 GeoEntityRenderer.renderRecursively 逐行一致
- *    - 骨骼位置：直接读 modelSpaceMatrix 变换原点，复用 GeoBone.getModelPosition 的 X 翻号（-x, y, z），不手搓 /16
- *
  * @param <T> 目标 Entity 的类型，必须是 Entity 子类且实现 GeoAnimatable（例如 OceanizedEnderDragonEntity）
  */
 public class ServerGeoAnimator<T extends Entity & GeoAnimatable> {
@@ -182,7 +174,6 @@ public class ServerGeoAnimator<T extends Entity & GeoAnimatable> {
 	 * 8. 递归 child 骨骼
 	 * 9. popPose()
 	 * </pre>
-	 * 全程无手搓矩阵、无手搓符号/单位换算、无手搓欧拉顺序。
 	 */
 	private static void calcBoneRecursive(PoseStack stack, GeoBone bone, Map<String, Vec3> result) {
 		stack.pushPose();
@@ -206,8 +197,6 @@ public class ServerGeoAnimator<T extends Entity & GeoAnimatable> {
 
 		stack.popPose();
 	}
-
-	// === 供业务端的便捷访问（可选，按需扩展） ===
 
 	public AnimationProcessor<T> getAnimationProcessor() {
 		ensureInitialized();

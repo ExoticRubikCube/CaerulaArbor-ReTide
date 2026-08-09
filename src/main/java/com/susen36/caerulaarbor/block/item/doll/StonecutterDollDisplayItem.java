@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.block.item;
+package com.susen36.caerulaarbor.block.item.doll;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
@@ -10,10 +10,10 @@ import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class PocketSeaDollDisplayItem extends BlockItem implements GeoItem {
+public class StonecutterDollDisplayItem extends BlockItem implements GeoItem {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-	public PocketSeaDollDisplayItem(Block block, Properties settings) {
+	public StonecutterDollDisplayItem(Block block, Properties settings) {
 		super(block, settings);
 	}
 

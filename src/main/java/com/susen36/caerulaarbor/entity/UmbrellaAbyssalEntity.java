@@ -11,6 +11,7 @@ import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -23,7 +24,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -47,6 +49,9 @@ import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UmbrellaAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(UmbrellaAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
@@ -93,32 +98,6 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 	}
 
-    @Override
-	public SoundEvent getAmbientSound() {
-		return SoundEvents.GLOW_SQUID_AMBIENT;
-	}
-
-	@Override
-	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(SoundEvents.SILVERFISH_STEP, 0.15f, 1);
-	}
-
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return SoundEvents.GLOW_SQUID_HURT;
-	}
-
-	@Override
-	public SoundEvent getDeathSound() {
-		return CASounds.SEABORN_DEATH.get();
-	}
-
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
 
 	@Override
 	public void baseTick() {
@@ -134,22 +113,22 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
             angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
             d = Mth.nextDouble(RandomSource.create(), 1.6, 2.2);
             if (world instanceof ServerLevel level)
-                level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.09);
+                level.sendParticles(ColorParticleOption.create(CAParticles.SEA_RIPPLE.get(), this.getRandomActiveEffect()), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.09);
             angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
             d = Mth.nextDouble(RandomSource.create(), 1.9, 2.5);
             if (world instanceof ServerLevel level)
-                level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
+                level.sendParticles(ColorParticleOption.create(CAParticles.SEA_RIPPLE.get(), this.getRandomActiveEffect()), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
         }
         if (MapVariables.get(world).strategy_grow >= 3) {
             for (int index1 = 0; index1 < 9; index1++) {
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 d = Mth.nextDouble(RandomSource.create(), 3.6, 4.3);
                 if (world instanceof ServerLevel level)
-                    level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.12);
+                    level.sendParticles(ColorParticleOption.create(CAParticles.SEA_RIPPLE.get(), this.getRandomActiveEffect()), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.12);
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 d = Mth.nextDouble(RandomSource.create(), 4.0, 4.7);
                 if (world instanceof ServerLevel level)
-                    level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.14);
+                    level.sendParticles(ColorParticleOption.create(CAParticles.SEA_RIPPLE.get(), this.getRandomActiveEffect()), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.14);
             }
         }
         if (tickCount % 20 == 0) {
@@ -173,6 +152,9 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                     }
                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                             (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                    if (entityiterator instanceof LivingEntity livingTarget) {
+                        this.applyActivePotionEffects(livingTarget);
+                    }
                 }
             }
             if (MapVariables.get(world).strategy_grow >= 3) {
@@ -192,11 +174,58 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                                 SanityEvent.Hurt.Type.ENTITY);
                         entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                                 (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                        this.applyActivePotionEffects(target);
                     }
                 }
             }
         }
         this.refreshDimensions();
+	}
+
+	private int getRandomActiveEffect() {
+		List<MobEffectInstance> effects = new ArrayList<>(this.getActiveEffects());
+		if (effects.isEmpty()) {
+			return 0xFF0F48D0;
+		}
+		int idx = this.random.nextInt(effects.size());
+		MobEffect effect = effects.get(idx).getEffect().value();
+		int rgb = effect.getColor();
+		return 0xFF000000 | (rgb & 0x00FFFFFF);
+	}
+
+	private void applyActivePotionEffects(LivingEntity target) {
+		for (MobEffectInstance ownEffect : this.getActiveEffects()) {
+			int scaledDuration = Mth.clamp((int) (ownEffect.getDuration() * 0.25F), 1, Integer.MAX_VALUE);
+			MobEffectInstance applied = new MobEffectInstance(
+					ownEffect.getEffect(),
+					scaledDuration,
+					ownEffect.getAmplifier(),
+					ownEffect.isAmbient(),
+					ownEffect.isVisible(),
+					ownEffect.showIcon()
+			);
+			target.addEffect(applied, this);
+		}
+	}
+
+	@Override
+	public SoundEvent getAmbientSound() {
+		return SoundEvents.GLOW_SQUID_AMBIENT;
+	}
+
+	@Override
+	public void playStepSound(BlockPos pos, BlockState blockIn) {
+		this.playSound(SoundEvents.SILVERFISH_STEP, 0.15f, 1);
+	}
+
+	@Override
+	public SoundEvent getHurtSound(DamageSource ds) {
+		return SoundEvents.GLOW_SQUID_HURT;
+	}
+
+	@Override
+	public SoundEvent getDeathSound() {
+		return CASounds.SEABORN_DEATH.get();
 	}
 
 	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {

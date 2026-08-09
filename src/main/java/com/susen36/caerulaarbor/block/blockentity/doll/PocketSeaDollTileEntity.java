@@ -1,6 +1,5 @@
-package com.susen36.caerulaarbor.block.blockentity;
+package com.susen36.caerulaarbor.block.blockentity.doll;
 
-import com.susen36.caerulaarbor.block.PocketSeaDollBlock;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,12 +16,14 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
@@ -45,38 +46,19 @@ public class PocketSeaDollTileEntity extends RandomizableContainerBlockEntity im
 	}
 
 	private PlayState predicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(PocketSeaDollBlock.DATA_ANIMATION));
-		if (animationprocedure.equals("0")) {
-			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
-		}
-		return PlayState.STOP;
+		PlayState result;
+		result = PlayState.STOP;
+		return result;
 	}
 
-	String prevAnim = "0";
-
 	private PlayState procedurePredicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(PocketSeaDollBlock.DATA_ANIMATION));
-		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
-			if (!animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				if (this.getBlockState().getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp)
-					level.setBlock(this.getBlockPos(), this.getBlockState().setValue(integerProp, 0), 3);
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("0")) {
-			prevAnim = "0";
-			return PlayState.STOP;
-		}
-		prevAnim = animationprocedure;
-		return PlayState.CONTINUE;
+		return PlayState.STOP;
 	}
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<PocketSeaDollTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<PocketSeaDollTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override

@@ -21,7 +21,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
@@ -60,13 +59,13 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
             String selection;
             selection = entity.getPersistentData().getString("centrifugerSelection");
             if ((selection).equals("skadi")) {
-                result = (LevelAccessor) world instanceof Level level ? new SkadiEntity(CAEntities.SKADI.get(), level) : null;
+                result = world instanceof Level level ? new SkadiEntity(CAEntities.SKADI.get(), level) : null;
             } else if ((selection).equals("ulpians")) {
-                result = (LevelAccessor) world instanceof Level level ? new UlpiansEntity(CAEntities.ULPIANS.get(), level) : null;
+                result = world instanceof Level level ? new UlpiansEntity(CAEntities.ULPIANS.get(), level) : null;
             } else if ((selection).equals("gladiia")) {
-                result = (LevelAccessor) world instanceof Level level ? new GladiiaEntity(CAEntities.GLADIIA.get(), level) : null;
+                result = world instanceof Level level ? new GladiiaEntity(CAEntities.GLADIIA.get(), level) : null;
             } else if ((selection).equals("specter")) {
-                result = (LevelAccessor) world instanceof Level level ? new SpecterEntity(CAEntities.SPECTER.get(), level) : null;
+                result = world instanceof Level level ? new SpecterEntity(CAEntities.SPECTER.get(), level) : null;
             } else {
                 result = entity;
             }

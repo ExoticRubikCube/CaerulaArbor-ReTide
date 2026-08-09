@@ -45,12 +45,9 @@ public class CannedCherryItem extends RelicItemBase {
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 240, 1));
-		{
-		boolean setval = true;
-		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-		Relic.PITTS_ASSORTED_FRUITS.set(capability, setval ? 1 : 0);
-		capability.syncPlayerVariables(entity);
-	}
+        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+        Relic.PITTS_ASSORTED_FRUITS.set(capability, 1);
+        capability.syncPlayerVariables(entity);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -75,16 +74,10 @@ public class BlockRecorderBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.SUCCESS;
-        if (entity == null) {
-            result = InteractionResult.PASS;
-        } else if ((Entity) entity instanceof ServerPlayer ent) {
+        if (entity instanceof ServerPlayer serverPlayer) {
             BlockPos bpos = BlockPos.containing(x, y, z);
-            ent.openMenu(new MenuProvider() {
+            serverPlayer.openMenu(new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
                     return Component.literal("CaerulaRecordGUI");

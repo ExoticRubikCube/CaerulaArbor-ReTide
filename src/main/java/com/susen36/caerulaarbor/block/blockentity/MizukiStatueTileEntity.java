@@ -83,8 +83,8 @@ public class MizukiStatueTileEntity extends RandomizableContainerBlockEntity imp
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<MizukiStatueTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<MizukiStatueTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override

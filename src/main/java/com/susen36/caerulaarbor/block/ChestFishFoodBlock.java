@@ -102,55 +102,53 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
 	}
 
 	@Override
-	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player entity, boolean willHarvest, FluidState fluid) {
+	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
-		if (entity != null) {
-			int bs = -1;
-			IntegerProperty blockstateProp = (IntegerProperty) blockstate.getBlock().getStateDefinition().getProperty("blockstate");
-			if (blockstateProp != null) {
-				bs = blockstate.getValue(blockstateProp);
-			}
-			if (!((Entity) entity instanceof Player player) || !player.getAbilities().instabuild) {
-				if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
-					if (bs == 0) {
-						if (world instanceof ServerLevel level) {
-							ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CABlocks.CHEST_FISH_FOOD.get()));
-							entityToSpawn.setPickUpDelay(10);
-							level.addFreshEntity(entityToSpawn);
-						}
-					} else if (bs == 1) {
-						for (int i = 0; i < Mth.nextInt(RandomSource.create(), 3, 4); ++i) {
-							if (!((LevelAccessor) world instanceof ServerLevel level)) {
-								continue;
-							}
-							ItemEntity entityToSpawn = new ItemEntity(level, x + 0.5, y + 0.75, z + 0.5, new ItemStack(CAItems.OCEAN_FIBRE.get()));
-							entityToSpawn.setPickUpDelay(5);
-							level.addFreshEntity(entityToSpawn);
-						}
-						for (int i = 0; i < Mth.nextInt(RandomSource.create(), 2, 4); ++i) {
-							if (!((LevelAccessor) world instanceof ServerLevel level)) {
-								continue;
-							}
-							ItemEntity entityToSpawn = new ItemEntity(level, x + 0.5, y + 0.75, z + 0.5, new ItemStack(CAItems.CHITIN_COOKIE_RAW.get()));
-							entityToSpawn.setPickUpDelay(5);
-							level.addFreshEntity(entityToSpawn);
-						}
-					} else if (bs == 2) {
-						for (int i = 0; i < Mth.nextInt(RandomSource.create(), 2, 4); ++i) {
-							if (!((LevelAccessor) world instanceof ServerLevel level)) {
-								continue;
-							}
-							ItemEntity entityToSpawn = new ItemEntity(level, x + 0.5, y + 0.75, z + 0.5, new ItemStack(CAItems.CHITIN_COOKIE_RAW.get()));
-							entityToSpawn.setPickUpDelay(5);
-							level.addFreshEntity(entityToSpawn);
-						}
-					}
-				}
-			}
-		}
-		return super.onDestroyedByPlayer(blockstate, world, pos, entity, willHarvest, fluid);
+        int bs = -1;
+        IntegerProperty blockstateProp = (IntegerProperty) blockstate.getBlock().getStateDefinition().getProperty("blockstate");
+        if (blockstateProp != null) {
+            bs = blockstate.getValue(blockstateProp);
+        }
+        if (!player.getAbilities().instabuild) {
+            if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+                if (bs == 0) {
+                    if (world instanceof ServerLevel level) {
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CABlocks.CHEST_FISH_FOOD.get()));
+                        entityToSpawn.setPickUpDelay(10);
+                        level.addFreshEntity(entityToSpawn);
+                    }
+                } else if (bs == 1) {
+                    for (int i = 0; i < Mth.nextInt(RandomSource.create(), 3, 4); ++i) {
+                        if (!(world instanceof ServerLevel level)) {
+                            continue;
+                        }
+                        ItemEntity entityToSpawn = new ItemEntity(level, x + 0.5, y + 0.75, z + 0.5, new ItemStack(CAItems.OCEAN_FIBRE.get()));
+                        entityToSpawn.setPickUpDelay(5);
+                        level.addFreshEntity(entityToSpawn);
+                    }
+                    for (int i = 0; i < Mth.nextInt(RandomSource.create(), 2, 4); ++i) {
+                        if (!(world instanceof ServerLevel level)) {
+                            continue;
+                        }
+                        ItemEntity entityToSpawn = new ItemEntity(level, x + 0.5, y + 0.75, z + 0.5, new ItemStack(CAItems.CHITIN_COOKIE_RAW.get()));
+                        entityToSpawn.setPickUpDelay(5);
+                        level.addFreshEntity(entityToSpawn);
+                    }
+                } else if (bs == 2) {
+                    for (int i = 0; i < Mth.nextInt(RandomSource.create(), 2, 4); ++i) {
+                        if (!(world instanceof ServerLevel level)) {
+                            continue;
+                        }
+                        ItemEntity entityToSpawn = new ItemEntity(level, x + 0.5, y + 0.75, z + 0.5, new ItemStack(CAItems.CHITIN_COOKIE_RAW.get()));
+                        entityToSpawn.setPickUpDelay(5);
+                        level.addFreshEntity(entityToSpawn);
+                    }
+                }
+            }
+        }
+        return super.onDestroyedByPlayer(blockstate, world, pos, player, willHarvest, fluid);
 	}
 
 	@Override
@@ -170,7 +168,7 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
 			if (offHand.getItem() == Blocks.AIR.asItem()) {
 				if (bs == 0) {
 					for (int i = 0; i < Mth.nextInt(RandomSource.create(), 3, 4); ++i) {
-						if (!((LevelAccessor) world instanceof ServerLevel level)) {
+						if (!(world instanceof ServerLevel level)) {
 							continue;
 						}
 						ItemEntity entityToSpawn = new ItemEntity(level, x + 0.5, y + 0.75, z + 0.5, new ItemStack(CAItems.OCEAN_PEDUNCLE.get()));
@@ -185,7 +183,7 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
 					}
 				} else if (bs == 1) {
 					for (int i = 0; i < Mth.nextInt(RandomSource.create(), 3, 4); ++i) {
-						if (!((LevelAccessor) world instanceof ServerLevel level)) {
+						if (!(world instanceof ServerLevel level)) {
 							continue;
 						}
 						ItemEntity entityToSpawn = new ItemEntity(level, x + 0.5, y + 0.75, z + 0.5, new ItemStack(CAItems.OCEAN_FIBRE.get()));
@@ -200,7 +198,7 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
 					}
 				} else if (bs == 2) {
 					for (int i = 0; i < Mth.nextInt(RandomSource.create(), 2, 4); ++i) {
-						if (!((LevelAccessor) world instanceof ServerLevel level)) {
+						if (!(world instanceof ServerLevel level)) {
 							continue;
 						}
 						ItemEntity entityToSpawn = new ItemEntity(level, x + 0.5, y + 0.75, z + 0.5, new ItemStack(CAItems.CHITIN_COOKIE_RAW.get()));

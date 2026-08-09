@@ -83,8 +83,8 @@ public class TidewayCradleTileEntity extends RandomizableContainerBlockEntity im
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<TidewayCradleTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<TidewayCradleTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override

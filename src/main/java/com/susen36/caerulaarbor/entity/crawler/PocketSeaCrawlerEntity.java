@@ -33,6 +33,14 @@ public class PocketSeaCrawlerEntity extends AbstractPocketSeaCrawlerEntity {
 		maxSwell = 10;
 	}
 
+	public PocketSeaCrawlerEntity(EntityType<PocketSeaCrawlerEntity> type, Level world, boolean fromDoll) {
+		super(type, world);
+		maxSwell = 10;
+		if (fromDoll) {
+			this.getAttribute(Attributes.SCALE).setBaseValue(0.8F);
+		}
+	}
+
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();

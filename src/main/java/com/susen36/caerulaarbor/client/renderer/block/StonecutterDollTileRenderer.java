@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.client.renderer.block;
 
-import com.susen36.caerulaarbor.block.blockentity.StonecutterDollTileEntity;
-import com.susen36.caerulaarbor.client.model.block.StonecutterDollBlockModel;
+import com.susen36.caerulaarbor.block.blockentity.doll.StonecutterDollTileEntity;
+import com.susen36.caerulaarbor.client.model.block.doll.StonecutterDollBlockModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;

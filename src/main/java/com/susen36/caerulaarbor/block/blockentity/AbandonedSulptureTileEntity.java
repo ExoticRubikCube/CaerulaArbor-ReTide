@@ -75,8 +75,8 @@ public class AbandonedSulptureTileEntity extends RandomizableContainerBlockEntit
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<AbandonedSulptureTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<AbandonedSulptureTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override
