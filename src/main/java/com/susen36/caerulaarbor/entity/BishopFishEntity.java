@@ -6,7 +6,7 @@ import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -61,7 +61,7 @@ import software.bernie.geckolib.animation.AnimationState;
 
 import javax.annotation.Nullable;
 
-public class BishopFishEntity extends SeaMonster {
+public class BishopFishEntity extends SeaMonsterBoss {
 
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKLP = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
@@ -74,7 +74,6 @@ public class BishopFishEntity extends SeaMonster {
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
     public BishopFishEntity(Level world) {
         this(CAEntities.BISHOP_FISH.get(), world);
@@ -82,6 +81,7 @@ public class BishopFishEntity extends SeaMonster {
 
     public BishopFishEntity(EntityType<BishopFishEntity> type, Level world) {
         super(type, world);
+        this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
         xpReward = 64;
         setNoAi(false);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2f);
@@ -511,25 +511,6 @@ public class BishopFishEntity extends SeaMonster {
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
-
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
-        this.bossInfo.addPlayer(player);
-    }
-
-    @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
-        super.stopSeenByPlayer(player);
-        this.bossInfo.removePlayer(player);
-    }
-
-    @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
-        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-    }
-
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();

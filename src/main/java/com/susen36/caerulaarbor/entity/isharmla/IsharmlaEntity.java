@@ -6,7 +6,7 @@ import com.susen36.caerulaarbor.api.ServerGeoAnimator;
 import com.susen36.caerulaarbor.client.model.entity.IsharmlaModel;
 import com.susen36.caerulaarbor.entity.GladiiaWhirlEntity;
 import com.susen36.caerulaarbor.entity.SkadiCorruptedEntity;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -62,7 +62,7 @@ import software.bernie.geckolib.animation.AnimationState;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class IsharmlaEntity extends SeaMonster {
+public class IsharmlaEntity extends SeaMonsterBoss {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Boolean> DATA_IS_MONSTER = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.BOOLEAN);
@@ -76,7 +76,6 @@ public class IsharmlaEntity extends SeaMonster {
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
 	public static final SoundEvent SKADI_HIT = CASounds.SKADI_HIT.get();
 
@@ -97,6 +96,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 	public IsharmlaEntity(EntityType<IsharmlaEntity> type, Level world) {
 		super(type, world);
+		this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 		this.serverGeoAnimator = new ServerGeoAnimator<>(this, new IsharmlaModel());
 		this.head = new IsharmlaPart(this, "upjaw", 4.0F, 4.0F);
 		this.body = new IsharmlaPart(this, "isharmla_body", 0.0F, 0.0F);
@@ -644,24 +644,6 @@ public class IsharmlaEntity extends SeaMonster {
 	@Override
 	public boolean canUsePortal(boolean allowVehicles) {
 		return false;
-	}
-
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
-
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
-
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 	}
 
 	@Override

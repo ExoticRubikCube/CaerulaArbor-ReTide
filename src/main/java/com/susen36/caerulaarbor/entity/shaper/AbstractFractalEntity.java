@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.entity.routeshaper;
+package com.susen36.caerulaarbor.entity.shaper;
 
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAGameRules;

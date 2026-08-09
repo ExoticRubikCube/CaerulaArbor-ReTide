@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.client.model.entity;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.routeshaper.RouteFractalEntity;
+import com.susen36.caerulaarbor.entity.shaper.RouteFractalEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.entity.bullets.PrayerSplashEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -55,7 +55,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
-public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMob {
+public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAttackMob {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.INT);

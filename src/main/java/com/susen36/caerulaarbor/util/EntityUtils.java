@@ -491,15 +491,16 @@ public class EntityUtils {
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_bron")
 		);
 
-	private static final TagKey<EntityType<?>> SEA_BORN_BOSS = TagKey.create(
+	public static final TagKey<EntityType<?>> SEA_BORN_BOSS = TagKey.create(
 			Registries.ENTITY_TYPE,
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")
 	);
 
-	private static final TagKey<EntityType<?>> SEA_BORN_PET = TagKey.create(
+	public static final TagKey<EntityType<?>> SEA_BORN_PET = TagKey.create(
 			Registries.ENTITY_TYPE,
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")
 	);
+
 	// 应用先锋增益
 	public static void vanguardBuff(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)

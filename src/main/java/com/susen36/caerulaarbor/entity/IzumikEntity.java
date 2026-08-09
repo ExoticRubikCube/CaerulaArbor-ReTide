@@ -4,7 +4,7 @@ import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -68,7 +68,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public class IzumikEntity extends SeaMonster {
+public class IzumikEntity extends SeaMonsterBoss {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_GROWTH_P = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
@@ -80,7 +80,6 @@ public class IzumikEntity extends SeaMonster {
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_12);
 
     public IzumikEntity(Level world) {
         this(CAEntities.IZUMIK.get(), world);
@@ -88,6 +87,7 @@ public class IzumikEntity extends SeaMonster {
 
     public IzumikEntity(EntityType<IzumikEntity> type, Level world) {
         super(type, world);
+        this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_12);
         xpReward = 128;
         setNoAi(false);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2f);
@@ -580,24 +580,6 @@ public class IzumikEntity extends SeaMonster {
     @Override
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
-    }
-
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
-        this.bossInfo.addPlayer(player);
-    }
-
-    @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
-        super.stopSeenByPlayer(player);
-        this.bossInfo.removePlayer(player);
-    }
-
-    @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
-        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
     @Override

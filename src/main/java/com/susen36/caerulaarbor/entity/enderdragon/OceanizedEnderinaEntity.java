@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity.enderdragon;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -17,7 +17,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -58,7 +57,7 @@ import software.bernie.geckolib.animation.AnimationState;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackMob {
+public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_REVIVE_TICK = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
@@ -70,7 +69,6 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	private long lastSwing;
 	public String animationprocedure = "empty";
 	public Set<String> crystals = new HashSet<>();
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
 	public OceanizedEnderinaEntity(Level world) {
 		this(CAEntities.OCEANIZED_ENDERINA.get(), world);
@@ -78,6 +76,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 
 	public OceanizedEnderinaEntity(EntityType<OceanizedEnderinaEntity> type, Level world) {
 		super(type, world);
+		this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 		xpReward = 128;
 		setNoAi(false);
 		setNoGravity(true);
@@ -563,24 +562,6 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	@Override
 	public boolean canUsePortal(boolean allowVehicles) {
 		return false;
-	}
-
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
-
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
-
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.ServerGeoAnimator;
 import com.susen36.caerulaarbor.client.model.entity.OceanizedEnderDragonModel;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -19,7 +19,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -64,7 +63,7 @@ import software.bernie.geckolib.animation.AnimationState;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAttackMob {
+public class OceanizedEnderDragonEntity extends SeaMonsterBoss implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedEnderDragonEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedEnderDragonEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_REVIVE_TICK = SynchedEntityData.defineId(OceanizedEnderDragonEntity.class, EntityDataSerializers.INT);
@@ -76,7 +75,6 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	private long lastSwing;
 	public String animationprocedure = "empty";
 	public Set<String> crystals = new HashSet<>();
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
 	public final double[][] positions = new double[64][3];
 	public int posPointer = -1;
@@ -104,6 +102,7 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 
 	public OceanizedEnderDragonEntity(EntityType<OceanizedEnderDragonEntity> type, Level world) {
 		super(type, world);
+		this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 		this.serverGeoAnimator = new ServerGeoAnimator<>(this, new OceanizedEnderDragonModel());
 		this.head = new OceanizedEnderDragonPart(this, "head", 1.25F, 1.25F);
 		this.neck1 = new OceanizedEnderDragonPart(this, "neck2", 1.5F, 1.75F);
@@ -735,24 +734,6 @@ public class OceanizedEnderDragonEntity extends SeaMonster implements RangedAtta
 	@Override
 	public boolean canUsePortal(boolean allowVehicles) {
 		return false;
-	}
-
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
-
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
-
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 	}
 
 	@Override

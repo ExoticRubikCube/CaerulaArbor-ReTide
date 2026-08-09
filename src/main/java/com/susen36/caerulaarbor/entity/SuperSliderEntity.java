@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -12,7 +12,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -42,13 +41,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib.animation.*;
 
-public class SuperSliderEntity extends SeaMonster {
+public class SuperSliderEntity extends SeaMonsterBoss {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(SuperSliderEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(SuperSliderEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
     public SuperSliderEntity(Level world) {
         this(CAEntities.SUPER_SLIDER.get(), world);
@@ -56,6 +54,7 @@ public class SuperSliderEntity extends SeaMonster {
 
     public SuperSliderEntity(EntityType<SuperSliderEntity> type, Level world) {
         super(type, world);
+        this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
         xpReward = 32;
         setNoAi(false);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
@@ -139,24 +138,6 @@ public class SuperSliderEntity extends SeaMonster {
     @Override
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
-    }
-
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
-        this.bossInfo.addPlayer(player);
-    }
-
-    @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
-        super.stopSeenByPlayer(player);
-        this.bossInfo.removePlayer(player);
-    }
-
-    @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
-        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
     public static AttributeSupplier.Builder createAttributes() {

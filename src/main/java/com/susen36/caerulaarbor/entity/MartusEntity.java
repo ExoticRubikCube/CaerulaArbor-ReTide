@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -20,7 +20,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
@@ -64,7 +63,7 @@ import java.util.function.BiConsumer;
 
 import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN;
 
-public class MartusEntity extends SeaMonster {
+public class MartusEntity extends SeaMonsterBoss {
     private final DynamicGameEventListener<MartusDeathListener> dynamicDeathListener;
     private int releaseTime = 0;
 
@@ -76,7 +75,6 @@ public class MartusEntity extends SeaMonster {
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
     public MartusEntity(Level world) {
         this(CAEntities.MARTUS.get(), world);
@@ -84,6 +82,7 @@ public class MartusEntity extends SeaMonster {
 
     public MartusEntity(EntityType<MartusEntity> type, Level world) {
         super(type, world);
+        this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
         this.dynamicDeathListener = new DynamicGameEventListener<>(new MartusDeathListener(this));
         xpReward = 64;
         setNoAi(false);
@@ -513,24 +512,6 @@ public class MartusEntity extends SeaMonster {
     @Override
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
-    }
-
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
-        this.bossInfo.addPlayer(player);
-    }
-
-    @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
-        super.stopSeenByPlayer(player);
-        this.bossInfo.removePlayer(player);
-    }
-
-    @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
-        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
     private void martusTimedSpawn(Level world, double x, double y, double z) {

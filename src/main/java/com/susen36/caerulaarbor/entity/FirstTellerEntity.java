@@ -4,7 +4,7 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.entity.bullets.TellerShotEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -48,7 +48,7 @@ import software.bernie.geckolib.animation.AnimationState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
+public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_SKLP = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.INT);

@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -18,7 +18,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -59,7 +58,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SkadiCorruptedEntity extends SeaMonster {
+public class SkadiCorruptedEntity extends SeaMonsterBoss {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_CONVERT_P = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
@@ -68,7 +67,6 @@ public class SkadiCorruptedEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_CONVERT_TICK = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.RED, ServerBossEvent.BossBarOverlay.NOTCHED_6);
     public String animationprocedure = "empty";
     String prevAnim = "empty";
     private boolean swinging;
@@ -80,6 +78,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 
     public SkadiCorruptedEntity(EntityType<SkadiCorruptedEntity> type, Level world) {
         super(type, world);
+        this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.RED, ServerBossEvent.BossBarOverlay.NOTCHED_6);
         xpReward = 0;
         setNoAi(false);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
@@ -602,24 +601,6 @@ public class SkadiCorruptedEntity extends SeaMonster {
     @Override
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
-    }
-
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
-        this.bossInfo.addPlayer(player);
-    }
-
-    @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
-        super.stopSeenByPlayer(player);
-        this.bossInfo.removePlayer(player);
-    }
-
-    @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
-        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
     @Override

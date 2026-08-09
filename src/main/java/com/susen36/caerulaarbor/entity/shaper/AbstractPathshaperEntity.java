@@ -1,7 +1,7 @@
-package com.susen36.caerulaarbor.entity.routeshaper;
+package com.susen36.caerulaarbor.entity.shaper;
 
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -14,7 +14,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -49,12 +48,11 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractPathshaperEntity extends SeaMonster {
+public abstract class AbstractPathshaperEntity extends SeaMonsterBoss {
 	protected static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractPathshaperEntity.class, EntityDataSerializers.STRING);
 	protected static final EntityDataAccessor<Integer> DATA_ATTACK_SKILLP = SynchedEntityData.defineId(AbstractPathshaperEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> DATA_HURT_SKILLP = SynchedEntityData.defineId(AbstractPathshaperEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(AbstractPathshaperEntity.class, EntityDataSerializers.INT);
-	protected final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 	public String animationprocedure = "empty";
 	protected String prevAnim = "empty";
 	protected boolean swinging;
@@ -62,6 +60,7 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 
 	protected AbstractPathshaperEntity(EntityType<? extends AbstractPathshaperEntity> entityType, Level level) {
 		super(entityType, level);
+		this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 		setNoAi(false);
 		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
 		setPersistenceRequired();
@@ -335,24 +334,6 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
                 this.addEffect(new MobEffectInstance(MobEffects.GLOWING, 1800, 0, false, false));
         }
         return super.finalizeSpawn(world, difficulty, reason, livingdata);
-	}
-
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
-
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
-
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 	}
 
 	@Override

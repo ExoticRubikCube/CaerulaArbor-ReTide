@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -41,14 +41,13 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 
-public class MegaChestEntity extends SeaMonster {
+public class MegaChestEntity extends SeaMonsterBoss {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_RELEASED = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
     public MegaChestEntity(Level world) {
         this(CAEntities.MEGA_CHEST.get(), world);
@@ -56,6 +55,7 @@ public class MegaChestEntity extends SeaMonster {
 
     public MegaChestEntity(EntityType<MegaChestEntity> type, Level world) {
         super(type, world);
+        this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
         xpReward = 32;
         setNoAi(false);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.2f);
@@ -213,25 +213,6 @@ public class MegaChestEntity extends SeaMonster {
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
     }
-
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
-        this.bossInfo.addPlayer(player);
-    }
-
-    @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
-        super.stopSeenByPlayer(player);
-        this.bossInfo.removePlayer(player);
-    }
-
-    @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
-        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-    }
-
 
     private InteractionResult handleChestStart(Entity sourceentity) {
         if (sourceentity == null)

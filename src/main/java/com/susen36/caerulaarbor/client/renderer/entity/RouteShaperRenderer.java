@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.client.renderer.entity;
 
-import com.susen36.caerulaarbor.client.model.entity.RouteShaperModel;
-import com.susen36.caerulaarbor.entity.routeshaper.RouteShaperEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.client.model.entity.RouteShaperModel;
+import com.susen36.caerulaarbor.entity.shaper.RouteShaperEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

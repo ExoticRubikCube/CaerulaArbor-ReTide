@@ -4,7 +4,7 @@ import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -15,7 +15,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -50,7 +49,7 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public abstract class AbstractOceanizedWitherEntity extends SeaMonster implements ElementalAttacker {
+public abstract class AbstractOceanizedWitherEntity extends SeaMonsterBoss implements ElementalAttacker {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.INT);
@@ -61,10 +60,10 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster implement
     protected long lastSwing;
     protected String prevAnim = "empty";
     public String animationprocedure = "empty";
-    protected final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
     protected AbstractOceanizedWitherEntity(EntityType<? extends AbstractOceanizedWitherEntity> type, Level world) {
         super(type, world);
+        this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
         this.xpReward = 512;
         this.setNoAi(false);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2F);
@@ -289,24 +288,6 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster implement
     @Override
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
-    }
-
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
-        this.bossInfo.addPlayer(player);
-    }
-
-    @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
-        super.stopSeenByPlayer(player);
-        this.bossInfo.removePlayer(player);
-    }
-
-    @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
-        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
     @Override

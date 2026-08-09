@@ -33,17 +33,18 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_BOSS;
+import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_PET;
+
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
 	private static final TagKey<Block> NETHERSEA_WALKER = BlockTags.create(
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions"));
-	private static final TagKey<EntityType<?>> SEA_BORN_BOSS = TagKey.create(Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss"));
-	private static final TagKey<EntityType<?>> OCEANSPAWN = TagKey.create(Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanspawn"));
-	private static final TagKey<EntityType<?>> SEA_BORN_PET = TagKey.create(Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"));
+	private static final TagKey<EntityType<?>> OCEAN_SPAWN = TagKey.create(Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "ocean_spawn"));
+
 	private static final ResourceLocation SILENCE_SPEED_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "silence_movement_speed");
 	private static final ResourceLocation BOOST_ATTACK_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "boost_of_silence_attack_damage");
+
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
 	protected SeaMonster(EntityType<? extends Monster> entityType, Level level) {
@@ -131,7 +132,7 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		if (!world.isClientSide()) {
 			double breedLevel = MapVariables.get(world).strategy_breed;
-			if (breedLevel > 0 && !this.isRemoved() && (reason == MobSpawnType.NATURAL || reason == MobSpawnType.CHUNK_GENERATION) && !this.getType().is(SEA_BORN_BOSS) && !this.getType().is(OCEANSPAWN) && !this.getType().is(SEA_BORN_PET)) {
+			if (breedLevel > 0 && !this.isRemoved() && (reason == MobSpawnType.NATURAL || reason == MobSpawnType.CHUNK_GENERATION) && !this.getType().is(SEA_BORN_BOSS) && !this.getType().is(OCEAN_SPAWN) && !this.getType().is(SEA_BORN_PET)) {
 				BreedGroupData breedData;
 				if (livingdata instanceof BreedGroupData existing) {
 					existing.groupSize++;

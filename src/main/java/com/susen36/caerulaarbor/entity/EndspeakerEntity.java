@@ -6,7 +6,7 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -66,7 +66,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EndspeakerEntity extends SeaMonster {
+public class EndspeakerEntity extends SeaMonsterBoss {
 	protected static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(EndspeakerEntity.class, EntityDataSerializers.STRING);
 	protected static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(EndspeakerEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Boolean> DATA_IS_EVOLVING = SynchedEntityData.defineId(EndspeakerEntity.class, EntityDataSerializers.BOOLEAN);
@@ -78,8 +78,6 @@ public class EndspeakerEntity extends SeaMonster {
 	protected String prevAnim = "empty";
 	protected boolean swinging;
 	protected long lastSwing;
-
-	private final ServerBossEvent bossInfo;
 
 	public EndspeakerEntity(Level level) {
 		this(CAEntities.ENDSPEAKER.get(), level);
@@ -615,18 +613,6 @@ public class EndspeakerEntity extends SeaMonster {
 	@Override
 	public boolean canUsePortal(boolean allowVehicles) {
 		return false;
-	}
-
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
-
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
 	}
 
 	@Override

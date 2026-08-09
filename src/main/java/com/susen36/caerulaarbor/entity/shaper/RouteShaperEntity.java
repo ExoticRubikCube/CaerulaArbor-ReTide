@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.entity.routeshaper;
+package com.susen36.caerulaarbor.entity.shaper;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.init.CAAttributes;

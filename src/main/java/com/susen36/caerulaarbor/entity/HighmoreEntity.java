@@ -6,7 +6,7 @@ import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -73,7 +73,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-public class HighmoreEntity extends SeaMonster implements RangedAttackMob, ElementalAttacker {
+public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, ElementalAttacker {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.INT);
@@ -82,7 +82,6 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
     public HighmoreEntity(Level world) {
         this(CAEntities.HIGHMORE.get(), world);
@@ -90,6 +89,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
 
     public HighmoreEntity(EntityType<HighmoreEntity> type, Level world) {
         super(type, world);
+        this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_10);
         xpReward = 64;
         setNoAi(false);
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
@@ -522,24 +522,6 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob, Eleme
     @Override
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
-    }
-
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
-        this.bossInfo.addPlayer(player);
-    }
-
-    @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
-        super.stopSeenByPlayer(player);
-        this.bossInfo.removePlayer(player);
-    }
-
-    @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
-        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
     @Override
