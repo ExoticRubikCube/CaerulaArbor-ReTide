@@ -9,7 +9,6 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.entity.IzumikOffspringEntity;
 import com.susen36.caerulaarbor.entity.SkadiEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornTransformManager;
@@ -69,7 +68,6 @@ public class LivingDeathEventHandler {
         handleLifePoint(event);
         handleBarrierReset(event);
         handleInvulnerableDeath(event);
-        handleSublimationRevival(event);
     }
 
     @SubscribeEvent
@@ -192,65 +190,6 @@ public class LivingDeathEventHandler {
             
         }
     }
-
-    private static void handleSublimationRevival(LivingDeathEvent event) {
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        LevelAccessor world = entity.level();
-
-        if (damagesource == null) return;
-
-        if (entity instanceof Player player && player.isCreative()) {
-            return;
-        }
-
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {
-            return;
-        }
-
-        if (entity.getPersistentData().getBoolean("caerula.sublimationRevived")) {
-            return;
-        }
-
-        if (entity instanceof IzumikOffspringEntity) {
-            return;
-        }
-
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
-            double subl = MapVariables.get(world).strategy_sublimation;
-            if (subl > 0.0) {
-                double finalBreed = Math.min(subl, MapVariables.get(world).strategy_breed);
-                double rate = 0.05 + 0.05 * finalBreed;
-                if (Math.random() < rate) {
-                       event.setCanceled(true);
-                    }
-                    if (world instanceof Level level) {
-                        level.playSound(null, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), SoundEvents.TOTEM_USE, SoundSource.HOSTILE, 1.5f, 1.0f);
-                    }
-                    if (world instanceof ServerLevel level) {
-                        level.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, entity.getX(), entity.getY() + 1.0, entity.getZ(), 32, 1.0, 1.0, 1.0, 0.15);
-                    }
-                    entity.getPersistentData().putBoolean("caerula.sublimationRevived", true);
-                    double revivalRate = 0.0;
-                    if (finalBreed == 3.0) {
-                        revivalRate = 0.1;
-                    } else if (finalBreed == 4.0) {
-                        revivalRate = 0.2;
-                    }
-                    if (revivalRate > 0.0 && Math.random() < revivalRate && world instanceof ServerLevel level) {
-                        Entity entityToSpawn = CAEntities.CAERULA_OFFSPRING.get().spawn(level, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360.0F);
-                        }
-                    }
-                    if (entity instanceof LivingEntity living) {
-                        float health = living.getMaxHealth();
-                        double healthRate = 0.1 + 0.05 * finalBreed;
-                        living.setHealth((float) (health * healthRate));
-                    }
-                }
-            }
-        }
 
     private static void handleExtractorAdv(LivingDeathEvent event) {
         DamageSource damagesource = event.getSource();

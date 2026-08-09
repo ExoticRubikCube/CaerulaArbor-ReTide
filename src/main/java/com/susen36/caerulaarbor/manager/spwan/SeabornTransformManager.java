@@ -19,7 +19,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.monster.*;
@@ -29,7 +29,6 @@ import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -83,7 +82,7 @@ public class SeabornTransformManager {
 			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CAConfigs.CLONE_NUM.get()) * 2) {
 				return false;
 			}
-			TransformAttemptResult standardTransformResult = tryStandardTransformRules(world, x, y, z, entity);
+			TransformAttemptResult standardTransformResult = tryStandardTransforms(world, x, y, z, entity);
 			if (standardTransformResult != TransformAttemptResult.NO_MATCH) {
 				trans = standardTransformResult == TransformAttemptResult.SUCCESS;
 			} else if (Math.random() < 0.25) {
@@ -116,7 +115,7 @@ public class SeabornTransformManager {
 		return trans;
 	}
 
-	private static TransformAttemptResult tryStandardTransformRules(LevelAccessor world, double x, double y, double z, Entity entity) {
+	private static TransformAttemptResult tryStandardTransforms(Level world, double x, double y, double z, Entity entity) {
 		for (TransformRule rule : STANDARD_TRANSFORM_RULES) {
 			if (rule.condition().test(entity)) {
 				if (Math.random() >= rule.chance()) {
@@ -131,17 +130,17 @@ public class SeabornTransformManager {
 		return TransformAttemptResult.NO_MATCH;
 	}
 
-	private static boolean spawnReplacement(LevelAccessor world, double x, double y, double z, Entity originalEntity, Predicate<Entity> condition, EntityType<?> replacementType) {
+	private static boolean spawnReplacement(Level world, double x, double y, double z, Entity originalEntity, Predicate<Entity> condition, EntityType<? extends Mob> replacementType) {
 		if (!condition.test(originalEntity)) {
 			return false;
 		}
-		if (world instanceof ServerLevel level) {
-			Entity spawnedEntity = replacementType.spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-			if (spawnedEntity != null) {
-				spawnedEntity.setYRot(originalEntity.getYRot());
-				spawnedEntity.setYBodyRot(originalEntity.getYRot());
-				spawnedEntity.setYHeadRot(originalEntity.getYRot());
-				spawnedEntity.setXRot(originalEntity.getXRot());
+		if (originalEntity instanceof Mob mob && world instanceof ServerLevel) {
+			Mob converted = mob.convertTo(replacementType, false);
+			if (converted != null) {
+				converted.setYRot(originalEntity.getYRot());
+				converted.setYBodyRot(originalEntity.getYRot());
+				converted.setYHeadRot(originalEntity.getYRot());
+				converted.setXRot(originalEntity.getXRot());
 			}
 		}
 		return true;
@@ -156,7 +155,7 @@ public class SeabornTransformManager {
 	}
 
 	private record TransformRule(Predicate<Entity> condition, double chance, TransformExecutor executor) {
-		private TransformRule(Predicate<Entity> condition, double chance, EntityType<?> replacementType) {
+		private TransformRule(Predicate<Entity> condition, double chance, EntityType<? extends Mob> replacementType) {
 			this(condition, chance, (world, x, y, z, entity) -> spawnReplacement(world, x, y, z, entity, current -> true, replacementType));
 		}
 	}
@@ -169,6 +168,6 @@ public class SeabornTransformManager {
 
 	@FunctionalInterface
 	private interface TransformExecutor {
-		boolean apply(LevelAccessor world, double x, double y, double z, Entity entity);
+		boolean apply(Level world, double x, double y, double z, Entity entity);
 	}
 }

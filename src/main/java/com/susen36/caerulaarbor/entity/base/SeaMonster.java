@@ -2,11 +2,15 @@ package com.susen36.caerulaarbor.entity.base;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
+import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -34,13 +38,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_BOSS;
-import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_PET;
+import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_MINION;
 
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
 	private static final TagKey<Block> NETHERSEA_WALKER = BlockTags.create(
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions"));
-	private static final TagKey<EntityType<?>> OCEAN_SPAWN = TagKey.create(Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "ocean_spawn"));
 
 	private static final ResourceLocation SILENCE_SPEED_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "silence_movement_speed");
 	private static final ResourceLocation BOOST_ATTACK_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "boost_of_silence_attack_damage");
@@ -56,6 +58,43 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		if (source.is(DamageTypes.DROWN))
 			return false;
 		return super.hurt(source, amount);
+	}
+
+	@Override
+	public void die(DamageSource source) {
+		if (!this.level().isClientSide()
+				&& !this.getPersistentData().getBoolean("caerula.sublimationRevived")
+				&& !this.getType().is(SEA_BORN_BOSS)
+				&& !this.getType().is(SEA_BORN_MINION)) {
+			MapVariables vars = MapVariables.get(this.level());
+			double subl = vars.strategy_sublimation;
+			if (subl <= 0.0) {
+				super.die(source);
+			} else {
+				double finalBreed = Math.min(subl, vars.strategy_breed);
+				double rate = 0.05 + 0.05 * finalBreed;
+				if (this.random.nextDouble() >= rate) {
+					super.die(source);
+				} else {
+					this.getPersistentData().putBoolean("caerula.sublimationRevived", true);
+					this.level().playSound(null, this.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.HOSTILE, 1.5f, 1.0f);
+					if (this.level() instanceof ServerLevel slevel) {
+						slevel.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, this.getX(), this.getY() + 1.0, this.getZ(), 32, 1.0, 1.0, 1.0, 0.15);
+						double revivalRate = finalBreed == 3.0 ? 0.1 : finalBreed == 4.0 ? 0.2 : 0.0;
+						if (revivalRate > 0.0 && this.random.nextDouble() < revivalRate) {
+							Entity spawned = CAEntities.CAERULA_OFFSPRING.get().spawn(slevel, this.blockPosition(), MobSpawnType.MOB_SUMMONED);
+							if (spawned != null) {
+								spawned.setYRot(this.random.nextFloat() * 360.0F);
+							}
+						}
+					}
+					float reviveHealth = this.getMaxHealth() * (float) (0.1 + 0.05 * finalBreed);
+					this.setHealth(reviveHealth);
+				}
+			}
+		} else {
+			super.die(source);
+		}
 	}
 
 	@Override
@@ -132,7 +171,7 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		if (!world.isClientSide()) {
 			double breedLevel = MapVariables.get(world).strategy_breed;
-			if (breedLevel > 0 && !this.isRemoved() && (reason == MobSpawnType.NATURAL || reason == MobSpawnType.CHUNK_GENERATION) && !this.getType().is(SEA_BORN_BOSS) && !this.getType().is(OCEAN_SPAWN) && !this.getType().is(SEA_BORN_PET)) {
+			if (breedLevel > 0 && !this.isRemoved() && (reason == MobSpawnType.NATURAL || reason == MobSpawnType.CHUNK_GENERATION) && !this.getType().is(SEA_BORN_BOSS) && !this.getType().is(SEA_BORN_MINION)) {
 				BreedGroupData breedData;
 				if (livingdata instanceof BreedGroupData existing) {
 					existing.groupSize++;

@@ -20,7 +20,6 @@ import net.minecraft.world.level.LevelAccessor;
 import java.util.ArrayList;
 
 public class SublimationUpgradeManger {
-
     public static void applySublimationUpgrade(LevelAccessor world, double point) {
         AdvancementProgress _ap;
         AdvancementHolder _adv;

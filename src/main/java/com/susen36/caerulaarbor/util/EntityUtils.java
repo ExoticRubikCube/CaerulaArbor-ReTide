@@ -232,7 +232,7 @@ public class EntityUtils {
 		List<LivingEntity> entfound = world.getEntitiesOfClass(
 				LivingEntity.class,
 				new AABB(searchCenter, searchCenter).inflate(16.0),
-				e -> e != center && e.getType().is(SEA_BORN) && !e.getType().is(SEA_BORN_BOSS) && !e.getType().is(SEA_BORN_PET)
+				e -> e != center && e.getType().is(SEA_BORN) && !e.getType().is(SEA_BORN_BOSS) && !e.getType().is(SEA_BORN_MINION)
 		);
 		double count = 0;
 		for (LivingEntity ignored : entfound) {
@@ -496,9 +496,9 @@ public class EntityUtils {
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")
 	);
 
-	public static final TagKey<EntityType<?>> SEA_BORN_PET = TagKey.create(
+	public static final TagKey<EntityType<?>> SEA_BORN_MINION = TagKey.create(
 			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_minion")
 	);
 
 	// 应用先锋增益
