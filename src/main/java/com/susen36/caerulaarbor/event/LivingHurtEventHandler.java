@@ -794,7 +794,7 @@ public class LivingHurtEventHandler {
             final Vec3 center = new Vec3(x, y, z);
             List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
                     e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "phalax"))));
-            for (LivingEntity entityiterator : entfound) {
+            for (LivingEntity ignored : entfound) {
                 less = less - 0.06;
                 if (less <= 0.4) break;
             }
@@ -804,7 +804,7 @@ public class LivingHurtEventHandler {
             final Vec3 center = new Vec3(x, y, z);
             List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
                     e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "phalax"))));
-            for (LivingEntity entityiterator : entfound) {
+            for (LivingEntity ignored : entfound) {
                 less = less - 0.06;
                 if (less <= 0.4) break;
             }

@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.tidelinked;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.player.Player;
@@ -97,4 +99,15 @@ public class TidelinkedArchonEntity extends AbstractTidelinkedEntity {
         return super.hurt(source, amount);
     }
 
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.4);
+        builder = builder.add(Attributes.MAX_HEALTH, 100);
+        builder = builder.add(Attributes.ARMOR, 10);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.65);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        return builder;
+    }
 }
