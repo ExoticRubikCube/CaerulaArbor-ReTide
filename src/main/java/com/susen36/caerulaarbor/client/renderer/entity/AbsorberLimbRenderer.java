@@ -18,6 +18,7 @@ public class AbsorberLimbRenderer extends GeoEntityRenderer<AbsorberLimbEntity> 
 		this.shadowRadius = 0.4f;
 	}
 
+	//TODO 使用脚本批量清理他们
 	@Override
 	public RenderType getRenderType(AbsorberLimbEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
 		return RenderType.entityTranslucent(getTextureLocation(animatable));

@@ -1,15 +1,13 @@
 
 package com.susen36.caerulaarbor.client.renderer.entity;
 
-import com.susen36.caerulaarbor.entity.FleeFishEntity;
-import com.susen36.caerulaarbor.client.model.entity.layer.FleeFishLayer;
-import com.susen36.caerulaarbor.client.model.entity.FleeFishModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.client.model.entity.FleeFishModel;
+import com.susen36.caerulaarbor.client.model.entity.layer.FleeFishLayer;
+import com.susen36.caerulaarbor.entity.FleeFishEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
@@ -18,11 +16,6 @@ public class FleeFishRenderer extends GeoEntityRenderer<FleeFishEntity> {
 		super(renderManager, new FleeFishModel());
 		this.shadowRadius = 0.5f;
 		this.addRenderLayer(new FleeFishLayer(this));
-	}
-
-	@Override
-	public RenderType getRenderType(FleeFishEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
 	}
 
 	@Override

@@ -2,8 +2,10 @@ package com.susen36.caerulaarbor.manager.spwan;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.NetherseaSlimeEntity;
+import com.susen36.caerulaarbor.entity.OceanizedDogEntity;
 import com.susen36.caerulaarbor.entity.TribunalHealerEntity;
 import com.susen36.caerulaarbor.init.CAConfigs;
+import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -17,6 +19,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -62,14 +65,24 @@ public class SeabornTransformManager {
 					CAEntities.OCEANIZED_SPIDER.get()),
 			new TransformRule(entity -> entity instanceof EnderMan, 0.2, CAEntities.OCEANIZED_ENDERMAN.get()),
 			new TransformRule(entity -> entity instanceof Wolf wolf && !wolf.isTame(), 0.2, CAEntities.OCEANIZED_WOLF.get()),
-			new TransformRule(entity -> entity instanceof Wolf wolf && wolf.isTame(), 1.0, CAEntities.OCEANIZED_DOG.get()),
+			new TransformRule(entity -> entity instanceof Wolf wolf && wolf.isTame(), 1.0, (world, x, y, z, entity, damageSource) -> {
+				Entity result = spawnReplacement(world, x, y, z, entity, current -> true, CAEntities.OCEANIZED_DOG.get(), damageSource);
+				if (entity instanceof Wolf dog && result instanceof OceanizedDogEntity seaDog) {
+					seaDog.setOwnerUUID(dog.getOwnerUUID());
+					seaDog.setTame(true, false);
+				}
+				return result;
+			}),
 			new TransformRule(entity -> entity instanceof Witch, 0.33, CAEntities.OCEANIZED_WITCH.get()),
 			new TransformRule(entity -> entity instanceof Ravager, 0.25, CAEntities.OCEANIZED_RAVAGER.get()),
-			new TransformRule(entity -> entity instanceof Warden, 0.1, (world, x, y, z, entity) -> spawnReplacement(world, x, y, z, entity, current -> current instanceof Warden,
-					Math.random() < 0.02 ? CAEntities.OCEANIZED_WARDENIS.get() : CAEntities.OCEANIZED_WARDEN.get())),
+			new TransformRule(entity -> entity instanceof Warden, 0.1, (world, x, y, z, entity, damageSource) -> spawnReplacement(world, x, y, z, entity, current -> current instanceof Warden,
+					Math.random() < 0.02 ? CAEntities.OCEANIZED_WARDENIS.get() : CAEntities.OCEANIZED_WARDEN.get(), damageSource)),
 			new TransformRule(entity -> entity instanceof Cat || entity instanceof Ocelot, 0.5, CAEntities.OCEANIZED_CAT.get()),
-			new TransformRule(entity -> entity instanceof Slime, 0.33, (world, x, y, z, entity) -> {
-				Entity result = spawnReplacement(world, x, y, z, entity, current -> true, CAEntities.NETHERSEA_SLIME.get());
+			new TransformRule(entity -> entity instanceof Slime, 0.66, (world, x, y, z, entity, damageSource) -> {
+				if (damageSource == null || !damageSource.is(CADamageTypes.TRAIL_DAMAGE)) {
+					return null;
+				}
+				Entity result = spawnReplacement(world, x, y, z, entity, current -> true, CAEntities.NETHERSEA_SLIME.get(), damageSource);
 				if (entity instanceof Slime slime && result instanceof NetherseaSlimeEntity seaSlime) {
 					int size = slime.getSize();
 					seaSlime.getEntityData().set(NetherseaSlimeEntity.DATA_SIZE, size);
@@ -78,6 +91,10 @@ public class SeabornTransformManager {
 			}));
 
 	public static boolean transformToSeaborn(Level world, double x, double y, double z, Entity entity) {
+		return transformToSeaborn(world, x, y, z, entity, null);
+	}
+
+	public static boolean transformToSeaborn(Level world, double x, double y, double z, Entity entity, DamageSource damageSource) {
 		if (entity == null)
 			return false;
 		boolean trans = false;
@@ -91,7 +108,7 @@ public class SeabornTransformManager {
 			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CAConfigs.CLONE_NUM.get()) * 2) {
 				return false;
 			}
-			TransformAttemptResult standardTransformResult = tryStandardTransforms(world, x, y, z, entity);
+			TransformAttemptResult standardTransformResult = tryStandardTransforms(world, x, y, z, entity, damageSource);
 			if (standardTransformResult != TransformAttemptResult.NO_MATCH) {
 				trans = standardTransformResult == TransformAttemptResult.SUCCESS;
 			} else if (Math.random() < 0.25) {
@@ -124,13 +141,13 @@ public class SeabornTransformManager {
 		return trans;
 	}
 
-	private static TransformAttemptResult tryStandardTransforms(Level world, double x, double y, double z, Entity entity) {
+	private static TransformAttemptResult tryStandardTransforms(Level world, double x, double y, double z, Entity entity, DamageSource damageSource) {
 		for (TransformRule rule : STANDARD_TRANSFORM_RULES) {
 			if (rule.condition().test(entity)) {
 				if (Math.random() >= rule.chance()) {
 					return TransformAttemptResult.FAILED;
 				}
-				Entity result = rule.executor().apply(world, x, y, z, entity);
+				Entity result = rule.executor().apply(world, x, y, z, entity, damageSource);
 				if (result != null) {
 					return TransformAttemptResult.SUCCESS;
 				}
@@ -141,6 +158,10 @@ public class SeabornTransformManager {
 	}
 
 	private static Entity spawnReplacement(Level world, double x, double y, double z, Entity originalEntity, Predicate<Entity> condition, EntityType<? extends Mob> replacementType) {
+		return spawnReplacement(world, x, y, z, originalEntity, condition, replacementType, null);
+	}
+
+	private static Entity spawnReplacement(Level world, double x, double y, double z, Entity originalEntity, Predicate<Entity> condition, EntityType<? extends Mob> replacementType, DamageSource damageSource) {
 		if (!condition.test(originalEntity)) {
 			return null;
 		}
@@ -151,6 +172,9 @@ public class SeabornTransformManager {
 				converted.setYBodyRot(originalEntity.getYRot());
 				converted.setYHeadRot(originalEntity.getYRot());
 				converted.setXRot(originalEntity.getXRot());
+				if (damageSource != null && originalEntity instanceof LivingEntity living) {
+					converted.hurt(damageSource, living.getHealth());
+				}
 			}
 			return converted;
 		}
@@ -167,7 +191,7 @@ public class SeabornTransformManager {
 
 	private record TransformRule(Predicate<Entity> condition, double chance, TransformExecutor executor) {
 		private TransformRule(Predicate<Entity> condition, double chance, EntityType<? extends Mob> replacementType) {
-			this(condition, chance, (world, x, y, z, entity) -> spawnReplacement(world, x, y, z, entity, current -> true, replacementType));
+			this(condition, chance, (world, x, y, z, entity, damageSource) -> spawnReplacement(world, x, y, z, entity, current -> true, replacementType, damageSource));
 		}
 	}
 
@@ -179,6 +203,6 @@ public class SeabornTransformManager {
 
 	@FunctionalInterface
 	private interface TransformExecutor {
-		Entity apply(Level world, double x, double y, double z, Entity entity);
+		Entity apply(Level world, double x, double y, double z, Entity entity, DamageSource damageSource);
 	}
 }

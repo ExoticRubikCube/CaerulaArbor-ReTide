@@ -519,9 +519,8 @@ public class LivingDeathEventHandler {
 
         if (entity.level().isClientSide() && !(entity.getType().is(SEA_BORN)||entity.getType().is(SEA_BORN_BOSS)||entity.getType().is(SEA_BORN_MINION))) {
             if((sourceentity != null && sourceentity.getType().is(SEA_BORN)||source.is(CADamageTypes.TRAIL_DAMAGE))) {
-                if (SeabornTransformManager.transformToSeaborn(world, x, y, z, entity)) {
+                if (SeabornTransformManager.transformToSeaborn(world, x, y, z, entity,source)) {
                     event.setCanceled(true);
-                    entity.discard();
                 }
             }
         }
