@@ -19,7 +19,7 @@ public class CaerulaOffspringModel extends GeoModel<CaerulaOffspringEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(CaerulaOffspringEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/izumik_offspring.png");
 	}
 
 }

@@ -14,7 +14,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -124,13 +123,6 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         return false;
     }
 
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN))
-            return false;
-        return super.hurt(source, amount);
-    }
-
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
@@ -167,7 +159,8 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         RocinanteEntity retval = CAEntities.ROCINANTE.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
+        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);
+        ;
         return retval;
     }
 
@@ -270,7 +263,6 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         return PlayState.CONTINUE;
     }
 
-    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

@@ -21,7 +21,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -86,7 +85,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this,  1.3, false) {
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.3, false) {
 
             @Override
             public boolean canUse() {
@@ -179,13 +178,6 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             });
         }
         return true;
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN))
-            return false;
-        return super.hurt(source, amount);
     }
 
     @Override
@@ -324,7 +316,8 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     @Override
     public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
         SpecterEntity retval = CAEntities.SPECTER.get().create(serverWorld);
-        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);;
+        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null);
+        ;
         return retval;
     }
 
@@ -454,14 +447,11 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         double range = 4.5;
 
         final Vec3 center = new Vec3(x, y, z);
-        List<Entity> nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(4.5), e -> true).stream()
+        List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(4.5), e -> true).stream()
                 .sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(center)))
                 .toList();
 
-        for (Entity entityiterator : nearbyEntities) {
-            if (!(entityiterator instanceof LivingEntity)) {
-                continue;
-            }
+        for (LivingEntity entityiterator : nearbyEntities) {
             if (!entityiterator.isAlive()) {
                 continue;
             }

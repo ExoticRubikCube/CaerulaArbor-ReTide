@@ -14,7 +14,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -60,7 +59,7 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 			public void tick() {
 				if (DepositerProkaryoteEntity.this.isInWater())
 					DepositerProkaryoteEntity.this.setDeltaMovement(DepositerProkaryoteEntity.this.getDeltaMovement().add(0, 0.005, 0));
-				if (this.operation == MoveControl.Operation.MOVE_TO && !DepositerProkaryoteEntity.this.getNavigation().isDone()) {
+				if (this.operation == Operation.MOVE_TO && !DepositerProkaryoteEntity.this.getNavigation().isDone()) {
 					double dx = this.wantedX - DepositerProkaryoteEntity.this.getX();
 					double dy = this.wantedY - DepositerProkaryoteEntity.this.getY();
 					double dz = this.wantedZ - DepositerProkaryoteEntity.this.getZ();
@@ -97,7 +96,7 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	}
 
 
-    @Override
+	@Override
 	protected PathNavigation createNavigation(Level world) {
 		return new WaterBoundPathNavigation(this, world);
 	}
@@ -110,7 +109,7 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 	}
 
-    @Override
+	@Override
 	public SoundEvent getHurtSound(DamageSource source) {
 		return SoundEvents.PUFFER_FISH_HURT;
 	}
@@ -121,19 +120,12 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
-
-
-	@Override
 	public void baseTick() {
 		super.baseTick();
 		this.refreshDimensions();
 	}
-@Override
+
+	@Override
 	public boolean checkSpawnObstruction(LevelReader world) {
 		return world.isUnobstructed(this);
 	}
@@ -183,7 +175,7 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
@@ -220,36 +212,36 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(DepositerProkaryoteEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience(this.getKillCredit());
-            LevelAccessor world = this.level();
-            double x = this.getX();
-            double y = this.getY();
-            double z = this.getZ();
-            if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
+			LevelAccessor world = this.level();
+			double x = this.getX();
+			double y = this.getY();
+			double z = this.getZ();
+			if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
 				BlockPos bp = BlockPos.containing(x, y, z);
 				BlockState bs = CABlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(bp));
 				if (bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty waterlogged)
 					bs = bs.setValue(waterlogged, (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER);
 				world.setBlock(bp, bs, 3);
-                world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
-            }
-            for (Direction directioniterator : Direction.values()) {
-                if (Math.random() < 0.5) {
-                    if ((world.getBlockState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ()))).canBeReplaced()) {
-                        {
-                            BlockPos bp = BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ());
-                            BlockState bs = CABlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(bp));
-                            if (bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty waterlogged)
-                                bs = bs.setValue(waterlogged,
-                                        (world.getFluidState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ())).createLegacyBlock()).getBlock() == Blocks.WATER);
-                            world.setBlock(bp, bs, 3);
-                        }
-                        world.levelEvent(2001, BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ()), Block.getId(CABlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
-                    }
-                }
-            }
-        }
+				world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
+			}
+			for (Direction directioniterator : Direction.values()) {
+				if (Math.random() < 0.5) {
+					if ((world.getBlockState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ()))).canBeReplaced()) {
+						{
+							BlockPos bp = BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ());
+							BlockState bs = CABlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(bp));
+							if (bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty waterlogged)
+								bs = bs.setValue(waterlogged,
+										(world.getFluidState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ())).createLegacyBlock()).getBlock() == Blocks.WATER);
+							world.setBlock(bp, bs, 3);
+						}
+						world.levelEvent(2001, BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ()), Block.getId(CABlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
+					}
+				}
+			}
+		}
 	}
 
 	public String getSyncedAnimation() {

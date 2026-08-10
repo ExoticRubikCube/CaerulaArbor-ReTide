@@ -12,7 +12,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -83,13 +82,6 @@ public class AbsorberLimbEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
-
-	@Override
 	public void die(DamageSource source) {
 		super.die(source);
 		LevelAccessor world = this.level();
@@ -119,7 +111,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
-        this.setHealth(this.getMaxHealth() * 2 / 3);
+		this.setHealth(this.getMaxHealth() * 2 / 3);
 		this.setAnimation("animation.absorber_limb.start");
 		return super.finalizeSpawn(world, difficulty, reason, livingdata);
 	}
@@ -147,7 +139,6 @@ public class AbsorberLimbEntity extends SeaMonster {
 	protected void pushEntities() {
 	}
 
-	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();

@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -74,13 +73,6 @@ public class OceanizedVindicatorEntity extends SeaMonster {
     @Override
     public SoundEvent getDeathSound() {
         return SoundEvents.VINDICATOR_DEATH;
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN))
-            return false;
-        return super.hurt(source, amount);
     }
 
     @Override
@@ -150,7 +142,6 @@ public class OceanizedVindicatorEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

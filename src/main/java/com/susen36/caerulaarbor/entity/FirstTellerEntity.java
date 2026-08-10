@@ -22,7 +22,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -75,7 +74,7 @@ public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob
 		super.registerGoals();
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(11, new FloatGoal(this));
-		this.goalSelector.addGoal(1, new FirstTellerEntity.RangedAttackGoal(this, 1, 50, 8f) {
+		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1, 50, 8f) {
 			@Override
 			public boolean canContinueToUse() {
 				return this.canUse();
@@ -111,7 +110,7 @@ public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob
 				this.attackIntervalMax = p_25776_;
 				this.attackRadius = p_25777_;
 				this.attackRadiusSqr = p_25777_ * p_25777_;
-				this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+				this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 			}
 		}
 
@@ -171,7 +170,7 @@ public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob
 		}
 	}
 
-    @Override
+	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
@@ -192,18 +191,11 @@ public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
-
-	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
-        if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 200, 0, false, false));
-        return retval;
+		if (!this.level().isClientSide())
+			this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 200, 0, false, false));
+		return retval;
 	}
 
 	@Override
@@ -216,52 +208,51 @@ public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("Sklp")) {
-		    this.entityData.set(DATA_SKLP, compound.getInt("Sklp"));
+			this.entityData.set(DATA_SKLP, compound.getInt("Sklp"));
 		}
 	}
 
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        Entity target;
-        if (this.isAlive()) {
-            if ((Entity) this instanceof FirstTellerEntity datEntSetI)
-                datEntSetI.getEntityData().set(DATA_SKLP, ((Entity) this instanceof FirstTellerEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) + 1);
-            if (MapVariables.get(world).strategy_grow >= 4) {
-                if ((Entity) this instanceof FirstTellerEntity datEntSetI)
-                    datEntSetI.getEntityData().set(DATA_SKLP, ((Entity) this instanceof FirstTellerEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) + 1);
-            }
-            target = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-            if (((Entity) this instanceof FirstTellerEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) >= 400 && !(target == null)) {
-                if (distanceTo(target) <= 8) {
-                    if (world instanceof Level level) {
-                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRSTTELLER_SKILL.get(), SoundSource.HOSTILE, 3, 1);
-                    }
-                    if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 65, 0, false, false));
-                    if (this instanceof FirstTellerEntity) {
-                        this.setAnimation("animation.firstspeak.skill");
-                    }
-                    CaerulaArbor.queueServerWork(10, () -> {
-                        Mob mobEnt = this;
-                        if (!(mobEnt.getTarget() == null)) {
-                            if ((Entity) mobEnt.getTarget() instanceof LivingEntity entity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.FIRST_TELLER_SKILL, 50, 0, false, false));
-                        }
-                    });
-                    if ((Entity) this instanceof FirstTellerEntity datEntSetI)
-                        datEntSetI.getEntityData().set(DATA_SKLP, 0);
-                }
-            }
-        }
-        this.refreshDimensions();
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		Entity target;
+		if (this.isAlive()) {
+			if ((Entity) this instanceof FirstTellerEntity datEntSetI)
+				datEntSetI.getEntityData().set(DATA_SKLP, ((Entity) this instanceof FirstTellerEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) + 1);
+			if (MapVariables.get(world).strategy_grow >= 4) {
+				if ((Entity) this instanceof FirstTellerEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_SKLP, ((Entity) this instanceof FirstTellerEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) + 1);
+			}
+			target = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+			if (((Entity) this instanceof FirstTellerEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) >= 400 && !(target == null)) {
+				if (distanceTo(target) <= 8) {
+					if (world instanceof Level level) {
+						level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRSTTELLER_SKILL.get(), SoundSource.HOSTILE, 3, 1);
+					}
+					if (!this.level().isClientSide())
+						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 65, 0, false, false));
+					if (this instanceof FirstTellerEntity) {
+						this.setAnimation("animation.firstspeak.skill");
+					}
+					CaerulaArbor.queueServerWork(10, () -> {
+						Mob mobEnt = this;
+						if (!(mobEnt.getTarget() == null)) {
+							if ((Entity) mobEnt.getTarget() instanceof LivingEntity entity && !this.level().isClientSide())
+								this.addEffect(new MobEffectInstance(CAMobEffects.FIRST_TELLER_SKILL, 50, 0, false, false));
+						}
+					});
+					if ((Entity) this instanceof FirstTellerEntity datEntSetI)
+						datEntSetI.getEntityData().set(DATA_SKLP, 0);
+				}
+			}
+		}
+		this.refreshDimensions();
 	}
 
-	
 
 	public MobEffectInstance STOP = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false);
 
@@ -310,7 +301,7 @@ public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
@@ -347,7 +338,7 @@ public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 30) {
-			this.remove(FirstTellerEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience(this.getKillCredit());
 		}
 	}

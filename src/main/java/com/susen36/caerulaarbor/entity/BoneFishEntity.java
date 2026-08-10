@@ -18,7 +18,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -63,7 +62,7 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 			public void tick() {
 				if (BoneFishEntity.this.isInWater())
 					BoneFishEntity.this.setDeltaMovement(BoneFishEntity.this.getDeltaMovement().add(0, 0.005, 0));
-				if (this.operation == MoveControl.Operation.MOVE_TO && !BoneFishEntity.this.getNavigation().isDone()) {
+				if (this.operation == Operation.MOVE_TO && !BoneFishEntity.this.getNavigation().isDone()) {
 					double dx = this.wantedX - BoneFishEntity.this.getX();
 					double dy = this.wantedY - BoneFishEntity.this.getY();
 					double dz = this.wantedZ - BoneFishEntity.this.getZ();
@@ -99,7 +98,7 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 		builder.define(DATA_ANIMATION, "undefined");
 	}
 
-    @Override
+	@Override
 	protected PathNavigation createNavigation(Level world) {
 		return new WaterBoundPathNavigation(this, world);
 	}
@@ -127,7 +126,7 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 		this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 	}
 
-    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+	protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
 		super.dropCustomDeathLoot(level, damageSource, recentlyHit);
 		this.spawnAtLocation(new ItemStack(CAItems.BONE_SHARD.get()));
 	}
@@ -145,13 +144,6 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 	@Override
 	public SoundEvent getDeathSound() {
 		return SoundEvents.SALMON_DEATH;
-	}
-
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
 	}
 
 	@Override
@@ -257,7 +249,7 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

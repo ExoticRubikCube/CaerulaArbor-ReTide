@@ -129,22 +129,33 @@ public class EntityUtils {
 			return;
 		}
 		MapVariables mapVars = MapVariables.get(world);
-		if (entity.getType().is(SEA_BORN)) {
-			if (mapVars.strategy_silence >= 2) {
-				living.setHealth((float) (living.getHealth() + living.getMaxHealth() * 0.0025));
-			} else if (mapVars.strategy_subsisting >= 3) {
-				living.setHealth((float) (living.getHealth() + living.getMaxHealth() * 0.001));
+		boolean isSeabornUnit = (living.getType().is(SEA_BORN)
+				|| living.getType().is(SEA_BORN_BOSS)
+				|| living.getType().is(SEA_BORN_MINION))
+				&& !living.getType().is(SEA_BORN_PET);
+
+		if (living.tickCount % 20 == 0) {
+			if (isSeabornUnit) {
+				if (mapVars.strategy_silence >= 2) {
+					living.heal((float) (living.getMaxHealth() * 0.05));
+				} else if (mapVars.strategy_subsisting >= 3) {
+					living.heal((float) (living.getMaxHealth() * 0.02));
+				}
+			} else if (living instanceof Player player
+					&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 3) {
+				if (mapVars.strategy_silence >= 2) {
+					living.heal((float) (living.getMaxHealth() * 0.05));
+				} else if (mapVars.strategy_subsisting >= 3) {
+					living.heal((float) (living.getMaxHealth() * 0.02));
+				}
 			}
-			if (!living.level().isClientSide()) {
+		}
+
+		if (!living.level().isClientSide()) {
+			if (isSeabornUnit) {
 				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
-			}
-		} else if (entity instanceof Player && ModCapabilities.getPlayerVariables(entity).player_oceanization >= 3) {
-			if (mapVars.strategy_silence >= 2) {
-				living.heal((float) (living.getMaxHealth() * 0.0025));
-			} else if (mapVars.strategy_subsisting >= 3) {
-				living.heal((float) (living.getMaxHealth() * 0.001));
-			}
-			if (!living.level().isClientSide()) {
+			} else if (living instanceof Player player
+					&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 3) {
 				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
 				living.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
 			}

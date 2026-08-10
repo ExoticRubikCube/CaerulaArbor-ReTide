@@ -23,7 +23,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -73,7 +72,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
             public void tick() {
                 if (NucleicMaleficentEntity.this.isInWater())
                     NucleicMaleficentEntity.this.setDeltaMovement(NucleicMaleficentEntity.this.getDeltaMovement().add(0, 0.005, 0));
-                if (this.operation == MoveControl.Operation.MOVE_TO && !NucleicMaleficentEntity.this.getNavigation().isDone()) {
+                if (this.operation == Operation.MOVE_TO && !NucleicMaleficentEntity.this.getNavigation().isDone()) {
                     double dx = this.wantedX - NucleicMaleficentEntity.this.getX();
                     double dy = this.wantedY - NucleicMaleficentEntity.this.getY();
                     double dz = this.wantedZ - NucleicMaleficentEntity.this.getZ();
@@ -179,13 +178,6 @@ public class NucleicMaleficentEntity extends SeaMonster {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN))
-            return false;
-        return super.hurt(source, amount);
-    }
-
-    @Override
     public void baseTick() {
         super.baseTick();
         LevelAccessor world = this.level();
@@ -208,7 +200,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
                     }
                     if (distanceTo(entityiterator) < 5) {
                         if (!(entityiterator == this)) {
-                            SIHelper.causeSanityInjury( entityiterator,
+                            SIHelper.causeSanityInjury(entityiterator,
                                     this,
                                     (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 6,
                                     SanityEvent.Hurt.Type.ENTITY);

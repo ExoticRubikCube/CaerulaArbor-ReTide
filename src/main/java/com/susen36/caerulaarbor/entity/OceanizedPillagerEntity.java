@@ -16,7 +16,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -184,13 +183,6 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN))
-            return false;
-        return super.hurt(source, amount);
-    }
-
-    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
@@ -333,7 +325,6 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
         return PlayState.CONTINUE;
     }
 
-    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

@@ -21,7 +21,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -194,13 +193,6 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
     @Override
     public SoundEvent getDeathSound() {
         return SoundEvents.EVOKER_DEATH;
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN))
-            return false;
-        return super.hurt(source, amount);
     }
 
     @Override
@@ -521,7 +513,6 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         return PlayState.CONTINUE;
     }
 
-    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -49,7 +48,7 @@ public class DivicellularGoEntity extends SeaMonster {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1.15, false));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15, false));
         this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(9, new RandomSwimmingGoal(this, 4, 40));
         this.goalSelector.addGoal(10, new FloatGoal(this));
@@ -74,13 +73,6 @@ public class DivicellularGoEntity extends SeaMonster {
     @Override
     public SoundEvent getDeathSound() {
         return SoundEvents.PUFFER_FISH_DEATH;
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN))
-            return false;
-        return super.hurt(source, amount);
     }
 
     @Override
@@ -147,7 +139,6 @@ public class DivicellularGoEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

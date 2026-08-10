@@ -20,7 +20,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -66,7 +65,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 			public void tick() {
 				if (ApostleProkaryoteEntity.this.isInWater())
 					ApostleProkaryoteEntity.this.setDeltaMovement(ApostleProkaryoteEntity.this.getDeltaMovement().add(0, 0.005, 0));
-				if (this.operation == MoveControl.Operation.MOVE_TO && !ApostleProkaryoteEntity.this.getNavigation().isDone()) {
+				if (this.operation == Operation.MOVE_TO && !ApostleProkaryoteEntity.this.getNavigation().isDone()) {
 					double dx = this.wantedX - ApostleProkaryoteEntity.this.getX();
 					double dy = this.wantedY - ApostleProkaryoteEntity.this.getY();
 					double dz = this.wantedZ - ApostleProkaryoteEntity.this.getZ();
@@ -103,7 +102,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 		builder.define(DATA_SHELLED, false);
 	}
 
-    @Override
+	@Override
 	protected PathNavigation createNavigation(Level world) {
 		return new WaterBoundPathNavigation(this, world);
 	}
@@ -116,7 +115,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 	}
 
-    @Override
+	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
 		this.playSound(SoundEvents.DOLPHIN_SWIM, 0.15f, 1);
 	}
@@ -132,13 +131,6 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
-
-	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("Shelled", this.entityData.get(DATA_SHELLED));
@@ -148,73 +140,74 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("Shelled")) {
-		    this.entityData.set(DATA_SHELLED, compound.getBoolean("Shelled"));
+			this.entityData.set(DATA_SHELLED, compound.getBoolean("Shelled"));
 		}
 	}
 
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        boolean found = false;
-        double perc;
-        if (this.isAlive()) {
-            if (!((Entity) this instanceof ApostleProkaryoteEntity datEntL1 && datEntL1.getEntityData().get(DATA_SHELLED))) {
-                for (int dx = -2; dx <= 2; dx++) {
-                    for (int dy = -2; dy <= 3; dy++) {
-                        for (int dz = -2; dz <= 2; dz++) {
-                            if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.WHITE_CHITIN_BLOCK.get()) {
-                                this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((x + dx), (y + dy), (z + dz)));
-                                world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (found) {
-                            break;
-                        }
-                    }
-                    if (found) {
-                        break;
-                    }
-                }
-                if (found) {
-                    perc = this.getHealth() / this.getMaxHealth();
-                    if (MapVariables.get(world).strategy_subsisting >= 4) {
-                        if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                                    ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.2));
-                        if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                    ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.8));
-                    } else {
-                        if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                                    ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 1.6));
-                        if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                    ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.4));
-                    }
-                    this.setHealth((float) (this.getMaxHealth() * perc));
-                    if ((Entity) this instanceof ApostleProkaryoteEntity datEntSetL)
-                        datEntSetL.getEntityData().set(DATA_SHELLED, true);
-                    if (this instanceof ApostleProkaryoteEntity) {
-                        this.setAnimation("animation.apostle.skill");
-                    }
-                    CaerulaArbor.queueServerWork(17, () -> {
-                        if (world instanceof Level level) {
-                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.HOSTILE, 1, 1);
-                        }
-                    });
-                }
-            }
-        }
-        this.refreshDimensions();
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		boolean found = false;
+		double perc;
+		if (this.isAlive()) {
+			if (!((Entity) this instanceof ApostleProkaryoteEntity datEntL1 && datEntL1.getEntityData().get(DATA_SHELLED))) {
+				for (int dx = -2; dx <= 2; dx++) {
+					for (int dy = -2; dy <= 3; dy++) {
+						for (int dz = -2; dz <= 2; dz++) {
+							if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.WHITE_CHITIN_BLOCK.get()) {
+								this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((x + dx), (y + dy), (z + dz)));
+								world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
+								found = true;
+								break;
+							}
+						}
+						if (found) {
+							break;
+						}
+					}
+					if (found) {
+						break;
+					}
+				}
+				if (found) {
+					perc = this.getHealth() / this.getMaxHealth();
+					if (MapVariables.get(world).strategy_subsisting >= 4) {
+						if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+							this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+									((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.2));
+						if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+							this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+									((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.8));
+					} else {
+						if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+							this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+									((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 1.6));
+						if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+							this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+									((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.4));
+					}
+					this.setHealth((float) (this.getMaxHealth() * perc));
+					if ((Entity) this instanceof ApostleProkaryoteEntity datEntSetL)
+						datEntSetL.getEntityData().set(DATA_SHELLED, true);
+					if (this instanceof ApostleProkaryoteEntity) {
+						this.setAnimation("animation.apostle.skill");
+					}
+					CaerulaArbor.queueServerWork(17, () -> {
+						if (world instanceof Level level) {
+							level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.HOSTILE, 1, 1);
+						}
+					});
+				}
+			}
+		}
+		this.refreshDimensions();
 	}
-@Override
+
+	@Override
 	public boolean checkSpawnObstruction(LevelReader world) {
 		return world.isUnobstructed(this);
 	}
@@ -265,7 +258,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

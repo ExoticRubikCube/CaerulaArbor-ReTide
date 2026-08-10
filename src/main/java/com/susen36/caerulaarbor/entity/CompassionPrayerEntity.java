@@ -23,7 +23,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -239,13 +238,6 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN))
-            return false;
-        return super.hurt(source, amount);
-    }
-
-    @Override
     public void die(DamageSource source) {
         if (this.getEntityData().get(DATA_PHASE) == 0 && this.getEntityData().get(DATA_REVIVE_TICK) <= 0) {
             Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
@@ -441,7 +433,6 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
         prevAnim = this.animationprocedure;
         return PlayState.CONTINUE;
     }
-
 
 
     public String getSyncedAnimation() {

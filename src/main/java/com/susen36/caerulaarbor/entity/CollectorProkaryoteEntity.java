@@ -18,7 +18,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -64,7 +63,7 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 			public void tick() {
 				if (CollectorProkaryoteEntity.this.isInWater())
 					CollectorProkaryoteEntity.this.setDeltaMovement(CollectorProkaryoteEntity.this.getDeltaMovement().add(0, 0.005, 0));
-				if (this.operation == MoveControl.Operation.MOVE_TO && !CollectorProkaryoteEntity.this.getNavigation().isDone()) {
+				if (this.operation == Operation.MOVE_TO && !CollectorProkaryoteEntity.this.getNavigation().isDone()) {
 					double dx = this.wantedX - CollectorProkaryoteEntity.this.getX();
 					double dy = this.wantedY - CollectorProkaryoteEntity.this.getY();
 					double dz = this.wantedZ - CollectorProkaryoteEntity.this.getZ();
@@ -113,7 +112,7 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 	}
 
-    protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
+	protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
 		super.dropCustomDeathLoot(level, damageSource, recentlyHit);
 		this.spawnAtLocation(new ItemStack(CAItems.BROKEN_OCEAN_CELL.get()));
 	}
@@ -134,34 +133,27 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
-
-	@Override
 	public void die(DamageSource source) {
 		super.die(source);
-        LevelAccessor world = this.level();
-        Entity sourceentity = source.getEntity();
-        if (sourceentity == null)
-            return;
-        if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:swords")))
-                || (sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:swords")))
-                || (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))
-                || (sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))
-                || (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/knives")))
-                || (sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/knives")))) {
-            if (Math.random() < 0.33) {
-                if (world instanceof ServerLevel level) {
-                    ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.COLLECTOR_MEAT.get()));
-                    entityToSpawn.setPickUpDelay(10);
-                    level.addFreshEntity(entityToSpawn);
-                }
-            }
-        }
-    }
+		LevelAccessor world = this.level();
+		Entity sourceentity = source.getEntity();
+		if (sourceentity == null)
+			return;
+		if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:swords")))
+				|| (sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:swords")))
+				|| (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))
+				|| (sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))
+				|| (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/knives")))
+				|| (sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/knives")))) {
+			if (Math.random() < 0.33) {
+				if (world instanceof ServerLevel level) {
+					ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.COLLECTOR_MEAT.get()));
+					entityToSpawn.setPickUpDelay(10);
+					level.addFreshEntity(entityToSpawn);
+				}
+			}
+		}
+	}
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
@@ -226,7 +218,8 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 		super.baseTick();
 		this.refreshDimensions();
 	}
-@Override
+
+	@Override
 	public boolean checkSpawnObstruction(LevelReader world) {
 		return world.isUnobstructed(this);
 	}
@@ -265,7 +258,7 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

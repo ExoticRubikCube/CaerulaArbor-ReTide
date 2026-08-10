@@ -16,7 +16,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -52,19 +51,6 @@ public class TheAbandonedEntity extends SeaMonster {
         setPersistenceRequired();
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.15);
-        builder = builder.add(Attributes.MAX_HEALTH, 76);
-        builder = builder.add(Attributes.ARMOR, 0);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
-        builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.25);
-        builder = builder.add(Attributes.STEP_HEIGHT, 1f);
-        return builder;
-    }
-
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
@@ -77,7 +63,7 @@ public class TheAbandonedEntity extends SeaMonster {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.6, false));
-		this.goalSelector.addGoal(3, new MountVehicleGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
+        this.goalSelector.addGoal(3, new MountVehicleGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
         this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(13, new FloatGoal(this));
@@ -113,13 +99,6 @@ public class TheAbandonedEntity extends SeaMonster {
             });
         }
         return true;
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.DROWN))
-            return false;
-        return super.hurt(source, amount);
     }
 
     @Override
@@ -243,7 +222,6 @@ public class TheAbandonedEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);
@@ -260,6 +238,18 @@ public class TheAbandonedEntity extends SeaMonster {
         data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
     }
 
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.15);
+        builder = builder.add(Attributes.MAX_HEALTH, 76);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
+        builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.25);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1f);
+        return builder;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

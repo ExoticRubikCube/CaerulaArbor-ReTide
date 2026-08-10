@@ -21,7 +21,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -66,7 +65,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 			public void tick() {
 				if (AccumulatorProkaryoteEntity.this.isInWater())
 					AccumulatorProkaryoteEntity.this.setDeltaMovement(AccumulatorProkaryoteEntity.this.getDeltaMovement().add(0, 0.005, 0));
-				if (this.operation == MoveControl.Operation.MOVE_TO && !AccumulatorProkaryoteEntity.this.getNavigation().isDone()) {
+				if (this.operation == Operation.MOVE_TO && !AccumulatorProkaryoteEntity.this.getNavigation().isDone()) {
 					double dx = this.wantedX - AccumulatorProkaryoteEntity.this.getX();
 					double dy = this.wantedY - AccumulatorProkaryoteEntity.this.getY();
 					double dz = this.wantedZ - AccumulatorProkaryoteEntity.this.getZ();
@@ -116,7 +115,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 	}
 
-    @Override
+	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
 		this.playSound(SoundEvents.PUFFER_FISH_FLOP, 0.15f, 1);
 	}
@@ -132,13 +131,6 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
-
-	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("Split", this.entityData.get(DATA_SPLIT));
@@ -148,7 +140,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("Split")) {
-		    this.entityData.set(DATA_SPLIT, compound.getBoolean("Split"));
+			this.entityData.set(DATA_SPLIT, compound.getBoolean("Split"));
 		}
 	}
 
@@ -196,7 +188,8 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		}
 		this.refreshDimensions();
 	}
-@Override
+
+	@Override
 	public boolean checkSpawnObstruction(LevelReader world) {
 		return world.isUnobstructed(this);
 	}
@@ -241,7 +234,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

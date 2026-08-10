@@ -17,7 +17,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -66,7 +65,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		super.registerGoals();
 		this.goalSelector.addGoal(13, new MountVehicleGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(1, new SplasherAbyssalEntity.RangedAttackGoal(this, 1.25, 40, 6f) {
+		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 40, 6f) {
 			@Override
 			public boolean canContinueToUse() {
 				return this.canUse();
@@ -102,7 +101,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 				this.attackIntervalMax = p_25776_;
 				this.attackRadius = p_25777_;
 				this.attackRadiusSqr = p_25777_ * p_25777_;
-				this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+				this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 			}
 		}
 
@@ -162,7 +161,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		}
 	}
 
-    @Override
+	@Override
 	public SoundEvent getAmbientSound() {
 		return SoundEvents.PUFFER_FISH_AMBIENT;
 	}
@@ -183,20 +182,13 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
-
-	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (!this.hasEffect(CAMobEffects.SPLASHER_ATTACK)) {
-            if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CAMobEffects.SPLASHER_ATTACK, -1, 0, false, false));
-        }
-        this.refreshDimensions();
+		if (!this.hasEffect(CAMobEffects.SPLASHER_ATTACK)) {
+			if (!this.level().isClientSide())
+				this.addEffect(new MobEffectInstance(CAMobEffects.SPLASHER_ATTACK, -1, 0, false, false));
+		}
+		this.refreshDimensions();
 	}
 
 	@Override

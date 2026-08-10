@@ -18,11 +18,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
@@ -119,8 +117,8 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		double nearbyCount = 0;
 		Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
 		List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), entity -> true).stream()
-			.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center)))
-			.toList();
+				.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center)))
+				.toList();
 		for (Entity nearbyEntity : nearbyEntities) {
 			if (nearbyEntity instanceof RouteFractalEntity || nearbyEntity instanceof LineringPathshaperEntity) {
 				nearbyCount = nearbyCount + 1;
@@ -230,13 +228,6 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
-
-	@Override
 	public boolean doHurtTarget(Entity target) {
 		boolean flag = super.doHurtTarget(target);
 		if (flag) {
@@ -300,7 +291,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 
 		private OwnerHurtByTargetGoal() {
 			super(AbstractFractalEntity.this, false);
-			this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+			this.setFlags(EnumSet.of(Flag.TARGET));
 		}
 
 		@Override
@@ -332,7 +323,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 
 		private OwnerHurtTargetGoal() {
 			super(AbstractFractalEntity.this, false);
-			this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+			this.setFlags(EnumSet.of(Flag.TARGET));
 		}
 
 		@Override
