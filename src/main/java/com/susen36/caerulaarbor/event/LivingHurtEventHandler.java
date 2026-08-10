@@ -10,7 +10,6 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.init.*;
-import com.susen36.caerulaarbor.manager.spwan.SeabornTransformManager;
 import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SublimationUpgradeManger;
 import com.susen36.caerulaarbor.util.*;
@@ -35,7 +34,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -58,7 +56,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.*;
+import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN;
 
 @EventBusSubscriber
 public class LivingHurtEventHandler {
@@ -87,7 +85,6 @@ public class LivingHurtEventHandler {
         handleSeabornKiller(event);
         handleSeabornsGetOffShip(event);
         handleMoreFallDamageEffect(event);
-        handleSlimeFunc(event);
         handleWarriorTactic(event);
         handlePlayerEvolutionDamageReduction(event);
         handlePlayerEvolutionDamageAmplification(event);
@@ -97,11 +94,6 @@ public class LivingHurtEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void livingIncomingHurt(LivingIncomingDamageEvent event) {
-        handleNetherseaImmunity(event);
-        handleSeabornTransform(event);
-    }
-
-    private static void handleNetherseaImmunity(LivingIncomingDamageEvent event) {
         DamageSource damageSource = event.getSource();
         LivingEntity entity = event.getEntity();
 
@@ -724,55 +716,6 @@ public class LivingHurtEventHandler {
         if (damagesource.is(DamageTypes.FALL) && entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(CAMobEffects.MORE_FALL_DAMAGE)) {
             double level = livingEntity.getEffect(CAMobEffects.MORE_FALL_DAMAGE).getAmplifier() + 1;
             event.setNewDamage((float) (amount * (1 + 0.25 * level)));
-        }
-    }
-
-    private static void handleSeabornTransform(LivingIncomingDamageEvent event) {
-        Level world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        Entity entity = event.getEntity();
-        DamageSource source = event.getSource();
-        Entity sourceentity = source.getEntity();
-
-        if (event.isCanceled()) return;
-
-        if (entity.level().isClientSide() && !(entity.getType().is(SEA_BORN)||entity.getType().is(SEA_BORN_BOSS)||entity.getType().is(SEA_BORN_MINION))) {
-            if((sourceentity != null && sourceentity.getType().is(SEA_BORN)||source.is(CADamageTypes.TRAIL_DAMAGE))) {
-                if (SeabornTransformManager.transformToSeaborn(world, x, y, z, entity)) {
-                    event.setCanceled(true);
-                        entity.discard();
-                }
-            }
-        }
-    }
-
-    //TODO 下放到实体海嗣化转换器(高优先级)
-    private static void handleSlimeFunc(LivingDamageEvent.Pre event) {
-        Level world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-
-        if (damagesource.is(CADamageTypes.TRAIL_DAMAGE)) {
-            if (entity instanceof Slime slime) {
-                if (slime.getHealth() <= slime.getMaxHealth() * 0.5 || slime.getHealth() <= 1) {
-                    int size = slime.getSize();
-                    if (world instanceof ServerLevel level) {
-                        NetherseaSlimeEntity entityToSpawn = CAEntities.NETHERSEA_SLIME.get().create(level);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setPos(x, y, z);
-                            entityToSpawn.getEntityData().set(NetherseaSlimeEntity.DATA_SIZE, size);
-                            entityToSpawn.setYRot(entity.getYRot());
-                            entity.discard();
-                            level.addFreshEntity(entityToSpawn);
-                        }
-                    }
-                }
-            }
         }
     }
 

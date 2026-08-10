@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.entity.base;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.ai.StrengthOfCrowdGoal;
+import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -77,6 +78,8 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.DROWN))
+			return false;
+		if (source.is(CADamageTypes.TRAIL_DAMAGE))
 			return false;
 		return super.hurt(source, amount);
 	}

@@ -63,7 +63,7 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         addSeaMonsterSubclassesToTag();
         addSeaMonsterBossSubclassesToTag();
-        addEntityTypesToTag(CANNOT_TRANSFORM, EntityType.IRON_GOLEM, CAEntities.CHITIN_GOLEM, EntityType.SNOW_GOLEM, EntityType.SLIME, EntityType.MAGMA_CUBE, EntityType.STRIDER, EntityType.VEX);
+        addEntityTypesToTag(CANNOT_TRANSFORM, EntityType.IRON_GOLEM, CAEntities.CHITIN_GOLEM, EntityType.SNOW_GOLEM, EntityType.STRIDER, EntityType.VEX);
         addTagsToTag(CANNOT_TRANSFORM, SEA_BORN, GOLEMS, HUNTERS, SEA_FRIEND);
         addEntityTypesToTag(ENDSPEAKER_EDIBLE, CAEntities.BASELAYER_ABYSSAL, CAEntities.CRACKER_ABYSSAL, CAEntities.GUIDE_ABYSSAL, CAEntities.PREDATOR_ABYSSAL, CAEntities.SPLASHER_ABYSSAL, CAEntities.UMBRELLA_ABYSSAL);
         addEntityTypesToTag(GOLEMS, CAEntities.CHITIN_GOLEM, CAEntities.SPIKE_CHEST, CAEntities.COMPLEX_CHITIN_GOLEM, CAEntities.THE_LAST_KNIGHT, CAEntities.FLAMARINE_STATUE, CAEntities.FLAMARINE_GOLEM, CAEntities.MOIST_DRAGON_BREATH);
