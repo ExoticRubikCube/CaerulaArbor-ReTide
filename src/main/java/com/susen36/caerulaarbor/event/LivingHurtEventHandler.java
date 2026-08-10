@@ -52,9 +52,12 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 import java.util.Comparator;
 import java.util.List;
+
+import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN;
 
 @EventBusSubscriber
 public class LivingHurtEventHandler {
@@ -62,11 +65,9 @@ public class LivingHurtEventHandler {
     public static final TagKey<DamageType> B_PROTECTION = CADamageTags.BYPASS_PROTECTION;
     public static final TagKey<DamageType> IS_MAGIC = CADamageTags.IS_MAGIC;
     public static final TagKey<DamageType> B_DEFENSE = CADamageTags.BYPASS_DEFENSE;
-    private static final TagKey<EntityType<?>> OCEAN_OFFSPRING = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onEntityHurt(LivingDamageEvent.Pre event) {
-        handleNetherseaImmunity(event);
         handleBarrierFunc(event);
         handleMagicResis(event);
         handleFlamarineHurt(event);
@@ -93,6 +94,16 @@ public class LivingHurtEventHandler {
         handleSublimationDamage(event);
     }
 
+    @SubscribeEvent(priority = EventPriority.LOW)
+    private static void handleNetherseaImmunity(LivingIncomingDamageEvent event) {
+        DamageSource damageSource = event.getSource();
+        LivingEntity entity = event.getEntity();
+
+        if (damageSource.is(CADamageTypes.TRAIL_DAMAGE) && entity.getType().is(SEA_BORN)) {
+            event.setCanceled(true);
+        }
+    }
+
     private static void handleKillMuteSelf(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
@@ -112,14 +123,6 @@ public class LivingHurtEventHandler {
             entity.getPersistentData().putDouble("caerula.lastHurtByTime", entity.tickCount);
             entity.getPersistentData().putDouble("caerula.sublimationDamage", entity.getPersistentData().getDouble("caerula.sublimationDamage") + amount);
             SublimationUpgradeManger.applySublimationUpgrade(world, amount);
-        }
-    }
-
-    private static void handleNetherseaImmunity(LivingDamageEvent.Pre event) {
-        DamageSource damageSource = event.getSource();
-        LivingEntity entity = event.getEntity();
-        if (damageSource.is(CADamageTypes.TRAIL_DAMAGE) && entity.getType().is(OCEAN_OFFSPRING)) {
-            event.setNewDamage(0);
         }
     }
 
@@ -186,6 +189,7 @@ public class LivingHurtEventHandler {
         }
     }
 
+    //TODO 需要制作共同的基类然后下放
     private static void handleFlamarineHurt(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
@@ -239,7 +243,7 @@ public class LivingHurtEventHandler {
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getNewDamage();
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         ItemStack helm = (sourceentity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).copy();
         ItemStack chest = (sourceentity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).copy();
@@ -274,7 +278,7 @@ public class LivingHurtEventHandler {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         double rate = 0;
         double freeze;
@@ -319,6 +323,7 @@ public class LivingHurtEventHandler {
         }
     }
 
+    //TODO 需要下放到海嗣BOSS基类
     private static void handleBossHit(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
@@ -524,8 +529,6 @@ public class LivingHurtEventHandler {
         Entity entity = event.getEntity();
         double amount = event.getNewDamage();
 
-        if (damagesource == null || entity == null) return;
-
         if (damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "hunters")))) {
@@ -546,6 +549,7 @@ public class LivingHurtEventHandler {
         }
     }
 
+    //TODO 可能需要下放
     private static void handleOnArrowHit(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
@@ -674,8 +678,7 @@ public class LivingHurtEventHandler {
 
         if (sourceentity == null) return;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
-                && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.OCEANOSPR_KILLER), (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY)) != 0) {
+        if (entity.getType().is(SEA_BORN) && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.OCEANOSPR_KILLER), (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY)) != 0) {
             double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.OCEANOSPR_KILLER), (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY));
             double addition = Math.max(amount * lvl * 0.15, lvl * 5);
             if (world instanceof ServerLevel level)
@@ -689,8 +692,8 @@ public class LivingHurtEventHandler {
         Entity entity = event.getEntity();
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite"))) && WorldUtils.canGrief(world)) {
-            Entity eee = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-            if (eee != null && eee.isAlive()) {
+            LivingEntity living = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+            if (living != null && living.isAlive()) {
                 Entity boat = entity.getVehicle();
                 if (boat instanceof Boat) {
                     boat.hurt(CADamageTypes.source(world, CADamageTypes.GENERIC_SEABORN_ATTACK), 20);
@@ -699,6 +702,7 @@ public class LivingHurtEventHandler {
         }
     }
 
+    //TODO 需要破罐是否需要下放
     private static void handleMoreFallDamageEffect(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
@@ -717,8 +721,9 @@ public class LivingHurtEventHandler {
         }
     }
 
+    //TODO 需要下放到实体类
     private static void handleSlimeFunc(LivingDamageEvent.Pre event) {
-        LevelAccessor world = event.getEntity().level();
+        Level world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();

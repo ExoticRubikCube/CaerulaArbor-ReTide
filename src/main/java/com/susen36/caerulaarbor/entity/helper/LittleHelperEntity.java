@@ -308,7 +308,6 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
         return this.cache;
     }
 
-
     @Override
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;

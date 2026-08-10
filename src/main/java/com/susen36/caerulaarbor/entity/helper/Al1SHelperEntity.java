@@ -56,7 +56,7 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 
 	@Override
 	@Nullable
-        protected SoundEvent getCustomDeathSound() {
+	protected SoundEvent getCustomDeathSound() {
 		return null;
 	}
 }

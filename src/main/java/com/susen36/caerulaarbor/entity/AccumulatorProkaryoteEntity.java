@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -36,6 +37,8 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Team;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import software.bernie.geckolib.animation.*;
@@ -153,44 +156,46 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        if (this.isAlive() && tickCount % 10 == 0) {
-            if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5 && (Entity) this instanceof AccumulatorProkaryoteEntity datEntL4
-                    && datEntL4.getEntityData().get(DATA_SPLIT)) {
-                if (this instanceof AccumulatorProkaryoteEntity) {
-                    this.setAnimation("animation.accumulator.split");
-                }
-                if ((Entity) this instanceof LivingEntity entity)
-                    entity.setHealth((float) (((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5));
-                if ((Entity) this instanceof AccumulatorProkaryoteEntity datEntSetL)
-                    datEntSetL.getEntityData().set(DATA_SPLIT, false);
-                if (!((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(CAMobEffects.MUTE))) {
-                    CaerulaArbor.queueServerWork(10, () -> {
-                        if (isInWater()) {
-                            if (world instanceof ServerLevel level) {
-                                Entity entityToSpawn = CAEntities.ACCUMULATOR_CLONE.get().spawn(level,
-                                        BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), MobSpawnType.MOB_SUMMONED);
-                                if (entityToSpawn != null) {
-                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                }
-                            }
-                        } else {
-                            if (world instanceof ServerLevel level) {
-                                Entity entityToSpawn = CAEntities.DIVICELLULAR_GO.get().spawn(level,
-                                        BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), MobSpawnType.MOB_SUMMONED);
-                                if (entityToSpawn != null) {
-                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                }
-                            }
-                        }
-                        if (world instanceof Level level) {
-                            level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.HOSTILE, 2, 1);
-                        }
-                    });
-                }
-            }
-        }
-        this.refreshDimensions();
+		LevelAccessor world = this.level();
+		if (this.isAlive() && tickCount % 10 == 0) {
+			if (this.getHealth() <= this.getMaxHealth() * 0.5F && this.entityData.get(DATA_SPLIT)) {
+				this.setAnimation("animation.accumulator.split");
+				this.setHealth(this.getMaxHealth() * 0.5F);
+				this.entityData.set(DATA_SPLIT, false);
+				if (!this.hasEffect(CAMobEffects.MUTE)) {
+					CaerulaArbor.queueServerWork(10, () -> {
+						ServerLevel serverLevel = world instanceof ServerLevel ? (ServerLevel) world : null;
+						if (serverLevel != null) {
+							Entity entityToSpawn;
+							BlockPos spawnPos = BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1));
+							if (isInWater()) {
+								entityToSpawn = CAEntities.ACCUMULATOR_PROKARYOTE.get().spawn(serverLevel, spawnPos, MobSpawnType.MOB_SUMMONED);
+								if (entityToSpawn instanceof AccumulatorProkaryoteEntity cloneProkaryote) {
+									cloneProkaryote.setHealth(cloneProkaryote.getMaxHealth() * 0.5F);
+									cloneProkaryote.entityData.set(DATA_SPLIT, false);
+								}
+							} else {
+								entityToSpawn = CAEntities.DIVICELLULAR_GO.get().spawn(serverLevel, spawnPos, MobSpawnType.MOB_SUMMONED);
+							}
+							if (entityToSpawn != null) {
+								entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+								if (this instanceof Mob parentMob && entityToSpawn instanceof Mob childMob) {
+									Team team = parentMob.getTeam();
+									MinecraftServer server = childMob.getServer();
+									if (server != null && team instanceof PlayerTeam playerTeam) {
+										server.getScoreboard().addPlayerToTeam(childMob.getScoreboardName(), playerTeam);
+									}
+								}
+							}
+						}
+						if (world instanceof Level level) {
+							level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.HOSTILE, 2, 1);
+						}
+					});
+				}
+			}
+		}
+		this.refreshDimensions();
 	}
 @Override
 	public boolean checkSpawnObstruction(LevelReader world) {

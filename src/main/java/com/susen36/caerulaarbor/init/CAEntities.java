@@ -176,9 +176,6 @@ public class CAEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<AccumulatorProkaryoteEntity>> ACCUMULATOR_PROKARYOTE = register("accumulator_prokaryote", AccumulatorProkaryoteEntity.class,
             EntityType.Builder.<AccumulatorProkaryoteEntity>of(AccumulatorProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.5f, 1f));
-    public static final DeferredHolder<EntityType<?>, EntityType<AccumulatorCloneEntity>> ACCUMULATOR_CLONE = register("accumulator_clone", AccumulatorCloneEntity.class,
-            EntityType.Builder.<AccumulatorCloneEntity>of(AccumulatorCloneEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
-                    .sized(0.5f, 1f));
     public static final DeferredHolder<EntityType<?>, EntityType<FeederProkaryoteEntity>> FEEDER_PROKARYOTE = register("feeder_prokaryote", FeederProkaryoteEntity.class,
             EntityType.Builder.<FeederProkaryoteEntity>of(FeederProkaryoteEntity::new, MobCategory.WATER_CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.8f, 1.1f));
@@ -471,7 +468,6 @@ public class CAEntities {
         addAttributeRegistration(APOSTLE_PROKARYOTE, ApostleProkaryoteEntity::createAttributes);
         addAttributeRegistration(HIGHMORE, HighmoreEntity::createAttributes);
         addAttributeRegistration(ACCUMULATOR_PROKARYOTE, AccumulatorProkaryoteEntity::createAttributes);
-        addAttributeRegistration(ACCUMULATOR_CLONE, AccumulatorCloneEntity::createAttributes);
         addAttributeRegistration(FEEDER_PROKARYOTE, FeederProkaryoteEntity::createAttributes);
         addAttributeRegistration(CHEST_FISH, ChestFishEntity::createAttributes);
         addAttributeRegistration(SPIKE_CHEST, SpikeChestEntity::createAttributes);
@@ -593,7 +589,6 @@ public class CAEntities {
         markSummonable(APOSTLE_PROKARYOTE);
         markSummonable(HIGHMORE);
         markSummonable(ACCUMULATOR_PROKARYOTE);
-        markSummonable(ACCUMULATOR_CLONE);
         markSummonable(FEEDER_PROKARYOTE);
         markSummonable(CHEST_FISH);
         markSummonable(SPIKE_CHEST);
@@ -804,7 +799,6 @@ public class CAEntities {
             addRenderer(CAEntities.HIGHMORE_SHOOT, HighmoreShootRenderer::new);
             addRenderer(CAEntities.HIGHMORE, HighmoreRenderer::new);
             addRenderer(CAEntities.ACCUMULATOR_PROKARYOTE, AccumulatorProkaryoteRenderer::new);
-            addRenderer(CAEntities.ACCUMULATOR_CLONE, AccumulatorCloneRenderer::new);
             addRenderer(CAEntities.FEEDER_PROKARYOTE, FeederProkaryoteRenderer::new);
             addRenderer(CAEntities.CHEST_FISH, ChestFishRenderer::new);
             addRenderer(CAEntities.SPIKE_CHEST, SpikeChestRenderer::new);
