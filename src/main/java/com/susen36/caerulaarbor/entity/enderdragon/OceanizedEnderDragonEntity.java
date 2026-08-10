@@ -119,7 +119,6 @@ public class OceanizedEnderDragonEntity extends SeaMonsterBoss implements Ranged
 		xpReward = 128;
 		setNoAi(false);
 		setNoGravity(true);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		setPersistenceRequired();
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 		this.setId(ENTITY_COUNTER.getAndAdd(this.subEntities.length + 1) + 1);
@@ -760,6 +759,7 @@ public class OceanizedEnderDragonEntity extends SeaMonsterBoss implements Ranged
 		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
 		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.0125);
 		builder = builder.add(CAAttributes.SANITY_RESISTANCE, 75);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
 

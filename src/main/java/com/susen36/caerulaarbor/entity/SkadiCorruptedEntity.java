@@ -77,7 +77,6 @@ public class SkadiCorruptedEntity extends SeaMonsterBoss {
         this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.RED, ServerBossEvent.BossBarOverlay.NOTCHED_6);
         xpReward = 0;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
     }
 
@@ -119,6 +118,7 @@ public class SkadiCorruptedEntity extends SeaMonsterBoss {
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.02);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 30);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
     }
 

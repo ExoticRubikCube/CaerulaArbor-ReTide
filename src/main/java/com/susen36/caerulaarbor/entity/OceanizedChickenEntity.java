@@ -69,7 +69,6 @@ public class OceanizedChickenEntity extends SeaMonster {
         super(type, world);
         xpReward = 3;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
@@ -348,6 +347,7 @@ public class OceanizedChickenEntity extends SeaMonster {
         builder = builder.add(Attributes.FOLLOW_RANGE, 22);
         builder = builder.add(Attributes.FLYING_SPEED, 0.3);
         builder = builder.add(Attributes.SCALE, 1.0);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

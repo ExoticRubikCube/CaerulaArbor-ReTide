@@ -53,7 +53,6 @@ public class FeederProkaryoteEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 6;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
 		this.setPathfindingMalus(PathType.WATER, 0);
 		this.moveControl = new MoveControl(this) {
 			@Override
@@ -174,6 +173,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.65);
 		builder = builder.add(NeoForgeMod.SWIM_SPEED, 1.5);
+		builder = builder.add(Attributes.STEP_HEIGHT, 1f);
 		return builder;
 	}
 

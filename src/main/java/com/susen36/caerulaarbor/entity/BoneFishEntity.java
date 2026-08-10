@@ -57,7 +57,6 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 		super(type, world);
 		xpReward = 3;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		this.setPathfindingMalus(PathType.WATER, 0);
 		this.moveControl = new MoveControl(this) {
 			@Override
@@ -246,6 +245,7 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 4);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 12);
 		builder = builder.add(NeoForgeMod.SWIM_SPEED, 2);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
 

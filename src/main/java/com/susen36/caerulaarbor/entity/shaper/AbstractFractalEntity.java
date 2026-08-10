@@ -20,6 +20,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -53,7 +54,6 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	protected AbstractFractalEntity(EntityType<? extends AbstractFractalEntity> entityType, Level level) {
 		super(entityType, level);
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
 		setPersistenceRequired();
 	}
 
@@ -280,6 +280,12 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
 		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+	}
+
+	public static AttributeSupplier.Builder createAttributes() {
+		AttributeSupplier.Builder builder = Mob.createMobAttributes();
+		builder = builder.add(Attributes.STEP_HEIGHT, 1f);
+		return builder;
 	}
 
 	@Override

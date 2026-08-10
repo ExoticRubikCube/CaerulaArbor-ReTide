@@ -46,7 +46,6 @@ public class SuperSliderEntity extends SeaMonsterBoss {
         this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
         xpReward = 32;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
         setPersistenceRequired();
     }
 
@@ -128,6 +127,7 @@ public class SuperSliderEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.FOLLOW_RANGE, 48);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
         return builder;
     }
 

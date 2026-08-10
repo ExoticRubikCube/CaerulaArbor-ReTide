@@ -10,7 +10,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -95,7 +94,7 @@ public class PocketSeaCrawlerEntity extends AbstractPocketSeaCrawlerEntity {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
+		AttributeSupplier.Builder builder = AbstractPocketSeaCrawlerEntity.createAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.225);
 		builder = builder.add(Attributes.MAX_HEALTH, 85);
 		builder = builder.add(Attributes.ARMOR, 0);

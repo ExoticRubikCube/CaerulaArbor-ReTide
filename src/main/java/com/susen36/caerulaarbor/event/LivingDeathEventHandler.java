@@ -56,6 +56,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 
+import static com.susen36.caerulaarbor.util.EntityUtils.*;
+
 @EventBusSubscriber
 public class LivingDeathEventHandler {
 
@@ -510,16 +512,17 @@ public class LivingDeathEventHandler {
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
+        DamageSource source = event.getSource();
+        Entity sourceentity = source.getEntity();
 
-        if (sourceentity == null) return;
         if (event.isCanceled()) return;
 
-        if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
-            if (SeabornTransformManager.transformToSeaborn(world, x, y, z, entity)) {
-                event.setCanceled(true);
-                if (!entity.level().isClientSide())
+        if (entity.level().isClientSide() && !(entity.getType().is(SEA_BORN)||entity.getType().is(SEA_BORN_BOSS)||entity.getType().is(SEA_BORN_MINION))) {
+            if((sourceentity != null && sourceentity.getType().is(SEA_BORN)||source.is(CADamageTypes.TRAIL_DAMAGE))) {
+                if (SeabornTransformManager.transformToSeaborn(world, x, y, z, entity)) {
+                    event.setCanceled(true);
                     entity.discard();
+                }
             }
         }
     }

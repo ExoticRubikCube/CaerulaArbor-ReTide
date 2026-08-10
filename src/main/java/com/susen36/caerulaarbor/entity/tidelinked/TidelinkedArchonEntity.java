@@ -100,7 +100,7 @@ public class TidelinkedArchonEntity extends AbstractTidelinkedEntity {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        AttributeSupplier.Builder builder = AbstractTidelinkedEntity.createAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.4);
         builder = builder.add(Attributes.MAX_HEALTH, 100);
         builder = builder.add(Attributes.ARMOR, 10);

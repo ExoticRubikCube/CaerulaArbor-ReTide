@@ -60,7 +60,6 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         super(type, world);
         xpReward = 8;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.8f);
         setPersistenceRequired();
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.TOTEM_OF_UNDYING));
     }
@@ -472,6 +471,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         builder = builder.add(Attributes.ATTACK_DAMAGE, 3);
         builder = builder.add(Attributes.FOLLOW_RANGE, 24);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.8f);
         return builder;
     }
 

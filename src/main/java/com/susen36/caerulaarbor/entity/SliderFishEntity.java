@@ -51,7 +51,6 @@ public class SliderFishEntity extends SeaMonster implements Bucketable {
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
 	}
 
 	@Override
@@ -177,6 +176,7 @@ public class SliderFishEntity extends SeaMonster implements Bucketable {
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 3);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+		builder = builder.add(Attributes.STEP_HEIGHT, 1f);
 		return builder;
 	}
 

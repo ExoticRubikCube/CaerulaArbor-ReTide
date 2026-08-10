@@ -61,7 +61,7 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
         super(type, world);
         xpReward = 11;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.8f);
+
         setPersistenceRequired();
     }
 
@@ -227,6 +227,7 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
         builder = builder.add(Attributes.ATTACK_DAMAGE, 11);
         builder = builder.add(Attributes.FOLLOW_RANGE, 24);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.8f);
         return builder;
     }
 

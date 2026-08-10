@@ -21,7 +21,7 @@ public class RedOvaryBlock extends AbstractOvaryBlock {
 
 	public RedOvaryBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.SCULK_SENSOR).strength(0.5f, 0.5f).lightLevel(s -> 4).requiresCorrectToolForDrops().speedFactor(0.9f).jumpFactor(0.9f).noOcclusion().pushReaction(PushReaction.BLOCK)
-				.hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true).isRedstoneConductor((bs, br, bp) -> false));
+			.hasPostProcess((bs, br, bp) -> true).emissiveRendering((bs, br, bp) -> true).isRedstoneConductor((bs, br, bp) -> false));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OUTPUT, 0).setValue(WATERLOGGED, false));
 	}
 

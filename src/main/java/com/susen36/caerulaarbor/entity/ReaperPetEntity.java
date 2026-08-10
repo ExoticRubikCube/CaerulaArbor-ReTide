@@ -69,7 +69,6 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		super(type, world);
 		xpReward = 8;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
 	}
 
 	@Override
@@ -335,6 +334,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 11);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 30);
+		builder = builder.add(Attributes.STEP_HEIGHT, 1f);
 		return builder;
 	}
 

@@ -65,7 +65,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss {
 		this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 		this.xpReward = 1024;
 		this.setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6F);
+
 		this.setPersistenceRequired();
 	}
 
@@ -504,6 +504,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss {
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 75);
 		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.6F);
 		return builder;
 	}
 

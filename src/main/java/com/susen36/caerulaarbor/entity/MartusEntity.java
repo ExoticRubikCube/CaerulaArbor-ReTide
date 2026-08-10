@@ -87,7 +87,6 @@ public class MartusEntity extends SeaMonsterBoss {
         xpReward = 64;
         setNoAi(false);
         setNoGravity(true);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
@@ -579,6 +578,7 @@ public class MartusEntity extends SeaMonsterBoss {
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 16384);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 100);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

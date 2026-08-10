@@ -59,7 +59,6 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
         super(type, world);
         xpReward = 4;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
     }
 
     @Override
@@ -284,6 +283,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
         builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
         builder = builder.add(Attributes.FOLLOW_RANGE, 14);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.33);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
     }
 

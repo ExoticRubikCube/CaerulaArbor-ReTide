@@ -53,7 +53,7 @@ public class TideutantRockSpiderEntity extends SeaMonster implements ElementalAt
         super(type, world);
         xpReward = 16;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
+
         setPersistenceRequired();
     }
 
@@ -242,6 +242,7 @@ public class TideutantRockSpiderEntity extends SeaMonster implements ElementalAt
         builder = builder.add(Attributes.FOLLOW_RANGE, 24);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
         builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.15);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

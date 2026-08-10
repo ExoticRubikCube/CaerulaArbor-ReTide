@@ -50,7 +50,6 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.2f);
 	}
 
 	@Override
@@ -139,6 +138,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
+		builder = builder.add(Attributes.STEP_HEIGHT, 1.2f);
 		return builder;
 	}
 

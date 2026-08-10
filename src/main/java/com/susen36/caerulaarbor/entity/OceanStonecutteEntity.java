@@ -64,14 +64,12 @@ public class OceanStonecutteEntity extends SeaMonster implements RangedAttackMob
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 	}
 
 	public OceanStonecutteEntity(EntityType<OceanStonecutteEntity> type, Level world, boolean fromDoll) {
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		if (fromDoll) {
 			this.getAttribute(Attributes.SCALE).setBaseValue(0.8F);
 		}
@@ -352,6 +350,7 @@ public class OceanStonecutteEntity extends SeaMonster implements RangedAttackMob
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 12);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.33);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
 

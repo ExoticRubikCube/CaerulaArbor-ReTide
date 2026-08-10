@@ -78,7 +78,7 @@ public class TidelinkedBishopEntity extends SeaMonsterBoss implements RangedAtta
         this.variant = variant;
         xpReward = 32;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
+
     }
 
     @Override
@@ -410,6 +410,7 @@ public class TidelinkedBishopEntity extends SeaMonsterBoss implements RangedAtta
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

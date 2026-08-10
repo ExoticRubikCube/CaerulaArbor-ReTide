@@ -69,7 +69,6 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
         setPersistenceRequired();
     }
 
@@ -320,6 +319,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.05);
         builder = builder.add(CAAttributes.MISSRATE, 33);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
         return builder;
     }
 

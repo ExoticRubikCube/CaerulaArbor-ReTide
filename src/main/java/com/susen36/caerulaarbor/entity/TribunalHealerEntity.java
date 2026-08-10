@@ -72,7 +72,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
         super(type, world);
         xpReward = 8;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.8f);
+
         setPersistenceRequired();
     }
 
@@ -470,6 +470,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
         builder = builder.add(Attributes.FOLLOW_RANGE, 18);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.25);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.8f);
         return builder;
     }
 

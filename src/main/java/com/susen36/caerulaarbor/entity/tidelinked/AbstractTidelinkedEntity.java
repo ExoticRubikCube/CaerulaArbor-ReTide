@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -50,7 +51,7 @@ public abstract class AbstractTidelinkedEntity extends SeaMonsterBoss implements
         this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
         xpReward = 6;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
+
         setPersistenceRequired();
     }
 
@@ -334,6 +335,12 @@ public abstract class AbstractTidelinkedEntity extends SeaMonsterBoss implements
     @Override
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
+        return builder;
     }
 
     private class BishopHurtByTargetGoal extends TargetGoal {

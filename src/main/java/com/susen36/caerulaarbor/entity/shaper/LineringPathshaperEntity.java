@@ -6,7 +6,6 @@ import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -62,7 +61,7 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
+		AttributeSupplier.Builder builder = AbstractPathshaperEntity.createAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
 		builder = builder.add(Attributes.MAX_HEALTH, 260);
 		builder = builder.add(Attributes.ARMOR, 9);

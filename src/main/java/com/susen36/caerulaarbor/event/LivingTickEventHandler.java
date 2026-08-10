@@ -29,6 +29,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -37,6 +38,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import java.util.Comparator;
+
+import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_BOSS;
 
 @EventBusSubscriber
 public class LivingTickEventHandler {
@@ -147,7 +150,7 @@ public class LivingTickEventHandler {
 
     //TODO有性能问题
     private static void handleMobTick(EntityTickEvent.Post event) {
-        LevelAccessor world = event.getEntity().level();
+        Level world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
@@ -155,12 +158,12 @@ public class LivingTickEventHandler {
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))))
         {
-            handleMobBuffs(world, x, y, z, entity);
+            handleMobBuffs(world, entity);
             handleNaturalEvolution(world, x, y, z, entity);
         }
     }
 
-    private static void handleMobBuffs(LevelAccessor world, double x, double y, double z, Entity entity) {
+    private static void handleMobBuffs(Level world, Entity entity) {
         double subsistingLevel = MapVariables.get(world).strategy_subsisting;
         int resistLvl = SubsistingUpgradeManager.getSubsistResistLevel(subsistingLevel);
         if (resistLvl >= 0) {
@@ -175,47 +178,45 @@ public class LivingTickEventHandler {
         handleSublimationBuffs(world, entity);
     }
 
-    private static void handleSublimationBuffs(LevelAccessor world, Entity entity) {
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {
-            return;
-        }
-        if (world.isClientSide()) return;
+    //TODO 可以下放到海嗣基类实现
+    private static void handleSublimationBuffs(Level world, Entity entity) {
+        if (!world.isClientSide()&&entity.getType().is(SEA_BORN_BOSS)) {
+            double subl = MapVariables.get(world).strategy_sublimation;
+            double subs = MapVariables.get(world).strategy_subsisting;
+            double migra = MapVariables.get(world).strategy_migration;
+            double finalSubs = Math.min(subs, subl);
+            double finalMigra = Math.min(migra, subl);
 
-        double subl = MapVariables.get(world).strategy_sublimation;
-        double subs = MapVariables.get(world).strategy_subsisting;
-        double migra = MapVariables.get(world).strategy_migration;
-        double finalSubs = Math.min(subs, subl);
-        double finalMigra = Math.min(migra, subl);
+            if (entity instanceof LivingEntity living) {
+                double maxHealth = living.getMaxHealth();
+                double notHurtTick = entity.tickCount - entity.getPersistentData().getDouble("caerula.lastHurtByTime");
 
-        if (entity instanceof LivingEntity living) {
-            double maxHealth = living.getMaxHealth();
-            double notHurtTick = entity.tickCount - entity.getPersistentData().getDouble("caerula.lastHurtByTime");
-
-            if (notHurtTick >= 220.0 - 20.0 * finalSubs) {
-                if (finalSubs > 0.0 && !(entity instanceof AbsorberLimbEntity)) {
-                    living.heal((float) (maxHealth * finalSubs * 0.01 * 0.05));
+                if (notHurtTick >= 220.0 - 20.0 * finalSubs && living.tickCount % 20 == 0) {
+                    if (finalSubs > 0.0 && !(entity instanceof AbsorberLimbEntity)) {
+                        living.heal((float) (maxHealth * finalSubs * 0.01 * 0.05));
+                    }
                 }
-            }
 
-            if (!entity.getPersistentData().getBoolean("sublimationBlessed") && finalMigra >= 3.0) {
-                float currentHealth = living.getHealth();
-                if (currentHealth < maxHealth * 0.3) {
-                    boolean isElite = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite")));
-                    boolean isTiny = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "tiny_seaborn")));
-                    entity.getPersistentData().putBoolean("sublimationBlessed", true);
+                if (!entity.getPersistentData().getBoolean("sublimationBlessed") && finalMigra >= 3.0) {
+                    float currentHealth = living.getHealth();
+                    if (currentHealth < maxHealth * 0.3) {
+                        boolean isElite = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite")));
+                        boolean isTiny = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "tiny_seaborn")));
+                        entity.getPersistentData().putBoolean("sublimationBlessed", true);
 
-                    if (!isTiny) {
-                        if (finalMigra == 3.0) {
-                            if (isElite) {
-                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 100, 0, false, false));
-                            } else {
-                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 60, 0, false, false));
-                            }
-                        } else if (finalMigra == 4.0) {
-                            if (isElite) {
-                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 200, 0, false, false));
-                            } else {
-                                living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 100, 0, false, false));
+                        if (!isTiny) {
+                            if (finalMigra == 3.0) {
+                                if (isElite) {
+                                    living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 100, 0, false, false));
+                                } else {
+                                    living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 60, 0, false, false));
+                                }
+                            } else if (finalMigra == 4.0) {
+                                if (isElite) {
+                                    living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 200, 0, false, false));
+                                } else {
+                                    living.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 100, 0, false, false));
+                                }
                             }
                         }
                     }
@@ -224,7 +225,7 @@ public class LivingTickEventHandler {
         }
     }
 
-    private static void handleNaturalEvolution(LevelAccessor world, double x, double y, double z, Entity entity) {
+    private static void handleNaturalEvolution(Level world, double x, double y, double z, Entity entity) {
         if (!world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) return;
         if (entity.tickCount % 10 != 0) return;
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")))) return;

@@ -45,7 +45,6 @@ public class GunmuEntity extends Monster {
 
     public GunmuEntity(EntityType<GunmuEntity> type, Level world) {
         super(type, world);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         xpReward = 0;
         setNoAi(false);
         setPersistenceRequired();
@@ -222,6 +221,7 @@ public class GunmuEntity extends Monster {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 100);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
     }
 }

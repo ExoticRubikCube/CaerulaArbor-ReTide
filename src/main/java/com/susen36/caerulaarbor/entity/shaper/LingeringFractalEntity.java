@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -60,7 +59,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
+		AttributeSupplier.Builder builder = AbstractFractalEntity.createAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.5);
 		builder = builder.add(Attributes.MAX_HEALTH, 95);
 		builder = builder.add(Attributes.ARMOR, 3);

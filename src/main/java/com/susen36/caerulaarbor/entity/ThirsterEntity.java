@@ -72,7 +72,6 @@ public class ThirsterEntity extends SeaMonsterBoss {
         this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
         xpReward = 24;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.25f);
         setPersistenceRequired();
     }
 
@@ -87,6 +86,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 10);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 95);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.25f);
         return builder;
     }
 

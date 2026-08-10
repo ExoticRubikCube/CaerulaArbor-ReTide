@@ -50,7 +50,6 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
         super(type, world);
         xpReward = 8;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.CROSSBOW));
     }
 
@@ -284,6 +283,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 6);
         builder = builder.add(Attributes.FOLLOW_RANGE, 14);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
     }
 

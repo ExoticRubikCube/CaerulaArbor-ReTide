@@ -50,7 +50,6 @@ public class TidutantExcrescenceEntity extends SeaMonster implements ElementalAt
         super(type, world);
         xpReward = 8;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
     }
 
     @Override
@@ -143,6 +142,7 @@ public class TidutantExcrescenceEntity extends SeaMonster implements ElementalAt
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
         builder = builder.add(Attributes.FOLLOW_RANGE, 19);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

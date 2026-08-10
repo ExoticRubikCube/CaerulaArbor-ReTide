@@ -50,7 +50,6 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
         super(type, world);
         xpReward = 6;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.8f);
         setPersistenceRequired();
     }
 
@@ -184,6 +183,7 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
         builder = builder.add(Attributes.ARMOR, 4);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
         builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.8f);
         return builder;
     }
 

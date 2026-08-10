@@ -37,7 +37,6 @@ public class DivicellularGoEntity extends SeaMonster {
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
     }
 
     @Override
@@ -98,6 +97,7 @@ public class DivicellularGoEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 4);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

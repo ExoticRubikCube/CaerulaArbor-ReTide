@@ -24,6 +24,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MoveBackToVillageGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -54,7 +55,6 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
     protected AbstractPocketSeaCrawlerEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         xpReward = 8;
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.2f);
     }
 
     @Override
@@ -283,6 +283,12 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
     public void registerControllers(AnimatableManager.ControllerRegistrar data) {
         data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
         data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.2f);
+        return builder;
     }
 
     @Override

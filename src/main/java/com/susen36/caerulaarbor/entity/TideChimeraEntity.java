@@ -74,7 +74,6 @@ public class TideChimeraEntity extends SeaMonsterBoss {
         this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_12);
         xpReward = 99;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
         setPersistenceRequired();
     }
 
@@ -781,6 +780,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(CAAttributes.MISSRATE, 50);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 45);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
         return builder;
     }
 

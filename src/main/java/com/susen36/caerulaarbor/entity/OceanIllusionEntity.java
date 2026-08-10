@@ -50,7 +50,6 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		super(type, world);
 		xpReward = 0;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		setPersistenceRequired();
 	}
 
@@ -280,6 +279,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
 

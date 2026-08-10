@@ -45,7 +45,6 @@ public class OceanizedWolfEntity extends SeaMonster {
         super(type, world);
         xpReward = 4;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
     }
 
     @Override
@@ -119,6 +118,7 @@ public class OceanizedWolfEntity extends SeaMonster {
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
         builder = builder.add(Attributes.FOLLOW_RANGE, 14);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

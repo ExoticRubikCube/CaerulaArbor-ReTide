@@ -90,7 +90,6 @@ public class IzumikEntity extends SeaMonsterBoss {
         this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_12);
         xpReward = 128;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2f);
         setPersistenceRequired();
         setNoGravity(true);
         this.moveControl = new FlyingMoveControl(this, 10, true);
@@ -689,6 +688,7 @@ public class IzumikEntity extends SeaMonsterBoss {
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(Attributes.STEP_HEIGHT, 2f);
         return builder;
     }
 

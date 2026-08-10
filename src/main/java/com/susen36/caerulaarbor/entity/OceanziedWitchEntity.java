@@ -71,7 +71,6 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
         super(type, world);
         xpReward = 6;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
     }
 
     @Override
@@ -436,6 +435,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 4);
         builder = builder.add(Attributes.FOLLOW_RANGE, 13);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
     }
 

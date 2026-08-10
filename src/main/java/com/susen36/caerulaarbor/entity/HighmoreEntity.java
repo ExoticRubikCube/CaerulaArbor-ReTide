@@ -91,7 +91,6 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_10);
         xpReward = 64;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         setPersistenceRequired();
         setNoGravity(true);
         this.moveControl = new FlyingMoveControl(this, 10, true);
@@ -557,6 +556,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.6);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

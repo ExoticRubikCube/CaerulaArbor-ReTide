@@ -62,7 +62,6 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         setPersistenceRequired();
     }
 
@@ -134,37 +133,35 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
                     target = this.getTarget();
                     r = 6;
                     damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.8;
-                    {
-                        final Vec3 center = new Vec3(x, y, z);
-                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                        for (Entity entityiterator : entfound) {
-                            if (!(entityiterator instanceof LivingEntity)) {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
+                        if (!(entityiterator instanceof LivingEntity)) {
+                            continue;
+                        }
+                        if (!entityiterator.isAlive()) {
+                            continue;
+                        }
+                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
+                            if (!(entityiterator == target)) {
                                 continue;
                             }
-                            if (!entityiterator.isAlive()) {
+                        }
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
+                            if (!(entityiterator == target)) {
                                 continue;
                             }
-                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
-                                if (!(entityiterator == target)) {
-                                    continue;
-                                }
-                            }
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")))) {
-                                if (!(entityiterator == target)) {
-                                    continue;
-                                }
-                            }
-                            if (entityiterator == this) {
-                                continue;
-                            }
-                            double result;
-                            result = Math.abs(getX() - entityiterator.getX()) + Math.abs(getZ() - entityiterator.getZ());
-                            if (result <= r) {
-                                invulnerableTime = 0;
-                                entityiterator.hurt(this.damageSources().magic(), (float) damage);
-                                if (!this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 30, 2));
-                            }
+                        }
+                        if (entityiterator == this) {
+                            continue;
+                        }
+                        double result;
+                        result = Math.abs(getX() - entityiterator.getX()) + Math.abs(getZ() - entityiterator.getZ());
+                        if (result <= r) {
+                            invulnerableTime = 0;
+                            entityiterator.hurt(this.damageSources().magic(), (float) damage);
+                            if (!this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 30, 2));
                         }
                     }
                 }
@@ -199,7 +196,6 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
         this.updateSwingTime();
     }
 
-
     private void spawnDiamondParticle(double t) {
         LevelAccessor world = this.level();
         double x = this.getX();
@@ -233,6 +229,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.33);
         builder = builder.add(CAAttributes.MISSRATE, 18);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

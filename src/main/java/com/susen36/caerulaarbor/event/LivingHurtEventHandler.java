@@ -10,6 +10,7 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.manager.spwan.SeabornTransformManager;
 import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SublimationUpgradeManger;
 import com.susen36.caerulaarbor.util.*;
@@ -57,7 +58,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN;
+import static com.susen36.caerulaarbor.util.EntityUtils.*;
 
 @EventBusSubscriber
 public class LivingHurtEventHandler {
@@ -95,6 +96,11 @@ public class LivingHurtEventHandler {
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
+    public static void livingIncomingHurt(LivingIncomingDamageEvent event) {
+        handleNetherseaImmunity(event);
+        handleSeabornTransform(event);
+    }
+
     private static void handleNetherseaImmunity(LivingIncomingDamageEvent event) {
         DamageSource damageSource = event.getSource();
         LivingEntity entity = event.getEntity();
@@ -267,7 +273,7 @@ public class LivingHurtEventHandler {
                 double gap = entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0);
                 double maxH = entity instanceof LivingEntity livingEntity18 && livingEntity18.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity18.getAttribute(Attributes.MAX_HEALTH).getValue() : 0;
                 if (gap < 10) {
-                    event.setNewDamage((float) Math.min(amount * Math.min(1, Math.max(gap * 0.1, 0.05)), Math.max(maxH * 0.33, 16)));
+                    event.setNewDamage((float) Math.clamp(maxH * 0.33, 16, amount * Math.clamp(gap * 0.1, 0.05, 1)));
                 }
             }
         }
@@ -600,7 +606,7 @@ public class LivingHurtEventHandler {
                     Entity recentVictim = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtMob() : null;
                     Entity recentAttacker = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtByMob() : null;
                     for (LivingEntity entityiterator : entfound) {
-                        boolean isValid = false;
+                        boolean isValid;
                         if (entityiterator instanceof Monster) {
                             isValid = true;
                         } else {
@@ -721,7 +727,28 @@ public class LivingHurtEventHandler {
         }
     }
 
-    //TODO 或许可以下放到实体海嗣化转换器
+    private static void handleSeabornTransform(LivingIncomingDamageEvent event) {
+        Level world = event.getEntity().level();
+        double x = event.getEntity().getX();
+        double y = event.getEntity().getY();
+        double z = event.getEntity().getZ();
+        Entity entity = event.getEntity();
+        DamageSource source = event.getSource();
+        Entity sourceentity = source.getEntity();
+
+        if (event.isCanceled()) return;
+
+        if (entity.level().isClientSide() && !(entity.getType().is(SEA_BORN)||entity.getType().is(SEA_BORN_BOSS)||entity.getType().is(SEA_BORN_MINION))) {
+            if((sourceentity != null && sourceentity.getType().is(SEA_BORN)||source.is(CADamageTypes.TRAIL_DAMAGE))) {
+                if (SeabornTransformManager.transformToSeaborn(world, x, y, z, entity)) {
+                    event.setCanceled(true);
+                        entity.discard();
+                }
+            }
+        }
+    }
+
+    //TODO 下放到实体海嗣化转换器(高优先级)
     private static void handleSlimeFunc(LivingDamageEvent.Pre event) {
         Level world = event.getEntity().level();
         double x = event.getEntity().getX();
@@ -765,53 +792,61 @@ public class LivingHurtEventHandler {
                 livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 100, 0, false, false));
         }
 
-        if (entity instanceof JuniorWarriorPriestEntity) {
-            if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) >= 0.5) {
-                if (world instanceof Level level) {
-                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
+        switch (entity) {
+            case JuniorWarriorPriestEntity juniorWarriorPriestEntity -> {
+                if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) >= 0.5) {
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
+                    }
+                    event.setNewDamage((float) (amount * 0.6));
                 }
-                event.setNewDamage((float) (amount * 0.6));
             }
-        } else if (entity instanceof WarriorPriestEntity) {
-            if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) >= 0.5) {
-                if (world instanceof Level level) {
-                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
+            case WarriorPriestEntity warriorPriestEntity -> {
+                if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) >= 0.5) {
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
+                    }
+                    event.setNewDamage((float) (amount * 0.5));
                 }
-                event.setNewDamage((float) (amount * 0.5));
             }
-        } else if (entity instanceof CorrectionalPhalanxyInfantryEntity) {
-            double rate = 1;
-            double less = 1;
-            if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) >= 0.5) {
-                if (world instanceof Level level) {
-                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
+            case CorrectionalPhalanxyInfantryEntity correctionalPhalanxyInfantryEntity -> {
+                double rate = 1;
+                double less = 1;
+                if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) >= 0.5) {
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
+                    }
+                    rate = 0.5;
                 }
-                rate = 0.5;
-            }
-            final Vec3 center = new Vec3(x, y, z);
-            List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
-                    e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "phalax"))));
-            for (LivingEntity ignored : entfound) {
-                less = less - 0.06;
-                if (less <= 0.4) break;
-            }
-            event.setNewDamage((float) (amount * rate * less));
-        } else if (entity instanceof IreneEntity) {
-            double less = 1;
-            final Vec3 center = new Vec3(x, y, z);
-            List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
-                    e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "phalax"))));
-            for (LivingEntity ignored : entfound) {
-                less = less - 0.06;
-                if (less <= 0.4) break;
-            }
-            event.setNewDamage((float) (amount * less));
-        } else if (entity instanceof CorrectinalPhalaxVanguardEntity) {
-            if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) <= -0.5) {
-                if (world instanceof Level level) {
-                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
+                final Vec3 center = new Vec3(x, y, z);
+                List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
+                        e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "phalax"))));
+                for (LivingEntity ignored : entfound) {
+                    less = less - 0.06;
+                    if (less <= 0.4) break;
                 }
-                event.setNewDamage((float) (amount * 0.5));
+                event.setNewDamage((float) (amount * rate * less));
+            }
+            case IreneEntity ireneEntity -> {
+                double less = 1;
+                final Vec3 center = new Vec3(x, y, z);
+                List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
+                        e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "phalax"))));
+                for (LivingEntity ignored : entfound) {
+                    less = less - 0.06;
+                    if (less <= 0.4) break;
+                }
+                event.setNewDamage((float) (amount * less));
+            }
+            case CorrectinalPhalaxVanguardEntity correctinalPhalaxVanguardEntity -> {
+                if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) <= -0.5) {
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
+                    }
+                    event.setNewDamage((float) (amount * 0.5));
+                }
+            }
+            default -> {
             }
         }
     }

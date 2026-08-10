@@ -1506,6 +1506,7 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 				.add(Attributes.ATTACK_DAMAGE, 1.0)
 				.add(Attributes.FOLLOW_RANGE, 16.0)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.0)
+				.add(Attributes.STEP_HEIGHT, 0.6F)
 				.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000.0);
 	}
 

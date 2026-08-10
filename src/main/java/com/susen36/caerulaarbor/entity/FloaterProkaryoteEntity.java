@@ -64,7 +64,6 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 		super(type, world);
 		xpReward = 5;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
@@ -340,6 +339,7 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
 		builder = builder.add(Attributes.FLYING_SPEED, 0.5);
 		builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.5);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
 

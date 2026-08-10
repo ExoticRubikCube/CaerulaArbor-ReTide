@@ -58,7 +58,6 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
         super(type, world);
         xpReward = 8;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         setPersistenceRequired();
     }
 
@@ -226,6 +225,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
         builder = builder.add(Attributes.ATTACK_DAMAGE, 11);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

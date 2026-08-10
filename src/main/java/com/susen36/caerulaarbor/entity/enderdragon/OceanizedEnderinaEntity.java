@@ -79,7 +79,6 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 		xpReward = 128;
 		setNoAi(false);
 		setNoGravity(true);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		setPersistenceRequired();
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
@@ -584,6 +583,7 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
 		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.0125);
 		builder = builder.add(CAAttributes.SANITY_RESISTANCE, 75);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
 

@@ -55,7 +55,6 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2.5f);
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
@@ -232,6 +231,7 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 1);
+        builder = builder.add(Attributes.STEP_HEIGHT, 2.5f);
         return builder;
     }
 

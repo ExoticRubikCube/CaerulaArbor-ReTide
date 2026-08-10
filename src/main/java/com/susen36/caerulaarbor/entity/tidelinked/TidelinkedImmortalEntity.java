@@ -11,7 +11,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -112,7 +111,7 @@ public class TidelinkedImmortalEntity extends AbstractTidelinkedEntity {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        AttributeSupplier.Builder builder = AbstractTidelinkedEntity.createAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
         builder = builder.add(Attributes.MAX_HEALTH, 75);
         builder = builder.add(Attributes.ARMOR, 10);

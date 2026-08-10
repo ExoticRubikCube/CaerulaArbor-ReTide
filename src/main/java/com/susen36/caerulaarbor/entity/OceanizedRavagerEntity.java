@@ -45,7 +45,6 @@ public class OceanizedRavagerEntity extends SeaMonster {
         super(type, world);
         xpReward = 24;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
         setPersistenceRequired();
     }
 
@@ -237,6 +236,7 @@ public class OceanizedRavagerEntity extends SeaMonster {
         builder = builder.add(Attributes.FOLLOW_RANGE, 27);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
         builder = builder.add(Attributes.ATTACK_KNOCKBACK, 1);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
         return builder;
     }
 

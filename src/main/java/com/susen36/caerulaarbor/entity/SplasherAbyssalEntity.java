@@ -52,7 +52,6 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.85f);
 	}
 
 	@Override
@@ -222,6 +221,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 27);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.85f);
 		return builder;
 	}
 

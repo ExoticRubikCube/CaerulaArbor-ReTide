@@ -49,7 +49,6 @@ public class TheAbandonedEntity extends SeaMonster {
         super(type, world);
         xpReward = 16;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
     }
 
@@ -62,6 +61,7 @@ public class TheAbandonedEntity extends SeaMonster {
         builder = builder.add(Attributes.FOLLOW_RANGE, 24);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
         builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.25);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
     }
 

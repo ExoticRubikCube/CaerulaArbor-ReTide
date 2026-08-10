@@ -67,7 +67,6 @@ public class OceanizedIllusionerEntity extends SeaMonsterBoss implements RangedA
         this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.PROGRESS);
         xpReward = 64;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
         setPersistenceRequired();
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CAItems.CHITIN_BOW.get()));
     }
@@ -487,6 +486,7 @@ public class OceanizedIllusionerEntity extends SeaMonsterBoss implements RangedA
         builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
         builder = builder.add(Attributes.FOLLOW_RANGE, 28);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
     }
 

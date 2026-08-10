@@ -75,7 +75,6 @@ public class BishopFishEntity extends SeaMonsterBoss {
         this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
         xpReward = 64;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2f);
         setPersistenceRequired();
     }
 
@@ -95,7 +94,6 @@ public class BishopFishEntity extends SeaMonsterBoss {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        // TODO: 子类专属匿名 override 版 MeleeAttackGoal（需主教启动后激活），与基类 targetSelector 统一目标不冲突
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  0, false) {
 
             @Override
@@ -502,6 +500,7 @@ public class BishopFishEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 24);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(Attributes.STEP_HEIGHT, 2f);
         return builder;
     }
 

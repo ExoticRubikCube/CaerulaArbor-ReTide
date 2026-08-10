@@ -51,7 +51,6 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 2;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
 	}
 
 	@Override
@@ -152,16 +151,6 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	@Override
 	public EntityDimensions getDefaultDimensions(Pose p_33597_) {
 		return super.getDefaultDimensions(p_33597_).scale((float) this.getSlimeSize());
-	}
-
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.075);
-		builder = builder.add(Attributes.MAX_HEALTH, 2);
-		builder = builder.add(Attributes.ARMOR, 0);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-		return builder;
 	}
 
 	private PlayState movementPredicate(AnimationState event) {
@@ -278,6 +267,17 @@ public class NetherseaSlimeEntity extends SeaMonster {
 				}
 			}
 		}
+	}
+
+	public static AttributeSupplier.Builder createAttributes() {
+		AttributeSupplier.Builder builder = Mob.createMobAttributes();
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.075);
+		builder = builder.add(Attributes.MAX_HEALTH, 2);
+		builder = builder.add(Attributes.ARMOR, 0);
+		builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
+		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+		builder = builder.add(Attributes.STEP_HEIGHT,1f);
+		return builder;
 	}
 
 	public String getSyncedAnimation() {

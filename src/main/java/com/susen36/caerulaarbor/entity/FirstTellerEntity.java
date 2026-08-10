@@ -59,7 +59,6 @@ public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob
 		super(type, world);
 		xpReward = 16;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.1f);
 		setPersistenceRequired();
 	}
 
@@ -291,6 +290,7 @@ public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.85);
 		builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+		builder = builder.add(Attributes.STEP_HEIGHT, 1.1f);
 		return builder;
 	}
 

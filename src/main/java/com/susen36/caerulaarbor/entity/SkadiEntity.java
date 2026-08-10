@@ -78,7 +78,6 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.2f);
         setPersistenceRequired();
     }
 
@@ -410,6 +409,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         builder = builder.add(Attributes.ATTACK_DAMAGE, 38);
         builder = builder.add(Attributes.FOLLOW_RANGE, 32);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.2f);
         return builder;
     }
 

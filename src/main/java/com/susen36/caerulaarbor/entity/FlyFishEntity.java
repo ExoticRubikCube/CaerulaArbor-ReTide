@@ -57,7 +57,6 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		super(type, world);
 		xpReward = 4;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
@@ -264,6 +263,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
 		builder = builder.add(Attributes.FLYING_SPEED, 0.25);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
 

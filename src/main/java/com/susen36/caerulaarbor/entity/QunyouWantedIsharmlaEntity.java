@@ -51,7 +51,6 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         super(type, world);
         xpReward = 256;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
@@ -232,6 +231,7 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         builder = builder.add(Attributes.FLYING_SPEED, 0.6);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 1656);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 90);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
         return builder;
     }
 

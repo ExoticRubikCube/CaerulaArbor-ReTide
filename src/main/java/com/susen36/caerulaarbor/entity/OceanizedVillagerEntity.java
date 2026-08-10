@@ -37,7 +37,6 @@ public class OceanizedVillagerEntity extends SeaMonster {
         super(type, world);
         xpReward = 4;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
     }
 
     @Override

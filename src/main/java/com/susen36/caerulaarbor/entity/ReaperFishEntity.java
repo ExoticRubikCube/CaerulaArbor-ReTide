@@ -62,7 +62,6 @@ public class ReaperFishEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 8;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
 	}
 
 	@Override
@@ -263,6 +262,7 @@ public class ReaperFishEntity extends SeaMonster {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 40);
+		builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
 		return builder;
 	}
 

@@ -55,7 +55,6 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         xpReward = 0;
         setNoAi(true);
         setNoGravity(true);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0f);
     }
 
     @Override
@@ -277,6 +276,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         builder = builder.add(Attributes.FOLLOW_RANGE, 1);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 99);
         builder = builder.add(Attributes.GRAVITY, 0);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0f);
         return builder;
     }
 

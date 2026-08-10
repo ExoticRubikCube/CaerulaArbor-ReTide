@@ -60,7 +60,6 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         super(type, world);
         xpReward = 5;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         setPersistenceRequired();
     }
 
@@ -74,6 +73,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 60);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 6);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

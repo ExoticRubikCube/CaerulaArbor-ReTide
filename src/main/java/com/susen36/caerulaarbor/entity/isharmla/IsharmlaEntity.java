@@ -108,7 +108,6 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 		xpReward = 64;
 		setNoAi(false);
 		this.noCulling = true;
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
 		setPersistenceRequired();
 		IS_ANGERED = false;
 		this.setId(ENTITY_COUNTER.getAndAdd(8) + 1);
@@ -706,6 +705,7 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
 		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
 		builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+		builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
 		return builder;
 	}
 

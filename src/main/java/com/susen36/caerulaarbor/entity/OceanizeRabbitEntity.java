@@ -58,7 +58,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
         super(type, world);
         xpReward = 1;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.4f);
     }
 
     @Override
@@ -245,6 +244,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
         builder = builder.add(Attributes.FOLLOW_RANGE, 18);
         builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.1);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.4f);
         return builder;
     }
 

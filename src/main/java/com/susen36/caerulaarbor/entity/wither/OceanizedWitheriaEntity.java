@@ -255,7 +255,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        AttributeSupplier.Builder builder = AbstractOceanizedWitherEntity.createAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.45);
         builder = builder.add(Attributes.MAX_HEALTH, 600);
         builder = builder.add(Attributes.ARMOR, 15);

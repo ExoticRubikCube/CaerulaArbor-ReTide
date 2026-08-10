@@ -373,7 +373,6 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
     }
 
     protected void updatePhaseRuntimeProperties() {
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.25F);
         this.updatePhaseAttributes();
         if (this.bossInfo != null) {
             this.bossInfo.setColor(this.getPhase() == 1 ? ServerBossEvent.BossBarColor.BLUE : ServerBossEvent.BossBarColor.WHITE);
@@ -665,7 +664,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes()
+        AttributeSupplier.Builder builder = Mob.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.20)
                 .add(NeoForgeMod.SWIM_SPEED, 8)
                 .add(CAAttributes.GENERAL_DEFENSE, 10)
@@ -676,6 +675,8 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
                 .add(Attributes.FOLLOW_RANGE, 36)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 10)
                 .add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000.0);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.25F);
+        return builder;
     }
 
     @Override

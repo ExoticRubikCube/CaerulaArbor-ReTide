@@ -60,7 +60,6 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 0;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		this.setPathfindingMalus(PathType.WATER, 0);
 		this.moveControl = new MoveControl(this) {
 			@Override
@@ -225,6 +224,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(NeoForgeMod.SWIM_SPEED, 1.75);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
 

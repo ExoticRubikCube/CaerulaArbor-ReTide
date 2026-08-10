@@ -71,7 +71,6 @@ public class IzumikOffspringEntity extends SeaMonster {
 		super(type, world);
 		xpReward = 0;
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
@@ -316,6 +315,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.35);
 		builder = builder.add(Attributes.FLYING_SPEED, 0.4);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 40);
+		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
 

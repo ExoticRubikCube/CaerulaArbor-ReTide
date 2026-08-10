@@ -71,7 +71,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1f);
+
         setPersistenceRequired();
     }
 
@@ -481,6 +481,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         builder = builder.add(Attributes.ATTACK_DAMAGE, 55);
         builder = builder.add(Attributes.FOLLOW_RANGE, 32);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 5);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
     }
 

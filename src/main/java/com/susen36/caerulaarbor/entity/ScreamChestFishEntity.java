@@ -64,7 +64,6 @@ public class ScreamChestFishEntity extends SeaMonster {
         super(type, world);
         xpReward = 0;
         setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
         setPersistenceRequired();
     }
 
@@ -297,6 +296,7 @@ public class ScreamChestFishEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 

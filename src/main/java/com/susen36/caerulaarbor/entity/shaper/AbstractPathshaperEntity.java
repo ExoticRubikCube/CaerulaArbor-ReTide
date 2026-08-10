@@ -24,6 +24,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -54,7 +55,6 @@ public abstract class AbstractPathshaperEntity extends SeaMonsterBoss {
 		super(entityType, level);
 		this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 		setNoAi(false);
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
 		setPersistenceRequired();
 	}
 
@@ -340,6 +340,12 @@ public abstract class AbstractPathshaperEntity extends SeaMonsterBoss {
 			this.setHurtSkillp(compound.getInt("HurtCount"));
 		if (compound.contains("Phase"))
 			this.setPhase(compound.getInt("Phase"));
+	}
+
+	public static AttributeSupplier.Builder createAttributes() {
+		AttributeSupplier.Builder builder = Mob.createMobAttributes();
+		builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
+		return builder;
 	}
 
 	@Override

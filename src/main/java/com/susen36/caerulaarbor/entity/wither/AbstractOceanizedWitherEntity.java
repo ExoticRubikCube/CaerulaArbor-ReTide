@@ -25,6 +25,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -66,7 +67,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonsterBoss imple
         this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
         this.xpReward = 512;
         this.setNoAi(false);
-        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2F);
+
         this.setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
@@ -418,6 +419,12 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonsterBoss imple
 
     public boolean isWitherDurative() {
         return this.isAlive() && this.entityData.get(DATA_DURATION) <= 0;
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.STEP_HEIGHT, 2F);
+        return builder;
     }
 
     public static void shootWitherSkull(LevelAccessor world, Entity from, double acceleration, double dx, double dy, double dz, double inaccuracy, double speed, double x, double y, double z) {

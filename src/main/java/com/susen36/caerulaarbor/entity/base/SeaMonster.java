@@ -123,8 +123,7 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 			double silenceLevel = variables.strategy_silence;
 
 			if (silenceLevel > 0) {
-				int amplifier = (int) (silenceLevel - 1);
-				AttributeInstance attackAttr = this.getAttribute(Attributes.ATTACK_DAMAGE);
+                AttributeInstance attackAttr = this.getAttribute(Attributes.ATTACK_DAMAGE);
 				if (silenceLevel >= 3) {
 					if (attackAttr.getModifier(BOOST_ATTACK_ID) == null) {
 						double attackBonus = 0.25D * silenceLevel;
@@ -153,7 +152,7 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 					}
 				}
 
-				if (!this.isAggressive() && tickCount % 20 == 0 && this.getHealth() < this.getMaxHealth()) {
+				if (tickCount % 60 == 0 && this.getHealth() < this.getMaxHealth()) {
 					this.heal(1.0F);
 				}
 			}
