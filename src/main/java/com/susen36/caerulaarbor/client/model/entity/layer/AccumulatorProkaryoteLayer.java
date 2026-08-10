@@ -13,15 +13,15 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class AccumulatorProkaryoteLayer extends GeoRenderLayer<AccumulatorProkaryoteEntity> {
-	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/accmulit.png");
+    private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/accmulit.png");
 
-	public AccumulatorProkaryoteLayer(GeoRenderer<AccumulatorProkaryoteEntity> entityRenderer) {
-		super(entityRenderer);
-	}
+    public AccumulatorProkaryoteLayer(GeoRenderer<AccumulatorProkaryoteEntity> entityRenderer) {
+        super(entityRenderer);
+    }
 
-	@Override
-	public void render(PoseStack poseStack, AccumulatorProkaryoteEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-		RenderType glowRenderType = RenderType.eyes(LAYER);
-		getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-	}
+    @Override
+    public void render(PoseStack poseStack, AccumulatorProkaryoteEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+        RenderType glowRenderType = RenderType.eyes(LAYER);
+        getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+    }
 }

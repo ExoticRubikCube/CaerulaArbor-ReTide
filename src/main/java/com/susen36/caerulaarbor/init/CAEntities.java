@@ -21,6 +21,8 @@ import com.susen36.caerulaarbor.entity.shaper.LineringPathshaperEntity;
 import com.susen36.caerulaarbor.entity.shaper.LingeringFractalEntity;
 import com.susen36.caerulaarbor.entity.shaper.RouteFractalEntity;
 import com.susen36.caerulaarbor.entity.shaper.RouteShaperEntity;
+import com.susen36.caerulaarbor.entity.slime.FissionProkaryoteSlimeEntity;
+import com.susen36.caerulaarbor.entity.slime.NetherseaSlimeEntity;
 import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedArchonEntity;
 import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedBishopEntity;
 import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedImmortalEntity;
@@ -400,7 +402,6 @@ public class CAEntities {
                     .sized(0.6f, 1.8f));
     public static final DeferredHolder<EntityType<?>, EntityType<OceanizedEnderinaEntity>> OCEANIZED_ENDERINA = register("oceanized_enderina", OceanizedEnderinaEntity.class,
             EntityType.Builder.<OceanizedEnderinaEntity>of(OceanizedEnderinaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3));
-
     public static final DeferredHolder<EntityType<?>, EntityType<OceanizedEnderDragonEntity>> OCEANIZED_ENDER_DRAGON = register("oceanized_ender_dragon", OceanizedEnderDragonEntity.class,
             EntityType.Builder.<OceanizedEnderDragonEntity>of(OceanizedEnderDragonEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3).fireImmune()
                     .sized(6.0f, 3.6f));
@@ -424,6 +425,9 @@ public class CAEntities {
                     .sized(0.5f, 0.875f).attach(EntityAttachment.PASSENGER, 0f, 0.675f, 0f));
     public static final DeferredHolder<EntityType<?>, EntityType<NetherseaSlimeEntity>> NETHERSEA_SLIME = register("nethersea_slime", NetherseaSlimeEntity.class,
             EntityType.Builder.<NetherseaSlimeEntity>of(NetherseaSlimeEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3)
+                    .sized(1f, 1f));
+    public static final DeferredHolder<EntityType<?>, EntityType<FissionProkaryoteSlimeEntity>> FISSION_PROKARYOTE_SLIME = register("fission_prokaryote_slime", FissionProkaryoteSlimeEntity.class,
+            EntityType.Builder.<FissionProkaryoteSlimeEntity>of(FissionProkaryoteSlimeEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3)
                     .sized(1f, 1f));
     public static final DeferredHolder<EntityType<?>, EntityType<OceanizedShulkerEntity>> OCEANIZED_SHULKER = register("oceanized_shulker", OceanizedShulkerEntity.class,
             EntityType.Builder.<OceanizedShulkerEntity>of(OceanizedShulkerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3)
@@ -551,6 +555,7 @@ public class CAEntities {
         addAttributeRegistration(SCREAM_CHEST_FISH, ScreamChestFishEntity::createAttributes);
         addAttributeRegistration(OCEANIZED_CHICKEN, OceanizedChickenEntity::createAttributes);
         addAttributeRegistration(NETHERSEA_SLIME, NetherseaSlimeEntity::createAttributes);
+        addAttributeRegistration(FISSION_PROKARYOTE_SLIME, FissionProkaryoteSlimeEntity::createAttributes);
         addAttributeRegistration(OCEANIZED_SHULKER, OceanizedShulkerEntity::createAttributes);
 
         markSummonable(RUN_FISH);
@@ -890,6 +895,7 @@ public class CAEntities {
             addRenderer(CAEntities.SCREAM_CHEST_FISH, ScreamChestFishRenderer::new);
             addRenderer(CAEntities.OCEANIZED_CHICKEN, OceanizedChickenRenderer::new);
             addRenderer(CAEntities.NETHERSEA_SLIME, NetherseaSlimeRenderer::new);
+            addRenderer(CAEntities.FISSION_PROKARYOTE_SLIME, FissionProkaryoteSlimeRenderer::new);
             addRenderer(CAEntities.OCEANIZED_SHULKER, OceanizedShulkerRenderer::new);
         }
 

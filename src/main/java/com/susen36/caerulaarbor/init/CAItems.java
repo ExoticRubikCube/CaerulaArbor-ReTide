@@ -613,6 +613,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_CHICKEN_EGG = REGISTRY.register("nethersea_chicken_egg", NetherseaChickenEggItem::new);
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_EGG_CUSTARD = REGISTRY.register("nethersea_egg_custard", NetherseaEggCustardItem::new);
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_SLIME_SPAWN_EGG = REGISTRY.register("nethersea_slime_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.NETHERSEA_SLIME, -10983573, -12426093, new Item.Properties()));
+    public static final DeferredHolder<Item, ? extends Item> FISSION_PROKARYOTE_SLIME_SPAWN_EGG = REGISTRY.register("fission_prokaryote_slime_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.FISSION_PROKARYOTE_SLIME, -16776961, -1, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_SHULKER_SPAWN_EGG = REGISTRY.register("oceanized_shulker_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_SHULKER, -5999788, -13398106, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> NURTURE_GENE_SET = REGISTRY.register("nurture_gene_set", NurtureGeneSetItem::new);
     public static final DeferredHolder<Item, ? extends Item> GENE_SAMPLE_NORMAL = REGISTRY.register("gene_sample_normal", GeneSampleNormalItem::new);

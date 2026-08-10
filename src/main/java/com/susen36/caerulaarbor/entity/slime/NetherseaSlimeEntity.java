@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.entity;
+package com.susen36.caerulaarbor.entity.slime;
 
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -15,6 +15,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -32,10 +33,13 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
+
+import javax.annotation.Nullable;
 
 public class NetherseaSlimeEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.BOOLEAN);
@@ -64,14 +68,14 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1));
+		this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1));
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(5, new FloatGoal(this));
+		this.goalSelector.addGoal(3, new FloatGoal(this));
 	}
 
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(SoundEvents.SLIME_JUMP_SMALL, 0.15f, 1);
+		this.playSound(SoundEvents.SLIME_JUMP_SMALL, 0.15f, 0.5F);
 	}
 
 	@Override
@@ -86,13 +90,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 
 	@Override
 	public boolean causeFallDamage(float l, float d, DamageSource source) {
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        if (world instanceof Level level) {
-                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1, 1);
-        }
+        this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1, 1);
         return super.causeFallDamage(l, d, source);
 	}
 
@@ -120,12 +118,25 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	}
 
 	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
+		RandomSource random = world.getRandom();
+		int i = random.nextInt(3);
+		if (i < 2 && random.nextFloat() < 0.5F * difficulty.getSpecialMultiplier()) {
+			i++;
+		}
+		int size = 1 << i;
+		this.entityData.set(DATA_SIZE, size);
+		return retval;
+	}
+
+	@Override
 	public void baseTick() {
 		super.baseTick();
 		CompoundTag tag = this.getPersistentData();
 		if(!tag.getBoolean("Resized")){
             double size;
-            size = (Entity) this instanceof NetherseaSlimeEntity datEntI ? datEntI.getEntityData().get(DATA_SIZE) : 0;
+            size =  this.getEntityData().get(DATA_SIZE);
             if (size > 1) {
                 if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                     this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(

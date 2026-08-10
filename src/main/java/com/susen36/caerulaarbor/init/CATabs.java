@@ -352,6 +352,7 @@ public class CATabs {
                 tabData.accept(CAItems.OCEANIZE_RABBIT_SPAWN_EGG.get());
                 tabData.accept(CAItems.OCEANIZED_CHICKEN_SPAWN_EGG.get());
                 tabData.accept(CAItems.NETHERSEA_SLIME_SPAWN_EGG.get());
+                tabData.accept(CAItems.FISSION_PROKARYOTE_SLIME_SPAWN_EGG.get());
                 tabData.accept(CAItems.OCEANIZED_PIGLIN_SPAWN_EGG.get());
                 tabData.accept(CAItems.OCEANIZED_SPIDER_SPAWN_EGG.get());
                 tabData.accept(CAItems.OCEANIZED_ENDERMAN_SPAWN_EGG.get());
