@@ -5,7 +5,6 @@ import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -27,8 +26,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -67,13 +64,10 @@ public class SliderFishEntity extends SeaMonster implements Bucketable {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		//TODO 修改为通用目标类
 		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.15, true));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
-		this.targetSelector.addGoal(10, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1));
-		this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(13, new FloatGoal(this));
+		this.goalSelector.addGoal(10, new RandomStrollGoal(this, 1));
+		this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(12, new FloatGoal(this));
 	}
 
     @Override
@@ -87,7 +81,7 @@ public class SliderFishEntity extends SeaMonster implements Bucketable {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return CASounds.SEABORN_GENERIC_HIT.get();
 	}
 
@@ -230,15 +224,6 @@ public class SliderFishEntity extends SeaMonster implements Bucketable {
 		}
 		prevAnim = this.animationprocedure;
 		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(SliderFishEntity.RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
-		}
 	}
 
 	public String getSyncedAnimation() {

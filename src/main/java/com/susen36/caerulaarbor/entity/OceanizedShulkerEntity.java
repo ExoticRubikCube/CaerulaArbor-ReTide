@@ -152,7 +152,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return peekTime() > 0 ? SoundEvents.SHULKER_HURT : SoundEvents.SHULKER_HURT_CLOSED;
     }
 

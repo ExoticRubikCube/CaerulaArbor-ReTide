@@ -64,8 +64,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false));
-		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1));
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false));this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1));
 		this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(5, new FloatGoal(this));
@@ -77,7 +76,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return SoundEvents.SLIME_HURT;
 	}
 

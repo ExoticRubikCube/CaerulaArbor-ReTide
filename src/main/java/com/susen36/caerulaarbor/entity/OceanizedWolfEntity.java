@@ -10,7 +10,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -27,11 +28,7 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.*;
 
 public class OceanizedWolfEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedWolfEntity.class, EntityDataSerializers.BOOLEAN);
@@ -92,7 +89,7 @@ public class OceanizedWolfEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.WOLF_HURT;
     }
 
@@ -162,14 +159,7 @@ public class OceanizedWolfEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
-    }
+    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

@@ -122,7 +122,7 @@ public abstract class AbstractTidelinkedEntity extends SeaMonsterBoss implements
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.GUARDIAN_HURT;
     }
 

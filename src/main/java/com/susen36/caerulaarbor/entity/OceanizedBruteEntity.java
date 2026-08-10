@@ -139,7 +139,7 @@ public class OceanizedBruteEntity extends SeaMonsterBoss {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return CASounds.BRUTE_HURT.get();
     }
 

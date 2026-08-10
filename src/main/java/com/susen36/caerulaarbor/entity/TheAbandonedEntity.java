@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.ai.MountGoal;
+import com.susen36.caerulaarbor.entity.ai.MountVehicleGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.AbandonedShootEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -85,7 +85,7 @@ public class TheAbandonedEntity extends SeaMonster {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.6, false));
-		this.goalSelector.addGoal(3, new MountGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
+		this.goalSelector.addGoal(3, new MountVehicleGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
@@ -110,7 +110,7 @@ public class TheAbandonedEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.DROWNED_HURT_WATER;
     }
 
@@ -259,14 +259,7 @@ public class TheAbandonedEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
-    }
+    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

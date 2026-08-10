@@ -161,7 +161,7 @@ public class OceanizedChickenEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.CHICKEN_HURT;
     }
 
@@ -394,14 +394,7 @@ public class OceanizedChickenEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
-    }
+    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

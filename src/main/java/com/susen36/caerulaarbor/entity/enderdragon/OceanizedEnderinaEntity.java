@@ -231,7 +231,7 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return CASounds.CASTER_HURT.get();
 	}
 

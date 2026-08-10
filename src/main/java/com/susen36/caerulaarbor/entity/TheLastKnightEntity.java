@@ -189,7 +189,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return CASounds.LAST_KNIGHT_HIT.get();
     }
 

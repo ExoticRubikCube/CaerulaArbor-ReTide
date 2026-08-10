@@ -32,7 +32,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.event.EventHooks;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -134,7 +133,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.WOLF_HURT;
     }
 
@@ -325,14 +324,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
-    }
+    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

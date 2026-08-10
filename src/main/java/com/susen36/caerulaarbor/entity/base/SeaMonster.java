@@ -4,6 +4,7 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.ai.StrengthOfCrowdGoal;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +22,15 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.SnowGolem;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -50,7 +59,19 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, true));
 		this.targetSelector.addGoal(3, new StrengthOfCrowdGoal(this));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, true));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, true, true));
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, true));
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pillager.class, true, true));
+		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, true));
+		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Witch.class, true, true));
+		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
 	}
 
 	@Override
@@ -132,11 +153,8 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 					}
 				}
 
-				if (!this.isAggressive() && this.getHealth() < this.getMaxHealth()) {
-					int interval = 50 >> amplifier;
-					if (this.tickCount % interval == 0) {
-						this.heal(1.0F);
-					}
+				if (!this.isAggressive() && tickCount % 20 == 0 && this.getHealth() < this.getMaxHealth()) {
+					this.heal(1.0F);
 				}
 			}
 		}

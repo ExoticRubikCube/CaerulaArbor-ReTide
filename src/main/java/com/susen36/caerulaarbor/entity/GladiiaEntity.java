@@ -167,7 +167,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	}
 
     @Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return CASounds.GLADIIA_HURT.get();
 	}
 

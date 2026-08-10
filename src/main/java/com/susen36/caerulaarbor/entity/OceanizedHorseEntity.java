@@ -91,7 +91,7 @@ public class OceanizedHorseEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.ZOMBIE_HORSE_HURT;
     }
 
@@ -215,14 +215,7 @@ public class OceanizedHorseEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
-    }
+    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

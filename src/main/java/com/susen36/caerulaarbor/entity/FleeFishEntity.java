@@ -8,7 +8,6 @@ import com.susen36.caerulaarbor.entity.bullets.FleefishBulletEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -38,7 +37,6 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -109,9 +107,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
 		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
-		this.targetSelector.addGoal(13, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1, 20) {
+		this.targetSelector.addGoal(13, new HurtByTargetGoal(this));this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1, 20) {
 			@Override
 			protected Vec3 getPosition() {
 				RandomSource random = FleeFishEntity.this.getRandom();
@@ -122,6 +118,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
 			}
 		});
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
+
 		this.goalSelector.addGoal(1, new FleeFishEntity.RangedAttackGoal(this, 1.25, 60, 9f) {
 			@Override
 			public boolean canContinueToUse() {
@@ -227,7 +224,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return SoundEvents.PHANTOM_HURT;
 	}
 
@@ -361,15 +358,6 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
 		}
 		prevAnim = this.animationprocedure;
 		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(FleeFishEntity.RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
-		}
 	}
 
 	public String getSyncedAnimation() {

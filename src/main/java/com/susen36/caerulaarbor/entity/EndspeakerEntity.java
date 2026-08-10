@@ -87,191 +87,6 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 		this.setPersistenceRequired();
 	}
 
-	public static boolean hasAbility(LevelAccessor world, double index) {
-		int comparator = 1 << (int) index;
-		int abilities = (int) MapVariables.get(world).endspeaker_abolities;
-		return (abilities & comparator) == comparator;
-	}
-
-	public boolean hasAbility(double index) {
-		return hasAbility(this.level(), index);
-	}
-
-	@Nullable
-	public static EndspeakerEntity spawnForPhase(ServerLevel level, BlockPos pos, MobSpawnType spawnType, int phase) {
-		EndspeakerEntity endspeaker = CAEntities.ENDSPEAKER.get().create(level);
-		if (endspeaker == null) {
-			return null;
-		}
-		endspeaker.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, level.getRandom().nextFloat() * 360.0F, 0.0F);
-		endspeaker.setPhase(Mth.clamp(phase, 0, 3));
-		endspeaker.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), spawnType, null);
-		endspeaker.setHealth(endspeaker.getMaxHealth());
-		level.addFreshEntity(endspeaker);
-		return endspeaker;
-	}
-
-	public static AttributeSupplier.Builder createAttributes() {
-		return Mob.createMobAttributes()
-				.add(Attributes.MOVEMENT_SPEED, 0.15)
-				.add(Attributes.MAX_HEALTH, 16.0)
-				.add(Attributes.ARMOR, 0.0)
-				.add(Attributes.ATTACK_DAMAGE, 1.0)
-				.add(Attributes.FOLLOW_RANGE, 16.0)
-				.add(Attributes.KNOCKBACK_RESISTANCE, 0.0)
-				.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000.0);
-	}
-
-	protected int getFloatGoalPriority() {
-		if (this.getPhase() == 0) {
-			return 4;
-		}
-		if (this.getPhase() == 1) {
-			return 18;
-		}
-		if (this.getPhase() == 2) {
-			return 16;
-		}
-		if (!this.hasNextPhase()) {
-			return 17;
-		}
-		return 0;
-	}
-
-	protected boolean hasNextPhase() {
-        return this.getPhase() == 0 || this.getPhase() == 1 || this.getPhase() == 2;
-    }
-
-	protected boolean canTransitionToNextPhase() {
-		return this.hasNextPhase() && !this.isEvolving();
-	}
-
-	public int getPhase() {
-		return this.entityData.get(DATA_PHASE);
-	}
-
-	public void setPhase(int phase) {
-		this.entityData.set(DATA_PHASE, Mth.clamp(phase, 0, 3));
-		this.updatePhaseRuntimeProperties();
-		this.refreshDimensions();
-	}
-
-	public int getEvolveTime() {
-		return this.entityData.get(DATA_EVOLVE_TIME);
-	}
-
-	public void setEvolveTime(int evolveTime) {
-		this.entityData.set(DATA_EVOLVE_TIME, evolveTime);
-	}
-
-	protected boolean isEvolving() {
-		return this.getEvolveTime() > 0;
-	}
-
-	public int getDuration() {
-		return this.entityData.get(DATA_DURATION);
-	}
-
-	public void setDuration(int duration) {
-		this.entityData.set(DATA_DURATION, duration);
-	}
-
-	public int getSkillCooldown() {
-		return this.entityData.get(DATA_SKILL_COOLDOWN);
-	}
-
-	public void setSkillCooldown(int skillCooldown) {
-		this.entityData.set(DATA_SKILL_COOLDOWN, skillCooldown);
-	}
-
-	protected boolean isPhaseZeroStarting() {
-		return this.tickCount >= 28 && !this.isEvolving();
-	}
-
-	protected boolean isPhaseOneStarting() {
-		return this.tickCount >= 50 && !this.isEvolving();
-	}
-
-	protected boolean isPhaseTwoDurative() {
-		return !this.isEvolving() && this.getDuration() <= 0 && this.tickCount >= 68;
-	}
-
-	protected boolean isPhaseThreeDurative() {
-		return this.isAlive() && this.getDuration() <= 0 && this.tickCount >= 50;
-	}
-
-	protected ServerBossEvent.BossBarOverlay getPhaseBossBarOverlay() {
-		return switch (this.getPhase()) {
-			case 2 -> ServerBossEvent.BossBarOverlay.NOTCHED_6;
-			case 3 -> ServerBossEvent.BossBarOverlay.NOTCHED_10;
-			default -> ServerBossEvent.BossBarOverlay.PROGRESS;
-		};
-	}
-
-	protected void updatePhaseRuntimeProperties() {
-		this.xpReward = switch (this.getPhase()) {
-			case 2 -> 48;
-			case 3 -> 64;
-			default -> 0;
-		};
-		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(switch (this.getPhase()) {
-			case 2 -> 1.0F;
-			case 3 -> 1.5F;
-			default -> 0.6F;
-		});
-		this.updatePhaseAttributes();
-		if (this.bossInfo != null) {
-			this.bossInfo.setColor(this.getPhase() >= 2 ? ServerBossEvent.BossBarColor.WHITE : ServerBossEvent.BossBarColor.BLUE);
-			this.bossInfo.setOverlay(this.getPhaseBossBarOverlay());
-			this.bossInfo.setName(this.getTypeName());
-			float maxHealth = this.getMaxHealth();
-			float progress = maxHealth <= 0.0F ? 0.0F : Mth.clamp(this.getHealth() / maxHealth, 0.0F, 1.0F);
-			this.bossInfo.setProgress(progress);
-		}
-	}
-
-	protected void updatePhaseAttributes() {
-		double maxHealth = switch (this.getPhase()) {
-			case 1 -> 120.0D;
-			case 2 -> 140.0D;
-			case 3 -> 224.0D;
-			default -> 16.0D;
-		};
-		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHealth);
-
-		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(switch (this.getPhase()) {
-			case 1, 3 -> 0.16D;
-			case 2 -> 0.18D;
-            default -> 0.15D;
-		});
-
-		this.getAttribute(Attributes.ARMOR).setBaseValue(switch (this.getPhase()) {
-			case 1 -> 5.0D;
-			case 2 -> 6.0D;
-			case 3 -> 8.0D;
-			default -> 0.0D;
-		});
-
-		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(switch (this.getPhase()) {
-			case 1 -> 7.0D;
-			case 2 -> 9.0D;
-			case 3 -> 11.0D;
-			default -> 1.0D;
-		});
-
-		this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(switch (this.getPhase()) {
-			case 2 -> 32.0D;
-			case 1, 3 -> 36.0D;
-			default -> 16.0D;
-		});
-
-		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(this.getPhase() == 0 ? 0.0D : 10.0D);
-
-		if (this.getHealth() > maxHealth) {
-			this.setHealth((float) maxHealth);
-		}
-	}
-
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
@@ -1499,6 +1314,155 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 			this.dropExperience(this.getKillCredit());
 		}
 	}
+	protected int getFloatGoalPriority() {
+		if (this.getPhase() == 0) {
+			return 4;
+		}
+		if (this.getPhase() == 1) {
+			return 18;
+		}
+		if (this.getPhase() == 2) {
+			return 16;
+		}
+		if (!this.hasNextPhase()) {
+			return 17;
+		}
+		return 0;
+	}
+
+	protected boolean hasNextPhase() {
+		return this.getPhase() == 0 || this.getPhase() == 1 || this.getPhase() == 2;
+	}
+
+	protected boolean canTransitionToNextPhase() {
+		return this.hasNextPhase() && !this.isEvolving();
+	}
+
+	public int getPhase() {
+		return this.entityData.get(DATA_PHASE);
+	}
+
+	public void setPhase(int phase) {
+		this.entityData.set(DATA_PHASE, Mth.clamp(phase, 0, 3));
+		this.updatePhaseRuntimeProperties();
+		this.refreshDimensions();
+	}
+
+	public int getEvolveTime() {
+		return this.entityData.get(DATA_EVOLVE_TIME);
+	}
+
+	public void setEvolveTime(int evolveTime) {
+		this.entityData.set(DATA_EVOLVE_TIME, evolveTime);
+	}
+
+	protected boolean isEvolving() {
+		return this.getEvolveTime() > 0;
+	}
+
+	public int getDuration() {
+		return this.entityData.get(DATA_DURATION);
+	}
+
+	public void setDuration(int duration) {
+		this.entityData.set(DATA_DURATION, duration);
+	}
+
+	public int getSkillCooldown() {
+		return this.entityData.get(DATA_SKILL_COOLDOWN);
+	}
+
+	public void setSkillCooldown(int skillCooldown) {
+		this.entityData.set(DATA_SKILL_COOLDOWN, skillCooldown);
+	}
+
+	protected boolean isPhaseZeroStarting() {
+		return this.tickCount >= 28 && !this.isEvolving();
+	}
+
+	protected boolean isPhaseOneStarting() {
+		return this.tickCount >= 50 && !this.isEvolving();
+	}
+
+	protected boolean isPhaseTwoDurative() {
+		return !this.isEvolving() && this.getDuration() <= 0 && this.tickCount >= 68;
+	}
+
+	protected boolean isPhaseThreeDurative() {
+		return this.isAlive() && this.getDuration() <= 0 && this.tickCount >= 50;
+	}
+
+	protected ServerBossEvent.BossBarOverlay getPhaseBossBarOverlay() {
+		return switch (this.getPhase()) {
+			case 2 -> ServerBossEvent.BossBarOverlay.NOTCHED_6;
+			case 3 -> ServerBossEvent.BossBarOverlay.NOTCHED_10;
+			default -> ServerBossEvent.BossBarOverlay.PROGRESS;
+		};
+	}
+
+	protected void updatePhaseRuntimeProperties() {
+		this.xpReward = switch (this.getPhase()) {
+			case 2 -> 48;
+			case 3 -> 64;
+			default -> 0;
+		};
+		this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(switch (this.getPhase()) {
+			case 2 -> 1.0F;
+			case 3 -> 1.5F;
+			default -> 0.6F;
+		});
+		this.updatePhaseAttributes();
+		if (this.bossInfo != null) {
+			this.bossInfo.setColor(this.getPhase() >= 2 ? ServerBossEvent.BossBarColor.WHITE : ServerBossEvent.BossBarColor.BLUE);
+			this.bossInfo.setOverlay(this.getPhaseBossBarOverlay());
+			this.bossInfo.setName(this.getTypeName());
+			float maxHealth = this.getMaxHealth();
+			float progress = maxHealth <= 0.0F ? 0.0F : Mth.clamp(this.getHealth() / maxHealth, 0.0F, 1.0F);
+			this.bossInfo.setProgress(progress);
+		}
+	}
+
+	protected void updatePhaseAttributes() {
+		double maxHealth = switch (this.getPhase()) {
+			case 1 -> 120.0D;
+			case 2 -> 140.0D;
+			case 3 -> 224.0D;
+			default -> 16.0D;
+		};
+		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHealth);
+
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(switch (this.getPhase()) {
+			case 1, 3 -> 0.16D;
+			case 2 -> 0.18D;
+			default -> 0.15D;
+		});
+
+		this.getAttribute(Attributes.ARMOR).setBaseValue(switch (this.getPhase()) {
+			case 1 -> 5.0D;
+			case 2 -> 6.0D;
+			case 3 -> 8.0D;
+			default -> 0.0D;
+		});
+
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(switch (this.getPhase()) {
+			case 1 -> 7.0D;
+			case 2 -> 9.0D;
+			case 3 -> 11.0D;
+			default -> 1.0D;
+		});
+
+		this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(switch (this.getPhase()) {
+			case 2 -> 32.0D;
+			case 1, 3 -> 36.0D;
+			default -> 16.0D;
+		});
+
+		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(this.getPhase() == 0 ? 0.0D : 10.0D);
+
+		if (this.getHealth() > maxHealth) {
+			this.setHealth((float) maxHealth);
+		}
+	}
 
 	//TODO 或许可以修改为每5ticks
 	protected int getPhaseDeathTickThreshold() {
@@ -1508,6 +1472,41 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 			case 3 -> 50;
 			default -> 35;
 		};
+	}
+
+	public static boolean hasAbility(LevelAccessor world, double index) {
+		int comparator = 1 << (int) index;
+		int abilities = (int) MapVariables.get(world).endspeaker_abolities;
+		return (abilities & comparator) == comparator;
+	}
+
+	public boolean hasAbility(double index) {
+		return hasAbility(this.level(), index);
+	}
+
+	@Nullable
+	public static EndspeakerEntity spawnForPhase(ServerLevel level, BlockPos pos, MobSpawnType spawnType, int phase) {
+		EndspeakerEntity endspeaker = CAEntities.ENDSPEAKER.get().create(level);
+		if (endspeaker == null) {
+			return null;
+		}
+		endspeaker.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, level.getRandom().nextFloat() * 360.0F, 0.0F);
+		endspeaker.setPhase(Mth.clamp(phase, 0, 3));
+		endspeaker.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), spawnType, null);
+		endspeaker.setHealth(endspeaker.getMaxHealth());
+		level.addFreshEntity(endspeaker);
+		return endspeaker;
+	}
+
+	public static AttributeSupplier.Builder createAttributes() {
+		return Mob.createMobAttributes()
+				.add(Attributes.MOVEMENT_SPEED, 0.15)
+				.add(Attributes.MAX_HEALTH, 16.0)
+				.add(Attributes.ARMOR, 0.0)
+				.add(Attributes.ATTACK_DAMAGE, 1.0)
+				.add(Attributes.FOLLOW_RANGE, 16.0)
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.0)
+				.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000.0);
 	}
 
 	@Override

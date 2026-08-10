@@ -119,7 +119,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.GLASS_HIT;
     }
 

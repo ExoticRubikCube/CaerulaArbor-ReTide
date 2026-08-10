@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnimationEntity {
-
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_NIUBI = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);

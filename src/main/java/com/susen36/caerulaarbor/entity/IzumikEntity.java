@@ -169,7 +169,7 @@ public class IzumikEntity extends SeaMonsterBoss {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return CASounds.IZUMIK_HIT.get();
     }
 

@@ -127,7 +127,7 @@ public class ScreamChestFishEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.ARMOR_STAND_HIT;
     }
 

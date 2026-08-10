@@ -190,7 +190,7 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.CREEPER_HURT;
     }
 

@@ -93,7 +93,7 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.GENERIC_HURT;
     }
 
@@ -195,21 +195,6 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         this.setNoGravity(true);
     }
 
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.6);
-        builder = builder.add(Attributes.MAX_HEALTH, 625554);
-        builder = builder.add(Attributes.ARMOR, 24);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 6593);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 36);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(Attributes.FLYING_SPEED, 0.6);
-        builder = builder.add(CAAttributes.GENERAL_DEFENSE, 1656);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 90);
-        return builder;
-    }
-
     private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.isharmla.idle_monster"));
@@ -236,13 +221,20 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
+    
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.6);
+        builder = builder.add(Attributes.MAX_HEALTH, 625554);
+        builder = builder.add(Attributes.ARMOR, 24);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 6593);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 36);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(Attributes.FLYING_SPEED, 0.6);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE, 1656);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 90);
+        return builder;
     }
 
     public String getSyncedAnimation() {

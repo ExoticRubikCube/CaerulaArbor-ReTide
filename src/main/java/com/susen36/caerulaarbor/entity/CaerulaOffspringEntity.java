@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +12,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -19,25 +23,21 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
-public class CaerulaOffspringEntity extends Monster implements GeoEntity {
+public class CaerulaOffspringEntity extends SeaMonster {
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(CaerulaOffspringEntity.class, EntityDataSerializers.STRING);
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CaerulaOffspringEntity.class, EntityDataSerializers.STRING);
+	public String animationprocedure = "empty";
+	String prevAnim = "empty";
 
 	public CaerulaOffspringEntity(Level world) {
 		this(CAEntities.CAERULA_OFFSPRING.get(), world);
@@ -53,9 +53,11 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 		this.moveControl = new FlyingMoveControl(this, 10, true);
 	}
 
+	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
 		builder.define(TEXTURE, "caerula_offspring");
+		builder.define(DATA_ANIMATION, "undefined");
 	}
 
 	public void setTexture(String texture) {
@@ -67,6 +69,21 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 	}
 
 	@Override
+	public String getSyncedAnimation() {
+		return this.entityData.get(DATA_ANIMATION);
+	}
+
+	@Override
+	public void setAnimation(String animation) {
+		this.entityData.set(DATA_ANIMATION, animation);
+	}
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
+
+	@Override
 	protected PathNavigation createNavigation(Level world) {
 		return new FlyingPathNavigation(this, world);
 	}
@@ -74,9 +91,9 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1.2, false));
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1.0, 20) {
+			@Override
 			protected Vec3 getPosition() {
 				RandomSource random = CaerulaOffspringEntity.this.getRandom();
 				double dir_x = CaerulaOffspringEntity.this.getX() + (double)((random.nextFloat() * 2.0f - 1.0f) * 16.0f);
@@ -89,6 +106,7 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 		this.goalSelector.addGoal(5, new FloatGoal(this));
 	}
 
+	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
@@ -113,6 +131,7 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 		return false;
 	}
 
+	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
 		return super.finalizeSpawn(world, difficulty, reason, livingdata);
 	}
@@ -165,21 +184,26 @@ public class CaerulaOffspringEntity extends Monster implements GeoEntity {
 		return event.setAndContinue(RawAnimation.begin().thenLoop("animation.izumik_offspring.idle"));
 	}
 
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(Entity.RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
+	private PlayState procedurePredicate(AnimationState event) {
+		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+			if (!this.animationprocedure.equals(prevAnim))
+				event.getController().forceAnimationReset();
+			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+				this.animationprocedure = "empty";
+				event.getController().forceAnimationReset();
+			}
+		} else if (animationprocedure.equals("empty")) {
+			prevAnim = "empty";
+			return PlayState.STOP;
 		}
+		prevAnim = this.animationprocedure;
+		return PlayState.CONTINUE;
 	}
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController(this, "movement", 0, this::movementPredicate));
-	}
-
-	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.cache;
+		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 	}
 }

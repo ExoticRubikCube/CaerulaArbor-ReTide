@@ -34,7 +34,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -87,7 +86,6 @@ public class ChestFishEntity extends SeaMonster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  1.2, true) {
 
 			@Override
@@ -102,8 +100,7 @@ public class ChestFishEntity extends SeaMonster {
 				return !isShiftKeyDown();
 			}
 
-		});
-		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
+		});this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
 				if (!super.canUse()) return false;
@@ -132,7 +129,7 @@ public class ChestFishEntity extends SeaMonster {
 	}
 
     @Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return SoundEvents.ARMOR_STAND_HIT;
 	}
 
@@ -284,15 +281,6 @@ public class ChestFishEntity extends SeaMonster {
 		}
 		prevAnim = this.animationprocedure;
 		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(ChestFishEntity.RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
-		}
 	}
 
 	public String getSyncedAnimation() {

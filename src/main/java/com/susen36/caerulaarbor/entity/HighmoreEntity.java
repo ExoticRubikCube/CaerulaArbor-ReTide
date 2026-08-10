@@ -9,7 +9,6 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import com.susen36.caerulaarbor.init.*;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -116,6 +115,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        // TODO: 子类专属 HurtByTargetGoal，覆盖基类同优先级目标
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
@@ -139,7 +139,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+
         this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.5, 20) {
             @Override
             protected Vec3 getPosition() {
@@ -274,7 +274,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return CASounds.HIGHMORE_HIT.get();
     }
 

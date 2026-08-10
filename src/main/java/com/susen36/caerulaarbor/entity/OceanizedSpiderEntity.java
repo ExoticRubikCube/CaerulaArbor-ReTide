@@ -183,7 +183,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.SPIDER_HURT;
     }
 

@@ -236,7 +236,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return CASounds.SEABORN_GENERIC_HIT.get();
 	}
 
@@ -294,15 +294,6 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		world.playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.AXOLOTL_SPLASH, SoundSource.HOSTILE, 0.75F, 1);
 		return retval;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
-		}
 	}
 
 	@Override

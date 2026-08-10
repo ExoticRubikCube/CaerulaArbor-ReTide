@@ -32,7 +32,6 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;
@@ -146,9 +145,8 @@ public class NucleicMaleficentEntity extends SeaMonster {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 2, false));
-        this.goalSelector.addGoal(3, new RandomSwimmingGoal(this, 1, 40));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 2, false));
+        this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, 1, 40));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
     }
 
@@ -158,7 +156,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return CASounds.SEABORN_GENERIC_HIT.get();
     }
 
@@ -343,15 +341,6 @@ public class NucleicMaleficentEntity extends SeaMonster {
         }
         prevAnim = this.animationprocedure;
         return PlayState.CONTINUE;
-    }
-
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(NucleicMaleficentEntity.RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
     }
 
     public String getSyncedAnimation() {

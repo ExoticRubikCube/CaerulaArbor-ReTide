@@ -129,7 +129,7 @@ public class OceanizedVexEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.VEX_HURT;
     }
 

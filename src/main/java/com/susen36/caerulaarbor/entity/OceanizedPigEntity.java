@@ -94,7 +94,7 @@ public class OceanizedPigEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.PIG_HURT;
     }
 

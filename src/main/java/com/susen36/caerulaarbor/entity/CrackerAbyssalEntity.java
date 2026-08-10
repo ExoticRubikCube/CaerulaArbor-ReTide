@@ -2,10 +2,9 @@ package com.susen36.caerulaarbor.entity;
 
 
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.ai.MountGoal;
+import com.susen36.caerulaarbor.entity.ai.MountVehicleGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -29,14 +28,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.SnowGolem;
-import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.monster.piglin.Piglin;
-import net.minecraft.world.entity.monster.piglin.PiglinBrute;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -70,27 +61,6 @@ public class CrackerAbyssalEntity extends SeaMonster {
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1.5f);
     }
 
-    public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
-        event.register(CAEntities.CRACKER_ABYSSAL.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
-            int x = pos.getX();
-            int y = pos.getY();
-            int z = pos.getZ();
-            return WorldUtils.canDangerSeabornSpawn(world, x, y, z);
-        }, RegisterSpawnPlacementsEvent.Operation.REPLACE);
-    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.27);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
-        builder = builder.add(Attributes.MAX_HEALTH, 85);
-        builder = builder.add(Attributes.ARMOR, 10);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 13);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 32);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.85);
-        return builder;
-    }
-
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
@@ -101,7 +71,6 @@ public class CrackerAbyssalEntity extends SeaMonster {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(2, new BreakDoorGoal(this, e -> true) {
             @Override
             public boolean canUse() {
@@ -115,19 +84,8 @@ public class CrackerAbyssalEntity extends SeaMonster {
                 return super.canContinueToUse() && WorldUtils.canGrief(world);
             }
         });
-		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1, true));
-		this.goalSelector.addGoal(4, new MountGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
-        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
-        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
-        this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
-        this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
-        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
-        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1, true));
+		this.goalSelector.addGoal(4, new MountVehicleGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
         this.goalSelector.addGoal(16, new RandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(17, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(18, new FloatGoal(this));
@@ -144,7 +102,7 @@ public class CrackerAbyssalEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return CASounds.SEABORN_GENERIC_HIT.get();
     }
 
@@ -289,13 +247,25 @@ public class CrackerAbyssalEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(CrackerAbyssalEntity.RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
+    public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(CAEntities.CRACKER_ABYSSAL.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+            int x = pos.getX();
+            int y = pos.getY();
+            int z = pos.getZ();
+            return WorldUtils.canDangerSeabornSpawn(world, x, y, z);
+        }, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.27);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
+        builder = builder.add(Attributes.MAX_HEALTH, 85);
+        builder = builder.add(Attributes.ARMOR, 10);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 13);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 32);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.85);
+        return builder;
     }
 
     public String getSyncedAnimation() {

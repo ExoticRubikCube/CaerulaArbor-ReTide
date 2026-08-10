@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.ai.MountGoal;
+import com.susen36.caerulaarbor.entity.ai.MountVehicleGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.entity.bullets.ShotOceanArrowEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -106,7 +106,7 @@ public class OceanizedIllusionerEntity extends SeaMonsterBoss implements RangedA
         this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
         this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(14, new OpenDoorGoal(this, false));
-        this.goalSelector.addGoal(13, new MountGoal(this, OceanizedRavagerEntity.class, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
+        this.goalSelector.addGoal(13, new MountVehicleGoal(this, OceanizedRavagerEntity.class, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
         this.goalSelector.addGoal(15, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(16, new RandomStrollGoal(this, 1) {
             @Override
@@ -242,7 +242,7 @@ public class OceanizedIllusionerEntity extends SeaMonsterBoss implements RangedA
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.ILLUSIONER_HURT;
     }
 

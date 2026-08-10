@@ -8,7 +8,6 @@ import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.ai.MoveToTargetGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ColorParticleOption;
@@ -33,7 +32,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
@@ -82,7 +80,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+
 		this.goalSelector.addGoal(2, new MoveToTargetGoal(this, 0.4, false));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, false, false));
@@ -93,9 +91,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, false, false));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, false, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, false, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, false, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, false, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
-		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.4));
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, false, false));this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.4));
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 	}
 
@@ -229,7 +225,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return SoundEvents.GLOW_SQUID_HURT;
 	}
 
@@ -289,16 +285,6 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		}
 		prevAnim = this.animationprocedure;
 		return PlayState.CONTINUE;
-	}
-
-       
-       @Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(UmbrellaAbyssalEntity.RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
-		}
 	}
 
 	public String getSyncedAnimation() {

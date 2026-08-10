@@ -59,18 +59,6 @@ public class OceanizedCatEntity extends SeaMonster {
         this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(0.6f);
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 35);
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
-        builder = builder.add(Attributes.MAX_HEALTH, 24);
-        builder = builder.add(Attributes.ARMOR, 0);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 6);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.33);
-        return builder;
-    }
-
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
@@ -110,7 +98,7 @@ public class OceanizedCatEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.CAT_HURT;
     }
 
@@ -258,15 +246,18 @@ public class OceanizedCatEntity extends SeaMonster {
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 35);
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
+        builder = builder.add(Attributes.MAX_HEALTH, 24);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 6);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.33);
+        return builder;
     }
-
+    
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);
     }

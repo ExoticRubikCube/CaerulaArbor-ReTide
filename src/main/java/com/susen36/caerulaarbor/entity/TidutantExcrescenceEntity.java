@@ -109,7 +109,7 @@ public class TidutantExcrescenceEntity extends SeaMonster implements ElementalAt
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return CASounds.SEABORN_GENERIC_HIT.get();
     }
 

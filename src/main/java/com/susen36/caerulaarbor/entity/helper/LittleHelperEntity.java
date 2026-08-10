@@ -101,7 +101,7 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.ARMOR_STAND_HIT;
     }
 

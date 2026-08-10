@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.ai.MountGoal;
+import com.susen36.caerulaarbor.entity.ai.MountVehicleGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.ThrowablePotionEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -107,7 +107,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
         this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
         this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(13, new MountGoal(this, OceanizedRavagerEntity.class, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
+        this.goalSelector.addGoal(13, new MountVehicleGoal(this, OceanizedRavagerEntity.class, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
         this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(16, new FloatGoal(this));
         this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 50, 4f) {
@@ -212,7 +212,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return CASounds.WITCH_HURT.get();
     }
 
@@ -512,14 +512,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
-    }
+    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

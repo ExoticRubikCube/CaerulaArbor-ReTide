@@ -29,7 +29,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
@@ -71,7 +70,6 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
 		super.registerGoals();
 		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, true));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
-		this.targetSelector.addGoal(10, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1));
 		this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(13, new FloatGoal(this));
@@ -93,7 +91,7 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return CASounds.SEABORN_GENERIC_HIT.get();
 	}
 
@@ -237,15 +235,6 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
 		}
 		prevAnim = this.animationprocedure;
 		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(RunFishEntity.RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
-		}
 	}
 
 	public String getSyncedAnimation() {

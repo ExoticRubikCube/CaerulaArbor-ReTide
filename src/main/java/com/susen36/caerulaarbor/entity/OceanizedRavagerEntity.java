@@ -79,18 +79,6 @@ public class OceanizedRavagerEntity extends SeaMonster {
         }
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.15);
-        builder = builder.add(Attributes.MAX_HEALTH, 215);
-        builder = builder.add(Attributes.ARMOR, 6);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 17);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 27);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
-        builder = builder.add(Attributes.ATTACK_KNOCKBACK, 1);
-        return builder;
-    }
-
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
@@ -133,7 +121,7 @@ public class OceanizedRavagerEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.RAVAGER_HURT;
     }
 
@@ -260,6 +248,18 @@ public class OceanizedRavagerEntity extends SeaMonster {
             this.remove(RemovalReason.KILLED);
             this.dropExperience(this.getKillCredit());
         }
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.15);
+        builder = builder.add(Attributes.MAX_HEALTH, 215);
+        builder = builder.add(Attributes.ARMOR, 6);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 17);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 27);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+        builder = builder.add(Attributes.ATTACK_KNOCKBACK, 1);
+        return builder;
     }
 
     public String getSyncedAnimation() {

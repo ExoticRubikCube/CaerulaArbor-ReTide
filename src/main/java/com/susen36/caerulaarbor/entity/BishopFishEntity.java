@@ -38,16 +38,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.monster.piglin.Piglin;
-import net.minecraft.world.entity.monster.piglin.PiglinBrute;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
@@ -62,7 +54,6 @@ import software.bernie.geckolib.animation.AnimationState;
 import javax.annotation.Nullable;
 
 public class BishopFishEntity extends SeaMonsterBoss {
-
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKLP = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_ENDP = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
@@ -104,7 +95,7 @@ public class BishopFishEntity extends SeaMonsterBoss {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        // TODO: 子类专属匿名 override 版 MeleeAttackGoal（需主教启动后激活），与基类 targetSelector 统一目标不冲突
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this,  0, false) {
 
             @Override
@@ -118,17 +109,6 @@ public class BishopFishEntity extends SeaMonsterBoss {
             }
 
         });
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
-        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
-        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
-        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-        this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
-        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
-        this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
-        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(14, new RandomLookAroundGoal(this));
     }
 
@@ -143,7 +123,7 @@ public class BishopFishEntity extends SeaMonsterBoss {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.ELDER_GUARDIAN_HURT;
     }
 

@@ -140,7 +140,7 @@ public class FlamarineGolemEntity extends SeaMonster {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.IRON_GOLEM_HURT;
     }
 

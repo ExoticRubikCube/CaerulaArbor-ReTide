@@ -41,7 +41,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
@@ -158,7 +157,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return SoundEvents.PUFFER_FISH_HURT;
 	}
 
@@ -328,8 +327,6 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		this.updateSwingTime();
 	}
 
-	
-
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.24);
@@ -388,15 +385,6 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		}
 		prevAnim = this.animationprocedure;
 		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
-		}
 	}
 
 	public String getSyncedAnimation() {

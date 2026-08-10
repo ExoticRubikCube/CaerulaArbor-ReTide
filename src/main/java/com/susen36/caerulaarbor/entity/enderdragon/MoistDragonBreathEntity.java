@@ -116,7 +116,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.GENERIC_HURT;
     }
 

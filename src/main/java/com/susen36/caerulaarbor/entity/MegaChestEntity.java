@@ -32,7 +32,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -84,8 +83,8 @@ public class MegaChestEntity extends SeaMonsterBoss {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.6, true));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 0.6, true));
+
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 0.4) {
             @Override
             public boolean canUse() {
@@ -116,7 +115,7 @@ public class MegaChestEntity extends SeaMonsterBoss {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return SoundEvents.ARMOR_STAND_HIT;
     }
 
@@ -308,14 +307,7 @@ public class MegaChestEntity extends SeaMonsterBoss {
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
-    }
+    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

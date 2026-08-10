@@ -6,12 +6,12 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.AABB;
 
-public class MountGoal extends Goal {
+public class MountVehicleGoal extends Goal {
     private final Mob rider;
     private final Class<? extends Entity>[] mountTypes;
 
     @SafeVarargs
-    public MountGoal(Mob rider, Class<? extends Entity>... mountTypes) {
+    public MountVehicleGoal(Mob rider, Class<? extends Entity>... mountTypes) {
         this.rider = rider;
         this.mountTypes = mountTypes;
     }

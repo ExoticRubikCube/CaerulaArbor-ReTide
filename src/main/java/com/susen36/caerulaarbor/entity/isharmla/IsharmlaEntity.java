@@ -177,7 +177,7 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		if (isMonster()) return SoundEvents.GUARDIAN_HURT;
 		return SKADI_HIT;
 	}

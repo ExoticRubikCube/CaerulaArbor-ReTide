@@ -108,7 +108,7 @@ public class SuperSliderEntity extends SeaMonsterBoss {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return CASounds.SEABORN_GENERIC_HIT.get();
     }
 
@@ -199,14 +199,7 @@ public class SuperSliderEntity extends SeaMonsterBoss {
         return PlayState.CONTINUE;
     }
 
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime == 20) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-        }
-    }
+    
 
     public String getSyncedAnimation() {
         return this.entityData.get(DATA_ANIMATION);

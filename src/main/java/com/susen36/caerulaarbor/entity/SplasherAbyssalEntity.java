@@ -1,14 +1,13 @@
 package com.susen36.caerulaarbor.entity;
 
 
-import com.susen36.caerulaarbor.entity.ai.MountGoal;
+import com.susen36.caerulaarbor.entity.ai.MountVehicleGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FishShootEntity;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -29,7 +28,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
@@ -37,7 +35,6 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -75,7 +72,6 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, true));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, true));
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Villager.class, true, true));
@@ -85,11 +81,11 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Witch.class, true, true));
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
-		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1));
-		this.goalSelector.addGoal(13, new MountGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
+		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1));
+
+		this.goalSelector.addGoal(13, new MountVehicleGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
+
 		this.goalSelector.addGoal(1, new SplasherAbyssalEntity.RangedAttackGoal(this, 1.25, 40, 6f) {
 			@Override
 			public boolean canContinueToUse() {
@@ -197,7 +193,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
+	public SoundEvent getHurtSound(DamageSource source) {
 		return CASounds.SEABORN_GENERIC_HIT.get();
 	}
 
@@ -292,15 +288,6 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		}
 		prevAnim = this.animationprocedure;
 		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(SplasherAbyssalEntity.RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
-		}
 	}
 
 	public String getSyncedAnimation() {

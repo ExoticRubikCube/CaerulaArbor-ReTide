@@ -82,19 +82,6 @@ public class TideChimeraEntity extends SeaMonsterBoss {
         setPersistenceRequired();
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
-        builder = builder.add(Attributes.MAX_HEALTH, 300);
-        builder = builder.add(Attributes.ARMOR, 8);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 48);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.MISSRATE, 50);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 45);
-        return builder;
-    }
-
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
@@ -156,7 +143,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(DamageSource source) {
         return CASounds.SEABORN_GENERIC_HIT.get();
     }
 
@@ -789,6 +776,19 @@ public class TideChimeraEntity extends SeaMonsterBoss {
 
     private boolean isChimeraDurative() {
         return this.isAlive() && this.tickCount > 100 && this.getEntityData().get(DATA_DURATION) <= 0;
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+        builder = builder.add(Attributes.MAX_HEALTH, 300);
+        builder = builder.add(Attributes.ARMOR, 8);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 48);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(CAAttributes.MISSRATE, 50);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 45);
+        return builder;
     }
 
     @Override
