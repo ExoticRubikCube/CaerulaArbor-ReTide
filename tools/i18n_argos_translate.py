@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
 import subprocess
 import sys
 from pathlib import Path
+
+for _log_name in ("stanza", "argostranslate", "ctranslate2"):
+    logging.getLogger(_log_name).setLevel(logging.ERROR)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 LANG_DIR = PROJECT_ROOT / "src" / "main" / "resources" / "assets" / "caerula_arbor" / "lang"
@@ -13,7 +17,6 @@ SOURCE_FILE = LANG_DIR / "en_us.json"
 # Minecraft 内部名(输出文件) | Argos 目标语代码
 # 翻译路线固定为：en_us.json（人工维护的英文基准） -> 其他 6 种外语
 # 中文家族（zh_cn / zh_tw / zh_hk / zh_mo）由 zh_cn.json 人工基准 + i18n_zh_trad.py 繁简转换负责，
-# 本脚本绝不生成/覆盖中文任何文件。
 TARGETS: list[tuple[str, str]] = [
     ("ru_ru.json", "ru"), # 俄语         -> en -> ru
     ("ja_jp.json", "ja"), # 日语         -> en -> ja
@@ -177,7 +180,7 @@ def main() -> int:
     argos = ensure_argos()
 
     print(f"[信息] 源文件：{SOURCE_FILE}")
-    print(f"[信息] 模式：本地离线 Argos Translate（以英文为源生成所有其他语种）")
+    print(f"[信息] 模式：本地离线 Argos Translate(以英文为源生成所有其他语种)")
     total = len(TARGETS)
     for i, (filename, lang) in enumerate(TARGETS, 1):
         out = LANG_DIR / filename

@@ -1,12 +1,10 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
@@ -18,8 +16,8 @@ import net.neoforged.neoforge.event.entity.player.CriticalHitEvent;
 public class PlayerAttackEventHandler {
 	@SubscribeEvent
 	public static void onPlayerCriticalHit(CriticalHitEvent event) {
-		Entity attackerEntity = event.getEntity();
-		if (!event.isVanillaCritical() || !(attackerEntity instanceof LivingEntity attacker)) {
+		LivingEntity attacker = event.getEntity();
+		if (!event.isVanillaCritical()) {
 			return;
 		}
 

@@ -4,7 +4,10 @@ import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CADamageTypes;
+import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAParticles;
+import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -28,9 +31,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -170,19 +171,6 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand pHand) {
-        if (!this.IS_STATIC) return InteractionResult.PASS;
-        Level level = this.level();
-        if (level instanceof ServerLevel sLevel) {
-            if (player.getMainHandItem().isEmpty()) {
-                ItemEntity item = new ItemEntity(sLevel, this.getX(), this.getY(), this.getZ(),
-                        new ItemStack(CAItems.MOIST_CRYSTAL_ITEM.get()));
-                item.setPickUpDelay(10);
-                item.setUnlimitedLifetime();
-                sLevel.addFreshEntity(item);
-                this.discard();
-                return InteractionResult.SUCCESS;
-            }
-        }
         return InteractionResult.PASS;
     }
 

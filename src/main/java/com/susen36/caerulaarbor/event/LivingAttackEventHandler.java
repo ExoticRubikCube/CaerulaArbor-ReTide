@@ -51,6 +51,9 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 import java.util.List;
 
+import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN;
+import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_PET;
+
 @SuppressWarnings("unused")
 @EventBusSubscriber
 public class LivingAttackEventHandler {
@@ -59,10 +62,6 @@ public class LivingAttackEventHandler {
             ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "inquisition"));
     private static final TagKey<EntityType<?>> HUMAN_SIDE = TagKey.create(Registries.ENTITY_TYPE,
             ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside"));
-    private static final TagKey<EntityType<?>> OCEAN_OFFSPRING = TagKey.create(Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
-    private static final TagKey<EntityType<?>> OCEAN_PET = TagKey.create(Registries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"));
     private static final TagKey<EntityType<?>> SKIP_MIGRATION = TagKey.create(Registries.ENTITY_TYPE,
             ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "skip_migration"));
     private static final TagKey<EntityType<?>> IGNORE_MIGRATION = TagKey.create(Registries.ENTITY_TYPE,
@@ -196,7 +195,7 @@ public class LivingAttackEventHandler {
     }
 
     private static void handleOceanOffspringFriendlyFire(LivingIncomingDamageEvent event, LivingEntity target, Entity sourceEntity) {
-        if (sourceEntity.getType().is(OCEAN_OFFSPRING) && target.getType().is(OCEAN_OFFSPRING)) {
+        if (sourceEntity.getType().is(SEA_BORN) && target.getType().is(SEA_BORN)) {
             LivingEntity srcTarget = sourceEntity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
             if (target != srcTarget) {
                 event.setCanceled(true);
@@ -208,8 +207,8 @@ public class LivingAttackEventHandler {
         var migrationLevel = MapVariables.get(world).strategy_migration;
         if (migrationLevel <= 0) return;
 
-        if (target.getType().is(OCEAN_OFFSPRING) && !sourceEntity.getType().is(OCEAN_OFFSPRING)
-                && !target.getType().is(OCEAN_PET) && !target.getType().is(SKIP_MIGRATION)
+        if (target.getType().is(SEA_BORN) && !sourceEntity.getType().is(SEA_BORN)
+                && !target.getType().is(SEA_BORN_PET) && !target.getType().is(SKIP_MIGRATION)
                 && !(sourceEntity instanceof Player player && player.getAbilities().instabuild)
                 && !damageSource.is(CADamageTags.BYPASSES_MIGRATION)) {
             var migrationArea = new AABB(target.getX() - (8 + migrationLevel * 16), target.getY() - 16,
@@ -220,7 +219,7 @@ public class LivingAttackEventHandler {
 
         if (target instanceof Player player
                 && ModCapabilities.getPlayerVariables(player).player_oceanization >= 3
-                && !sourceEntity.getType().is(OCEAN_OFFSPRING)) {
+                && !sourceEntity.getType().is(SEA_BORN)) {
             var migrationArea = new AABB(target.getX() - (8 + migrationLevel * 24), target.getY() - 16,
                     target.getZ() - (8 + migrationLevel * 24), target.getX() + 8 + migrationLevel * 24,
                     target.getY() + 16, target.getZ() + 8 + migrationLevel * 24);
@@ -230,7 +229,7 @@ public class LivingAttackEventHandler {
 
     private static void directMigratingMobs(LevelAccessor world, LivingEntity target, Entity sourceEntity, AABB area, double speed, boolean ignoreMarkedEntities) {
         for (var candidate : world.getEntities(target, area)) {
-            if (!candidate.getType().is(OCEAN_OFFSPRING) || candidate.getType().is(OCEAN_PET)
+            if (!candidate.getType().is(SEA_BORN) || candidate.getType().is(SEA_BORN_PET)
                     || candidate == sourceEntity || ignoreMarkedEntities && candidate.getType().is(IGNORE_MIGRATION)
                     || !(candidate instanceof Mob mob)) continue;
 
@@ -242,7 +241,7 @@ public class LivingAttackEventHandler {
     }
 
     private static void handleMobHitEvolution(LivingIncomingDamageEvent event, LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource, double amount) {
-        if (sourceEntity.getType().is(OCEAN_OFFSPRING)
+        if (sourceEntity.getType().is(SEA_BORN)
                 && world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
             var growthPoints = amount * 0.025;
             MapVariablesHandler.addEvoPoint(world, StrategyType.GROW, growthPoints);
@@ -250,7 +249,7 @@ public class LivingAttackEventHandler {
             SilenceUpgradeManager.applySilenceUpgrade(world, growthPoints);
         }
 
-        if (!target.getType().is(OCEAN_OFFSPRING)) return;
+        if (!target.getType().is(SEA_BORN)) return;
 
         if (sourceEntity instanceof ServerPlayer player) {
             var advancement = player.server.getAdvancements().get(

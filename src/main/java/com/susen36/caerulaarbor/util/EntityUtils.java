@@ -44,6 +44,8 @@ import java.util.List;
 
 public class EntityUtils {
 
+	public static final int NUMB_EFFECT_DURATION = 10 * 60 * 20; // 麻痹（NUMB）效果时长：10 分钟 = 12000 ticks
+
 	private EntityUtils() {
 		throw new UnsupportedOperationException("Utility class");
 	}

@@ -9,12 +9,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import java.util.EnumSet;
 import java.util.List;
 
 public class StrengthOfCrowdGoal extends TargetGoal {
+    private static final TargetingConditions HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
+
     private int timestamp;
     private final SeaMonster seaMonster;
 
@@ -31,8 +34,10 @@ public class StrengthOfCrowdGoal extends TargetGoal {
         if (i != this.timestamp && livingentity != null) {
             if (livingentity == this.mob) {
                 return false;
+            } else if (livingentity.getType().is(EntityUtils.SEA_BORN)) {
+                return false;
             } else {
-                return !livingentity.getType().is(EntityUtils.SEA_BORN);
+                return this.canAttack(livingentity, HURT_BY_TARGETING);
             }
         } else {
             return false;
@@ -41,7 +46,11 @@ public class StrengthOfCrowdGoal extends TargetGoal {
 
     @Override
     public void start() {
+        LivingEntity attacker = this.mob.getLastHurtByMob();
+        this.mob.setTarget(attacker);
+        this.targetMob = attacker;
         this.timestamp = this.mob.getLastHurtByMobTimestamp();
+        this.unseenMemoryTicks = 300;
         this.alertOthers();
         super.start();
     }
@@ -54,22 +63,22 @@ public class StrengthOfCrowdGoal extends TargetGoal {
         double rangeY = range[1];
 
         AABB aabb = AABB.unitCubeFromLowerCorner(this.mob.position()).inflate(rangeXZ, rangeY, rangeXZ);
-        List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, aabb, EntitySelector.NO_SPECTATORS);
+        List<SeaMonster> list = level.getEntitiesOfClass(SeaMonster.class, aabb, EntitySelector.NO_CREATIVE_OR_SPECTATOR);
         LivingEntity target = this.mob.getLastHurtByMob();
 
-        for (LivingEntity candidate : list) {
+        for (SeaMonster candidate : list) {
             if (this.mob != candidate
-                    && candidate instanceof Mob candidateMob
-                    && candidate.getType().is(EntityUtils.SEA_BORN)
                     && !candidate.getType().is(EntityUtils.SEA_BORN_PET)
-                    && candidateMob.getTarget() == null
-                    && !candidateMob.isAlliedTo(target)) {
-                this.alertOther(candidateMob, target);
+                    && candidate.getTarget() == null
+                    && !candidate.isAlliedTo(target)) {
+                this.alertOther(candidate, target);
             }
         }
     }
 
     protected void alertOther(Mob mob, LivingEntity target) {
-        mob.setTarget(target);
+        if(mob.getTarget() == null) {
+            mob.setTarget(target);
+        }
     }
 }

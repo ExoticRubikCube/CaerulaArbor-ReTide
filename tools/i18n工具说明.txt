@@ -3,11 +3,11 @@ Caerula Arbor - i18n 工具说明
 
 三份基准与两份自动化脚本的分工：
 
-  基准源（需人工维护，脚本永不覆盖）
+  基准源(需人工维护，脚本永不覆盖)
   ├─ zh_cn.json  简体中文
   └─ en_us.json  英文
 
-  自动产物（由脚本生成，不要手动编辑）
+  自动产物(由脚本生成，不要手动编辑)
   ├─ zh_tw.json / zh_hk.json / zh_mo.json    由 i18n_zh_trad.py（中文繁简）生成
   └─ ru_ru / ja_jp / it_it / fr_fr / de_de / es_es   由 i18n_argos_translate.py（英文→其他语种离线翻译）生成
 

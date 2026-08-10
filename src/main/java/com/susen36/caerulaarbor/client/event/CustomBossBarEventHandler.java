@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.event;
+package com.susen36.caerulaarbor.client.event;
 
 import com.mojang.datafixers.util.Pair;
 import com.susen36.caerulaarbor.CaerulaArbor;
@@ -18,7 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-@EventBusSubscriber
+@OnlyIn(Dist.CLIENT)
+@EventBusSubscriber(value = Dist.CLIENT)
 public class CustomBossBarEventHandler {
 	public static final Map<BossEvent, BossBarRenderContext> CACHE = new HashMap<>();
 	public static final Map<BossEvent, String> CACHE_NAME = new HashMap<>();

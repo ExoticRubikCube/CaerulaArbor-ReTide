@@ -5,12 +5,13 @@ import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent;
 
 @EventBusSubscriber
 public class PlayerWakeUpEventHandler {
-	@net.neoforged.bus.api.SubscribeEvent
+	@SubscribeEvent
 	public static void onEntityEndSleep(PlayerWakeUpEvent event) {
 		if (!event.updateLevel() && !event.wakeImmediately()) {
 			Entity entity = event.getEntity();

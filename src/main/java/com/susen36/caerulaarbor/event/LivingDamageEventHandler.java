@@ -22,8 +22,6 @@ public class LivingDamageEventHandler {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
-        if (event == null) return;
-
         handleReduceLightsWithDamage(event);
         handlePlayerEvolutionDamage(event);
     }

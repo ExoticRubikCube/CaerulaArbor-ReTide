@@ -63,11 +63,8 @@ public class LivingDeathEventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onEntityDeath(LivingDeathEvent event) {
-        if (event == null) return;
-
         handleLifePoint(event);
         handleBarrierReset(event);
-        handleInvulnerableDeath(event);
     }
 
     @SubscribeEvent
@@ -109,13 +106,11 @@ public class LivingDeathEventHandler {
                 if (capability.player_shield > 0) {
                     death_blocked = true;
                     is_shield = true;
-                    double setval = capability.player_shield - 1;
-                    capability.player_shield = setval;
+                    capability.player_shield = capability.player_shield - 1;
                     capability.syncPlayerVariables(entity);
                 } else if (capability.player_lives > 1) {
                     death_blocked = true;
-                    double setval = capability.player_lives - 1;
-                    capability.player_lives = setval;
+                    capability.player_lives = capability.player_lives - 1;
                     capability.syncPlayerVariables(entity);
                 } else {
                     light_cost = 50;
@@ -179,27 +174,13 @@ public class LivingDeathEventHandler {
         entity.getPersistentData().putDouble("playerEvoHitTime", 0);
     }
 
-    private static void handleInvulnerableDeath(LivingDeathEvent event) {
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (sourceentity == null) return;
-
-        if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.INVULNERABLE) && !damagesource.is(CADamageTypes.INV_KILLER)) {
-            
-        }
-    }
-
     private static void handleExtractorAdv(LivingDeathEvent event) {
         DamageSource damagesource = event.getSource();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (damagesource == null || sourceentity == null) return;
-
-        if (damagesource.is(CADamageTypes.EXTRACTOR_DAMAGE)) {
-            if (sourceentity instanceof ServerPlayer player) {
-                AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "little_by_little"));
+        if (sourceentity instanceof ServerPlayer player && damagesource.is(CADamageTypes.EXTRACTOR_DAMAGE)) {
+            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "little_by_little"));
+            if (adv != null) {
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                 if (!ap.isDone()) {
                     for (String criteria : ap.getRemainingCriteria())
@@ -217,7 +198,7 @@ public class LivingDeathEventHandler {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
         if (!world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) return;
 
         if (sourceentity instanceof Player && EntityUtils.canPlayerEvo(sourceentity)) {
@@ -265,7 +246,7 @@ public class LivingDeathEventHandler {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (sourceentity instanceof Player) {
             handlePlayerKillRelics(event, world, x, y, z, entity, sourceentity);

@@ -73,7 +73,6 @@ public class LivingHurtEventHandler {
         handleTrailriteAttackBonus(event);
         handleArmorKnight(event);
         handleBossHit(event);
-        handleChimeraKilledByApocata(event);
         handleCorruptedBurdenDamage(event);
         handleDamageBurdenVeicle(event);
         handleCrimsonTreaty(event);
@@ -338,21 +337,6 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleChimeraKilledByApocata(LivingDamageEvent.Pre event) {
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getNewDamage();
-
-        if (entity == null || sourceentity == null) return;
-
-        if (entity instanceof TideChimeraEntity) {
-            String name = sourceentity.getDisplayName().getString();
-            if (name.contains("apocata") || name.contains("Apocata")) {
-                event.setNewDamage((float) Math.max(1000000, amount));
-            }
-        }
-    }
-
     private static void handleCorruptedBurdenDamage(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
@@ -363,7 +347,7 @@ public class LivingHurtEventHandler {
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getNewDamage();
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
             if (entity instanceof SkadiCorruptedEntity) return;
@@ -373,7 +357,7 @@ public class LivingHurtEventHandler {
                     .min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
 
             if (skadiCorrupted == null) return;
-            if ((skadiCorrupted != null ? entity.distanceTo(skadiCorrupted) : -1) > 16) return;
+            if (entity.distanceTo(skadiCorrupted) > 16) return;
             if (skadiCorrupted == entity) return;
             if (skadiCorrupted == sourceentity) return;
             if (entity == (skadiCorrupted instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null)) return;
@@ -571,7 +555,6 @@ public class LivingHurtEventHandler {
         Entity entity = event.getEntity();
         double amount = event.getNewDamage();
 
-        if (damagesource == null || entity == null) return;
         if (world.isClientSide()) return;
 
         Entity arrow = damagesource.getDirectEntity();
@@ -605,42 +588,40 @@ public class LivingHurtEventHandler {
                 double y1 = arrow.getY();
                 Entity entity1 = damagesource.getEntity();
                 if (entity1 != null) {
-                    if (!(lll <= 0)) {
-                        final Vec3 center = new Vec3(x, y1, z);
-                        List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24 / 2d),
-                                e -> e != entity1 && !e.hasEffect(CAMobEffects.COOLDOWN_SINAL));
-                        LivingEntity nextTarget = null;
-                        double minDist = -1.0D;
-                        Entity recentVictim = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtMob() : null;
-                        Entity recentAttacker = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtByMob() : null;
-                        for (LivingEntity entityiterator : entfound) {
-                            boolean isValid = false;
-                            if (entityiterator instanceof Monster) {
-                                isValid = true;
-                            } else {
-                                isValid = (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity1
-                                        || entityiterator == recentVictim
-                                        || entityiterator == recentAttacker;
-                            }
-                            if (isValid) {
-                                double d = entityiterator.distanceToSqr(x, y1, z);
-                                if (minDist == -1.0D || d < minDist) {
-                                    minDist = d;
-                                    nextTarget = entityiterator;
-                                }
+                    final Vec3 center = new Vec3(x, y1, z);
+                    List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24 / 2d),
+                            e -> e != entity1 && !e.hasEffect(CAMobEffects.COOLDOWN_SINAL));
+                    LivingEntity nextTarget = null;
+                    double minDist = -1.0D;
+                    Entity recentVictim = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtMob() : null;
+                    Entity recentAttacker = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtByMob() : null;
+                    for (LivingEntity entityiterator : entfound) {
+                        boolean isValid = false;
+                        if (entityiterator instanceof Monster) {
+                            isValid = true;
+                        } else {
+                            isValid = (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity1
+                                    || entityiterator == recentVictim
+                                    || entityiterator == recentAttacker;
+                        }
+                        if (isValid) {
+                            double d = entityiterator.distanceToSqr(x, y1, z);
+                            if (minDist == -1.0D || d < minDist) {
+                                minDist = d;
+                                nextTarget = entityiterator;
                             }
                         }
-                        if (nextTarget != null && world instanceof ServerLevel projectileLevel) {
-                            AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, projectileLevel);
-                            entityToSpawn.setOwner(entity1);
-                            entityToSpawn.setBaseDamage((float) amount);
-                            entityToSpawn.setCritArrow(true);
-                            entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-                            entityToSpawn.setPos(x, y1, z);
-                            entityToSpawn.getPersistentData().putDouble("TrailriteLink", lll - 1);
-                            entityToSpawn.shoot((nextTarget.getX() - x), ((nextTarget.getY() + nextTarget.getBbHeight() * 0.9) - y1), (nextTarget.getZ() - z), (float) 1.75, 0);
-                            projectileLevel.addFreshEntity(entityToSpawn);
-                        }
+                    }
+                    if (nextTarget != null && world instanceof ServerLevel projectileLevel) {
+                        AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, projectileLevel);
+                        entityToSpawn.setOwner(entity1);
+                        entityToSpawn.setBaseDamage((float) amount);
+                        entityToSpawn.setCritArrow(true);
+                        entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+                        entityToSpawn.setPos(x, y1, z);
+                        entityToSpawn.getPersistentData().putDouble("TrailriteLink", lll - 1);
+                        entityToSpawn.shoot((nextTarget.getX() - x), ((nextTarget.getY() + nextTarget.getBbHeight() * 0.9) - y1), (nextTarget.getZ() - z), (float) 1.75, 0);
+                        projectileLevel.addFreshEntity(entityToSpawn);
                     }
                 }
                 if (lll > 4) {
@@ -669,7 +650,7 @@ public class LivingHurtEventHandler {
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getNewDamage();
 
-        if (entity == null || sourceentity == null) return;
+        if (sourceentity == null) return;
 
         ItemStack mainHandItem = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
         if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_REAPER), mainHandItem) != 0) {

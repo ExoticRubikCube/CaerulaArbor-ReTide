@@ -206,7 +206,7 @@ public class IzumikEntity extends SeaMonsterBoss {
                         if (this.getEntityData().get(DATA_PHASE) >= 2 && Math.random() < 0.15 && target instanceof LivingEntity livingTarget) {
                             int currentNumb = livingTarget.hasEffect(BabelMobEffects.NUMB) ? livingTarget.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
                             livingTarget.removeEffect(BabelMobEffects.NUMB);
-                            livingTarget.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, Integer.MAX_VALUE, currentNumb, false, false, true));
+                            livingTarget.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
                             if (this.level() instanceof ServerLevel serverLevel) {
                                 serverLevel.sendParticles(ParticleTypes.FIREWORK, targetX, targetY + 0.75, targetZ, 16, 0.75, 0.75, 0.75, 0.1);
                             }
@@ -663,11 +663,11 @@ public class IzumikEntity extends SeaMonsterBoss {
                         if (MapVariables.get(world).strategy_grow >= 4) {
                             int currentNumb = entityiterator.hasEffect(BabelMobEffects.NUMB) ? entityiterator.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
                             entityiterator.removeEffect(BabelMobEffects.NUMB);
-                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, Integer.MAX_VALUE, currentNumb + 1, false, false, true));
+                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, EntityUtils.NUMB_EFFECT_DURATION, currentNumb + 1, false, false, true));
                         } else {
                             int currentNumb = entityiterator.hasEffect(BabelMobEffects.NUMB) ? entityiterator.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
                             entityiterator.removeEffect(BabelMobEffects.NUMB);
-                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, Integer.MAX_VALUE, currentNumb, false, false, true));
+                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
                         }
                     }
                     this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.01));
