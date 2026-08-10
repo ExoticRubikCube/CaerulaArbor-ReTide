@@ -23,8 +23,13 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.*;
@@ -53,13 +58,71 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
+	protected WaterBoundPathNavigation waterNavigation;
+	protected GroundPathNavigation groundNavigation;
+	protected MoveControl landControl;
+	protected MoveControl swimControl;
+	protected boolean canBreatheUnderwater = true;
+
 	protected SeaMonster(EntityType<? extends Monster> entityType, Level level) {
 		super(entityType, level);
+	}
+
+	public void setupAquaticMovement() {
+		this.waterNavigation = new WaterBoundPathNavigation(this, this.level());
+		this.groundNavigation = new GroundPathNavigation(this, this.level());
+		this.landControl = new MoveControl(this);
+	}
+
+	public void setSwimControl(MoveControl swimControl) {
+		this.swimControl = swimControl;
+	}
+
+	public MoveControl getLandControl() {
+		return this.landControl;
+	}
+
+	public MoveControl getSwimControl() {
+		return this.swimControl;
+	}
+
+	public void updateSwimming() {
+		if (!this.level().isClientSide()) {
+			if (this.isEffectiveAi() && this.isInWater()) {
+				this.navigation = this.waterNavigation;
+				this.moveControl = this.swimControl != null ? this.swimControl : this.landControl;
+				this.setSwimming(true);
+			} else {
+				this.navigation = this.groundNavigation;
+				this.moveControl = this.landControl;
+				this.setSwimming(false);
+			}
+		}
+	}
+
+	@Override
+	protected PathNavigation createNavigation(Level level) {
+		this.waterNavigation = new WaterBoundPathNavigation(this, level);
+		this.groundNavigation = new GroundPathNavigation(this, level);
+		if (this.isInWater()) {
+			return this.waterNavigation;
+		}
+		return this.groundNavigation;
+	}
+
+	@Override
+	public boolean canBreatheUnderwater() {
+		return this.canBreatheUnderwater;
+	}
+
+	public void setCanBreatheUnderwater(boolean canBreathe) {
+		this.canBreatheUnderwater = canBreathe;
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
+		this.goalSelector.addGoal(12, new RandomStrollGoal(this, 1.0, 40));
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this, SeaMonster.class));
 		this.targetSelector.addGoal(2, new StrengthOfCrowdGoal(this));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, true));
@@ -122,6 +185,7 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 	public void aiStep() {
 		super.aiStep();
 		if (!this.level().isClientSide()) {
+			updateSwimming();
 			MapVariables variables = MapVariables.get(this.level());
 			double silenceLevel = variables.strategy_silence;
 

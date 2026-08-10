@@ -27,7 +27,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;
@@ -60,7 +62,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		xpReward = 0;
 		setNoAi(false);
 		this.setPathfindingMalus(PathType.WATER, 0);
-		this.moveControl = new MoveControl(this) {
+		this.swimControl = new MoveControl(this) {
 			@Override
 			public void tick() {
 				if (AccumulatorProkaryoteEntity.this.isInWater())
@@ -74,17 +76,13 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 					AccumulatorProkaryoteEntity.this.setYRot(this.rotlerp(AccumulatorProkaryoteEntity.this.getYRot(), f, 10));
 					AccumulatorProkaryoteEntity.this.yBodyRot = AccumulatorProkaryoteEntity.this.getYRot();
 					AccumulatorProkaryoteEntity.this.yHeadRot = AccumulatorProkaryoteEntity.this.getYRot();
-					if (AccumulatorProkaryoteEntity.this.isInWater()) {
-						AccumulatorProkaryoteEntity.this.setSpeed((float) AccumulatorProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-						float f2 = -(float) (Mth.atan2(dy, (float) Math.sqrt(dx * dx + dz * dz)) * (180 / Math.PI));
-						f2 = Mth.clamp(Mth.wrapDegrees(f2), -85, 85);
-						AccumulatorProkaryoteEntity.this.setXRot(this.rotlerp(AccumulatorProkaryoteEntity.this.getXRot(), f2, 5));
-						float f3 = Mth.cos(AccumulatorProkaryoteEntity.this.getXRot() * (float) (Math.PI / 180.0));
-						AccumulatorProkaryoteEntity.this.setZza(f3 * f1);
-						AccumulatorProkaryoteEntity.this.setYya((float) (f1 * dy));
-					} else {
-						AccumulatorProkaryoteEntity.this.setSpeed(f1 * 0.05F);
-					}
+					AccumulatorProkaryoteEntity.this.setSpeed((float) AccumulatorProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
+					float f2 = -(float) (Mth.atan2(dy, (float) Math.sqrt(dx * dx + dz * dz)) * (180 / Math.PI));
+					f2 = Mth.clamp(Mth.wrapDegrees(f2), -85, 85);
+					AccumulatorProkaryoteEntity.this.setXRot(this.rotlerp(AccumulatorProkaryoteEntity.this.getXRot(), f2, 5));
+					float f3 = Mth.cos(AccumulatorProkaryoteEntity.this.getXRot() * (float) (Math.PI / 180.0));
+					AccumulatorProkaryoteEntity.this.setZza(f3 * f1);
+					AccumulatorProkaryoteEntity.this.setYya((float) (f1 * dy));
 				} else {
 					AccumulatorProkaryoteEntity.this.setSpeed(0);
 					AccumulatorProkaryoteEntity.this.setYya(0);
@@ -92,6 +90,8 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 				}
 			}
 		};
+		this.setupAquaticMovement();
+		this.setSwimControl(this.swimControl);
 	}
 
 	@Override
@@ -104,7 +104,12 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 
 	@Override
 	protected PathNavigation createNavigation(Level world) {
-		return new WaterBoundPathNavigation(this, world);
+		this.waterNavigation = new WaterBoundPathNavigation(this, world);
+		this.groundNavigation = new GroundPathNavigation(this, world);
+		if (this.isInWater()) {
+			return this.waterNavigation;
+		}
+		return this.groundNavigation;
 	}
 
 	@Override
@@ -113,6 +118,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25, false));
 		this.goalSelector.addGoal(9, new RandomSwimmingGoal(this, 1, 40));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1.0));
 	}
 
 	@Override
@@ -223,12 +229,17 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.move"));
+			if (this.isInWater()) {
+				if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
+					return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.move"));
+				}
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.idle"));
+			} else {
+				if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
+					return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.move_land"));
+				}
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.idle_land"));
 			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.idle"));
 		}
 		return PlayState.STOP;
 	}
