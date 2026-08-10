@@ -111,6 +111,19 @@ public class TidelinkedImmortalEntity extends AbstractTidelinkedEntity {
         }
     }
 
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
+        builder = builder.add(Attributes.MAX_HEALTH, 75);
+        builder = builder.add(Attributes.ARMOR, 10);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 8);
+        builder = builder.add(Attributes.ATTACK_SPEED, 5.2);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.65);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        return builder;
+    }
+
     public void repellerChop(LivingEntity target,float rate) {
         if (this.isWithinMeleeAttackRange(target) && this.getSensing().hasLineOfSight(target)) {
             float f = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE)* rate;
@@ -134,19 +147,6 @@ public class TidelinkedImmortalEntity extends AbstractTidelinkedEntity {
             }
 
         }
-    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
-        builder = builder.add(Attributes.MAX_HEALTH, 75);
-        builder = builder.add(Attributes.ARMOR, 10);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 8);
-        builder = builder.add(Attributes.ATTACK_SPEED, 5.2);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.65);
-        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
-        return builder;
     }
 
 }

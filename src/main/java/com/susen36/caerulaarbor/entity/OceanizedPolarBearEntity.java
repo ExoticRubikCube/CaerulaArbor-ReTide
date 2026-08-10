@@ -16,11 +16,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Fox;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib.animation.*;
@@ -53,11 +50,8 @@ public class OceanizedPolarBearEntity extends SeaMonster {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Fox.class, true, false));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
         this.goalSelector.addGoal(6, new RandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(7, new RandomSwimmingGoal(this, 1.5, 40));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));

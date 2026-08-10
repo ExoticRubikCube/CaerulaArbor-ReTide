@@ -39,7 +39,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
@@ -187,7 +186,6 @@ public class OceanizedEnderDragonEntity extends SeaMonsterBoss implements Ranged
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(0, new DoNothingGoal());
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 60, 15.0F));
 		this.goalSelector.addGoal(5, new DragonWanderGoal(this, 1.25D));
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));

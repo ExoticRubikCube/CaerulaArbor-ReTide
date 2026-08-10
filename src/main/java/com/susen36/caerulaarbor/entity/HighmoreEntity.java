@@ -115,7 +115,6 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        // TODO: 子类专属 HurtByTargetGoal，覆盖基类同优先级目标
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {

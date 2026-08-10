@@ -241,7 +241,6 @@ public class SliderFishEntity extends SeaMonster implements Bucketable {
 		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 	}
 
-
 	@Override
 	public void setAnimationProcedure(String animation) {
 		this.animationprocedure = animation;

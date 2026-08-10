@@ -213,6 +213,23 @@ public class ChestFishEntity extends SeaMonster {
         this.refreshDimensions();
 	}
 
+	public InteractionResult startChest(Level world, double x, double y, double z, Entity sourceentity) {
+		if (this.isShiftKeyDown()) {
+			this.setAnimation("animation.chest_fish.start");
+			if (!world.isClientSide()) {
+				world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CHEST_OPEN, SoundSource.HOSTILE, 1, 1);
+			} else {
+				world.playLocalSound(x, y, z, SoundEvents.CHEST_OPEN, SoundSource.HOSTILE, 1, 1, false);
+			}
+			this.setShiftKeyDown(false);
+			this.getEntityData().set(DATA_RELEASE, true);
+			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+			if (sourceentity instanceof LivingEntity ent)
+				this.setTarget(ent);
+			return InteractionResult.SUCCESS;
+		}
+		return InteractionResult.PASS;
+	}
 
 	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
 		event.register(CAEntities.CHEST_FISH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
@@ -297,25 +314,6 @@ public class ChestFishEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "attacking", 3, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 3, this::procedurePredicate));
 	}
-
-	public InteractionResult startChest(Level world, double x, double y, double z, Entity sourceentity) {
-		if (this.isShiftKeyDown()) {
-			this.setAnimation("animation.chest_fish.start");
-			if (!world.isClientSide()) {
-				world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CHEST_OPEN, SoundSource.HOSTILE, 1, 1);
-			} else {
-				world.playLocalSound(x, y, z, SoundEvents.CHEST_OPEN, SoundSource.HOSTILE, 1, 1, false);
-			}
-			this.setShiftKeyDown(false);
-			this.getEntityData().set(DATA_RELEASE, true);
-			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-			if (sourceentity instanceof LivingEntity ent)
-				this.setTarget(ent);
-			return InteractionResult.SUCCESS;
-		}
-		return InteractionResult.PASS;
-	}
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

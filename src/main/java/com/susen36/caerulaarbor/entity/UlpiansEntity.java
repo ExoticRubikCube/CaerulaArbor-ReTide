@@ -33,7 +33,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
@@ -102,7 +101,6 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
             }
 
         });
-        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
         this.goalSelector.addGoal(4, new OpenDoorGoal(this, false));
         this.goalSelector.addGoal(5, new OpenDoorGoal(this, true));

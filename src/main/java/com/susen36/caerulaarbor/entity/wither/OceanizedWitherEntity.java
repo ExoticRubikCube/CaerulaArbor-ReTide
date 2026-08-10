@@ -30,7 +30,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -80,7 +79,6 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Animal.class, false, false));
         this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 30, 12f) {
             @Override

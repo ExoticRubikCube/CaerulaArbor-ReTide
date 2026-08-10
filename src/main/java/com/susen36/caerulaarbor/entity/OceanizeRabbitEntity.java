@@ -25,7 +25,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -75,8 +74,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false));
-        this.targetSelector.addGoal(2, new HurtByTargetGoal(this).setAlertOthers());
-        this.goalSelector.addGoal(3, new TemptGoal(this, 1, Ingredient.of(Items.CARROT), false));
+         this.goalSelector.addGoal(3, new TemptGoal(this, 1, Ingredient.of(Items.CARROT), false));
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(6, new FloatGoal(this));

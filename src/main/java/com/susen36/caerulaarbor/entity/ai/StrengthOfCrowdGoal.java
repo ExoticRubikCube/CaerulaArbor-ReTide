@@ -8,36 +8,31 @@ import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.target.TargetGoal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import java.util.EnumSet;
 import java.util.List;
 
-public class StrengthOfCrowdGoal extends TargetGoal {
-    private static final TargetingConditions HURT_BY_TARGETING = TargetingConditions.forCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
-
+public class StrengthOfCrowdGoal extends Goal {
     private int timestamp;
     private final SeaMonster seaMonster;
 
     public StrengthOfCrowdGoal(SeaMonster mob) {
-        super(mob, true);
         this.seaMonster = mob;
-        this.setFlags(EnumSet.of(Goal.Flag.TARGET));
+        this.setFlags(EnumSet.noneOf(Goal.Flag.class));
     }
 
     @Override
     public boolean canUse() {
-        int i = this.mob.getLastHurtByMobTimestamp();
-        LivingEntity livingentity = this.mob.getLastHurtByMob();
+        int i = this.seaMonster.getLastHurtByMobTimestamp();
+        LivingEntity livingentity = this.seaMonster.getLastHurtByMob();
         if (i != this.timestamp && livingentity != null) {
-            if (livingentity == this.mob) {
+            if (livingentity == this.seaMonster) {
                 return false;
             } else if (livingentity.getType().is(EntityUtils.SEA_BORN)) {
                 return false;
             } else {
-                return this.canAttack(livingentity, HURT_BY_TARGETING);
+                return true;
             }
         } else {
             return false;
@@ -46,13 +41,8 @@ public class StrengthOfCrowdGoal extends TargetGoal {
 
     @Override
     public void start() {
-        LivingEntity attacker = this.mob.getLastHurtByMob();
-        this.mob.setTarget(attacker);
-        this.targetMob = attacker;
-        this.timestamp = this.mob.getLastHurtByMobTimestamp();
-        this.unseenMemoryTicks = 300;
+        this.timestamp = this.seaMonster.getLastHurtByMobTimestamp();
         this.alertOthers();
-        super.start();
     }
 
     protected void alertOthers() {
@@ -62,12 +52,12 @@ public class StrengthOfCrowdGoal extends TargetGoal {
         double rangeXZ = range[0];
         double rangeY = range[1];
 
-        AABB aabb = AABB.unitCubeFromLowerCorner(this.mob.position()).inflate(rangeXZ, rangeY, rangeXZ);
+        AABB aabb = AABB.unitCubeFromLowerCorner(this.seaMonster.position()).inflate(rangeXZ, rangeY, rangeXZ);
         List<SeaMonster> list = level.getEntitiesOfClass(SeaMonster.class, aabb, EntitySelector.NO_CREATIVE_OR_SPECTATOR);
-        LivingEntity target = this.mob.getLastHurtByMob();
+        LivingEntity target = this.seaMonster.getLastHurtByMob();
 
         for (SeaMonster candidate : list) {
-            if (this.mob != candidate
+            if (this.seaMonster != candidate
                     && !candidate.getType().is(EntityUtils.SEA_BORN_PET)
                     && candidate.getTarget() == null
                     && !candidate.isAlliedTo(target)) {

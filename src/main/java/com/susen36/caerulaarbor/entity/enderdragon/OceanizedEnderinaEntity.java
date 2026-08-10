@@ -36,7 +36,6 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -109,7 +108,6 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(0, new DoNothingGoal());
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 60, 15.0F));
 		this.goalSelector.addGoal(5, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
@@ -122,8 +120,8 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 	public MoistEnderCrystalEntity getCrystal(String uuid) {
 		Level level = this.level();
 		if (level instanceof ServerLevel && uuid != null && !uuid.isEmpty()) {
-			Entity c = ((ServerLevel) level).getEntity(UUID.fromString(uuid));
-			return c instanceof MoistEnderCrystalEntity ? (MoistEnderCrystalEntity) c : null;
+			Entity entity = ((ServerLevel) level).getEntity(UUID.fromString(uuid));
+			return entity instanceof MoistEnderCrystalEntity ? (MoistEnderCrystalEntity) entity : null;
 		}
 		return null;
 	}

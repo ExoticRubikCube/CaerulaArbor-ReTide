@@ -20,7 +20,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.player.Player;
@@ -81,7 +80,6 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.goalSelector.addGoal(3, new OwnerHurtByTargetGoal(this));
         this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1, (float) 3, (float) 24));
-        this.targetSelector.addGoal(5, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(6, new FollowMobGoal(this, 1, (float) 16, (float) 12));
         this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1) {
             @Override

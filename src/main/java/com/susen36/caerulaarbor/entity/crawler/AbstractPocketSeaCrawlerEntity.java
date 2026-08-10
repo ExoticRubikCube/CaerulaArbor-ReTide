@@ -28,7 +28,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MoveBackToVillageGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Monster;
@@ -73,7 +72,6 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Cat.class, false, false));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(5, new MoveBackToVillageGoal(this, 0.6, false));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));

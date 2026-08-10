@@ -27,16 +27,9 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.SnowGolem;
-import net.minecraft.world.entity.monster.*;
-import net.minecraft.world.entity.monster.piglin.Piglin;
-import net.minecraft.world.entity.monster.piglin.PiglinBrute;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -97,17 +90,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, true));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, true));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, true, true));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, true));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Pillager.class, true, true));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, true));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Witch.class, true, true));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
-		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(13, new HurtByTargetGoal(this));this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1, 20) {
+		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1, 20) {
 			@Override
 			protected Vec3 getPosition() {
 				RandomSource random = FleeFishEntity.this.getRandom();

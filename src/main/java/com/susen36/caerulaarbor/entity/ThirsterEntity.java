@@ -35,7 +35,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -105,8 +104,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.1, false));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.1, false));
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
             @Override
             public boolean canUse() {
