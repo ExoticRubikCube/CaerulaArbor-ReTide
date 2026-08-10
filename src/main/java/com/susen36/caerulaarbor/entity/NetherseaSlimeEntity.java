@@ -22,11 +22,13 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -63,7 +65,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false));this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1));
+		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1));
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(5, new FloatGoal(this));
 	}
@@ -233,12 +235,46 @@ public class NetherseaSlimeEntity extends SeaMonster {
         }
 	}
 
+	public boolean isTiny() {
+		return this.entityData.get(DATA_SIZE) <= 1;
+	}
+
+	protected boolean isDealsDamage() {
+		return !this.isTiny() && this.isEffectiveAi();
+	}
+
+	protected float getAttackDamage() {
+		return (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
+	}
+
 	@Override
-	public void push(Entity pEntity){
+	public void playerTouch(Player player) {
+		if (this.isDealsDamage()) {
+			this.dealDamage(player);
+		}
+	}
+
+	@Override
+	public void push(Entity pEntity) {
 		super.push(pEntity);
 		if (pEntity instanceof NetherseaSlimeEntity) return;
-		if (pEntity instanceof LivingEntity entity && !entity.level().isClientSide())
+		if (pEntity instanceof LivingEntity entity && !entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 70, 0));
+		}
+		if (pEntity instanceof IronGolem && this.isDealsDamage()) {
+			this.dealDamage((LivingEntity) pEntity);
+		}
+	}
+
+	protected void dealDamage(LivingEntity target) {
+		if (this.level() instanceof ServerLevel serverlevel && this.isAlive() && this.isWithinMeleeAttackRange(target) && this.hasLineOfSight(target)) {
+			DamageSource damagesource = this.damageSources().mobAttack(this);
+			if (target.hurtServer(serverlevel, damagesource, this.getAttackDamage())) {
+				target.invulnerableTime = 0;
+				this.playSound(SoundEvents.SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+				EnchantmentHelper.doPostAttackEffects(serverlevel, target, damagesource);
+			}
+		}
 	}
 
 	public String getSyncedAnimation() {

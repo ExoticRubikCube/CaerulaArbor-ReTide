@@ -721,7 +721,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    //TODO 需要下放到实体类
+    //TODO 或许可以下放到实体海嗣化转换器
     private static void handleSlimeFunc(LivingDamageEvent.Pre event) {
         Level world = event.getEntity().level();
         double x = event.getEntity().getX();
@@ -746,9 +746,6 @@ public class LivingHurtEventHandler {
                     }
                 }
             }
-        }
-        if ((damagesource.getEntity()) instanceof NetherseaSlimeEntity) {
-            entity.invulnerableTime = 0;
         }
     }
 

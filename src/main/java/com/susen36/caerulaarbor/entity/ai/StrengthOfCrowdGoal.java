@@ -24,28 +24,25 @@ public class StrengthOfCrowdGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        int i = this.seaMonster.getLastHurtByMobTimestamp();
-        LivingEntity livingentity = this.seaMonster.getLastHurtByMob();
-        if (i != this.timestamp && livingentity != null) {
-            if (livingentity == this.seaMonster) {
-                return false;
-            } else if (livingentity.getType().is(EntityUtils.SEA_BORN)) {
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
+        LivingEntity attacker = this.seaMonster.getLastHurtByMob();
+        return this.seaMonster.getLastHurtByMobTimestamp() != this.timestamp
+                && attacker != null
+                && attacker.isAlive()
+                && attacker != this.seaMonster
+                && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(attacker)
+                && !attacker.getType().is(EntityUtils.SEA_BORN);
     }
 
     @Override
     public void start() {
         this.timestamp = this.seaMonster.getLastHurtByMobTimestamp();
-        this.alertOthers();
+        LivingEntity target = this.seaMonster.getLastHurtByMob();
+        if (target != null && target.isAlive() && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(target)) {
+            this.alertOthers(target);
+        }
     }
 
-    protected void alertOthers() {
+    protected void alertOthers(LivingEntity target) {
         Level level = this.seaMonster.level();
         double migrationLevel = MapVariables.get(level).strategy_migration;
         int[] range = MigrationUpgradeManager.getMigrationRange(migrationLevel);
@@ -54,20 +51,18 @@ public class StrengthOfCrowdGoal extends Goal {
 
         AABB aabb = AABB.unitCubeFromLowerCorner(this.seaMonster.position()).inflate(rangeXZ, rangeY, rangeXZ);
         List<SeaMonster> list = level.getEntitiesOfClass(SeaMonster.class, aabb, EntitySelector.NO_CREATIVE_OR_SPECTATOR);
-        LivingEntity target = this.seaMonster.getLastHurtByMob();
 
         for (SeaMonster candidate : list) {
             if (this.seaMonster != candidate
+                    && candidate.isAlive()
                     && !candidate.getType().is(EntityUtils.SEA_BORN_PET)
                     && candidate.getTarget() == null
-                    && !candidate.isAlliedTo(target)) {
-                this.alertOther(candidate, target);
-            }
+                    && !candidate.isAlliedTo(target)) this.alertOther(candidate, target);
         }
     }
 
     protected void alertOther(Mob mob, LivingEntity target) {
-        if(mob.getTarget() == null) {
+        if (mob.getTarget() == null) {
             mob.setTarget(target);
         }
     }
