@@ -184,6 +184,10 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 		this.updateSwingTime();
 	}
 
+	private boolean isApocataDurative() {
+		return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
+	}
+
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
@@ -193,10 +197,6 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
 		return builder;
-	}
-
-	private boolean isApocataDurative() {
-		return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
 	}
 
 	private PlayState movementPredicate(AnimationState event) {

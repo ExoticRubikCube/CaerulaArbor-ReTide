@@ -267,12 +267,15 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	}
 
 	protected void dealDamage(LivingEntity target) {
-		if (this.level() instanceof ServerLevel serverlevel && this.isAlive() && this.isWithinMeleeAttackRange(target) && this.hasLineOfSight(target)) {
+		if (this.isAlive() && this.isWithinMeleeAttackRange(target) && this.hasLineOfSight(target)) {
 			DamageSource damagesource = this.damageSources().mobAttack(this);
-			if (target.hurtServer(serverlevel, damagesource, this.getAttackDamage())) {
+			if (target.hurt(damagesource, this.getAttackDamage())) {
 				target.invulnerableTime = 0;
 				this.playSound(SoundEvents.SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-				EnchantmentHelper.doPostAttackEffects(serverlevel, target, damagesource);
+				Level var4 = this.level();
+				if (var4 instanceof ServerLevel serverlevel) {
+                    EnchantmentHelper.doPostAttackEffects(serverlevel, target, damagesource);
+				}
 			}
 		}
 	}
