@@ -377,7 +377,6 @@ public class TideChimeraEntity extends SeaMonsterBoss {
                 }
                 entityToSpawn = CAEntities.ACCUMULATOR_PROKARYOTE.get().spawn(level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn instanceof AccumulatorProkaryoteEntity accumulatorProkaryote) {
-                    accumulatorProkaryote.entityData.set(AccumulatorProkaryoteEntity.DATA_VARIANT, AccumulatorProkaryoteEntity.VARIANT_DIVICELLULAR);
                     if (!level.isClientSide()) {
                         accumulatorProkaryote.refreshVariantAttributes();
                     }

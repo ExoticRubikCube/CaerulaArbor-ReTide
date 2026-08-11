@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.BossEvent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
@@ -84,8 +85,8 @@ public class CustomBossBarEventHandler {
 	public static final Map<BossEvent, Integer> CYCLE_MAP = new HashMap<>();
 
 	@OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void customBossBar(CustomizeGuiOverlayEvent.BossEventProgress event){
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void customBossBarRender(CustomizeGuiOverlayEvent.BossEventProgress event){
     	if(!CAConfigs.BOSSBAR.get()) return;
     	if(event.isCanceled()) return;
         LerpingBossEvent bossEvent = event.getBossEvent();
@@ -95,7 +96,6 @@ public class CustomBossBarEventHandler {
             float progress = bossEvent.getProgress();
             context = context.loc((gui.guiWidth() - context.frame_x)/2, event.getY())
                     .name(bossEvent.getName().getString(), gui.guiWidth()/2, event.getY());
-            event.setCanceled(true);
             ResourceLocation style = context.style;
             int cycle = 0;
             if(style != null || context.equals(CONTEXT_ENDERINA)){
@@ -106,6 +106,18 @@ public class CustomBossBarEventHandler {
                 else CYCLE_MAP.put(bossEvent, 0);
             }
             renderBossBar(gui, context, progress, context.color, cycle);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void customBossBarCancel(CustomizeGuiOverlayEvent.BossEventProgress event){
+    	if(!CAConfigs.BOSSBAR.get()) return;
+    	if(event.isCanceled()) return;
+        LerpingBossEvent bossEvent = event.getBossEvent();
+        BossBarRenderContext context = getContext(bossEvent);
+        if(context != null) {
+            event.setCanceled(true);
         }
     }
 
