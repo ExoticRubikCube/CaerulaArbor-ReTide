@@ -29,7 +29,7 @@ public class FissionProkaryoteSlimeModel extends GeoModel<FissionProkaryoteSlime
 	public void setCustomAnimations(FissionProkaryoteSlimeEntity animatable, long instanceId, AnimationState<FissionProkaryoteSlimeEntity> animationState) {
 		GeoBone flat = getAnimationProcessor().getBone("flat");
 		if (flat != null) {
-			boolean isVisible = animatable.getSlimeSize() >= 2.0F;
+			boolean isVisible = animatable.getEntityData().get(FissionProkaryoteSlimeEntity.DATA_SIZE) >= 4;
 			flat.setHidden(!isVisible);
 			if (isVisible) {
 				float ageInTicks = animatable.tickCount + animationState.getPartialTick();

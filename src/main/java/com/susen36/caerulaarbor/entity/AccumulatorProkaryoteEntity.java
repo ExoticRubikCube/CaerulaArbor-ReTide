@@ -206,12 +206,12 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 1.75);
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
 		builder = builder.add(Attributes.MAX_HEALTH, 32);
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 3);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-		builder = builder.add(NeoForgeMod.SWIM_SPEED, 1.75);
+		builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.9D);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
 		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;

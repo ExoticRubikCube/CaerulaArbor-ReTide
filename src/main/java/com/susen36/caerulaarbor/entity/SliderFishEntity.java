@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import software.bernie.geckolib.animation.*;
 
@@ -194,6 +195,7 @@ public class SliderFishEntity extends SeaMonster implements Bucketable {
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 3);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+        builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.65D);
         builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
     }

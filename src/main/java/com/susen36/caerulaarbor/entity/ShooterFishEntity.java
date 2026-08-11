@@ -238,7 +238,7 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 15);
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.17);
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
         builder = builder.add(Attributes.MAX_HEALTH, 14);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 3);

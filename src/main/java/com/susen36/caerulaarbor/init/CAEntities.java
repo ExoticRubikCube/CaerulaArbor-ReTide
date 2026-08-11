@@ -217,7 +217,7 @@ public class CAEntities {
                     .sized(0.6f, 1f));
     public static final DeferredHolder<EntityType<?>, EntityType<OceanizedHorseEntity>> OCEANIZED_HORSE = register("oceanized_horse", OceanizedHorseEntity.class,
             EntityType.Builder.<OceanizedHorseEntity>of(OceanizedHorseEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
-                    .sized(1.25f, 1.8f));
+                    .sized(1.15f, 1.8f));
     public static final DeferredHolder<EntityType<?>, EntityType<OceanizedPiglinEntity>> OCEANIZED_PIGLIN = register("oceanized_piglin", OceanizedPiglinEntity.class, EntityType.Builder.<OceanizedPiglinEntity>of(OceanizedPiglinEntity::new, MobCategory.MONSTER)
             .setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).fireImmune().sized(0.6f, 2f));
     public static final DeferredHolder<EntityType<?>, EntityType<OceanizedBruteEntity>> OCEANIZED_BRUTE = register("oceanized_brute", OceanizedBruteEntity.class, EntityType.Builder.<OceanizedBruteEntity>of(OceanizedBruteEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)

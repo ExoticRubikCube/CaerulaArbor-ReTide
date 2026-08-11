@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
@@ -29,8 +30,12 @@ public class FissionProkaryoteSlimeRenderer extends GeoEntityRenderer<FissionPro
 		float scale = (float) entity.getSlimeSize();
 		this.scaleHeight = scale;
 		this.scaleWidth = scale;
-		super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
-	}
+		int size = entity.getEntityData().get(FissionProkaryoteSlimeEntity.DATA_SIZE);
+
+		float alpha = Mth.clamp(0.75F + (size - 1.0F) * (0.25F / 3.0F), 0.75F, 1.0F);
+		int alphaByte = (int)(alpha * 255.0F) & 0xFF;
+		int tintedColor = (alphaByte << 24) | (color & 0x00FFFFFF);
+		super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, tintedColor);}
 
 	@Override
 	protected float getDeathMaxRotation(FissionProkaryoteSlimeEntity entityLivingBaseIn) {
