@@ -8,16 +8,16 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.GeoModel;
 
 public class FissionProkaryoteSlimeModel extends GeoModel<FissionProkaryoteSlimeEntity> {
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/fission_prokaryote.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/fission_prokaryote_slime..png");
 
 	@Override
 	public ResourceLocation getAnimationResource(FissionProkaryoteSlimeEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "animations/fission_prokaryote.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "animations/fission_prokaryote_slime..animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(FissionProkaryoteSlimeEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "geo/fission_prokaryote.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "geo/fission_prokaryote_slime..geo.json");
 	}
 
 	@Override

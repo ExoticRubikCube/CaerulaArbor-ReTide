@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class FissionProkaryoteSlimeLayer extends GeoRenderLayer<FissionProkaryoteSlimeEntity> {
-	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/fission_prokaryote_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/fission_prokaryote_slime._lit.png");
 
 	public FissionProkaryoteSlimeLayer(GeoRenderer<FissionProkaryoteSlimeEntity> entityRenderer) {
 		super(entityRenderer);

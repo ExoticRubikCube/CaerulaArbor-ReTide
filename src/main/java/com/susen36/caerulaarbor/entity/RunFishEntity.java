@@ -23,10 +23,13 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -43,6 +46,10 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
     private long lastSwing;
     private boolean fromBucket;
     public String animationprocedure = "empty";
+    protected final WaterBoundPathNavigation waterNavigation;
+    protected final GroundPathNavigation groundNavigation;
+    private final MoveControl landControl;
+    private final ApostleProkaryoteEntity.SeabornSwimControl swimControl;
 
     public RunFishEntity(Level world) {
         this(CAEntities.RUN_FISH.get(), world);
@@ -52,6 +59,11 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
         super(type, world);
         xpReward = 3;
         setNoAi(false);
+        this.landControl = new MoveControl(this);
+        this.swimControl = new ApostleProkaryoteEntity.SeabornSwimControl(this);
+        this.moveControl = this.landControl;
+        this.waterNavigation = new WaterBoundPathNavigation(this, world);
+        this.groundNavigation = new GroundPathNavigation(this, world);
     }
 
     @Override
@@ -65,9 +77,23 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, true));
+        this.goalSelector.addGoal(11, new RandomSwimmingGoal(this, 1, 40));
         this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(13, new FloatGoal(this));
+    }
+
+    public void updateSwimming() {
+        if (!this.level().isClientSide()) {
+            if (this.isEffectiveAi() && this.isInWater()) {
+                this.navigation = this.waterNavigation;
+                this.moveControl = this.swimControl;
+                this.setSwimming(true);
+            } else {
+                this.navigation = this.groundNavigation;
+                this.moveControl = this.landControl;
+                this.setSwimming(false);
+            }
+        }
     }
 
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
@@ -182,9 +208,10 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
 
     private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
-            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-            ) {
+            if (event.isMoving()) {
+                if (this.isInWaterOrBubble()) {
+                    return event.setAndContinue(RawAnimation.begin().thenLoop("animation.shell_sea_runner.swim"));
+                }
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.shell_sea_runner.move"));
             }
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.shell_sea_runner.idle"));

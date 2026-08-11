@@ -23,10 +23,13 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -44,6 +47,10 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
+    protected final WaterBoundPathNavigation waterNavigation;
+    protected final GroundPathNavigation groundNavigation;
+    private final MoveControl landControl;
+    private final ApostleProkaryoteEntity.SeabornSwimControl swimControl;
 
     public ShooterFishEntity(Level world) {
         this(CAEntities.SHOOTER_FISH.get(), world);
@@ -53,6 +60,11 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
         super(type, world);
         xpReward = 4;
         setNoAi(false);
+        this.landControl = new MoveControl(this);
+        this.swimControl = new ApostleProkaryoteEntity.SeabornSwimControl(this);
+        this.moveControl = this.landControl;
+        this.waterNavigation = new WaterBoundPathNavigation(this, world);
+        this.groundNavigation = new GroundPathNavigation(this, world);
     }
 
     @Override
@@ -65,15 +77,29 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(10, new RandomSwimmingGoal(this, 1, 40));
         this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(13, new FloatGoal(this));
         this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 60, 8f) {
             @Override
             public boolean canContinueToUse() {
                 return this.canUse();
             }
         });
+    }
+
+    public void updateSwimming() {
+        if (!this.level().isClientSide()) {
+            if (this.isEffectiveAi() && this.isInWater()) {
+                this.navigation = this.waterNavigation;
+                this.moveControl = this.swimControl;
+                this.setSwimming(true);
+            } else {
+                this.navigation = this.groundNavigation;
+                this.moveControl = this.landControl;
+                this.setSwimming(false);
+            }
+        }
     }
 
     public class RangedAttackGoal extends Goal {
@@ -223,9 +249,7 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 
     private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
-            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-            ) {
+            if (event.isMoving()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.shootfish.move"));
             }
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.shootfish.idle"));
