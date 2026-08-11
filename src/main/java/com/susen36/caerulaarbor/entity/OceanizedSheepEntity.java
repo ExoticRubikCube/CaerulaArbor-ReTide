@@ -1,8 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -129,7 +128,7 @@ public class OceanizedSheepEntity extends SeaMonster {
 					level.addFreshEntity(entityToSpawn);
 				}
 			}
-			SIHelper.causeSanityInjury(sourceentity, this, 64, SanityEvent.Hurt.Type.ENTITY);
+			EPUtils.causeSanityInjury(sourceentity, this, 64);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;

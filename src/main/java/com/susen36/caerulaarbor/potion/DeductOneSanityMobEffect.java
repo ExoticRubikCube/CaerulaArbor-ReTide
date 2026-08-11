@@ -1,8 +1,5 @@
 
-package com.susen36.caerulaarbor.potion;
-
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+package com.susen36.caerulaarbor.potion;import com.susen36.babel.util.EPUtils;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +25,7 @@ public class DeductOneSanityMobEffect extends MobEffect {
 
 	@Override
 	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        SIHelper.causeSanityInjury(entity, (double) amplifier + 1, SanityEvent.Hurt.Type.POTION);
+        EPUtils.causeSanityInjury(entity, (double) amplifier + 1);
 	    return true;
     }
 

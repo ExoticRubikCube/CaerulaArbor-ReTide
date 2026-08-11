@@ -1,8 +1,7 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.manager.spwan.SeabornTransformManager;
 import net.minecraft.core.BlockPos;
@@ -68,7 +67,7 @@ public class OceanizeCatalystItem extends Item {
 		double damageToHealth = Math.min(target.getHealth() * 0.33, player.getHealth() * 1.5);
 		level.playSound(null, BlockPos.containing(targetX, targetY, targetZ), SoundEvents.LAVA_EXTINGUISH, SoundSource.HOSTILE, 1, 1);
 		target.hurt(CADamageTypes.source(level, CADamageTypes.EXTRACTOR_DAMAGE), 0.5F);
-		SIHelper.causeSanityInjury(target, player, 256, SanityEvent.Hurt.Type.ENTITY);
+		EPUtils.causeSanityInjury(target, player, 256);
 		target.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 1));
 		target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
 		target.setHealth((float) Math.max(target.getHealth() - damageToHealth, 0.5));

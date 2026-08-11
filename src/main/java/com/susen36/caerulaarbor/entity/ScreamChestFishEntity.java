@@ -1,8 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -275,7 +274,7 @@ public class ScreamChestFishEntity extends SeaMonster {
                             if (!(entityiterator instanceof LivingEntity)) {
                                 continue;
                             }
-                            SIHelper.causeSanityInjury((LivingEntity) entityiterator, this, 5, SanityEvent.Hurt.Type.ENTITY);
+                            EPUtils.causeSanityInjury((LivingEntity) entityiterator, this, 5);
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1));
                         }

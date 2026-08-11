@@ -1,8 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
@@ -150,7 +150,7 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean result = super.hurtEnemy(itemstack, entity, sourceentity);
 		if (sourceentity instanceof Player player && this.canUseSpecialAttack(player, itemstack)) {
-			BabelAPI.hurtElemental(entity, AbstractEPCapability.EPType.CORROSION, sourceentity,
+			EPManager.hurtElemental(entity, AbstractEPCapability.EPType.CORROSION, sourceentity,
 					Mth.floor(sourceentity.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.35D + 4.0D));
 			this.setAttackAnimation(itemstack);
 			if (!sourceentity.level().isClientSide()) {
@@ -194,7 +194,7 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 				nearbyEntity.hurt(
 						CADamageTypes.source(level, CADamageTypes.HIGHMORE_ATTACK, attacker),
 						(float) (attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * (1.5F + 0.2F * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(attacker.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack))));
-				BabelAPI.hurtElemental((LivingEntity) nearbyEntity, AbstractEPCapability.EPType.CORROSION, attacker,
+				EPManager.hurtElemental((LivingEntity) nearbyEntity, AbstractEPCapability.EPType.CORROSION, attacker,
 						Mth.floor(attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.35D + 4.0D));
 			}
 			if (!(attacker instanceof Player player) || !player.getAbilities().instabuild) {

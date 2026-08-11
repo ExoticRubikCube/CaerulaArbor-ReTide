@@ -1,8 +1,7 @@
 package com.susen36.caerulaarbor.entity.enderdragon;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -419,9 +418,9 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                                 (float) d);
                         if (entityiterator instanceof LivingEntity livingTarget) {
                             if (owner instanceof LivingEntity attacker) {
-                                SIHelper.causeSanityInjury(livingTarget, attacker, d * 20, SanityEvent.Hurt.Type.ENTITY);
+                                EPUtils.causeSanityInjury(livingTarget, attacker, d * 20);
                             } else {
-                                SIHelper.causeSanityInjury(livingTarget, d * 20, SanityEvent.Hurt.Type.ENTITY);
+                                EPUtils.causeSanityInjury(livingTarget, d * 20);
                             }
                         }
                     }

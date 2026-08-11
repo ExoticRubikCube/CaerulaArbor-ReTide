@@ -1,14 +1,13 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.manager.EPManager;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
@@ -564,7 +563,7 @@ public class LivingHurtEventHandler {
         if (arrow instanceof Arrow) {
             if (arrow.getPersistentData().getBoolean("ComplexChitin")) {
                 if (entity instanceof LivingEntity target) {
-                    SIHelper.causeSanityInjury(target, amount * 4, SanityEvent.Hurt.Type.ENTITY);
+                    EPUtils.causeSanityInjury(target, amount * 4);
                 }
                 for (int index0 = 0; index0 < 3; index0++) {
                     double yaw = Mth.nextInt(RandomSource.create(), -30, 30);
@@ -632,9 +631,9 @@ public class LivingHurtEventHandler {
                         level.sendParticles(CAParticles.MOIST_BOOM.get(), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
                     if (entity instanceof LivingEntity target) {
                         if (entity1 instanceof LivingEntity attacker) {
-                            SIHelper.causeSanityInjury(target, attacker, amount * 5, SanityEvent.Hurt.Type.ENTITY);
+                            EPUtils.causeSanityInjury(target, attacker, amount * 5);
                         } else {
-                            SIHelper.causeSanityInjury(target, amount * 5, SanityEvent.Hurt.Type.ENTITY);
+                            EPUtils.causeSanityInjury(target, amount * 5);
                         }
                     }
                     if (entity instanceof LivingEntity living)
@@ -659,7 +658,7 @@ public class LivingHurtEventHandler {
         if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_REAPER), mainHandItem) != 0) {
             double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_REAPER), mainHandItem);
             if (entity instanceof LivingEntity target && sourceentity instanceof LivingEntity attacker) {
-                SIHelper.causeSanityInjury(target, attacker, amount * 2 * lvl, SanityEvent.Hurt.Type.ENTITY);
+                EPUtils.causeSanityInjury(target, attacker, amount * 2 * lvl);
             }
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 1 + entity.getBbHeight() * 0.5), z, (int) Math.min(8 * lvl, 40), 1, 1, 1.2, 0.1);
@@ -861,7 +860,7 @@ public class LivingHurtEventHandler {
             finalValue = amount * rate;
         }
 
-        if (entity instanceof LivingEntity livEnt && BabelAPI.isUnderBreak(livEnt)) {
+        if (entity instanceof LivingEntity livEnt && EPManager.isUnderBreak(livEnt)) {
             e = NodeUtils.getNodeWorseBreak(attacker);
             if (e >= 4) rate = 2.4;
             else if (e >= 3) rate = 1.9;

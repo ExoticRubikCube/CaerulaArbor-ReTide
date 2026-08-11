@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.block.item.*;
 import com.susen36.caerulaarbor.block.item.doll.PocketSeaDollDisplayItem;
@@ -191,7 +191,7 @@ public class CAItems {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
             ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-            BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(15);
+            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(15);
             return retval;
         }
     });
@@ -260,7 +260,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> COOKED_PEDUNCLE = REGISTRY.register("cooked_peduncle", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(1f).build())) {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
-            BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(15);
+            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(15);
             return super.finishUsingItem(itemstack, world, entity);
         }
     });
@@ -274,7 +274,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> BOILED_EGG = REGISTRY.register("boiled_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build())) {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
-            BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(125);
+            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(125);
             return super.finishUsingItem(itemstack, world, entity);
         }
     });

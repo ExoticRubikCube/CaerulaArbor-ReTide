@@ -1,8 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -52,7 +52,7 @@ public class ColourfulAppleJuiceItem extends Item {
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 2));
 		}
-		BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(80);
+		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(80);
 		if (entity instanceof Player) {
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 			capability.player_light = Math.min(capability.player_light + 12, 100.0);

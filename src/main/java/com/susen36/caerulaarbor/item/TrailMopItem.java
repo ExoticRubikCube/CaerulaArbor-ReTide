@@ -1,9 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -56,7 +55,7 @@ public class TrailMopItem extends Item {
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		itemstack.hurtAndBreak(2, entity, EquipmentSlot.MAINHAND);
         LevelAccessor world = entity.level();
-        SIHelper.causeSanityInjury(entity, sourceentity, 40, SanityEvent.Hurt.Type.ENTITY);
+        EPUtils.causeSanityInjury(entity, sourceentity, 40);
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 if (world instanceof ServerLevel level)

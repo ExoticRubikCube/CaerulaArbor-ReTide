@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.babel.api.BabelAPI;
+import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -49,7 +49,7 @@ public class EntityJoinLevelEventHandler {
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "with_lowest_smaller_elemental_modifier")))) sanityModifier = 0.2;
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "with_lowest_smallest_elemental_modifier")))) sanityModifier = 0.1;
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "with_zero_elemental_modifier")))) sanityModifier = 0;
-            BabelAPI.setElementalDefenseBaseModifier(livingEntity0, sanityModifier);
+            EPManager.setElementalDefenseBaseModifier(livingEntity0, sanityModifier);
         }
     }
 

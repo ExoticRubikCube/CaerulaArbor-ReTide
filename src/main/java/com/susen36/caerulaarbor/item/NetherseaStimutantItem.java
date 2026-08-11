@@ -1,9 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
@@ -56,7 +55,7 @@ public class NetherseaStimutantItem extends Item {
             entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 300, 3));
             entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 480, 0));
         }
-        SIHelper.causeSanityInjury(entity, 75, SanityEvent.Hurt.Type.FOOD);
+        EPUtils.causeSanityInjury(entity, 75);
         if (!(entity instanceof Player)) {
             resultStack.shrink(1);
             ItemStack emptyCup = new ItemStack(CAItems.OCEANGLASS_CUP.get());
@@ -82,7 +81,7 @@ public class NetherseaStimutantItem extends Item {
                 } else if (!entity.level().isClientSide()) {
                     entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 280, 0));
                 }
-                SIHelper.causeSanityInjury(entity, 125, SanityEvent.Hurt.Type.FOOD);
+                EPUtils.causeSanityInjury(entity, 125);
             }
         });
         return resultStack;

@@ -1,13 +1,13 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.manager.EPManager;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
@@ -82,7 +82,7 @@ public class PlayerTickEventHandler {
             lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), chest)
                     + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), boot);
             if (lvl > 0) {
-                SIHelper.causeSanityInjury(entity, lvl);
+                EPUtils.causeSanityInjury(entity, lvl);
             }
         }
 
@@ -213,7 +213,7 @@ public class PlayerTickEventHandler {
         }
 
         if (PlayerStateUtils.isNexusRegSanitySelected(entity)) {
-            BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(1);
+            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(1);
         }
 
         if (tickCount % 10 == 0) {
@@ -316,7 +316,7 @@ public class PlayerTickEventHandler {
         if (ModCapabilities.getPlayerVariables(entity).player_oceanization >= 3) {
             modifi = modifi * 0.33;
         }
-        BabelAPI.setElementalDefenseBaseModifier(entity, modifi);
+        EPManager.setElementalDefenseBaseModifier(entity, modifi);
     }
 
     private static void handleKingSuit(Player entity) {

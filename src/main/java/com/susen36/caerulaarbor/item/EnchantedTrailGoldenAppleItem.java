@@ -2,8 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -40,7 +39,7 @@ public class EnchantedTrailGoldenAppleItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		SIHelper.causeSanityInjury(entity, 120, SanityEvent.Hurt.Type.FOOD);
+		EPUtils.causeSanityInjury(entity, 120);
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 1750, 4));
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 3));

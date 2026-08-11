@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -39,7 +39,7 @@ public class CellClusterItem extends Item {
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 1));
 		}
-		SIHelper.causeSanityInjury(entity, 225);
+		EPUtils.causeSanityInjury(entity, 225);
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 64, 0.75, 2, 0.75, 0.1);
 		}

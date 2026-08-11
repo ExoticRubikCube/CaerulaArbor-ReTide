@@ -1,11 +1,10 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.manager.EPManager;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornSpawnManager;
@@ -209,12 +208,11 @@ public class BishopFishEntity extends SeaMonsterBoss {
                         entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                                 (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                         if (entityiterator instanceof LivingEntity target) {
-                            SIHelper.causeSanityInjury(target,
+                            EPUtils.causeSanityInjury(target,
                                     this,
                                     (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * BabelAPI.getElementalAttackConfig(this).rate()
-                                            * 1.5,
-                                    SanityEvent.Hurt.Type.ENTITY);
+                                            * EPManager.getElementalAttackConfig(this).rate()
+                                            * 1.5);
                         }
                         if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 60, 0, false, false));

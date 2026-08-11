@@ -1,13 +1,13 @@
 package com.susen36.caerulaarbor.util;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.manager.EPManager;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import net.minecraft.advancements.AdvancementHolder;
@@ -123,11 +123,11 @@ public class PlayerStateUtils {
 
 	// 理智损伤
 	public static void dealSanityInjury(LivingEntity living, double amount) {
-		SIHelper.causeSanityInjury(living, amount);
+		EPUtils.causeSanityInjury(living, amount);
 	}
 
 	public static void healSanityInjury(LivingEntity living, double amount) {
-		BabelAPI.getEP(living).getEP(AbstractEPCapability.EPType.NERVOUS).heal(Mth.floor(amount));
+		EPManager.getEP(living).getEP(AbstractEPCapability.EPType.NERVOUS).heal(Mth.floor(amount));
 	}
 
 	// 护甲侵蚀
@@ -148,7 +148,7 @@ public class PlayerStateUtils {
 			return;
 		}
 		if (entity instanceof LivingEntity livingEntity && getPlayerVariables(entity).player_oceanization < 3) {
-			SIHelper.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 16, 32));
+			EPUtils.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 16, 32));
 		}
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x + 0.5, y + 0.5, z + 0.5, 12, 0.75, 0.75, 0.75, 0.1);
@@ -164,7 +164,7 @@ public class PlayerStateUtils {
 			return;
 		}
 		if (entity instanceof LivingEntity livingEntity && getPlayerVariables(entity).player_oceanization < 2.85) {
-			SIHelper.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 32, 96));
+			EPUtils.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 32, 96));
 		}
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x + 0.5, y + 0.5, z + 0.5, 16, 0.75, 0.75, 0.75, 0.1);

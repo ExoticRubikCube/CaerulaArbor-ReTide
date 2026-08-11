@@ -1,8 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -44,7 +44,7 @@ public class TrailedDiamondSwordItem extends SwordItem {
                     .map(itemstack::getEnchantmentLevel).orElse(0);
         }
         dam = 70 + 14 * sharpnessLevel;
-        SIHelper.causeSanityInjury(entity, dam);
+        EPUtils.causeSanityInjury(entity, dam);
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 if (world instanceof ServerLevel level)

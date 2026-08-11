@@ -1,8 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -31,7 +30,7 @@ public class NetherseaStewItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(Items.BOWL);
 		super.finishUsingItem(itemstack, world, entity);
-		SIHelper.causeSanityInjury(entity, 75, SanityEvent.Hurt.Type.FOOD);
+		EPUtils.causeSanityInjury(entity, 75);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

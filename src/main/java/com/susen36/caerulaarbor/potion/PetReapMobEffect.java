@@ -1,8 +1,7 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -51,10 +50,9 @@ public class PetReapMobEffect extends MobEffect {
                 for (LivingEntity entityiterator : entfound) {
                     if (entityiterator instanceof Monster) {
                         if (!(entityiterator == entity)) {
-                            SIHelper.causeSanityInjury(entityiterator,
+                            EPUtils.causeSanityInjury(entityiterator,
                                     entity,
-                                    (entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12,
-                                    SanityEvent.Hurt.Type.ENTITY);
+                                    (entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12);
                         }
                     }
                     if (((Entity) entity instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == entityiterator && !entity.level().isClientSide())

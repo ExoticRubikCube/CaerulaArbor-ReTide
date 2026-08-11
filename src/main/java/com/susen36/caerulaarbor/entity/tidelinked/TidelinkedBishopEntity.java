@@ -179,8 +179,8 @@ public class TidelinkedBishopEntity extends SeaMonsterBoss implements RangedAtta
     }
 
     public void spawnLinkParticles(Entity linkedEntity) {
-        LevelAccessor world = this.level();
-        if (this == null || linkedEntity == null || !(world instanceof ServerLevel level))
+        Level world = this.level();
+        if (linkedEntity == null || !(world instanceof ServerLevel level))
             return;
         double dx = getX() - linkedEntity.getX();
         double dy = getY() - linkedEntity.getY();

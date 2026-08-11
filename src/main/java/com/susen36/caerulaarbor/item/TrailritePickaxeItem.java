@@ -1,7 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
@@ -33,7 +33,7 @@ public class TrailritePickaxeItem extends PickaxeItem {
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
-		SIHelper.causeSanityInjury(entity, sourceentity, 128);
+		EPUtils.causeSanityInjury(entity, sourceentity, 128);
 		return retval;
 	}
 

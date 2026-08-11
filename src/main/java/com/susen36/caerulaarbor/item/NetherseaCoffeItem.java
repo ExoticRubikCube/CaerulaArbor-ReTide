@@ -1,8 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
@@ -54,7 +53,7 @@ public class NetherseaCoffeItem extends Item {
             entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 400, 2));
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 500, 1));
         }
-        SIHelper.causeSanityInjury(entity, 45, SanityEvent.Hurt.Type.FOOD);
+        EPUtils.causeSanityInjury(entity, 45);
         if (!(entity instanceof Player)) {
             resultStack.shrink(1);
             ItemStack emptyCup = new ItemStack(CAItems.OCEANGLASS_CUP.get());

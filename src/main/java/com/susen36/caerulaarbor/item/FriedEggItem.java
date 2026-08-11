@@ -1,8 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.manager.EPManager;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +20,7 @@ public class FriedEggItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(45);
+		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(45);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1));
 		return retval;

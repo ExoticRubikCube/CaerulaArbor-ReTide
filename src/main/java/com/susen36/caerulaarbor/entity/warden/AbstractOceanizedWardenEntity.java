@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.entity.warden;
 
 import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -181,7 +181,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss {
 				double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
 				if (isSonic) {
 					nearbyEntity.hurt(CADamageTypes.wardenSonic(this.level(), this), (float) damage);
-					SIHelper.causeSanityInjury(nearbyEntity, damage * 1.5);
+					EPUtils.causeSanityInjury(nearbyEntity, damage * 1.5);
 				} else {
 					nearbyEntity.hurt(CADamageTypes.wardenAttack(this.level(), this), (float) damage);
 				}

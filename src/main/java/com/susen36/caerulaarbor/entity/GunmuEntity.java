@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -162,7 +162,7 @@ public class GunmuEntity extends Monster {
             clearFire();
             this.removeAllEffects();
             this.removeEffect(BabelMobEffects.PALSY);
-            AbstractEPCapability sanityInjury = BabelAPI.getEP(this).getEP(AbstractEPCapability.EPType.NERVOUS);
+            AbstractEPCapability sanityInjury = EPManager.getEP(this).getEP(AbstractEPCapability.EPType.NERVOUS);
             sanityInjury.heal(sanityInjury.getMaxValue());
         }
     }

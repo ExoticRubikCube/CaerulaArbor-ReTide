@@ -2,9 +2,8 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -422,7 +421,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
                                 if (distanceToSqr(entityiterator) < 400) {
                                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.TRAIL_DAMAGE),
                                             (float) num);
-                                    SIHelper.causeSanityInjury(entityiterator, this, num * 25, SanityEvent.Hurt.Type.ENTITY);
+                                    EPUtils.causeSanityInjury(entityiterator, this, num * 25);
                                 }
                             }
                         }
@@ -475,7 +474,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
 
         for (LivingEntity entityiterator : nearbyEntities) {
             if (this.distanceToSqr(entityiterator) < 400) {
-                SIHelper.causeSanityInjury(entityiterator, this, 1000, SanityEvent.Hurt.Type.ENTITY);
+                EPUtils.causeSanityInjury(entityiterator, this, 1000);
             }
         }
     }

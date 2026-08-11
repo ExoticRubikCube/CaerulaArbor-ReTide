@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
@@ -132,8 +132,8 @@ public class LivingDeathEventHandler {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, (float) 0.33, 1);
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.TARGET_DAMAGED.get(), SoundSource.PLAYERS, (float) 0.33, 1);
                 }
-                AbstractEPCapability sanityInjury = BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS);
-                BabelAPI.healToFull(entity, AbstractEPCapability.EPType.NERVOUS);
+                AbstractEPCapability sanityInjury = EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS);
+                EPManager.healToFull(entity, AbstractEPCapability.EPType.NERVOUS);
                 if (is_shield) {
                     if (world instanceof ServerLevel level)
                         level.sendParticles(CAParticles.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);

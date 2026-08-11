@@ -1,9 +1,8 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.crawler.PocketSeaCreeperEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -230,10 +229,9 @@ public class OceanizedEndermanEntity extends SeaMonster {
                 if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) || this.getTarget() == sourceentity) {
                     this.teleportTo(x, y, z, sx, sy, sz);
                     if (sourceentity instanceof LivingEntity target) {
-                        SIHelper.causeSanityInjury(target,
+                        EPUtils.causeSanityInjury(target,
                                 this,
-                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 15,
-                                SanityEvent.Hurt.Type.ENTITY);
+                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 15);
                         this.setTarget(target);
                     }
                     sourceentity.hurt(

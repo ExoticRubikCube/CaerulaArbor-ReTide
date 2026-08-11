@@ -1,8 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.entity.bullets.PrayerSplashEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -348,7 +347,7 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
                             if (distanceTo(entityiterator) <= 5) {
                                 entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                                         (float) (d * 0.2));
-                                SIHelper.causeSanityInjury(entityiterator, d * 30, SanityEvent.Hurt.Type.ENTITY);
+                                EPUtils.causeSanityInjury(entityiterator, d * 30);
                             }
                         }
                     }

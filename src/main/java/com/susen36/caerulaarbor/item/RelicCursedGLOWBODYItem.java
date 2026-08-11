@@ -1,10 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.api.event.SanityEvent;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -68,7 +67,7 @@ public class RelicCursedGLOWBODYItem extends RelicItemBase {
 			entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
 		if (world instanceof ServerLevel level)
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 72, 1, 2, 1, 0.1);
-		SIHelper.causeSanityInjury(entity, 500, SanityEvent.Hurt.Type.FOOD);
+		EPUtils.causeSanityInjury(entity, 500);
 		if (entity instanceof Player player)
 			player.getCooldowns().addCooldown(itemstack.getItem(), 200);
 		return retval;

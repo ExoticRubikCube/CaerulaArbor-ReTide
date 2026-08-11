@@ -1,9 +1,8 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -35,7 +34,6 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -172,13 +170,13 @@ public class NucleicMaleficentEntity extends SeaMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
         double angle;
-        if (this.getTarget() != null && ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).isAlive()) {
-            if ((Entity) this instanceof Mob mobEnt4 && mobEnt4.isAggressive() && this.isAlive() && tickCount % 20 == 0) {
+        if (this.getTarget() != null && (this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).isAlive()) {
+            if (this instanceof Mob mobEnt4 && mobEnt4.isAggressive() && this.isAlive() && tickCount % 20 == 0) {
                 for (int index0 = 0; index0 < 120; index0++) {
                     angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                     if (world instanceof ServerLevel level)
@@ -192,10 +190,9 @@ public class NucleicMaleficentEntity extends SeaMonster {
                     }
                     if (distanceTo(entityiterator) < 5) {
                         if (!(entityiterator == this)) {
-                            SIHelper.causeSanityInjury(entityiterator,
+                            EPUtils.causeSanityInjury(entityiterator,
                                     this,
-                                    (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 6,
-                                    SanityEvent.Hurt.Type.ENTITY);
+                                    (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 6);
                         }
                     }
                 }

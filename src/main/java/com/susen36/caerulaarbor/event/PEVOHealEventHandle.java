@@ -1,7 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.NodeUtils;
@@ -16,9 +15,9 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 
 @EventBusSubscriber
 public class PEVOHealEventHandle {
@@ -80,7 +79,7 @@ public class PEVOHealEventHandle {
 			}
 			nearbyEntity.hurt(wipeMagicDamage, (float) damage);
 			if (sanityDamage > 0 && entity instanceof LivingEntity attacker && nearbyEntity instanceof LivingEntity target) {
-				SIHelper.causeSanityInjury(target, attacker, sanityDamage, SanityEvent.Hurt.Type.ENTITY);
+				EPUtils.causeSanityInjury(target, attacker, sanityDamage);
 			}
 		}
 	}

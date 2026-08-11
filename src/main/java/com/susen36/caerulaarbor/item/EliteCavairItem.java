@@ -1,10 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.advancements.AdvancementHolder;
@@ -69,7 +68,7 @@ public class EliteCavairItem extends Item {
             capability.player_light = setval;
             capability.syncPlayerVariables(entity);
         }
-        SIHelper.causeSanityInjury(entity, 45, SanityEvent.Hurt.Type.FOOD);
+        EPUtils.causeSanityInjury(entity, 45);
         if ((Entity) entity instanceof ServerPlayer player) {
             AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "but_i_refuse"));
             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);

@@ -1,8 +1,4 @@
-package com.susen36.caerulaarbor.entity;
-
-
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+package com.susen36.caerulaarbor.entity;import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -234,7 +230,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 						vehicle.hurt(CADamageTypes.source(this.level(), DamageTypes.IN_WALL, this),
 								(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
 						if (vehicle instanceof LivingEntity livingTarget) {
-							SIHelper.causeSanityInjury(livingTarget, this, 50, SanityEvent.Hurt.Type.ENTITY);
+							EPUtils.causeSanityInjury(livingTarget, this, 50);
 						}
 					}
 				} else {

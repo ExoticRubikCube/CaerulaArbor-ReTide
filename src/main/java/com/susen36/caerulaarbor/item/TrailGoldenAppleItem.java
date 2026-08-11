@@ -1,8 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -26,7 +25,7 @@ public class TrailGoldenAppleItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-        SIHelper.causeSanityInjury(entity, 80, SanityEvent.Hurt.Type.FOOD);
+        EPUtils.causeSanityInjury(entity, 80);
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 1250, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 2));

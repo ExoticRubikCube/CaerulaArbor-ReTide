@@ -1,9 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -18,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
@@ -42,7 +40,7 @@ public class OceanPeduncleItem extends Item {
 		double z = entity.getZ();
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                SIHelper.causeSanityInjury(entity, 20, SanityEvent.Hurt.Type.FOOD);
+                EPUtils.causeSanityInjury(entity, 20);
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.9), z, 16, 0.55, 1, 0.55, 0.1);
                 if (world instanceof Level level) {

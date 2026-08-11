@@ -2,8 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -46,7 +45,7 @@ public class NourishedApplePieItem extends Item {
 			entity.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 3600, 0));
 		}
 		entity.setHealth((float) (entity.getHealth() + entity.getMaxHealth() * 0.15));
-		SIHelper.causeSanityInjury(entity, 75, SanityEvent.Hurt.Type.FOOD);
+		EPUtils.causeSanityInjury(entity, 75);
 		return retval;
 	}
 }

@@ -1,11 +1,10 @@
 package com.susen36.caerulaarbor.potion;
 
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.MathUtils;
@@ -100,7 +99,7 @@ public class InfestedMobEffect extends MobEffect {
                     capability.player_oceanization = setval;
                     capability.syncPlayerVariables(entity);
             }
-            SIHelper.causeSanityInjury(entity, 750 * ((double) amplifier + 1), SanityEvent.Hurt.Type.POTION);
+            EPUtils.causeSanityInjury(entity, 750 * ((double) amplifier + 1));
             if ((Entity) entity instanceof ServerPlayer player) {
                 AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "they_shall_welcome"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);

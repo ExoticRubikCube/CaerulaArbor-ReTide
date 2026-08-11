@@ -1,12 +1,12 @@
 package com.susen36.caerulaarbor.util;
 
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
@@ -234,7 +234,7 @@ public class EntityUtils {
 					entity.hurt(CADamageTypes.source(world, CADamageTypes.TRAIL_DAMAGE), 2);
 				}
 				if (entity instanceof LivingEntity livingEntity) {
-					SIHelper.causeSanityInjury(livingEntity, 20);
+					EPUtils.causeSanityInjury(livingEntity, 20);
 				}
 			}
 		}

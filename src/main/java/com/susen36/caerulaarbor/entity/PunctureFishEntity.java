@@ -192,7 +192,6 @@ public class PunctureFishEntity extends SeaMonster {
         data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
     }
 
-
     @Override
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;

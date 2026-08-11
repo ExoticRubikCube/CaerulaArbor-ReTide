@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity.enderdragon;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -274,7 +274,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
                         (float) ((enderina instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.25));
             } else {
                 enderina.heal((float) ((enderina.getMaxHealth()) * 0.05));
-                BabelAPI.healToFull(enderina, AbstractEPCapability.EPType.NERVOUS);
+                EPManager.healToFull(enderina, AbstractEPCapability.EPType.NERVOUS);
             }
         }
     }

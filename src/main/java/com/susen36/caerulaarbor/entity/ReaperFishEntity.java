@@ -1,10 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -207,10 +206,9 @@ public class ReaperFishEntity extends SeaMonster {
 					if (distanceTo(entityiterator) < 5) {
 						if (!(entityiterator == this)) {
 							if (entityiterator instanceof LivingEntity target) {
-								SIHelper.causeSanityInjury(target,
+								EPUtils.causeSanityInjury(target,
 										this,
-										(this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12,
-										SanityEvent.Hurt.Type.ENTITY);
+										(this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12);
 							}
 						}
 					}

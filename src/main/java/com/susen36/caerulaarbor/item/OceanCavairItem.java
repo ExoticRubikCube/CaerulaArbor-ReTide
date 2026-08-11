@@ -1,8 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
@@ -49,7 +48,7 @@ public class OceanCavairItem extends Item {
 			entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, 600, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0));
 		}
-		SIHelper.causeSanityInjury(entity, 325, SanityEvent.Hurt.Type.FOOD);
+		EPUtils.causeSanityInjury(entity, 325);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else if (entity instanceof Player player && !player.getAbilities().instabuild) {

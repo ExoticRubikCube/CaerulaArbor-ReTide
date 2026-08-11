@@ -1,10 +1,9 @@
 
 package com.susen36.caerulaarbor.potion;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.FirstTellerEntity;
 import com.susen36.caerulaarbor.entity.bullets.TellerShotEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -102,7 +101,7 @@ public class  FirstTellerSkillMobEffect extends MobEffect {
                 }
                 entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                         (float) (ayk * 0.6));
-                SIHelper.causeSanityInjury(livingEntity, ayk * 60, SanityEvent.Hurt.Type.POTION);
+                EPUtils.causeSanityInjury(livingEntity, ayk * 60);
             }
             if (world instanceof ServerLevel projectileLevel) {
                 TellerShotEntity entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
@@ -113,7 +112,7 @@ public class  FirstTellerSkillMobEffect extends MobEffect {
                 projectileLevel.addFreshEntity(entityToSpawn);
             }
             entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC), (float) (ayk * 0.6));
-            SIHelper.causeSanityInjury(entity, ayk * 60, SanityEvent.Hurt.Type.POTION);
+            EPUtils.causeSanityInjury(entity, ayk * 60);
         }
         return true;
     }

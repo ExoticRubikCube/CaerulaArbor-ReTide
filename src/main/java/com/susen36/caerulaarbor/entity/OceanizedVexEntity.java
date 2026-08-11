@@ -1,8 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -328,7 +327,7 @@ public class OceanizedVexEntity extends SeaMonster {
                     if (distanceTo(entityiterator) <= 4) {
                         entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, this), (float) (sanity * 3));
                         if (entityiterator instanceof LivingEntity target) {
-                            SIHelper.causeSanityInjury(target, this, sanity * 20, SanityEvent.Hurt.Type.ENTITY);
+                            EPUtils.causeSanityInjury(target, this, sanity * 20);
                         }
                     }
                 }

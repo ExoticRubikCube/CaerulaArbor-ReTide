@@ -1,8 +1,8 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.manager.EPManager;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -21,7 +21,7 @@ public class SanityHealMobEffect extends MobEffect {
 
     @Override
     public void applyInstantenousEffect(Entity source, Entity indirectSource, LivingEntity entity, int amplifier, double health) {
-        BabelAPI.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, Mth.floor(100.0 * ((double) amplifier + 1.0)));
+        EPManager.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, Mth.floor(100.0 * ((double) amplifier + 1.0)));
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.susen36.caerulaarbor.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.babel.BabelMod;
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
@@ -136,7 +136,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/light_extinguish.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 
-		AbstractEPCapability currentElement = BabelAPI.getEP(entity).getCurrentElement();
+		AbstractEPCapability currentElement = EPManager.getEP(entity).getCurrentElement();
 		if (currentElement != null) {
 			double elementValue = currentElement.getValue();
 			double maxElementValue = currentElement.getMaxValue();
@@ -218,7 +218,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_disconcentration"), 101, 147, -3368449, false);
 		if (RelicUtils.hasRelic(Relic.DISO_BLOOD, entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_haemophilia"), 101, 147, -3368449, false);
-		AbstractEPCapability currentElement = BabelAPI.getEP(entity).getCurrentElement();
+		AbstractEPCapability currentElement = EPManager.getEP(entity).getCurrentElement();
 		if (currentElement != null) {
 			String elementValue = Math.round(currentElement.getValue()) + "/" + Math.round(currentElement.getMaxValue());
 			guiGraphics.drawString(this.font,

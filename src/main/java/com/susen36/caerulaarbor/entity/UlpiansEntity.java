@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -439,7 +439,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 this.removeEffect(BabelMobEffects.STUN);
                                 this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                                 this.removeEffect(MobEffects.DIG_SLOWDOWN);
-                                AbstractEPCapability sanityInjury = BabelAPI.getEP(this).getEP(AbstractEPCapability.EPType.NERVOUS);
+                                AbstractEPCapability sanityInjury = EPManager.getEP(this).getEP(AbstractEPCapability.EPType.NERVOUS);
                                 sanityInjury.heal(sanityInjury.getMaxValue());
                                 if (world instanceof ServerLevel level)
                                     level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, noeX, nowY, nowZ, 72, 3, 3, 3, 0.5);

@@ -1,10 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.manager.EPManager;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.entity.bullets.*;
 import com.susen36.caerulaarbor.init.*;
@@ -151,7 +150,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
             CaerulaArbor.queueServerWork(8, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 4) {
                     if (target instanceof LivingEntity livingTarget) {
-                        BabelAPI.hurtElemental(
+                        EPManager.hurtElemental(
                                 livingTarget,
                                 AbstractEPCapability.EPType.CORROSION,
                                 this,
@@ -243,7 +242,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
             entity.hurt(CADamageTypes.source(level, CADamageTypes.OCEAN_MAGIC, this),
                     (float) attackDamage);
             if ((Entity) this instanceof LivingEntity attacker && entity instanceof LivingEntity target) {
-                SIHelper.causeSanityInjury(target, attacker, attackDamage * 150, SanityEvent.Hurt.Type.ENTITY);
+                EPUtils.causeSanityInjury(target, attacker, attackDamage * 150);
             }
         }
     }
@@ -511,7 +510,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
                         if (!(entityiterator instanceof LivingEntity)) {
                             continue;
                         }
-                        SIHelper.causeSanityInjury((LivingEntity) entityiterator, this, daam * 4, SanityEvent.Hurt.Type.ENTITY);
+                        EPUtils.causeSanityInjury((LivingEntity) entityiterator, this, daam * 4);
                         entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                                 (float) (daam * 0.5));
                     }

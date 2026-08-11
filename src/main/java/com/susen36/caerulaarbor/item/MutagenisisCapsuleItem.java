@@ -1,10 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
@@ -43,7 +42,7 @@ public class MutagenisisCapsuleItem extends Item {
         double ocean;
         ocean = ModCapabilities.getPlayerVariables(entity).player_oceanization;
         if (ocean < 2.9) {
-            SIHelper.causeSanityInjury(entity, (ocean + 1) * 40, SanityEvent.Hurt.Type.FOOD);
+            EPUtils.causeSanityInjury(entity, (ocean + 1) * 40);
             entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEANIZE_DAMAGE), (float) (3 * (ocean + 1)));
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 2400, (int) ocean));

@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.block;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -128,9 +128,9 @@ public class EmergencyAidBuildingSalvientoBlock extends Block implements SimpleW
 					continue;
 				}
 				if (livingEntity instanceof Player) {
-					BabelAPI.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(20);
+					EPManager.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(20);
 				} else {
-					BabelAPI.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(10);
+					EPManager.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(10);
 				}
 			}
 			for (int index0 = 0; index0 < 120; index0++) {

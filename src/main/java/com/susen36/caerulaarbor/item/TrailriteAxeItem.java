@@ -1,7 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
@@ -69,7 +68,7 @@ public class TrailriteAxeItem extends AxeItem {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EMPTY, SoundSource.PLAYERS, 1, 1);
             }
         }
-        SIHelper.causeSanityInjury(entity, sourceentity, 225, SanityEvent.Hurt.Type.ENTITY);
+        EPUtils.causeSanityInjury(entity, sourceentity, 225);
         return retval;
 	}
 

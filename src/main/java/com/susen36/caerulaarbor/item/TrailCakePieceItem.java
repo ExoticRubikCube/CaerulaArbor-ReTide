@@ -1,7 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +20,7 @@ public class TrailCakePieceItem extends Item {
         double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		SIHelper.causeSanityInjury(entity, 150, SanityEvent.Hurt.Type.FOOD);
+		EPUtils.causeSanityInjury(entity, 150);
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.7, z, 32, 0.5, 1.5, 0.5, 1);
 		}

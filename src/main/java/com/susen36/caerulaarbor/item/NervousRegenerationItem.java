@@ -1,9 +1,9 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
+import com.susen36.babel.manager.EPManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,7 +31,7 @@ public class NervousRegenerationItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		AbstractEPCapability sanityInjury = BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS);
+		AbstractEPCapability sanityInjury = EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS);
 		sanityInjury.heal(sanityInjury.getMaxValue());
 		entity.removeEffect(BabelMobEffects.STUN);
 		entity.removeEffect(MobEffects.BLINDNESS);

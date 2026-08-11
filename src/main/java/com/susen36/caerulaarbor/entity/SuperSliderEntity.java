@@ -69,6 +69,7 @@ public class SuperSliderEntity extends SeaMonsterBoss {
         return false;
     }
 
+    @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource damageSource, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, damageSource, recentlyHit);
         this.spawnAtLocation(new ItemStack(CAItems.RECORD_WHISPER.get()));

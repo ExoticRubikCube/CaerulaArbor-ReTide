@@ -1,8 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.api.event.SanityEvent;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
@@ -53,15 +52,15 @@ public class TrailriteSwordItem extends SwordItem {
         double z = entity.getZ();
         double absorp;
         double rate;
-        SIHelper.causeSanityInjury(entity, sourceentity, 330, SanityEvent.Hurt.Type.ENTITY);
+        EPUtils.causeSanityInjury(entity, sourceentity, 330);
         if (!(entity instanceof Player)) {
             int lootingLevel = 0;
             int sharpnessLevel = 0;
             if (world instanceof Level level) {
                 lootingLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.LOOTING)
-                        .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
+                        .map(itemstack::getEnchantmentLevel).orElse(0);
                 sharpnessLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SHARPNESS)
-                        .map(h -> itemstack.getEnchantmentLevel(h)).orElse(0);
+                        .map(itemstack::getEnchantmentLevel).orElse(0);
             }
             if (Math.random() < 0.2 + lootingLevel * 0.02) {
                 rate = 0.025 + sharpnessLevel * 0.005;

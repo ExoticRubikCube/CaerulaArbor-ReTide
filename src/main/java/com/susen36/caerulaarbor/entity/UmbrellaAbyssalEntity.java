@@ -1,10 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.event.SanityEvent;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.capability.sanity.SIHelper;
 import com.susen36.caerulaarbor.entity.ai.MoveToTargetGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
@@ -121,10 +120,9 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                         }
                     }
                     if (entityiterator instanceof LivingEntity target) {
-                        SIHelper.causeSanityInjury(target,
+                        EPUtils.causeSanityInjury(target,
                                 this,
-                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4,
-                                SanityEvent.Hurt.Type.ENTITY);
+                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4);
                     }
                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                             (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -144,10 +142,9 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                         if (!(entityiterator instanceof Mob target)) {
                             continue;
                         }
-                        SIHelper.causeSanityInjury(target,
+                        EPUtils.causeSanityInjury(target,
                                 this,
-                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4,
-                                SanityEvent.Hurt.Type.ENTITY);
+                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4);
                         entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                                 (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                         this.applyActivePotionEffects(target);

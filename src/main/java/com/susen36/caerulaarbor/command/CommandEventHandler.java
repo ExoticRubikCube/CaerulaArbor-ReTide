@@ -23,43 +23,41 @@ public class CommandEventHandler {
 			return;
 		}
 
-		if (player.level().isClientSide() || commandContext.getSource().getServer().getDefaultGameType() != GameType.SURVIVAL) {
-			return;
-		}
-
-		boolean hasGameRuleNode = false;
-		boolean hasSurgingWavesNode = false;
-		boolean hasValueNode = false;
-		for (ParsedCommandNode<CommandSourceStack> parsedNode : commandContext.getNodes()) {
-			String nodeName = parsedNode.getNode().getName();
-			if ("gamerule".equals(nodeName)) {
-				hasGameRuleNode = true;
-			} else if (CAGameRules.SURGING_WAVES.getId().equals(nodeName)) {
-				hasSurgingWavesNode = true;
-			} else if ("value".equals(nodeName)) {
-				hasValueNode = true;
+		if (!player.level().isClientSide() && commandContext.getSource().getServer().getDefaultGameType() != GameType.SURVIVAL) {
+			boolean hasGameRuleNode = false;
+			boolean hasSurgingWavesNode = false;
+			boolean hasValueNode = false;
+			for (ParsedCommandNode<CommandSourceStack> parsedNode : commandContext.getNodes()) {
+				String nodeName = parsedNode.getNode().getName();
+				if ("gamerule".equals(nodeName)) {
+					hasGameRuleNode = true;
+				} else if (CAGameRules.SURGING_WAVES.getId().equals(nodeName)) {
+					hasSurgingWavesNode = true;
+				} else if ("value".equals(nodeName)) {
+					hasValueNode = true;
+				}
 			}
-		}
 
-		if (!hasGameRuleNode || !hasSurgingWavesNode || !hasValueNode) {
-			return;
-		}
+			if (!hasGameRuleNode || !hasSurgingWavesNode || !hasValueNode) {
+				return;
+			}
 
-		int targetSurgingWavesLevel = IntegerArgumentType.getInteger(commandContext, "value");
-		int currentSurgingWavesLevel = player.level().getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES);
-		if (targetSurgingWavesLevel <= currentSurgingWavesLevel) {
-			return;
-		}
+			int targetSurgingWavesLevel = IntegerArgumentType.getInteger(commandContext, "value");
+			int currentSurgingWavesLevel = player.level().getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES);
+			if (targetSurgingWavesLevel <= currentSurgingWavesLevel) {
+				return;
+			}
 
-		Component warningMessage = null;
-		if (currentSurgingWavesLevel < 12 && targetSurgingWavesLevel >= 12) {
-			warningMessage = Component.translatable("gameplay.caerula_arbor.n_warn_12");
-		} else if (currentSurgingWavesLevel < 6 && targetSurgingWavesLevel >= 6) {
-			warningMessage = Component.translatable("gameplay.caerula_arbor.n_warn_6");
-		}
+			Component warningMessage = null;
+			if (currentSurgingWavesLevel < 12 && targetSurgingWavesLevel >= 12) {
+				warningMessage = Component.translatable("gameplay.caerula_arbor.n_warn_12");
+			} else if (currentSurgingWavesLevel < 6 && targetSurgingWavesLevel >= 6) {
+				warningMessage = Component.translatable("gameplay.caerula_arbor.n_warn_6");
+			}
 
-		if (warningMessage != null) {
-			player.displayClientMessage(warningMessage, false);
+			if (warningMessage != null) {
+				player.displayClientMessage(warningMessage, false);
+			}
 		}
 	}
 }
