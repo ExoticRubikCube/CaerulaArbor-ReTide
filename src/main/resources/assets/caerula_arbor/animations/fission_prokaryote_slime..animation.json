@@ -470,7 +470,7 @@
 				}
 			}
 		},
-		"animation.fission_prokaryote_slime.swim": {
+		"animation.fission_prokaryote_slime.move": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {

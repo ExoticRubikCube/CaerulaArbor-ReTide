@@ -2,24 +2,18 @@ package com.susen36.caerulaarbor.entity.slime;
 
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.ApostleProkaryoteEntity;
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -31,29 +25,20 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.animation.AnimationState;
 
-import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class FissionProkaryoteSlimeEntity  extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FissionProkaryoteSlimeEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(FissionProkaryoteSlimeEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_SIZE = SynchedEntityData.defineId(FissionProkaryoteSlimeEntity.class, EntityDataSerializers.INT);
-    public String animationprocedure = "empty";
+public class FissionProkaryoteSlimeEntity extends AbstractSeaSlimeEntity {
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = AbstractSeaSlimeEntity.DATA_SHOOT;
+    public static final EntityDataAccessor<String> DATA_ANIMATION = AbstractSeaSlimeEntity.DATA_ANIMATION;
+    public static final EntityDataAccessor<Integer> DATA_SIZE = AbstractSeaSlimeEntity.DATA_SIZE;
     private boolean wasOnGround = false;
     protected final WaterBoundPathNavigation waterNavigation;
     protected final GroundPathNavigation groundNavigation;
@@ -66,8 +51,6 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
 
     public FissionProkaryoteSlimeEntity(EntityType<FissionProkaryoteSlimeEntity> type, Level world) {
         super(type, world);
-        xpReward = 2;
-        setNoAi(false);
         this.setPathfindingMalus(PathType.WATER, 0);
         this.landControl = new SlimeMoveControl(this);
         this.swimControl = new ApostleProkaryoteEntity.SeabornSwimControl(this);
@@ -77,23 +60,15 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-        super.defineSynchedData(builder);
-        builder.define(DATA_SHOOT, false);
-        builder.define(DATA_ANIMATION, "undefined");
-        builder.define(DATA_SIZE, 5);
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(2, new FissionProkaryoteSlimeAttackGoal(this));
+        this.goalSelector.addGoal(3, new FissionProkaryoteSlimeRandomDirectionGoal(this));
+        this.goalSelector.addGoal(5, new FissionProkaryoteSlimeKeepOnJumpingGoal(this));
+        this.goalSelector.addGoal(9, new RandomSwimmingGoal(this, 1, 40));
+        this.goalSelector.addGoal(10, new RandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
     }
-
-    @Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.goalSelector.addGoal(2, new FissionProkaryoteSlimeAttackGoal(this));
-		this.goalSelector.addGoal(3, new FissionProkaryoteSlimeRandomDirectionGoal(this));
-		this.goalSelector.addGoal(5, new FissionProkaryoteSlimeKeepOnJumpingGoal(this));
-		this.goalSelector.addGoal(9, new RandomSwimmingGoal(this, 1, 40));
-		this.goalSelector.addGoal(10, new RandomStrollGoal(this, 1));
-		this.goalSelector.addGoal(11, new RandomLookAroundGoal(this));
-	}
 
     @Override
     public void tick() {
@@ -125,246 +100,45 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
         return MapVariables.get(this.level()).strategy_silence > 0;
     }
 
-    public void jumpFromGround() {
-        Vec3 vec3 = this.getDeltaMovement();
-        float heightMul = 1.0F;
-        float distanceMul = 1.1F;
-        if (this.hasSilenceBoost()) {
-            heightMul *= 1.25F;
-            distanceMul *= 1.25F;
-        }
-        this.setDeltaMovement(vec3.x * (double)distanceMul, this.getJumpPower() * (double)heightMul, vec3.z * (double)distanceMul);
-        this.hasImpulse = true;
-        CommonHooks.onLivingJump(this);
-    }
-
-	protected int getJumpDelay() {
-		return this.random.nextInt(30) + 20;
+    @Override
+	protected void refreshAttributesBySize(int size) {
+		super.refreshAttributesBySize(size);
+		if (this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED)) {
+			this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2D + 0.1D * (double) size);
+		}
 	}
+
+	public void jumpFromGround() {
+		Vec3 vec3 = this.getDeltaMovement();
+		double jumpPower = this.getJumpPower();
+		if (this.hasSilenceBoost()) {
+			jumpPower *= 1.25D;
+		}
+		this.setDeltaMovement(vec3.x, jumpPower, vec3.z);
+        this.hasImpulse = true;
+		CommonHooks.onLivingJump(this);
+	}
+
+    protected int getJumpDelay() {
+        return this.random.nextInt(30) + 20;
+    }
 
     protected SoundEvent getJumpSound() {
         return this.isTiny() ? SoundEvents.SLIME_JUMP_SMALL : SoundEvents.SLIME_JUMP;
     }
 
-	float getSoundPitch() {
-		float f = this.isTiny() ? 1.2F : 0.6F;
-		return ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * f;
-	}
+    float getSoundPitch() {
+        float f = this.isTiny() ? 1.2F : 0.6F;
+        return ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * f;
+    }
 
-	protected boolean doPlayJumpSound() {
-		return this.isEffectiveAi();
-	}
+    protected boolean doPlayJumpSound() {
+        return this.isEffectiveAi();
+    }
 
     @Override
     public void playStepSound(BlockPos pos, BlockState blockIn) {
         this.playSound(SoundEvents.SLIME_JUMP_SMALL, 0.2f, 1);
-    }
-
-    @Override
-    public SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.SLIME_HURT;
-    }
-
-    @Override
-    public SoundEvent getDeathSound() {
-        return SoundEvents.SLIME_DEATH;
-    }
-
-    @Override
-    public boolean causeFallDamage(float l, float damage, DamageSource source) {
-        this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1, 1);
-        return super.causeFallDamage(l, damage, source);
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.FALL))
-            return false;
-        return super.hurt(source, amount);
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt("Size", this.entityData.get(DATA_SIZE));
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        if (compound.contains("Size")) {
-            this.entityData.set(DATA_SIZE, compound.getInt("Size"));
-        }
-    }
-
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
-        RandomSource random = world.getRandom();
-        int i = random.nextInt(3);
-        if (i < 2 && random.nextFloat() < 0.5F * difficulty.getSpecialMultiplier()) {
-            i++;
-        }
-        int size = 1 << i;
-        this.entityData.set(DATA_SIZE, size);
-        return retval;
-    }
-
-    @Override
-    public void baseTick() {
-        super.baseTick();
-        CompoundTag tag = this.getPersistentData();
-        if(!tag.getBoolean("Resized")){
-            double size;
-            size = (Entity) this instanceof FissionProkaryoteSlimeEntity datEntI ? datEntI.getEntityData().get(DATA_SIZE) : 0;
-            if (size > 1) {
-                if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                    this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                            ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * Math.pow(size, 2)));
-                if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                    this.getAttribute(Attributes.ATTACK_DAMAGE)
-                            .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * size));
-                if (this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED))
-                    this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue((0.1 + 0.025 * Math.max(size, 4)));
-                if (this.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE))
-                    this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue((size * 0.2));
-                this.setHealth(this.getMaxHealth());
-            }
-            tag.putBoolean("Resized", true);
-        }
-        this.refreshDimensions();
-    }
-
-    public double getSlimeSize() {
-        return this.getEntityData().get(DATA_SIZE) * 0.5;
-    }
-
-    @Override
-    public EntityDimensions getDefaultDimensions(Pose p_33597_) {
-        return super.getDefaultDimensions(p_33597_).scale((float) this.getSlimeSize());
-    }
-
-    private PlayState movementPredicate(AnimationState event) {
-        if (this.animationprocedure.equals("empty")) {
-            if (this.isDeadOrDying()) {
-                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.fission_prokaryote_slime.die"));
-            }
-            if (event.isMoving()) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.fission_prokaryote_slime.swim"));
-            }
-            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.fission_prokaryote_slime.idle"));
-        }
-        return PlayState.STOP;
-    }
-
-    String prevAnim = "empty";
-
-    private PlayState procedurePredicate(AnimationState event) {
-        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-            if (!this.animationprocedure.equals(prevAnim))
-                event.getController().forceAnimationReset();
-            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-                this.animationprocedure = "empty";
-                event.getController().forceAnimationReset();
-            }
-        } else if (animationprocedure.equals("empty")) {
-            prevAnim = "empty";
-            return PlayState.STOP;
-        }
-        prevAnim = this.animationprocedure;
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime >= 14) {
-            this.remove(FissionProkaryoteSlimeEntity.RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
-            LevelAccessor world = this.level();
-            double x = this.getX();
-            double y = this.getY();
-            double z = this.getZ();
-            int originalSize = this.getEntityData().get(DATA_SIZE);
-            if (originalSize > 2) {
-                int halfSize = (int) (originalSize * 0.5);
-                Vec3 pos = new Vec3(x, y, z);
-                if (world instanceof ServerLevel level) {
-                    RandomSource levelRandom = level.getRandom();
-                    int t = Mth.nextInt(levelRandom, 3, 4);
-                    for (int index0 = 0; index0 < t; index0++) {
-                        Vec3 offset = new Vec3(Mth.nextDouble(levelRandom, -1, 1), 0, Mth.nextDouble(levelRandom, -1, 1));
-                        Entity entityToSpawn = CAEntities.FISSION_PROKARYOTE_SLIME.get().create(level);
-                        if (entityToSpawn instanceof FissionProkaryoteSlimeEntity slime){
-                            slime.setPos(pos.add(offset));
-                            slime.getEntityData().set(DATA_SIZE, Math.min(halfSize + index0, originalSize));
-                            slime.setYRot(world.getRandom().nextFloat() * 360F);
-                            level.addFreshEntity(slime);
-                        }
-                    }
-                }
-            } else if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                if (world instanceof ServerLevel level) {
-                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.TRAIL_CREAM.get()));
-                    entityToSpawn.setPickUpDelay(10);
-                    level.addFreshEntity(entityToSpawn);
-                }
-            }
-        }
-    }
-
-    public boolean isTiny() {
-        return this.entityData.get(DATA_SIZE) <= 2;
-    }
-
-    protected boolean isDealsDamage() {
-        return !this.isTiny() && this.isEffectiveAi();
-    }
-
-    protected float getAttackDamage() {
-        return (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-    }
-
-    @Override
-    public void playerTouch(Player player) {
-        if (this.isDealsDamage()) {
-            this.dealDamage(player);
-        }
-    }
-
-    @Override
-    public void push(Entity pEntity) {
-        super.push(pEntity);
-        if (pEntity.is(this.getTarget()) && this.isDealsDamage()) {
-            this.dealDamage((LivingEntity) pEntity);
-        }
-    }
-
-    protected void dealDamage(LivingEntity target) {
-        if (this.isAlive() && this.isWithinMeleeAttackRange(target) && this.hasLineOfSight(target)) {
-            DamageSource damagesource = this.damageSources().mobAttack(this);
-            if (target.hurt(damagesource, this.getAttackDamage())) {
-                this.playSound(SoundEvents.SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-                Level var4 = this.level();
-                if (var4 instanceof ServerLevel serverlevel) {
-                    EnchantmentHelper.doPostAttackEffects(serverlevel, target, damagesource);
-                }
-            }
-        }
-    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.065);
-        builder = builder.add(Attributes.MAX_HEALTH, 3);
-        builder = builder.add(Attributes.ARMOR, 0);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 2.5);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 36);
-        builder = builder.add(Attributes.STEP_HEIGHT, 1.25f);
-        builder = builder.add(Attributes.JUMP_STRENGTH, 0.49F);
-        builder = builder.add(NeoForgeMod.SWIM_SPEED, 1.0D);
-        return builder;
     }
 
     @Override
@@ -377,23 +151,75 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
         return false;
     }
 
-    public String getSyncedAnimation() {
-        return this.entityData.get(DATA_ANIMATION);
-    }
-
-    public void setAnimation(String animation) {
-        this.entityData.set(DATA_ANIMATION, animation);
+    @Override
+    protected String getAnimationPrefix() {
+        return "animation.fission_prokaryote_slime";
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-        data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
-        data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
+    protected int getSplitSizeThreshold() {
+        return 3;
     }
 
     @Override
-    public void setAnimationProcedure(String animation) {
-        this.animationprocedure = animation;
+    protected int getSplitMinCount() {
+        return 3;
+    }
+
+    @Override
+    protected int getSplitMaxCount() {
+        return 4;
+    }
+
+    @Override
+    protected int computeSplitChildSize(int parentSize, int spawnIndex) {
+        int halfSize = (int) (parentSize * 0.5);
+        return Mth.clamp(halfSize + spawnIndex, 1, parentSize - 1);
+    }
+
+    @Override
+    protected EntityType<? extends AbstractSeaSlimeEntity> getSplitEntityType() {
+        return CAEntities.FISSION_PROKARYOTE_SLIME.get();
+    }
+
+    public boolean isTiny() {
+        return this.entityData.get(DATA_SIZE) <= 2;
+    }
+
+    @Override
+    protected void onPushEntity(Entity pEntity) {
+        if (pEntity.is(this.getTarget()) && this.isEffectiveAi()) {
+            this.dealDamage((LivingEntity) pEntity);
+        }
+    }
+
+    @Override
+    protected void dropLoot(Level world, Vec3 pos) {
+        if (world instanceof ServerLevel level) {
+            int r = this.random.nextInt(10);
+            if (r < 2) {
+                ItemEntity entityToSpawn = new ItemEntity(level, pos.x, pos.y, pos.z, new ItemStack(CAItems.BROKEN_OCEAN_CELL.get()));
+                entityToSpawn.setPickUpDelay(10);
+                level.addFreshEntity(entityToSpawn);
+            } else if (r < 5) {
+                ItemEntity entityToSpawn = new ItemEntity(level, pos.x, pos.y, pos.z, new ItemStack(CAItems.OCEAN_CELL.get()));
+                entityToSpawn.setPickUpDelay(10);
+                level.addFreshEntity(entityToSpawn);
+            }
+        }
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+        builder = builder.add(Attributes.MAX_HEALTH, 3);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 2.5);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 36);
+        builder = builder.add(Attributes.STEP_HEIGHT, 1.25f);
+        builder = builder.add(Attributes.JUMP_STRENGTH, 0.49F);
+        builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.8D);
+        return builder;
     }
 
     static class SlimeMoveControl extends MoveControl {
@@ -428,8 +254,8 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
             } else {
                 this.operation = MoveControl.Operation.WAIT;
                 if (this.mob.onGround()) {
-                    float base = (float)(this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                    float distMul = this.slime.hasSilenceBoost() ? 1.1F * 1.25F : 1.1F;
+                    float base = (float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                    float distMul = this.slime.hasSilenceBoost() ? 1.25F : 1.0F;
                     this.mob.setSpeed(base * distMul);
                     if (this.jumpDelay-- <= 0) {
                         this.jumpDelay = this.slime.getJumpDelay();
@@ -440,15 +266,14 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
                         if (this.slime.doPlayJumpSound()) {
                             this.slime.playSound(this.slime.getJumpSound(), this.slime.getSoundVolume(), this.slime.getSoundPitch());
                         }
-                        this.mob.setSpeed(base * distMul);
                     } else {
                         this.slime.xxa = 0.0F;
                         this.slime.zza = 0.0F;
                         this.mob.setSpeed(0.0F);
                     }
                 } else {
-                    float base = (float)(this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                    float distMul = this.slime.hasSilenceBoost() ? 1.1F * 1.25F : 1.1F;
+                    float base = (float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                    float distMul = this.slime.hasSilenceBoost() ? 1.25F : 1.0F;
                     this.mob.setSpeed(base * distMul);
                 }
             }
@@ -465,7 +290,7 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
 
         @Override
         public boolean canUse() {
-            return !this.slime.isPassenger() && this.slime.getMoveControl() instanceof SlimeMoveControl;
+            return !this.slime.isPassenger() && !this.slime.isInWater() && this.slime.getMoveControl() instanceof SlimeMoveControl;
         }
 
         @Override
@@ -482,24 +307,18 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
 
         public FissionProkaryoteSlimeAttackGoal(FissionProkaryoteSlimeEntity pEntity) {
             this.slime = pEntity;
-            this.setFlags(EnumSet.of(Goal.Flag.LOOK));
+            this.setFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
         }
 
         @Override
         public boolean canUse() {
             LivingEntity livingentity = this.slime.getTarget();
-            if (livingentity == null) {
-                return false;
-            } else if (!this.slime.canAttack(livingentity)) {
-                return false;
-            } else {
-                return this.slime.getMoveControl() instanceof SlimeMoveControl;
-            }
+            return livingentity != null && this.slime.canAttack(livingentity);
         }
 
         @Override
         public void start() {
-            this.growTiredTimer = this.reducedTickDelay(300);
+            this.growTiredTimer = reducedTickDelay(300);
             super.start();
         }
 
@@ -525,9 +344,11 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
             LivingEntity livingentity = this.slime.getTarget();
             if (livingentity != null) {
                 this.slime.lookAt(livingentity, 10.0F, 10.0F);
-            }
-            if (this.slime.getMoveControl() instanceof SlimeMoveControl control) {
-                control.setDirection(this.slime.getYRot(), this.slime.isDealsDamage());
+                if (this.slime.isInWater()) {
+                    this.slime.getNavigation().moveTo(livingentity, 1.2);
+                } else if (this.slime.getMoveControl() instanceof SlimeMoveControl control) {
+                    control.setDirection(this.slime.getYRot(), this.slime.isEffectiveAi());
+                }
             }
         }
     }
@@ -544,9 +365,13 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
 
         @Override
         public boolean canUse() {
-            return this.slime.getTarget() == null
-                && (this.slime.onGround() || this.slime.isInWater() || this.slime.isInLava())
-                && this.slime.getMoveControl() instanceof SlimeMoveControl;
+            if (this.slime.getTarget() != null) {
+                return false;
+            } else if (!this.slime.onGround() && !this.slime.isInWater() && !this.slime.isInLava()) {
+                return false;
+            } else {
+                return true;
+            }
         }
 
         @Override
@@ -555,7 +380,13 @@ public class FissionProkaryoteSlimeEntity  extends SeaMonster {
                 this.nextRandomizeTime = this.adjustedTickDelay(40 + this.slime.getRandom().nextInt(60));
                 this.chosenDegrees = this.slime.getRandom().nextInt(360);
             }
-            if (this.slime.getMoveControl() instanceof SlimeMoveControl control) {
+            if (this.slime.isInWater()) {
+                double rad = Math.toRadians(this.chosenDegrees);
+                double tx = this.slime.getX() + Math.cos(rad) * 8;
+                double tz = this.slime.getZ() + Math.sin(rad) * 8;
+                double ty = this.slime.getY() + (this.slime.getRandom().nextDouble() - 0.5) * 4;
+                this.slime.getNavigation().moveTo(tx, ty, tz, 0.8);
+            } else if (this.slime.getMoveControl() instanceof SlimeMoveControl control) {
                 control.setDirection(this.chosenDegrees, false);
             }
         }

@@ -1,50 +1,29 @@
 package com.susen36.caerulaarbor.entity.slime;
 
-import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.animation.AnimationState;
 
-import javax.annotation.Nullable;
-
-public class NetherseaSlimeEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_SIZE = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.INT);
-	public String animationprocedure = "empty";
+public class NetherseaSlimeEntity extends AbstractSeaSlimeEntity {
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = AbstractSeaSlimeEntity.DATA_SHOOT;
+	public static final EntityDataAccessor<String> DATA_ANIMATION = AbstractSeaSlimeEntity.DATA_ANIMATION;
+	public static final EntityDataAccessor<Integer> DATA_SIZE = AbstractSeaSlimeEntity.DATA_SIZE;
 
 	public NetherseaSlimeEntity(Level world) {
 		this(CAEntities.NETHERSEA_SLIME.get(), world);
@@ -52,226 +31,65 @@ public class NetherseaSlimeEntity extends SeaMonster {
 
 	public NetherseaSlimeEntity(EntityType<NetherseaSlimeEntity> type, Level world) {
 		super(type, world);
-		xpReward = 2;
-		setNoAi(false);
-	}
-
-	@Override
-	protected void defineSynchedData(SynchedEntityData.Builder builder) {
-		super.defineSynchedData(builder);
-		builder.define(DATA_SHOOT, false);
-		builder.define(DATA_ANIMATION, "undefined");
-		builder.define(DATA_SIZE, 4);
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1));
-		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(3, new FloatGoal(this));
+		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1));
 	}
 
 	@Override
-	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(SoundEvents.SLIME_JUMP_SMALL, 0.15f, 0.5F);
+	protected String getAnimationPrefix() {
+		return "animation.nethersea_slime";
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource source) {
-		return SoundEvents.SLIME_HURT;
+	protected int getSplitSizeThreshold() {
+		return 1;
 	}
 
 	@Override
-	public SoundEvent getDeathSound() {
-		return SoundEvents.SLIME_DEATH;
+	protected int getSplitMinCount() {
+		return 2;
 	}
 
 	@Override
-	public boolean causeFallDamage(float l, float d, DamageSource source) {
-        this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1, 1);
-        return super.causeFallDamage(l, d, source);
+	protected int getSplitMaxCount() {
+		return 4;
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.FALL))
-			return false;
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
+	protected int computeSplitChildSize(int parentSize, int spawnIndex) {
+		return (int) (parentSize * 0.5);
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putInt("Size", this.entityData.get(DATA_SIZE));
-	}
-
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Size")) {
-		    this.entityData.set(DATA_SIZE, compound.getInt("Size"));
-		}
-	}
-
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
-		RandomSource random = world.getRandom();
-		int i = random.nextInt(3);
-		if (i < 2 && random.nextFloat() < 0.5F * difficulty.getSpecialMultiplier()) {
-			i++;
-		}
-		int size = 1 << i;
-		this.entityData.set(DATA_SIZE, size);
-		return retval;
-	}
-
-	@Override
-	public void baseTick() {
-		super.baseTick();
-		CompoundTag tag = this.getPersistentData();
-		if(!tag.getBoolean("Resized")){
-            double size;
-            size =  this.getEntityData().get(DATA_SIZE);
-            if (size > 1) {
-                if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                    this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                            ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * Math.pow(size, 2)));
-                if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                    this.getAttribute(Attributes.ATTACK_DAMAGE)
-                            .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * size));
-                if (this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED))
-                    this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue((0.1 + 0.025 * Math.max(size, 4)));
-                if (this.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE))
-                    this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue((size * 0.2));
-                this.setHealth(this.getMaxHealth());
-            }
-            tag.putBoolean("Resized", true);
-		}
-		this.refreshDimensions();
-	}
-
-	public double getSlimeSize() {
-		return this.getEntityData().get(DATA_SIZE) * 0.5;
-	}
-
-	@Override
-	public EntityDimensions getDefaultDimensions(Pose p_33597_) {
-		return super.getDefaultDimensions(p_33597_).scale((float) this.getSlimeSize());
-	}
-
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nethersea_slime.move"));
-			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.nethersea_slime.die"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nethersea_slime.idle"));
-		}
-		return PlayState.STOP;
-	}
-
-	String prevAnim = "empty";
-
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime >= 14) {
-			this.remove(NetherseaSlimeEntity.RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
-            LevelAccessor world = this.level();
-            double x = this.getX();
-            double y = this.getY();
-            double z = this.getZ();
-            int size = (Entity) this instanceof NetherseaSlimeEntity datEntI ? datEntI.getEntityData().get(DATA_SIZE) : 0;
-            if (size > 1) {
-                size = (int) (size * 0.5);
-                Vec3 pos = new Vec3(x, y, z);
-                if (world instanceof ServerLevel level) {
-                    RandomSource levelRandom = level.getRandom();
-                    int t = Mth.nextInt(levelRandom, 2, 4);
-                    for (int index0 = 0; index0 < t; index0++) {
-                        Vec3 offset = new Vec3(Mth.nextDouble(levelRandom, -1, 1), 0, Mth.nextDouble(levelRandom, -1, 1));
-                        Entity entityToSpawn = CAEntities.NETHERSEA_SLIME.get().create(level);
-                        if (entityToSpawn instanceof NetherseaSlimeEntity slime){
-                            slime.setPos(pos.add(offset));
-                            slime.getEntityData().set(DATA_SIZE, size);
-                            //SlimeAttrModifyProcedure.execute(slime);
-                            slime.setYRot(world.getRandom().nextFloat() * 360F);
-                            level.addFreshEntity(slime);
-                        }
-                    }
-                }
-            } else if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                if (world instanceof ServerLevel level) {
-                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.TRAIL_CREAM.get()));
-                    entityToSpawn.setPickUpDelay(10);
-                    level.addFreshEntity(entityToSpawn);
-                }
-            }
-        }
+	protected EntityType<? extends AbstractSeaSlimeEntity> getSplitEntityType() {
+		return CAEntities.NETHERSEA_SLIME.get();
 	}
 
 	public boolean isTiny() {
 		return this.entityData.get(DATA_SIZE) <= 1;
 	}
 
-	protected boolean isDealsDamage() {
-		return !this.isTiny() && this.isEffectiveAi();
-	}
-
-	protected float getAttackDamage() {
-		return (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-	}
-
 	@Override
-	public void playerTouch(Player player) {
-		if (this.isDealsDamage()) {
-			this.dealDamage(player);
+	protected void dropLoot(Level world, Vec3 pos) {
+		if (world instanceof ServerLevel level) {
+			ItemEntity entityToSpawn = new ItemEntity(level, pos.x, pos.y, pos.z, new ItemStack(CAItems.TRAIL_CREAM.get()));
+			entityToSpawn.setPickUpDelay(10);
+			level.addFreshEntity(entityToSpawn);
 		}
 	}
 
 	@Override
-	public void push(Entity pEntity) {
-		super.push(pEntity);
+	protected void onPushEntity(Entity pEntity) {
 		if (pEntity instanceof LivingEntity entity && !entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 70, 0));
-			if (this.isDealsDamage()) {
+			if (this.isEffectiveAi()) {
 				this.dealDamage(entity);
-			}
-		}
-	}
-
-	protected void dealDamage(LivingEntity target) {
-		if (this.isAlive() && this.isWithinMeleeAttackRange(target) && this.hasLineOfSight(target)) {
-			DamageSource damagesource = this.damageSources().mobAttack(this);
-			if (target.hurt(damagesource, this.getAttackDamage())) {
-				this.playSound(SoundEvents.SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-                if (this.level() instanceof ServerLevel serverlevel) {
-                    EnchantmentHelper.doPostAttackEffects(serverlevel, target, damagesource);
-				}
 			}
 		}
 	}
@@ -283,26 +101,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-		builder = builder.add(Attributes.STEP_HEIGHT,1f);
+		builder = builder.add(Attributes.STEP_HEIGHT, 1f);
 		return builder;
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(DATA_ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(DATA_ANIMATION, animation);
-	}
-
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
-		data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
-	}
-
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
 	}
 }

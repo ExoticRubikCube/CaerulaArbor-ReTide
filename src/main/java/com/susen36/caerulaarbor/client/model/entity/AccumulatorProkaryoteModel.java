@@ -7,15 +7,25 @@ import software.bernie.geckolib.model.GeoModel;
 
 public class AccumulatorProkaryoteModel extends GeoModel<AccumulatorProkaryoteEntity> {
 	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/accumulator.png");
+	private static final ResourceLocation MODEL_DEFAULT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "geo/accumulator.geo.json");
+	private static final ResourceLocation MODEL_PET = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "geo/accumulator_pet.geo.json");
+	private static final ResourceLocation ANIM_DEFAULT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "animations/accumulator.animation.json");
+	private static final ResourceLocation ANIM_PET = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "animations/accumulator_pet.animation.json");
 
 	@Override
 	public ResourceLocation getAnimationResource(AccumulatorProkaryoteEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "animations/accumulator.animation.json");
+		if (entity.isDivicellularVariant()) {
+			return ANIM_PET;
+		}
+		return ANIM_DEFAULT;
 	}
 
 	@Override
 	public ResourceLocation getModelResource(AccumulatorProkaryoteEntity entity) {
-		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "geo/accumulator.geo.json");
+		if (entity.isDivicellularVariant()) {
+			return MODEL_PET;
+		}
+		return MODEL_DEFAULT;
 	}
 
 	@Override

@@ -3,8 +3,10 @@ package com.susen36.caerulaarbor.manager.spwan;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.OceanizedDogEntity;
 import com.susen36.caerulaarbor.entity.TribunalHealerEntity;
+import com.susen36.caerulaarbor.entity.slime.AbstractSeaSlimeEntity;
 import com.susen36.caerulaarbor.entity.slime.NetherseaSlimeEntity;
 import com.susen36.caerulaarbor.init.CAConfigs;
+import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -76,13 +78,22 @@ public class SeabornTransformManager {
 			new TransformRule(entity -> entity instanceof Warden, 0.1, (world, x, y, z, entity, damageSource) -> spawnReplacement(world, x, y, z, entity, current -> current instanceof Warden,
 					Math.random() < 0.02 ? CAEntities.OCEANIZED_WARDENIS.get() : CAEntities.OCEANIZED_WARDEN.get(), damageSource)),
 			new TransformRule(entity -> entity instanceof Cat || entity instanceof Ocelot, 0.5, CAEntities.OCEANIZED_CAT.get()),
-			new TransformRule(entity -> entity instanceof Slime, 0.33, (world, x, y, z, entity, damageSource) -> {
-				Entity result = spawnReplacement(world, x, y, z, entity, current -> true, CAEntities.NETHERSEA_SLIME.get(), damageSource);
-				if (entity instanceof Slime slime && result instanceof NetherseaSlimeEntity seaSlime) {
-					int size = slime.getSize();
-					seaSlime.getEntityData().set(NetherseaSlimeEntity.DATA_SIZE, size);
+			new TransformRule(entity -> entity instanceof Slime, 1.0, (world, x, y, z, entity, damageSource) -> {
+				if (damageSource != null && damageSource.is(CADamageTypes.TRAIL_DAMAGE)) {
+					Entity result = spawnReplacement(world, x, y, z, entity, current -> true, CAEntities.NETHERSEA_SLIME.get(), damageSource);
+					if (entity instanceof Slime slime && result instanceof NetherseaSlimeEntity seaSlime) {
+                        seaSlime.setSize(slime.getSize());
+					}
+					return result;
+				} else if (Math.random() < 0.45) {
+					Entity result = spawnReplacement(world, x, y, z, entity, current -> true,
+							Math.random() < 0.6 ? CAEntities.NETHERSEA_SLIME.get() : CAEntities.FISSION_PROKARYOTE_SLIME.get(), damageSource);
+					if (entity instanceof Slime slime && result instanceof AbstractSeaSlimeEntity seaSlime) {
+                        seaSlime.setSize(slime.getSize());
+					}
+					return result;
 				}
-				return result;
+				return null;
 			}));
 
 	public static boolean transformToSeaborn(Level world, double x, double y, double z, Entity entity) {

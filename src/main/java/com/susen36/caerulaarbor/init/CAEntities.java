@@ -250,9 +250,6 @@ public class CAEntities {
                     .sized(0.5f, 0.9f));
     public static final DeferredHolder<EntityType<?>, EntityType<IzumikEntity>> IZUMIK = register("izumik", IzumikEntity.class,
             EntityType.Builder.<IzumikEntity>of(IzumikEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(21).setUpdateInterval(3).fireImmune().sized(3.3f, 9f));
-    public static final DeferredHolder<EntityType<?>, EntityType<DivicellularGoEntity>> DIVICELLULAR_GO = register("divicellular_go", DivicellularGoEntity.class,
-            EntityType.Builder.<DivicellularGoEntity>of(DivicellularGoEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
-                    .sized(0.5f, 1f));
     public static final DeferredHolder<EntityType<?>, EntityType<OceanizedEvokerEntity>> OCEANIZED_EVOKER = register("oceanized_evoker", OceanizedEvokerEntity.class,
             EntityType.Builder.<OceanizedEvokerEntity>of(OceanizedEvokerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 1.9f));
@@ -495,7 +492,6 @@ public class CAEntities {
         addAttributeRegistration(IZUMIK_OFFSPRING, IzumikOffspringEntity::createAttributes);
         addAttributeRegistration(CAERULA_OFFSPRING, CaerulaOffspringEntity::createAttributes);
         addAttributeRegistration(IZUMIK, IzumikEntity::createAttributes);
-        addAttributeRegistration(DIVICELLULAR_GO, DivicellularGoEntity::createAttributes);
         addAttributeRegistration(OCEANIZED_EVOKER, OceanizedEvokerEntity::createAttributes);
         addAttributeRegistration(JUNIOR_WARRIOR_PRIEST, JuniorWarriorPriestEntity::createAttributes);
         addAttributeRegistration(WARRIOR_PRIEST, WarriorPriestEntity::createAttributes);
@@ -616,7 +612,6 @@ public class CAEntities {
         markSummonable(OCEANIZED_WITCH);
         markSummonable(IZUMIK_OFFSPRING);
         markSummonable(IZUMIK);
-        markSummonable(DIVICELLULAR_GO);
         markSummonable(OCEANIZED_EVOKER);
         markSummonable(JUNIOR_WARRIOR_PRIEST);
         markSummonable(WARRIOR_PRIEST);
@@ -830,7 +825,6 @@ public class CAEntities {
             addRenderer(CAEntities.IZUMIK_OFFSPRING, IzumikOffspringRenderer::new);
             addRenderer(CAEntities.CAERULA_OFFSPRING, CaerulaOffspringRenderer::new);
             addRenderer(CAEntities.IZUMIK, IzumikRenderer::new);
-            addRenderer(CAEntities.DIVICELLULAR_GO, DivicellularGoRenderer::new);
             addRenderer(CAEntities.OCEANIZED_EVOKER, OceanizedEvokerRenderer::new);
             addRenderer(CAEntities.JUNIOR_WARRIOR_PRIEST, JuniorWarriorPriestRenderer::new);
             addRenderer(CAEntities.WARRIOR_PRIEST, WarriorPriestRenderer::new);
