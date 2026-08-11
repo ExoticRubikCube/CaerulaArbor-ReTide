@@ -203,9 +203,9 @@ public class IzumikEntity extends SeaMonsterBoss {
                         target.hurt(
                                 CADamageTypes.source(this.level(), CADamageTypes.OCEAN_MAGIC, this), oceanMagicDamage);
                         if (this.getEntityData().get(DATA_PHASE) >= 2 && Math.random() < 0.15 && target instanceof LivingEntity livingTarget) {
-                            int currentNumb = livingTarget.hasEffect(BabelMobEffects.NUMB) ? livingTarget.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
-                            livingTarget.removeEffect(BabelMobEffects.NUMB);
-                            livingTarget.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
+                            int currentNumb = livingTarget.hasEffect(BabelMobEffects.PALSY) ? livingTarget.getEffect(BabelMobEffects.PALSY).getAmplifier() + 1 : 0;
+                            livingTarget.removeEffect(BabelMobEffects.PALSY);
+                            livingTarget.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
                             if (this.level() instanceof ServerLevel serverLevel) {
                                 serverLevel.sendParticles(ParticleTypes.FIREWORK, targetX, targetY + 0.75, targetZ, 16, 0.75, 0.75, 0.75, 0.1);
                             }
@@ -356,7 +356,7 @@ public class IzumikEntity extends SeaMonsterBoss {
         double waves;
         double amplifi;
         if (this.isAlive()) {
-            this.removeEffect(BabelMobEffects.DIZZY);
+            this.removeEffect(BabelMobEffects.STUN);
             this.removeEffect(CAMobEffects.FROZEN);
             sklp = this.getEntityData().get(DATA_SKILLP);
             sklp1 = this.getEntityData().get(DATA_SKILLP_1);
@@ -647,9 +647,9 @@ public class IzumikEntity extends SeaMonsterBoss {
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.IZUMIK_SHOCK, 160, 0, false, false));
                 }
-                if (!entityiterator.hasEffect(BabelMobEffects.DIZZY)) {
+                if (!entityiterator.hasEffect(BabelMobEffects.STUN)) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 160, 0, false, false));
+                        this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 160, 0, false, false));
                 }
                 if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
                     this.getAttribute(CAAttributes.GENERAL_DEFENSE)
@@ -660,13 +660,13 @@ public class IzumikEntity extends SeaMonsterBoss {
                 if ((this.getEntityData().get(DATA_PHASE) >= 2)) {
                     if (Math.random() < 0.33) {
                         if (MapVariables.get(world).strategy_grow >= 4) {
-                            int currentNumb = entityiterator.hasEffect(BabelMobEffects.NUMB) ? entityiterator.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
-                            entityiterator.removeEffect(BabelMobEffects.NUMB);
-                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, EntityUtils.NUMB_EFFECT_DURATION, currentNumb + 1, false, false, true));
+                            int currentNumb = entityiterator.hasEffect(BabelMobEffects.PALSY) ? entityiterator.getEffect(BabelMobEffects.PALSY).getAmplifier() + 1 : 0;
+                            entityiterator.removeEffect(BabelMobEffects.PALSY);
+                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, EntityUtils.NUMB_EFFECT_DURATION, currentNumb + 1, false, false, true));
                         } else {
-                            int currentNumb = entityiterator.hasEffect(BabelMobEffects.NUMB) ? entityiterator.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
-                            entityiterator.removeEffect(BabelMobEffects.NUMB);
-                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
+                            int currentNumb = entityiterator.hasEffect(BabelMobEffects.PALSY) ? entityiterator.getEffect(BabelMobEffects.PALSY).getAmplifier() + 1 : 0;
+                            entityiterator.removeEffect(BabelMobEffects.PALSY);
+                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
                         }
                     }
                     this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.01));

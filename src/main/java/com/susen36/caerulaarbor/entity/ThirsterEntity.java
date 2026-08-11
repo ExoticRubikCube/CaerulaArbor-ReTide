@@ -193,7 +193,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
                 for (LivingEntity entityiterator : entfound) {
                     if (this.distanceToSqr(entityiterator) < 400) {
                         if (!entityiterator.level().isClientSide())
-                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 160, 0, false, false));
+                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 160, 0, false, false));
                         dizzyTargetCount = dizzyTargetCount - 1;
                         if (dizzyTargetCount <= 1) {
                             break;

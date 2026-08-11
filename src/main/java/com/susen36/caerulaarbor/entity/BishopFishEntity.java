@@ -217,7 +217,7 @@ public class BishopFishEntity extends SeaMonsterBoss {
                                     SanityEvent.Hurt.Type.ENTITY);
                         }
                         if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 60, 0, false, false));
+                            this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 60, 0, false, false));
                     }
                 }
                 if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP)) {

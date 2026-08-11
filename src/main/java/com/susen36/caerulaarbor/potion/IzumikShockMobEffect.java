@@ -50,9 +50,9 @@ public class IzumikShockMobEffect extends MobEffect {
                 level.sendParticles(ParticleTypes.END_ROD, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);
             if (Math.random() < 0.33) {
                 if ((Entity) entity instanceof LivingEntity livingEntity8) {
-                    int currentNumb = livingEntity8.hasEffect(BabelMobEffects.NUMB) ? livingEntity8.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0;
-                    livingEntity8.removeEffect(BabelMobEffects.NUMB);
-                    livingEntity8.addEffect(new MobEffectInstance(BabelMobEffects.NUMB, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
+                    int currentNumb = livingEntity8.hasEffect(BabelMobEffects.PALSY) ? livingEntity8.getEffect(BabelMobEffects.PALSY).getAmplifier() + 1 : 0;
+                    livingEntity8.removeEffect(BabelMobEffects.PALSY);
+                    livingEntity8.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
                 }
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.FIREWORK, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);

@@ -73,7 +73,7 @@ public class InfestedMobEffect extends MobEffect {
                             livingEntity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN, 160, 0));
                     } else if (dam == 7) {
                         if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 160, 0));
+                            livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 160, 0));
                     }
                 }
             }

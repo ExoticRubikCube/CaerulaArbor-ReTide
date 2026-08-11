@@ -457,7 +457,7 @@ public class EntityUtils {
 	public static String getPalsy(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round(entity instanceof LivingEntity livingEntity0 && livingEntity0.hasEffect(BabelMobEffects.NUMB) ? livingEntity0.getEffect(BabelMobEffects.NUMB).getAmplifier() + 1 : 0);
+		return "" + Math.round(entity instanceof LivingEntity livingEntity0 && livingEntity0.hasEffect(BabelMobEffects.PALSY) ? livingEntity0.getEffect(BabelMobEffects.PALSY).getAmplifier() + 1 : 0);
 	}
 
 	public static String getHealth(Entity entity) {

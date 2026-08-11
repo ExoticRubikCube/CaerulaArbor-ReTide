@@ -103,7 +103,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
             if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
                 this.getAttribute(CAAttributes.MISSRATE).setBaseValue(0);
         }
-        if ((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(BabelMobEffects.DIZZY) || (Entity) this instanceof LivingEntity livEnt10 && livEnt10.hasEffect(CAMobEffects.FROZEN)
+        if ((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(BabelMobEffects.STUN) || (Entity) this instanceof LivingEntity livEnt10 && livEnt10.hasEffect(CAMobEffects.FROZEN)
                 || (Entity) this instanceof LivingEntity livEnt11 && livEnt11.hasEffect(MobEffects.LEVITATION) || (Entity) this instanceof LivingEntity livEnt12 && livEnt12.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
                 || (Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(MobEffects.SLOW_FALLING)) {
             if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))

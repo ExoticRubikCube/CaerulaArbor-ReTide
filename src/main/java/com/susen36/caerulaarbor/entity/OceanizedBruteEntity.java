@@ -165,7 +165,7 @@ public class OceanizedBruteEntity extends SeaMonsterBoss {
                                         recordHurtPlayer(player);
                                     }
                                     if (sourceentity instanceof LivingEntity entity1 && !entity1.level().isClientSide())
-                                        entity1.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
+                                        entity1.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 120, 0, false, false));
                                     if (sourceentity instanceof LivingEntity entity1 && !entity1.level().isClientSide())
                                         entity1.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 120, 0, false, false));
                                 }
@@ -197,7 +197,7 @@ public class OceanizedBruteEntity extends SeaMonsterBoss {
                                         entityiterator.hurt(
                                                 CADamageTypes.source(world, CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) sklp1);
                                         if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
-                                            entity1.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
+                                            entity1.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 120, 0, false, false));
                                         if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
                                             entity1.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 120, 0, false, false));
                                     }

@@ -170,7 +170,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                                 CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                         * 2.5));
                                         if (sourceentity instanceof LivingEntity && !this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 100, 0, false, false));
+                                            this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 100, 0, false, false));
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
                                     if (world instanceof Level level) {
@@ -182,7 +182,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                             && distanceTo(sourceentity) <= 3) {
                                         sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ddd);
                                         if (!this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 100, 0, false, false));
+                                            this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 100, 0, false, false));
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
                                 }

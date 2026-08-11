@@ -180,7 +180,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         double validY;
         double tX;
         double tZ;
-        if (!source.is(BYPASSES_ENDERMAN) && !this.hasEffect(BabelMobEffects.DIZZY) && !this.hasEffect(CAMobEffects.MUTE)) {
+        if (!source.is(BYPASSES_ENDERMAN) && !this.hasEffect(BabelMobEffects.STUN) && !this.hasEffect(CAMobEffects.MUTE)) {
             Entity directEntity = source.getDirectEntity();
             if (directEntity != sourceentity || !(sourceentity instanceof LivingEntity)) {
                 if (sourceentity instanceof LivingEntity target) {

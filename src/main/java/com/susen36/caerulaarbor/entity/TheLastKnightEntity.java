@@ -770,7 +770,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
                     this.setDeltaMovement(Vec3.ZERO);
                 }
                 this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-                this.removeEffect(BabelMobEffects.DIZZY);
+                this.removeEffect(BabelMobEffects.STUN);
                 if (!this.isEvolving()) {
                     double duration = this.getDuration();
                     if (duration > 0) {

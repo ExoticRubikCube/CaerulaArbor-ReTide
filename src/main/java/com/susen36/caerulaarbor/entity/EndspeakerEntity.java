@@ -896,7 +896,7 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 		}
 		if (this.hasAbility(4)) {
 			this.clearFire();
-			this.removeEffect(BabelMobEffects.DIZZY);
+			this.removeEffect(BabelMobEffects.STUN);
 			this.removeEffect(CAMobEffects.MUTE);
 			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
 			this.removeEffect(MobEffects.WEAKNESS);
@@ -915,7 +915,7 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 			if (this.isOnFire() && !this.fireImmune()) {
 				missRate = 0.0D;
 			}
-			if (this.hasEffect(BabelMobEffects.DIZZY)
+			if (this.hasEffect(BabelMobEffects.STUN)
 				|| this.hasEffect(CAMobEffects.FROZEN)
 				|| this.hasEffect(MobEffects.LEVITATION)
 				|| this.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)

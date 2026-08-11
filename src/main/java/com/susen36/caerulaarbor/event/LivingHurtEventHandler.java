@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.api.BabelAPI;
 import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
@@ -860,7 +861,7 @@ public class LivingHurtEventHandler {
             finalValue = amount * rate;
         }
 
-        if (entity instanceof LivingEntity livEnt && livEnt.hasEffect(BabelMobEffects.UNDER_BREAK)) {
+        if (entity instanceof LivingEntity livEnt && BabelAPI.isUnderBreak(livEnt)) {
             e = NodeUtils.getNodeWorseBreak(attacker);
             if (e >= 4) rate = 2.4;
             else if (e >= 3) rate = 1.9;

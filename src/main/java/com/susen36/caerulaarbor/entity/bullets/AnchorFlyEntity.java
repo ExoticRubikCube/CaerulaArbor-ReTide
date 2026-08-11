@@ -91,7 +91,7 @@ public class AnchorFlyEntity extends BaseProjectile implements ItemSupplier {
                         entityiterator.hurt(
                                 CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, sourceentity), (float) ((sourceentity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                         if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
+                            livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 120, 0, false, false));
                     }
                 }
             }
@@ -99,7 +99,7 @@ public class AnchorFlyEntity extends BaseProjectile implements ItemSupplier {
             if (sourceentity instanceof ServerPlayer serverPlayer)
                 serverPlayer.connection.teleport(x, y, z, sourceentity.getYRot(), sourceentity.getXRot());
             if (sourceentity instanceof LivingEntity livingEntity)
-                livingEntity.removeEffect(BabelMobEffects.DIZZY);
+                livingEntity.removeEffect(BabelMobEffects.STUN);
             if (sourceentity instanceof LivingEntity livingEntity)
                 livingEntity.removeEffect(MobEffects.DIG_SLOWDOWN);
             if (sourceentity instanceof LivingEntity livingEntity)
@@ -146,7 +146,7 @@ public class AnchorFlyEntity extends BaseProjectile implements ItemSupplier {
                 if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, entity), (float) ((entity instanceof LivingEntity livingEntity15 && livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                     if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                        livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
+                        livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 120, 0, false, false));
                 }
             }
         }
@@ -154,7 +154,7 @@ public class AnchorFlyEntity extends BaseProjectile implements ItemSupplier {
         if (entity instanceof ServerPlayer serverPlayer)
             serverPlayer.connection.teleport((getX()), (getY()), (getZ()), entity.getYRot(), entity.getXRot());
         if (entity instanceof LivingEntity living) {
-            living.removeEffect(BabelMobEffects.DIZZY);
+            living.removeEffect(BabelMobEffects.STUN);
             living.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
             living.removeEffect(MobEffects.DIG_SLOWDOWN);
         }
@@ -200,12 +200,12 @@ public class AnchorFlyEntity extends BaseProjectile implements ItemSupplier {
                         if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, entity), (float) ((entity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                             if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                                livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
+                                livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 120, 0, false, false));
                         }
                     }
                 }
         if (entity instanceof LivingEntity livingEntity)
-            livingEntity.removeEffect(BabelMobEffects.DIZZY);
+            livingEntity.removeEffect(BabelMobEffects.STUN);
         if (entity instanceof LivingEntity livingEntity)
             livingEntity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
         if (entity instanceof LivingEntity livingEntity)

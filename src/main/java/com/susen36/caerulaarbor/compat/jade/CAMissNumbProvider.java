@@ -43,7 +43,7 @@ public enum CAMissNumbProvider implements IEntityComponentProvider {
     }
 
     private double getNumb(LivingEntity living) {
-        MobEffectInstance instance = living.getEffect(BabelMobEffects.NUMB);
+        MobEffectInstance instance = living.getEffect(BabelMobEffects.PALSY);
         if (instance != null) return instance.getAmplifier() + 1;
         return 0;
     }

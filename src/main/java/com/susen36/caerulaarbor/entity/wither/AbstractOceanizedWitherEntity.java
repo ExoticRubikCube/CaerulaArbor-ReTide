@@ -321,7 +321,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonsterBoss imple
             this.tickSubclassBaseTick(world, x, y, z);
             if (this.tickCount % 20 == 0) {
                 this.removeEffect(MobEffects.WITHER);
-                this.removeEffect(BabelMobEffects.DIZZY);
+                this.removeEffect(BabelMobEffects.STUN);
 
                 Vec3 center = new Vec3(x, y, z);
                 List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(64 / 2D), entity -> true).stream().sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center)))

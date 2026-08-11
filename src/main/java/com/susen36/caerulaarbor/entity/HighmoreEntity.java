@@ -402,8 +402,8 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
                                 entityiterator.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, (int) lvl, false, true));
                             if (!entityiterator.hasEffect(BabelMobEffects.FEEBLENESS))
                                 entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.FEEBLENESS, 20, (int) lvl, false, true));
-                            if (!entityiterator.hasEffect(BabelMobEffects.WEIGHTLESS))
-                                entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.WEIGHTLESS, 20, (int) lvl, false, true));
+                            if (!entityiterator.hasEffect(BabelMobEffects.MASS_LOSS))
+                                entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.MASS_LOSS, 20, (int) lvl, false, true));
                             if (!entityiterator.hasEffect(MobEffects.DIG_SLOWDOWN))
                                 entityiterator.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20, (int) lvl, false, true));
                         }

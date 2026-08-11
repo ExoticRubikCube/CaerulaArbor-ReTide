@@ -323,7 +323,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                         d = distanceTo(entityiterator);
                                         if (d <= r && (EntityUtils.getEntityCosine(this, entityiterator) > 0.5 || d <= 3)) {
                                             if (!this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 40, 0, false, false));
+                                                this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 40, 0, false, false));
                                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                         }
                                     }
@@ -413,7 +413,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                     Entity ent = this;
                                     ent.teleportTo((enemy1.getX()), (enemy1.getY()), (enemy1.getZ()));
                                     if (enemy1 instanceof LivingEntity && !this.level().isClientSide())
-                                        this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
+                                        this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 120, 0, false, false));
                                     enemy1.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                 }
                                 noeX = getX();
@@ -431,12 +431,12 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                     for (LivingEntity entityiterator : entfound) {
                                         if (distanceToSqr(entityiterator) <= 36) {
                                             if (!this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 120, 0, false, false));
+                                                this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 120, 0, false, false));
                                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                         }
                                     }
                                 }
-                                this.removeEffect(BabelMobEffects.DIZZY);
+                                this.removeEffect(BabelMobEffects.STUN);
                                 this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                                 this.removeEffect(MobEffects.DIG_SLOWDOWN);
                                 AbstractEPCapability sanityInjury = BabelAPI.getEP(this).getEP(AbstractEPCapability.EPType.NERVOUS);

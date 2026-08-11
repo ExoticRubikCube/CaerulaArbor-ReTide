@@ -33,7 +33,7 @@ public class NervousRegenerationItem extends Item {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		AbstractEPCapability sanityInjury = BabelAPI.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS);
 		sanityInjury.heal(sanityInjury.getMaxValue());
-		entity.removeEffect(BabelMobEffects.DIZZY);
+		entity.removeEffect(BabelMobEffects.STUN);
 		entity.removeEffect(MobEffects.BLINDNESS);
 		entity.removeEffect(MobEffects.DARKNESS);
 		return retval;

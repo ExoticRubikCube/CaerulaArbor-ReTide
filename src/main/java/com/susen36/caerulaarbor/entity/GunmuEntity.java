@@ -161,7 +161,7 @@ public class GunmuEntity extends Monster {
         if (tickCount % 10 == 0) {
             clearFire();
             this.removeAllEffects();
-            this.removeEffect(BabelMobEffects.NUMB);
+            this.removeEffect(BabelMobEffects.PALSY);
             AbstractEPCapability sanityInjury = BabelAPI.getEP(this).getEP(AbstractEPCapability.EPType.NERVOUS);
             sanityInjury.heal(sanityInjury.getMaxValue());
         }

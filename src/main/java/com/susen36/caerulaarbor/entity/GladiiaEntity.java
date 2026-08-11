@@ -300,9 +300,9 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 										level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 3, 1);
 									}
 									if (ene instanceof LivingEntity && !this.level().isClientSide())
-										this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 40, 0, false, false));
+										this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 40, 0, false, false));
 									if (EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene) instanceof LivingEntity && !this.level().isClientSide())
-										this.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 40, 0, false, false));
+										this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 40, 0, false, false));
 								});
 							}
 						});

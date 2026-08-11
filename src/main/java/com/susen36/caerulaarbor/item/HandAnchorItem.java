@@ -33,7 +33,7 @@ public class HandAnchorItem extends PickaxeItem {
 		boolean retval = super.hurtEnemy(itemstack, living, sourceentity);
         if (Math.random() < 0.15) {
             if (!living.level().isClientSide())
-				living.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 40, 0, false, false));
+				living.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 40, 0, false, false));
         }
         return retval;
 	}

@@ -117,7 +117,7 @@ public class BrokenSeaItem extends SwordItem {
                             GladiiaEntity.spawnGladiiaLinkParticles(world, entity, entityiterator);
                             LivingEntity livingEntity = (LivingEntity) entityiterator;
                             if (!livingEntity.level().isClientSide())
-                                livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.DIZZY, 40, 0, false, false));
+                                livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 40, 0, false, false));
                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, entity), (float) (damage * 3));
                             count = count + 1;
                         }

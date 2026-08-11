@@ -31,7 +31,7 @@ public class PalsyOverlay {
 		RenderSystem.setShaderColor(1, 1, 1, 1);
         boolean result = false;
         if (entity != null) {
-            result = entity.hasEffect(BabelMobEffects.NUMB);
+            result = entity.hasEffect(BabelMobEffects.PALSY);
         }
         if (result) {
 			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/palsy.png"), w / 2 + 5, h / 2 + -8, 0, 0, 16, 16, 16, 16);

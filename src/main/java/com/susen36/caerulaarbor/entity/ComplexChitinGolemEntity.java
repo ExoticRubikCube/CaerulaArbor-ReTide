@@ -245,7 +245,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         double sklp1;
         double dura;
         if (this.isAlive()) {
-            this.removeEffect(BabelMobEffects.DIZZY);
+            this.removeEffect(BabelMobEffects.STUN);
             boolean root;
             double rx;
             double rz;
