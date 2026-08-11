@@ -458,7 +458,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_WARDEN_SPAWNEGG = REGISTRY.register("oceanized_warden_spawnegg", OceanizedWardenSpawneggItem::new);
     public static final DeferredHolder<Item, ? extends Item> MUTAGENISIS_CAPSULE = REGISTRY.register("mutagenisis_capsule", MutagenisisCapsuleItem::new);
     public static final DeferredHolder<Item, ? extends Item> ECHO_JELLY = REGISTRY.register("echo_jelly", EchoJellyItem::new);
-    public static final DeferredHolder<Item, ? extends Item> APOCALYPSE = REGISTRY.register("susen36", ApocalypseItem::new);
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_CAT_SPAWN_EGG = REGISTRY.register("oceanized_cat_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_CAT, -3491156, -7897500, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> SUPER_BIG_CAT_SPAWN_EGG = REGISTRY.register("super_big_cat_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SUPER_BIG_CAT, -1, -1, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> HAND_ANCHOR = REGISTRY.register("hand_anchor", HandAnchorItem::new);

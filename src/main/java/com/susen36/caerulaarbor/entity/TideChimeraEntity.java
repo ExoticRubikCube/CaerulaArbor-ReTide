@@ -37,9 +37,7 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -631,13 +629,6 @@ public class TideChimeraEntity extends SeaMonsterBoss {
         if (this.deathTime == 40) {
             this.remove(RemovalReason.KILLED);
             this.dropExperience(this.getKillCredit());
-            LevelAccessor world = this.level();
-            if (world instanceof ServerLevel level) {
-                ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.APOCALYPSE.get()));
-                entityToSpawn.setPickUpDelay(10);
-                entityToSpawn.setUnlimitedLifetime();
-                level.addFreshEntity(entityToSpawn);
-            }
         }
     }
 

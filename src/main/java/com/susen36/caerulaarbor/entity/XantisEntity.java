@@ -40,7 +40,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);
@@ -286,7 +285,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return Objects.equals(CAItems.APOCALYPSE.get(), stack.getItem());
+        return false;
     }
 
     @Override

@@ -2,10 +2,8 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -165,35 +163,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
         super.mobInteract(sourceentity, hand);
-        Entity entity = this;
-        if ((entity instanceof OceanizeRabbitEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0) > 4.5) {
-            return InteractionResult.PASS;
-        }
-        if (sourceentity.isHolding(CAItems.APOCALYPSE.get())) {
-            if (entity instanceof OceanizeRabbitEntity datEntSetI)
-                datEntSetI.getEntityData().set(DATA_VARIANT, 5);
-            LivingEntity livingEntity = (LivingEntity) entity;
-            if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue((livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 10);
-            if (livingEntity.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                livingEntity.getAttribute(Attributes.MAX_HEALTH).setBaseValue((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 10);
-            if (livingEntity.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
-                livingEntity.getAttribute(CAAttributes.GENERAL_DEFENSE).setBaseValue(32.5);
-            if (livingEntity.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
-                livingEntity.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(79.9);
-            if (livingEntity.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE))
-                livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
-            if (!this.level().isClientSide()) {
-                //TODO 99999应该怎么替代
-                this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 99999, 2));
-                this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 99999, 2));
-                this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 99999, 0));
-                this.addEffect(new MobEffectInstance(CAMobEffects.SANITY_IMMUE, 99999, 0));
-                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 99999, 1));
-            }
-            livingEntity.setHealth(livingEntity.getMaxHealth());
-            return InteractionResult.SUCCESS;
-        }
         return InteractionResult.PASS;
     }
 

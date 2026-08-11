@@ -596,7 +596,6 @@ public class CATabs {
                 tabData.accept(CAItems.XANTIS_SPAWN_EGG.get());
                 tabData.accept(CAItems.QUNYOU_WANTED_ISHARMLA_SPAWN_EGG.get());
                 tabData.accept(CAItems.BANNED_ITEM.get());
-                tabData.accept(CAItems.APOCALYPSE.get());
                 tabData.accept(CAItems.GOODSQUIDS_SERVERER.get());
                 tabData.accept(CAItems.THERMOGRAPH.get());
                 tabData.accept(CAItems.RULER.get());

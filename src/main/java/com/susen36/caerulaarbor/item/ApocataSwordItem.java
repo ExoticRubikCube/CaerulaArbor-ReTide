@@ -1,7 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -28,7 +27,7 @@ public class ApocataSwordItem extends SwordItem {
 			99f,
 			65532f,
 			99,
-			() -> Ingredient.of(new ItemStack(CAItems.APOCALYPSE.get()))
+			() -> Ingredient.of(new ItemStack(Items.NETHERITE_INGOT))
 	);
 
 	public ApocataSwordItem() {

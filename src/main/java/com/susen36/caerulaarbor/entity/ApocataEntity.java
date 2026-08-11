@@ -2,7 +2,6 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -24,6 +23,7 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
@@ -244,7 +244,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 			this.dropExperience(this.getKillCredit());
             LevelAccessor world = this.level();
             if (world instanceof ServerLevel level) {
-                ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.APOCALYPSE.get()));
+                ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(Items.PUFFERFISH));
                 entityToSpawn.setPickUpDelay(10);
                 entityToSpawn.setUnlimitedLifetime();
                 level.addFreshEntity(entityToSpawn);

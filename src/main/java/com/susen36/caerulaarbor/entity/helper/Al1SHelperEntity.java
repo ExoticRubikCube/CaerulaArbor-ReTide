@@ -4,7 +4,6 @@ import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -27,11 +26,6 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 
 	@Override
 	protected InteractionResult handleApocalypseInteract(Player sourceentity) {
-		if (this.level() instanceof ServerLevel serverLevel && sourceentity.isHolding(CAItems.APOCALYPSE.get())) {
-			serverLevel.sendParticles(ParticleTypes.FLAME, this.getX(), this.getY(), this.getZ(), 32, 0.75, 0.75, 0.75, 0.15);
-			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), CASounds.AL1S_SPEC.get(), SoundSource.BLOCKS, 3, 1);
-			return InteractionResult.SUCCESS;
-		}
 		return InteractionResult.PASS;
 	}
 
