@@ -20,17 +20,15 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -42,6 +40,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.AnimationState;
 
 public class ApostleProkaryoteEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
@@ -50,6 +49,11 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
+	protected final WaterBoundPathNavigation waterNavigation;
+	protected final GroundPathNavigation groundNavigation;
+	private final MoveControl landControl;
+	private final SeabornSwimControl swimControl;
+	String prevAnim = "empty";
 
 	public ApostleProkaryoteEntity(Level world) {
 		this(CAEntities.APOSTLE_PROKARYOTE.get(), world);
@@ -60,38 +64,11 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 		xpReward = 8;
 		setNoAi(false);
 		this.setPathfindingMalus(PathType.WATER, 0);
-		this.moveControl = new MoveControl(this) {
-			@Override
-			public void tick() {
-				if (ApostleProkaryoteEntity.this.isInWater())
-					ApostleProkaryoteEntity.this.setDeltaMovement(ApostleProkaryoteEntity.this.getDeltaMovement().add(0, 0.005, 0));
-				if (this.operation == Operation.MOVE_TO && !ApostleProkaryoteEntity.this.getNavigation().isDone()) {
-					double dx = this.wantedX - ApostleProkaryoteEntity.this.getX();
-					double dy = this.wantedY - ApostleProkaryoteEntity.this.getY();
-					double dz = this.wantedZ - ApostleProkaryoteEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
-					float f1 = (float) (this.speedModifier * ApostleProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-					ApostleProkaryoteEntity.this.setYRot(this.rotlerp(ApostleProkaryoteEntity.this.getYRot(), f, 10));
-					ApostleProkaryoteEntity.this.yBodyRot = ApostleProkaryoteEntity.this.getYRot();
-					ApostleProkaryoteEntity.this.yHeadRot = ApostleProkaryoteEntity.this.getYRot();
-					if (ApostleProkaryoteEntity.this.isInWater()) {
-						ApostleProkaryoteEntity.this.setSpeed((float) ApostleProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-						float f2 = -(float) (Mth.atan2(dy, (float) Math.sqrt(dx * dx + dz * dz)) * (180 / Math.PI));
-						f2 = Mth.clamp(Mth.wrapDegrees(f2), -85, 85);
-						ApostleProkaryoteEntity.this.setXRot(this.rotlerp(ApostleProkaryoteEntity.this.getXRot(), f2, 5));
-						float f3 = Mth.cos(ApostleProkaryoteEntity.this.getXRot() * (float) (Math.PI / 180.0));
-						ApostleProkaryoteEntity.this.setZza(f3 * f1);
-						ApostleProkaryoteEntity.this.setYya((float) (f1 * dy));
-					} else {
-						ApostleProkaryoteEntity.this.setSpeed(f1 * 0.05F);
-					}
-				} else {
-					ApostleProkaryoteEntity.this.setSpeed(0);
-					ApostleProkaryoteEntity.this.setYya(0);
-					ApostleProkaryoteEntity.this.setZza(0);
-				}
-			}
-		};
+		this.landControl = new MoveControl(this);
+		this.swimControl = new SeabornSwimControl(this);
+		this.moveControl = this.swimControl;
+		this.waterNavigation = new WaterBoundPathNavigation(this, world);
+		this.groundNavigation = new GroundPathNavigation(this, world);
 	}
 
 	@Override
@@ -103,16 +80,12 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	}
 
 	@Override
-	protected PathNavigation createNavigation(Level world) {
-		return new WaterBoundPathNavigation(this, world);
-	}
-
-	@Override
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false));
 		this.goalSelector.addGoal(9, new RandomSwimmingGoal(this, 1, 40));
-		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(10, new RandomStrollGoal(this, 1.0));
+		this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
 	}
 
 	@Override
@@ -217,6 +190,21 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 		return false;
 	}
 
+	@Override
+	public void updateSwimming() {
+		if (!this.level().isClientSide()) {
+			if (this.isEffectiveAi() && this.isInWater()) {
+				this.navigation = this.waterNavigation;
+				this.moveControl = this.swimControl;
+				this.setSwimming(true);
+			} else {
+				this.navigation = this.groundNavigation;
+				this.moveControl = this.landControl;
+				this.setSwimming(false);
+			}
+		}
+	}
+
 	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
 		event.register(CAEntities.APOSTLE_PROKARYOTE.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
@@ -240,19 +228,24 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	}
 
 	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.apostle.move"));
-			}
-			if (this.isDeadOrDying()) {
+		boolean inWater = this.isInWaterOrBubble();
+		if (this.isDeadOrDying()) {
+			if (inWater) {
 				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.apostle.die"));
 			}
-			if (this.isInWaterOrBubble()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.apostle.move"));
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.apostle.die_lamd"));
+		}
+		if (this.animationprocedure.equals("empty")) {
+			if (event.isMoving()) {
+				if (inWater) {
+					return event.setAndContinue(RawAnimation.begin().thenLoop("animation.apostle.move"));
+				}
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.apostle.move_land"));
 			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.apostle.idle"));
+			if (inWater) {
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.apostle.idle"));
+			}
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.apostle.idle_land"));
 		}
 		return PlayState.STOP;
 	}
@@ -271,8 +264,6 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 		}
 		return PlayState.CONTINUE;
 	}
-
-	String prevAnim = "empty";
 
 	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
@@ -309,5 +300,49 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	@Override
 	public void setAnimationProcedure(String animation) {
 		this.animationprocedure = animation;
+	}
+
+	public static class SeabornSwimControl extends MoveControl {
+		public SeabornSwimControl(Mob mob) {
+			super(mob);
+		}
+
+		@Override
+		public void tick() {
+			Mob entity = this.mob;
+			if (entity.isInWater()) {
+				entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, 0.005, 0.0));
+			}
+			if (this.operation == Operation.MOVE_TO && !entity.getNavigation().isDone()) {
+				double dx = this.wantedX - entity.getX();
+				double dy = this.wantedY - entity.getY();
+				double dz = this.wantedZ - entity.getZ();
+				float f = (float) (Mth.atan2(dz, dx) * (180D / Math.PI)) - 90.0f;
+				float f1 = (float) (this.speedModifier * entity.getAttribute(NeoForgeMod.SWIM_SPEED).getValue());
+				entity.setYRot(this.rotlerp(entity.getYRot(), f, 10.0f));
+				entity.yBodyRot = entity.getYRot();
+				entity.yHeadRot = entity.getYRot();
+				if (entity.isInWater()) {
+					LivingEntity target;
+					entity.setSpeed((float) entity.getAttribute(NeoForgeMod.SWIM_SPEED).getValue());
+					float f2 = -(float) (Mth.atan2(dy, (float) Math.sqrt(dx * dx + dz * dz)) * (180D / Math.PI));
+					f2 = Mth.clamp(Mth.wrapDegrees(f2), -85.0f, 85.0f);
+					entity.setXRot(this.rotlerp(entity.getXRot(), f2, 5.0f));
+					float f3 = Mth.cos(entity.getXRot() * (float) (Math.PI / 180.0));
+					entity.setZza(f3 * f1);
+					entity.setYya((float) (f1 * dy));
+					if (entity.tickCount % 20 == 0 && !entity.level().isClientSide() && (target = entity.getTarget()) != null && target.isAlive() && !target.isInWater() && target.getY() > entity.getY()) {
+						Vec3 jump = entity.position().vectorTo(target.position()).normalize().scale(f1 * 0.35);
+						entity.push(jump.x, jump.y + 0.33, jump.z);
+					}
+				} else {
+					super.tick();
+				}
+			} else {
+				entity.setSpeed(0.0f);
+				entity.setYya(0.0f);
+				entity.setZza(0.0f);
+			}
+		}
 	}
 }

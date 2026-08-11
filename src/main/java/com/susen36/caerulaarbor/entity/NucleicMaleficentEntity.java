@@ -31,6 +31,7 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;
@@ -57,6 +58,10 @@ public class NucleicMaleficentEntity extends SeaMonster {
     String prevAnim = "empty";
     private boolean swinging;
     private long lastSwing;
+    protected final WaterBoundPathNavigation waterNavigation;
+    protected final GroundPathNavigation groundNavigation;
+    private final MoveControl landControl;
+    private final ApostleProkaryoteEntity.SeabornSwimControl swimControl;
 
     public NucleicMaleficentEntity(Level world) {
         this(CAEntities.NUCLEIC_MALEFICENT.get(), world);
@@ -67,38 +72,11 @@ public class NucleicMaleficentEntity extends SeaMonster {
         xpReward = 0;
         setNoAi(false);
         this.setPathfindingMalus(PathType.WATER, 0);
-        this.moveControl = new MoveControl(this) {
-            @Override
-            public void tick() {
-                if (NucleicMaleficentEntity.this.isInWater())
-                    NucleicMaleficentEntity.this.setDeltaMovement(NucleicMaleficentEntity.this.getDeltaMovement().add(0, 0.005, 0));
-                if (this.operation == Operation.MOVE_TO && !NucleicMaleficentEntity.this.getNavigation().isDone()) {
-                    double dx = this.wantedX - NucleicMaleficentEntity.this.getX();
-                    double dy = this.wantedY - NucleicMaleficentEntity.this.getY();
-                    double dz = this.wantedZ - NucleicMaleficentEntity.this.getZ();
-                    float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
-                    float f1 = (float) (this.speedModifier * NucleicMaleficentEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-                    NucleicMaleficentEntity.this.setYRot(this.rotlerp(NucleicMaleficentEntity.this.getYRot(), f, 10));
-                    NucleicMaleficentEntity.this.yBodyRot = NucleicMaleficentEntity.this.getYRot();
-                    NucleicMaleficentEntity.this.yHeadRot = NucleicMaleficentEntity.this.getYRot();
-                    if (NucleicMaleficentEntity.this.isInWater()) {
-                        NucleicMaleficentEntity.this.setSpeed((float) NucleicMaleficentEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-                        float f2 = -(float) (Mth.atan2(dy, (float) Math.sqrt(dx * dx + dz * dz)) * (180 / Math.PI));
-                        f2 = Mth.clamp(Mth.wrapDegrees(f2), -85, 85);
-                        NucleicMaleficentEntity.this.setXRot(this.rotlerp(NucleicMaleficentEntity.this.getXRot(), f2, 5));
-                        float f3 = Mth.cos(NucleicMaleficentEntity.this.getXRot() * (float) (Math.PI / 180.0));
-                        NucleicMaleficentEntity.this.setZza(f3 * f1);
-                        NucleicMaleficentEntity.this.setYya((float) (f1 * dy));
-                    } else {
-                        NucleicMaleficentEntity.this.setSpeed(f1 * 0.05F);
-                    }
-                } else {
-                    NucleicMaleficentEntity.this.setSpeed(0);
-                    NucleicMaleficentEntity.this.setYya(0);
-                    NucleicMaleficentEntity.this.setZza(0);
-                }
-            }
-        };
+        this.landControl = new MoveControl(this);
+        this.swimControl = new ApostleProkaryoteEntity.SeabornSwimControl(this);
+        this.moveControl = this.swimControl;
+        this.waterNavigation = new WaterBoundPathNavigation(this, world);
+        this.groundNavigation = new GroundPathNavigation(this, world);
     }
 
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
@@ -118,13 +96,13 @@ public class NucleicMaleficentEntity extends SeaMonster {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 1.25);
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 45);
         builder = builder.add(Attributes.MAX_HEALTH, 120);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-        builder = builder.add(NeoForgeMod.SWIM_SPEED, 1.25);
+        builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.8);
         builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
@@ -141,11 +119,25 @@ public class NucleicMaleficentEntity extends SeaMonster {
         return new WaterBoundPathNavigation(this, world);
     }
 
+    public void updateSwimming() {
+        if (!this.level().isClientSide()) {
+            if (this.isEffectiveAi() && this.isInWater()) {
+                this.navigation = this.waterNavigation;
+                this.moveControl = this.swimControl;
+                this.setSwimming(true);
+            } else {
+                this.navigation = this.groundNavigation;
+                this.moveControl = this.landControl;
+                this.setSwimming(false);
+            }
+        }
+    }
+
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 2, false));
-        this.goalSelector.addGoal(2, new RandomSwimmingGoal(this, 1, 40));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25, false));
+        this.goalSelector.addGoal(3, new RandomSwimmingGoal(this, 1, 40));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
     }
 
@@ -288,10 +280,10 @@ public class NucleicMaleficentEntity extends SeaMonster {
     }
 
     private PlayState movementPredicate(AnimationState event) {
+        if (this.isDeadOrDying()) {
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.nucleic_maleficent.die"));
+        }
         if (this.animationprocedure.equals("empty")) {
-            if (this.isDeadOrDying()) {
-                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.nucleic_maleficent.die"));
-            }
             if (this.isAggressive() && event.isMoving()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nucleic_maleficent.swim"));
             }

@@ -25,7 +25,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -257,12 +256,11 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	@Override
 	public void push(Entity pEntity) {
 		super.push(pEntity);
-		if (pEntity instanceof NetherseaSlimeEntity) return;
 		if (pEntity instanceof LivingEntity entity && !entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 70, 0));
-		}
-		if (pEntity instanceof IronGolem && this.isDealsDamage()) {
-			this.dealDamage((LivingEntity) pEntity);
+			if (this.isDealsDamage()) {
+				this.dealDamage(entity);
+			}
 		}
 	}
 
@@ -272,8 +270,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 			if (target.hurt(damagesource, this.getAttackDamage())) {
 				target.invulnerableTime = 0;
 				this.playSound(SoundEvents.SLIME_ATTACK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-				Level var4 = this.level();
-				if (var4 instanceof ServerLevel serverlevel) {
+                if (this.level() instanceof ServerLevel serverlevel) {
                     EnchantmentHelper.doPostAttackEffects(serverlevel, target, damagesource);
 				}
 			}

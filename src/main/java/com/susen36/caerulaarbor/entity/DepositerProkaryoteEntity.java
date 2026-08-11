@@ -12,7 +12,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -22,7 +21,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;
@@ -44,6 +45,11 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
+	protected final WaterBoundPathNavigation waterNavigation;
+	protected final GroundPathNavigation groundNavigation;
+	private final MoveControl landControl;
+	private final ApostleProkaryoteEntity.SeabornSwimControl swimControl;
+	String prevAnim = "empty";
 
 	public DepositerProkaryoteEntity(Level world) {
 		this(CAEntities.DEPOSITER_PROKARYOTE.get(), world);
@@ -54,47 +60,18 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 		xpReward = 4;
 		setNoAi(false);
 		this.setPathfindingMalus(PathType.WATER, 0);
-		this.moveControl = new MoveControl(this) {
-			@Override
-			public void tick() {
-				if (DepositerProkaryoteEntity.this.isInWater())
-					DepositerProkaryoteEntity.this.setDeltaMovement(DepositerProkaryoteEntity.this.getDeltaMovement().add(0, 0.005, 0));
-				if (this.operation == Operation.MOVE_TO && !DepositerProkaryoteEntity.this.getNavigation().isDone()) {
-					double dx = this.wantedX - DepositerProkaryoteEntity.this.getX();
-					double dy = this.wantedY - DepositerProkaryoteEntity.this.getY();
-					double dz = this.wantedZ - DepositerProkaryoteEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
-					float f1 = (float) (this.speedModifier * DepositerProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-					DepositerProkaryoteEntity.this.setYRot(this.rotlerp(DepositerProkaryoteEntity.this.getYRot(), f, 10));
-					DepositerProkaryoteEntity.this.yBodyRot = DepositerProkaryoteEntity.this.getYRot();
-					DepositerProkaryoteEntity.this.yHeadRot = DepositerProkaryoteEntity.this.getYRot();
-					if (DepositerProkaryoteEntity.this.isInWater()) {
-						DepositerProkaryoteEntity.this.setSpeed((float) DepositerProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-						float f2 = -(float) (Mth.atan2(dy, (float) Math.sqrt(dx * dx + dz * dz)) * (180 / Math.PI));
-						f2 = Mth.clamp(Mth.wrapDegrees(f2), -85, 85);
-						DepositerProkaryoteEntity.this.setXRot(this.rotlerp(DepositerProkaryoteEntity.this.getXRot(), f2, 5));
-						float f3 = Mth.cos(DepositerProkaryoteEntity.this.getXRot() * (float) (Math.PI / 180.0));
-						DepositerProkaryoteEntity.this.setZza(f3 * f1);
-						DepositerProkaryoteEntity.this.setYya((float) (f1 * dy));
-					} else {
-						DepositerProkaryoteEntity.this.setSpeed(f1 * 0.05F);
-					}
-				} else {
-					DepositerProkaryoteEntity.this.setSpeed(0);
-					DepositerProkaryoteEntity.this.setYya(0);
-					DepositerProkaryoteEntity.this.setZza(0);
-				}
-			}
-		};
+		this.landControl = new MoveControl(this);
+		this.swimControl = new ApostleProkaryoteEntity.SeabornSwimControl(this);
+		this.moveControl = this.swimControl;
+		this.waterNavigation = new WaterBoundPathNavigation(this, world);
+		this.groundNavigation = new GroundPathNavigation(this, world);
 	}
-
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
 		super.defineSynchedData(builder);
 		builder.define(DATA_SHOOT, false);
 		builder.define(DATA_ANIMATION, "undefined");
 	}
-
 
 	@Override
 	protected PathNavigation createNavigation(Level world) {
@@ -105,8 +82,23 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25, false));
-		this.goalSelector.addGoal(9, new RandomSwimmingGoal(this, 1, 40));
-		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1.0));
+		this.goalSelector.addGoal(5, new RandomSwimmingGoal(this, 1, 40));
+		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+	}
+
+	public void updateSwimming() {
+		if (!this.level().isClientSide()) {
+			if (this.isEffectiveAi() && this.isInWater()) {
+				this.navigation = this.waterNavigation;
+				this.moveControl = this.swimControl;
+				this.setSwimming(true);
+			} else {
+				this.navigation = this.groundNavigation;
+				this.moveControl = this.landControl;
+				this.setSwimming(false);
+			}
+		}
 	}
 
 	@Override
@@ -146,30 +138,32 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 1.5);
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.14);
 		builder = builder.add(Attributes.MAX_HEALTH, 18);
 		builder = builder.add(Attributes.ARMOR, 3);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 4);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 22);
-		builder = builder.add(NeoForgeMod.SWIM_SPEED, 1.5);
+		builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.9);
 		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
 
 	private PlayState movementPredicate(AnimationState event) {
+		if (this.isDeadOrDying()) {
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.depsoiter.die"));
+		}
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.depsoiter.move"));
+			boolean inWater = this.isInWaterOrBubble();
+			if (event.isMoving()) {
+				if (inWater) {
+					return event.setAndContinue(RawAnimation.begin().thenLoop("animation.depsoiter.move"));
+				}
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.depsoiter.move_land"));
 			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.depsoiter.die"));
+			if (inWater) {
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.depsoiter.idle"));
 			}
-			if (this.isInWaterOrBubble()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.depsoiter.move"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.depsoiter.idle"));
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.depsoiter.idle_land"));
 		}
 		return PlayState.STOP;
 	}
@@ -179,17 +173,18 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
-		if (this.swinging && this.lastSwing + 20L <= level().getGameTime()) {
+		if (this.swinging && this.lastSwing + 16L <= level().getGameTime()) {
 			this.swinging = false;
 		}
 		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.depsoiter.attack"));
+			if (this.isInWaterOrBubble()) {
+				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.depsoiter.attack"));
+			}
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.depsoiter.attack_land"));
 		}
 		return PlayState.CONTINUE;
 	}
-
-	String prevAnim = "empty";
 
 	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {

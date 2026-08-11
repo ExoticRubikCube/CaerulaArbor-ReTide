@@ -16,7 +16,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -24,7 +23,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;
@@ -43,6 +44,11 @@ public class FeederProkaryoteEntity extends SeaMonster {
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
+	protected final WaterBoundPathNavigation waterNavigation;
+	protected final GroundPathNavigation groundNavigation;
+	private final MoveControl landControl;
+	private final ApostleProkaryoteEntity.SeabornSwimControl swimControl;
+	String prevAnim = "empty";
 
 	public FeederProkaryoteEntity(Level world) {
 		this(CAEntities.FEEDER_PROKARYOTE.get(), world);
@@ -53,38 +59,11 @@ public class FeederProkaryoteEntity extends SeaMonster {
 		xpReward = 6;
 		setNoAi(false);
 		this.setPathfindingMalus(PathType.WATER, 0);
-		this.moveControl = new MoveControl(this) {
-			@Override
-			public void tick() {
-				if (FeederProkaryoteEntity.this.isInWater())
-					FeederProkaryoteEntity.this.setDeltaMovement(FeederProkaryoteEntity.this.getDeltaMovement().add(0, 0.005, 0));
-				if (this.operation == Operation.MOVE_TO && !FeederProkaryoteEntity.this.getNavigation().isDone()) {
-					double dx = this.wantedX - FeederProkaryoteEntity.this.getX();
-					double dy = this.wantedY - FeederProkaryoteEntity.this.getY();
-					double dz = this.wantedZ - FeederProkaryoteEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
-					float f1 = (float) (this.speedModifier * FeederProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-					FeederProkaryoteEntity.this.setYRot(this.rotlerp(FeederProkaryoteEntity.this.getYRot(), f, 10));
-					FeederProkaryoteEntity.this.yBodyRot = FeederProkaryoteEntity.this.getYRot();
-					FeederProkaryoteEntity.this.yHeadRot = FeederProkaryoteEntity.this.getYRot();
-					if (FeederProkaryoteEntity.this.isInWater()) {
-						FeederProkaryoteEntity.this.setSpeed((float) FeederProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-						float f2 = -(float) (Mth.atan2(dy, (float) Math.sqrt(dx * dx + dz * dz)) * (180 / Math.PI));
-						f2 = Mth.clamp(Mth.wrapDegrees(f2), -85, 85);
-						FeederProkaryoteEntity.this.setXRot(this.rotlerp(FeederProkaryoteEntity.this.getXRot(), f2, 5));
-						float f3 = Mth.cos(FeederProkaryoteEntity.this.getXRot() * (float) (Math.PI / 180.0));
-						FeederProkaryoteEntity.this.setZza(f3 * f1);
-						FeederProkaryoteEntity.this.setYya((float) (f1 * dy));
-					} else {
-						FeederProkaryoteEntity.this.setSpeed(f1 * 0.05F);
-					}
-				} else {
-					FeederProkaryoteEntity.this.setSpeed(0);
-					FeederProkaryoteEntity.this.setYya(0);
-					FeederProkaryoteEntity.this.setZza(0);
-				}
-			}
-		};
+		this.landControl = new MoveControl(this);
+		this.swimControl = new ApostleProkaryoteEntity.SeabornSwimControl(this);
+		this.moveControl = this.swimControl;
+		this.waterNavigation = new WaterBoundPathNavigation(this, world);
+		this.groundNavigation = new GroundPathNavigation(this, world);
 	}
 
 	@Override
@@ -102,9 +81,24 @@ public class FeederProkaryoteEntity extends SeaMonster {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false));
-		this.goalSelector.addGoal(9, new RandomSwimmingGoal(this, 1, 40));
-		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0, false));
+		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1.0));
+		this.goalSelector.addGoal(5, new RandomSwimmingGoal(this, 1, 40));
+		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+	}
+
+	public void updateSwimming() {
+		if (!this.level().isClientSide()) {
+			if (this.isEffectiveAi() && this.isInWater()) {
+				this.navigation = this.waterNavigation;
+				this.moveControl = this.swimControl;
+				this.setSwimming(true);
+			} else {
+				this.navigation = this.groundNavigation;
+				this.moveControl = this.landControl;
+				this.setSwimming(false);
+			}
+		}
 	}
 
 	@Override
@@ -159,31 +153,29 @@ public class FeederProkaryoteEntity extends SeaMonster {
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 1.5);
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.17);
 		builder = builder.add(Attributes.MAX_HEALTH, 58);
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 8);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.65);
-		builder = builder.add(NeoForgeMod.SWIM_SPEED, 1.5);
+		builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.75);
 		builder = builder.add(Attributes.STEP_HEIGHT, 1f);
 		return builder;
 	}
 
 	private PlayState movementPredicate(AnimationState event) {
+		if (this.isDeadOrDying()) {
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.model.die"));
+		}
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.feeder.move"));
+			if (event.isMoving()) {
+				if (this.isInWaterOrBubble()) {
+					return event.setAndContinue(RawAnimation.begin().thenLoop("animation.model.move"));
+				}
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.model.move_land"));
 			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.feeder.die"));
-			}
-			if (this.isInWaterOrBubble()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.feeder.move"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.feeder.idle"));
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.model.idle"));
 		}
 		return PlayState.STOP;
 	}
@@ -198,12 +190,10 @@ public class FeederProkaryoteEntity extends SeaMonster {
 		}
 		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.feeder.attack"));
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.model.attack"));
 		}
 		return PlayState.CONTINUE;
 	}
-
-	String prevAnim = "empty";
 
 	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
@@ -225,9 +215,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
 	@Override
 	protected void tickDeath() {
 		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(RemovalReason.KILLED);
-			this.dropExperience(this.getKillCredit());
+		if (this.deathTime >= 20) {
 			Level world = this.level();
 			double x = this.getX();
 			double y = this.getY();
@@ -340,6 +328,8 @@ public class FeederProkaryoteEntity extends SeaMonster {
 			}
 			if (world instanceof ServerLevel level)
 				level.sendParticles(ParticleTypes.CLOUD, x, y, z, 32, 1, 1, 1, 0.1);
+			this.remove(RemovalReason.KILLED);
+			this.dropExperience(this.getKillCredit());
 		}
 	}
 

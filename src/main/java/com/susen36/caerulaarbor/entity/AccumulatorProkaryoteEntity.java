@@ -52,6 +52,11 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
+	protected final WaterBoundPathNavigation waterNavigation;
+	protected final GroundPathNavigation groundNavigation;
+	private final MoveControl landControl;
+	private final ApostleProkaryoteEntity.SeabornSwimControl swimControl;
+	String prevAnim = "empty";
 
 	public AccumulatorProkaryoteEntity(Level world) {
 		this(CAEntities.ACCUMULATOR_PROKARYOTE.get(), world);
@@ -62,36 +67,11 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		xpReward = 0;
 		setNoAi(false);
 		this.setPathfindingMalus(PathType.WATER, 0);
-		this.swimControl = new MoveControl(this) {
-			@Override
-			public void tick() {
-				if (AccumulatorProkaryoteEntity.this.isInWater())
-					AccumulatorProkaryoteEntity.this.setDeltaMovement(AccumulatorProkaryoteEntity.this.getDeltaMovement().add(0, 0.005, 0));
-				if (this.operation == Operation.MOVE_TO && !AccumulatorProkaryoteEntity.this.getNavigation().isDone()) {
-					double dx = this.wantedX - AccumulatorProkaryoteEntity.this.getX();
-					double dy = this.wantedY - AccumulatorProkaryoteEntity.this.getY();
-					double dz = this.wantedZ - AccumulatorProkaryoteEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
-					float f1 = (float) (this.speedModifier * AccumulatorProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-					AccumulatorProkaryoteEntity.this.setYRot(this.rotlerp(AccumulatorProkaryoteEntity.this.getYRot(), f, 10));
-					AccumulatorProkaryoteEntity.this.yBodyRot = AccumulatorProkaryoteEntity.this.getYRot();
-					AccumulatorProkaryoteEntity.this.yHeadRot = AccumulatorProkaryoteEntity.this.getYRot();
-					AccumulatorProkaryoteEntity.this.setSpeed((float) AccumulatorProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-					float f2 = -(float) (Mth.atan2(dy, (float) Math.sqrt(dx * dx + dz * dz)) * (180 / Math.PI));
-					f2 = Mth.clamp(Mth.wrapDegrees(f2), -85, 85);
-					AccumulatorProkaryoteEntity.this.setXRot(this.rotlerp(AccumulatorProkaryoteEntity.this.getXRot(), f2, 5));
-					float f3 = Mth.cos(AccumulatorProkaryoteEntity.this.getXRot() * (float) (Math.PI / 180.0));
-					AccumulatorProkaryoteEntity.this.setZza(f3 * f1);
-					AccumulatorProkaryoteEntity.this.setYya((float) (f1 * dy));
-				} else {
-					AccumulatorProkaryoteEntity.this.setSpeed(0);
-					AccumulatorProkaryoteEntity.this.setYya(0);
-					AccumulatorProkaryoteEntity.this.setZza(0);
-				}
-			}
-		};
-		this.setupAquaticMovement();
-		this.setSwimControl(this.swimControl);
+		this.landControl = new MoveControl(this);
+		this.swimControl = new ApostleProkaryoteEntity.SeabornSwimControl(this);
+		this.moveControl = this.swimControl;
+		this.waterNavigation = new WaterBoundPathNavigation(this, world);
+		this.groundNavigation = new GroundPathNavigation(this, world);
 	}
 
 	@Override
@@ -104,21 +84,16 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 
 	@Override
 	protected PathNavigation createNavigation(Level world) {
-		this.waterNavigation = new WaterBoundPathNavigation(this, world);
-		this.groundNavigation = new GroundPathNavigation(this, world);
-		if (this.isInWater()) {
-			return this.waterNavigation;
-		}
-		return this.groundNavigation;
+		return new WaterBoundPathNavigation(this, world);
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25, false));
-		this.goalSelector.addGoal(9, new RandomSwimmingGoal(this, 1, 40));
-		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1.0));
+		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1.0));
+		this.goalSelector.addGoal(5, new RandomSwimmingGoal(this, 1, 40));
+		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 	}
 
 	@Override
@@ -205,6 +180,21 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		return false;
 	}
 
+	@Override
+	public void updateSwimming() {
+		if (!this.level().isClientSide()) {
+			if (this.isEffectiveAi() && this.isInWater()) {
+				this.navigation = this.waterNavigation;
+				this.moveControl = this.swimControl;
+				this.setSwimming(true);
+			} else {
+				this.navigation = this.groundNavigation;
+				this.moveControl = this.landControl;
+				this.setSwimming(false);
+			}
+		}
+	}
+
 	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
 		event.register(CAEntities.ACCUMULATOR_PROKARYOTE.get(), SpawnPlacementTypes.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
@@ -229,22 +219,24 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			if (this.isInWater()) {
-				if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
+			boolean inWater = this.isInWaterOrBubble();
+			if (event.isMoving()) {
+				if (inWater) {
 					return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.move"));
 				}
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.idle"));
-			} else {
-				if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
-					return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.move_land"));
-				}
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.idle_land"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.move_land"));
 			}
+			if (inWater) {
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.idle"));
+			}
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.accumulator.idle_land"));
 		}
 		return PlayState.STOP;
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
+		double d1 = this.getX() - this.xOld;
+		double d0 = this.getZ() - this.zOld;
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -254,12 +246,13 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		}
 		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.accumulator.attack"));
+			if (this.isInWaterOrBubble()) {
+				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.accumulator.attack"));
+			}
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.accumulator.attack_land"));
 		}
 		return PlayState.CONTINUE;
 	}
-
-	String prevAnim = "empty";
 
 	private PlayState procedurePredicate(AnimationState event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
