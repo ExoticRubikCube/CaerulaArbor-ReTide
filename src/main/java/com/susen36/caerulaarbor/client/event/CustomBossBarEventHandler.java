@@ -51,8 +51,8 @@ public class CustomBossBarEventHandler {
     public static final ResourceLocation WARDENIS = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/wardenis_bossbar.png");
     public static final ResourceLocation ENDERINA = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/enderina_bossbar.png");
     public static final ResourceLocation ENDSPEAKER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/endspeaker_bossbar.png");
-    public static final ResourceLocation WITHER_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/wither_bossstyle.png");
-    public static final ResourceLocation WARDEN_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/warden_bossstyle.png");
+    public static final ResourceLocation WITHER_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/wither_bossstyle.png");
+    public static final ResourceLocation WARDEN_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bossbar/warden_bossstyle.png");
     public static final ResourceLocation ENDERINA_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/enderina_style.png");
 
     public static final BossBarRenderContext CONTEXT_GENERIC = BossBarRenderContext.of(GENERIC).frame(158,26).bar(156,3,1,11).offset(-9, 5);
