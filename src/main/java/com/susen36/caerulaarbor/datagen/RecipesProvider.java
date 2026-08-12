@@ -1021,7 +1021,7 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:apocata_sword", 1),
-                ingredients(item("caerula_arbor:trailrite_sword"), item("caerula_arbor:complex_chitin_sword"), item("caerula_arbor:incandescent_anima"), item("caerula_arbor:leviathan_animus"), item("caerula_arbor:mizuki_determination"), item("caerula_arbor:moist_echo_shard"), item("caerula_arbor:moist_star"), item("caerula_arbor:susen36"), item("caerula_arbor:banned_item"))
+                ingredients(item("caerula_arbor:trailrite_sword"), item("caerula_arbor:complex_chitin_sword"), item("caerula_arbor:incandescent_anima"), item("caerula_arbor:leviathan_animus"), item("caerula_arbor:mizuki_determination"), item("caerula_arbor:moist_echo_shard"), item("caerula_arbor:moist_star"), item("caerula_arbor:banned_item"))
         );
         shapeless(
                 writer,

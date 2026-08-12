@@ -5,7 +5,6 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -43,7 +42,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock, BonemealableBlock {
+public class SeaTrailGrownBlock extends Block implements NetherseaBrandBlock, SimpleWaterloggedBlock, BonemealableBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 64);
@@ -332,7 +331,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 	@Override
 	public void entityInside(BlockState blockstate, Level world, BlockPos pos, Entity entity) {
 		super.entityInside(blockstate, world, pos, entity);
-		EntityUtils.damagedByNethseabrand(world, entity);
+		this.applyNetherseaBrand(world, entity);
 	}
 
 	@Override

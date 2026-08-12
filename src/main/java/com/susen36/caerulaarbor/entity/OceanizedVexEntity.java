@@ -321,7 +321,7 @@ public class OceanizedVexEntity extends SeaMonster {
                     if (!(entityiterator instanceof LivingEntity)) {
                         continue;
                     }
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                         continue;
                     }
                     if (distanceTo(entityiterator) <= 4) {

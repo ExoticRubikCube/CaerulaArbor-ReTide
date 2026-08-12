@@ -74,8 +74,8 @@ public class TidelinkedArchonEntity extends AbstractTidelinkedEntity {
         if (sourceentity != null && this.isAlive() && this.getEntityData().get(DATA_SKILLP) <= 0 && !this.hasEffect(CAMobEffects.FAKE_DEATH) && this.distanceTo(sourceentity) <= 6) {
             Vec3 attackCenter = new Vec3((x + 1.8 * getLookAngle().x), (y + 1.5), (z + 1.8 * getLookAngle().z));
             List<LivingEntity> targets = world.getEntitiesOfClass(LivingEntity.class, new AABB(attackCenter, attackCenter).inflate(5),
-                    e -> e.getType().is(EntityUtils.SEA_BORN) && this.getTarget() == e
-                        || !e.getType().is(EntityUtils.SEA_BORN) && (e instanceof Mob || e instanceof Player));
+                    e -> e.getType().is(EntityUtils.SEABORN) && this.getTarget() == e
+                        || !e.getType().is(EntityUtils.SEABORN) && (e instanceof Mob || e instanceof Player));
             int strongTargets = 0;
             for (LivingEntity entityiterator : targets) {
                 if (entityiterator != this && entityiterator.getMaxHealth() >= 10) {

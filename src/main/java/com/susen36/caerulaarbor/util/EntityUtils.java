@@ -1,15 +1,12 @@
 package com.susen36.caerulaarbor.util;
 
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
-import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
@@ -22,16 +19,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -43,8 +40,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class EntityUtils {
-
-	public static final int NUMB_EFFECT_DURATION = 10 * 60 * 20; // 麻痹（NUMB）效果时长：10 分钟 = 12000 ticks
 
 	private EntityUtils() {
 		throw new UnsupportedOperationException("Utility class");
@@ -122,120 +117,39 @@ public class EntityUtils {
 	}
 
 	public static void applyNetherseaBuff(LevelAccessor world, Entity entity) {
-		if (entity == null || !entity.isAlive()) {
-			return;
-		}
-		if (!(entity instanceof LivingEntity living)) {
-			return;
-		}
-		MapVariables mapVars = MapVariables.get(world);
-		boolean isSeabornUnit = (living.getType().is(SEA_BORN)
-				|| living.getType().is(SEA_BORN_BOSS)
-				|| living.getType().is(SEA_BORN_MINION))
-				&& !living.getType().is(SEA_BORN_PET);
+		if (entity != null && entity.isAlive() && entity instanceof LivingEntity living) {
+			MapVariables mapVars = MapVariables.get(world);
+			boolean isSeabornUnit = (living.getType().is(SEABORN)
+					|| living.getType().is(SEABORN_BOSS)
+					|| living.getType().is(SEABORN_MINION))
+					&& !living.getType().is(SEABORN_PET);
 
-		if (living.tickCount % 20 == 0) {
-			if (isSeabornUnit) {
-				if (mapVars.strategy_silence >= 2) {
-					living.heal((float) (living.getMaxHealth() * 0.05));
-				} else if (mapVars.strategy_subsisting >= 3) {
-					living.heal((float) (living.getMaxHealth() * 0.02));
-				}
-			} else if (living instanceof Player player
-					&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 3) {
-				if (mapVars.strategy_silence >= 2) {
-					living.heal((float) (living.getMaxHealth() * 0.05));
-				} else if (mapVars.strategy_subsisting >= 3) {
-					living.heal((float) (living.getMaxHealth() * 0.02));
-				}
-			}
-		}
-
-		if (!living.level().isClientSide()) {
-			if (isSeabornUnit) {
-				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
-			} else if (living instanceof Player player
-					&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 3) {
-				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
-				living.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
-			}
-		}
-	}
-
-	// 施加 Nethseabrand 的伤害效果，可能需要做成接口
-	public static void damagedByNethseabrand(LevelAccessor world, Entity entity) {
-		if (entity == null)
-			return;
-		double lvl = 0;
-		double gap;
-		double lvl1 = 0;
-		ItemStack a0;
-		ItemStack a1;
-		ItemStack a2;
-		ItemStack a3;
-		if (entity instanceof LivingEntity) {
-			if (!(entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.TRAIL_BUFF))) {
-				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF, 10, 0, false, false));
-			}
-			gap = 20;
-			a0 = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).copy();
-			a1 = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).copy();
-			a2 = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).copy();
-			a3 = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).copy();
-			if (a0.getItem() == CAItems.SEALEATHER_BOOTS.get()) {
-				gap = gap + 8;
-			} else if (a0.getItem() == CAItems.SEALEATHER_CHITIN_BOOTS.get()) {
-				gap = gap + 6;
-			} else if (a0.getItem() == CAItems.TRAILRITE_ARMOR_BOOTS.get()) {
-				gap = gap + 8;
-			}
-			if (a1.getItem() == CAItems.SEALEATHER_LEGGINGS.get()) {
-				gap = gap + 6;
-			} else if (a1.getItem() == CAItems.SEALEATHER_CHITIN_LEGGINGS.get()) {
-				gap = gap + 5;
-			} else if (a1.getItem() == CAItems.TRAILRITE_ARMOR_LEGGINGS.get()) {
-				gap = gap + 6;
-			}
-			if (a2.getItem() == CAItems.SEALEATHER_CHESTPLATE.get()) {
-				gap = gap + 4;
-			} else if (a2.getItem() == CAItems.SEALEATHER_CHITIN_CHESTPLATE.get()) {
-				gap = gap + 4;
-			} else if (a2.getItem() == CAItems.TRAILRITE_ARMOR_CHESTPLATE.get()) {
-				gap = gap + 4;
-			}
-			if (a3.getItem() == CAItems.SEALEATHER_HELMET.get()) {
-				gap = gap + 2;
-			} else if (a3.getItem() == CAItems.SEALEATHER_CHITIN_HELMET.get()) {
-				gap = gap + 3;
-			} else if (a3.getItem() == CAItems.TRAILRITE_ARMOR_HELMET.get()) {
-				gap = gap + 2;
-			}
-			if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), a0) != 0) {
-				lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), a0);
-				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 30, (int) lvl, false, false));
-				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-					livingEntity.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
-			}
-			if (entity.tickCount % gap == 0 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "immue_to_nethersea_brand")))) {
-				if (entity instanceof Player) {
-					if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.DEPTH_STRIDER), a0) != 0) {
-						lvl1 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), Enchantments.DEPTH_STRIDER), a0);
+			if (living.tickCount % 20 == 0) {
+				if (isSeabornUnit) {
+					if (mapVars.strategy_silence >= 2) {
+						living.heal((float) (living.getMaxHealth() * 0.05));
+					} else if (mapVars.strategy_subsisting >= 3) {
+						living.heal((float) (living.getMaxHealth() * 0.02));
 					}
-					if (Math.random() < 0.2 * lvl + 0.05 * lvl1) {
-						return;
-					}
-					if ((ModCapabilities.getPlayerVariables(entity)).player_oceanization >= 3) {
-						return;
+				} else if (living instanceof Player player
+						&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 3) {
+					if (mapVars.strategy_silence >= 2) {
+						living.heal((float) (living.getMaxHealth() * 0.05));
+					} else if (mapVars.strategy_subsisting >= 3) {
+						living.heal((float) (living.getMaxHealth() * 0.02));
 					}
 				}
-				if (!(entity instanceof LivingEntity livEnt28 && livEnt28.getType().is(EntityTypeTags.UNDEAD))) {
-					entity.hurt(CADamageTypes.source(world, CADamageTypes.TRAIL_DAMAGE), 2);
+			}
+
+			if (!living.level().isClientSide()) {
+				if (isSeabornUnit) {
+					living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
+				} else if (living instanceof Player player
+						&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 3) {
+					living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
+					living.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
 				}
-				if (entity instanceof LivingEntity livingEntity) {
-					EPUtils.causeSanityInjury(livingEntity, 20);
-				}
+
 			}
 		}
 	}
@@ -256,7 +170,7 @@ public class EntityUtils {
 		List<LivingEntity> entfound = world.getEntitiesOfClass(
 				LivingEntity.class,
 				new AABB(searchCenter, searchCenter).inflate(16.0),
-				e -> e != center && e.getType().is(SEA_BORN) && !e.getType().is(SEA_BORN_BOSS) && !e.getType().is(SEA_BORN_MINION)
+				e -> e != center && e.getType().is(SEABORN) && !e.getType().is(SEABORN_BOSS) && !e.getType().is(SEABORN_MINION)
 		);
 		double count = 0;
 		for (LivingEntity ignored : entfound) {
@@ -268,7 +182,7 @@ public class EntityUtils {
 	public static double getSeabornNum(Level world, double x, double y, double z) {
 		double count = 0;
 		final Vec3 center = new Vec3(x, y, z);
-		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d), e -> e.getType().is(SEA_BORN) && !e.getType().is(SEA_BORN_BOSS) && !e.getType().is(SEA_BORN_PET));
+		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d), e -> e.getType().is(SEABORN) && !e.getType().is(SEABORN_BOSS) && !e.getType().is(SEABORN_PET));
 		for (LivingEntity ignored : entfound) {
 			count = count + 1;
 		}
@@ -344,7 +258,7 @@ public class EntityUtils {
 		double minDist = -1.0D;
 		double d;
 		for (LivingEntity entityiterator : world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 42), (y + 40), (z + 42), (x - 42), (y - 40), (z - 42)))) {
-			if (entityiterator.getType().is(SEA_BORN)) {
+			if (entityiterator.getType().is(SEABORN)) {
 				continue;
 			}
 			d = obj.distanceToSqr(entityiterator);
@@ -385,21 +299,6 @@ public class EntityUtils {
 		if (A == null || B == null)
 			return 0;
 		return MathUtils.getCosine(B.getX() - A.getX(), B.getZ() - A.getZ(), A.getLookAngle().x, A.getLookAngle().z);
-	}
-
-	public static double getFellowAround(LevelAccessor world, double x, double y, double z, Entity entity) {
-		if (entity == null)
-			return 0;
-		double num = 0;
-		{
-			final Vec3 center = new Vec3(x, y, z);
-			List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(12 / 2d),
-					e -> e != entity && e.getType() == entity.getType());
-			for (LivingEntity entityiterator : entfound) {
-				num = num + 1;
-			}
-		}
-		return num;
 	}
 
 	public static double getIllusionNum(LevelAccessor world, double x, double y, double z) {
@@ -504,30 +403,29 @@ public class EntityUtils {
 		return at.isAlliedTo(bt);
 	}
 
-	// 人类实体标签
 	public static final TagKey<EntityType<?>> HUMAN = TagKey.create(
 			Registries.ENTITY_TYPE,
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")
 		);
 
-	public static final TagKey<EntityType<?>> SEA_BORN = TagKey.create(
+	public static final TagKey<EntityType<?>> SEABORN = TagKey.create(
 			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")
 		);
 
-	public static final TagKey<EntityType<?>> SEA_BORN_BOSS = TagKey.create(
+	public static final TagKey<EntityType<?>> SEABORN_BOSS = TagKey.create(
 			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")
 	);
 
-	public static final TagKey<EntityType<?>> SEA_BORN_MINION = TagKey.create(
+	public static final TagKey<EntityType<?>> SEABORN_MINION = TagKey.create(
 			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_minion")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_minion")
 	);
 
-	public static final TagKey<EntityType<?>> SEA_BORN_PET = TagKey.create(
+	public static final TagKey<EntityType<?>> SEABORN_PET = TagKey.create(
 			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_pet")
 	);
 
 	public static final TagKey<EntityType<?>> SEA_FRIEND = TagKey.create(
@@ -535,7 +433,6 @@ public class EntityUtils {
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_friend")
 	);
 
-	// 应用先锋增益
 	public static void vanguardBuff(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;

@@ -1075,7 +1075,7 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 		List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8), entity -> true);
 		for (LivingEntity nearbyEntity : nearbyEntities) {
 			LivingEntity livingTarget = nearbyEntity;
-			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
 				if (nearbyEntity != target) {
 					continue;
 				}
@@ -1125,7 +1125,7 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 		Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
 		List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius / 2d), entity -> true);
 		for (LivingEntity nearbyEntity : nearbyEntities) {
-			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
 				if (nearbyEntity != target) {
 					continue;
 				}

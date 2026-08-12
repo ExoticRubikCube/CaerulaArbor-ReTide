@@ -266,7 +266,7 @@ public class ScreamChestFishEntity extends SeaMonster {
                     }
                     for (Entity entityiterator : world.getEntities(this, new AABB((x - 5), (y - 2), (z - 5), (x + 5), (y + 3), (z + 5)))) {
                         if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 5) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                 if (!(entityiterator == this.getTarget())) {
                                     continue;
                                 }

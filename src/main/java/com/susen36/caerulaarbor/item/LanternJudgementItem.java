@@ -130,7 +130,7 @@ public class LanternJudgementItem extends Item {
             final Vec3 center = new Vec3(x, y, z);
             List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(36 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
             for (Entity entityiterator : entfound) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet"))) && entity.distanceTo(entityiterator) <= 18) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))) && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_pet"))) && entity.distanceTo(entityiterator) <= 18) {
                     if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())
                         entity.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 200, 0, false, false));
                     if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())

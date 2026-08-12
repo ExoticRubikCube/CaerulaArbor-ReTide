@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -31,7 +30,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.common.util.TriState;
 
-public class TrailPulseBlock extends Block {
+public class TrailPulseBlock extends Block implements NetherseaBrandBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final IntegerProperty NURTR = IntegerProperty.create("nurtr", 0, 16);
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 24);
@@ -249,6 +248,6 @@ public class TrailPulseBlock extends Block {
 	@Override
 	public void stepOn(Level world, BlockPos pos, BlockState blockstate, Entity entity) {
 		super.stepOn(world, pos, blockstate, entity);
-		EntityUtils.damagedByNethseabrand(world, entity);
+		this.applyNetherseaBrand(world, entity);
 	}
 }

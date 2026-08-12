@@ -226,7 +226,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
             double sy = sourceentity.getY();
             double sz = sourceentity.getZ();
             if (isValidTeleportPlace(world, sx, sy, sz)) {
-                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) || this.getTarget() == sourceentity) {
+                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))) || this.getTarget() == sourceentity) {
                     this.teleportTo(x, y, z, sx, sy, sz);
                     if (sourceentity instanceof LivingEntity target) {
                         EPUtils.causeSanityInjury(target,
@@ -352,7 +352,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                                             if (!(entityiterator instanceof Mob)) {
                                                 continue;
                                             }
-                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                                 if (!(((Entity) OceanizedEndermanEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)) {
                                                     continue;
                                                 }

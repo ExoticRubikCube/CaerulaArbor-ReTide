@@ -23,16 +23,16 @@ public class SeabornAggressiveTargetGoal extends NearestAttackableTargetGoal<Liv
             if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(candidate)) {
                 return false;
             }
-            if (candidate.getType().is(EntityUtils.SEA_BORN)) {
+            if (candidate.getType().is(EntityUtils.SEABORN)) {
                 return false;
             }
-            if (candidate.getType().is(EntityUtils.SEA_BORN_PET)) {
+            if (candidate.getType().is(EntityUtils.SEABORN_PET)) {
                 return false;
             }
-            if (candidate.getType().is(EntityUtils.SEA_BORN_BOSS)) {
+            if (candidate.getType().is(EntityUtils.SEABORN_BOSS)) {
                 return false;
             }
-            if (candidate.getType().is(EntityUtils.SEA_BORN_MINION)) {
+            if (candidate.getType().is(EntityUtils.SEABORN_MINION)) {
                 return false;
             }
             if (candidate.getType().is(EntityUtils.SEA_FRIEND)) {

@@ -395,7 +395,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonsterBoss imple
                         level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 32, 48)));
                 }
             }
-            if (this instanceof OceanizedWitherEntity) {
+            if (this instanceof AbstractOceanizedWitherEntity) {
                 if (world instanceof ServerLevel level) {
                     Entity entityToSpawn = CAEntities.OCEANIZED_WITHERIA.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {

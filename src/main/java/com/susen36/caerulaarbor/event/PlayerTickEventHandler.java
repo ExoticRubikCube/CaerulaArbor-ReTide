@@ -3,12 +3,9 @@ package com.susen36.caerulaarbor.event;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.manager.EPManager;
-import com.susen36.babel.util.EPUtils;
-import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAMobEffects;
@@ -16,12 +13,9 @@ import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.NodeUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.RelicUtils;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -47,100 +41,10 @@ public class PlayerTickEventHandler {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        handleArmorEnchantFunc(player);
-        handleBanRelicFunc(player);
         handleEssenceResistanceWithIce(player);
         handleHandSwipeFunc(player);
-        handleNetherseaWalkerExtraFunc(player);
         handlePlayerEvolutionTick(player);
         handlePlayerTickFunc(player);
-    }
-
-    private static void handleArmorEnchantFunc(Player entity) {
-        if (entity == null) return;
-
-        ItemStack helm = (entity.getItemBySlot(EquipmentSlot.HEAD)).copy();
-        ItemStack chest = (entity.getItemBySlot(EquipmentSlot.CHEST)).copy();
-        ItemStack legg = (entity.getItemBySlot(EquipmentSlot.LEGS)).copy();
-        ItemStack boot = (entity.getItemBySlot(EquipmentSlot.FEET)).copy();
-
-        if (entity.tickCount % 5 == 0) {
-            double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.FLEXIBILITY), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.FLEXIBILITY), chest)
-                    + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.FLEXIBILITY), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.FLEXIBILITY), boot);
-            if (lvl > 0) {
-                if (!entity.level().isClientSide())
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.FLEXIBILITY_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
-            }
-
-            lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), chest)
-                    + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), boot);
-            if (lvl > 0) {
-                if (!entity.level().isClientSide())
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.MAGIC_RESIS_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
-            }
-
-            lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), chest)
-                    + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), boot);
-            if (lvl > 0) {
-                EPUtils.causeSanityInjury(entity, lvl);
-            }
-        }
-
-        double lvl0 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), helm);
-        double lvl1 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), chest);
-        double lvl2 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), legg);
-        double lvl3 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), boot);
-        double lvl = lvl0 + lvl1 + lvl2 + lvl3;
-
-        if (lvl > 0) {
-            double gap = Math.max(600 - 25 * lvl, 300);
-            double maxAmplif = Math.min(Math.max(Math.max(lvl0, lvl1), Math.max(lvl2, lvl3)), 2);
-            if (entity.tickCount % gap == 64) {
-                if (!entity.level().isClientSide())
-                    entity.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 260, (int) (maxAmplif - 1), false, false));
-            }
-        }
-    }
-
-    private static void handleBanRelicFunc(Player entity) {
-        if (entity == null) return;
-        if (!CAConfigs.RELIC_BAN.get()) return;
-
-        ItemStack mainHandItem = (entity.getMainHandItem()).copy();
-        if (mainHandItem.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "relic_advanced")))) {
-            entity.getMainHandItem().setCount(0);
-        }
-        mainHandItem = (entity.getOffhandItem()).copy();
-        if (mainHandItem.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "relic_advanced")))) {
-            entity.getOffhandItem().setCount(0);
-        }
-
-        if (entity.tickCount % 20 == 10) {
-            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.HAND_ENGRAVE.set(capability, -1);
-            Relic.SURVIVOR_CONTRACT.set(capability, -1);
-            Relic.KING_CROWN.set(capability, 0);
-            Relic.KING_ARMOR.set(capability, 0);
-            Relic.KING_SPEAR.set(capability, 0);
-            Relic.KING_EXTENSION.set(capability, 0);
-            Relic.KING_CRYSTAL.set(capability, 0);
-            Relic.SARKAZ_KING_FLAG.set(capability, 0);
-            Relic.SARKAZ_KING_BED.set(capability, 0);
-            Relic.SARKAZ_KING_RYLFATE.set(capability, 0);
-            Relic.SARKAZ_KING_ARTIFACT.set(capability, 0);
-            Relic.HAND_THORNS.set(capability, 0);
-            Relic.HAND_STRANGLE.set(capability, 0);
-            Relic.HAND_FERTILITY.set(capability, 0);
-            Relic.HAND_SPEED.set(capability, 0);
-            Relic.HAND_OF_PULVERIZATION.set(capability, 0);
-            Relic.HAND_SWIPE.set(capability, 0);
-            Relic.HAND_FIREWORK.set(capability, 0);
-            Relic.HAND_SWORD.set(capability, 0);
-            Relic.LEGEND_CHITIN.set(capability, 0);
-            Relic.YEARNING.set(capability, 0);
-            Relic.TREATY.set(capability, 0);
-            capability.syncPlayerVariables(entity);
-        }
     }
 
     private static void handleEssenceResistanceWithIce(Player entity) {
@@ -173,27 +77,6 @@ public class PlayerTickEventHandler {
                             level.sendParticles(ParticleTypes.WAX_OFF, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 12, 0.8, 1, 0.8, 0.1);
                     }
                 }
-            }
-        }
-    }
-
-    private static void handleNetherseaWalkerExtraFunc(Player entity) {
-        if (entity == null) return;
-        if (entity.tickCount % 5 != 0) return;
-
-        LevelAccessor world = entity.level();
-        double x = entity.getX();
-        double y = entity.getY();
-        double z = entity.getZ();
-
-        if (!world.getBlockState(BlockPos.containing(x, y - 0.5, z)).is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions")))) return;
-
-        ItemStack boots = (entity.getItemBySlot(EquipmentSlot.FEET)).copy();
-        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), boots) != 0) {
-            double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), boots);
-            if (!entity.level().isClientSide()) {
-                entity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 30, (int) lvl, false, false));
-                entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 10, 0, false, false));
             }
         }
     }
@@ -346,8 +229,7 @@ public class PlayerTickEventHandler {
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BREATH, 20, suitKing < 3 ? 0 : 2, false, false));
             }
-            final double suitLevel = suitKing < 3 ? 1 : 2;
-            capability.player_king_suit = suitLevel;
+            capability.player_king_suit = suitKing < 3 ? 1 : 2;
             capability.syncPlayerVariables(entity);
         } else {
             capability.player_king_suit = 0;
@@ -364,7 +246,7 @@ public class PlayerTickEventHandler {
                 List<Entity> entfound = world.getEntities(entity, new AABB(center, center).inflate(8 / 2d));
                 for (Entity entityiterator : entfound) {
                     if (entityiterator == entity) continue;
-                    if (entityiterator instanceof ServerPlayer || entityiterator instanceof Player || entityiterator instanceof Animal) {
+                    if (entityiterator instanceof Player || entityiterator instanceof Animal) {
                         valid = false;
                         break;
                     }
@@ -400,8 +282,7 @@ public class PlayerTickEventHandler {
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SACREFICE, 20, suitArchfi < 3 ? 0 : 2, false, false));
             }
-            final double suitLevel = suitArchfi < 3 ? 1 : 2;
-            capability.player_demon_suit = suitLevel;
+            capability.player_demon_suit = suitArchfi < 3 ? 1 : 2;
             capability.syncPlayerVariables(entity);
         } else {
             capability.player_demon_suit = 0;
@@ -413,12 +294,12 @@ public class PlayerTickEventHandler {
         if (Relic.HAND_ENGRAVE.get(entity) > 0) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.ENGRAVED_TRIUMPH, 20,
-                        (int) (Relic.HAND_ENGRAVE.get(entity) - 1), false, false));
+                        Relic.HAND_ENGRAVE.get(entity) - 1, false, false));
         }
         if (Relic.SURVIVOR_CONTRACT.get(entity) > 0) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SURVIVORS_GUIDE, 20,
-                        (int) (Relic.SURVIVOR_CONTRACT.get(entity) - 1), false, false));
+                        Relic.SURVIVOR_CONTRACT.get(entity) - 1, false, false));
         }
     }
 

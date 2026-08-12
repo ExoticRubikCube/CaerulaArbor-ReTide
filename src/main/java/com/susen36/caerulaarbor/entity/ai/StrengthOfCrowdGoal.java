@@ -30,7 +30,7 @@ public class StrengthOfCrowdGoal extends Goal {
                 && attacker.isAlive()
                 && attacker != this.seaMonster
                 && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(attacker)
-                && !attacker.getType().is(EntityUtils.SEA_BORN);
+                && !attacker.getType().is(EntityUtils.SEABORN);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class StrengthOfCrowdGoal extends Goal {
         for (SeaMonster candidate : list) {
             if (this.seaMonster != candidate
                     && candidate.isAlive()
-                    && !candidate.getType().is(EntityUtils.SEA_BORN_PET)
+                    && !candidate.getType().is(EntityUtils.SEABORN_PET)
                     && candidate.getTarget() == null
                     && !candidate.isAlliedTo(target)) this.alertOther(candidate, target);
         }

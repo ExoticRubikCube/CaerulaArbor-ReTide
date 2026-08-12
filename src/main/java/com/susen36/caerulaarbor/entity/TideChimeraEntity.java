@@ -178,7 +178,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             if (!(sourceentity instanceof Player) && !(sourceentity instanceof ApocataEntity)) {
-                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                     {
                         final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
                         List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16), e -> true);
@@ -186,7 +186,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
                             if (entityiterator == this) {
                                 continue;
                             }
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                 if (entityiterator instanceof Mob entity && sourceentity instanceof LivingEntity ent)
                                     entity.setTarget(ent);
                             }
@@ -233,7 +233,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
         double radius = 3.0D;
         List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AABB(centerPos, centerPos).inflate(radius), entity -> entity != this).stream().sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(centerPos))).toList();
         for (Entity entity : nearbyEntities) {
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                 continue;
             }
             if (!(entity instanceof LivingEntity)) {
@@ -502,7 +502,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
                 }
                 for (Entity entityiterator : world.getEntities(this, new AABB((x - 6.5), (y - 2), (z - 6.5), (x + 6.5), (y + 5), (z + 6.5)))) {
                     if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6.5) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                             if (!(entityiterator == this.getTarget())) {
                                 continue;
                             }

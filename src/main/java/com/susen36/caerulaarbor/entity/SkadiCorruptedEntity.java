@@ -204,7 +204,7 @@ public class SkadiCorruptedEntity extends SeaMonsterBoss {
                         if (entityIterator == this) {
                             continue;
                         }
-                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                             continue;
                         }
                         if (this.distanceToSqr(entityIterator) <= 9) {
@@ -443,7 +443,7 @@ public class SkadiCorruptedEntity extends SeaMonsterBoss {
                         final Vec3 center = new Vec3(x, y, z);
                         List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24), e -> true);
                         for (LivingEntity entityiterator : entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                 if (!(entityiterator == enemy1)) {
                                     continue;
                                 }
@@ -505,7 +505,7 @@ public class SkadiCorruptedEntity extends SeaMonsterBoss {
                         mayBonus = false;
                         isSeaborn = false;
                         if (distanceToSqr(entityiterator) <= 256) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                 mayBonus = true;
                                 isSeaborn = true;
                             }
@@ -541,8 +541,8 @@ public class SkadiCorruptedEntity extends SeaMonsterBoss {
                                     entityiterator.getPersistentData().putBoolean("corruptedBonus2", true);
                                 }
                                 if (phase > 0.5 && isSeaborn) {
-                                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))
-                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_pet")))) {
+                                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))
+                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_pet")))) {
                                         if (entityiterator instanceof Mob entity && enemy1 instanceof LivingEntity ent)
                                             entity.setTarget(ent);
                                     }

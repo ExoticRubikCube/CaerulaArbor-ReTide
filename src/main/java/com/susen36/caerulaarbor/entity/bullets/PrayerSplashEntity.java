@@ -82,7 +82,7 @@ public class PrayerSplashEntity extends BaseProjectile implements ItemSupplier {
                         if (entity == entityiterator) {
                             continue;
                         }
-						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
 							if (entityiterator instanceof LivingEntity livingEntity && livingEntity.getHealth() < livingEntity.getMaxHealth()) {
 								if (entityiterator.isAlive()) {
                                     livingEntity.heal((float) atk);

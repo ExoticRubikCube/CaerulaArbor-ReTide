@@ -234,10 +234,10 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_neurodegression"), 101, 147, -3368449, false);
 		if (RelicUtils.hasRelic(Relic.DISO_FLESH, entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_deformity"), 101, 147, -3368449, false);
-        if ((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)) > 0)
+        if ((world.getLevelData().getGameRules().getInt(CAGameRules.NORMAL_DIFFICULTY)) > 0)
             guiGraphics.drawString(this.font,
 
-                    Component.translatable("key.surging_waves").getString() + "\u00B7" + Math.round((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES))), -4, -13, -10040065, false);
+                    Component.translatable("key.surging_waves").getString() + "\u00B7" + Math.round((world.getLevelData().getGameRules().getInt(CAGameRules.NORMAL_DIFFICULTY))), -4, -13, -10040065, false);
 	}
 
 	@Override

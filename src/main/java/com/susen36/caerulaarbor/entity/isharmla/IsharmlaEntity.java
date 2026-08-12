@@ -213,7 +213,7 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 							break;
 						}
 						final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-						TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
+						TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"));
 						List<LivingEntity> foundEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
 								entity -> entity.isAlive()
 										&& entity != this
@@ -263,7 +263,7 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 					(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1));
 			Vec3 center = new Vec3(x, y, z);
 			List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius),
-					entity -> !(entity.getType().is(EntityUtils.SEA_BORN) && entity != target));
+					entity -> !(entity.getType().is(EntityUtils.SEABORN) && entity != target));
 			for (LivingEntity entityIterator : entities) {
 				if (center.distanceToSqr(entityIterator.position()) <= radius * radius) {
 					entityIterator.hurt(
@@ -424,8 +424,8 @@ public class IsharmlaEntity extends SeaMonsterBoss {
                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.15;
 				{
 					final Vec3 center = new Vec3(x, y, z);
-					TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
-					TagKey<EntityType<?>> bossOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss"));
+					TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"));
+					TagKey<EntityType<?>> bossOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss"));
 					List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32),
 							e -> e.isAlive()
 									&& e != this
@@ -564,7 +564,7 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 						}
 						{
 							final Vec3 center = new Vec3(x, y, z);
-							TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
+							TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"));
 							List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(8),
 									e -> e.getType().is(oceanOffspringTag) && e.getHealth() < e.getMaxHealth())
 									.stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
@@ -883,7 +883,7 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 		}
 
 		final Vec3 center = new Vec3(x, y, z);
-		TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
+		TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"));
 		List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius),
 				e -> !(e.getType().is(oceanOffspringTag) && e != target));
 

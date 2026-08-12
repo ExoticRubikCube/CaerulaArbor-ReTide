@@ -165,7 +165,7 @@ public class CrackerAbyssalEntity extends SeaMonster {
                         final Vec3 center = new Vec3(x, y, z);
                         List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                         for (LivingEntity entityiterator : entfound) {
-                            if ((!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) || ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)
+                            if ((!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))) || ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)
                                     && (entityiterator instanceof Mob || entityiterator instanceof Player)) {
                                 if (distanceTo(entityiterator) <= 3) {
                                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)

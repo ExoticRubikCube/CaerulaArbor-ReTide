@@ -155,7 +155,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                     this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                             CASounds.ANCHOR_ATTACK.get(), SoundSource.HOSTILE, 2.75F, 1);
                     final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-                    TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
+                    TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"));
                     List<LivingEntity> foundEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24),
                             entity -> entity.isAlive()
                                     && entity != this

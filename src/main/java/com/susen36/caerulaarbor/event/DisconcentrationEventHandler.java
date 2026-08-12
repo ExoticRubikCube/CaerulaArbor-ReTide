@@ -111,7 +111,7 @@ public class DisconcentrationEventHandler {
             return;
         }
 
-        if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+        if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
             return;
         }
 

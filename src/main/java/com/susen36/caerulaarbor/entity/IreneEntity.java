@@ -222,7 +222,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		float damage = baseDamage;
 		if (target instanceof LivingEntity livingTarget && livingTarget.hasEffect(MobEffects.SLOW_FALLING)) {
 			damage *= 1.2F;
-			if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+			if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
 				damage *= 1.2F;
 				if (!livingTarget.level().isClientSide()) {
 					livingTarget.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 80, 1));

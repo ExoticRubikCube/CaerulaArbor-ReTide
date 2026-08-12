@@ -287,7 +287,7 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 		Entity attacker = source.getEntity();
 		if (attacker == null) return false;
 		if (attacker instanceof LivingEntity living && living.getOffhandItem().is(CAItems.OCEANIZED_ENDER_DRAGON_SPAWN_EGG.get())) return true;
-		if (attacker.getType().is(EntityUtils.SEA_BORN)) return false;
+		if (attacker.getType().is(EntityUtils.SEABORN)) return false;
 		if (attacker instanceof TamableAnimal tamable && tamable.isTame()) return false;
 		return !(attacker instanceof Player) && !attacker.getType().is(EntityUtils.HUMAN);
 	}

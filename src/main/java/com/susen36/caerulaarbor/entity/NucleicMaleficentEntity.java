@@ -185,7 +185,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
                 final Vec3 center = new Vec3(x, y, z);
                 List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                 for (Mob entityiterator : entfound) {
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) && !(entityiterator == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))) && !(entityiterator == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                         continue;
                     }
                     if (distanceTo(entityiterator) < 5) {

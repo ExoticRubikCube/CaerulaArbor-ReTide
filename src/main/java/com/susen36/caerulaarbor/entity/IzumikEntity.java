@@ -205,7 +205,7 @@ public class IzumikEntity extends SeaMonsterBoss {
                         if (this.getEntityData().get(DATA_PHASE) >= 2 && Math.random() < 0.15 && target instanceof LivingEntity livingTarget) {
                             int currentNumb = livingTarget.hasEffect(BabelMobEffects.PALSY) ? livingTarget.getEffect(BabelMobEffects.PALSY).getAmplifier() + 1 : 0;
                             livingTarget.removeEffect(BabelMobEffects.PALSY);
-                            livingTarget.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
+                            livingTarget.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, 1200, currentNumb, false, false, true));
                             if (this.level() instanceof ServerLevel serverLevel) {
                                 serverLevel.sendParticles(ParticleTypes.FIREWORK, targetX, targetY + 0.75, targetZ, 16, 0.75, 0.75, 0.75, 0.1);
                             }
@@ -441,7 +441,7 @@ public class IzumikEntity extends SeaMonsterBoss {
                         }
                         {
                             final Vec3 center = new Vec3(x, y, z);
-                            TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
+                            TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"));
                             List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(range),
                                     e -> (e instanceof Mob || e instanceof Player)
                                             && !(e.getType().is(oceanOffspringTag) && e != this.getTarget()));
@@ -622,7 +622,7 @@ public class IzumikEntity extends SeaMonsterBoss {
         }
 
         final Vec3 center = new Vec3(x, y, z);
-        TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
+        TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"));
         List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(r),
                 e -> (e instanceof Mob || e instanceof Player)
                         && !(e.getType().is(oceanOffspringTag) && e != this.getTarget()));
@@ -662,11 +662,11 @@ public class IzumikEntity extends SeaMonsterBoss {
                         if (MapVariables.get(world).strategy_grow >= 4) {
                             int currentNumb = entityiterator.hasEffect(BabelMobEffects.PALSY) ? entityiterator.getEffect(BabelMobEffects.PALSY).getAmplifier() + 1 : 0;
                             entityiterator.removeEffect(BabelMobEffects.PALSY);
-                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, EntityUtils.NUMB_EFFECT_DURATION, currentNumb + 1, false, false, true));
+                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, 1200, currentNumb + 1, false, false, true));
                         } else {
                             int currentNumb = entityiterator.hasEffect(BabelMobEffects.PALSY) ? entityiterator.getEffect(BabelMobEffects.PALSY).getAmplifier() + 1 : 0;
                             entityiterator.removeEffect(BabelMobEffects.PALSY);
-                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
+                            entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, 1200, currentNumb, false, false, true));
                         }
                     }
                     this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.01));

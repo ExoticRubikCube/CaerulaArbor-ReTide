@@ -41,7 +41,7 @@ public class EntityJoinLevelEventHandler {
 
         if (entity instanceof LivingEntity livingEntity0) {
             double sanityModifier = 1;
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) sanityModifier = 0.16;
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) sanityModifier = 0.16;
             if (livingEntity0.getType().is(EntityTypeTags.UNDEAD)) sanityModifier = 0.5;
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "with_low_elemental_modifier")))) sanityModifier = 0.5;
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "with_lower_elemental_modifier")))) sanityModifier = 0.33;
@@ -70,7 +70,7 @@ public class EntityJoinLevelEventHandler {
         double coef_cur = 1;
         double percentage;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
             if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "marinemobs")))) {
                 if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(NeoForgeMod.SWIM_SPEED))
                     livingEntity4.getAttribute(NeoForgeMod.SWIM_SPEED)
@@ -80,7 +80,7 @@ public class EntityJoinLevelEventHandler {
                 health_index = SubsistingUpgradeManager.getSubsistHealthMultiplier(MapVariables.get(world).strategy_subsisting);
                 attack_index = GrowUpgradeManager.getGrowAttackMultiplier(MapVariables.get(world).strategy_grow);
                 armor_index = 1;
-                n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)), 18);
+                n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.NORMAL_DIFFICULTY)), 18);
                 if (n > 0) {
                     n = 1 + 0.01 * n * 2;
                     coef = 1;
@@ -132,7 +132,7 @@ public class EntityJoinLevelEventHandler {
                             ((entity instanceof LivingEntity livingEntity27 && livingEntity27.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity27.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * attack_index));
 
                 double subl = MapVariables.get(world).strategy_sublimation;
-                if (subl >= 1.0 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {
+                if (subl >= 1.0 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {
                     if (entity instanceof LivingEntity livingEntity30 && livingEntity30.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                         livingEntity30.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
                                 ((entity instanceof LivingEntity livingEntity29 && livingEntity29.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity29.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * (1.0 + 0.1 * subl)));
@@ -180,7 +180,7 @@ public class EntityJoinLevelEventHandler {
                     livingEntity58.getAttribute(Attributes.ATTACK_DAMAGE)
                             .setBaseValue(((entity instanceof LivingEntity livingEntity57 && livingEntity57.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity57.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
                                     * GrowUpgradeManager.getGrowAttackMultiplier(MapVariables.get(world).strategy_grow)));
-                n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)), 18);
+                n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.NORMAL_DIFFICULTY)), 18);
                 if (n > 0) {
                     n = 1 + 0.01 * n * 2;
                     coef = 1;
@@ -232,7 +232,7 @@ public class EntityJoinLevelEventHandler {
         if ((entity instanceof LivingEntity livingEntity60 && livingEntity60.getAttributes().hasAttribute(CAAttributes.EVOLVED)
                 ? livingEntity60.getAttribute(CAAttributes.EVOLVED).getBaseValue()
                 : 0) == 0) {
-            boolean isSeaborn = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")));
+            boolean isSeaborn = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")));
             String extendN18 = CAConfigs.EXTEND_N18.get();
             if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bypasses_surging_waves")))
                     && !isSeaborn && !extendN18.equals("off")
@@ -241,7 +241,7 @@ public class EntityJoinLevelEventHandler {
                     || extendN18.equals("exclude_monster") && !(entity instanceof Monster)
                     || extendN18.equals("monster_only") && entity instanceof Monster
                     || extendN18.equals("exclude_animal") && !(entity instanceof Animal))) {
-                n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)), 18);
+                n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.NORMAL_DIFFICULTY)), 18);
                 if (n > 0) {
                     n = 1 + 0.01 * n * 2;
                     coef = 1;

@@ -207,7 +207,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
                 final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                 for (Entity entityiterator : entfound) {
-                    if (Math.random() < 0.33 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                    if (Math.random() < 0.33 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                         double xx = entityiterator.getX();
                         double yy = entityiterator.getY() + entityiterator.getBbHeight();
                         double zz = entityiterator.getZ();

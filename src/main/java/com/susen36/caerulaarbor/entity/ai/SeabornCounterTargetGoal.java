@@ -18,10 +18,10 @@ public class SeabornCounterTargetGoal extends NearestAttackableTargetGoal<Monste
                 return false;
             }
             if (!EntityUtils.isSameTeam(mob, candidate)) {
-                return (candidate.getType().is(EntityUtils.SEA_BORN) ||
-                        candidate.getType().is(EntityUtils.SEA_BORN_BOSS) ||
-                        candidate.getType().is(EntityUtils.SEA_BORN_MINION)) &&
-                        !candidate.getType().is(EntityUtils.SEA_BORN_PET);
+                return (candidate.getType().is(EntityUtils.SEABORN) ||
+                        candidate.getType().is(EntityUtils.SEABORN_BOSS) ||
+                        candidate.getType().is(EntityUtils.SEABORN_MINION)) &&
+                        !candidate.getType().is(EntityUtils.SEABORN_PET);
             }
             return false;
         });

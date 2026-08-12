@@ -40,9 +40,8 @@ public class PlayerLogInEventHandler {
                 for (String remainingCriterion : surgingWavesNoticeProgress.getRemainingCriteria()) {
                     serverPlayer.getAdvancements().award(surgingWavesNoticeAdvancement, remainingCriterion);
                 }
-
                 if (serverPlayer.server.getDefaultGameType() == GameType.SURVIVAL) {
-                    int surgingWavesLevel = serverPlayer.serverLevel().getGameRules().getInt(CAGameRules.SURGING_WAVES);
+                    int surgingWavesLevel = serverPlayer.serverLevel().getGameRules().getInt(CAGameRules.NORMAL_DIFFICULTY);
                     if (surgingWavesLevel >= 12) {
                         serverPlayer.displayClientMessage(Component.translatable("gameplay.caerula_arbor.n_warn_12"), false);
                     } else if (surgingWavesLevel >= 6) {

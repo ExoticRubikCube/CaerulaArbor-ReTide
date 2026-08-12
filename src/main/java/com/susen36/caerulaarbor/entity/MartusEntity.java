@@ -61,7 +61,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN;
+import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN;
 
 public class MartusEntity extends SeaMonsterBoss {
     private final DynamicGameEventListener<MartusDeathListener> dynamicDeathListener;
@@ -347,7 +347,7 @@ public class MartusEntity extends SeaMonsterBoss {
                             if (!(entityiterator instanceof Mob livEnt1)) {
                                 continue;
                             }
-                            if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                            if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                 continue;
                             }
                             if (entityiterator instanceof MartusEntity) {
@@ -436,8 +436,8 @@ public class MartusEntity extends SeaMonsterBoss {
                                     if (!entityiterator.isAlive()) {
                                         continue;
                                     }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
-                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))
+                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {
                                         if (!this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1));
                                         if (!this.level().isClientSide())
@@ -471,7 +471,7 @@ public class MartusEntity extends SeaMonsterBoss {
                                 if (!(entityiterator instanceof Mob)) {
                                     continue;
                                 }
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                     continue;
                                 }
                                 if (entityiterator instanceof LivingEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.SUB_HAEMO)) {
@@ -702,7 +702,7 @@ public class MartusEntity extends SeaMonsterBoss {
         if (killedEntity.getPersistentData().getBoolean("blessed")) {
             double rawDamage = Mth.clamp(targetHp * 0.25, 0.0, maxHp * 0.4) * 0.05;
             this.hurtMartus(killer, rawDamage, 0);
-        } else if (killedEntity.getType().is(SEA_BORN) && this.getEntityData().get(DATA_PHASE) >= 1) {
+        } else if (killedEntity.getType().is(SEABORN) && this.getEntityData().get(DATA_PHASE) >= 1) {
             double rawDamage = Mth.clamp(targetHp * 0.03, maxHp * 0.018, maxHp * 0.025);
             this.hurtMartus(killer, rawDamage, 0);
         }
@@ -733,7 +733,7 @@ public class MartusEntity extends SeaMonsterBoss {
                 Entity sourceEntity = context.sourceEntity();
                 if (sourceEntity instanceof LivingEntity deadEntity && deadEntity != this.martus) {
                     boolean isBlessed = deadEntity.getPersistentData().getBoolean("blessed");
-                    boolean isOcean = deadEntity.getType().is(SEA_BORN);
+                    boolean isOcean = deadEntity.getType().is(SEABORN);
                     if (isBlessed || isOcean) {
                         LivingEntity killer = deadEntity.getLastHurtByMob();
                         this.martus.respondToNearbyCreatureDeath(deadEntity, killer);

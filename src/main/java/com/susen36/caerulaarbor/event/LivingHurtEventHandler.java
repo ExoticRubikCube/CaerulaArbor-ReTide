@@ -56,7 +56,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN;
+import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN;
 
 @EventBusSubscriber
 public class LivingHurtEventHandler {
@@ -97,7 +97,7 @@ public class LivingHurtEventHandler {
         DamageSource damageSource = event.getSource();
         LivingEntity entity = event.getEntity();
 
-        if (damageSource.is(CADamageTypes.TRAIL_DAMAGE) && entity.getType().is(SEA_BORN)) {
+        if (damageSource.is(CADamageTypes.TRAIL_DAMAGE) && entity.getType().is(SEABORN)) {
             event.setCanceled(true);
         }
     }
@@ -117,7 +117,7 @@ public class LivingHurtEventHandler {
         Entity entity = event.getEntity();
         double amount = event.getNewDamage();
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
             entity.getPersistentData().putDouble("caerula.lastHurtByTime", entity.tickCount);
             entity.getPersistentData().putDouble("caerula.sublimationDamage", entity.getPersistentData().getDouble("caerula.sublimationDamage") + amount);
             SublimationUpgradeManger.applySublimationUpgrade(world, amount);
@@ -314,7 +314,7 @@ public class LivingHurtEventHandler {
             }
         }
         if (rate > 0.8) {
-            if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+            if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                 if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
                     livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 1));
             }
@@ -328,7 +328,7 @@ public class LivingHurtEventHandler {
 
         if (damagesource.is(CADamageTags.NEVER_TRIGGER_BOSS_PROTECTION)) return;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {
             if (entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0) < 5) {
                 if (Math.random() < 0.33) {
                     if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
@@ -352,7 +352,7 @@ public class LivingHurtEventHandler {
 
         if (sourceentity == null) return;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
             if (entity instanceof SkadiCorruptedEntity) return;
             if (amount > (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) return;
 
@@ -380,7 +380,7 @@ public class LivingHurtEventHandler {
         if (entity.isAlive() && entity.isPassenger()) {
             Entity vehicle = entity.getVehicle();
             if (vehicle != null && vehicle.isAlive()) {
-                if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                     if (vehicle instanceof OceanizedRavagerEntity) {
                         event.setNewDamage((float) (amount * 0.5));
                         vehicle.hurt(damagesource, (float) (amount * 0.5));
@@ -446,7 +446,7 @@ public class LivingHurtEventHandler {
 
         if (growLevel >= 3) {
             double magicMult = GrowUpgradeManager.getGrowMagicMultiplier(growLevel);
-            if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
+            if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))
                     && !damagesource.is(CADamageTypes.OCEAN_MAGIC)) {
                 if (entity.isAlive() && sourceentity.isAlive()) {
                     entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
@@ -676,7 +676,7 @@ public class LivingHurtEventHandler {
 
         if (sourceentity == null) return;
 
-        if (entity.getType().is(SEA_BORN) && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.OCEANOSPR_KILLER), (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY)) != 0) {
+        if (entity.getType().is(SEABORN) && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.OCEANOSPR_KILLER), (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY)) != 0) {
             double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.OCEANOSPR_KILLER), (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY));
             double addition = Math.max(amount * lvl * 0.15, lvl * 5);
             if (world instanceof ServerLevel level)
@@ -730,7 +730,7 @@ public class LivingHurtEventHandler {
 
         if (sourceentity == null) return;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "warriors")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "warriors")))) {
             if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
                 livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 100, 0, false, false));
         }

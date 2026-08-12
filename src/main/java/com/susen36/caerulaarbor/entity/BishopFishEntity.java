@@ -166,7 +166,7 @@ public class BishopFishEntity extends SeaMonsterBoss {
                     }
                 }.timedLoop(0, 10, 2);
                 for (Entity entityiterator : world.getEntities(this, new AABB((x + 20), (y - 4), (z + 20), (x - 20), (y + 8), (z - 20)))) {
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                         if (!(entityiterator == this.getTarget())) {
                             continue;
                         }
@@ -416,7 +416,7 @@ public class BishopFishEntity extends SeaMonsterBoss {
                             level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), SoundEvents.AMBIENT_UNDERWATER_ENTER, SoundSource.NEUTRAL, (float) 1.5, 1);
                         }
                         for (Entity entityiterator : world.getEntities(BishopFishEntity.this, new AABB((x + 18), y, (z + 18), (x - 18), (y + 12), (z - 18)))) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                 if (!(entityiterator == ((Entity) BishopFishEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                                     continue;
                                 }

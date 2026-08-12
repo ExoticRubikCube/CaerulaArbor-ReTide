@@ -42,8 +42,8 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_BOSS;
-import static com.susen36.caerulaarbor.util.EntityUtils.SEA_BORN_MINION;
+import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN_BOSS;
+import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN_MINION;
 
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
 	private static final TagKey<Block> NETHERSEA_WALKER = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions"));
@@ -87,7 +87,7 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 
 	@Override
 	public void die(DamageSource source) {
-		if (!this.level().isClientSide() && !this.getPersistentData().getBoolean("caerula.sublimationRevived") && !this.getType().is(SEA_BORN_BOSS) && !this.getType().is(SEA_BORN_MINION)) {
+		if (!this.level().isClientSide() && !this.getPersistentData().getBoolean("caerula.sublimationRevived") && !this.getType().is(SEABORN_BOSS) && !this.getType().is(SEABORN_MINION)) {
 			MapVariables vars = MapVariables.get(this.level());
 			double subl = vars.strategy_sublimation;
 			if (subl <= 0.0) {
@@ -169,7 +169,7 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		if (!world.isClientSide()) {
 			double breedLevel = MapVariables.get(world).strategy_breed;
-			if (breedLevel > 0 && !this.isRemoved() && (reason == MobSpawnType.NATURAL || reason == MobSpawnType.CHUNK_GENERATION) && !this.getType().is(SEA_BORN_BOSS) && !this.getType().is(SEA_BORN_MINION)) {
+			if (breedLevel > 0 && !this.isRemoved() && (reason == MobSpawnType.NATURAL || reason == MobSpawnType.CHUNK_GENERATION) && !this.getType().is(SEABORN_BOSS) && !this.getType().is(SEABORN_MINION)) {
 				BreedGroupData breedData;
 				if (livingdata instanceof BreedGroupData existing) {
 					existing.groupSize++;

@@ -2,7 +2,6 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +24,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.common.util.TriState;
 
-public class SeaTrailSolidBlock extends Block {
+public class SeaTrailSolidBlock extends Block implements NetherseaBrandBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public SeaTrailSolidBlock() {
@@ -104,6 +103,6 @@ public class SeaTrailSolidBlock extends Block {
 	@Override
 	public void stepOn(Level world, BlockPos pos, BlockState blockstate, Entity entity) {
 		super.stepOn(world, pos, blockstate, entity);
-		EntityUtils.damagedByNethseabrand(world, entity);
+		this.applyNetherseaBrand(world, entity);
 	}
 }

@@ -126,7 +126,7 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
             List<LivingEntity> nearbyEntities = serverLevel.getEntitiesOfClass(
                     LivingEntity.class,
                     new AABB(centerPos, centerPos).inflate(3.0D),
-                    entity -> entity != this && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))
+                    entity -> entity != this && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))
             );
 
             for (LivingEntity entity : nearbyEntities) {

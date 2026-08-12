@@ -183,7 +183,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
                             (float) 2.5, 1);
                 }
                 final Vec3 center = new Vec3(x, y, z);
-                TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"));
+                TagKey<EntityType<?>> oceanOffspringTag = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"));
                 List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(20),
                         e -> e.isAlive()
                                 && !(e.getType().is(oceanOffspringTag) && e != currentTarget)
@@ -298,7 +298,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
                                 final Vec3 center = new Vec3(x, y, z);
                                 List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(20), e -> true);
                                 for (LivingEntity entityiterator : entfound) {
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                         if (!(entityiterator == enemy1)) {
                                             continue;
                                         }
@@ -388,7 +388,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
                             final Vec3 center = new Vec3(x, y, z);
                             List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(20), e -> true);
                             for (LivingEntity entityiterator : entfound) {
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                     if (!(entityiterator == enemy1)) {
                                         continue;
                                     }
@@ -470,7 +470,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
 
         final Vec3 center = new Vec3(x, y, z);
         List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(20),
-                e -> !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born"))));
+                e -> !e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))));
 
         for (LivingEntity entityiterator : nearbyEntities) {
             if (this.distanceToSqr(entityiterator) < 400) {

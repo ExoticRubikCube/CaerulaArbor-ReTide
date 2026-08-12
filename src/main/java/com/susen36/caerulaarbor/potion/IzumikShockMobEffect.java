@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.potion;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.entity.IzumikEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -52,7 +51,7 @@ public class IzumikShockMobEffect extends MobEffect {
                 if ((Entity) entity instanceof LivingEntity livingEntity8) {
                     int currentNumb = livingEntity8.hasEffect(BabelMobEffects.PALSY) ? livingEntity8.getEffect(BabelMobEffects.PALSY).getAmplifier() + 1 : 0;
                     livingEntity8.removeEffect(BabelMobEffects.PALSY);
-                    livingEntity8.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, EntityUtils.NUMB_EFFECT_DURATION, currentNumb, false, false, true));
+                    livingEntity8.addEffect(new MobEffectInstance(BabelMobEffects.PALSY, 1200, currentNumb, false, false, true));
                 }
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.FIREWORK, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);

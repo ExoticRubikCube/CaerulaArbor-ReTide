@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
  * 生成实体类型标签数据
  */
 public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<EntityType<?>> {
-    private static final TagKey<EntityType<?>> SEA_BORN_BOSS = caEntityTypeTag("sea_born_boss");
+    private static final TagKey<EntityType<?>> SEABORN_BOSS = caEntityTypeTag("seaborn_boss");
     private static final TagKey<EntityType<?>> CANNOT_TRANSFORM = caEntityTypeTag("cannot_transform");
     private static final TagKey<EntityType<?>> ENDSPEAKER_EDIBLE = caEntityTypeTag("endspeaker_edible");
     private static final TagKey<EntityType<?>> GOLEMS = caEntityTypeTag("golems");
@@ -37,8 +37,8 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
     private static final TagKey<EntityType<?>> MARINEMOBS = caEntityTypeTag("marinemobs");
     private static final TagKey<EntityType<?>> NO_JOIN_WHIRL = caEntityTypeTag("no_join_whirl");
     private static final TagKey<EntityType<?>> ELITE = caEntityTypeTag("elite");
-    private static final TagKey<EntityType<?>> SEA_BORN = caEntityTypeTag("sea_born");
-    private static final TagKey<EntityType<?>> SEA_BORN_MINION = caEntityTypeTag("sea_born_minion");
+    private static final TagKey<EntityType<?>> SEABORN = caEntityTypeTag("seaborn");
+    private static final TagKey<EntityType<?>> SEABORN_MINION = caEntityTypeTag("seaborn_minion");
     private static final TagKey<EntityType<?>> PHALAX = caEntityTypeTag("phalax");
     private static final TagKey<EntityType<?>> PORTABLE = caEntityTypeTag("portable");
     private static final TagKey<EntityType<?>> SEA_FRIEND = caEntityTypeTag("sea_friend");
@@ -64,7 +64,7 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
         addSeaMonsterSubclassesToTag();
         addSeaMonsterBossSubclassesToTag();
         addEntityTypesToTag(CANNOT_TRANSFORM, EntityType.IRON_GOLEM, CAEntities.CHITIN_GOLEM, EntityType.SNOW_GOLEM, EntityType.STRIDER, EntityType.VEX, EntityType.MAGMA_CUBE);
-        addTagsToTag(CANNOT_TRANSFORM, SEA_BORN, GOLEMS, HUNTERS, SEA_FRIEND);
+        addTagsToTag(CANNOT_TRANSFORM, SEABORN, GOLEMS, HUNTERS, SEA_FRIEND);
         addEntityTypesToTag(ENDSPEAKER_EDIBLE, CAEntities.BASELAYER_ABYSSAL, CAEntities.CRACKER_ABYSSAL, CAEntities.GUIDE_ABYSSAL, CAEntities.PREDATOR_ABYSSAL, CAEntities.SPLASHER_ABYSSAL, CAEntities.UMBRELLA_ABYSSAL);
         addEntityTypesToTag(GOLEMS, CAEntities.CHITIN_GOLEM, CAEntities.SPIKE_CHEST, CAEntities.COMPLEX_CHITIN_GOLEM, CAEntities.THE_LAST_KNIGHT, CAEntities.FLAMARINE_STATUE, CAEntities.FLAMARINE_GOLEM, CAEntities.MOIST_DRAGON_BREATH);
         addEntityTypesToTag(HOMO_SAPIENS, CAEntities.APOCATA, CAEntities.GUNMU);
@@ -73,16 +73,16 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
         addEntityTypesToTag(IGNORE_MIGRATION, CAEntities.OCEANIZED_WARDEN, CAEntities.OCEANIZED_WARDENIS, CAEntities.IZUMIK, CAEntities.IZUMIK_OFFSPRING, CAEntities.OCEANIZED_WITHER, CAEntities.MARTUS, CAEntities.TIDE_CHIMERA, CAEntities.MOIST_DRAGON_BREATH, CAEntities.MOIST_ENDER_CRYSTAL);
         addEntityTypesToTag(IMMUE_TO_INST_SANITY, CAEntities.OCEANIZED_WITCH);
         addEntityTypesToTag(IMMUE_TO_NETHERSEA_BRAND, CAEntities.LITTLE_HELPER, CAEntities.AL_1_S_HELPER, CAEntities.FLAMARINE_STATUE, CAEntities.FLAMARINE_GOLEM, CAEntities.QUNYOU_WANTED_ISHARMLA);
-        addTagsToTag(IMMUE_TO_NETHERSEA_BRAND, SEA_BORN, GOLEMS);
+        addTagsToTag(IMMUE_TO_NETHERSEA_BRAND, SEABORN, GOLEMS);
         addEntityTypesToTag(INQUISITION, CAEntities.TRIBUNAL_HEALER, CAEntities.IRENE, CAEntities.SAINT_CARMEN);
         addTagsToTag(INQUISITION, WARRIORS, PHALAX);
         addEntityTypesToTag(IS_HUMANSIDE, CAEntities.GLADIIA_WHIRL, CAEntities.CHITIN_GOLEM, CAEntities.COMPLEX_CHITIN_GOLEM, EntityType.IRON_GOLEM, EntityType.SNOW_GOLEM, EntityType.VILLAGER, CAEntities.THE_LAST_KNIGHT);
-        addTagsToTag(IS_HUMANSIDE, HUNTERS, INQUISITION, SEA_BORN_MINION);
+        addTagsToTag(IS_HUMANSIDE, HUNTERS, INQUISITION, SEABORN_MINION);
         addEntityTypesToTag(IZUMIK_DISCOVERS, CAEntities.BONE_FISH, CAEntities.CRACKER_ABYSSAL, EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER, EntityType.ZOMBIFIED_PIGLIN, EntityType.DROWNED, EntityType.ENDERMAN, EntityType.SILVERFISH, EntityType.ELDER_GUARDIAN, EntityType.GUARDIAN, CAEntities.FLEE_FISH, EntityType.BLAZE, EntityType.CREEPER, CAEntities.FIRST_TO_TALK, EntityType.PHANTOM, EntityType.CAVE_SPIDER, EntityType.SPIDER, EntityType.LLAMA, EntityType.SHULKER, EntityType.SKELETON, EntityType.WITHER_SKELETON, EntityType.MAGMA_CUBE, CAEntities.ROUTE_FRACTAL, CAEntities.OCEANIZED_COW, CAEntities.OCEANIZED_DOG, CAEntities.OCEANIZED_HORSE, CAEntities.OCEANIZED_PIG, CAEntities.OCEANIZED_PIGLIN, CAEntities.OCEANIZED_PILLAGER, CAEntities.OCEANIZED_RAVAGER, CAEntities.OCEANIZED_SHEEP, CAEntities.OCEANIZED_VILLAGER, CAEntities.OCEANIZED_VINDICATOR, CAEntities.OCEANIZED_WOLF, CAEntities.OCEANIZED_WITCH, CAEntities.OCEANIZED_ENDERMAN, CAEntities.OCEANIZED_SPIDER, CAEntities.OCEANIZED_BRUTE, CAEntities.OCEANIZED_CAT, CAEntities.OCEANIZED_EVOKER, CAEntities.OCEANIZED_WARDENIS, CAEntities.OCEANIZED_FOX, CAEntities.OCEANIZED_POLAR_BEAR, CAEntities.IZUMIK_OFFSPRING, CAEntities.LINGERING_FRACTAL, CAEntities.OCEANIZE_RABBIT, CAEntities.COMPASSION_PRAYER, CAEntities.THIRSTER, CAEntities.NETHERSEA_SLIME, CAEntities.OCEANIZED_CHICKEN);
         addEntityTypesToTag(MARINEMOBS, CAEntities.COLLECTOR_PROKARYOTE, CAEntities.BONE_FISH, CAEntities.APOSTLE_PROKARYOTE, CAEntities.FLOATER_PROKARYOTE, CAEntities.ACCUMULATOR_PROKARYOTE, CAEntities.FEEDER_PROKARYOTE, CAEntities.NUCLEIC_MALEFICENT, CAEntities.DEPOSITER_PROKARYOTE, CAEntities.NAUTILUS_HEADHUNTER);
         addEntityTypesToTag(NO_JOIN_WHIRL, EntityType.GLOW_ITEM_FRAME, EntityType.ITEM_DISPLAY, EntityType.ITEM_FRAME, EntityType.ZOMBIE, EntityType.BOAT, EntityType.CHEST_BOAT, EntityType.MINECART, EntityType.CHEST_MINECART, EntityType.COMMAND_BLOCK_MINECART, EntityType.FURNACE_MINECART, EntityType.HOPPER_MINECART, EntityType.SPAWNER_MINECART, EntityType.TNT_MINECART, CAEntities.GLADIIA_WHIRL, CAEntities.AL_1_S_HELPER, CAEntities.LITTLE_HELPER, CAEntities.ISHARMLA_TEAR, CAEntities.QUNYOU_WANTED_ISHARMLA);
         addEntityTypesToTag(ELITE, CAEntities.BASELAYER_ABYSSAL, CAEntities.CRACKER_ABYSSAL, CAEntities.POCKET_SEA_CREEPER, CAEntities.FIRST_TO_TALK, CAEntities.FLEE_FISH, CAEntities.GUIDE_ABYSSAL, CAEntities.PREGNANT_FISH, CAEntities.PUNCTURE_FISH, CAEntities.REAPER_FISH, CAEntities.UMBRELLA_ABYSSAL, CAEntities.MEGA_CHEST, CAEntities.APOSTLE_PROKARYOTE, CAEntities.CHEST_FISH, CAEntities.OCEANIZED_VINDICATOR, CAEntities.OCEANIZED_ENDERMAN, CAEntities.OCEANIZED_RAVAGER, CAEntities.IZUMIK_OFFSPRING, CAEntities.OCEANIZED_EVOKER, CAEntities.THE_ABANDONED, CAEntities.NUCLEIC_MALEFICENT, CAEntities.TIDUTANT_ROCK_SPIDER, CAEntities.SCREAM_CHEST_FISH, CAEntities.OCEANIZED_SHULKER);
-        addEntityTypesToTag(SEA_BORN_MINION, CAEntities.REAPER_PET, CAEntities.OCEANIZED_DOG, CAEntities.ROCINANTE);
+        addEntityTypesToTag(SEABORN_MINION, CAEntities.REAPER_PET, CAEntities.OCEANIZED_DOG, CAEntities.ROCINANTE);
         addEntityTypesToTag(PHALAX, CAEntities.CORRECTIONAL_PHALAX_VANGUARD, CAEntities.CORRECTIONAL_PHALANXY_INFANTRY);
         addEntityTypesToTag(PORTABLE, CAEntities.THE_ABANDONED);
         addTagsToTag(PORTABLE, HOMO_SAPIENS, HUNTERS);
@@ -90,7 +90,7 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
         addEntityTypesToTag(SKIP_MIGRATION, CAEntities.OCEANIZED_WITHER, CAEntities.TIDE_CHIMERA, CAEntities.MOIST_DRAGON_BREATH, CAEntities.MOIST_ENDER_CRYSTAL);
         addEntityTypesToTag(WARRIORS, CAEntities.JUNIOR_WARRIOR_PRIEST, CAEntities.WARRIOR_PRIEST);
         addTagsToTag(WITH_LOW_ELEMENTAL_MODIFIER, INQUISITION);
-        addTagsToTag(WITH_LOWER_ELEMENTAL_MODIFIER, SEA_BORN);
+        addTagsToTag(WITH_LOWER_ELEMENTAL_MODIFIER, SEABORN);
         addEntityTypesToTag(WITH_LOWEST_ELEMENTAL_MODIFIER, EntityType.WARDEN);
         addTagsToTag(WITH_LOWEST_ELEMENTAL_MODIFIER, ELITE);
         addTagsToTag(WITH_LOWEST_SMALLER_ELEMENTAL_MODIFIER, FORGE_BOSSES, HUNTERS);
@@ -98,7 +98,7 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
         addEntityTypesToTag(WITH_ZERO_ELEMENTAL_MODIFIER, CAEntities.GUNMU, CAEntities.AL_1_S_HELPER, CAEntities.LITTLE_HELPER, CAEntities.IZUMIK, CAEntities.QUNYOU_WANTED_ISHARMLA, CAEntities.ISHARMLA_TEAR);
 
         addEntityTypesToTag(FORGE_BOSSES, CAEntities.CHITIN_GOLEM, CAEntities.COMPLEX_CHITIN_GOLEM, CAEntities.THE_LAST_KNIGHT, CAEntities.FLAMARINE_GOLEM);
-        addTagsToTag(FORGE_BOSSES, SEA_BORN_BOSS, HUNTERS);
+        addTagsToTag(FORGE_BOSSES, SEABORN_BOSS, HUNTERS);
         addEntityTypesToTag(FORGE_NETHER_MOBS, EntityType.BLAZE, EntityType.GHAST, EntityType.MAGMA_CUBE, EntityType.PIGLIN, EntityType.PIGLIN_BRUTE, EntityType.WITHER, EntityType.WITHER_SKELETON, EntityType.ZOGLIN, EntityType.ZOMBIFIED_PIGLIN, CAEntities.OCEANIZED_BRUTE, CAEntities.OCEANIZED_PIGLIN, CAEntities.OCEANIZED_WITHER, CAEntities.OCEANIZED_WITHERIA);
 
         addEntityTypesToTag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS, CAEntities.THE_LAST_KNIGHT, CAEntities.MEGA_CHEST, CAEntities.OCEANIZED_FOX, CAEntities.OCEANIZED_POLAR_BEAR);
@@ -107,8 +107,8 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
 
         addEntityTypesToTag(EntityTypeTags.ARTHROPOD, CAEntities.OCEANIZED_SPIDER);
 
-        addTagsToTag(EntityTypeTags.AQUATIC, SEA_BORN, MARINEMOBS);
-        addTagsToTag(EntityTypeTags.CAN_BREATHE_UNDER_WATER, SEA_BORN, MARINEMOBS);
+        addTagsToTag(EntityTypeTags.AQUATIC, SEABORN, MARINEMOBS);
+        addTagsToTag(EntityTypeTags.CAN_BREATHE_UNDER_WATER, SEABORN, MARINEMOBS);
     }
 
     /**
@@ -165,7 +165,7 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
      * 将所有 SeaMonster 及其子类实体加入目标标签。新增 SeaMonster 子类无需手动维护标签列表。
      */
     private void addSeaMonsterSubclassesToTag() {
-        var appender = tag(EntityTypeTagsProvider.SEA_BORN);
+        var appender = tag(EntityTypeTagsProvider.SEABORN);
         for (DeferredHolder<EntityType<?>, ?> holder : CAEntities.SEA_MONSTERS) {
             appender.add(entityTypeKey(holder));
         }
@@ -176,7 +176,7 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
      * 将所有 SeaMonsterBoss 及其子类实体加入目标标签。新增 Boss 无需手动维护标签列表。
      */
     private void addSeaMonsterBossSubclassesToTag() {
-        var appender = tag(EntityTypeTagsProvider.SEA_BORN_BOSS);
+        var appender = tag(EntityTypeTagsProvider.SEABORN_BOSS);
         for (DeferredHolder<EntityType<?>, ?> holder : CAEntities.SEA_MONSTER_BOSSES) {
             appender.add(entityTypeKey(holder));
         }

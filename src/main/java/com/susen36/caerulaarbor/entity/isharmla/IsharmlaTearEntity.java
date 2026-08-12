@@ -103,7 +103,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
                 .toList();
 
         for (Entity entityiterator : nearbyEntities) {
-            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                 continue;
             }
             if (!(entityiterator instanceof LivingEntity)) {

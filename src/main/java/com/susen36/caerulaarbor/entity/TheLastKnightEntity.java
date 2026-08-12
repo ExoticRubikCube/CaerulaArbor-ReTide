@@ -256,7 +256,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
         if (target.getTicksFrozen() >= 200) {
             damage *= 1.75F;
         }
-        if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+        if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
             damage *= 1.5F;
         }
         return damage;

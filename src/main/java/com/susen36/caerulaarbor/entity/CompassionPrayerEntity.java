@@ -245,7 +245,7 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
                     .toList();
             for (Entity nearbyEntity : nearbyEntities) {
                 if (nearbyEntity != this && nearbyEntity.isAlive()
-                        && nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                        && nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                     if (nearbyEntity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide()) {
                         livingEntity.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL, 200, 0, false, false));
                     }
@@ -314,10 +314,10 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
                             if (!entityiterator.isAlive()) {
                                 continue;
                             }
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {
                                 continue;
                             }
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                 if (!(entityiterator instanceof LivingEntity livEnt12 && livEnt12.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY))) {
                                     perc = EntityUtils.getHealthPerc(entityiterator);
                                     if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
@@ -339,7 +339,7 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
                         final Vec3 center = new Vec3(x, y, z);
                         List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                         for (LivingEntity entityiterator : entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                 if (!(entityiterator == target)) {
                                     continue;
                                 }

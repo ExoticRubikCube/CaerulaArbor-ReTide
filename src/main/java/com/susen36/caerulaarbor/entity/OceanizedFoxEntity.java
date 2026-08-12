@@ -282,7 +282,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                                         if (!(entityiterator instanceof LivingEntity)) {
                                             continue;
                                         }
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                             if (!(entityiterator == enemy1)) {
                                                 continue;
                                             }

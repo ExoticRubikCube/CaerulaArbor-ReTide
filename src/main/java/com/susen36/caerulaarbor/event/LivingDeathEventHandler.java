@@ -205,11 +205,11 @@ public class LivingDeathEventHandler {
 
         if (sourceentity instanceof Player && EntityUtils.canPlayerEvo(sourceentity)) {
             double r0 = 0, r1 = 0, r2 = 0;
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born_boss")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {
                 r0 = 0.5; r1 = 0.25; r2 = 0.125;
             } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite")))) {
                 r0 = 0.3; r1 = 0.075; r2 = 0.0075;
-            } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+            } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                 r0 = 0.15;
             }
             if (Math.random() < r0) {
@@ -254,7 +254,7 @@ public class LivingDeathEventHandler {
             handlePlayerKillRelics(event, world, x, y, z, entity, sourceentity);
         }
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
             if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
                 if (!world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).isEmpty()) {
                     MapVariablesHandler.addEvoPoint(world, StrategyType.BREED, (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.1);
@@ -517,8 +517,8 @@ public class LivingDeathEventHandler {
 
         if (event.isCanceled()) return;
 
-        if (entity.level().isClientSide() && !(entity.getType().is(SEA_BORN)||entity.getType().is(SEA_BORN_BOSS)||entity.getType().is(SEA_BORN_MINION))) {
-            if((sourceentity != null && sourceentity.getType().is(SEA_BORN)||source.is(CADamageTypes.TRAIL_DAMAGE))) {
+        if (entity.level().isClientSide() && !(entity.getType().is(SEABORN)||entity.getType().is(SEABORN_BOSS)||entity.getType().is(SEABORN_MINION))) {
+            if((sourceentity != null && sourceentity.getType().is(SEABORN)||source.is(CADamageTypes.TRAIL_DAMAGE))) {
                 if (SeabornTransformManager.transformToSeaborn(world, x, y, z, entity,source)) {
                     event.setCanceled(true);
                 }

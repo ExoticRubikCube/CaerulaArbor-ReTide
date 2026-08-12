@@ -388,7 +388,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
                     if (entityiterator == this) {
                         continue;
                     }
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                         if (entityiterator != this.getTarget()) {
                             continue;
                         }
@@ -765,7 +765,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
                 if (entityiterator == entity) {
                     continue;
                 }
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                     if (!(entityiterator == (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                         continue;
                     }

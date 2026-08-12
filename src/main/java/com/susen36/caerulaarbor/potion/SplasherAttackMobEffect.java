@@ -45,7 +45,7 @@ public class SplasherAttackMobEffect extends MobEffect {
                 if ((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) < 5) {
                     continue;
                 }
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_born")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                     continue;
                 }
                 if (entityiterator instanceof Player && (ModCapabilities.getPlayerVariables(entityiterator)).player_oceanization >= 3) {
