@@ -78,7 +78,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 	private static final List<RelicDisplayEntry> ALL_ENTRIES;
 	static {
 		ALL_ENTRIES = new ArrayList<>();
-		// ===== 第 1 行 =====
+
 		ALL_ENTRIES.add(e("imagebutton_relic_crown",          CARelics.KING_CROWN.get(),                1,  "imagebutton_relic_crown",          "relic_crown"));
 		ALL_ENTRIES.add(e("imagebutton_relic_spear",          CARelics.KING_SPEAR.get(),                2,  "imagebutton_relic_spear",          "kings_spear"));
 		ALL_ENTRIES.add(e("imagebutton_extension",            CARelics.KING_EXTENSION.get(),            4,  "imagebutton_extension",            "kings_extension"));
@@ -89,7 +89,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		ALL_ENTRIES.add(e("imagebutton_archifi_bed",          CARelics.SARKAZ_KING_BED.get(),           8,  "imagebutton_archifi_bed",          "archfiends_bed"));
 		ALL_ENTRIES.add(e("imagebutton_royalfate",            CARelics.ROYALFATE.get(),                -1,  "imagebutton_royalfate",            "royal_fate"));
 		ALL_ENTRIES.add(e("imagebutton_hand_sword",           CARelics.HAND_SWORD.get(),               35,  "imagebutton_hand_sword",           "hand_sword"));
-		// ===== 第 2 行 =====
+
 		ALL_ENTRIES.add(e("imagebutton_hand_spike",           CARelics.HAND_THORNS.get(),              10,  "imagebutton_hand_spike",           "hand_of_thorns"));
 		ALL_ENTRIES.add(e("imagebutton_hand_reap",            CARelics.HAND_STRANGLE.get(),            11,  "imagebutton_hand_reap",            "hand_of_strangle"));
 		ALL_ENTRIES.add(e("imagebutton_hand_reap1",           CARelics.HAND_FERTILITY.get(),           12,  "imagebutton_hand_reap1",           "hand_of_fertiliy"));
@@ -103,7 +103,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		ALL_ENTRIES.add(e("imagebutton_hand_firework",        CARelics.HAND_FIREWORK.get(),            16,  "imagebutton_hand_firework",        "hand_of_firework"));
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
-		// ===== 第 3 行 =====
+
 		ALL_ENTRIES.add(e("imagebutton_crimson_contarct_0",   CARelics.TREATY.get(),                   17,  "imagebutton_crimson_contarct_0",   "crimson_treaty"));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_survivor_contarct", null, RelicDisplayEntry.SpecialType.SURVIVOR, 18,
 			"imagebutton_survivor_contarct", "survivor_contract",
@@ -117,7 +117,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
-		// ===== 第 4 行 =====
+
 		ALL_ENTRIES.add(e("imagebutton_beef_can",             CARelics.FEATURED_CANNED_MEAT.get(),     -1, "imagebutton_beef_can",             "meat_can"));
 		ALL_ENTRIES.add(e("imagebutton_bowl_seagrass",        CARelics.SEAWEED_SALAD.get(),            -1, "imagebutton_bowl_seagrass",        "bowl_seagrass"));
 		ALL_ENTRIES.add(e("imagebutton_orangestorm",          CARelics.ORANGE_STORM.get(),             -1, "imagebutton_orangestorm",          "golden_storm"));
@@ -130,7 +130,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		ALL_ENTRIES.add(e("imagebutton_musicboxsmall",        CARelics.UTIL_MUSICBOX.get(),            -1, "imagebutton_musicboxsmall",        "solo_music_box"));
 		ALL_ENTRIES.add(e("imagebutton_flute",                CARelics.WEIRD_FLUTE.get(),              -1, "imagebutton_flute",                "odd_flute"));
 		ALL_ENTRIES.add(e("imagebutton_originium_iris",       CARelics.UTIL_IRIS.get(),                -1, "imagebutton_originium_iris",       "redstone_iris_flower"));
-		// ===== 第 5 行 =====
+
 		ALL_ENTRIES.add(e("imagebutton_kettle",               CARelics.HOT_WATER_KETTLE.get(),         -1, "imagebutton_kettle",               "kettle"));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_alley", CARelics.UTIL_ALLEY.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_alley", "allay_sculpture",
@@ -162,7 +162,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			null, null));
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
-		// ===== 第 6 行（翻页第 2 页开始） =====
+
 		ALL_ENTRIES.add(e("imagebutton_voyageofsmall",        CARelics.PURE_GOLD_EXPEDITION.get(),     -1, "imagebutton_voyageofsmall",        "voyage_of_gold"));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_piglin_diary", CARelics.DURIN_OVERGROUND_ODYSSEY.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_piglin_diary", "piglin_diary",
@@ -177,7 +177,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			entity -> RelicUtils.hasRelic(CARelics.CURSED_HEART.get(), entity),
 			null, null));
 		ALL_ENTRIES.add(e("imagebutton_golden_chalise", CARelics.GOLDEN_CHALISE.get(), -1, "imagebutton_golden_chalise", "golden_chalise"));
-		// ===== 补全：有注册物品但原界面未消费的条目 =====
+
 		ALL_ENTRIES.add(e("imagebutton_nurture_gene_set",    CARelics.NURTURE_GENE_SET.get(),    -1, "imagebutton_nurture_gene_set",    "nurture_gene_set"));
 		ALL_ENTRIES.add(e("imagebutton_oil_and_cream",       CARelics.OIL_AND_CREAM.get(),       -1, "imagebutton_oil_and_cream",       "oil_and_cream"));
 		ALL_ENTRIES.add(e("imagebutton_tulip_medcine",       CARelics.TULIP_MEDCINE.get(),       -1, "imagebutton_tulip_medcine",       "tulip_medcine"));
