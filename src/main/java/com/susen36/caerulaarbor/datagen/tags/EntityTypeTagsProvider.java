@@ -39,6 +39,7 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
     private static final TagKey<EntityType<?>> ELITE = caEntityTypeTag("elite");
     private static final TagKey<EntityType<?>> SEABORN = caEntityTypeTag("seaborn");
     private static final TagKey<EntityType<?>> SEABORN_MINION = caEntityTypeTag("seaborn_minion");
+    private static final TagKey<EntityType<?>> SEABORN_PET= caEntityTypeTag("seaborn_pet");
     private static final TagKey<EntityType<?>> PHALAX = caEntityTypeTag("phalax");
     private static final TagKey<EntityType<?>> PORTABLE = caEntityTypeTag("portable");
     private static final TagKey<EntityType<?>> SEA_FRIEND = caEntityTypeTag("sea_friend");
@@ -82,7 +83,8 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
         addEntityTypesToTag(MARINEMOBS, CAEntities.COLLECTOR_PROKARYOTE, CAEntities.BONE_FISH, CAEntities.APOSTLE_PROKARYOTE, CAEntities.FLOATER_PROKARYOTE, CAEntities.ACCUMULATOR_PROKARYOTE, CAEntities.FEEDER_PROKARYOTE, CAEntities.NUCLEIC_MALEFICENT, CAEntities.DEPOSITER_PROKARYOTE, CAEntities.NAUTILUS_HEADHUNTER);
         addEntityTypesToTag(NO_JOIN_WHIRL, EntityType.GLOW_ITEM_FRAME, EntityType.ITEM_DISPLAY, EntityType.ITEM_FRAME, EntityType.ZOMBIE, EntityType.BOAT, EntityType.CHEST_BOAT, EntityType.MINECART, EntityType.CHEST_MINECART, EntityType.COMMAND_BLOCK_MINECART, EntityType.FURNACE_MINECART, EntityType.HOPPER_MINECART, EntityType.SPAWNER_MINECART, EntityType.TNT_MINECART, CAEntities.GLADIIA_WHIRL, CAEntities.AL_1_S_HELPER, CAEntities.LITTLE_HELPER, CAEntities.ISHARMLA_TEAR, CAEntities.QUNYOU_WANTED_ISHARMLA);
         addEntityTypesToTag(ELITE, CAEntities.BASELAYER_ABYSSAL, CAEntities.CRACKER_ABYSSAL, CAEntities.POCKET_SEA_CREEPER, CAEntities.FIRST_TO_TALK, CAEntities.FLEE_FISH, CAEntities.GUIDE_ABYSSAL, CAEntities.PREGNANT_FISH, CAEntities.PUNCTURE_FISH, CAEntities.REAPER_FISH, CAEntities.UMBRELLA_ABYSSAL, CAEntities.MEGA_CHEST, CAEntities.APOSTLE_PROKARYOTE, CAEntities.CHEST_FISH, CAEntities.OCEANIZED_VINDICATOR, CAEntities.OCEANIZED_ENDERMAN, CAEntities.OCEANIZED_RAVAGER, CAEntities.IZUMIK_OFFSPRING, CAEntities.OCEANIZED_EVOKER, CAEntities.THE_ABANDONED, CAEntities.NUCLEIC_MALEFICENT, CAEntities.TIDUTANT_ROCK_SPIDER, CAEntities.SCREAM_CHEST_FISH, CAEntities.OCEANIZED_SHULKER);
-        addEntityTypesToTag(SEABORN_MINION, CAEntities.REAPER_PET, CAEntities.OCEANIZED_DOG, CAEntities.ROCINANTE);
+        addEntityTypesToTag(SEABORN_PET, CAEntities.REAPER_PET, CAEntities.OCEANIZED_DOG, CAEntities.ROCINANTE);
+        addEntityTypesToTag(SEABORN_MINION, CAEntities.MOIST_ENDER_CRYSTAL);
         addEntityTypesToTag(PHALAX, CAEntities.CORRECTIONAL_PHALAX_VANGUARD, CAEntities.CORRECTIONAL_PHALANXY_INFANTRY);
         addEntityTypesToTag(PORTABLE, CAEntities.THE_ABANDONED);
         addTagsToTag(PORTABLE, HOMO_SAPIENS, HUNTERS);

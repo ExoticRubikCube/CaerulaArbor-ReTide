@@ -209,8 +209,8 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		this.y = container.y;
 		this.z = container.z;
 		this.entity = container.entity;
-		this.imageWidth = 328;
-		this.imageHeight = 216;
+		this.imageWidth = 312;
+		this.imageHeight = 192;
 		this.totalPages = (ALL_ENTRIES.size() + PAGE_SIZE - 1) / PAGE_SIZE;
 		if (this.totalPages < 1) this.totalPages = 1;
 	}
@@ -258,7 +258,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 328, 216, 328, 216);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 312, 192, 312, 192);
 		RenderSystem.disableBlend();
 	}
 
@@ -428,8 +428,11 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 	public void init() {
 		super.init();
 
+		// 元素相对偏移保持不变：Y=198，X=4/24/292
+		final int buttonY = 198;
+
 		// 返回按钮
-		button_return = new PlainTextButton(this.leftPos + 292, this.topPos + 204, 24, 20,
+		button_return = new PlainTextButton(this.leftPos + 292, this.topPos + buttonY, 24, 16,
 			Component.translatable("gui.caerula_arbor.relic_showcase.button_return"), e -> {
 			PacketDistributor.sendToServer(new RelicShowcaseButtonMessage(0, x, y, z));
 			RelicShowcaseButtonMessage.handleButtonAction(entity, 0, x, y, z);
@@ -438,12 +441,12 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		this.addRenderableWidget(button_return);
 
 		// 上一页
-		button_prev_page = new PlainTextButton(this.leftPos + 4, this.topPos + 204, 16, 16,
+		button_prev_page = new PlainTextButton(this.leftPos + 4, this.topPos + buttonY, 16, 16,
 			Component.literal("◀"), e -> setPage(currentPage - 1), this.font);
 		this.addRenderableWidget(button_prev_page);
 
 		// 下一页
-		button_next_page = new PlainTextButton(this.leftPos + 24, this.topPos + 204, 16, 16,
+		button_next_page = new PlainTextButton(this.leftPos + 24, this.topPos + buttonY, 16, 16,
 			Component.literal("▶"), e -> setPage(currentPage + 1), this.font);
 		this.addRenderableWidget(button_next_page);
 
