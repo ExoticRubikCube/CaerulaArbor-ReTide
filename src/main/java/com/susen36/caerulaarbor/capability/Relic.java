@@ -4,6 +4,7 @@ import com.susen36.caerulaarbor.api.event.RelicEvent;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CARelics;
+import com.susen36.caerulaarbor.relic.RelicTier;
 import com.susen36.caerulaarbor.relic.RelicType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
@@ -33,25 +34,25 @@ public enum Relic {
     CURSED_EMELIGHT,
     CURSED_GLOWBODY,
     CURSED_RESEARCH,
-    KING_CROWN(true),
-    KING_ARMOR(true),
-    KING_SPEAR(true),
-    KING_EXTENSION(true),
-    KING_CRYSTAL(true),
-    HAND_THORNS(true),
-    HAND_STRANGLE(true),
-    HAND_FERTILITY(true),
-    HAND_SPEED(true),
-    HAND_OF_PULVERIZATION(true),
-    HAND_SWIPE(true),
-    SARKAZ_KING_ARTIFACT(true),
-    HAND_FIREWORK(true),
-    SARKAZ_KING_FLAG(true),
-    HAND_ENGRAVE(-1, 99, -1, true),
-    SARKAZ_KING_BED(true),
-    SURVIVOR_CONTRACT(-1, 32, -1, true),
-    TREATY(true),
-    SARKAZ_KING_RYLFATE(true),
+    KING_CROWN,
+    KING_ARMOR,
+    KING_SPEAR,
+    KING_EXTENSION,
+    KING_CRYSTAL,
+    HAND_THORNS,
+    HAND_STRANGLE,
+    HAND_FERTILITY,
+    HAND_SPEED,
+    HAND_OF_PULVERIZATION,
+    HAND_SWIPE,
+    SARKAZ_KING_ARTIFACT,
+    HAND_FIREWORK,
+    SARKAZ_KING_FLAG,
+    HAND_ENGRAVE(-1, 99, -1),
+    SARKAZ_KING_BED,
+    SURVIVOR_CONTRACT(-1, 32, -1),
+    TREATY,
+    SARKAZ_KING_RYLFATE,
     UTIL_MUSICBOX,
     UTIL_IRIS,
     WEIRD_FLUTE,
@@ -59,7 +60,7 @@ public enum Relic {
     DURIN_OVERGROUND_ODYSSEY,
     UTIL_TOPONYM,
     HOT_WATER_KETTLE,
-    LEGEND_CHITIN(true),
+    LEGEND_CHITIN,
     UTIL_ALLEY,
     VAMPIRES_BED,
     PROOF_OF_LONGEVITY,
@@ -67,7 +68,7 @@ public enum Relic {
     UTIL_SCORE,
     UTIL_RESCISSION,
     UTIL_STARE,
-    HAND_SWORD(true),
+    HAND_SWORD,
     UTIL_ALLAY,
     UTIL_RAINBOW,
     DISO,
@@ -80,30 +81,20 @@ public enum Relic {
     ROYALFATE,
     CURSED_HEART,
     HEMOST,
-    YEARNING(true);
+    YEARNING;
 
     public final int minLevel;
     public final int maxLevel;
     public final int defaultLevel;
-    public final boolean advanced;
 
     Relic() {
-        this(0, 1, 0, false);
-    }
-
-    Relic(boolean advanced) {
-        this(0, 1, 0, advanced);
+        this(0, 1, 0);
     }
 
     Relic(int minLevel, int maxLevel, int defaultLevel) {
-        this(minLevel, maxLevel, defaultLevel, false);
-    }
-
-    Relic(int minLevel, int maxLevel, int defaultLevel, boolean advanced) {
         this.minLevel = minLevel;
         this.maxLevel = maxLevel;
         this.defaultLevel = defaultLevel;
-        this.advanced = advanced;
     }
 
     /**
@@ -113,13 +104,12 @@ public enum Relic {
     private static final EnumMap<Relic, ResourceKey<RelicType>> BY_ENUM = new EnumMap<>(Relic.class);
 
     /**
-     * 判断该遗物是否属于「高级遗物」（即 RELIC_ADVANCED 标签对应的遗物组）。
-     * 由枚举构造器中的 advanced 字段直接决定，外部代码应当使用此方法判断，而不是硬编码名字。
-     *
-     * @return 若为高级遗物返回 true
+     * 从注册表读取该遗物对应的 {@link RelicType} 稀有度等级。
+     * 级别在 CARelics 注册 RelicType 时设置，此处不再在枚举内手动标记。
      */
-    public boolean isAdvanced() {
-        return this.advanced;
+    private RelicTier tier() {
+        RelicType type = CARelics.RELICS_REGISTRY.get(getRegistryKey());
+        return type == null ? RelicTier.NORMAL : type.tier();
     }
 
     static {
@@ -201,7 +191,7 @@ public enum Relic {
      */
     public int get(PlayerVariable variables) {
         int stored = variables.getRelic(getRegistryKey());
-        if (this.isAdvanced() && CAConfigs.RELIC_BAN.get()) {
+        if (tier() == RelicTier.ADVANCED && CAConfigs.RELIC_BAN.get()) {
             return this.defaultLevel;
         }
         return stored;

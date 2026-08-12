@@ -33,8 +33,6 @@ public class SimpleRelicItem extends RelicItemBase {
         return InteractionResultHolder.sidedSuccess(stack, world.isClientSide());
     }
 
-    /* =============== 注册辅助：一行配置 =============== */
-
     /** Boolean 型收藏品：rarity=UNCOMMON / stacksTo=1 / LEVELUP / HAPPY_VILLAGER。*/
     public static Supplier<Item> simpleBoolean(Relic relic) {
         return () -> new SimpleRelicItem(relic,

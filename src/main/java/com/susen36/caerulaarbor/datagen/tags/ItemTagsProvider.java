@@ -42,7 +42,6 @@ public class ItemTagsProvider extends TagsProvider.RegistryTagsProvider<Item> {
     private static final TagKey<Item> MOIST_ITEM = caItemTag("moist_item");
     private static final TagKey<Item> NETHERSEA_LOGS = caItemTag("nethersea_logs");
     private static final TagKey<Item> NETHERSEA_PROTECTIVE = caItemTag("nethersea_protective");
-    private static final TagKey<Item> RELIC_ADVANCED = caItemTag("relic_advanced");
     private static final TagKey<Item> RELIC_GENERIC = caItemTag("relic_generic");
     private static final TagKey<Item> SEABORN_LOOTS = caItemTag("seaborn_loots");
     private static final TagKey<Item> SELF_MENDABLE = caItemTag("self_mendable");
@@ -126,8 +125,6 @@ public class ItemTagsProvider extends TagsProvider.RegistryTagsProvider<Item> {
         addItemsToTag(MOIST_ITEM, CAItems.MOIST_ECHO_SHARD, CAItems.MOIST_STAR, CAItems.WATER_LOGGED_PEARL, CAItems.MOIST_CRYSTAL_ITEM, CAItems.MOIST_DRAGON_HEART);
         addItemsToTag(NETHERSEA_LOGS, CAItems.NETHERSEA_WOOD, CAItems.STRIPPED_NETHERSEA_WOOD, CAItems.TRAIL_LOG, CAItems.STRIPPED_TRAIL_LOG);
         addItemsToTag(NETHERSEA_PROTECTIVE, CAItems.TRAILRITE_AXE, CAItems.TRAILRITE_SWORD, CAItems.TRAILRITE_PICKAXE, CAItems.TRAILRITE_HOE, CAItems.TRAILRITE_SHOVEL, CAItems.TRAIL_MOP);
-        addItemsToTag(RELIC_ADVANCED, CAItems.SURVIVOR_CONTRACT, CAItems.CHITIN_KNIFE, CAItems.UNRIPE_YEARNING, CAItems.CRIMSON_TREATY);
-        addTagsToTag(RELIC_ADVANCED, KING_RELICS, ARCHFIEND_RELICS, HAND_RELICS);
         addItemsToTag(RELIC_GENERIC, CAItems.SURVIVOR_CONTRACT, CAItems.CRIMSON_TREATY, CAItems.BOWL_SEAGRASS, CAItems.GOLDEN_STORM, CAItems.COFFEE_CANDY, CAItems.CANNED_CHERRY, CAItems.RAINBOW_CANDY, CAItems.AROMATIC_COFFEE, CAItems.SOLO_MUSIC_BOX, CAItems.REDSTONE_IRIS_FLOWER, CAItems.ODD_FLUTE, CAItems.VOYAGE_OF_GOLD, CAItems.PIGLIN_DIARY, CAItems.TOPONYM_TEXTOLOGY, CAItems.KETTLE, CAItems.CHITIN_KNIFE, CAItems.ALLAY_SCULPTURE, CAItems.BAT_BED, CAItems.PROOF_OF_LONGEVITY, CAItems.OMNI_KEY, CAItems.SCORE, CAItems.RESCISSION, CAItems.GUARDIAN_STARE, CAItems.UNRIPE_YEARNING, CAItems.MEAT_CAN, CAItems.SMELLY_HEMOSTATIC);
         addTagsToTag(RELIC_GENERIC, HAND_RELICS, ARCHFIEND_RELICS, KING_RELICS);
         addItemsToTag(SEABORN_LOOTS, CAItems.OCEAN_PHLOEM, CAItems.OCEAN_FIBRE, CAItems.OCEAN_EYE, CAItems.OCEAN_CRYSTAL, CAItems.OCEAN_CUTIN, CAItems.OCEAN_CHITIN, CAItems.HETEROPIC_PIECE, CAItems.BROKEN_OCEAN_CELL, CAItems.BROKEN_CELL_CLUSTER, CAItems.OCEAN_CELL, CAItems.CELL_CLUSTER);
