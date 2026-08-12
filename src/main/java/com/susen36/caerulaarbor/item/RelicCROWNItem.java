@@ -36,7 +36,7 @@ import java.util.List;
 
 public class RelicCROWNItem extends RelicItemBase {
 	public RelicCROWNItem() {
-		super(CARelics.KING_CROWN.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.KING_CROWN, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override

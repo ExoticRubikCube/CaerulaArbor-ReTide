@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.caerulaarbor.api.anim.SyncedAnimationItem;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.client.gui.screens.Screen;

@@ -29,7 +29,7 @@ import java.util.List;
 
 public class RelicCursedGLOWBODYItem extends RelicItemBase {
 	public RelicCursedGLOWBODYItem() {
-		super(CARelics.CURSED_GLOWBODY.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.CURSED_GLOWBODY, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override

@@ -25,7 +25,7 @@ import java.util.List;
 
 public class RedstoneIrisFlowerItem extends RelicItemBase {
 	public RedstoneIrisFlowerItem() {
-		super(CARelics.UTIL_IRIS.get(), new Item.Properties().stacksTo(16).rarity(Rarity.EPIC));
+		super(CARelics.UTIL_IRIS, new Item.Properties().stacksTo(16).rarity(Rarity.EPIC));
 	}
 
 	@Override

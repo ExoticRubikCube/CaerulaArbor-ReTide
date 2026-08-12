@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ArchfiendsFlagItem extends RelicItemBase {
 	public ArchfiendsFlagItem() {
-		super(CARelics.SARKAZ_KING_FLAG.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
+		super(CARelics.SARKAZ_KING_FLAG, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	}
 
 	@Override

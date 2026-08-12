@@ -26,7 +26,7 @@ import java.util.List;
 
 public class HandOfStrangleItem extends RelicItemBase {
 	public HandOfStrangleItem() {
-		super(CARelics.HAND_STRANGLE.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.HAND_STRANGLE, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override

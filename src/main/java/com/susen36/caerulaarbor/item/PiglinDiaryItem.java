@@ -27,7 +27,7 @@ import java.util.List;
 
 public class PiglinDiaryItem extends RelicItemBase {
 	public PiglinDiaryItem() {
-		super(CARelics.DURIN_OVERGROUND_ODYSSEY.get(), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(CARelics.DURIN_OVERGROUND_ODYSSEY, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override

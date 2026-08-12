@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ProofOfLongevityItem extends RelicItemBase {
 	public ProofOfLongevityItem() {
-		super(CARelics.PROOF_OF_LONGEVITY.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.PROOF_OF_LONGEVITY, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override

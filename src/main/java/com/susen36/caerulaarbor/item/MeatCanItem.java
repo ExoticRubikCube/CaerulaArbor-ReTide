@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MeatCanItem extends RelicItemBase {
 	public MeatCanItem() {
-		super(CARelics.FEATURED_CANNED_MEAT.get(), new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(14).saturationModifier(0.25f).build()));
+		super(CARelics.FEATURED_CANNED_MEAT, new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(14).saturationModifier(0.25f).build()));
 	}
 
 	@Override

@@ -40,8 +40,7 @@ public class AromaticCoffeeItem extends Item {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 240, 0));
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-		double setval = capability.player_shield + 1;
-		capability.player_shield = setval;
+        capability.player_shield = capability.player_shield + 1;
 		capability.syncPlayerVariables(entity);
 		{
 			PlayerVariable cap = ModCapabilities.getPlayerVariables(entity);

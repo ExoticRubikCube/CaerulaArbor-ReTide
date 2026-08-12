@@ -36,7 +36,7 @@ import java.util.List;
 
 public class KingsExtensionItem extends RelicItemBase {
 	public KingsExtensionItem() {
-		super(CARelics.KING_EXTENSION.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.COMMON));
+		super(CARelics.KING_EXTENSION, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.COMMON));
 	}
 
 	@Override

@@ -25,7 +25,7 @@ import java.util.List;
 
 public class CrimsonTreatyItem extends RelicItemBase {
 	public CrimsonTreatyItem() {
-		super(CARelics.TREATY.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.TREATY, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override

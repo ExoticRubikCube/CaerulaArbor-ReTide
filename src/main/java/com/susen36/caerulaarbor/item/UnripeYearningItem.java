@@ -25,7 +25,7 @@ import java.util.List;
 
 public class UnripeYearningItem extends RelicItemBase {
 	public UnripeYearningItem() {
-		super(CARelics.YEARNING.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.YEARNING, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override

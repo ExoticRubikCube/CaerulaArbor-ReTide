@@ -26,7 +26,7 @@ import java.util.List;
 
 public class RainbowCandyItem extends RelicItemBase {
 	public RainbowCandyItem() {
-		super(CARelics.UTIL_RAINBOW.get(), new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build()));
+		super(CARelics.UTIL_RAINBOW, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build()));
 	}
 
 	@Override

@@ -30,7 +30,7 @@ import java.util.List;
 
 public class KingsSpearItem extends RelicItemBase {
 	public KingsSpearItem() {
-		super(CARelics.KING_SPEAR.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
+		super(CARelics.KING_SPEAR, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	}
 
 	@Override

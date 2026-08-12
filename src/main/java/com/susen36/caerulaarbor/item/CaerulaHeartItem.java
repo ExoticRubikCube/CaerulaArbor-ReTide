@@ -34,7 +34,7 @@ import java.util.List;
 
 public class CaerulaHeartItem extends RelicItemBase {
 	public CaerulaHeartItem() {
-		super(CARelics.CURSED_HEART.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.CURSED_HEART, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override

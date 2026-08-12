@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.entity.isharmla;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
+import com.susen36.caerulaarbor.api.anim.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;

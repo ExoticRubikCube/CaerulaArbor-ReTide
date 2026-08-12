@@ -31,7 +31,7 @@ import java.util.List;
 
 public class OddFluteItem extends RelicItemBase {
 	public OddFluteItem() {
-		super(CARelics.WEIRD_FLUTE.get(), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(CARelics.WEIRD_FLUTE, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override

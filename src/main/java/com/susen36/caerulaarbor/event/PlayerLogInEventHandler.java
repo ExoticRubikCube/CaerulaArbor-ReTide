@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.difficulty.Difficulty;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAConfigs;
-import com.susen36.caerulaarbor.init.CAGameRules;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.network.chat.Component;
@@ -41,7 +41,7 @@ public class PlayerLogInEventHandler {
                     serverPlayer.getAdvancements().award(surgingWavesNoticeAdvancement, remainingCriterion);
                 }
                 if (serverPlayer.server.getDefaultGameType() == GameType.SURVIVAL) {
-                    int surgingWavesLevel = serverPlayer.serverLevel().getGameRules().getInt(CAGameRules.NORMAL_DIFFICULTY);
+                    int surgingWavesLevel = Difficulty.difficultyLevel(serverPlayer.serverLevel()).getLevel();
                     if (surgingWavesLevel >= 12) {
                         serverPlayer.displayClientMessage(Component.translatable("gameplay.caerula_arbor.n_warn_12"), false);
                     } else if (surgingWavesLevel >= 6) {

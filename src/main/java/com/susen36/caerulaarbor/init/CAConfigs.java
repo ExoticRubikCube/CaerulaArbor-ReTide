@@ -24,7 +24,6 @@ public class CAConfigs {
 	public static final ModConfigSpec.ConfigValue<Double> HEALTH_MULT;
 	public static final ModConfigSpec.ConfigValue<Double> ATTACK_MULT;
 	public static final ModConfigSpec.ConfigValue<Double> ARMOR_MULT;
-	public static final ModConfigSpec.ConfigValue<List<? extends String>> N18_ENTRY;
 	public static final ModConfigSpec.ConfigValue<Double> MORTAR_HEALTH;
 	public static final ModConfigSpec.ConfigValue<Double> MORTAR_ATTACK;
 	public static final ModConfigSpec.ConfigValue<Boolean> SANITY_BAR_STYLE;
@@ -39,7 +38,6 @@ public class CAConfigs {
 	public static final ModConfigSpec.ConfigValue<Boolean> EXTERNAL_ERROSION;
 	public static final ModConfigSpec.ConfigValue<Double> LP_LIMIT;
 	public static final ModConfigSpec.ConfigValue<Double> SHIELD_LIMIT;
-	public static final ModConfigSpec.ConfigValue<String> EXTEND_N18;
 	public static final ModConfigSpec.ConfigValue<Boolean> CROSSOVER;
 	public static final ModConfigSpec.ConfigValue<Boolean> TRANS_BOSS;
 	public static final ModConfigSpec.ConfigValue<Boolean> DEBUG;
@@ -76,7 +74,6 @@ public class CAConfigs {
 		EXTERNAL_ERROSION = BUILDER.comment("海嗣能够腐蚀来自真菌感染：孢子和魔法病的有机方块。").define("external_errosion", true);
 		LP_LIMIT = BUILDER.comment("全局目标生命上限。").define("life_point_global_limit", (double) 32767);
 		SHIELD_LIMIT = BUILDER.comment("全局护盾值上限。").define("player_shield_global_limit", (double) 99999);
-		EXTEND_N18 = BUILDER.comment("浪潮涌动应用于非海嗣生物。可填入：off（默认）, monster_only, animal_only, exclude_animal, exclude_monster和on").define("extended_surging_waves", "off");
 		CROSSOVER = BUILDER.comment("仅使用本模组物品召唤联动头目。").define("independent_crossover", false);
 		TRANS_BOSS = BUILDER.comment("是否海嗣化Boss生物。").define("boss_oceanization", false);
 		DEBUG = BUILDER.comment("在日志输出调试信息。").define("show_debug_info", false);
@@ -88,7 +85,6 @@ public class CAConfigs {
 		HEALTH_MULT = BUILDER.comment("海嗣最大生命乘数。1为原值，小于 0.1 的值无效，不建议使用过大的值。").define("health_multiplier", (double) 1);
 		ATTACK_MULT = BUILDER.comment("海嗣攻击伤害乘数。1为原值。").define("attack_multiplier", (double) 1);
 		ARMOR_MULT = BUILDER.comment("海嗣盔甲乘数。1为原值。").define("armor_multiplier", (double) 1);
-		N18_ENTRY = BUILDER.comment("浪潮涌动检测的玩家进度，其顺序推荐从前往后。仅前四个有效。").defineList("surging_waves_entry", List.of("empty"), entry -> true);
 		MORTAR_HEALTH = BUILDER.comment("阿戈尔重炮速射炮的生命值。").define("mortar_health", (double) 500);
 		MORTAR_ATTACK = BUILDER.comment("阿戈尔重炮速射炮的基础伤害。").define("mortar_attack", (double) 32);
 		BUILDER.pop();

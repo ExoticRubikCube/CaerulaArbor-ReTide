@@ -26,7 +26,7 @@ import java.util.List;
 
 public class HandOfSpeedItem extends RelicItemBase {
 	public HandOfSpeedItem() {
-		super(CARelics.HAND_SPEED.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.HAND_SPEED, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import java.util.List;
 
 public class HandOfFireworkItem extends RelicItemBase {
 	public HandOfFireworkItem() {
-		super(CARelics.HAND_FIREWORK.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.HAND_FIREWORK, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override

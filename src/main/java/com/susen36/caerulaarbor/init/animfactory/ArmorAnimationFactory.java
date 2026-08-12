@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.init.animfactory;
 
-import com.susen36.caerulaarbor.item.SyncedAnimationItem;
+import com.susen36.caerulaarbor.api.anim.SyncedAnimationItem;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;

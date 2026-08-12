@@ -18,7 +18,7 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
  * <ol>
  *   <li>ResourceKey.createRegistryKey(caerula_arbor:relics) 创建自定义 RegistryKey</li>
  *   <li>RegistryBuilder + NewRegistryEvent 向 NeoForge 根注册表注册我们的自定义 Registry</li>
- *   <li>DeferredRegister&lt;RelicType&gt; 统一注册所有遗物条目，第三方 Addon 可通过同一个 DeferredRegister 注入新遗物</li>
+ *   <li>DeferredRegister&lt;RelicType&gt; 统一注册所有遗物条目，第三方 Mod 可通过同一个 DeferredRegister 注入新遗物</li>
  * </ol>
  */
 public final class CARelics {
@@ -107,15 +107,14 @@ public final class CARelics {
     }
 
     /**
-     * 在 mod event bus 上既注册自定义 Registry 本体（NewRegistryEvent），又注册 DeferredRegister 条目。
+     * 注册 DeferredRegister 条目。
      * 需要在 CaerulaArbor 构造器里和 ModCapabilities.register() 类似位置调用。
      */
     public static void register(IEventBus modEventBus) {
-        modEventBus.addListener(CARelics::onNewRegistry);
-        REGISTRY.register(modEventBus);
+        modEventBus.addListener(CARelics::onRelicRegister);
     }
 
-    private static void onNewRegistry(NewRegistryEvent event) {
+    private static void onRelicRegister(NewRegistryEvent event) {
         event.register(RELICS_REGISTRY);
     }
 }

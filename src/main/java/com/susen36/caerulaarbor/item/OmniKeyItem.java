@@ -34,7 +34,7 @@ import java.util.List;
 
 public class OmniKeyItem extends RelicItemBase {
 	public OmniKeyItem() {
-		super(CARelics.UTIL_OMNIKEY.get(), new Item.Properties().durability(64).rarity(Rarity.UNCOMMON));
+		super(CARelics.UTIL_OMNIKEY, new Item.Properties().durability(64).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override

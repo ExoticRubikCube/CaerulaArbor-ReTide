@@ -31,7 +31,7 @@ import java.util.List;
 
 public class CannedCherryItem extends RelicItemBase {
 	public CannedCherryItem() {
-		super(CARelics.PITTS_ASSORTED_FRUITS.get(), new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.1f).alwaysEdible().build()));
+		super(CARelics.PITTS_ASSORTED_FRUITS, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.1f).alwaysEdible().build()));
 	}
 
 	@Override

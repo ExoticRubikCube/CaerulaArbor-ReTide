@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.item;
+package com.susen36.caerulaarbor.api.anim;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;

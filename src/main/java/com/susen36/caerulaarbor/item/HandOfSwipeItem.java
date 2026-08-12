@@ -25,7 +25,7 @@ import java.util.List;
 
 public class HandOfSwipeItem extends RelicItemBase {
 	public HandOfSwipeItem() {
-		super(CARelics.HAND_SWIPE.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.HAND_SWIPE, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override

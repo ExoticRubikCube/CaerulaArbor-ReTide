@@ -29,7 +29,7 @@ import java.util.List;
 
 public class GuardianStareItem extends RelicItemBase {
 	public GuardianStareItem() {
-		super(CARelics.UTIL_STARE.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.UTIL_STARE, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override

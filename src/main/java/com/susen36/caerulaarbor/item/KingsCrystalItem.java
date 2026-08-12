@@ -36,7 +36,7 @@ import java.util.List;
 
 public class KingsCrystalItem extends RelicItemBase {
 	public KingsCrystalItem() {
-		super(CARelics.KING_CRYSTAL.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
+		super(CARelics.KING_CRYSTAL, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	}
 
 	@Override

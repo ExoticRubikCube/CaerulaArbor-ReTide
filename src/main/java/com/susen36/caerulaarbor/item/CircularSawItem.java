@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.api.anim.SyncedAnimationItem;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.client.Minecraft;

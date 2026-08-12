@@ -4,6 +4,7 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.api.anim.SyncedAnimationItem;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CASounds;

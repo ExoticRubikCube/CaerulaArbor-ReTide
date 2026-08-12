@@ -27,7 +27,7 @@ import java.util.List;
 
 public class ToponymTextologyItem extends RelicItemBase {
 	public ToponymTextologyItem() {
-		super(CARelics.UTIL_TOPONYM.get(), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(CARelics.UTIL_TOPONYM, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override

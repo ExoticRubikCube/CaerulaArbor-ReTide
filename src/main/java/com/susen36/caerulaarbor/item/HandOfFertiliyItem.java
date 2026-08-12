@@ -26,7 +26,7 @@ import java.util.List;
 
 public class HandOfFertiliyItem extends RelicItemBase {
 	public HandOfFertiliyItem() {
-		super(CARelics.HAND_FERTILITY.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.HAND_FERTILITY, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override

@@ -38,7 +38,7 @@ import java.util.List;
 
 public class RescissionItem extends RelicItemBase {
 	public RescissionItem() {
-		super(CARelics.UTIL_RESCISSION.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+		super(CARelics.UTIL_RESCISSION, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override

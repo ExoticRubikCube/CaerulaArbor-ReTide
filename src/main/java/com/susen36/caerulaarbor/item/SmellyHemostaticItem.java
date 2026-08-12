@@ -25,7 +25,7 @@ import java.util.List;
 
 public class SmellyHemostaticItem extends RelicItemBase {
 	public SmellyHemostaticItem() {
-		super(CARelics.HEMOST.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+		super(CARelics.HEMOST, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override

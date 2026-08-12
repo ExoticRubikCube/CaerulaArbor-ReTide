@@ -38,7 +38,7 @@ import java.util.List;
 
 public class RoyalFateItem extends RelicItemBase {
 	public RoyalFateItem() {
-		super(CARelics.ROYALFATE.get(), new Item.Properties().stacksTo(2).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.ROYALFATE, new Item.Properties().stacksTo(2).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.init.animfactory;
 
-import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
+import com.susen36.caerulaarbor.api.anim.SyncedAnimationEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;

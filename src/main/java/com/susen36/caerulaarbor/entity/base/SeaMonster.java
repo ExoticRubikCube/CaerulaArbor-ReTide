@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.entity.base;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.api.anim.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.ai.StrengthOfCrowdGoal;
 import com.susen36.caerulaarbor.init.CADamageTypes;

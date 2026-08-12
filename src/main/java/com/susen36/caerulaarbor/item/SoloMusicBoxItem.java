@@ -29,14 +29,13 @@ import java.util.List;
 
 public class SoloMusicBoxItem extends RelicItemBase {
 	public SoloMusicBoxItem() {
-		super(CARelics.UTIL_MUSICBOX.get(), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(CARelics.UTIL_MUSICBOX, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-        String hoverText = null;
-		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
+        if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
 			list.add(Component.translatable("item.caerula_arbor.relics.used"));
 		}
     }
@@ -55,7 +54,7 @@ public class SoloMusicBoxItem extends RelicItemBase {
             }
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            CARelics.UTIL_MUSICBOX.get().set(capability, setval ? 1 : 0);
+            CARelics.UTIL_MUSICBOX.get().set(capability, 1);
             capability.syncPlayerVariables(entity);
             CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
             world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);

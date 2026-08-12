@@ -38,13 +38,12 @@ import java.util.List;
 
 public class RelicCurseEMELIGHTItem extends RelicItemBase {
 	public RelicCurseEMELIGHTItem() {
-		super(CARelics.CURSED_EMELIGHT.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.CURSED_EMELIGHT, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-        String hoverText = null;
 		if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
 			list.add(Component.translatable("item.caerula_arbor.cursed.used"));
 		}

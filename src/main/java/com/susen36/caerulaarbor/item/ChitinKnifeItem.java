@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ChitinKnifeItem extends RelicItemBase {
 	public ChitinKnifeItem() {
-		super(CARelics.LEGEND_CHITIN.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.LEGEND_CHITIN, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override

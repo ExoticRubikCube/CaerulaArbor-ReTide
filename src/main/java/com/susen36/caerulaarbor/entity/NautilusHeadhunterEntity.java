@@ -1,5 +1,6 @@
-package com.susen36.caerulaarbor.entity;import com.susen36.babel.util.EPUtils;
-import com.susen36.caerulaarbor.entity.base.SyncedAnimationEntity;
+package com.susen36.caerulaarbor.entity;
+import com.susen36.babel.util.EPUtils;
+import com.susen36.caerulaarbor.api.anim.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.WorldUtils;

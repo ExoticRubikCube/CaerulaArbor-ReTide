@@ -2,6 +2,7 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.api.anim.SyncedAnimationItem;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
@@ -178,7 +179,6 @@ public class WavecleaverItem extends Item implements GeoItem, SyncedAnimationIte
             }
         }
 	}
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

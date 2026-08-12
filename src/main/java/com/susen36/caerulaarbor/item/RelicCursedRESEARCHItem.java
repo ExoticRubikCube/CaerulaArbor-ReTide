@@ -25,7 +25,7 @@ import java.util.List;
 
 public class RelicCursedRESEARCHItem extends RelicItemBase {
 	public RelicCursedRESEARCHItem() {
-		super(CARelics.CURSED_RESEARCH.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.CURSED_RESEARCH, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override

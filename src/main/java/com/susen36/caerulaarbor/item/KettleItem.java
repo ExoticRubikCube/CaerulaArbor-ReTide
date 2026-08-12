@@ -29,7 +29,7 @@ import java.util.List;
 
 public class KettleItem extends RelicItemBase {
 	public KettleItem() {
-		super(CARelics.HOT_WATER_KETTLE.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+		super(CARelics.HOT_WATER_KETTLE, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override

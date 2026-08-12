@@ -26,7 +26,7 @@ import java.util.List;
 
 public class ArchfiendsBedItem extends RelicItemBase {
 	public ArchfiendsBedItem() {
-		super(CARelics.SARKAZ_KING_BED.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+		super(CARelics.SARKAZ_KING_BED, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import java.util.List;
 
 public class CoffeeCandyItem extends RelicItemBase {
 	public CoffeeCandyItem() {
-		super(CARelics.COFFEE_PLAINS_COFFEE_CANDY.get(), new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(1f).build()));
+		super(CARelics.COFFEE_PLAINS_COFFEE_CANDY, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(1f).build()));
 	}
 
 	@Override

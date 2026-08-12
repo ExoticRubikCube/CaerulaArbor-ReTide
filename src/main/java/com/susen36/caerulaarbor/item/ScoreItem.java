@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ScoreItem extends RelicItemBase {
 	public ScoreItem() {
-		super(CARelics.UTIL_SCORE.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).jukeboxPlayable(CAJukeboxSongs.SCORE));
+		super(CARelics.UTIL_SCORE, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).jukeboxPlayable(CAJukeboxSongs.SCORE));
 	}
 
 	@Override

@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * 收藏品物品基类：把「Relic ↔ Item」双向绑定 + 通用右键激活逻辑收拢到一处。
@@ -32,7 +33,7 @@ import java.util.Map;
  *       <pre>DeferredRegister.create(BuiltInRegistries.ITEM, MODID)
  *             .register("name", () -> new XxxItem(...));</pre>
  *       也就是项目 [CAItems.java] 里的用法。</li>
- *   <li>本基类在构造器里执行 {@code BINDING.put(relic, this)}，这样：
+ *   <li>本基类延迟到 {@link #relic()} 首次调用时执行 {@code BINDING.put(relic, this)}：
  *       无论是 SimpleRelicItem 工厂实例、还是自定义类 extends RelicItemBase，
  *       只要 DeferredRegister 触发了构造器，绑定表就有对应条目——
  *       保证每一个 Relic 枚举都能反查到 Item，GUI / LootTable 可以直接拿。</li>
@@ -40,15 +41,21 @@ import java.util.Map;
  */
 public abstract class RelicItemBase extends Item {
 
-    /** RelicType → Item 双向绑定：构造器写入；反查用 {@link #byRelic(RelicType)}。*/
+    /** RelicType → Item 双向绑定：首次 {@link #relic()} 时写入；反查用 {@link #byRelic(RelicType)}。*/
     private static final Map<RelicType, RelicItemBase> BY_RELIC = new HashMap<>();
 
-    public final RelicType relic;
+    private final Supplier<RelicType> relicSupplier;
 
-    protected RelicItemBase(RelicType relic, Item.Properties properties) {
+    protected RelicItemBase(Supplier<RelicType> relic, Item.Properties properties) {
         super(properties);
-        this.relic = relic;
-        BY_RELIC.put(relic, this);
+        this.relicSupplier = relic;
+    }
+
+    /** 延迟解析 Relic 并建立绑定：自定义注册表在物品注册期尚未填充，须推迟到运行时解析。 */
+    public RelicType relic() {
+        RelicType value = this.relicSupplier.get();
+        BY_RELIC.putIfAbsent(value, this);
+        return value;
     }
 
     public static RelicItemBase byRelic(RelicType relic) {
@@ -100,7 +107,7 @@ public abstract class RelicItemBase extends Item {
             level.sendParticles(params.particle(), x, y + params.particleYOffset(), z, params.paticleCount(), 1, 1, 1, params.particleSpeed());
         }
         PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
-        this.relic.set(capability, params.setValue());
+        this.relic().set(capability, params.setValue());
         capability.syncPlayerVariables(player);
         if (params.showActivationOverlay() && world.isClientSide()) {
             Minecraft.getInstance().gameRenderer.displayItemActivation(stack);
@@ -113,10 +120,10 @@ public abstract class RelicItemBase extends Item {
 
     private boolean shouldActivate(Player player, ActivateParams.ActivateMode mode) {
         if (mode == ActivateParams.ActivateMode.BELOW_ZERO) {
-            return this.relic.get(player) < 0;
+            return this.relic().get(player) < 0;
         }
         // NOT_GAINED：默认 = defaultLevel 还没拿到遗物
-        return !this.relic.gained(player);
+        return !this.relic().gained(player);
     }
 
     /**

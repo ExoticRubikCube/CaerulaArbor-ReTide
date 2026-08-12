@@ -28,7 +28,7 @@ import java.util.List;
 
 public class BatBedItem extends RelicItemBase {
 	public BatBedItem() {
-		super(CARelics.VAMPIRES_BED.get(), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(CARelics.VAMPIRES_BED, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override

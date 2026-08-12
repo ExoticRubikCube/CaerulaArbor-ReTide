@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.entity.base;
+package com.susen36.caerulaarbor.api.anim;
 
 public interface SyncedAnimationEntity {
 	String UNDEFINED_ANIMATION = "undefined";

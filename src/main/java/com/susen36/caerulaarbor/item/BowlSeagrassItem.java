@@ -17,7 +17,7 @@ import java.util.List;
 
 public class BowlSeagrassItem extends RelicItemBase {
 	public BowlSeagrassItem() {
-		super(CARelics.SEAWEED_SALAD.get(), new Item.Properties().stacksTo(16).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(0.4f).alwaysEdible().build()));
+		super(CARelics.SEAWEED_SALAD, new Item.Properties().stacksTo(16).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(0.4f).alwaysEdible().build()));
 	}
 
 	@Override

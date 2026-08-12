@@ -26,7 +26,7 @@ import java.util.List;
 
 public class HandOfBarrenItem extends RelicItemBase {
 	public HandOfBarrenItem() {
-		super(CARelics.HAND_OF_PULVERIZATION.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.HAND_OF_PULVERIZATION, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override

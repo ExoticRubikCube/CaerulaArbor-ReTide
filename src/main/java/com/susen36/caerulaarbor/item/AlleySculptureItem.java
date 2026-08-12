@@ -28,7 +28,7 @@ import java.util.List;
 
 public class AlleySculptureItem extends RelicItemBase {
 	public AlleySculptureItem() {
-		super(CARelics.UTIL_ALLEY.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+		super(CARelics.UTIL_ALLEY, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override

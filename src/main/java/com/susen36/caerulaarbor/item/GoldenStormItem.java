@@ -22,7 +22,7 @@ import java.util.List;
 
 public class GoldenStormItem extends RelicItemBase {
 	public GoldenStormItem() {
-		super(CARelics.ORANGE_STORM.get(), new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(0.4f).alwaysEdible().build()));
+		super(CARelics.ORANGE_STORM, new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(0.4f).alwaysEdible().build()));
 	}
 
 	@Override

@@ -2,11 +2,11 @@ package com.susen36.caerulaarbor.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.babel.BabelMod;
+import com.susen36.babel.difficulty.Difficulty;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.susen36.caerulaarbor.network.send.CaerulaRecordGUIButtonMessage;
@@ -234,10 +234,10 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_neurodegression"), 101, 147, -3368449, false);
 		if (RelicUtils.hasRelic(CARelics.DISO_FLESH.get(), entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_deformity"), 101, 147, -3368449, false);
-        if ((world.getLevelData().getGameRules().getInt(CAGameRules.NORMAL_DIFFICULTY)) > 0)
+        if (Difficulty.difficultyLevel(world).isNormal())
             guiGraphics.drawString(this.font,
 
-                    Component.translatable("key.surging_waves").getString() + "\u00B7" + Math.round((world.getLevelData().getGameRules().getInt(CAGameRules.NORMAL_DIFFICULTY))), -4, -13, -10040065, false);
+                    Component.translatable("key.surging_waves").getString() + "·" + Difficulty.difficultyLevel(world).getLevel(), -4, -13, -10040065, false);
 	}
 
 	@Override

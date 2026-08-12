@@ -16,7 +16,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -31,14 +30,13 @@ import java.util.List;
 
 public class VoyageOfGoldItem extends RelicItemBase {
 	public VoyageOfGoldItem() {
-		super(CARelics.PURE_GOLD_EXPEDITION.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.PURE_GOLD_EXPEDITION, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		Entity entity = itemstack.getEntityRepresentation();
-        String hoverText;
+		 String hoverText;
         String extra_lines;
         String locId;
         locId = itemstack.getDescriptionId();
@@ -68,12 +66,9 @@ public class VoyageOfGoldItem extends RelicItemBase {
             }
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 400, 1, false, false));
-            {
-                boolean setval = true;
-                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                CARelics.PURE_GOLD_EXPEDITION.get().set(capability, setval ? 1 : 0);
-                capability.syncPlayerVariables(entity);
-            }
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+            CARelics.PURE_GOLD_EXPEDITION.get().set(capability, 1);
+            capability.syncPlayerVariables(entity);
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
