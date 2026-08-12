@@ -55,5 +55,8 @@ public class DataGenerators {
 
         // recipes
         generator.addProvider(event.includeServer(), new RecipesProvider(output, lookupProvider));
+
+        // blockstates
+        generator.addProvider(event.includeClient(), new CABlockStateProvider(output, existingFileHelper));
     }
 }

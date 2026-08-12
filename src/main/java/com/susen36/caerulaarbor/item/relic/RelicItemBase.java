@@ -16,33 +16,22 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- * 收藏品物品基类：把「Relic ↔ Item」双向绑定 + 通用右键激活逻辑收拢到一处。
+ * 收藏品物品基类：把「Relic ↔ Item」关联 + 通用右键激活逻辑收拢到一处。
  * <p>
  * 注册系统说明（对应 NeoForge 原版机制）：
- * <ol>
- *   <li>原版 Item 构造器：{@link Item#Item(Item.Properties)} 只是把 Properties
- *       里的 DataComponents / requiredFeatures / descriptionId 收进 final 字段，
- *       并调用 {@code BuiltInRegistries.ITEM.createIntrusiveHolder(this)} 建立 intrusive holder，
- *       <b>完全不会自己注册</b>。真正的注册必须通过：
- *       <pre>DeferredRegister.create(BuiltInRegistries.ITEM, MODID)
- *             .register("name", () -> new XxxItem(...));</pre>
- *       也就是项目 [CAItems.java] 里的用法。</li>
- *   <li>本基类延迟到 {@link #relic()} 首次调用时执行 {@code BINDING.put(relic, this)}：
- *       无论是 SimpleRelicItem 工厂实例、还是自定义类 extends RelicItemBase，
- *       只要 DeferredRegister 触发了构造器，绑定表就有对应条目——
- *       保证每一个 Relic 枚举都能反查到 Item，GUI / LootTable 可以直接拿。</li>
- * </ol>
+ * 原版 Item 构造器 {@link Item#Item(Item.Properties)} 只是把 Properties 里的
+ * DataComponents / requiredFeatures / descriptionId 收进 final 字段，<b>完全不会自己注册</b>。
+ * 真正的注册必须通过 {@code DeferredRegister.create(BuiltInRegistries.ITEM, MODID).register(...)}，
+ * 即项目 [CAItems.java] 里的用法。
+ * <p>
+ * 本类不维护全局 Relic↔Item 绑定表：收藏品界面按各条目的 itemKey 从
+ * {@code BuiltInRegistries.ITEM} 反查物品，避免出现「有绑定但无界面条目消费」的孤岛问题。
  */
 public abstract class RelicItemBase extends Item {
-
-    /** RelicType → Item 双向绑定：首次 {@link #relic()} 时写入；反查用 {@link #byRelic(RelicType)}。*/
-    private static final Map<RelicType, RelicItemBase> BY_RELIC = new HashMap<>();
 
     private final Supplier<RelicType> relicSupplier;
 
@@ -51,19 +40,9 @@ public abstract class RelicItemBase extends Item {
         this.relicSupplier = relic;
     }
 
-    /** 延迟解析 Relic 并建立绑定：自定义注册表在物品注册期尚未填充，须推迟到运行时解析。 */
+    /** 延迟解析本物品绑定的 Relic：自定义注册表在物品注册期尚未填充，须推迟到运行时解析。 */
     public RelicType relic() {
-        RelicType value = this.relicSupplier.get();
-        BY_RELIC.putIfAbsent(value, this);
-        return value;
-    }
-
-    public static RelicItemBase byRelic(RelicType relic) {
-        return BY_RELIC.get(relic);
-    }
-
-    public static boolean hasBinding(RelicType relic) {
-        return BY_RELIC.containsKey(relic);
+        return this.relicSupplier.get();
     }
 
     /**

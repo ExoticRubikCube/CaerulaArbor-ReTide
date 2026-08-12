@@ -19,6 +19,5 @@ public class CAScreens {
         event.register(CAMenus.INFO_STRATEGY_ALL.get(), InfoStrategyAllScreen::new);
         event.register(CAMenus.EVO_TREE.get(), EvoTreeScreen::new);
         event.register(CAMenus.CENTRIFUGER_SELECT.get(), CentrifugerSelectScreen::new);
-        event.register(CAMenus.PLAYER_EVO.get(), PlayerEvoScreen::new);
     }
 }

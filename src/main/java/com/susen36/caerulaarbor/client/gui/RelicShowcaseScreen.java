@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CARelics;
-import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import com.susen36.caerulaarbor.network.send.RelicShowcaseButtonMessage;
 import com.susen36.caerulaarbor.relic.RelicType;
@@ -177,6 +176,20 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			"imagebutton_cursed_heart", "caerula_heart",
 			entity -> RelicUtils.hasRelic(CARelics.CURSED_HEART.get(), entity),
 			null, null));
+		ALL_ENTRIES.add(e("imagebutton_golden_chalise", CARelics.GOLDEN_CHALISE.get(), -1, "imagebutton_golden_chalise", "golden_chalise"));
+		// ===== 补全：有注册物品但原界面未消费的条目 =====
+		ALL_ENTRIES.add(e("imagebutton_nurture_gene_set",    CARelics.NURTURE_GENE_SET.get(),    -1, "imagebutton_nurture_gene_set",    "nurture_gene_set"));
+		ALL_ENTRIES.add(e("imagebutton_oil_and_cream",       CARelics.OIL_AND_CREAM.get(),       -1, "imagebutton_oil_and_cream",       "oil_and_cream"));
+		ALL_ENTRIES.add(e("imagebutton_tulip_medcine",       CARelics.TULIP_MEDCINE.get(),       -1, "imagebutton_tulip_medcine",       "tulip_medcine"));
+		ALL_ENTRIES.add(e("imagebutton_util_allay",          CARelics.UTIL_ALLAY.get(),          -1, "imagebutton_util_allay",          "util_allay"));
+		ALL_ENTRIES.add(e("imagebutton_diso",                CARelics.DISO.get(),                -1, "imagebutton_diso",                "diso"));
+		ALL_ENTRIES.add(e("imagebutton_diso_flesh",          CARelics.DISO_FLESH.get(),          -1, "imagebutton_diso_flesh",          "diso_flesh"));
+		ALL_ENTRIES.add(e("imagebutton_diso_blood",          CARelics.DISO_BLOOD.get(),          -1, "imagebutton_diso_blood",          "diso_blood"));
+		ALL_ENTRIES.add(e("imagebutton_diso_neuro",          CARelics.DISO_NEURO.get(),          -1, "imagebutton_diso_neuro",          "diso_neuro"));
+		ALL_ENTRIES.add(e("imagebutton_diso_attention",      CARelics.DISO_ATTENTION.get(),      -1, "imagebutton_diso_attention",      "diso_attention"));
+		ALL_ENTRIES.add(e("imagebutton_ahnd_swipe",          CARelics.AHND_SWIPE.get(),          -1, "imagebutton_ahnd_swipe",          "ahnd_swipe"));
+		ALL_ENTRIES.add(e("imagebutton_hanshand_spike",      CARelics.HANSHAND_SPIKE.get(),      -1, "imagebutton_hanshand_spike",      "hanshand_spike"));
+		ALL_ENTRIES.add(e("imagebutton_sarkaz_king_rylfate", CARelics.SARKAZ_KING_RYLFATE.get(), -1, "imagebutton_sarkaz_king_rylfate", "sarkaz_king_rylfate"));
 	}
 
 	// ===== 工厂辅助：普通 boolean 遗物 =====
@@ -193,12 +206,8 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			"", "", entity -> false, null, null);
 	}
 
-	// ===== 根据条目解析对应的 MC 物品（优先用 Relic 绑定表，无则按 itemKey 注册表反查） =====
+	// ===== 根据条目解析对应的 MC 物品：按 itemKey 从注册表反查，不依赖全局 Relic 绑定表 =====
 	private Item resolveItem(RelicDisplayEntry entry) {
-		Item byRelic = entry.relic() != null ? RelicItemBase.byRelic(entry.relic()) : null;
-		if (byRelic != null) {
-			return byRelic;
-		}
 		return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, entry.itemKey()));
 	}
 

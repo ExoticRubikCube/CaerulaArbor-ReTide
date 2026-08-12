@@ -2,10 +2,8 @@ package com.susen36.caerulaarbor.event;
 
 import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.init.BabelMobEffects;
-import com.susen36.babel.manager.EPManager;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.init.*;
@@ -85,8 +83,6 @@ public class LivingHurtEventHandler {
         handleSeabornsGetOffShip(event);
         handleMoreFallDamageEffect(event);
         handleWarriorTactic(event);
-        handlePlayerEvolutionDamageReduction(event);
-        handlePlayerEvolutionDamageAmplification(event);
         handleKillMuteSelf(event);
         handleSublimationDamage(event);
     }
@@ -790,134 +786,6 @@ public class LivingHurtEventHandler {
             }
             default -> {
             }
-        }
-    }
-
-    private static void handlePlayerEvolutionDamageReduction(LivingDamageEvent.Pre event) {
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        double amount = event.getNewDamage();
-
-        if (!(entity instanceof Player player) || !EntityUtils.canPlayerEvo(player)) return;
-
-        boolean isIndirect = damagesource.getDirectEntity() != damagesource.getEntity();
-        double rate = 1;
-        double e = ModCapabilities.getPlayerVariables(player).PEVO_NODE_less_damage;
-        double finalAmount = amount;
-
-        if (PlayerStateUtils.isNexusExpoShieldSelected(player)) {
-            finalAmount = Math.min(32 * Math.pow(finalAmount / 32, 0.75), finalAmount);
-        }
-
-        if (e >= 1 && !isIndirect) rate = 0.85;
-        if (e >= 2 && isIndirect) rate = 0.85;
-        if (e >= 3 && !isIndirect) rate = 0.5;
-        if (e >= 4 && isIndirect) rate = 0.5;
-
-        if (rate < 1) {
-            finalAmount = finalAmount * rate;
-        }
-
-        if (EntityUtils.getHealthPerc(player) <= 0.5) {
-            e = NodeUtils.getNodeEunectes(player);
-            if (e >= 4) rate = 0.5;
-            else if (e >= 3) rate = 0.3;
-            else if (e >= 2) rate = 0.15;
-            else if (e >= 1) rate = 0.05;
-
-            if (rate < 1) {
-                finalAmount = finalAmount * rate;
-            }
-        }
-
-        if (finalAmount < amount) {
-            event.setNewDamage((float) finalAmount);
-        }
-    }
-
-    private static void handlePlayerEvolutionDamageAmplification(LivingDamageEvent.Pre event) {
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getNewDamage();
-
-        if (sourceentity == null) return;
-
-        if (!(sourceentity instanceof Player attacker) || !EntityUtils.canPlayerEvo(attacker)) return;
-
-        boolean isIndirect = damagesource.getDirectEntity() != damagesource.getEntity();
-        double rate = 1;
-        double e = NodeUtils.getNodeAddDamage(attacker);
-        double finalValue = 0;
-
-        if (e >= 1 && !isIndirect) rate = 1.2;
-        if (e >= 2 && isIndirect) rate = 1.2;
-        if (e >= 3 && !isIndirect) rate = 1.6;
-        if (e >= 4 && isIndirect) rate = 1.6;
-
-        if (rate > 1) {
-            finalValue = amount * rate;
-        }
-
-        if (entity instanceof LivingEntity livEnt && EPManager.isUnderBreak(livEnt)) {
-            e = NodeUtils.getNodeWorseBreak(attacker);
-            if (e >= 4) rate = 2.4;
-            else if (e >= 3) rate = 1.9;
-            else if (e >= 2) rate = 1.5;
-            else if (e >= 1) rate = 1.2;
-
-            if (rate > 1) {
-                finalValue = finalValue * rate;
-            }
-        }
-
-        e = ModCapabilities.getPlayerVariables(attacker).PEVO_NODE_less_armor;
-
-        if (e > 0) {
-            double lll = 0;
-            if (e >= 4) {
-                rate = 1.4;
-                lll = 23;
-            } else if (e >= 3) {
-                rate = 1.15;
-                lll = 23;
-            } else if (e >= 2) {
-                rate = 1;
-                lll = 17;
-            } else if (e >= 1) {
-                rate = 1;
-                lll = 17;
-            }
-
-            for (int index0 = 0; index0 < (int) e; index0++) {
-                LessArmorMobEffect.apply((LivingEntity) entity);
-            }
-
-            if ((entity instanceof LivingEntity livEnt && livEnt.hasEffect(BabelMobEffects.LESS_ARMOR) ? livEnt.getEffect(BabelMobEffects.LESS_ARMOR).getAmplifier() : 0) >= lll) {
-                if (rate > 1) {
-                    finalValue = finalValue * rate;
-                }
-            }
-        }
-
-        if (PlayerStateUtils.isNexusPercDamageSelected(attacker)) {
-            double hitTime = attacker.getPersistentData().getDouble("playerEvoHitTime");
-            double perc;
-            double result = 0;
-
-            if (entity == attacker.getLastHurtMob()) {
-                perc = Math.min((int) ((hitTime - 1) / 2) * 0.005, 0.25);
-                attacker.getPersistentData().putDouble("playerEvoHitTime", (hitTime + 1));
-                result = perc * (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
-            } else {
-                attacker.getPersistentData().putDouble("playerEvoHitTime", 0);
-            }
-
-            finalValue = Math.clamp(finalValue, result, finalValue * 32);
-        }
-
-        if (finalValue > amount) {
-            event.setNewDamage((float) finalValue);
         }
     }
 }

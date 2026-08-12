@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.event;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import com.susen36.caerulaarbor.util.NodeUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -36,26 +35,8 @@ public class PEVOHealEventHandle {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        double overflowHealing = (double) livingEntity1.getHealth() + event.getAmount() - (double) livingEntity1.getMaxHealth();
-		if (overflowHealing <= 0) {
-			return;
-		}
-
-		double healDamageNodeLevel = NodeUtils.getNodeHealDamage(entity);
-		double damageRate = 0;
-		double sanityDamageRate = 0;
-		if (healDamageNodeLevel >= 4) {
-			damageRate = 1;
-			sanityDamageRate = 20;
-		} else if (healDamageNodeLevel >= 3) {
-			damageRate = 0.6;
-			sanityDamageRate = 10;
-		} else if (healDamageNodeLevel >= 2) {
-			damageRate = 0.3;
-		} else if (healDamageNodeLevel >= 1) {
-			damageRate = 0.1;
-		}
-		if (damageRate <= 0) {
+        double sanityDamage = (double) livingEntity1.getHealth() + event.getAmount() - (double) livingEntity1.getMaxHealth();
+		if (sanityDamage <= 0) {
 			return;
 		}
 
@@ -67,20 +48,18 @@ public class PEVOHealEventHandle {
 			}
 		}
 
-		double damage = overflowHealing * damageRate;
-		double sanityDamage = overflowHealing * sanityDamageRate;
-		var wipeMagicDamage = CADamageTypes.source(world, CADamageTypes.WIPE_MAGIC, entity);
+        var wipeMagicDamage = CADamageTypes.source(world, CADamageTypes.WIPE_MAGIC, entity);
 		for (Entity nearbyEntity : world.getEntities(entity, new AABB(x - 3, y - 1, z - 3, x + 3, y + 3, z + 3))) {
-			if (entity.distanceTo(nearbyEntity) > 3 || !(nearbyEntity instanceof LivingEntity)) {
+			if (entity.distanceTo(nearbyEntity) > 3 || !(nearbyEntity instanceof LivingEntity target)) {
 				continue;
 			}
 			if (!(nearbyEntity instanceof Monster) && (!(nearbyEntity instanceof Mob mob) || mob.getTarget() != entity)) {
 				continue;
 			}
-			nearbyEntity.hurt(wipeMagicDamage, (float) damage);
-			if (sanityDamage > 0 && entity instanceof LivingEntity attacker && nearbyEntity instanceof LivingEntity target) {
-				EPUtils.causeSanityInjury(target, attacker, sanityDamage);
-			}
+			nearbyEntity.hurt(wipeMagicDamage, (float) sanityDamage);
+			if (sanityDamage > 0) {
+                EPUtils.causeSanityInjury(target, livingEntity1, sanityDamage);
+            }
 		}
 	}
 }

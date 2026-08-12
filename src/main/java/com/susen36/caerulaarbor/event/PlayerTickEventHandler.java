@@ -11,7 +11,6 @@ import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import com.susen36.caerulaarbor.util.NodeUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.RelicUtils;
 import net.minecraft.core.particles.ParticleTypes;
@@ -102,74 +101,6 @@ public class PlayerTickEventHandler {
 
         if (PlayerStateUtils.isNexusRegSanitySelected(entity)) {
             EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(1);
-        }
-
-        if (tickCount % 10 == 0) {
-            handlePlayerEvolutionTickBuffs(entity);
-        }
-    }
-
-    private static void handlePlayerEvolutionTickBuffs(Player entity) {
-        if (PlayerStateUtils.isNexusRegLightsSelected(entity)) {
-            EntityUtils.restorePlayerLights(entity, 0.1);
-        }
-
-        double addDef = NodeUtils.getNodeAddDef(entity);
-        if (addDef > 0) {
-            if (!entity.level().isClientSide()) {
-                if (addDef == 1) {
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY, 20, 0, false, false));
-                } else if (addDef == 2) {
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY, 20, 2, false, false));
-                } else if (addDef == 3) {
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY, 20, 5, false, false));
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_PERCLY_TINY, 20, 2, false, false));
-                } else if (addDef == 4) {
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_TINY, 20, 9, false, false));
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DEF_PERCLY_TINY, 20, 7, false, false));
-                }
-            }
-        }
-
-        addDef = NodeUtils.getNodeAddResis(entity);
-        if (addDef > 0 && !entity.level().isClientSide()) {
-            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY, 20, 0, false, false));
-            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY, 20, 2, false, false));
-            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY, 20, 5, false, false));
-            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY, 20, 9, false, false));
-        }
-
-        addDef = NodeUtils.getNodeAddSpeed(entity);
-        if (addDef > 0 && !entity.level().isClientSide()) {
-            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY, 20, 0, false, false));
-            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY, 20, 2, false, false));
-            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY, 20, 5, false, false));
-            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY, 20, 9, false, false));
-        }
-
-        addDef = NodeUtils.getNodeAddSanity(entity);
-        if (addDef > 0 && !entity.level().isClientSide()) {
-            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER, 20, 0, false, false));
-            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER, 20, 2, false, false));
-            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER, 20, 5, false, false));
-            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER, 20, 9, false, false));
-        }
-
-        addDef = NodeUtils.getNodeAddMiss(entity);
-        boolean lowerHealth = EntityUtils.getHealthPerc(entity) <= 0.5;
-        if (addDef > 0 && !entity.level().isClientSide()) {
-            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE, 20, 2, false, false));
-            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE, 20, 7, false, false));
-            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE, 20, lowerHealth ? 22 : 14, false, false));
-            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE, 20, lowerHealth ? 41 : 23, false, false));
-        }
-
-        addDef = NodeUtils.getNodeEunectes(entity);
-        if (addDef > 0 && !lowerHealth && !entity.level().isClientSide()) {
-            if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY, 20, 0, false, false));
-            else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY, 20, 2, false, false));
-            else if (addDef == 3) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY, 20, 5, false, false));
-            else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY, 20, 9, false, false));
         }
     }
 

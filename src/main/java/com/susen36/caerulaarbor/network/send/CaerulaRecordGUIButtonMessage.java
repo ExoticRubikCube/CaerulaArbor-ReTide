@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.network.send;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.menu.PlayerEvoMenu;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
@@ -70,7 +69,6 @@ public class CaerulaRecordGUIButtonMessage implements CustomPacketPayload {
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;
 		if (buttonID == 0) {
-
 			{
 				boolean setval = !(ModCapabilities.getPlayerVariables(entity)).show_stats;
 				PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -79,7 +77,6 @@ public class CaerulaRecordGUIButtonMessage implements CustomPacketPayload {
 			}
 		}
 		if (buttonID == 1) {
-
 			{
 				boolean setval = !(ModCapabilities.getPlayerVariables(entity)).kingShowPtc;
 				PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -88,7 +85,6 @@ public class CaerulaRecordGUIButtonMessage implements CustomPacketPayload {
 			}
 		}
 		if (buttonID == 2) {
-
 			if ((Entity) entity instanceof ServerPlayer ent) {
 				BlockPos bpos = BlockPos.containing(x, y, z);
 				ent.openMenu(new MenuProvider() {
@@ -100,23 +96,6 @@ public class CaerulaRecordGUIButtonMessage implements CustomPacketPayload {
 					@Override
 					public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
 						return new RelicShowcaseMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
-					}
-				}, buf -> buf.writeBlockPos(bpos));
-			}
-		}
-		if (buttonID == 3) {
-
-			if ((Entity) entity instanceof ServerPlayer ent) {
-				BlockPos bpos = BlockPos.containing(x, y, z);
-				ent.openMenu(new MenuProvider() {
-					@Override
-					public Component getDisplayName() {
-						return Component.literal("PlayerEvo");
-					}
-
-					@Override
-					public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-						return new PlayerEvoMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
 					}
 				}, buf -> buf.writeBlockPos(bpos));
 			}

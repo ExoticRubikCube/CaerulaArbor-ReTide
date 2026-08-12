@@ -196,7 +196,6 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
             }
         }
 		if (buttonID == 3) {
-
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if (CARelics.KING_ARMOR.get().gained(entity)) {
@@ -246,7 +245,6 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
             }
         }
 		if (buttonID == 4) {
-
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if (CARelics.KING_EXTENSION.get().gained(entity)) {
@@ -296,7 +294,6 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
             }
         }
 		if (buttonID == 5) {
-
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if (CARelics.KING_CRYSTAL.get().gained(entity)) {
@@ -346,7 +343,6 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
             }
         }
 		if (buttonID == 6) {
-
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if (CARelics.SARKAZ_KING_ARTIFACT.get().gained(entity)) {
@@ -396,7 +392,6 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
             }
         }
 		if (buttonID == 7) {
-
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if (CARelics.SARKAZ_KING_FLAG.get().gained(entity)) {
@@ -516,9 +511,8 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HAND_THORNS.get().set(capability, setval ? 1 : 0);
+                            CARelics.HAND_THORNS.get().set(capability, 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -538,7 +532,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HAND_THORNS.get().set(capability, setval ? 1 : 0);
+                                CARelics.HAND_THORNS.get().set(capability, 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }

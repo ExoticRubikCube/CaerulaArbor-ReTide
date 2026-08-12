@@ -24,7 +24,6 @@ public class CANetwork {
 		registrar.playToServer(EvoTreeButtonMessage.TYPE, EvoTreeButtonMessage.STREAM_CODEC, EvoTreeButtonMessage::handle);
 		registrar.playToServer(InfoStrategyNavigationButtonMessage.TYPE, InfoStrategyNavigationButtonMessage.STREAM_CODEC, InfoStrategyNavigationButtonMessage::handle);
 		registrar.playToServer(InfoStrategyReturnButtonMessage.TYPE, InfoStrategyReturnButtonMessage.STREAM_CODEC, InfoStrategyReturnButtonMessage::handle);
-		registrar.playToServer(PlayerEvoButtonMessage.TYPE, PlayerEvoButtonMessage.STREAM_CODEC, PlayerEvoButtonMessage::handle);
 		registrar.playToServer(RelicShowcaseButtonMessage.TYPE, RelicShowcaseButtonMessage.STREAM_CODEC, RelicShowcaseButtonMessage::handle);
 		registrar.playToServer(PlayerLeftClickEventHandler.HelperLeftClickMessage.TYPE, PlayerLeftClickEventHandler.HelperLeftClickMessage.STREAM_CODEC, PlayerLeftClickEventHandler.HelperLeftClickMessage::handle);
 	}

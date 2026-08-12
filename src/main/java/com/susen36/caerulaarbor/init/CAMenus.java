@@ -20,5 +20,4 @@ public class CAMenus {
 	public static final DeferredHolder<MenuType<?>, MenuType<InfoStrategyAllMenu>> INFO_STRATEGY_ALL = REGISTRY.register("info_strategy_all", () -> IMenuTypeExtension.create(InfoStrategyAllMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<EvoTreeMenu>> EVO_TREE = REGISTRY.register("evo_tree", () -> IMenuTypeExtension.create(EvoTreeMenu::new));
 	public static final DeferredHolder<MenuType<?>, MenuType<CentrifugerSelectMenu>> CENTRIFUGER_SELECT = REGISTRY.register("centrifuger_select", () -> IMenuTypeExtension.create(CentrifugerSelectMenu::new));
-	public static final DeferredHolder<MenuType<?>, MenuType<PlayerEvoMenu>> PLAYER_EVO = REGISTRY.register("player_evo", () -> IMenuTypeExtension.create(PlayerEvoMenu::new));
 }
