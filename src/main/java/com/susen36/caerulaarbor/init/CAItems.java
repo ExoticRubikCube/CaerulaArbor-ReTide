@@ -465,7 +465,7 @@ public class CAItems {
             () -> new HighmoreSpawningBlockDisplayItem(CABlocks.HIGHMORE_SPAWNING_BLOCK.get(), new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> TIDELINKED_SHIELD = REGISTRY.register("tidelinked_shield", TidelinkedShieldItem::new);
     public static final DeferredHolder<Item, ? extends Item> TIDELINKED_WAND = REGISTRY.register("tidelinked_wand", TidelinkedWandItem::new);
-    public static final DeferredHolder<Item, ? extends Item> GOLDEN_CHALISE = block(CABlocks.GOLDEN_CHALISE);
+    public static final DeferredHolder<Item, ? extends Item> GOLDEN_CHALISE = REGISTRY.register("golden_chalise", GoldenChaliseItem::new);
     public static final DeferredHolder<Item, ? extends Item> EMERGENCY_AID_BUILDING = block(CABlocks.EMERGENCY_AID_BUILDING);
     public static final DeferredHolder<Item, ? extends Item> EMERGENCY_AID_BUILDING_SALVIENTO = block(CABlocks.EMERGENCY_AID_BUILDING_SALVIENTO);
     public static final DeferredHolder<Item, ? extends Item> MIZUKI_STATUE = REGISTRY.register(Objects.requireNonNull(CABlocks.MIZUKI_STATUE.getId()).getPath(), () -> new MizukiStatueDisplayItem(CABlocks.MIZUKI_STATUE.get(), new Item.Properties()));

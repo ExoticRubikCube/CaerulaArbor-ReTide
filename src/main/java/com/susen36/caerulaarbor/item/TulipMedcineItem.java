@@ -3,7 +3,8 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CARelics;
+import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.particles.ParticleTypes;
@@ -14,21 +15,19 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
 
-public class TulipMedcineItem extends Item {
+public class TulipMedcineItem extends RelicItemBase {
 	public TulipMedcineItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(2f).alwaysEdible().build()));
+		super(CARelics.TULIP_MEDCINE, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(2f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -39,12 +38,10 @@ public class TulipMedcineItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, context, list, flag);
-		list.add(Component.translatable("item.caerula_arbor.tulip_medcine.description_0"));
 	}
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = new ItemStack(CAItems.OCEAN_PHLOEM.get());
 		super.finishUsingItem(itemstack, world, entity);
 		double x = entity.getX();
 		double y = entity.getY();
@@ -69,14 +66,12 @@ public class TulipMedcineItem extends Item {
                     player.getAdvancements().award(adv, criteria);
             }
         }
-        if (itemstack.isEmpty()) {
-			return retval;
-		} else {
-			if (entity instanceof Player player && !player.getAbilities().instabuild) {
-				if (!player.getInventory().add(retval))
-					player.drop(retval, false);
-			}
-			return itemstack;
+		if (!CARelics.TULIP_MEDCINE.get().gained(entity)) {
+			boolean activated = true;
+			PlayerVariable cap = ModCapabilities.getPlayerVariables(entity);
+			CARelics.TULIP_MEDCINE.get().set(cap, activated ? 1 : 0);
+			cap.syncPlayerVariables(entity);
 		}
+		return itemstack;
 	}
 }

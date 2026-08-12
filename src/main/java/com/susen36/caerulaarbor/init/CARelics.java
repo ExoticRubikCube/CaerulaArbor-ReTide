@@ -69,6 +69,10 @@ public final class CARelics {
     /* ========== special / misc ========== */
     public static final DeferredHolder<RelicType, RelicType> SURVIVOR_CONTRACT = REGISTRY.register("survivor_contract", () -> new NumericRelicType(-1, 32, -1, RelicTier.ADVANCED));
     public static final DeferredHolder<RelicType, RelicType> TREATY = REGISTRY.register("treaty", () -> new BooleanRelicType(RelicTier.ADVANCED));
+    public static final DeferredHolder<RelicType, RelicType> NURTURE_GENE_SET = REGISTRY.register("nurture_gene_set", () -> new BooleanRelicType(RelicTier.ADVANCED));
+    public static final DeferredHolder<RelicType, RelicType> OIL_AND_CREAM = REGISTRY.register("oil_and_cream", () -> new BooleanRelicType(RelicTier.ADVANCED));
+    public static final DeferredHolder<RelicType, RelicType> TULIP_MEDCINE = REGISTRY.register("tulip_medcine", () -> new BooleanRelicType(RelicTier.ADVANCED));
+    public static final DeferredHolder<RelicType, RelicType> GOLDEN_CHALISE = REGISTRY.register("golden_chalise", () -> new BooleanRelicType(RelicTier.ADVANCED));
     public static final DeferredHolder<RelicType, RelicType> LEGEND_CHITIN = REGISTRY.register("legend_chitin", () -> new BooleanRelicType(RelicTier.ADVANCED));
 
     /* ========== util 实用物系列 ========== */

@@ -33,7 +33,7 @@
 					"name": "egg",
 					"parent": "stem",
 					"pivot": [0.43464, 4.57413, 0.16667],
-					"rotation": [0, 0, -5],
+					"rotation": [0, 0, -2.5],
 					"cubes": [
 						{
 							"origin": [-3.7348, 4.05131, -4],

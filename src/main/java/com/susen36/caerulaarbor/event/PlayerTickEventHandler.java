@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.event;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.manager.EPManager;
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CADamageTypes;
@@ -21,9 +22,13 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.LevelAccessor;
@@ -187,6 +192,7 @@ public class PlayerTickEventHandler {
         handleOceanizationEffects(entity);
         handleRelicHemost(entity);
         handleRelicYearning(entity);
+        handleGoldenChalise(entity);
     }
 
     private static void handleSanityModifier(Player entity) {
@@ -359,6 +365,40 @@ public class PlayerTickEventHandler {
                 double amplifi = Math.min(Math.floor(entity.experienceLevel * 0.25), 64);
                 if (amplifi >= 1 && !entity.level().isClientSide()) {
                     entity.addEffect(new MobEffectInstance(CAMobEffects.UNRIPE_THOUGHTS, 20, (int) amplifi, false, false));
+                }
+            }
+        }
+    }
+
+    private static final ResourceLocation CHALISE_ATTACK_SPEED_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "golden_chalise_attack_speed");
+
+    private static void handleGoldenChalise(Player entity) {
+        if (!CARelics.GOLDEN_CHALISE.get().gained(entity)) {
+            AttributeInstance attr = entity.getAttribute(Attributes.ATTACK_SPEED);
+            if (attr != null && attr.getModifier(CHALISE_ATTACK_SPEED_ID) != null) {
+                attr.removeModifier(CHALISE_ATTACK_SPEED_ID);
+            }
+        } else if (!entity.level().isClientSide()) {
+            int goldCount = 0;
+            for (ItemStack stack : entity.getInventory().items) {
+                if (stack.getItem() == Items.GOLD_INGOT) {
+                    goldCount += stack.getCount();
+                }
+            }
+            double boost = Math.min(goldCount, 200) / 200.0;
+
+            AttributeInstance attr = entity.getAttribute(Attributes.ATTACK_SPEED);
+            if (attr != null) {
+                AttributeModifier existing = attr.getModifier(CHALISE_ATTACK_SPEED_ID);
+                if (existing != null) {
+                    if (Math.abs(existing.amount() - boost) > 0.0001) {
+                        attr.removeModifier(CHALISE_ATTACK_SPEED_ID);
+                        if (boost > 0) {
+                            attr.addTransientModifier(new AttributeModifier(CHALISE_ATTACK_SPEED_ID, boost, AttributeModifier.Operation.ADD_VALUE));
+                        }
+                    }
+                } else if (boost > 0) {
+                    attr.addTransientModifier(new AttributeModifier(CHALISE_ATTACK_SPEED_ID, boost, AttributeModifier.Operation.ADD_VALUE));
                 }
             }
         }

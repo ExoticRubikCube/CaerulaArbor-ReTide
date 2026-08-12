@@ -127,7 +127,6 @@ public class CATabs {
                 tabData.accept(CAItems.EMERALD_TREATY.get());
                 tabData.accept(CAItems.TREATY_NETHERITE.get());
                 tabData.accept(CAItems.CARMEN_TREATY.get());
-                tabData.accept(CABlocks.GOLDEN_CHALISE.get().asItem());
                 tabData.accept(CABlocks.EMERGENCY_AID_BUILDING.get().asItem());
                 tabData.accept(CABlocks.EMERGENCY_AID_BUILDING_SALVIENTO.get().asItem());
                 tabData.accept(CABlocks.HIGHMORE_DOLL.get().asItem());
@@ -216,9 +215,6 @@ public class CATabs {
                 tabData.accept(CAItems.MUTAGENISIS_CAPSULE.get());
                 tabData.accept(CAItems.OCEANIZE_CATALYST.get());
                 tabData.accept(CAItems.COLOURFULL_JELLY.get());
-                tabData.accept(CAItems.TULIP_MEDCINE.get());
-                tabData.accept(CAItems.OIL_AND_CREAM.get());
-                tabData.accept(CAItems.NURTURE_GENE_SET.get());
                 tabData.accept(CAItems.GENE_SAMPLE_NORMAL.get());
                 tabData.accept(CAItems.GENE_SAMPLE_UPGRADED.get());
                 tabData.accept(CAItems.GENE_SAMPLE_SUPERB.get());
@@ -244,6 +240,10 @@ public class CATabs {
                 tabData.accept(CAItems.ARCHFIENDS_BED.get());
                 tabData.accept(CAItems.ROYAL_FATE.get());
                 tabData.accept(CAItems.SURVIVOR_CONTRACT.get());
+                tabData.accept(CAItems.NURTURE_GENE_SET.get());
+                tabData.accept(CAItems.OIL_AND_CREAM.get());
+                tabData.accept(CAItems.TULIP_MEDCINE.get());
+                tabData.accept(CAItems.GOLDEN_CHALISE.get());
                 tabData.accept(CAItems.CRIMSON_TREATY.get());
                 tabData.accept(CAItems.CHITIN_KNIFE.get());
                 tabData.accept(CAItems.HAND_OF_THORNS.get());

@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/golden_chalise_empty",
+  "textures": {
+    "all": "caerula_arbor:block/golden_chalise_full",
+    "particle": "caerula_arbor:block/golden_chalise_full",
+    "0": "caerula_arbor:block/golden_chalise_empty"
+  },
+  "render_type": "cutout"
+}
