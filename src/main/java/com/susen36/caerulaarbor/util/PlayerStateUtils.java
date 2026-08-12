@@ -6,10 +6,10 @@ import com.susen36.babel.manager.EPManager;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAConfigs;
+import com.susen36.caerulaarbor.init.CARelics;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -223,7 +223,7 @@ public class PlayerStateUtils {
 	}
 
 	public static double getSurvivor(Entity entity) {
-		return Relic.SURVIVOR_CONTRACT.get(entity);
+		return CARelics.SURVIVOR_CONTRACT.get().get(entity);
 	}
 
 	public static boolean hasSurvivorCont(Entity entity) {

@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -26,7 +26,7 @@ import java.util.List;
 
 public class RainbowCandyItem extends RelicItemBase {
 	public RainbowCandyItem() {
-		super(Relic.UTIL_RAINBOW, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build()));
+		super(CARelics.UTIL_RAINBOW.get(), new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class RainbowCandyItem extends RelicItemBase {
         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 		capability.player_util_RAINBOW = true;
 		capability.syncPlayerVariables(entity);
-        Relic.UTIL_RAINBOW.set(capability, 1);
+        CARelics.UTIL_RAINBOW.get().set(capability, 1);
         capability.syncPlayerVariables(entity);
 		if (itemstack.isEmpty()) {
 			return retval;

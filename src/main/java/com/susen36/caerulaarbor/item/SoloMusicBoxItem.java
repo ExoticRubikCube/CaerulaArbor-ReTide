@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class SoloMusicBoxItem extends RelicItemBase {
 	public SoloMusicBoxItem() {
-		super(Relic.UTIL_MUSICBOX, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(CARelics.UTIL_MUSICBOX.get(), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class SoloMusicBoxItem extends RelicItemBase {
             }
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.UTIL_MUSICBOX.set(capability, setval ? 1 : 0);
+            CARelics.UTIL_MUSICBOX.get().set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
             CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
             world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);

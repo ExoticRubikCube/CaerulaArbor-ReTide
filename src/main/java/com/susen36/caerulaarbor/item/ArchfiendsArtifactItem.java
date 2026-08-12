@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ArchfiendsArtifactItem extends RelicItemBase {
 	public ArchfiendsArtifactItem() {
-		super(Relic.SARKAZ_KING_ARTIFACT, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.SARKAZ_KING_ARTIFACT.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -40,14 +40,14 @@ public class ArchfiendsArtifactItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!Relic.SARKAZ_KING_ARTIFACT.gained(entity)) {
+        if (!CARelics.SARKAZ_KING_ARTIFACT.get().gained(entity)) {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
             }
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.DRIPPING_LAVA, x, y, z, 72, 1, 1, 1, 1);
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.SARKAZ_KING_ARTIFACT.set(capability, 1);
+            CARelics.SARKAZ_KING_ARTIFACT.get().set(capability, 1);
             capability.syncPlayerVariables(entity);
             if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);

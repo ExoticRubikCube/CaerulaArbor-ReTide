@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.api.event;
 
-import com.susen36.caerulaarbor.capability.Relic;
+import com.susen36.caerulaarbor.relic.RelicType;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.Event;
 
@@ -17,30 +17,30 @@ import net.neoforged.bus.api.Event;
 public class RelicEvent extends Event {
 
     public final Entity player;
-    public final Relic relic;
+    public final RelicType relic;
 
-    public RelicEvent(Entity player, Relic relic) {
+    public RelicEvent(Entity player, RelicType relic) {
         this.player = player;
         this.relic = relic;
     }
 
     public static class Gain extends RelicEvent {
 
-        public Gain(Entity player, Relic relic) {
+        public Gain(Entity player, RelicType relic) {
             super(player, relic);
         }
     }
 
     public static class Update extends RelicEvent {
 
-        public Update(Entity player, Relic relic) {
+        public Update(Entity player, RelicType relic) {
             super(player, relic);
         }
     }
 
     public static class Remove extends RelicEvent {
 
-        public Remove(Entity player, Relic relic) {
+        public Remove(Entity player, RelicType relic) {
             super(player, relic);
         }
     }

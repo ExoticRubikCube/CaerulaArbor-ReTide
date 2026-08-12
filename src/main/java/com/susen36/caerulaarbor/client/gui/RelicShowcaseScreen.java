@@ -2,10 +2,11 @@ package com.susen36.caerulaarbor.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.capability.Relic;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import com.susen36.caerulaarbor.network.send.RelicShowcaseButtonMessage;
+import com.susen36.caerulaarbor.relic.RelicType;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.RelicUtils;
@@ -63,7 +64,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 	// ===== 显示条目（按原 init 创建顺序，保持布局语义） =====
 	private record RelicDisplayEntry(
 		String guiKey,
-		Relic relic,
+		RelicType relic,
 		SpecialType special,
 		int buttonId,
 		String atlasBase,
@@ -79,107 +80,107 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 	static {
 		ALL_ENTRIES = new ArrayList<>();
 		// ===== 第 1 行 =====
-		ALL_ENTRIES.add(e("imagebutton_relic_crown",          Relic.KING_CROWN,                1,  "imagebutton_relic_crown",          "relic_crown"));
-		ALL_ENTRIES.add(e("imagebutton_relic_spear",          Relic.KING_SPEAR,                2,  "imagebutton_relic_spear",          "kings_spear"));
-		ALL_ENTRIES.add(e("imagebutton_extension",            Relic.KING_EXTENSION,            4,  "imagebutton_extension",            "kings_extension"));
-		ALL_ENTRIES.add(e("imagebutton_kingcrystal",          Relic.KING_CRYSTAL,              5,  "imagebutton_kingcrystal",          "kings_crystal"));
-		ALL_ENTRIES.add(e("imagebutton_kingsarmor",           Relic.KING_ARMOR,                3,  "imagebutton_kingsarmor",           "kings_armour"));
-		ALL_ENTRIES.add(e("imagebutton_archfiend_articraft",  Relic.SARKAZ_KING_ARTIFACT,      6,  "imagebutton_archfiend_articraft",  "archfiends_artifact"));
-		ALL_ENTRIES.add(e("imagebutton_archfi_flag",          Relic.SARKAZ_KING_FLAG,          7,  "imagebutton_archfi_flag",          "archfiends_flag"));
-		ALL_ENTRIES.add(e("imagebutton_archifi_bed",          Relic.SARKAZ_KING_BED,           8,  "imagebutton_archifi_bed",          "archfiends_bed"));
-		ALL_ENTRIES.add(e("imagebutton_royalfate",            Relic.ROYALFATE,                -1,  "imagebutton_royalfate",            "royal_fate"));
-		ALL_ENTRIES.add(e("imagebutton_hand_sword",           Relic.HAND_SWORD,               35,  "imagebutton_hand_sword",           "hand_sword"));
+		ALL_ENTRIES.add(e("imagebutton_relic_crown",          CARelics.KING_CROWN.get(),                1,  "imagebutton_relic_crown",          "relic_crown"));
+		ALL_ENTRIES.add(e("imagebutton_relic_spear",          CARelics.KING_SPEAR.get(),                2,  "imagebutton_relic_spear",          "kings_spear"));
+		ALL_ENTRIES.add(e("imagebutton_extension",            CARelics.KING_EXTENSION.get(),            4,  "imagebutton_extension",            "kings_extension"));
+		ALL_ENTRIES.add(e("imagebutton_kingcrystal",          CARelics.KING_CRYSTAL.get(),              5,  "imagebutton_kingcrystal",          "kings_crystal"));
+		ALL_ENTRIES.add(e("imagebutton_kingsarmor",           CARelics.KING_ARMOR.get(),                3,  "imagebutton_kingsarmor",           "kings_armour"));
+		ALL_ENTRIES.add(e("imagebutton_archfiend_articraft",  CARelics.SARKAZ_KING_ARTIFACT.get(),      6,  "imagebutton_archfiend_articraft",  "archfiends_artifact"));
+		ALL_ENTRIES.add(e("imagebutton_archfi_flag",          CARelics.SARKAZ_KING_FLAG.get(),          7,  "imagebutton_archfi_flag",          "archfiends_flag"));
+		ALL_ENTRIES.add(e("imagebutton_archifi_bed",          CARelics.SARKAZ_KING_BED.get(),           8,  "imagebutton_archifi_bed",          "archfiends_bed"));
+		ALL_ENTRIES.add(e("imagebutton_royalfate",            CARelics.ROYALFATE.get(),                -1,  "imagebutton_royalfate",            "royal_fate"));
+		ALL_ENTRIES.add(e("imagebutton_hand_sword",           CARelics.HAND_SWORD.get(),               35,  "imagebutton_hand_sword",           "hand_sword"));
 		// ===== 第 2 行 =====
-		ALL_ENTRIES.add(e("imagebutton_hand_spike",           Relic.HAND_THORNS,              10,  "imagebutton_hand_spike",           "hand_of_thorns"));
-		ALL_ENTRIES.add(e("imagebutton_hand_reap",            Relic.HAND_STRANGLE,            11,  "imagebutton_hand_reap",            "hand_of_strangle"));
-		ALL_ENTRIES.add(e("imagebutton_hand_reap1",           Relic.HAND_FERTILITY,           12,  "imagebutton_hand_reap1",           "hand_of_fertiliy"));
-		ALL_ENTRIES.add(e("imagebutton_hand_speed",           Relic.HAND_SPEED,               37,  "imagebutton_hand_speed",           "hand_of_speed"));
-		ALL_ENTRIES.add(e("imagebutton_hand_smash",           Relic.HAND_OF_PULVERIZATION,    13,  "imagebutton_hand_smash",           "hand_of_barren"));
-		ALL_ENTRIES.add(e("imagebutton_hand_swipe",           Relic.HAND_SWIPE,               14,  "imagebutton_hand_swipe",           "hand_of_spotless"));
-		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_hand_curve", Relic.HAND_ENGRAVE, RelicDisplayEntry.SpecialType.NONE, 15,
+		ALL_ENTRIES.add(e("imagebutton_hand_spike",           CARelics.HAND_THORNS.get(),              10,  "imagebutton_hand_spike",           "hand_of_thorns"));
+		ALL_ENTRIES.add(e("imagebutton_hand_reap",            CARelics.HAND_STRANGLE.get(),            11,  "imagebutton_hand_reap",            "hand_of_strangle"));
+		ALL_ENTRIES.add(e("imagebutton_hand_reap1",           CARelics.HAND_FERTILITY.get(),           12,  "imagebutton_hand_reap1",           "hand_of_fertiliy"));
+		ALL_ENTRIES.add(e("imagebutton_hand_speed",           CARelics.HAND_SPEED.get(),               37,  "imagebutton_hand_speed",           "hand_of_speed"));
+		ALL_ENTRIES.add(e("imagebutton_hand_smash",           CARelics.HAND_OF_PULVERIZATION.get(),    13,  "imagebutton_hand_smash",           "hand_of_barren"));
+		ALL_ENTRIES.add(e("imagebutton_hand_swipe",           CARelics.HAND_SWIPE.get(),               14,  "imagebutton_hand_swipe",           "hand_of_spotless"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_hand_curve", CARelics.HAND_ENGRAVE.get(), RelicDisplayEntry.SpecialType.NONE, 15,
 			"imagebutton_hand_curve", "hand_of_engrave",
-			entity -> RelicUtils.getRelic(Relic.HAND_ENGRAVE, entity) > 0,
+			entity -> RelicUtils.getRelic(CARelics.HAND_ENGRAVE.get(), entity) > 0,
 			null, new int[]{157, 36, -16777165, -1})); // label at (157/156, 36)
-		ALL_ENTRIES.add(e("imagebutton_hand_firework",        Relic.HAND_FIREWORK,            16,  "imagebutton_hand_firework",        "hand_of_firework"));
+		ALL_ENTRIES.add(e("imagebutton_hand_firework",        CARelics.HAND_FIREWORK.get(),            16,  "imagebutton_hand_firework",        "hand_of_firework"));
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
 		// ===== 第 3 行 =====
-		ALL_ENTRIES.add(e("imagebutton_crimson_contarct_0",   Relic.TREATY,                   17,  "imagebutton_crimson_contarct_0",   "crimson_treaty"));
+		ALL_ENTRIES.add(e("imagebutton_crimson_contarct_0",   CARelics.TREATY.get(),                   17,  "imagebutton_crimson_contarct_0",   "crimson_treaty"));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_survivor_contarct", null, RelicDisplayEntry.SpecialType.SURVIVOR, 18,
 			"imagebutton_survivor_contarct", "survivor_contract",
 			PlayerStateUtils::hasSurvivorCont,
 			null, new int[]{37, 60, -12829636, -1}));
-		ALL_ENTRIES.add(e("imagebutton_chitinknife",          Relic.LEGEND_CHITIN,            36,  "imagebutton_chitinknife",          "chitin_knife"));
-		ALL_ENTRIES.add(e("imagebutton_smelly_hemostatic",    Relic.HEMOST,                   38,  "imagebutton_smelly_hemostatic",    "smelly_hemostatic"));
-		ALL_ENTRIES.add(e("imagebutton_unripe_yearning",      Relic.YEARNING,                 39,  "imagebutton_unripe_yearning",      "unripe_yearning"));
+		ALL_ENTRIES.add(e("imagebutton_chitinknife",          CARelics.LEGEND_CHITIN.get(),            36,  "imagebutton_chitinknife",          "chitin_knife"));
+		ALL_ENTRIES.add(e("imagebutton_smelly_hemostatic",    CARelics.HEMOST.get(),                   38,  "imagebutton_smelly_hemostatic",    "smelly_hemostatic"));
+		ALL_ENTRIES.add(e("imagebutton_unripe_yearning",      CARelics.YEARNING.get(),                 39,  "imagebutton_unripe_yearning",      "unripe_yearning"));
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
 		// ===== 第 4 行 =====
-		ALL_ENTRIES.add(e("imagebutton_beef_can",             Relic.FEATURED_CANNED_MEAT,     -1, "imagebutton_beef_can",             "meat_can"));
-		ALL_ENTRIES.add(e("imagebutton_bowl_seagrass",        Relic.SEAWEED_SALAD,            -1, "imagebutton_bowl_seagrass",        "bowl_seagrass"));
-		ALL_ENTRIES.add(e("imagebutton_orangestorm",          Relic.ORANGE_STORM,             -1, "imagebutton_orangestorm",          "golden_storm"));
-		ALL_ENTRIES.add(e("imagebutton_coffee_candy",         Relic.COFFEE_PLAINS_COFFEE_CANDY, -1, "imagebutton_coffee_candy",      "coffee_candy"));
-		ALL_ENTRIES.add(e("imagebutton_rainbow_candy",        Relic.UTIL_RAINBOW,             -1, "imagebutton_rainbow_candy",        "rainbow_candy"));
-		ALL_ENTRIES.add(e("imagebutton_cherrycan",            Relic.PITTS_ASSORTED_FRUITS,    -1, "imagebutton_cherrycan",            "canned_cherry"));
+		ALL_ENTRIES.add(e("imagebutton_beef_can",             CARelics.FEATURED_CANNED_MEAT.get(),     -1, "imagebutton_beef_can",             "meat_can"));
+		ALL_ENTRIES.add(e("imagebutton_bowl_seagrass",        CARelics.SEAWEED_SALAD.get(),            -1, "imagebutton_bowl_seagrass",        "bowl_seagrass"));
+		ALL_ENTRIES.add(e("imagebutton_orangestorm",          CARelics.ORANGE_STORM.get(),             -1, "imagebutton_orangestorm",          "golden_storm"));
+		ALL_ENTRIES.add(e("imagebutton_coffee_candy",         CARelics.COFFEE_PLAINS_COFFEE_CANDY.get(), -1, "imagebutton_coffee_candy",      "coffee_candy"));
+		ALL_ENTRIES.add(e("imagebutton_rainbow_candy",        CARelics.UTIL_RAINBOW.get(),             -1, "imagebutton_rainbow_candy",        "rainbow_candy"));
+		ALL_ENTRIES.add(e("imagebutton_cherrycan",            CARelics.PITTS_ASSORTED_FRUITS.get(),    -1, "imagebutton_cherrycan",            "canned_cherry"));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_boxcoffee", null, RelicDisplayEntry.SpecialType.AROMATIC, -1,
 			"imagebutton_boxcoffee", "aromatic_coffee",
 			PlayerStateUtils::hasAromatic, null, null));
-		ALL_ENTRIES.add(e("imagebutton_musicboxsmall",        Relic.UTIL_MUSICBOX,            -1, "imagebutton_musicboxsmall",        "solo_music_box"));
-		ALL_ENTRIES.add(e("imagebutton_flute",                Relic.WEIRD_FLUTE,              -1, "imagebutton_flute",                "odd_flute"));
-		ALL_ENTRIES.add(e("imagebutton_originium_iris",       Relic.UTIL_IRIS,                -1, "imagebutton_originium_iris",       "redstone_iris_flower"));
+		ALL_ENTRIES.add(e("imagebutton_musicboxsmall",        CARelics.UTIL_MUSICBOX.get(),            -1, "imagebutton_musicboxsmall",        "solo_music_box"));
+		ALL_ENTRIES.add(e("imagebutton_flute",                CARelics.WEIRD_FLUTE.get(),              -1, "imagebutton_flute",                "odd_flute"));
+		ALL_ENTRIES.add(e("imagebutton_originium_iris",       CARelics.UTIL_IRIS.get(),                -1, "imagebutton_originium_iris",       "redstone_iris_flower"));
 		// ===== 第 5 行 =====
-		ALL_ENTRIES.add(e("imagebutton_kettle",               Relic.HOT_WATER_KETTLE,         -1, "imagebutton_kettle",               "kettle"));
-		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_alley", Relic.UTIL_ALLEY, RelicDisplayEntry.SpecialType.NONE, -1,
+		ALL_ENTRIES.add(e("imagebutton_kettle",               CARelics.HOT_WATER_KETTLE.get(),         -1, "imagebutton_kettle",               "kettle"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_alley", CARelics.UTIL_ALLEY.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_alley", "allay_sculpture",
-			entity -> RelicUtils.hasRelic(Relic.UTIL_ALLEY, entity),
+			entity -> RelicUtils.hasRelic(CARelics.UTIL_ALLEY.get(), entity),
 			null, null));
-		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_batbed", Relic.VAMPIRES_BED, RelicDisplayEntry.SpecialType.NONE, -1,
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_batbed", CARelics.VAMPIRES_BED.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_batbed", "bat_bed",
-			entity -> RelicUtils.hasRelic(Relic.VAMPIRES_BED, entity),
+			entity -> RelicUtils.hasRelic(CARelics.VAMPIRES_BED.get(), entity),
 			null, null));
-		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_score", Relic.UTIL_SCORE, RelicDisplayEntry.SpecialType.NONE, -1,
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_score", CARelics.UTIL_SCORE.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_score", "score",
-			entity -> RelicUtils.hasRelic(Relic.UTIL_SCORE, entity),
+			entity -> RelicUtils.hasRelic(CARelics.UTIL_SCORE.get(), entity),
 			null, null));
-		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_rescission", Relic.UTIL_RESCISSION, RelicDisplayEntry.SpecialType.NONE, -1,
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_rescission", CARelics.UTIL_RESCISSION.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_rescission", "rescission",
-			entity -> RelicUtils.hasRelic(Relic.UTIL_RESCISSION, entity),
+			entity -> RelicUtils.hasRelic(CARelics.UTIL_RESCISSION.get(), entity),
 			null, null));
-		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_omnikey", Relic.UTIL_OMNIKEY, RelicDisplayEntry.SpecialType.NONE, -1,
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_omnikey", CARelics.UTIL_OMNIKEY.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_omnikey", "omni_key",
-			entity -> RelicUtils.hasRelic(Relic.UTIL_OMNIKEY, entity),
+			entity -> RelicUtils.hasRelic(CARelics.UTIL_OMNIKEY.get(), entity),
 			null, null));
-		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_stare", Relic.UTIL_STARE, RelicDisplayEntry.SpecialType.NONE, -1,
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_stare", CARelics.UTIL_STARE.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_stare", "guardian_stare",
-			entity -> RelicUtils.hasRelic(Relic.UTIL_STARE, entity),
+			entity -> RelicUtils.hasRelic(CARelics.UTIL_STARE.get(), entity),
 			null, null));
-		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_longevity", Relic.PROOF_OF_LONGEVITY, RelicDisplayEntry.SpecialType.NONE, -1,
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_longevity", CARelics.PROOF_OF_LONGEVITY.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_longevity", "proof_of_longevity",
-			entity -> RelicUtils.hasRelic(Relic.PROOF_OF_LONGEVITY, entity),
+			entity -> RelicUtils.hasRelic(CARelics.PROOF_OF_LONGEVITY.get(), entity),
 			null, null));
 		ALL_ENTRIES.add(blank());
 		ALL_ENTRIES.add(blank());
 		// ===== 第 6 行（翻页第 2 页开始） =====
-		ALL_ENTRIES.add(e("imagebutton_voyageofsmall",        Relic.PURE_GOLD_EXPEDITION,     -1, "imagebutton_voyageofsmall",        "voyage_of_gold"));
-		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_piglin_diary", Relic.DURIN_OVERGROUND_ODYSSEY, RelicDisplayEntry.SpecialType.NONE, -1,
+		ALL_ENTRIES.add(e("imagebutton_voyageofsmall",        CARelics.PURE_GOLD_EXPEDITION.get(),     -1, "imagebutton_voyageofsmall",        "voyage_of_gold"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_piglin_diary", CARelics.DURIN_OVERGROUND_ODYSSEY.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_piglin_diary", "piglin_diary",
-			entity -> RelicUtils.hasRelic(Relic.DURIN_OVERGROUND_ODYSSEY, entity),
+			entity -> RelicUtils.hasRelic(CARelics.DURIN_OVERGROUND_ODYSSEY.get(), entity),
 			"durin_diary.png", null));
-		ALL_ENTRIES.add(e("imagebutton_location_name",        Relic.UTIL_TOPONYM,             -1, "imagebutton_location_name",        "toponym_textology"));
-		ALL_ENTRIES.add(e("imagebutton_cursed_emelight_0",    Relic.CURSED_EMELIGHT,          19, "imagebutton_cursed_emelight_0",    "relic_curse_emelight"));
-		ALL_ENTRIES.add(e("imagebutton_cursed_glowbody_0",    Relic.CURSED_GLOWBODY,          20, "imagebutton_cursed_glowbody_0",    "relic_cursed_glowbody"));
-		ALL_ENTRIES.add(e("imagebutton_cursed_research_0",    Relic.CURSED_RESEARCH,          21, "imagebutton_cursed_research_0",    "relic_cursed_research"));
-		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_cursed_heart", Relic.CURSED_HEART, RelicDisplayEntry.SpecialType.NONE, -1,
+		ALL_ENTRIES.add(e("imagebutton_location_name",        CARelics.UTIL_TOPONYM.get(),             -1, "imagebutton_location_name",        "toponym_textology"));
+		ALL_ENTRIES.add(e("imagebutton_cursed_emelight_0",    CARelics.CURSED_EMELIGHT.get(),          19, "imagebutton_cursed_emelight_0",    "relic_curse_emelight"));
+		ALL_ENTRIES.add(e("imagebutton_cursed_glowbody_0",    CARelics.CURSED_GLOWBODY.get(),          20, "imagebutton_cursed_glowbody_0",    "relic_cursed_glowbody"));
+		ALL_ENTRIES.add(e("imagebutton_cursed_research_0",    CARelics.CURSED_RESEARCH.get(),          21, "imagebutton_cursed_research_0",    "relic_cursed_research"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_cursed_heart", CARelics.CURSED_HEART.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_cursed_heart", "caerula_heart",
-			entity -> RelicUtils.hasRelic(Relic.CURSED_HEART, entity),
+			entity -> RelicUtils.hasRelic(CARelics.CURSED_HEART.get(), entity),
 			null, null));
 	}
 
 	// ===== 工厂辅助：普通 boolean 遗物 =====
-	private static RelicDisplayEntry e(String guiKey, Relic relic, int buttonId, String atlasBase, String itemKey) {
+	private static RelicDisplayEntry e(String guiKey, RelicType relic, int buttonId, String atlasBase, String itemKey) {
 		return new RelicDisplayEntry(guiKey, relic, RelicDisplayEntry.SpecialType.NONE, buttonId,
 			atlasBase, itemKey,
 			entity -> RelicUtils.hasRelic(relic, entity),
@@ -355,7 +356,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			int[] lp = entry.labelPos();
 			String text = switch (entry.special()) {
 				case SURVIVOR -> EntityUtils.getPlayerSurvconta(entity);
-				case NONE -> entry.relic() == Relic.HAND_ENGRAVE ? EntityUtils.getPlayerEnrave(entity) : "";
+				case NONE -> entry.relic() == CARelics.HAND_ENGRAVE.get() ? EntityUtils.getPlayerEnrave(entity) : "";
 				default -> "";
 			};
 			if (!text.isEmpty()) {

@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class HandOfSwipeItem extends RelicItemBase {
 	public HandOfSwipeItem() {
-		super(Relic.HAND_SWIPE, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.HAND_SWIPE.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -40,14 +40,14 @@ public class HandOfSwipeItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!Relic.HAND_SWIPE.gained(entity)) {
+        if (!CARelics.HAND_SWIPE.get().gained(entity)) {
             world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.CLOUD, x, y, z, 72, 1, 1, 1, 1);
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.HAND_SWIPE.set(capability, setval ? 1 : 0);
+                CARelics.HAND_SWIPE.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())

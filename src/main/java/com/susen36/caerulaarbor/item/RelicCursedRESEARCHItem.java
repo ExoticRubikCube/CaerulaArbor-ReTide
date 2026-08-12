@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class RelicCursedRESEARCHItem extends RelicItemBase {
 	public RelicCursedRESEARCHItem() {
-		super(Relic.CURSED_RESEARCH, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.CURSED_RESEARCH.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -44,10 +44,10 @@ public class RelicCursedRESEARCHItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-            if (!Relic.CURSED_RESEARCH.gained(entity)) {
+            if (!CARelics.CURSED_RESEARCH.get().gained(entity)) {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.CURSED_RESEARCH.set(capability, setval ? 1 : 0);
+                CARelics.CURSED_RESEARCH.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
                 if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);

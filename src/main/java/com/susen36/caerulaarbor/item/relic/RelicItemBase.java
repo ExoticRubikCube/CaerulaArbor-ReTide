@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item.relic;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.relic.RelicType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -16,8 +16,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 收藏品物品基类：把「Relic ↔ Item」双向绑定 + 通用右键激活逻辑收拢到一处。
@@ -39,22 +40,22 @@ import java.util.List;
  */
 public abstract class RelicItemBase extends Item {
 
-    /** Relic → Item 双向绑定：构造器写入；反查用 {@link #byRelic(Relic)}。*/
-    private static final EnumMap<Relic, RelicItemBase> BY_RELIC = new EnumMap<>(Relic.class);
+    /** RelicType → Item 双向绑定：构造器写入；反查用 {@link #byRelic(RelicType)}。*/
+    private static final Map<RelicType, RelicItemBase> BY_RELIC = new HashMap<>();
 
-    public final Relic relic;
+    public final RelicType relic;
 
-    protected RelicItemBase(Relic relic, Item.Properties properties) {
+    protected RelicItemBase(RelicType relic, Item.Properties properties) {
         super(properties);
         this.relic = relic;
         BY_RELIC.put(relic, this);
     }
 
-    public static RelicItemBase byRelic(Relic relic) {
+    public static RelicItemBase byRelic(RelicType relic) {
         return BY_RELIC.get(relic);
     }
 
-    public static boolean hasBinding(Relic relic) {
+    public static boolean hasBinding(RelicType relic) {
         return BY_RELIC.containsKey(relic);
     }
 

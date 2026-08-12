@@ -2,9 +2,9 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -38,7 +38,7 @@ import java.util.List;
 
 public class RescissionItem extends RelicItemBase {
 	public RescissionItem() {
-		super(Relic.UTIL_RESCISSION, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+		super(CARelics.UTIL_RESCISSION.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class RescissionItem extends RelicItemBase {
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.UTIL_RESCISSION.set(capability, setval ? 1 : 0);
+            CARelics.UTIL_RESCISSION.get().set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
             if (entity instanceof Player player)
                 player.giveExperienceLevels(2);

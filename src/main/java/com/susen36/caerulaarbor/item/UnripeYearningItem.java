@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class UnripeYearningItem extends RelicItemBase {
 	public UnripeYearningItem() {
-		super(Relic.YEARNING, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.YEARNING.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class UnripeYearningItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!Relic.YEARNING.gained(entity)) {
+        if (!CARelics.YEARNING.get().gained(entity)) {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, SoundSource.NEUTRAL, 2, 1);
             }
@@ -48,7 +48,7 @@ public class UnripeYearningItem extends RelicItemBase {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.YEARNING.set(capability, setval ? 1 : 0);
+                CARelics.YEARNING.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())

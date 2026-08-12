@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAJukeboxSongs;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ScoreItem extends RelicItemBase {
 	public ScoreItem() {
-		super(Relic.UTIL_SCORE, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).jukeboxPlayable(CAJukeboxSongs.SCORE));
+		super(CARelics.UTIL_SCORE.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).jukeboxPlayable(CAJukeboxSongs.SCORE));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class ScoreItem extends RelicItemBase {
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.UTIL_SCORE.set(capability, setval ? 1 : 0);
+            CARelics.UTIL_SCORE.get().set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
             if ((Entity) entity instanceof Player player)
                 player.giveExperienceLevels(2);

@@ -2,9 +2,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ChitinKnifeItem extends RelicItemBase {
 	public ChitinKnifeItem() {
-		super(Relic.LEGEND_CHITIN, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.LEGEND_CHITIN.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class ChitinKnifeItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!Relic.LEGEND_CHITIN.gained(entity)) {
+        if (!CARelics.LEGEND_CHITIN.get().gained(entity)) {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BELL_BLOCK, SoundSource.NEUTRAL, (float) 3.5, 1);
             }
@@ -52,7 +52,7 @@ public class ChitinKnifeItem extends RelicItemBase {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.LEGEND_CHITIN.set(capability, setval ? 1 : 0);
+                CARelics.LEGEND_CHITIN.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())

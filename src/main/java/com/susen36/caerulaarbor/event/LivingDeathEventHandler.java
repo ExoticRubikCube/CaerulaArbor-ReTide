@@ -4,7 +4,6 @@ import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
@@ -298,15 +297,15 @@ public class LivingDeathEventHandler {
 
     private static void handlePlayerKillRelics(LivingDeathEvent event, LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity) {
         PlayerVariable capability = ModCapabilities.getPlayerVariables(sourceentity);
-        if (Relic.CURSED_EMELIGHT.gained(capability)) {
+        if (CARelics.CURSED_EMELIGHT.get().gained(capability)) {
             capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.1, 0.2);
             capability.syncPlayerVariables(sourceentity);
         }
-        if (Relic.CURSED_GLOWBODY.gained(capability)) {
+        if (CARelics.CURSED_GLOWBODY.get().gained(capability)) {
             capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.2, 0.3);
             capability.syncPlayerVariables(sourceentity);
         }
-        if (Relic.CURSED_RESEARCH.gained(capability)) {
+        if (CARelics.CURSED_RESEARCH.get().gained(capability)) {
             capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.3, 0.5);
             capability.syncPlayerVariables(sourceentity);
         }
@@ -314,7 +313,7 @@ public class LivingDeathEventHandler {
             capability.player_light = 0;
             capability.syncPlayerVariables(sourceentity);
         }
-        if (Relic.KING_ARMOR.gained(capability)) {
+        if (CARelics.KING_ARMOR.get().gained(capability)) {
             if (Math.random() < 0.08) {
                 if (capability.player_lives > 1) {
                     capability.player_lives = capability.player_lives - 1;
@@ -324,7 +323,7 @@ public class LivingDeathEventHandler {
                 capability.syncPlayerVariables(sourceentity);
             }
         }
-        if (Relic.KING_CRYSTAL.gained(capability)) {
+        if (CARelics.KING_CRYSTAL.get().gained(capability)) {
             if (Math.random() < 0.1) {
                 if (capability.player_lives > 1) {
                     capability.player_lives = Math.max(capability.player_lives - 2, 1);
@@ -339,8 +338,8 @@ public class LivingDeathEventHandler {
                 }
             }
         }
-        if (Relic.HAND_ENGRAVE.get(capability) >= 0
-                && Relic.HAND_ENGRAVE.get(capability) < 99) {
+        if (CARelics.HAND_ENGRAVE.get().get(capability) >= 0
+                && CARelics.HAND_ENGRAVE.get().get(capability) < 99) {
             if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
                 boolean validweapon = false;
                 if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.TRIDENT) {
@@ -359,16 +358,16 @@ public class LivingDeathEventHandler {
                     }
                 }
                 if (validweapon) {
-                    Relic.HAND_ENGRAVE.set(capability, Relic.HAND_ENGRAVE.get(capability) + 1);
+                    CARelics.HAND_ENGRAVE.get().set(capability, CARelics.HAND_ENGRAVE.get().get(capability) + 1);
                     capability.syncPlayerVariables(sourceentity);
                 }
             }
         }
-        if (Relic.SURVIVOR_CONTRACT.get(capability) >= 0
-                && Relic.SURVIVOR_CONTRACT.get(capability) < 32) {
+        if (CARelics.SURVIVOR_CONTRACT.get().get(capability) >= 0
+                && CARelics.SURVIVOR_CONTRACT.get().get(capability) < 32) {
             if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
                 if (Math.random() < 0.035 || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses")))) {
-                    Relic.SURVIVOR_CONTRACT.set(capability, Relic.SURVIVOR_CONTRACT.get(capability) + 1);
+                    CARelics.SURVIVOR_CONTRACT.get().set(capability, CARelics.SURVIVOR_CONTRACT.get().get(capability) + 1);
                     capability.syncPlayerVariables(sourceentity);
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.WAX_ON, x, y, z, 48, 0.7, 1.5, 0.7, 0.2);

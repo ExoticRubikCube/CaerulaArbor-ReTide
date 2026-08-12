@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -38,7 +38,7 @@ import java.util.List;
 
 public class RoyalFateItem extends RelicItemBase {
 	public RoyalFateItem() {
-		super(Relic.ROYALFATE, new Item.Properties().stacksTo(2).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.ROYALFATE.get(), new Item.Properties().stacksTo(2).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class RoyalFateItem extends RelicItemBase {
         {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.ROYALFATE.set(capability, setval ? 1 : 0);
+            CARelics.ROYALFATE.get().set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
         }
         return ar;

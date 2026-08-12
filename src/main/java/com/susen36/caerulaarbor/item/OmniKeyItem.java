@@ -2,8 +2,8 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -34,7 +34,7 @@ import java.util.List;
 
 public class OmniKeyItem extends RelicItemBase {
 	public OmniKeyItem() {
-		super(Relic.UTIL_OMNIKEY, new Item.Properties().durability(64).rarity(Rarity.UNCOMMON));
+		super(CARelics.UTIL_OMNIKEY.get(), new Item.Properties().durability(64).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class OmniKeyItem extends RelicItemBase {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.UTIL_OMNIKEY.set(capability, setval ? 1 : 0);
+                CARelics.UTIL_OMNIKEY.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if ((Entity) entity instanceof Player player)

@@ -2,8 +2,8 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.AdvancementHolder;
@@ -34,7 +34,7 @@ import java.util.List;
 
 public class CaerulaHeartItem extends RelicItemBase {
 	public CaerulaHeartItem() {
-		super(Relic.CURSED_HEART, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(CARelics.CURSED_HEART.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class CaerulaHeartItem extends RelicItemBase {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.CURSED_HEART.set(capability, setval ? 1 : 0);
+                CARelics.CURSED_HEART.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             {

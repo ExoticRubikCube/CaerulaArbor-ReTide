@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class CoffeeCandyItem extends RelicItemBase {
 	public CoffeeCandyItem() {
-		super(Relic.COFFEE_PLAINS_COFFEE_CANDY, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(1f).build()));
+		super(CARelics.COFFEE_PLAINS_COFFEE_CANDY.get(), new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(1f).build()));
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class CoffeeCandyItem extends RelicItemBase {
 		{
 			boolean setval = true;
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			Relic.COFFEE_PLAINS_COFFEE_CANDY.set(capability, setval ? 1 : 0);
+			CARelics.COFFEE_PLAINS_COFFEE_CANDY.get().set(capability, setval ? 1 : 0);
 			capability.syncPlayerVariables(entity);
 		}
 		if (itemstack.isEmpty()) {

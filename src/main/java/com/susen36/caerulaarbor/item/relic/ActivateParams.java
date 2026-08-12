@@ -13,9 +13,9 @@ import net.minecraft.sounds.SoundEvents;
 public final class ActivateParams {
 
     public enum ActivateMode {
-        /** {@code Relic.XXX.get(player) < 0}，用于 HAND_ENGRAVE、SURVIVOR_CONTRACT 等数值型遗物。*/
+        /** {@code CARelics.XXX.get().get(player) < 0}，用于 HAND_ENGRAVE、SURVIVOR_CONTRACT 等数值型遗物。*/
         BELOW_ZERO,
-        /** {@code !Relic.XXX.gained(player)}，用于普通 Boolean 型（0=未拥有,1=已拥有）。*/
+        /** {@code !CARelics.XXX.get().gained(player)}，用于普通 Boolean 型（0=未拥有,1=已拥有）。*/
         NOT_GAINED
     }
 

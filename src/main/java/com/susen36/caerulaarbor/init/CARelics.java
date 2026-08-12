@@ -14,9 +14,7 @@ import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 
 /**
- * 遗物注册中心（方案 B：自定义 Registry + DeferredRegister）。
- * <p>
- * 与 CAItems / ModCapabilities 风格完全一致：
+ * 收藏品注册中心
  * <ol>
  *   <li>ResourceKey.createRegistryKey(caerula_arbor:relics) 创建自定义 RegistryKey</li>
  *   <li>RegistryBuilder + NewRegistryEvent 向 NeoForge 根注册表注册我们的自定义 Registry</li>

@@ -3,12 +3,12 @@ package com.susen36.caerulaarbor.util;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CARelics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -60,7 +60,7 @@ public class EntityUtils {
 		if (entity == null)
 			return false;
 		return (ModCapabilities.getPlayerVariables(entity)).can_player_evo
-				&& (RelicUtils.hasRelic(Relic.DISO, entity) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
+				&& (RelicUtils.hasRelic(CARelics.DISO.get(), entity) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
 	}
 
 	public static Entity catchNearestEnemy(LevelAccessor world, double x, double y, double z, Entity obj) {
@@ -158,7 +158,7 @@ public class EntityUtils {
 	public static String getPlayerSurvconta(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round(Relic.SURVIVOR_CONTRACT.get(entity));
+		return "" + Math.round(CARelics.SURVIVOR_CONTRACT.get().get(entity));
 	}
 
 	//需要评估是否下放到海嗣的基类
@@ -248,7 +248,7 @@ public class EntityUtils {
 	public static String getPlayerEnrave(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round(Relic.HAND_ENGRAVE.get(entity));
+		return "" + Math.round(CARelics.HAND_ENGRAVE.get().get(entity));
 	}
 
 	public static Entity getNearestEnemy(LevelAccessor world, double x, double y, double z, Entity exception0, Entity exception1, Entity obj) {

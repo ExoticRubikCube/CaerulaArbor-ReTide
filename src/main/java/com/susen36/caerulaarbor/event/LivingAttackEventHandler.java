@@ -2,7 +2,6 @@ package com.susen36.caerulaarbor.event;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
@@ -313,7 +312,7 @@ public class LivingAttackEventHandler {
             var itemKey = BuiltInRegistries.ITEM.getKey(mainHandItem.getItem());
             var registryName = itemKey.toString();
 
-            if (Relic.HAND_STRANGLE.gained(playerVariables) && isStrangleWeapon(mainHandItem, registryName)
+            if (CARelics.HAND_STRANGLE.get().gained(playerVariables) && isStrangleWeapon(mainHandItem, registryName)
                     && target.isAlive() && target.getHealth() < target.getMaxHealth() * 0.25F) {
                 target.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, player), target.getMaxHealth() * 99);
                 if (world instanceof ServerLevel level) {
@@ -322,14 +321,14 @@ public class LivingAttackEventHandler {
                 world.playSound(null, target.blockPosition(), SoundEvents.WITHER_HURT, SoundSource.NEUTRAL, 2, 1);
             }
 
-            if (Relic.HAND_FIREWORK.gained(playerVariables) && isFireworkWeapon(mainHandItem, registryName)
+            if (CARelics.HAND_FIREWORK.get().gained(playerVariables) && isFireworkWeapon(mainHandItem, registryName)
                     && player.getRandom().nextFloat() < 0.33F) {
                 world.playSound(null, player.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 3.6F, 1);
                 CaerulaArbor.queueServerWork(10, () -> detonateFireworkRelic(world, target, targetPosition, player, amount));
             }
         }
 
-        if (!Relic.LEGEND_CHITIN.gained(playerVariables) || player.getRandom().nextFloat() >= 0.05F) return;
+        if (!CARelics.LEGEND_CHITIN.get().gained(playerVariables) || player.getRandom().nextFloat() >= 0.05F) return;
 
         playerVariables.chitin_knife_selected = player.getMainHandItem().copy();
         playerVariables.syncPlayerVariables(player);

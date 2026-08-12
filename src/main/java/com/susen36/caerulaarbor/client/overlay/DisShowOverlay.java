@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.client.overlay;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.capability.Relic;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.util.RelicUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -28,20 +28,20 @@ public class DisShowOverlay {
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		if (RelicUtils.hasRelic(Relic.DISO, entity)) {
-			if (RelicUtils.hasRelic(Relic.DISO, entity)) {
+		if (RelicUtils.hasRelic(CARelics.DISO.get(), entity)) {
+			if (RelicUtils.hasRelic(CARelics.DISO.get(), entity)) {
 				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_bg.png"), w - 64, h - 128, 0, 0, 64, 128, 64, 128);
 			}
-			if (RelicUtils.hasRelic(Relic.DISO_ATTENTION, entity)) {
+			if (RelicUtils.hasRelic(CARelics.DISO_ATTENTION.get(), entity)) {
 				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_attention.png"), w - 69, h - 72, 0, 0, 64, 64, 64, 64);
 			}
-			if (RelicUtils.hasRelic(Relic.DISO_BLOOD, entity)) {
+			if (RelicUtils.hasRelic(CARelics.DISO_BLOOD.get(), entity)) {
 				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_blood.png"), w - 69, h - 72, 0, 0, 64, 64, 64, 64);
 			}
-			if (RelicUtils.hasRelic(Relic.DISO_NEURO, entity)) {
+			if (RelicUtils.hasRelic(CARelics.DISO_NEURO.get(), entity)) {
 				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_neuro.png"), w - 69, h - 72, 0, 0, 64, 64, 64, 64);
 			}
-			if (RelicUtils.hasRelic(Relic.DISO_FLESH, entity)) {
+			if (RelicUtils.hasRelic(CARelics.DISO_FLESH.get(), entity)) {
 				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_flesh.png"), w - 69, h - 72, 0, 0, 64, 64, 64, 64);
 			}
 		}

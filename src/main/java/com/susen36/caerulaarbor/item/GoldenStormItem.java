@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class GoldenStormItem extends RelicItemBase {
 	public GoldenStormItem() {
-		super(Relic.ORANGE_STORM, new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(0.4f).alwaysEdible().build()));
+		super(CARelics.ORANGE_STORM.get(), new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(0.4f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class GoldenStormItem extends RelicItemBase {
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 100, 0));
 		boolean setval = true;
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-		Relic.ORANGE_STORM.set(capability, setval ? 1 : 0);
+		CARelics.ORANGE_STORM.get().set(capability, setval ? 1 : 0);
 		capability.syncPlayerVariables(entity);
 		if (itemstack.isEmpty()) {
 			return retval;

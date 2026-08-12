@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class BatBedItem extends RelicItemBase {
 	public BatBedItem() {
-		super(Relic.VAMPIRES_BED, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(CARelics.VAMPIRES_BED.get(), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class BatBedItem extends RelicItemBase {
         {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.VAMPIRES_BED.set(capability, setval ? 1 : 0);
+            CARelics.VAMPIRES_BED.get().set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
         }
         {

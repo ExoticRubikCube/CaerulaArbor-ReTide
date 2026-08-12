@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class RedstoneIrisFlowerItem extends RelicItemBase {
 	public RedstoneIrisFlowerItem() {
-		super(Relic.UTIL_IRIS, new Item.Properties().stacksTo(16).rarity(Rarity.EPIC));
+		super(CARelics.UTIL_IRIS.get(), new Item.Properties().stacksTo(16).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class RedstoneIrisFlowerItem extends RelicItemBase {
                 level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
         }
         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-        Relic.UTIL_IRIS.set(capability, 1);
+        CARelics.UTIL_IRIS.get().set(capability, 1);
         capability.syncPlayerVariables(entity);
         if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);

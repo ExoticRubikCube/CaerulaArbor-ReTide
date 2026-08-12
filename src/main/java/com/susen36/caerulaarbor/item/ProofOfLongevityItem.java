@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ProofOfLongevityItem extends RelicItemBase {
 	public ProofOfLongevityItem() {
-		super(Relic.PROOF_OF_LONGEVITY, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.PROOF_OF_LONGEVITY.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class ProofOfLongevityItem extends RelicItemBase {
         {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.PROOF_OF_LONGEVITY.set(capability, setval ? 1 : 0);
+            CARelics.PROOF_OF_LONGEVITY.get().set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
         }
         {

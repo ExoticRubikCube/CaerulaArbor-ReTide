@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class GuardianStareItem extends RelicItemBase {
 	public GuardianStareItem() {
-		super(Relic.UTIL_STARE, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.UTIL_STARE.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class GuardianStareItem extends RelicItemBase {
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
             boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.UTIL_STARE.set(capability, setval ? 1 : 0);
+            CARelics.UTIL_STARE.get().set(capability, setval ? 1 : 0);
             capability.syncPlayerVariables(entity);
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);

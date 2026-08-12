@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class SmellyHemostaticItem extends RelicItemBase {
 	public SmellyHemostaticItem() {
-		super(Relic.HEMOST, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
+		super(CARelics.HEMOST.get(), new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class SmellyHemostaticItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!Relic.HEMOST.gained(entity)) {
+        if (!CARelics.HEMOST.get().gained(entity)) {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, (float) 3.5, 1);
             }
@@ -49,7 +49,7 @@ public class SmellyHemostaticItem extends RelicItemBase {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.HEMOST.set(capability, setval ? 1 : 0);
+                CARelics.HEMOST.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())

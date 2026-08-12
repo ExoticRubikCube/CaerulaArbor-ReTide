@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CARelics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -21,7 +21,7 @@ public class PlayerAttackEventHandler {
 			return;
 		}
 
-		if (!Relic.HAND_OF_PULVERIZATION.gained(attacker)) {
+		if (!CARelics.HAND_OF_PULVERIZATION.get().gained(attacker)) {
 			return;
 		}
 

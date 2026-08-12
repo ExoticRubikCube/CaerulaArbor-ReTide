@@ -3,7 +3,9 @@ package com.susen36.caerulaarbor.capability;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlockEntities;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.network.receive.SavedDataSyncMessage;
+import com.susen36.caerulaarbor.relic.RelicType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -148,7 +150,7 @@ public class CapabilityEventHandler {
         clone.PEVO_NEXUS_expo_shield = original.PEVO_NEXUS_expo_shield;
         clone.PEVO_NODE_eunectes = original.PEVO_NODE_eunectes;
         clone.PEVO_NODE_less_armor = original.PEVO_NODE_less_armor;
-        for (Relic relic : Relic.values()) {
+        for (RelicType relic : CARelics.RELICS_REGISTRY) {
             if (relic.gained(original)) {
                 relic.set(clone, relic.get(original));
             } else {

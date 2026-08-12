@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -27,7 +27,7 @@ import java.util.List;
 
 public class ToponymTextologyItem extends RelicItemBase {
 	public ToponymTextologyItem() {
-		super(Relic.UTIL_TOPONYM, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(CARelics.UTIL_TOPONYM.get(), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class ToponymTextologyItem extends RelicItemBase {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.UTIL_TOPONYM.set(capability, setval ? 1 : 0);
+                CARelics.UTIL_TOPONYM.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if (world instanceof Level level) {

@@ -2,8 +2,8 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class RelicCursedGLOWBODYItem extends RelicItemBase {
 	public RelicCursedGLOWBODYItem() {
-		super(Relic.CURSED_GLOWBODY, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.CURSED_GLOWBODY.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class RelicCursedGLOWBODYItem extends RelicItemBase {
 
 		if (!isUsed) {
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			if (!Relic.CURSED_GLOWBODY.gained(capability)) {
+			if (!CARelics.CURSED_GLOWBODY.get().gained(capability)) {
 				double x = entity.getX();
 				double y = entity.getY();
 				double z = entity.getZ();
@@ -94,7 +94,7 @@ public class RelicCursedGLOWBODYItem extends RelicItemBase {
 					serverLevel.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1.0, 1.0, 1.0, 1.0);
 				}
 
-				Relic.CURSED_GLOWBODY.set(capability, 1);
+				CARelics.CURSED_GLOWBODY.get().set(capability, 1);
 				capability.syncPlayerVariables(entity);
 
 				if (world.isClientSide()) {

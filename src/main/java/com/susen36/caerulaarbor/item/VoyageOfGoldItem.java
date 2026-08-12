@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -31,7 +31,7 @@ import java.util.List;
 
 public class VoyageOfGoldItem extends RelicItemBase {
 	public VoyageOfGoldItem() {
-		super(Relic.PURE_GOLD_EXPEDITION, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.PURE_GOLD_EXPEDITION.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class VoyageOfGoldItem extends RelicItemBase {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.PURE_GOLD_EXPEDITION.set(capability, setval ? 1 : 0);
+                CARelics.PURE_GOLD_EXPEDITION.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if (world instanceof Level level) {

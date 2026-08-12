@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import com.susen36.caerulaarbor.util.RelicUtils;
 import net.minecraft.core.BlockPos;
@@ -30,7 +30,7 @@ import java.util.List;
 
 public class KingsSpearItem extends RelicItemBase {
 	public KingsSpearItem() {
-		super(Relic.KING_SPEAR, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
+		super(CARelics.KING_SPEAR.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	}
 
 	@Override

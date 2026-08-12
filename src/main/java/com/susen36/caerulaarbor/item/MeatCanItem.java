@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MeatCanItem extends RelicItemBase {
 	public MeatCanItem() {
-		super(Relic.FEATURED_CANNED_MEAT, new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(14).saturationModifier(0.25f).build()));
+		super(CARelics.FEATURED_CANNED_MEAT.get(), new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(14).saturationModifier(0.25f).build()));
 	}
 
 	@Override
@@ -41,10 +41,10 @@ public class MeatCanItem extends RelicItemBase {
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 0));
-		if (!Relic.FEATURED_CANNED_MEAT.gained(entity)) {
+		if (!CARelics.FEATURED_CANNED_MEAT.get().gained(entity)) {
 			boolean setval = true;
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			Relic.FEATURED_CANNED_MEAT.set(capability, setval ? 1 : 0);
+			CARelics.FEATURED_CANNED_MEAT.get().set(capability, setval ? 1 : 0);
 			capability.syncPlayerVariables(entity);
 		}
 		if (itemstack.isEmpty()) {

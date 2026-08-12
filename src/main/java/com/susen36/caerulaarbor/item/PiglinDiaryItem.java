@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -27,7 +27,7 @@ import java.util.List;
 
 public class PiglinDiaryItem extends RelicItemBase {
 	public PiglinDiaryItem() {
-		super(Relic.DURIN_OVERGROUND_ODYSSEY, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(CARelics.DURIN_OVERGROUND_ODYSSEY.get(), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class PiglinDiaryItem extends RelicItemBase {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.DURIN_OVERGROUND_ODYSSEY.set(capability, setval ? 1 : 0);
+                CARelics.DURIN_OVERGROUND_ODYSSEY.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if (world instanceof Level level) {

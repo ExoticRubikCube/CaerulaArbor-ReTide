@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,7 +31,7 @@ import java.util.List;
 
 public class CannedCherryItem extends RelicItemBase {
 	public CannedCherryItem() {
-		super(Relic.PITTS_ASSORTED_FRUITS, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.1f).alwaysEdible().build()));
+		super(CARelics.PITTS_ASSORTED_FRUITS.get(), new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.1f).alwaysEdible().build()));
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class CannedCherryItem extends RelicItemBase {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 240, 1));
         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-        Relic.PITTS_ASSORTED_FRUITS.set(capability, 1);
+        CARelics.PITTS_ASSORTED_FRUITS.get().set(capability, 1);
         capability.syncPlayerVariables(entity);
 		if (itemstack.isEmpty()) {
 			return retval;

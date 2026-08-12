@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -36,7 +36,7 @@ import java.util.List;
 
 public class KingsCrystalItem extends RelicItemBase {
 	public KingsCrystalItem() {
-		super(Relic.KING_CRYSTAL, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
+		super(CARelics.KING_CRYSTAL.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class KingsCrystalItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!Relic.KING_CRYSTAL.gained(entity)) {
+        if (!CARelics.KING_CRYSTAL.get().gained(entity)) {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
             }
@@ -60,7 +60,7 @@ public class KingsCrystalItem extends RelicItemBase {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.KING_CRYSTAL.set(capability, setval ? 1 : 0);
+                CARelics.KING_CRYSTAL.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())

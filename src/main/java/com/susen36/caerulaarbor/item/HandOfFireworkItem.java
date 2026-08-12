@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class HandOfFireworkItem extends RelicItemBase {
 	public HandOfFireworkItem() {
-		super(Relic.HAND_FIREWORK, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.HAND_FIREWORK.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -39,14 +39,14 @@ public class HandOfFireworkItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!Relic.HAND_FIREWORK.gained(entity)) {
+        if (!CARelics.HAND_FIREWORK.get().gained(entity)) {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.CLOUD, x, y, z, 72, 1, 1, 1, 1);
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            Relic.HAND_FIREWORK.set(capability, 1);
+            CARelics.HAND_FIREWORK.get().set(capability, 1);
             capability.syncPlayerVariables(entity);
             if (world.isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);

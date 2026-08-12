@@ -2,8 +2,8 @@
 package com.susen36.caerulaarbor.item;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -26,7 +26,7 @@ import java.util.List;
 
 public class HandOfBarrenItem extends RelicItemBase {
 	public HandOfBarrenItem() {
-		super(Relic.HAND_OF_PULVERIZATION, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(CARelics.HAND_OF_PULVERIZATION.get(), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class HandOfBarrenItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!Relic.HAND_OF_PULVERIZATION.gained(entity)) {
+        if (!CARelics.HAND_OF_PULVERIZATION.get().gained(entity)) {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
@@ -50,7 +50,7 @@ public class HandOfBarrenItem extends RelicItemBase {
             {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                Relic.HAND_OF_PULVERIZATION.set(capability, setval ? 1 : 0);
+                CARelics.HAND_OF_PULVERIZATION.get().set(capability, setval ? 1 : 0);
                 capability.syncPlayerVariables(entity);
             }
             if (world.isClientSide())

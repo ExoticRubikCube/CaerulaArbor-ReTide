@@ -1,8 +1,9 @@
 package com.susen36.caerulaarbor.util;
 
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.Relic;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CARelics;
+import com.susen36.caerulaarbor.relic.RelicType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -20,11 +21,11 @@ public class RelicUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	public static boolean hasRelic(Relic relic, Entity entity) {
+	public static boolean hasRelic(RelicType relic, Entity entity) {
 		return relic.gained(entity);
 	}
 
-	public static double getRelic(Relic relic, Entity entity) {
+	public static double getRelic(RelicType relic, Entity entity) {
 		return relic.get(entity);
 	}
 
@@ -32,7 +33,7 @@ public class RelicUtils {
 		if (entity == null)
 			return;
 		PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(entity);
-		if (Relic.KING_ARMOR.gained(playerVariables))
+		if (CARelics.KING_ARMOR.get().gained(playerVariables))
 			return;
 
 		BlockPos pos = BlockPos.containing(x, y, z);
@@ -45,7 +46,7 @@ public class RelicUtils {
 			level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-		Relic.KING_ARMOR.gainAndSync(capability, entity);
+		CARelics.KING_ARMOR.get().gainAndSync(capability, entity);
 
 		if (world.isClientSide())
 			Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
@@ -64,14 +65,14 @@ public class RelicUtils {
 	}
 
 	public static void gainSpear(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
-		if (entity != null && !hasRelic(Relic.KING_SPEAR, entity)) {
+		if (entity != null && !hasRelic(CARelics.KING_SPEAR.get(), entity)) {
 			if (world instanceof Level level) {
 				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
 				if (world instanceof ServerLevel serverLevel)
 					serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 			}
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			Relic.KING_SPEAR.gainAndSync(capability, entity);
+			CARelics.KING_SPEAR.get().gainAndSync(capability, entity);
 			if (world.isClientSide())
 				Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
 		}

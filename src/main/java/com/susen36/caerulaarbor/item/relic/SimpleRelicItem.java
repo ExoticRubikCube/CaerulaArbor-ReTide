@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.item.relic;
 
-import com.susen36.caerulaarbor.capability.Relic;
+import com.susen36.caerulaarbor.relic.RelicType;
+import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +22,7 @@ public class SimpleRelicItem extends RelicItemBase {
 
     private final Supplier<ActivateParams> paramsSupplier;
 
-    public SimpleRelicItem(Relic relic, Item.Properties properties, Supplier<ActivateParams> paramsSupplier) {
+    public SimpleRelicItem(RelicType relic, Item.Properties properties, Supplier<ActivateParams> paramsSupplier) {
         super(relic, properties);
         this.paramsSupplier = paramsSupplier;
     }
@@ -34,29 +35,29 @@ public class SimpleRelicItem extends RelicItemBase {
     }
 
     /** Boolean 型收藏品：rarity=UNCOMMON / stacksTo=1 / LEVELUP / HAPPY_VILLAGER。*/
-    public static Supplier<Item> simpleBoolean(Relic relic) {
-        return () -> new SimpleRelicItem(relic,
+    public static Supplier<Item> simpleBoolean(Holder<RelicType> relic) {
+        return () -> new SimpleRelicItem(relic.value(),
                 new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
                 ActivateParams::standardBoolean);
     }
 
     /** Boolean 型收藏品（自定义 rarity + 自定义声音/粒子）。*/
-    public static Supplier<Item> simpleBoolean(Relic relic, Rarity rarity, Supplier<ActivateParams> params) {
-        return () -> new SimpleRelicItem(relic,
+    public static Supplier<Item> simpleBoolean(Holder<RelicType> relic, Rarity rarity, Supplier<ActivateParams> params) {
+        return () -> new SimpleRelicItem(relic.value(),
                 new Item.Properties().stacksTo(1).rarity(rarity),
                 params);
     }
 
     /** Numeric(<0→0) 型收藏品（对应 HAND_ENGRAVE、SURVIVOR_CONTRACT 这种）。*/
-    public static Supplier<Item> simpleNumericNeg1(Relic relic, Rarity rarity, Supplier<ActivateParams> params) {
-        return () -> new SimpleRelicItem(relic,
+    public static Supplier<Item> simpleNumericNeg1(Holder<RelicType> relic, Rarity rarity, Supplier<ActivateParams> params) {
+        return () -> new SimpleRelicItem(relic.value(),
                 new Item.Properties().stacksTo(1).rarity(rarity),
                 params);
     }
 
     /** 消耗型：使用后 shrink(1)（用于 PROOF_OF_LONGEVITY 这类"吃掉"的收藏品，副作用要写独立类）。*/
-    public static Supplier<Item> simpleConsumable(Relic relic, Rarity rarity, Supplier<ActivateParams> params) {
-        return () -> new SimpleRelicItem(relic,
+    public static Supplier<Item> simpleConsumable(Holder<RelicType> relic, Rarity rarity, Supplier<ActivateParams> params) {
+        return () -> new SimpleRelicItem(relic.value(),
                 new Item.Properties().stacksTo(1).rarity(rarity),
                 () -> params.get().shrinkAfterUse() ? params.get()
                         : ActivateParams.builder()
