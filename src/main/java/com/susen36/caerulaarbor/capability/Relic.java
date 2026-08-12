@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.capability;
 
+import com.susen36.caerulaarbor.api.event.RelicEvent;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAConfigs;
 import com.susen36.caerulaarbor.init.CARelics;
@@ -7,6 +8,7 @@ import com.susen36.caerulaarbor.relic.RelicType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.EnumMap;
 import java.util.function.Consumer;
@@ -222,7 +224,12 @@ public enum Relic {
     }
 
     public void set(Entity player, int level) {
-        set(ModCapabilities.getPlayerVariables(player), level);
+        if (level == this.defaultLevel) {
+            remove(player);
+        } else {
+            set(ModCapabilities.getPlayerVariables(player), level);
+            NeoForge.EVENT_BUS.post(new RelicEvent.Update(player, this));
+        }
     }
 
     public void set(PlayerVariable variables, int level) {
@@ -232,6 +239,16 @@ public enum Relic {
 
     public void gain(Entity player) {
         set(player, 1);
+        NeoForge.EVENT_BUS.post(new RelicEvent.Gain(player, this));
+    }
+
+    public void remove(Entity player) {
+        remove(ModCapabilities.getPlayerVariables(player));
+        NeoForge.EVENT_BUS.post(new RelicEvent.Remove(player, this));
+    }
+
+    public void remove(PlayerVariable variables) {
+        variables.setRelic(getRegistryKey(), this.defaultLevel);
     }
 
     public static void modify(Entity player, Consumer<PlayerVariable> operation) {
