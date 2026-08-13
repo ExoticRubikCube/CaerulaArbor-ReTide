@@ -274,7 +274,7 @@ public class LivingAttackEventHandler {
             var itemKey = BuiltInRegistries.ITEM.getKey(mainHandItem.getItem());
             var registryName = itemKey.toString();
 
-            if (CARelics.HAND_STRANGLE.get().gained(playerVariables) && isStrangleWeapon(mainHandItem, registryName)
+            if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_STRANGLE.get()) && isStrangleWeapon(mainHandItem, registryName)
                     && target.isAlive() && target.getHealth() < target.getMaxHealth() * 0.25F) {
                 target.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, player), target.getMaxHealth() * 99);
                 if (world instanceof ServerLevel level) {

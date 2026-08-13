@@ -4,6 +4,7 @@ import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;

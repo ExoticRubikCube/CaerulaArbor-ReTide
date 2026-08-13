@@ -36,9 +36,8 @@ public class ApocataSwordItem extends SwordItem {
 
 	@Override
 	public boolean onEntitySwing(ItemStack itemstack, LivingEntity entity, InteractionHand hand) {
-		boolean retval = super.onEntitySwing(itemstack, entity, hand);
 
-		if (entity instanceof Player player && player.getMainHandItem() == itemstack) {
+        if (entity instanceof Player player && player.getMainHandItem() == itemstack) {
 			double reach = player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE);
 
 			HitResult hitResult = player.pick(reach, 0.0F, false);
@@ -59,7 +58,7 @@ public class ApocataSwordItem extends SwordItem {
 				}
 			}
 		}
-		return retval;
+		return super.onEntitySwing(itemstack, entity, hand);
 	}
 
 	@Override

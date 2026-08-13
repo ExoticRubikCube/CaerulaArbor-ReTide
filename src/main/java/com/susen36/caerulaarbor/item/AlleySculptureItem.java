@@ -49,21 +49,18 @@ public class AlleySculptureItem extends RelicItemBase {
         if (world instanceof ServerLevel level)
             level.sendParticles(ParticleTypes.RAIN, x, y, z, 72, 1, 1, 1, 0.1);
         {
-            boolean setval = true;
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            CARelics.UTIL_ALLEY.get().set(capability, setval ? 1 : 0);
+            CARelics.UTIL_ALLEY.get().set(capability, 1);
             capability.syncPlayerVariables(entity);
         }
         {
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            double setval = capability.player_maxlive + 3;
-            capability.player_maxlive = setval;
+            capability.player_maxlive = capability.player_maxlive + 3;
             capability.syncPlayerVariables(entity);
         }
         {
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            double setval = capability.player_lives + 3;
-            capability.player_lives = setval;
+            capability.player_lives = capability.player_lives + 3;
             capability.syncPlayerVariables(entity);
         }
         if (world.isClientSide())

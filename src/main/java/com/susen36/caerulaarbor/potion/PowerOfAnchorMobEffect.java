@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.potion;
 
 import com.susen36.babel.api.entity.ElementalDefenseModifier;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.babel.manager.EPManager;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.world.effect.MobEffect;
@@ -35,7 +35,7 @@ public class PowerOfAnchorMobEffect extends MobEffect implements ElementalDefens
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity instanceof Player) {
-            EPManager.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, 10);
+            EPUtils.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, 10);
             ModCapabilities.getPlayerVariables(entity).player_light = Math.min(ModCapabilities.getPlayerVariables(entity).player_light + 0.125, 100.0);
             ModCapabilities.getPlayerVariables(entity).syncPlayerVariables(entity);
         }

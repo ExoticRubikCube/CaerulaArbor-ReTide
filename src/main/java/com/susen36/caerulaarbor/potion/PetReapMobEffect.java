@@ -29,8 +29,6 @@ public class PetReapMobEffect extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, -6710785);
     }
 
-    
-
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
@@ -44,20 +42,18 @@ public class PetReapMobEffect extends MobEffect {
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 2.5 * Math.sin(angle)), y, (z + 2.5 * Math.cos(angle)), 8, 0.1, 0.1, 0.1, 0.2);
             }
-            {
-                final Vec3 center = new Vec3(x, y, z);
-                List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                for (LivingEntity entityiterator : entfound) {
-                    if (entityiterator instanceof Monster) {
-                        if (!(entityiterator == entity)) {
-                            EPUtils.causeSanityInjury(entityiterator,
-                                    entity,
-                                    (entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12);
-                        }
+            final Vec3 center = new Vec3(x, y, z);
+            List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+            for (LivingEntity entityiterator : entfound) {
+                if (entityiterator instanceof Monster) {
+                    if (!(entityiterator == entity)) {
+                        EPUtils.causeSanityInjury(entityiterator,
+                                entity,
+                                (entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12);
                     }
-                    if (((Entity) entity instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == entityiterator && !entity.level().isClientSide())
-                        entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 0));
                 }
+                if (((Entity) entity instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == entityiterator && !entity.level().isClientSide())
+                    entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 0));
             }
         }
         return true;
@@ -67,5 +63,4 @@ public class PetReapMobEffect extends MobEffect {
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return MathUtils.isMultipleOf(duration, 20);
     }
-
 }

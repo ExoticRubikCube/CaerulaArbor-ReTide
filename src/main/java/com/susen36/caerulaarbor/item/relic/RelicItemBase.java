@@ -8,8 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -102,21 +100,6 @@ public abstract class RelicItemBase extends Item {
             return this.relic().get(player) < 0;
         }
         // NOT_GAINED：默认 = defaultLevel 还没拿到遗物
-        // TODO: 旧系统 RelicItemBase 核心，暂不迁移到 babel Collectibles
         return !this.relic().gained(player);
-    }
-
-    /**
-     * 默认右键行为：回退到 Item 基类的 {@link Item#use(Level, Player, InteractionHand)}。
-     * 这样做同时解决了两个编译问题：
-     * <ol>
-     *   <li>自定义子类（有自己的 use 逻辑）调用 {@code super.use(...)} 是合法的；</li>
-     *   <li>纯食物类 / 没有主动右键行为的类不需要再重写此方法。</li>
-     * </ol>
-     * SimpleRelicItem 会 override 此方法并调用 performActivate。
-     */
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        return super.use(world, player, hand);
     }
 }

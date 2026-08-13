@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.potion;
 
 import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.babel.manager.EPManager;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -16,12 +16,10 @@ public class SanityImmueMobEffect extends MobEffect {
         this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "sanity_immue_sanity_resistance"), 200, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    
-
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity.isAlive()) {
-            EPManager.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, 5);
+            EPUtils.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, 5);
         }
         return true;
     }

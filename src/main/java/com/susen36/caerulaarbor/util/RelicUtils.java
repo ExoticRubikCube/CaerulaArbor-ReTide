@@ -22,6 +22,7 @@ public class RelicUtils {
 	}
 
 	public static boolean hasRelic(RelicType relic, Entity entity) {
+		// TODO: 旧系统 RelicUtils 核心，通用 RelicType 判断暂不迁移到 babel Collectibles
 		return relic.gained(entity);
 	}
 

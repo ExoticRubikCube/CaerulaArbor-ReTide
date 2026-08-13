@@ -1,7 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
@@ -44,7 +46,7 @@ public class RelicCursedRESEARCHItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-            if (!CARelics.CURSED_RESEARCH.get().gained(entity)) {
+            if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_RESEARCH.get())) {
                 boolean setval = true;
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                 CARelics.CURSED_RESEARCH.get().set(capability, setval ? 1 : 0);

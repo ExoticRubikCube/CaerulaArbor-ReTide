@@ -32,13 +32,9 @@ public class InfestedMobEffect extends MobEffect {
         super(MobEffectCategory.HARMFUL, -3407668);
     }
 
-    
-
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
-        if (entity == null)
-             return true;
         double dam;
         if ((ModCapabilities.getPlayerVariables(entity)).player_oceanization < 3) {
             dam = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * Mth.nextDouble(RandomSource.create(), 0.1, 0.25) * ((double) amplifier + 1);

@@ -86,6 +86,7 @@ public class OilAndCreamItem extends RelicItemBase {
 					player.getAdvancements().award(adv, criteria);
 			}
 		}
+		// TODO: OIL_AND_CREAM 旧系统 relic 与 REGISTRY 物品 oil_and_cream 路径冲突，暂未注册 babel collectible，待补不同名后迁移
 		if (!CARelics.OIL_AND_CREAM.get().gained(entity)) {
 			boolean setval = true;
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);

@@ -66,6 +66,7 @@ public class TulipMedcineItem extends RelicItemBase {
                     player.getAdvancements().award(adv, criteria);
             }
         }
+		// TODO: TULIP_MEDCINE 旧系统 relic 与 REGISTRY 物品 tulip_medcine 路径冲突，暂未注册 babel collectible，待补不同名后迁移
 		if (!CARelics.TULIP_MEDCINE.get().gained(entity)) {
 			boolean activated = true;
 			PlayerVariable cap = ModCapabilities.getPlayerVariables(entity);
