@@ -57,7 +57,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN;
+import static com.susen36.caerulaarbor.util.EntityUtils.*;
 
 @EventBusSubscriber
 public class LivingHurtEventHandler {
@@ -684,11 +684,12 @@ public class LivingHurtEventHandler {
         }
     }
 
+    //TODO 需要迁移到bable,n12及以上生效
     private static void handleSeabornsGetOffShip(LivingDamageEvent.Pre event) {
-        LevelAccessor world = event.getEntity().level();
+        Level world = event.getEntity().level();
         Entity entity = event.getEntity();
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite"))) && WorldUtils.canGrief(world)) {
+        if ((entity.getType().is(ELITE)||(entity.getType().is(BOSSES)) && WorldUtils.canGrief(world))) {
             LivingEntity living = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
             if (living != null && living.isAlive()) {
                 Entity boat = entity.getVehicle();
@@ -719,7 +720,7 @@ public class LivingHurtEventHandler {
     }
 
     private static void handleWarriorTactic(LivingDamageEvent.Pre event) {
-        LevelAccessor world = event.getEntity().level();
+        Level world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
@@ -735,7 +736,7 @@ public class LivingHurtEventHandler {
         }
 
         switch (entity) {
-            case JuniorWarriorPriestEntity juniorWarriorPriestEntity -> {
+            case JuniorWarriorPriestEntity ignored3 -> {
                 if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) >= 0.5) {
                     if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
@@ -743,7 +744,7 @@ public class LivingHurtEventHandler {
                     event.setNewDamage((float) (amount * 0.6));
                 }
             }
-            case WarriorPriestEntity warriorPriestEntity -> {
+            case WarriorPriestEntity ignored2 -> {
                 if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) >= 0.5) {
                     if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);
@@ -751,7 +752,7 @@ public class LivingHurtEventHandler {
                     event.setNewDamage((float) (amount * 0.5));
                 }
             }
-            case CorrectionalPhalanxyInfantryEntity correctionalPhalanxyInfantryEntity -> {
+            case CorrectionalPhalanxyInfantryEntity ignored1 -> {
                 double rate = 1;
                 double less = 1;
                 if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) >= 0.5) {
@@ -769,7 +770,7 @@ public class LivingHurtEventHandler {
                 }
                 event.setNewDamage((float) (amount * rate * less));
             }
-            case IreneEntity ireneEntity -> {
+            case IreneEntity ignored1 -> {
                 double less = 1;
                 final Vec3 center = new Vec3(x, y, z);
                 List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
@@ -780,7 +781,7 @@ public class LivingHurtEventHandler {
                 }
                 event.setNewDamage((float) (amount * less));
             }
-            case CorrectinalPhalaxVanguardEntity correctinalPhalaxVanguardEntity -> {
+            case CorrectinalPhalaxVanguardEntity ignored -> {
                 if (MathUtils.getCosine(sourceentity.getX() - entity.getX(), entity.getLookAngle().x, sourceentity.getZ() - entity.getZ(), entity.getLookAngle().z) <= -0.5) {
                     if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BLOCK, SoundSource.HOSTILE, (float) 0.75, 1);

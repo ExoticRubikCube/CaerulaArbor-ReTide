@@ -29,11 +29,9 @@ public class PEVOHealEventHandle {
 			return;
 		}
 
-        boolean result = false;
-        if (entity != null) {
-            result = (ModCapabilities.getPlayerVariables(entity)).can_player_evo
-                    && (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get()) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
-        }
+        boolean result;
+        result = (ModCapabilities.getPlayerVariables(entity)).can_player_evo
+                && (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get()) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
         if (!entity.isShiftKeyDown() || !(entity instanceof Player livingEntity1) || !result) {
 			return;
 		}

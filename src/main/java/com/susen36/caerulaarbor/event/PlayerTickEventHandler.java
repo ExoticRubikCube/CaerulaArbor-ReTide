@@ -101,6 +101,7 @@ public class PlayerTickEventHandler {
         handleOceanizationEffects(entity);
         handleRelicHemost(entity);
         handleRelicYearning(entity);
+        handleLegendChitin(entity);
         handleGoldenChalise(entity);
     }
 
@@ -144,11 +145,6 @@ public class PlayerTickEventHandler {
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BREATH, 20, suitKing < 3 ? 0 : 2, false, false));
             }
-            capability.player_king_suit = suitKing < 3 ? 1 : 2;
-            capability.syncPlayerVariables(entity);
-        } else {
-            capability.player_king_suit = 0;
-            capability.syncPlayerVariables(entity);
         }
     }
 
@@ -197,11 +193,6 @@ public class PlayerTickEventHandler {
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SACREFICE, 20, suitArchfi < 3 ? 0 : 2, false, false));
             }
-            capability.player_demon_suit = suitArchfi < 3 ? 1 : 2;
-            capability.syncPlayerVariables(entity);
-        } else {
-            capability.player_demon_suit = 0;
-            capability.syncPlayerVariables(entity);
         }
     }
 
@@ -282,6 +273,31 @@ public class PlayerTickEventHandler {
     }
 
     private static final ResourceLocation CHALISE_ATTACK_SPEED_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "golden_chalise_attack_speed");
+    private static final ResourceLocation CHITIN_ATTACK_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "legend_chitin_attack");
+    private static final ResourceLocation CHITIN_MAX_HEALTH_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "legend_chitin_max_health");
+
+    private static void handleLegendChitin(Player entity) {
+        if (!entity.level().isClientSide()) {
+            boolean used = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.LEGEND_CHITIN.get());
+            AttributeInstance attackAttr = entity.getAttribute(Attributes.ATTACK_DAMAGE);
+            AttributeInstance healthAttr = entity.getAttribute(Attributes.MAX_HEALTH);
+            if (used) {
+                if (attackAttr != null && attackAttr.getModifier(CHITIN_ATTACK_ID) == null) {
+                    attackAttr.addTransientModifier(new AttributeModifier(CHITIN_ATTACK_ID, 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+                }
+                if (healthAttr != null && healthAttr.getModifier(CHITIN_MAX_HEALTH_ID) == null) {
+                    healthAttr.addTransientModifier(new AttributeModifier(CHITIN_MAX_HEALTH_ID, 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+                }
+            } else {
+                if (attackAttr != null && attackAttr.getModifier(CHITIN_ATTACK_ID) != null) {
+                    attackAttr.removeModifier(CHITIN_ATTACK_ID);
+                }
+                if (healthAttr != null && healthAttr.getModifier(CHITIN_MAX_HEALTH_ID) != null) {
+                    healthAttr.removeModifier(CHITIN_MAX_HEALTH_ID);
+                }
+            }
+        }
+    }
 
     private static void handleGoldenChalise(Player entity) {
         if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.GOLDEN_CHALISE.get())) {

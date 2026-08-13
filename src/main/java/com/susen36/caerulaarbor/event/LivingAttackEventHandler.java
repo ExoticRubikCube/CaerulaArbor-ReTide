@@ -2,11 +2,9 @@ package com.susen36.caerulaarbor.event;
 
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.entity.ChitinGolemEntity;
 import com.susen36.caerulaarbor.entity.PredatorAbyssalEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -80,9 +78,7 @@ public class LivingAttackEventHandler {
     private static void handleInvulnerable(LivingIncomingDamageEvent event) {
         var damageSource = event.getSource();
         var target = event.getEntity();
-        if (damageSource.is(CADamageTypes.INV_KILLER)) return;
-
-        if (target.hasEffect(CAMobEffects.INVULNERABLE)) {
+        if (!damageSource.is(CADamageTypes.INV_KILLER) && target.hasEffect(CAMobEffects.INVULNERABLE)) {
             event.setCanceled(true);
         }
     }
@@ -263,13 +259,12 @@ public class LivingAttackEventHandler {
         if (event.isCanceled()) return;
 
         if (sourceEntity instanceof Player player) {
-            PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(player);
-            handlePlayerHitRelics(world, target, target.position(), immediateSource, player, event.getAmount(), mainHandItem, playerVariables);
+            handlePlayerHitRelics(world, target, target.position(), immediateSource, player, event.getAmount(), mainHandItem);
         }
     }
 
     private static void handlePlayerHitRelics(Level world, LivingEntity target, Vec3 targetPosition, Entity immediateSource,
-                                              Player player, double amount, ItemStack mainHandItem, PlayerVariable playerVariables) {
+                                              Player player, double amount, ItemStack mainHandItem) {
         if (immediateSource != player) {
             var itemKey = BuiltInRegistries.ITEM.getKey(mainHandItem.getItem());
             var registryName = itemKey.toString();
@@ -290,10 +285,8 @@ public class LivingAttackEventHandler {
             }
         }
 
-        if (!player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.LEGEND_CHITIN.get()) || player.getRandom().nextFloat() >= 0.05F) return;
+        if (!player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.LEGEND_CHITIN.get()) || player.getRandom().nextFloat() >= 2.0F) return;
 
-        playerVariables.chitin_knife_selected = player.getMainHandItem().copy();
-        playerVariables.syncPlayerVariables(player);
         var healthPercent = EntityUtils.getHealthPerc(player);
         if (!world.isClientSide()) {
             player.addEffect(new MobEffectInstance(CAMobEffects.TIDE_OF_CHITIN, 500, 0, false, false));

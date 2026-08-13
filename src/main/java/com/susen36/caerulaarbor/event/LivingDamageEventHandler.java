@@ -17,6 +17,7 @@ public class LivingDamageEventHandler {
         handleReduceLightsWithDamage(event);
     }
 
+    //TODO 修改为消耗目标生命值才扣灯火
     private static void handleReduceLightsWithDamage(LivingDamageEvent.Pre event) {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();

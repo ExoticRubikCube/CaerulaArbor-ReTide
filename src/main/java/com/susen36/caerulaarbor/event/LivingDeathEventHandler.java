@@ -86,7 +86,7 @@ public class LivingDeathEventHandler {
     private static void handleLifePoint(LivingDeathEvent event) {
         LivingEntity entity = event.getEntity();
 
-        LevelAccessor world = entity.level();
+        Level world = entity.level();
         DamageSource damagesource = event.getSource();
 
         double x = entity.getX();
@@ -161,8 +161,7 @@ public class LivingDeathEventHandler {
             if (light_cost > 0) {
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                 double cur_light = capability.player_light;
-                double setval = Math.max(0, cur_light - light_cost);
-                capability.player_light = setval;
+                capability.player_light = Math.max(0, cur_light - light_cost);
                 capability.syncPlayerVariables(entity);
             }
         }
@@ -205,10 +204,8 @@ public class LivingDeathEventHandler {
 
         if (sourceentity instanceof Player) {
             boolean result = false;
-            if (sourceentity != null) {
-                result = (ModCapabilities.getPlayerVariables(sourceentity)).can_player_evo
-                        && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get()) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization > 2.9);
-            }
+            result = (ModCapabilities.getPlayerVariables(sourceentity)).can_player_evo
+                    && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get()) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization > 2.9);
             if (result) {
                 double r0 = 0, r1 = 0, r2 = 0;
                 if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {

@@ -1,11 +1,16 @@
 package com.susen36.caerulaarbor.recipe;
 
+import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAItems;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
@@ -39,6 +44,19 @@ public class AnvilRecipeHandler {
 				event.setCost(4);
 				event.setOutput(new ItemStack(CAItems.IRON_SWORD_OF_KNIGHT_CORPUS.get()));
 			}
+		} else if ((event.getLeft().getItem() == CAItems.LEGENDARY_SPEAR.get() || event.getLeft().getItem() == CAItems.HIGHMORE_SCYTHE.get()) && (event.getLeft().getCount() == 1)) {
+			Holder<Enchantment> sharpness = CAEnchantments.getHolder(event.getPlayer().level().registryAccess(), Enchantments.SHARPNESS);
+			Holder<Enchantment> synesthesia = CAEnchantments.getHolder(event.getPlayer().level().registryAccess(), CAEnchantments.SYNESTHESIA);
+			int sharpLevel = EnchantmentHelper.getItemEnchantmentLevel(sharpness, event.getRight());
+			int synLevel = EnchantmentHelper.getItemEnchantmentLevel(synesthesia, event.getLeft());
+			if (sharpLevel > synLevel) {
+				ItemStack output = event.getLeft().copy();
+				EnchantmentHelper.updateEnchantments(output, enchantments -> enchantments.removeIf(enchantment -> enchantment.equals(synesthesia)));
+				output.enchant(synesthesia, sharpLevel);
+				event.setOutput(output);
+				event.setCost(sharpLevel);
+				event.setMaterialCost(0);
+			}
 		}
 	}
 
@@ -50,6 +68,18 @@ public class AnvilRecipeHandler {
 			CompoundTag nbtTag = leftItem.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 			if (!nbtTag.isEmpty())
 				CustomData.update(DataComponents.CUSTOM_DATA, output, tag -> tag.merge(nbtTag));
+		} else if ((leftItem.getItem() == CAItems.LEGENDARY_SPEAR.get() || leftItem.getItem() == CAItems.HIGHMORE_SCYTHE.get())) {
+			Holder<Enchantment> sharpness = CAEnchantments.getHolder(event.getPlayer().level().registryAccess(), Enchantments.SHARPNESS);
+			Holder<Enchantment> synesthesia = CAEnchantments.getHolder(event.getPlayer().level().registryAccess(), CAEnchantments.SYNESTHESIA);
+			int sharpLevel = EnchantmentHelper.getItemEnchantmentLevel(sharpness, event.getRight());
+			int synLevel = EnchantmentHelper.getItemEnchantmentLevel(synesthesia, leftItem);
+			if (sharpLevel > synLevel) {
+				ItemStack returned = event.getRight().copy();
+				EnchantmentHelper.updateEnchantments(returned, enchantments -> enchantments.removeIf(enchantment -> enchantment.equals(sharpness)));
+				if (!event.getPlayer().getInventory().add(returned)) {
+					event.getPlayer().drop(returned, false);
+				}
+			}
 		}
 	}
 }

@@ -309,6 +309,16 @@ public class EntityUtils {
 			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_friend")
 	);
 
+	public static final TagKey<EntityType<?>> ELITE = TagKey.create(
+			Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "eLITE")
+	);
+
+	public static final TagKey<EntityType<?>> BOSSES = TagKey.create(
+			Registries.ENTITY_TYPE,
+			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bosses")
+	);
+
 	public static void vanguardBuff(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;

@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -19,12 +18,8 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
     public double player_shield = 0;
     public double disoclusion = 0;
     public boolean show_stats = true;
-    public boolean kingShowPtc = true;
-    public ItemStack chitin_knife_selected = ItemStack.EMPTY;
     public boolean player_util_RAINBOW = false;
     public boolean player_util_AROMATIC = false;
-    public double player_king_suit = 0;
-    public double player_demon_suit = 0;
     public double player_oceanization = 0;
     public double plauyer_balance = 0;
     public boolean can_player_evo = false;

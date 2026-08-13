@@ -56,7 +56,7 @@ public class EntityJoinLevelEventHandler {
         Level world = event.getLevel();
         Entity entity = event.getEntity();
 
-        if (!(entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.EVOLVED)))
+        if (entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.EVOLVED))
             return;
 
         double health_index;
