@@ -1,10 +1,19 @@
 package com.susen36.caerulaarbor.item;
 
 import com.google.common.collect.Iterables;
-import com.susen36.caerulaarbor.util.RelicUtils;
+import com.susen36.babel.collectible.Collectibles;
+import com.susen36.babel.network.BabelNetwork;
+import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CAItems;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -14,6 +23,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -58,7 +68,40 @@ public abstract class WearableChestItem extends ArmorItem {
 		public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 			super.inventoryTick(itemstack, world, entity, slot, selected);
 			if (entity instanceof Player player && Iterables.contains(player.getArmorSlots(), itemstack)) {
-				RelicUtils.gainArmor(world, entity.getX(), entity.getY(), entity.getZ(), entity, itemstack);
+				double x = entity.getX();
+				double y = entity.getY();
+				double z = entity.getZ();
+                PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(entity);
+				if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_ARMOR.get()))
+					return;
+
+				BlockPos pos = BlockPos.containing(x, y, z);
+				double storedLives = playerVariables.player_lives;
+
+				if ((LevelAccessor) world instanceof Level level) {
+					level.playSound(null, pos, SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
+				}
+				if ((LevelAccessor) world instanceof ServerLevel level)
+					level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
+
+				entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).markUsed(CAItems.KING_ARMOR.get());
+				if (entity instanceof Player player1)
+					BabelNetwork.syncCollectibles(player1);
+
+				if (world.isClientSide())
+					Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
+
+				if (storedLives > 1) {
+					playerVariables.player_lives = 1;
+					playerVariables.syncPlayerVariables(entity);
+				}
+
+				double shieldAfterLifeTransfer = playerVariables.player_shield + storedLives;
+				playerVariables.player_shield = shieldAfterLifeTransfer;
+				playerVariables.syncPlayerVariables(entity);
+
+				playerVariables.player_shield = shieldAfterLifeTransfer + 3;
+				playerVariables.syncPlayerVariables(entity);
 			}
 		}
 	}

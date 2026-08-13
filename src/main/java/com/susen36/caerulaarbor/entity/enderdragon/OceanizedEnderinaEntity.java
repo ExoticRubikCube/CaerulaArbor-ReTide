@@ -361,7 +361,7 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		LevelAccessor world = this.level();
+		Level world = this.level();
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
@@ -377,7 +377,7 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 			dura = (Entity) this instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
 			rev = (Entity) this instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0;
 			if (tickCount % 100 == 0) {
-				if (WorldUtils.hasNoSolidGroundWithin20Below(world, x, y, z)) {
+				if (WorldUtils.hasNoSolidGroundBelow(world, x, y, z,20)) {
 					push(0, (-0.35), 0);
 				}
 			}
@@ -390,7 +390,7 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 				if (tickCount % 10 == 0) {
 					this.swallowNearbyCrystals();
 				}
-				if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
+				if ((this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
 					if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
 						datEntSetI.getEntityData().set(DATA_REVIVE_TICK, 0);
 				}

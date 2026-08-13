@@ -7,7 +7,6 @@ import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -128,6 +127,6 @@ public class InfestedMobEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return MathUtils.isMultipleOf(duration, 40);
+        return (double) duration % (double) 40 == 0;
     }
 }

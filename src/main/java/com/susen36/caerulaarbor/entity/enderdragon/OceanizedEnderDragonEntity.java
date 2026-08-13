@@ -487,7 +487,7 @@ public class OceanizedEnderDragonEntity extends SeaMonsterBoss implements Ranged
 			dura = (Entity) this instanceof OceanizedEnderDragonEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
 			rev = (Entity) this instanceof OceanizedEnderDragonEntity datEntI ? datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0;
 			if (tickCount % 100 == 0) {
-				if (y > world.getMaxBuildHeight() - 20 && WorldUtils.hasNoSolidGroundWithin20Below(world, x, y, z)) {
+				if (y > world.getMaxBuildHeight() - 20 && WorldUtils.hasNoSolidGroundBelow(world, x, y, z,36)) {
 					push(0, (-0.35), 0);
 				}
 			}

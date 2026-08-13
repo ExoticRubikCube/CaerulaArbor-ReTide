@@ -6,7 +6,6 @@ import com.susen36.caerulaarbor.entity.bullets.FishSplashEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CAParticles;
-import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -87,6 +86,6 @@ public class SplasherAttackMobEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return MathUtils.isMultipleOf(duration, 40);
+        return (double) duration % (double) 40 == 0;
     }
 }

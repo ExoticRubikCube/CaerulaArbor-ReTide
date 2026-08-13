@@ -5,7 +5,6 @@ import com.susen36.caerulaarbor.entity.GuideAbyssalEntity;
 import com.susen36.caerulaarbor.entity.OceanizedHorseEntity;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.util.MathUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -92,6 +91,6 @@ public class GuidePathAheadMobEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return MathUtils.isMultipleOf(duration, 10);
+        return (double) duration % (double) 10 == 0;
     }
 }

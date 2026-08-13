@@ -67,12 +67,10 @@ public class CaerulaRecordGUIButtonMessage implements CustomPacketPayload {
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;
 		if (buttonID == 0) {
-			{
-				boolean setval = !(ModCapabilities.getPlayerVariables(entity)).show_stats;
-				PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-					capability.show_stats = setval;
-					capability.syncPlayerVariables(entity);
-			}
+			boolean setval = !(ModCapabilities.getPlayerVariables(entity)).show_stats;
+			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+			capability.show_stats = setval;
+			capability.syncPlayerVariables(entity);
 		}
 		if (buttonID == 1) {
 			if ((Entity) entity instanceof ServerPlayer ent) {

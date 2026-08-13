@@ -4,13 +4,13 @@ import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
-import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAEnchantments;
-import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -26,10 +26,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.Property;
+
+import java.util.Collections;
 
 public interface NetherseaBrandBlock {
 	default void applyNetherseaBrand(LevelAccessor world, Entity entity) {
-		if (entity == null)
+		if (entity == null || this.isInactive())
 			return;
 		double lvl = 0;
 		double gap;
@@ -155,8 +160,81 @@ public interface NetherseaBrandBlock {
 						damage = damage + 1.0F;
 					}
 					entity.hurt(CADamageTypes.source(world, CADamageTypes.TRAIL_DAMAGE), damage);
-					EPUtils.causeSanityInjury(livingEntity, 15+damage*8);
+					EPUtils.causeSanityInjury(livingEntity, 15 + damage * 8);
 				}
+			}
+		}
+	}
+
+	/**
+	 * 判断目标位置是否允许放置海嗣痕迹方块。
+	 *
+	 * <p>该方法检查目标位置正下方的方块：它的上表面必须能够承托方块，
+	 * 或者被显式标记为 {@code trail_existable} 标签；同时该支撑方块不能是
+	 * {@code SEA_TRAIL_SOLID}，以避免在实心海嗣痕迹上继续叠放普通痕迹。
+	 *
+	 * @param world 世界
+	 * @param x 目标 X 坐标
+	 * @param y 目标 Y 坐标
+	 * @param z 目标 Z 坐标
+	 * @return 若当前位置允许放置海嗣痕迹，则返回 {@code true}
+	 */
+	static boolean canPutTrail(LevelAccessor world, double x, double y, double z) {
+		BlockPos belowPos = BlockPos.containing(x, y - 1, z);
+		BlockState belowState = world.getBlockState(belowPos);
+		return (belowState.isFaceSturdy(world, belowPos, Direction.UP)
+				|| belowState.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail_existable"))))
+				&& belowState.getBlock() != CABlocks.SEA_TRAIL_SOLID.get();
+	}
+
+	/**
+	 * 该海嗣痕迹方块是否会在 {@code randomTick} / {@code tick} 中向邻近方块蔓延。
+	 *
+	 * <p>默认返回 {@code false}，表示不蔓延；需要蔓延的方块（如涌动的溟痕）应覆写为
+	 * {@code true}。
+	 *
+	 * @return 若该方块允许向邻近方块蔓延，则返回 {@code true}
+	 */
+	default boolean canSpread() {
+		return false;
+	}
+
+	/**
+	 * 该海嗣痕迹方块是否处于失活状态。
+	 *
+	 * <p>默认返回 {@code false}；被烧焦的海嗣痕迹方块应覆写为 {@code true}，用于关闭
+	 * 「加强上方海嗣 + 伤害非海嗣」的品牌效果。
+	 *
+	 * @return 若该方块处于失活状态，则返回 {@code true}
+	 */
+	default boolean isInactive() {
+		return false;
+	}
+
+	/**
+	 * 按当前海嗣痕迹方块的生长规则提高 {@code grow_age} 属性值。
+	 *
+	 * <p>该方法会直接读取目标位置上的方块状态；若该方块不存在 {@code grow_age}
+	 * 整型属性，则不执行任何操作。年龄达到该属性允许的最大值后不再增长，且每次
+	 * 最多一次性增加 {@code 8}（不超过最大值）。
+	 *
+	 * @param world 世界
+	 * @param pos 目标方块位置
+	 */
+	default void addGrowAge(LevelAccessor world, BlockPos pos) {
+		BlockState state = world.getBlockState(pos);
+		Property<?> property = state.getBlock().getStateDefinition().getProperty("grow_age");
+
+		if (property instanceof IntegerProperty growAgeProperty) {
+			int currentAge = state.getValue(growAgeProperty);
+
+			int maxAge = Collections.max(growAgeProperty.getPossibleValues());// 动态获取该方块允许的最大年龄，消除硬编码的 30
+			if (currentAge >= maxAge) {
+				return;
+			}
+			int nextAge = Math.min(currentAge + 8, maxAge);
+			if (currentAge != nextAge) {
+				world.setBlock(pos, state.setValue(growAgeProperty, nextAge), 3); // 3 = 方块更新标志位
 			}
 		}
 	}

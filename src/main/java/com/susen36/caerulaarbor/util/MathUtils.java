@@ -2,22 +2,8 @@ package com.susen36.caerulaarbor.util;
 
 public class MathUtils {
 
-    //TODO:可能需要迁移到巴别塔lib
     private MathUtils() {
         throw new UnsupportedOperationException("Utility class");
-    }
-
-    /**
-     * 检查指定的值是否为给定除数的倍数。
-     * <p>
-     * 注意：由于浮点数精度限制，在处理非整数或小数时请谨慎使用此方法。
-     *
-     * @param value   要检查的值
-     * @param divisor 除数
-     * @return 如果该值是除数的倍数则返回 {@code true}；否则返回 {@code false}
-     */
-    public static boolean isMultipleOf(double value, double divisor) {
-        return value % divisor == 0;
     }
 
     /**

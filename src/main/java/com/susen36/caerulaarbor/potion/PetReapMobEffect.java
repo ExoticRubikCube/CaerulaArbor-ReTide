@@ -2,7 +2,6 @@
 package com.susen36.caerulaarbor.potion;
 
 import com.susen36.babel.util.EPUtils;
-import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -61,6 +60,6 @@ public class PetReapMobEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return MathUtils.isMultipleOf(duration, 20);
+        return (double) duration % (double) 20 == 0;
     }
 }

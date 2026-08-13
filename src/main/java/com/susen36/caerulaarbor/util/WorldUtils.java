@@ -30,33 +30,6 @@ public class WorldUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	/**
-	 * 按当前海嗣痕迹方块的生长规则提高 {@code grow_age} 属性值。
-	 *
-	 * <p>该方法会直接读取目标位置上的方块状态；若该方块不存在 {@code grow_age}
-	 * 整型属性，则不执行任何操作。当前实现仅在年龄小于 {@code 30} 时生效，
-	 * 并尝试将其一次性增加 {@code 8}。只有当增加后的值仍属于该属性允许的取值范围时，
-	 * 才会真正写回世界。
-	 *
-	 * @param world 世界
-	 * @param pos 目标方块位置
-	 */
-	//TODO 应该纳入接口
-	public static void addGrowAge(LevelAccessor world, BlockPos pos) {
-		BlockState state = world.getBlockState(pos);
-		if (state.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty growAgeProperty) {
-			int growAge = state.getValue(growAgeProperty);
-			if (growAge >= 30) {
-				return;
-			}
-			int nextGrowAge = growAge + 8;
-			if (!growAgeProperty.getPossibleValues().contains(nextGrowAge)) {
-				return;
-			}
-			world.setBlock(pos, state.setValue(growAgeProperty, nextGrowAge), 3);
-		}
-	}
-
 	//可疑
 	public static void burndownTrail(LevelAccessor world, BlockState toBeBurn, double px, double py, double pz) {
 		BlockState output = Blocks.AIR.defaultBlockState();
@@ -104,29 +77,7 @@ public class WorldUtils {
 		}
 	}
 
-	/**
-	 * 判断目标位置是否允许放置海嗣痕迹方块。
-	 *
-	 * <p>该方法检查目标位置正下方的方块：它的上表面必须能够承托方块，
-	 * 或者被显式标记为 {@code trail_existable} 标签；同时该支撑方块不能是
-	 * {@code SEA_TRAIL_SOLID}，以避免在实心海嗣痕迹上继续叠放普通痕迹。
-	 *
-	 * @param world 世界
-	 * @param x 目标 X 坐标
-	 * @param y 目标 Y 坐标
-	 * @param z 目标 Z 坐标
-	 * @return 若当前位置允许放置海嗣痕迹，则返回 {@code true}
-	 */
-	// TODO 需要下放到Trail接口
-	public static boolean canPutTrail(LevelAccessor world, double x, double y, double z) {
-		BlockPos belowPos = BlockPos.containing(x, y - 1, z);
-		BlockState belowState = world.getBlockState(belowPos);
-		return (belowState.isFaceSturdy(world, belowPos, Direction.UP)
-				|| belowState.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail_existable"))))
-				&& belowState.getBlock() != CABlocks.SEA_TRAIL_SOLID.get();
-	}
-
-	//可以安排到SeaMoster
+	//可疑
 	public static boolean canCommonSeabornSpawn(LevelAccessor world, double x, double y, double z) {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "common_spawn_biome")))) {
 			return false;
@@ -143,7 +94,7 @@ public class WorldUtils {
 		return false;
 	}
 
-	//或许放到其他 util 比较好？可以专门制作一个海嗣 util
+	//或许放到其他 util 比较好?可以专门制作一个海嗣 util
 	public static boolean canDangerSeabornSpawn(LevelAccessor world, double x, double y, double z) {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "danger_spawn_biome")))) {
 			return false;
@@ -177,30 +128,43 @@ public class WorldUtils {
 		return false;
 	}
 
+
 	/**
-	 * 判断目标位置下方 20 格内是否不存在可作为地面的实心方块。
+	 * 判断目标位置下方指定格数内是否不存在可作为地面的实心方块。
 	 *
 	 * <p>该方法会将空气和液体都视为"未接地"，因此可用于悬浮单位检测自己是否长期位于
 	 * 深坑、水柱或其他无实心支撑的空间上方。
 	 *
 	 * @param world 世界
-	 * @param x 目标 X 坐标
-	 * @param y 目标 Y 坐标
-	 * @param z 目标 Z 坐标
-	 * @return 若下方 20 格内都没有实心地面，则返回 {@code true}
+	 * @param x     目标 X 坐标
+	 * @param y     目标 Y 坐标
+	 * @param z     目标 Z 坐标
+	 * @param depth 向下检测的最大格数（深度）
+	 * @return 若下方 depth 格内都没有实心地面，则返回 {@code true}
 	 */
-	public static boolean hasNoSolidGroundWithin20Below(LevelAccessor world, double x, double y, double z) {
-		if (y < -32) {
+	public static boolean hasNoSolidGroundBelow(Level world, double x, double y, double z, int depth) {
+		// 如果实体已经处于世界最低点以下，直接返回 false
+		if (y < world.getMinBuildHeight()) {
 			return false;
 		}
-		for (int index0 = 0; index0 < 20; index0++) {
-			if (!(world.isEmptyBlock(BlockPos.containing(x, y - index0 - 1, z)) || (world.getBlockState(BlockPos.containing(x, y - index0 - 1, z))).getBlock() instanceof LiquidBlock)) {
+
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		pos.set(x, y - 1, z);
+
+		for (int i = 0; i < depth; i++) {
+			if (pos.getY() < world.getMinBuildHeight()) {
+				break;
+			}
+			BlockState state = world.getBlockState(pos);
+
+			if (!state.isAir() && !(state.getBlock() instanceof LiquidBlock)) {
 				return false;
 			}
+			pos.move(Direction.DOWN);// 坐标向下移动一格，进入下一次循环
 		}
+
 		return true;
 	}
-
 
 	//还行，暂时不动代码本身，但是真的需要放在这里吗。再评估有没有更合适的位置
 	/**

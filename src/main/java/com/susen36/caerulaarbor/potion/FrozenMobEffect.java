@@ -1,7 +1,6 @@
 
 package com.susen36.caerulaarbor.potion;
 
-import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -66,6 +65,6 @@ public class FrozenMobEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return MathUtils.isMultipleOf(duration, 10);
+        return (double) duration % (double) 10 == 0;
     }
 }

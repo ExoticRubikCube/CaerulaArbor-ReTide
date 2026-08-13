@@ -2,7 +2,6 @@
 package com.susen36.caerulaarbor.potion;
 
 import com.susen36.caerulaarbor.init.CAParticles;
-import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
@@ -38,7 +37,7 @@ public class HaemophiliaMobEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return MathUtils.isMultipleOf(duration, 40);
+        return (double) duration % (double) 40 == 0;
     }
 
 }

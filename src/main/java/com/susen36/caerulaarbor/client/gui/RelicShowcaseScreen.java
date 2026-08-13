@@ -8,7 +8,6 @@ import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import com.susen36.caerulaarbor.network.send.RelicShowcaseButtonMessage;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import com.susen36.caerulaarbor.util.RelicUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -84,7 +83,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			Item relic = collectible.getValue().value();
 			ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_" + id, relic, RelicDisplayEntry.SpecialType.NONE, -1,
 				"imagebutton_" + id, id,
-				entity -> RelicUtils.hasRelic(relic, entity),
+				entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(relic),
 				null, null));
 		}
 	}

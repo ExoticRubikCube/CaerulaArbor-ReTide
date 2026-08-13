@@ -1,14 +1,11 @@
 package com.susen36.caerulaarbor.util;
 
-import com.susen36.babel.collectible.Collectibles;
-import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAConfigs;
-import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -114,15 +111,6 @@ public class PlayerStateUtils {
 		return 1 <= light && light < 50;
 	}
 
-	// 护甲侵蚀
-	public static void armorErrosion(Entity entity, int amount, int limit) {
-		for (int i = 0; i < amount; i++) {
-			if (entity instanceof LivingEntity living) {
-				LessArmorMobEffect.apply(living);
-			}
-		}
-	}
-
 	public static void pokeSlightly(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null) {
 			return;
@@ -204,17 +192,5 @@ public class PlayerStateUtils {
 
 	public static boolean canPlayerEvo(Entity entity) {
 		return ModCapabilities.getPlayerVariables(entity).can_player_evo;
-	}
-
-	public static double getSurvivor(Entity entity) {
-		return entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.SURVIVOR_CONTRACT.get());
-	}
-
-	public static boolean hasSurvivorCont(Entity entity) {
-		return getSurvivor(entity) >= 0;
-	}
-
-	public static boolean hasAromatic(Entity entity) {
-		return ModCapabilities.getPlayerVariables(entity).player_util_AROMATIC;
 	}
 }

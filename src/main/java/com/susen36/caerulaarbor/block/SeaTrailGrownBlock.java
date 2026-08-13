@@ -58,6 +58,11 @@ public class SeaTrailGrownBlock extends Block implements NetherseaBrandBlock, Si
 	}
 
 	@Override
+	public boolean canSpread() {
+		return true;
+	}
+
+	@Override
 	public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
 		return state.getFluidState().isEmpty();
 	}
@@ -108,7 +113,7 @@ public class SeaTrailGrownBlock extends Block implements NetherseaBrandBlock, Si
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
-			return WorldUtils.canPutTrail(world, x, y, z);
+			return NetherseaBrandBlock.canPutTrail(world, x, y, z);
 		}
 		return super.canSurvive(blockstate, worldIn, pos);
 	}
@@ -159,6 +164,7 @@ public class SeaTrailGrownBlock extends Block implements NetherseaBrandBlock, Si
 			boolean valid = !this.hasLargeLivingEntityNearby(world, pos);
 			float effectiveSpreadRate = world.getGameRules().getInt(CAGameRules.SPREAD_RATE) * 0.9f * (1.0f + 0.10f * (float) strategyGrow);
 			if (valid && growAge > 29 && longevity > 0 && random.nextFloat() * 100.0F < effectiveSpreadRate) {
+				if (this.canSpread()) {
 				if (SilenceUpgradeManager.isSilence(world)) {
 					expand = 1;
 				}
@@ -195,11 +201,12 @@ public class SeaTrailGrownBlock extends Block implements NetherseaBrandBlock, Si
 					}
 				}
 			}
-			int nextGrowAge = growAge + boostedExpand;
-			if (nextGrowAge <= 64) {
-				world.setBlock(pos, blockstate.setValue(GROW_AGE, nextGrowAge), 3);
-			}
-		} else {
+		}
+		int nextGrowAge = growAge + boostedExpand;
+		if (nextGrowAge <= 64) {
+			world.setBlock(pos, blockstate.setValue(GROW_AGE, nextGrowAge), 3);
+		}
+	} else {
 			BlockPos belowPos = pos.below();
 			BlockState targetState = world.getBlockState(belowPos);
 			Direction targetDirection = this.getDirection(targetState);
@@ -346,6 +353,6 @@ public class SeaTrailGrownBlock extends Block implements NetherseaBrandBlock, Si
 
 	@Override
 	public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState blockstate) {
-		WorldUtils.addGrowAge(world, pos);
+		this.addGrowAge(world, pos);
 	}
 }

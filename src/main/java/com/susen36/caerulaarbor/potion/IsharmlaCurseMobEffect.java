@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.potion;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAParticles;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -44,6 +43,6 @@ public class IsharmlaCurseMobEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return MathUtils.isMultipleOf(duration, 10);
+        return (double) duration % (double) 10 == 0;
     }
 }

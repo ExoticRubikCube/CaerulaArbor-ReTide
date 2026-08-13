@@ -4,7 +4,6 @@ package com.susen36.caerulaarbor.potion;
 import com.susen36.caerulaarbor.entity.OceanizedCowEntity;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.util.MathUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -54,7 +53,7 @@ public class CowBuffMobEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return MathUtils.isMultipleOf(duration, 10);
+        return (double) duration % (double) 10 == 0;
     }
 
 }

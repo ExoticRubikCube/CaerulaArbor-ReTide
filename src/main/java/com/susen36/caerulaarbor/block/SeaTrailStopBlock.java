@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
-import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -92,7 +91,7 @@ public class SeaTrailStopBlock extends Block implements NetherseaBrandBlock, Sim
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
-			return WorldUtils.canPutTrail(world, x, y, z);
+			return NetherseaBrandBlock.canPutTrail(world, x, y, z);
 		}
 		return super.canSurvive(blockstate, worldIn, pos);
 	}
@@ -149,6 +148,6 @@ public class SeaTrailStopBlock extends Block implements NetherseaBrandBlock, Sim
 
 	@Override
 	public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState blockstate) {
-		WorldUtils.addGrowAge(world, pos);
+		this.addGrowAge(world, pos);
 	}
 }

@@ -4,7 +4,6 @@ import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -21,7 +20,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -106,45 +104,6 @@ public class EntityUtils {
 				level.sendParticles(ParticleTypes.CHERRY_LEAVES,
 					entity.getX(), entity.getY() + 1, entity.getZ(),
 					24, 1, 1, 1, 0.1);
-			}
-		}
-	}
-
-	//TODO 需要处理
-	public static void applyNetherseaBuff(LevelAccessor world, Entity entity) {
-		if (entity != null && entity.isAlive() && entity instanceof LivingEntity living) {
-			MapVariables mapVars = MapVariables.get(world);
-			boolean isSeabornUnit = (living.getType().is(SEABORN)
-					|| living.getType().is(SEABORN_BOSS)
-					|| living.getType().is(SEABORN_MINION))
-					&& !living.getType().is(SEABORN_PET);
-
-			if (living.tickCount % 20 == 0) {
-				if (isSeabornUnit) {
-					if (mapVars.strategy_silence >= 2) {
-						living.heal((float) (living.getMaxHealth() * 0.05));
-					} else if (mapVars.strategy_subsisting >= 3) {
-						living.heal((float) (living.getMaxHealth() * 0.02));
-					}
-				} else if (living instanceof Player player
-						&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 3) {
-					if (mapVars.strategy_silence >= 2) {
-						living.heal((float) (living.getMaxHealth() * 0.05));
-					} else if (mapVars.strategy_subsisting >= 3) {
-						living.heal((float) (living.getMaxHealth() * 0.02));
-					}
-				}
-			}
-
-			if (!living.level().isClientSide()) {
-				if (isSeabornUnit) {
-					living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
-				} else if (living instanceof Player player
-						&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 3) {
-					living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL, 5, 0, false, false));
-					living.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
-				}
-
 			}
 		}
 	}

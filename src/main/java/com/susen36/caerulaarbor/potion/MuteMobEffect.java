@@ -2,7 +2,6 @@
 package com.susen36.caerulaarbor.potion;
 
 import com.susen36.caerulaarbor.init.CAParticles;
-import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
@@ -49,6 +48,6 @@ public class MuteMobEffect extends MobEffect {
 
 	@Override
 	public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-		return MathUtils.isMultipleOf(duration, 10);
+        return (double) duration % (double) 10 == 0;
 	}
 }

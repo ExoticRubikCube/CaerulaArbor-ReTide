@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
-import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -29,7 +28,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class SeaTrailInitBlock extends Block implements SimpleWaterloggedBlock, BonemealableBlock {
+public class SeaTrailInitBlock extends Block implements NetherseaBrandBlock, SimpleWaterloggedBlock, BonemealableBlock {
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final IntegerProperty LONGEVITY = IntegerProperty.create("longevity", 0, 16);
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 48);
@@ -78,7 +77,7 @@ public class SeaTrailInitBlock extends Block implements SimpleWaterloggedBlock, 
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
-			return WorldUtils.canPutTrail(world, x, y, z);
+			return NetherseaBrandBlock.canPutTrail(world, x, y, z);
 		}
 		return super.canSurvive(blockstate, worldIn, pos);
 	}
@@ -146,6 +145,6 @@ public class SeaTrailInitBlock extends Block implements SimpleWaterloggedBlock, 
 
 	@Override
 	public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState blockstate) {
-		WorldUtils.addGrowAge(world, pos);
+		this.addGrowAge(world, pos);
 	}
 }

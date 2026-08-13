@@ -10,7 +10,6 @@ import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -119,7 +118,7 @@ public class  FirstTellerSkillMobEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return MathUtils.isMultipleOf(duration, 10);
+        return (double) duration % (double) 10 == 0;
     }
 
 }

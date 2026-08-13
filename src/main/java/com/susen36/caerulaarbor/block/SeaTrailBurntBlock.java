@@ -2,7 +2,6 @@ package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +31,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock, BonemealableBlock {
+public class SeaTrailBurntBlock extends Block implements NetherseaBrandBlock, SimpleWaterloggedBlock, BonemealableBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 64);
@@ -42,6 +41,11 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
 	public SeaTrailBurntBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.SNOW).strength(1f).speedFactor(0.9f).jumpFactor(0.9f).noOcclusion().pushReaction(PushReaction.DESTROY).isRedstoneConductor((bs, br, bp) -> false));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(GROW_AGE, 0).setValue(LONGEVITY, 0).setValue(WATERLOGGED, false));
+	}
+
+	@Override
+	public boolean isInactive() {
+		return true;
 	}
 
 	@Override
@@ -95,7 +99,7 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
-			return WorldUtils.canPutTrail(world, x, y, z);
+			return NetherseaBrandBlock.canPutTrail(world, x, y, z);
 		}
 		return super.canSurvive(blockstate, worldIn, pos);
 	}
@@ -170,6 +174,6 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
 
 	@Override
 	public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState blockstate) {
-		WorldUtils.addGrowAge(world, pos);
+		this.addGrowAge(world, pos);
 	}
 }

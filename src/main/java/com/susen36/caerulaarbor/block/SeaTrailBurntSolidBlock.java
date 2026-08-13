@@ -12,12 +12,17 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.neoforged.neoforge.common.util.TriState;
 
-public class SeaTrailBurntSolidBlock extends Block {
+public class SeaTrailBurntSolidBlock extends Block implements NetherseaBrandBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public SeaTrailBurntSolidBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.SNOW).strength(1f, 2f).friction(0.9f).speedFactor(0.9f).jumpFactor(0.9f));
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+	}
+
+	@Override
+	public boolean isInactive() {
+		return true;
 	}
 
 	@Override

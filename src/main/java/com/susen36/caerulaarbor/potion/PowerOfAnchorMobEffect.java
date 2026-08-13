@@ -5,7 +5,6 @@ import com.susen36.babel.api.entity.ElementalDefenseModifier;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.util.MathUtils;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,7 +43,7 @@ public class PowerOfAnchorMobEffect extends MobEffect implements ElementalDefens
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return MathUtils.isMultipleOf(duration, 10);
+        return (double) duration % (double) 10 == 0;
     }
 
 }
