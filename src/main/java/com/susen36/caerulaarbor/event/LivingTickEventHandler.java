@@ -120,45 +120,50 @@ public class LivingTickEventHandler {
 
         Entity other = null;
 
-        if (enemy instanceof TidelinkedImmortalEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.FAKE_DEATH)) {
-            other = world.getEntitiesOfClass(TidelinkedBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
-        } else if (enemy instanceof TidelinkedBishopEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.FAKE_DEATH)) {
-            other = world.getEntitiesOfClass(TidelinkedImmortalEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
-        } else if (enemy instanceof MartusEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.INVULNERABLE)) {
-            Entity tgt_ent = null;
-            Entity tgt_blessed = null;
-            double max_h = -1.0D;
-            double blesses_h = -1.0D;
-            double d1;
-            for (Mob entityiterator : world.getEntitiesOfClass(Mob.class, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
-                if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))))
-                    continue;
-                if (entityiterator instanceof MartusEntity) continue;
-                d1 = entity.distanceToSqr(entityiterator);
-                if (entityiterator.getPersistentData().getBoolean("blessed") && (blesses_h == -1.0D || d1 < blesses_h)) {
-                    blesses_h = d1;
-                    tgt_blessed = entityiterator;
-                } else if (max_h == -1.0D || d1 < max_h) {
-                    max_h = d1;
-                    tgt_ent = entityiterator;
+        switch (enemy) {
+            case TidelinkedImmortalEntity livEnt5 when livEnt5.hasEffect(CAMobEffects.FAKE_DEATH) ->
+                    other = world.getEntitiesOfClass(TidelinkedBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
+            case TidelinkedBishopEntity livEnt8 when livEnt8.hasEffect(CAMobEffects.FAKE_DEATH) ->
+                    other = world.getEntitiesOfClass(TidelinkedImmortalEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
+            case MartusEntity livEnt11 when livEnt11.hasEffect(CAMobEffects.INVULNERABLE) -> {
+                Entity tgt_ent = null;
+                Entity tgt_blessed = null;
+                double max_h = -1.0D;
+                double blesses_h = -1.0D;
+                double d1;
+                for (Mob entityiterator : world.getEntitiesOfClass(Mob.class, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
+                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))))
+                        continue;
+                    if (entityiterator instanceof MartusEntity) continue;
+                    d1 = entity.distanceToSqr(entityiterator);
+                    if (entityiterator.getPersistentData().getBoolean("blessed") && (blesses_h == -1.0D || d1 < blesses_h)) {
+                        blesses_h = d1;
+                        tgt_blessed = entityiterator;
+                    } else if (max_h == -1.0D || d1 < max_h) {
+                        max_h = d1;
+                        tgt_ent = entityiterator;
+                    }
                 }
+                other = tgt_blessed != null ? tgt_blessed : tgt_ent;
             }
-            other = tgt_blessed != null ? tgt_blessed : tgt_ent;
-        } else {
-            if (enemy instanceof EndspeakerEntity endspeaker && endspeaker.getPhase() < 3 && endspeaker.hasEffect(CAMobEffects.INVULNERABLE)) {
-                other = world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)),
-                        e -> e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))
-                ).stream().min(Comparator.comparingDouble(e -> e.distanceToSqr(enemy))).orElse(null);
-            } else if (enemy instanceof OceanizedIllusionerEntity) {
-                other = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
-            } else if (enemy instanceof OceanizedEnderinaEntity enderina && !enderina.isEnderinaDurative()) {
-                other = world.getEntitiesOfClass(MoistEnderCrystalEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
+            default -> {
+                switch (enemy) {
+                    case EndspeakerEntity endspeaker when endspeaker.getPhase() < 3 && endspeaker.hasEffect(CAMobEffects.INVULNERABLE) ->
+                            other = world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)),
+                                    e -> e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))
+                            ).stream().min(Comparator.comparingDouble(e -> e.distanceToSqr(enemy))).orElse(null);
+                    case OceanizedIllusionerEntity oceanizedIllusionerEntity ->
+                            other = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
+                    case OceanizedEnderinaEntity enderina when !enderina.isEnderinaDurative() ->
+                            other = world.getEntitiesOfClass(MoistEnderCrystalEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
+                    default -> {
+                    }
+                }
             }
         }
 
-        if (other != null) {
-            if (entity instanceof Mob _entity && other instanceof LivingEntity _ent)
-                _entity.setTarget(_ent);
+        if (other instanceof LivingEntity _ent && entity instanceof Mob _entity) {
+            _entity.setTarget(_ent);
         }
     }
 

@@ -1,8 +1,10 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
@@ -83,7 +85,7 @@ public class RelicCursedGLOWBODYItem extends RelicItemBase {
 
 		if (!isUsed) {
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			if (!CARelics.CURSED_GLOWBODY.get().gained(capability)) {
+			if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_GLOWBODY.get())) {
 				double x = entity.getX();
 				double y = entity.getY();
 				double z = entity.getZ();

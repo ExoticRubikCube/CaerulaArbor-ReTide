@@ -36,6 +36,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.List;
 
@@ -116,6 +117,7 @@ public class EntityUtils {
 		}
 	}
 
+	//TODO 需要处理
 	public static void applyNetherseaBuff(LevelAccessor world, Entity entity) {
 		if (entity != null && entity.isAlive() && entity instanceof LivingEntity living) {
 			MapVariables mapVars = MapVariables.get(world);
@@ -353,16 +355,31 @@ public class EntityUtils {
 	}
 
 	public static String getHealth(Entity entity) {
-		if (entity == null)
+		if (entity == null) {
 			return "";
-		return (new java.text.DecimalFormat("##.##").format(entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1)) + "/"
-				+ (new java.text.DecimalFormat("##.#").format(entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1));
+		}
+		double health = -1;
+		double maxHealth = -1;
+		if (entity instanceof LivingEntity livEnt) {
+			health = livEnt.getHealth();
+			maxHealth = livEnt.getMaxHealth();
+		}
+		DecimalFormat currentFormat = new java.text.DecimalFormat("##.##");
+		DecimalFormat maxFormat = new java.text.DecimalFormat("##.#");
+
+		return currentFormat.format(health) + "/" + maxFormat.format(maxHealth);
 	}
 
 	public static double getHealthPerc(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+		if (!(entity instanceof LivingEntity livEnt)) {
+			return 0.0;
+		}
+
+		float maxHealth = livEnt.getMaxHealth();
+		if (maxHealth <= 0.0f) {
+			return 0.0;
+		}
+		return livEnt.getHealth() / (double) maxHealth;
 	}
 
 	public static String getLight(Entity entity) {

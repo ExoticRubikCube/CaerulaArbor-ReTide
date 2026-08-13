@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
@@ -51,7 +52,7 @@ public class KingsCrystalItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!CARelics.KING_CRYSTAL.get().gained(entity)) {
+        if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_CRYSTAL.get())) {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
             }

@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.collectible.Collectibles;
+import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -20,7 +22,7 @@ public class PlayerAttackEventHandler {
 			return;
 		}
 
-		if (!CARelics.HAND_OF_PULVERIZATION.get().gained(attacker)) {
+		if (!attacker.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_OF_PULVERIZATION.get())) {
 			return;
 		}
 

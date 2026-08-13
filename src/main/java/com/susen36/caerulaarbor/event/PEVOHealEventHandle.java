@@ -12,7 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -31,7 +31,7 @@ public class PEVOHealEventHandle {
 			return;
 		}
 
-		LevelAccessor world = entity.level();
+		Level world = entity.level();
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();

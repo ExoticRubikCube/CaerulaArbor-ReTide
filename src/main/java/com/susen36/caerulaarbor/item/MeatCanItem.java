@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -41,7 +42,7 @@ public class MeatCanItem extends RelicItemBase {
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 0));
-		if (!CARelics.FEATURED_CANNED_MEAT.get().gained(entity)) {
+		if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.FEATURED_CANNED_MEAT.get())) {
 			boolean setval = true;
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 			CARelics.FEATURED_CANNED_MEAT.get().set(capability, setval ? 1 : 0);

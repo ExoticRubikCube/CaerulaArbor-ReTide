@@ -101,7 +101,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 		if (buttonID == 1) {
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.KING_CROWN.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_CROWN.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -136,7 +136,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.KING_CROWN.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_CROWN.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -151,7 +151,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.KING_SPEAR.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_SPEAR.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -186,7 +186,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.KING_SPEAR.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_SPEAR.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -200,7 +200,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 		if (buttonID == 3) {
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.KING_ARMOR.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_ARMOR.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -235,7 +235,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.KING_ARMOR.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_ARMOR.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -249,7 +249,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 		if (buttonID == 4) {
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.KING_EXTENSION.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_EXTENSION.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -284,7 +284,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.KING_EXTENSION.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_EXTENSION.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -298,7 +298,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 		if (buttonID == 5) {
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.KING_CRYSTAL.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_CRYSTAL.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -333,7 +333,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.KING_CRYSTAL.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_CRYSTAL.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -347,7 +347,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 		if (buttonID == 6) {
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.SARKAZ_KING_ARTIFACT.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.SARKAZ_KING_ARTIFACT.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -382,7 +382,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.SARKAZ_KING_ARTIFACT.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.SARKAZ_KING_ARTIFACT.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -396,7 +396,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 		if (buttonID == 7) {
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.SARKAZ_KING_FLAG.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.SARKAZ_KING_FLAG.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -431,7 +431,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.SARKAZ_KING_FLAG.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.SARKAZ_KING_FLAG.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -446,7 +446,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.SARKAZ_KING_BED.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.SARKAZ_KING_BED.get())) {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -481,7 +481,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.SARKAZ_KING_BED.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.SARKAZ_KING_BED.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -496,7 +496,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.HAND_THORNS.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_THORNS.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -530,7 +530,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.HAND_THORNS.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_THORNS.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -545,7 +545,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.HAND_STRANGLE.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_STRANGLE.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -580,7 +580,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.HAND_STRANGLE.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_STRANGLE.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -595,7 +595,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.HAND_FERTILITY.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_FERTILITY.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -630,7 +630,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.HAND_FERTILITY.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_FERTILITY.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -645,7 +645,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.HAND_OF_PULVERIZATION.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_OF_PULVERIZATION.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -680,7 +680,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.HAND_OF_PULVERIZATION.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_OF_PULVERIZATION.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -695,7 +695,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.HAND_SWIPE.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_SWIPE.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -730,7 +730,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.HAND_SWIPE.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_SWIPE.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -795,7 +795,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.HAND_FIREWORK.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_FIREWORK.get())) {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -830,7 +830,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.HAND_FIREWORK.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_FIREWORK.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -845,7 +845,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.TREATY.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.TREATY.get())) {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -880,7 +880,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.TREATY.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.TREATY.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -941,7 +941,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.CURSED_EMELIGHT.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_EMELIGHT.get())) {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -976,7 +976,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.CURSED_EMELIGHT.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_EMELIGHT.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -991,7 +991,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.CURSED_GLOWBODY.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_GLOWBODY.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -1026,7 +1026,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.CURSED_GLOWBODY.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_GLOWBODY.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -1041,7 +1041,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.CURSED_RESEARCH.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_RESEARCH.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -1076,7 +1076,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.CURSED_RESEARCH.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_RESEARCH.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -1091,7 +1091,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.HAND_SWORD.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_SWORD.get())) {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -1126,7 +1126,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.HAND_SWORD.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_SWORD.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -1141,7 +1141,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.LEGEND_CHITIN.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.LEGEND_CHITIN.get())) {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -1176,7 +1176,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.LEGEND_CHITIN.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.LEGEND_CHITIN.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -1191,7 +1191,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.HAND_SPEED.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_SPEED.get())) {
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
@@ -1226,7 +1226,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.HAND_SPEED.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_SPEED.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -1241,7 +1241,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.HEMOST.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HEMOST.get())) {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -1276,7 +1276,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.HEMOST.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HEMOST.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -1291,7 +1291,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.YEARNING.get().gained(entity)) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.YEARNING.get())) {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
@@ -1326,7 +1326,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.YEARNING.get().gained(entity)) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.YEARNING.get())) {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);

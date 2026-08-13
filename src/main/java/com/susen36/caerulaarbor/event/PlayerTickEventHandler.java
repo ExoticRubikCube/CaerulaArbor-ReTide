@@ -7,14 +7,9 @@ import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAEnchantments;
-import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.init.CARelics;
+import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
-import com.susen36.caerulaarbor.util.RelicUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -65,7 +60,7 @@ public class PlayerTickEventHandler {
         if (entity == null) return;
         if (entity.tickCount % 20 != 0) return;
 
-        if (CARelics.HAND_SWIPE.get().gained(entity)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_SWIPE.get())) {
             if (!((entity.getOffhandItem()).getItem() == net.minecraft.world.item.Items.BRUSH)) return;
 
             if (entity.hasEffect(MobEffects.REGENERATION)) {
@@ -146,15 +141,15 @@ public class PlayerTickEventHandler {
         if (capability.player_lives > 1) return;
 
         double suitKing = 0;
-        if (CARelics.KING_SPEAR.get().gained(capability)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_SPEAR.get())) {
             suitKing = suitKing + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BOOST, 20, 1, false, false));
         }
-        if (CARelics.KING_ARMOR.get().gained(capability)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_ARMOR.get())) {
             suitKing = suitKing + 1;
         }
-        if (CARelics.KING_EXTENSION.get().gained(capability)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_EXTENSION.get())) {
             suitKing = suitKing + 1;
             double amplifi = Math.ceil(entity.getMaxHealth() / 20);
             if (amplifi > 24) amplifi = 24;
@@ -163,7 +158,7 @@ public class PlayerTickEventHandler {
                     entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20, (int) amplifi, false, false));
             }
         }
-        if (CARelics.KING_CROWN.get().gained(capability)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_CROWN.get())) {
             suitKing = suitKing + 1;
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BREATH, 20, suitKing < 3 ? 0 : 2, false, false));
@@ -178,7 +173,7 @@ public class PlayerTickEventHandler {
 
     private static void handleHandSpeed(Player entity, LevelAccessor world, double x, double y, double z) {
         ItemStack mainHandItem = (entity.getMainHandItem()).copy();
-        if (CARelics.HAND_SPEED.get().gained(entity)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_SPEED.get())) {
             if (mainHandItem.getItem() instanceof PickaxeItem || mainHandItem.is(ItemTags.create(ResourceLocation.parse("minecraft:pickaxes")))) {
                 boolean valid = true;
                 final Vec3 center = new Vec3(x, y, z);
@@ -206,17 +201,17 @@ public class PlayerTickEventHandler {
             return;
 
         double suitArchfi = 0;
-        if (CARelics.SARKAZ_KING_FLAG.get().gained(capability)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.SARKAZ_KING_FLAG.get())) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.FLAG_SWINGS, 20, 2, false, false));
         }
-        if (CARelics.SARKAZ_KING_BED.get().gained(capability)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.SARKAZ_KING_BED.get())) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KEEP_BEDDING, 20, 0, false, false));
         }
-        if (CARelics.SARKAZ_KING_ARTIFACT.get().gained(capability)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.SARKAZ_KING_ARTIFACT.get())) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SACREFICE, 20, suitArchfi < 3 ? 0 : 2, false, false));
@@ -288,14 +283,14 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleRelicHemost(Player entity) {
-        if (CARelics.HEMOST.get().gained(entity)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HEMOST.get())) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.HEMOSTATIC, 20, 0, false, false));
         }
     }
 
     private static void handleRelicYearning(Player entity) {
-        if (CARelics.YEARNING.get().gained(entity)) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.YEARNING.get())) {
             if (!(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() == ItemStack.EMPTY.getItem())) {
                 double amplifi = Math.min(Math.floor(entity.experienceLevel * 0.25), 64);
                 if (amplifi >= 1 && !entity.level().isClientSide()) {
@@ -308,6 +303,7 @@ public class PlayerTickEventHandler {
     private static final ResourceLocation CHALISE_ATTACK_SPEED_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "golden_chalise_attack_speed");
 
     private static void handleGoldenChalise(Player entity) {
+        // TODO: GOLDEN_CHALISE 旧系统 relic 与 REGISTRY 物品 golden_chalise 路径冲突，暂未注册 babel collectible，待补不同名后迁移
         if (!CARelics.GOLDEN_CHALISE.get().gained(entity)) {
             AttributeInstance attr = entity.getAttribute(Attributes.ATTACK_SPEED);
             if (attr != null && attr.getModifier(CHALISE_ATTACK_SPEED_ID) != null) {

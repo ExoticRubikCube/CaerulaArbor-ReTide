@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
@@ -282,14 +283,14 @@ public class LivingAttackEventHandler {
                 world.playSound(null, target.blockPosition(), SoundEvents.WITHER_HURT, SoundSource.NEUTRAL, 2, 1);
             }
 
-            if (CARelics.HAND_FIREWORK.get().gained(playerVariables) && isFireworkWeapon(mainHandItem, registryName)
+            if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_FIREWORK.get()) && isFireworkWeapon(mainHandItem, registryName)
                     && player.getRandom().nextFloat() < 0.33F) {
                 world.playSound(null, player.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 3.6F, 1);
                 CaerulaArbor.queueServerWork(10, () -> detonateFireworkRelic(world, target, targetPosition, player, amount));
             }
         }
 
-        if (!CARelics.LEGEND_CHITIN.get().gained(playerVariables) || player.getRandom().nextFloat() >= 0.05F) return;
+        if (!player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.LEGEND_CHITIN.get()) || player.getRandom().nextFloat() >= 0.05F) return;
 
         playerVariables.chitin_knife_selected = player.getMainHandItem().copy();
         playerVariables.syncPlayerVariables(player);

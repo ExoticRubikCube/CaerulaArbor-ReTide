@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.util;
 
 public class MathUtils {
 
-    //TODO:准备迁移到巴别塔lib
+    //TODO:可能需要迁移到巴别塔lib
     private MathUtils() {
         throw new UnsupportedOperationException("Utility class");
     }

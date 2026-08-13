@@ -1,7 +1,9 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
@@ -40,7 +42,7 @@ public class SmellyHemostaticItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!CARelics.HEMOST.get().gained(entity)) {
+        if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HEMOST.get())) {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, (float) 3.5, 1);
             }

@@ -300,12 +300,9 @@ public class WorldUtils {
 		return true;
 	}
 
-	//需要注释解释
+	//游戏规则(生物课破坏)
 	public static boolean canGrief(LevelAccessor world) {
-		if (world.isClientSide()) {
-			return false;
-		}
-		if (CAConfigs.BREAKABLE.get()) {
+		if (!world.isClientSide() && CAConfigs.BREAKABLE.get()) {
 			return world.getLevelData().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
 		}
 		return false;

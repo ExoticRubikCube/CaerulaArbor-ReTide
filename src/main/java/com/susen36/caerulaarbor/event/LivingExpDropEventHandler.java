@@ -1,6 +1,8 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -15,7 +17,7 @@ public class LivingExpDropEventHandler {
 		Player sourceentity = event.getAttackingPlayer();
 		if (sourceentity == null)
 			return;
-		if (CARelics.KING_EXTENSION.get().gained(sourceentity)) {
+		if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_EXTENSION.get())) {
 			if (ModCapabilities.getPlayerVariables(sourceentity).player_lives <= 1) {
 				event.setDroppedExperience((int) (event.getDroppedExperience() * 1.5));
 			}

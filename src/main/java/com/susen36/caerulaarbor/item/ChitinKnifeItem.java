@@ -1,6 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -43,7 +44,7 @@ public class ChitinKnifeItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!CARelics.LEGEND_CHITIN.get().gained(entity)) {
+        if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.LEGEND_CHITIN.get())) {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BELL_BLOCK, SoundSource.NEUTRAL, (float) 3.5, 1);
             }

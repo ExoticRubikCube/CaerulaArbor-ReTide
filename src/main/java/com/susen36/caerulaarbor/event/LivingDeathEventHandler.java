@@ -299,15 +299,15 @@ public class LivingDeathEventHandler {
 
     private static void handlePlayerKillRelics(LivingDeathEvent event, LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity) {
         PlayerVariable capability = ModCapabilities.getPlayerVariables(sourceentity);
-        if (CARelics.CURSED_EMELIGHT.get().gained(capability)) {
+        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_EMELIGHT.get())) {
             capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.1, 0.2);
             capability.syncPlayerVariables(sourceentity);
         }
-        if (CARelics.CURSED_GLOWBODY.get().gained(capability)) {
+        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_GLOWBODY.get())) {
             capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.2, 0.3);
             capability.syncPlayerVariables(sourceentity);
         }
-        if (CARelics.CURSED_RESEARCH.get().gained(capability)) {
+        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_RESEARCH.get())) {
             capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.3, 0.5);
             capability.syncPlayerVariables(sourceentity);
         }
@@ -315,7 +315,7 @@ public class LivingDeathEventHandler {
             capability.player_light = 0;
             capability.syncPlayerVariables(sourceentity);
         }
-        if (CARelics.KING_ARMOR.get().gained(capability)) {
+        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_ARMOR.get())) {
             if (Math.random() < 0.08) {
                 if (capability.player_lives > 1) {
                     capability.player_lives = capability.player_lives - 1;
@@ -325,7 +325,7 @@ public class LivingDeathEventHandler {
                 capability.syncPlayerVariables(sourceentity);
             }
         }
-        if (CARelics.KING_CRYSTAL.get().gained(capability)) {
+        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_CRYSTAL.get())) {
             if (Math.random() < 0.1) {
                 if (capability.player_lives > 1) {
                     capability.player_lives = Math.max(capability.player_lives - 2, 1);

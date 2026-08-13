@@ -1,8 +1,10 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.client.Minecraft;
@@ -41,7 +43,7 @@ public class HandOfThornsItem extends RelicItemBase {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!CARelics.HAND_THORNS.get().gained(entity)) {
+        if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_THORNS.get())) {
             world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.CLOUD, x, y, z, 72, 1, 1, 1, 1);

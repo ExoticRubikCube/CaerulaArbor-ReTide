@@ -102,6 +102,7 @@ public abstract class RelicItemBase extends Item {
             return this.relic().get(player) < 0;
         }
         // NOT_GAINED：默认 = defaultLevel 还没拿到遗物
+        // TODO: 旧系统 RelicItemBase 核心，暂不迁移到 babel Collectibles
         return !this.relic().gained(player);
     }
 

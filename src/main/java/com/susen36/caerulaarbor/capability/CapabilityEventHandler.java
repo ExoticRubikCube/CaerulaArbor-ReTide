@@ -150,6 +150,7 @@ public class CapabilityEventHandler {
         clone.PEVO_NEXUS_expo_shield = original.PEVO_NEXUS_expo_shield;
         clone.PEVO_NODE_eunectes = original.PEVO_NODE_eunectes;
         clone.PEVO_NODE_less_armor = original.PEVO_NODE_less_armor;
+        // TODO: 旧系统 relic 数据克隆逻辑，待整体迁移到 babel Collectibles 后移除（涉及 babel attachment 数据克隆）
         for (RelicType relic : CARelics.RELICS_REGISTRY) {
             if (relic.gained(original)) {
                 relic.set(clone, relic.get(original));
