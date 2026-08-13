@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.util;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.manager.EPManager;
@@ -9,7 +10,7 @@ import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAConfigs;
-import com.susen36.caerulaarbor.init.CARelics;
+import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -223,7 +224,7 @@ public class PlayerStateUtils {
 	}
 
 	public static double getSurvivor(Entity entity) {
-		return CARelics.SURVIVOR_CONTRACT.get().get(entity);
+		return entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.SURVIVOR_CONTRACT.get());
 	}
 
 	public static boolean hasSurvivorCont(Entity entity) {

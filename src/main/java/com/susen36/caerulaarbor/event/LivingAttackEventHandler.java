@@ -51,7 +51,6 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import java.util.List;
 
 import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN;
-import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN_PET;
 
 @SuppressWarnings("unused")
 @EventBusSubscriber
@@ -185,56 +184,18 @@ public class LivingAttackEventHandler {
         if (sourceEntity == null) return;
         if (event.isCanceled()) return;
 
-        handleMobHitMigration(world, target, sourceEntity, damageSource);
-        handleOceanOffspringFriendlyFire(event, target, sourceEntity);
+        handleSeabornFriendlyFire(event, target, sourceEntity);
         if (event.isCanceled()) return;
         handleMobHitEvolution(event, world, target, sourceEntity, damageSource, event.getAmount());
         event.getAmount();
         handleSublimationAttack(world, target, sourceEntity, damageSource);
     }
 
-    private static void handleOceanOffspringFriendlyFire(LivingIncomingDamageEvent event, LivingEntity target, Entity sourceEntity) {
+    private static void handleSeabornFriendlyFire(LivingIncomingDamageEvent event, LivingEntity target, Entity sourceEntity) {
         if (sourceEntity.getType().is(SEABORN) && target.getType().is(SEABORN)) {
             LivingEntity srcTarget = sourceEntity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
             if (target != srcTarget) {
                 event.setCanceled(true);
-            }
-        }
-    }
-
-    private static void handleMobHitMigration(LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource) {
-        var migrationLevel = MapVariables.get(world).strategy_migration;
-        if (migrationLevel <= 0) return;
-
-        if (target.getType().is(SEABORN) && !sourceEntity.getType().is(SEABORN)
-                && !target.getType().is(SEABORN_PET) && !target.getType().is(SKIP_MIGRATION)
-                && !(sourceEntity instanceof Player player && player.getAbilities().instabuild)
-                && !damageSource.is(CADamageTags.BYPASSES_MIGRATION)) {
-            var migrationArea = new AABB(target.getX() - (8 + migrationLevel * 16), target.getY() - 16,
-                    target.getZ() - (8 + migrationLevel * 16), target.getX() + 8 + migrationLevel * 24,
-                    target.getY() + 16, target.getZ() + 8 + migrationLevel * 24);
-            directMigratingMobs(world, target, sourceEntity, migrationArea, 0.5, true);
-        }
-
-        if (target instanceof Player player
-                && ModCapabilities.getPlayerVariables(player).player_oceanization >= 3
-                && !sourceEntity.getType().is(SEABORN)) {
-            var migrationArea = new AABB(target.getX() - (8 + migrationLevel * 24), target.getY() - 16,
-                    target.getZ() - (8 + migrationLevel * 24), target.getX() + 8 + migrationLevel * 24,
-                    target.getY() + 16, target.getZ() + 8 + migrationLevel * 24);
-            directMigratingMobs(world, target, sourceEntity, migrationArea, 0.8, false);
-        }
-    }
-
-    private static void directMigratingMobs(LevelAccessor world, LivingEntity target, Entity sourceEntity, AABB area, double speed, boolean ignoreMarkedEntities) {
-        for (var candidate : world.getEntities(target, area)) {
-            if (!candidate.getType().is(SEABORN) || candidate.getType().is(SEABORN_PET)
-                    || candidate == sourceEntity || ignoreMarkedEntities && candidate.getType().is(IGNORE_MIGRATION)
-                    || !(candidate instanceof Mob mob)) continue;
-
-            mob.getNavigation().moveTo(target.getX(), target.getY(), target.getZ(), speed);
-            if (sourceEntity instanceof LivingEntity livingSource) {
-                mob.setTarget(livingSource);
             }
         }
     }

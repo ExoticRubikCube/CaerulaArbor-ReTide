@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.babel.difficulty.Difficulty;
+import com.susen36.babel.difficulty.NDifficulty;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
@@ -11,12 +11,11 @@ import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SubsistingUpgradeManager;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForgeMod;
@@ -31,14 +30,12 @@ public class EntityJoinLevelEventHandler {
         handleBornFunc(event);
     }
 
+    //TODO 需要迁移到lib
     private static void handleMobInit(EntityJoinLevelEvent event) {
         Entity entity = event.getEntity();
 
         if (entity instanceof LivingEntity livingEntity0) {
             double sanityModifier = 1;
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss"))))
-                sanityModifier = 0.16;
-            if (livingEntity0.getType().is(EntityTypeTags.UNDEAD)) sanityModifier = 0.5;
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "with_low_elemental_modifier"))))
                 sanityModifier = 0.5;
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "with_lower_elemental_modifier"))))
@@ -56,10 +53,7 @@ public class EntityJoinLevelEventHandler {
     }
 
     private static void handleBornFunc(EntityJoinLevelEvent event) {
-        LevelAccessor world = event.getLevel();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
+        Level world = event.getLevel();
         Entity entity = event.getEntity();
 
         if (!(entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.EVOLVED)))
@@ -81,7 +75,7 @@ public class EntityJoinLevelEventHandler {
                 health_index = SubsistingUpgradeManager.getSubsistHealthMultiplier(MapVariables.get(world).strategy_subsisting);
                 attack_index = GrowUpgradeManager.getGrowAttackMultiplier(MapVariables.get(world).strategy_grow);
                 armor_index = 1;
-                n = Difficulty.multiplier(world);
+                n = NDifficulty.multiplier(world);
                 if (n > 0) {
                     health_index = n * health_index;
                     attack_index = n * attack_index;
@@ -121,11 +115,7 @@ public class EntityJoinLevelEventHandler {
                                 ((entity instanceof LivingEntity livingEntity29 && livingEntity29.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity29.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * (1.0 + 0.1 * subl)));
                 }
 
-                final double finalX = x;
-                final double finalY = y;
-                final double finalZ = z;
                 final Entity finalEntity = entity;
-                final LevelAccessor finalWorld = world;
                 CaerulaArbor.queueServerWork(10, () -> {
                     if (!(finalEntity instanceof LivingEntity livEnt29 && livEnt29.hasEffect(CAMobEffects.POWER_OF_ANCHOR))) {
                         if (finalEntity instanceof LivingEntity livingEntity41 && livingEntity41.getAttributes().hasAttribute(CAAttributes.EVOLVED))
@@ -163,7 +153,7 @@ public class EntityJoinLevelEventHandler {
                     livingEntity58.getAttribute(Attributes.ATTACK_DAMAGE)
                             .setBaseValue(((entity instanceof LivingEntity livingEntity57 && livingEntity57.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity57.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
                                     * GrowUpgradeManager.getGrowAttackMultiplier(MapVariables.get(world).strategy_grow)));
-                n = Difficulty.multiplier(world);
+                n = NDifficulty.multiplier(world);
                 if (n > 0) {
                     if (n > 1.0) {
                         percentage = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);

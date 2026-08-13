@@ -25,7 +25,7 @@ public class StrengthOfCrowdGoal extends Goal {
     @Override
     public boolean canUse() {
         LivingEntity attacker = this.seaMonster.getLastHurtByMob();
-        return this.seaMonster.getLastHurtByMobTimestamp() != this.timestamp
+        return MapVariables.get(this.seaMonster.level()).strategy_migration > 0 && this.seaMonster.getLastHurtByMobTimestamp() != this.timestamp
                 && attacker != null
                 && attacker.isAlive()
                 && attacker != this.seaMonster

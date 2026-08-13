@@ -21,6 +21,7 @@ public class ItemUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
+	//TODO 需要重写为在铁砧上操作
 	/**
 	 * 将副手上的 {@code 锋利} 等级转写到主手物品的 {@code 联觉} 附魔上。
 	 *

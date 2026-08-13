@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.util;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
@@ -8,7 +9,6 @@ import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.init.CARelics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -60,7 +60,7 @@ public class EntityUtils {
 		if (entity == null)
 			return false;
 		return (ModCapabilities.getPlayerVariables(entity)).can_player_evo
-				&& (RelicUtils.hasRelic(CARelics.DISO.get(), entity) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
+				&& (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get()) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
 	}
 
 	public static Entity catchNearestEnemy(LevelAccessor world, double x, double y, double z, Entity obj) {
@@ -158,7 +158,7 @@ public class EntityUtils {
 	public static String getPlayerSurvconta(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round(CARelics.SURVIVOR_CONTRACT.get().get(entity));
+		return "" + Math.round(entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.SURVIVOR_CONTRACT.get()));
 	}
 
 	//需要评估是否下放到海嗣的基类
@@ -242,13 +242,6 @@ public class EntityUtils {
 					player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.gene_sample.no_exp").getString())), true);
 			}
 		}
-	}
-
-	// 获取玩家的相关记录值
-	public static String getPlayerEnrave(Entity entity) {
-		if (entity == null)
-			return "";
-		return "" + Math.round(CARelics.HAND_ENGRAVE.get().get(entity));
 	}
 
 	public static Entity getNearestEnemy(LevelAccessor world, double x, double y, double z, Entity exception0, Entity exception1, Entity obj) {
@@ -395,12 +388,12 @@ public class EntityUtils {
 	}
 
 	public static boolean isSameTeam(Entity a, Entity b) {
-		if (a == null || b == null)
+		if (a == null || b == null) {
 			return false;
-		Team at = a.getTeam();
-		Team bt = b.getTeam();
-		if (at == null || bt == null) return false;
-		return at.isAlliedTo(bt);
+		}
+		Team teamA = a.getTeam();
+		Team teamB = b.getTeam();
+		return teamA != null && teamB != null && teamA.isAlliedTo(teamB);
 	}
 
 	public static final TagKey<EntityType<?>> HUMAN = TagKey.create(
@@ -443,7 +436,7 @@ public class EntityUtils {
 					final Vec3 center = new Vec3(x, y, z);
 					List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
 							e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "phalax"))));
-					for (LivingEntity entityiterator : entfound) {
+					for (LivingEntity ignored : entfound) {
 						less = less + 1;
 						if (less >= 10) {
 							break;

@@ -1,7 +1,9 @@
 package com.susen36.caerulaarbor.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import com.susen36.caerulaarbor.network.send.RelicShowcaseButtonMessage;
@@ -365,7 +367,8 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			int[] lp = entry.labelPos();
 			String text = switch (entry.special()) {
 				case SURVIVOR -> EntityUtils.getPlayerSurvconta(entity);
-				case NONE -> entry.relic() == CARelics.HAND_ENGRAVE.get() ? EntityUtils.getPlayerEnrave(entity) : "";
+				case NONE ->
+						entry.relic() == CARelics.HAND_ENGRAVE.get() ? "" + entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.HAND_OF_ENGRAVE.get()) : "";
 				default -> "";
 			};
 			if (!text.isEmpty()) {

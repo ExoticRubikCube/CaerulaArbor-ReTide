@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.manager.EPManager;
@@ -8,6 +9,7 @@ import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
+import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -92,7 +94,7 @@ public class PlayerTickEventHandler {
         double tickCount = entity.tickCount;
 
         if (PlayerStateUtils.isNexusNoRejectionSelected(entity)) {
-            if (RelicUtils.hasRelic(CARelics.DISO.get(), entity)) {
+            if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get())) {
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                 capability.disoclusion = -1;
                 capability.syncPlayerVariables(entity);
@@ -228,15 +230,17 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleEngraveAndSurvivor(Player entity) {
-        if (CARelics.HAND_ENGRAVE.get().get(entity) > 0) {
+        int engrave = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.HAND_OF_ENGRAVE.get());
+        if (engrave > 0) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.ENGRAVED_TRIUMPH, 20,
-                        CARelics.HAND_ENGRAVE.get().get(entity) - 1, false, false));
+                        engrave - 1, false, false));
         }
-        if (CARelics.SURVIVOR_CONTRACT.get().get(entity) > 0) {
+        int survivor = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.SURVIVOR_CONTRACT.get());
+        if (survivor > 0) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SURVIVORS_GUIDE, 20,
-                        CARelics.SURVIVOR_CONTRACT.get().get(entity) - 1, false, false));
+                        survivor - 1, false, false));
         }
     }
 

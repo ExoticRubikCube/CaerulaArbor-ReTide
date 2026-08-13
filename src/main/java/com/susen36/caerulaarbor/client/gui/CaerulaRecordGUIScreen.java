@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.babel.BabelMod;
-import com.susen36.babel.difficulty.Difficulty;
+import com.susen36.babel.difficulty.NDifficulty;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
@@ -234,10 +234,10 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_neurodegression"), 101, 147, -3368449, false);
 		if (RelicUtils.hasRelic(CARelics.DISO_FLESH.get(), entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_deformity"), 101, 147, -3368449, false);
-        if (Difficulty.difficultyLevel(world).isNormal())
+        if (NDifficulty.difficultyLevel(world).isNormal())
             guiGraphics.drawString(this.font,
 
-                    Component.translatable("key.surging_waves").getString() + "·" + Difficulty.difficultyLevel(world).getLevel(), -4, -13, -10040065, false);
+                    Component.translatable("key.surging_waves").getString() + "·" + NDifficulty.difficultyLevel(world).value(), -4, -13, -10040065, false);
 	}
 
 	@Override

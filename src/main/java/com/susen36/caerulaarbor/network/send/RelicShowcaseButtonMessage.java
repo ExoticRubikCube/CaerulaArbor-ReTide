@@ -1,5 +1,7 @@
 package com.susen36.caerulaarbor.network.send;
 
+import com.susen36.babel.collectible.Collectibles;
+import com.susen36.babel.network.BabelNetwork;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
@@ -893,12 +895,10 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.SURVIVOR_CONTRACT.get().get(entity) >= 0) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.SURVIVOR_CONTRACT.get()) >= 0) {
                     {
-                        double setval = -1;
-                        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.SURVIVOR_CONTRACT.get().set(capability, (int) setval);
-                            capability.syncPlayerVariables(entity);
+                        entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.SURVIVOR_CONTRACT.get(), -1);
+                        BabelNetwork.syncCollectibles(entity);
                     }
                     if ((Entity) entity instanceof Player player) {
                         ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
@@ -928,12 +928,10 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.SURVIVOR_CONTRACT.get().get(entity) >= 0) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.SURVIVOR_CONTRACT.get()) >= 0) {
                         {
-                            double setval = -1;
-                            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.SURVIVOR_CONTRACT.get().set(capability, (int) setval);
-                                capability.syncPlayerVariables(entity);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.SURVIVOR_CONTRACT.get(), -1);
+                            BabelNetwork.syncCollectibles(entity);
                         }
                     }
                 }

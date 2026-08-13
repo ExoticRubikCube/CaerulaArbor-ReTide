@@ -1,7 +1,9 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.manager.EPManager;
+import com.susen36.babel.network.BabelNetwork;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
@@ -338,37 +340,40 @@ public class LivingDeathEventHandler {
                 }
             }
         }
-        if (CARelics.HAND_ENGRAVE.get().get(capability) >= 0
-                && CARelics.HAND_ENGRAVE.get().get(capability) < 99) {
-            if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
-                boolean validweapon = false;
-                if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.TRIDENT) {
-                    validweapon = true;
-                } else if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/tridents")))) {
-                    validweapon = true;
-                } else if (event.getSource().is(DamageTypes.TRIDENT)) {
-                    validweapon = true;
-                } else {
-                    String rname = BuiltInRegistries.ITEM.getKey((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem()).toString();
-                    for (String stringiterator : CAConfigs.HAND_ENGRAVE.get()) {
-                        if (PlayerStateUtils.matchesRegistryName(stringiterator, rname)) {
-                            validweapon = true;
-                            break;
+        if (sourceentity instanceof Player player) {
+            int engrave = player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.HAND_OF_ENGRAVE.get());
+            if (engrave >= 0 && engrave < 99) {
+                if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
+                    boolean validweapon = false;
+                    if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.TRIDENT) {
+                        validweapon = true;
+                    } else if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/tridents")))) {
+                        validweapon = true;
+                    } else if (event.getSource().is(DamageTypes.TRIDENT)) {
+                        validweapon = true;
+                    } else {
+                        String rname = BuiltInRegistries.ITEM.getKey((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem()).toString();
+                        for (String stringiterator : CAConfigs.HAND_ENGRAVE.get()) {
+                            if (PlayerStateUtils.matchesRegistryName(stringiterator, rname)) {
+                                validweapon = true;
+                                break;
+                            }
                         }
                     }
-                }
-                if (validweapon) {
-                    CARelics.HAND_ENGRAVE.get().set(capability, CARelics.HAND_ENGRAVE.get().get(capability) + 1);
-                    capability.syncPlayerVariables(sourceentity);
+                    if (validweapon) {
+                        player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_OF_ENGRAVE.get(), engrave + 1);
+                    }
                 }
             }
         }
-        if (CARelics.SURVIVOR_CONTRACT.get().get(capability) >= 0
-                && CARelics.SURVIVOR_CONTRACT.get().get(capability) < 32) {
+        int survivor = sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.SURVIVOR_CONTRACT.get());
+        if (survivor >= 0
+                && survivor < 32) {
             if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
                 if (Math.random() < 0.035 || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses")))) {
-                    CARelics.SURVIVOR_CONTRACT.get().set(capability, CARelics.SURVIVOR_CONTRACT.get().get(capability) + 1);
-                    capability.syncPlayerVariables(sourceentity);
+                    sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.SURVIVOR_CONTRACT.get(), survivor + 1);
+                    if (sourceentity instanceof Player player)
+                        BabelNetwork.syncCollectibles(player);
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.WAX_ON, x, y, z, 48, 0.7, 1.5, 0.7, 0.2);
                 }
