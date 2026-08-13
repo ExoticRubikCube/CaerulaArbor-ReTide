@@ -4,10 +4,12 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
@@ -37,16 +39,24 @@ public class PalsyOverlay {
 			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/palsy.png"), w / 2 + 5, h / 2 + -8, 0, 0, 16, 16, 16, 16);
 
 			event.getGuiGraphics().drawString(Minecraft.getInstance().font,
-
-					EntityUtils.getPalsy(entity), w / 2 + 17, h / 2 + -3, -13421773, false);
+					getPalsy(entity), w / 2 + 17, h / 2 + -3, -13421773, false);
 			event.getGuiGraphics().drawString(Minecraft.getInstance().font,
-
-					EntityUtils.getPalsy(entity), w / 2 + 16, h / 2 + -3, -1, false);
+					getPalsy(entity), w / 2 + 16, h / 2 + -3, -1, false);
 		}
 		RenderSystem.depthMask(true);
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableDepthTest();
 		RenderSystem.disableBlend();
 		RenderSystem.setShaderColor(1, 1, 1, 1);
+	}
+
+	private static String getPalsy(Entity entity) {
+		if (entity instanceof LivingEntity living) {
+			MobEffectInstance effectInstance = living.getEffect(BabelMobEffects.PALSY);
+			if (effectInstance != null) {
+				return String.valueOf(effectInstance.getAmplifier() + 1);
+			}
+		}
+		return "";
 	}
 }

@@ -2,7 +2,6 @@ package com.susen36.caerulaarbor.client.overlay.skillbar;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.isharmla.IsharmlaEntity;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -52,8 +51,8 @@ public class IsharmlasSkillBarOverlay {
 
             Entity ent;
             double ind = 0;
-            ent = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true)
-                    .stream().min(EntityUtils.compareDistOf(x, y, z)).orElse(null);
+			ent = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true)
+                    .stream().min(Comparator.<Entity>comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
             if (!(ent == null)) {
                 ind = 2400 - (ent instanceof IsharmlaEntity datEntI ? datEntI.getEntityData().get(IsharmlaEntity.DATA_SKILLP_1) : 0);
             }

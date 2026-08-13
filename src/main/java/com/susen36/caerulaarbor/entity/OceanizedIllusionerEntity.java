@@ -270,7 +270,7 @@ public class OceanizedIllusionerEntity extends SeaMonsterBoss implements RangedA
                 }
             }
         }
-        int num = (int) EntityUtils.getIllusionNum(this.level(), this.getX(), this.getY(), this.getZ());
+        int num = (int) this.getIllusionNum();
         float scale = Math.max(1 - num * 0.1f, 0.2f);
         if (flag) {
             return super.hurt(source, amount * scale * 0.5f);
@@ -381,7 +381,7 @@ public class OceanizedIllusionerEntity extends SeaMonsterBoss implements RangedA
                 }
             } else if (dura <= 0) {
                 if (!(target == null) && target.isAlive()) {
-                    if (EntityUtils.getIllusionNum(world, x, y, z) < 8 && EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
+                    if (this.getIllusionNum() < 8 && EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.HOSTILE, 1, 1);
                         }
@@ -476,6 +476,11 @@ public class OceanizedIllusionerEntity extends SeaMonsterBoss implements RangedA
     @Override
     public boolean canUsePortal(boolean allowVehicles) {
         return false;
+    }
+
+    public double getIllusionNum() {
+        final Vec3 center = this.position();
+        return this.level().getEntitiesOfClass(OceanIllusionEntity.class, new AABB(center, center).inflate(48 / 2d), e -> true).size();
     }
 
     public static AttributeSupplier.Builder createAttributes() {

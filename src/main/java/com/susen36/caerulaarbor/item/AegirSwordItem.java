@@ -67,7 +67,7 @@ public class AegirSwordItem extends SwordItem {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (entity instanceof LivingEntity livingEntity && !entity.level().isClientSide()) {
 			AttributeInstance attackAttr = livingEntity.getAttribute(Attributes.ATTACK_DAMAGE);
-			if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
+			if (selected && EntityUtils.getHealthPerc(livingEntity) >= 0.5) {
 				if (attackAttr.getModifier(AEGIR_ATTACK_ID) == null) {
 					attackAttr.addTransientModifier(new AttributeModifier(AEGIR_ATTACK_ID, 0.25D * 2.0D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 				}

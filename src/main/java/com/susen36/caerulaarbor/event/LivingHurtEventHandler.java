@@ -533,12 +533,12 @@ public class LivingHurtEventHandler {
             if (GladiiaEntity.getGladiiaAround(world, x, y, z) != null) {
                 factor = 0.7;
             }
-            if (entity instanceof GladiiaEntity) {
-                double xxx = EntityUtils.getHealthPerc(entity);
+            if (entity instanceof GladiiaEntity gladiia) {
+                double xxx = EntityUtils.getHealthPerc(gladiia);
                 factor = factor * Math.max(1 - 2.68 * Math.pow(xxx - 1, 2), 0.33);
             } else if (entity instanceof SpecterDollEntity) {
                 Entity lastEnemt = (entity instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtByMob() : null;
-                if (!(lastEnemt == null) && (lastEnemt != null ? entity.distanceTo(lastEnemt) : -1) <= 9) {
+                if (!(lastEnemt == null) && entity.distanceTo(lastEnemt) <= 9) {
                     factor = factor * 0.65;
                 }
             }

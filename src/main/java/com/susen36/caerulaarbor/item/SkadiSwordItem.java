@@ -106,7 +106,7 @@ public class SkadiSwordItem extends SwordItem {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide()) {
 			AttributeInstance attackAttr = livingEntity.getAttribute(Attributes.ATTACK_DAMAGE);
-			if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
+			if (selected && EntityUtils.getHealthPerc(livingEntity) >= 0.5) {
 				if (attackAttr.getModifier(SKADI_ATTACK_ID) == null) {
 					attackAttr.addTransientModifier(new AttributeModifier(SKADI_ATTACK_ID, 0.25D * 7.0D, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 				}

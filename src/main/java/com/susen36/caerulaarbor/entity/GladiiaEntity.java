@@ -103,7 +103,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		double vx = target.getX() - fromX;
 		double vy = target.getY() - fromY;
 		double vz = target.getZ() - fromZ;
-		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
+		double size = Math.clamp(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 1, 32);
 		for (int index0 = 0; index0 < (int) size; index0++) {
 			if (world instanceof ServerLevel level) {
 				level.sendParticles(ParticleTypes.DRIPPING_WATER, fromX + (vx / size) * index0, fromY + (vy / size) * index0 + 0.5, fromZ + (vz / size) * index0, 8, 0.32, 0.5, 0.32, 0.05);
@@ -180,21 +180,21 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		double targetX = target.getX();
 		double targetY = target.getY();
 		double targetZ = target.getZ();
-		if (!this.level().isClientSide()) {
+		if (!this.level().isClientSide() && target instanceof LivingEntity living) {
 			this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 					CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 2.2F, 1);
 			CaerulaArbor.queueServerWork(9, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 5) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							CASounds.GLADIIA_ATTACK_HIT.get(), SoundSource.NEUTRAL, 2.75F, 1);
-					this.hurtWithHunterAttack(target, (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+					this.hurtWithHunterAttack(living, (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
 				}
 			});
 		}
 		return true;
 	}
 
-	private void hurtWithHunterAttack(Entity target, float amount) {
+	private void hurtWithHunterAttack(LivingEntity target, float amount) {
         if (target.getBoundingBox().getSize() < getBoundingBox().getSize() * 2) {
 			amount *= 1.3F;
 		}
@@ -277,19 +277,19 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 						this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
 						CaerulaArbor.queueServerWork(10, () -> {
 							if (this.isAlive()) {
-								Entity ene = this.getTarget();
-								if (ene == null)
+								LivingEntity living = this.getTarget();
+								if (living == null)
 									return;
-								Entity side;
+								LivingEntity side;
 								double damage;
 								if (world instanceof Level level) {
-									level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.NEUTRAL, 3, 1);
+									level.playSound(null, BlockPos.containing(living.getX(), living.getY(), living.getZ()), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.NEUTRAL, 3, 1);
 								}
-								EntityUtils.pullToward(ene, this);
-								GladiiaEntity.spawnGladiiaLinkParticles(world, this, ene);
+								EntityUtils.pullToward(living, this);
+								GladiiaEntity.spawnGladiiaLinkParticles(world, this, living);
 								damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-								this.hurtWithHunterAttack(ene, (float) (damage * 3));
-								side = EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene);
+								this.hurtWithHunterAttack(living, (float) (damage * 3));
+								side = this.catchNearestEnemy();
 								if (!(side == null)) {
 									EntityUtils.pullToward(side, this);
 									GladiiaEntity.spawnGladiiaLinkParticles(world, this, side);
@@ -297,11 +297,11 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 								}
 								CaerulaArbor.queueServerWork(10, () -> {
 									if (world instanceof Level level) {
-										level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 3, 1);
+										level.playSound(null, BlockPos.containing(living.getX(), living.getY(), living.getZ()), CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 3, 1);
 									}
-									if (ene instanceof LivingEntity && !this.level().isClientSide())
+									if (living instanceof LivingEntity && !this.level().isClientSide())
 										this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 40, 0, false, false));
-									if (EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene) instanceof LivingEntity && !this.level().isClientSide())
+									if (this.catchNearestEnemy() instanceof LivingEntity && !this.level().isClientSide())
 										this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 40, 0, false, false));
 								});
 							}
@@ -387,8 +387,6 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		this.refreshDimensions();
 	}
 
-	
-
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
 		GladiiaEntity retval = CAEntities.GLADIIA.get().create(serverWorld);
@@ -402,7 +400,27 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		this.updateSwingTime();
 	}
 
-	
+	public LivingEntity catchNearestEnemy() {
+		LivingEntity enemy = null;
+		double minDist = -1.0D;
+		double d;
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		Level world = this.level();
+		for (LivingEntity entityiterator : world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 4), (y + 4), (z + 4), (x - 4), (y - 4), (z - 4)))) {
+			if (entityiterator instanceof Monster || (entityiterator instanceof Mob mobEnt ? mobEnt.getTarget() : null) == this) {
+				d = this.distanceToSqr(entityiterator);
+				if (d <= 16.0D) {
+					if (minDist == -1.0D || d < minDist) {
+						minDist = d;
+						enemy = entityiterator;
+					}
+				}
+			}
+		}
+		return enemy;
+	}
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();

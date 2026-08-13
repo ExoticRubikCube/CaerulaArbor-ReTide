@@ -30,10 +30,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecordGUIMenu> {
 	private final static HashMap<String, Object> guistate = CaerulaRecordGUIMenu.guistate;
+	private static final DecimalFormat HEALTH_FORMAT = new DecimalFormat("#.##");
 	private final Level world;
 	private final int x, y, z;
 	private final Player entity;
@@ -169,8 +171,8 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_health1"), 45, 71, -10092442, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_health"), 44, 71, -1, false);
-		guiGraphics.drawString(this.font, EntityUtils.getHealth(entity), 82, 71, -10092442, false);
-		guiGraphics.drawString(this.font, EntityUtils.getHealth(entity), 81, 71, -1, false);
+		guiGraphics.drawString(this.font, HEALTH_FORMAT.format(entity.getHealth()) + "/" + HEALTH_FORMAT.format(entity.getMaxHealth()), 82, 71, -10092442, false);
+		guiGraphics.drawString(this.font, HEALTH_FORMAT.format(entity.getHealth()) + "/" + HEALTH_FORMAT.format(entity.getMaxHealth()), 81, 71, -1, false);
 		guiGraphics.drawString(this.font, EntityUtils.getLives(entity), 18, 33, -16764058, false);
 		guiGraphics.drawString(this.font, EntityUtils.getLives(entity), 17, 33, -1, false);
 		guiGraphics.drawString(this.font, EntityUtils.getLiveMaxShown(entity), 36, 33, -16764058, false);

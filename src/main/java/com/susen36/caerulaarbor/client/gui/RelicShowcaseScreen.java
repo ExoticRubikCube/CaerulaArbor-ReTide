@@ -7,7 +7,6 @@ import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import com.susen36.caerulaarbor.network.send.RelicShowcaseButtonMessage;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -249,7 +248,8 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			if (!entry.visibleTest().test(entity)) continue;
 			int[] lp = entry.labelPos();
 			String text = switch (entry.special()) {
-				case SURVIVOR -> EntityUtils.getPlayerSurvconta(entity);
+				case SURVIVOR ->
+						"" + Math.round(entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.SURVIVOR_CONTRACT.get()));
 				case NONE -> entry.relic() == CARelics.HAND_ENGRAVE.get() ? "" + entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.HAND_OF_ENGRAVE.get()) : "";
 				default -> "";
 			};

@@ -75,7 +75,7 @@ public class OceanizedWolfEntity extends SeaMonster {
         this.targetSelector.addGoal(17, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(18, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(19, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(20, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+        this.targetSelector.addGoal(20, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> !EntityUtils.isOceanizedPlayer(target)));
         this.goalSelector.addGoal(22, new RandomStrollGoal(this, 0.5));
         this.goalSelector.addGoal(23, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(24, new FloatGoal(this));

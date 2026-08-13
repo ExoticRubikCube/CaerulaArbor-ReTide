@@ -65,7 +65,7 @@ public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAni
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this, SeaMonster.class));
 		this.targetSelector.addGoal(2, new StrengthOfCrowdGoal(this));
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, true));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> !EntityUtils.isOceanizedPlayer(target)));
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, true));
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, true, true));
 		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, true));

@@ -323,14 +323,14 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 			public boolean canUse() {
 				return super.canUse()
 						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative())
-						&& EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
+						&& !EntityUtils.isOceanizedPlayer(this.target);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
 				return super.canContinueToUse()
 						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative())
-						&& EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
+						&& !EntityUtils.isOceanizedPlayer(this.target);
 			}
 		});
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1.0D) {

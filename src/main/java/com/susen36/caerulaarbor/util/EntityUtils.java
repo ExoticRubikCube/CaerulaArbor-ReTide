@@ -1,11 +1,8 @@
 package com.susen36.caerulaarbor.util;
 
-import com.susen36.babel.collectible.Collectibles;
-import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.entity.OceanIllusionEntity;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
@@ -23,8 +20,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -34,45 +29,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
 
-import java.text.DecimalFormat;
-import java.util.Comparator;
 import java.util.List;
 
 public class EntityUtils {
 
 	private EntityUtils() {
 		throw new UnsupportedOperationException("Utility class");
-	}
-
-	private static final class OceanQueryCache {
-		LevelAccessor level;
-		long tick;
-		double x;
-		double y;
-		double z;
-		boolean result;
-		boolean valid;
-	}
-	private static final OceanQueryCache OCEAN_QUERY_CACHE = new OceanQueryCache();
-
-	public static Entity catchNearestEnemy(LevelAccessor world, double x, double y, double z, Entity entity) {
-		if (entity == null)
-			return null;
-		Entity enemy = null;
-		double minDist = -1.0D;
-		double d;
-		for (LivingEntity entityiterator : world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 4), (y + 4), (z + 4), (x - 4), (y - 4), (z - 4)))) {
-			if (entityiterator instanceof Monster || (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity) {
-				d = entity.distanceToSqr(entityiterator);
-				if (d <= 16.0D) {
-					if (minDist == -1.0D || d < minDist) {
-						minDist = d;
-						enemy = entityiterator;
-					}
-				}
-			}
-		}
-		return enemy;
 	}
 
 	public static void restorePlayerLights(Entity player, double num) {
@@ -106,13 +68,6 @@ public class EntityUtils {
 					24, 1, 1, 1, 0.1);
 			}
 		}
-	}
-
-	// 同上，需评估
-	public static String getPlayerSurvconta(Entity entity) {
-		if (entity == null)
-			return "";
-		return "" + Math.round(entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.SURVIVOR_CONTRACT.get()));
 	}
 
 	//需要评估是否下放到海嗣的基类
@@ -248,11 +203,6 @@ public class EntityUtils {
 		return MathUtils.getCosine(B.getX() - A.getX(), B.getZ() - A.getZ(), A.getLookAngle().x, A.getLookAngle().z);
 	}
 
-	public static double getIllusionNum(LevelAccessor world, double x, double y, double z) {
-		final Vec3 center = new Vec3(x, y, z);
-		return world.getEntitiesOfClass(OceanIllusionEntity.class, new AABB(center, center).inflate(48 / 2d), e -> true).size();
-	}
-
 	public static String getLiveMaxShown(Entity entity) {
 		if (entity == null)
 			return "";
@@ -300,38 +250,12 @@ public class EntityUtils {
 		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).player_shield);
 	}
 
-	public static String getPalsy(Entity entity) {
-		if (entity == null)
-			return "";
-		return "" + Math.round(entity instanceof LivingEntity livingEntity0 && livingEntity0.hasEffect(BabelMobEffects.PALSY) ? livingEntity0.getEffect(BabelMobEffects.PALSY).getAmplifier() + 1 : 0);
-	}
-
-	public static String getHealth(Entity entity) {
-		if (entity == null) {
-			return "";
-		}
-		double health = -1;
-		double maxHealth = -1;
-		if (entity instanceof LivingEntity livEnt) {
-			health = livEnt.getHealth();
-			maxHealth = livEnt.getMaxHealth();
-		}
-		DecimalFormat currentFormat = new java.text.DecimalFormat("##.##");
-		DecimalFormat maxFormat = new java.text.DecimalFormat("##.#");
-
-		return currentFormat.format(health) + "/" + maxFormat.format(maxHealth);
-	}
-
-	public static double getHealthPerc(Entity entity) {
-		if (!(entity instanceof LivingEntity livEnt)) {
-			return 0.0;
-		}
-
-		float maxHealth = livEnt.getMaxHealth();
+	public static double getHealthPerc(LivingEntity living) {
+		float maxHealth = living.getMaxHealth();
 		if (maxHealth <= 0.0f) {
 			return 0.0;
 		}
-		return livEnt.getHealth() / (double) maxHealth;
+		return Math.clamp(living.getHealth() / (double) maxHealth, 0.0, 1.0);
 	}
 
 	public static String getLight(Entity entity) {
@@ -340,20 +264,10 @@ public class EntityUtils {
 		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).player_light);
 	}
 
-	public static Comparator<Entity> compareDistOf(double x, double y, double z) {
-		return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
-	}
-
 	public static double getSpeed(Entity e) {
 		if (e == null)
 			return 0;
 		return Math.sqrt(e.getDeltaMovement().x() * e.getDeltaMovement().x() + e.getDeltaMovement().y() * e.getDeltaMovement().y() + e.getDeltaMovement().z() * e.getDeltaMovement().z());
-	}
-
-	public static double getSize(Entity entity) {
-		if (entity == null)
-			return 0;
-		return entity.getBbWidth() * entity.getBbHeight();
 	}
 
 	public static boolean isSameTeam(Entity a, Entity b) {
@@ -418,33 +332,9 @@ public class EntityUtils {
 		}
 	}
 
-	public static boolean isOceanizedPlayerNearby(LevelAccessor world, double x, double y, double z) {
-		long currentTick = world instanceof Level level ? level.getGameTime() : -1L;
-		if (OCEAN_QUERY_CACHE.valid
-				&& OCEAN_QUERY_CACHE.level == world
-				&& OCEAN_QUERY_CACHE.tick == currentTick
-				&& Math.abs(OCEAN_QUERY_CACHE.x - x) < 1.0E-5D
-				&& Math.abs(OCEAN_QUERY_CACHE.y - y) < 1.0E-5D
-				&& Math.abs(OCEAN_QUERY_CACHE.z - z) < 1.0E-5D) {
-			return OCEAN_QUERY_CACHE.result;
-		}
-		double half = 36.0D;
-		AABB aabb = new AABB(x - half, y - half, z - half, x + half, y + half, z + half);
-		boolean result = true;
-		for (Player player : world.getEntitiesOfClass(Player.class, aabb)) {
-			if (ModCapabilities.getPlayerVariables(player).player_oceanization >= 2.9D) {
-				result = false;
-				break;
-			}
-		}
-		OCEAN_QUERY_CACHE.valid = true;
-		OCEAN_QUERY_CACHE.level = world;
-		OCEAN_QUERY_CACHE.tick = currentTick;
-		OCEAN_QUERY_CACHE.x = x;
-		OCEAN_QUERY_CACHE.y = y;
-		OCEAN_QUERY_CACHE.z = z;
-		OCEAN_QUERY_CACHE.result = result;
-		return result;
+	public static boolean isOceanizedPlayer(Entity entity) {
+		return entity instanceof Player player
+				&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 2.9D;
 	}
 
 	// 应用环绕运动

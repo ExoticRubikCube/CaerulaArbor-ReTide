@@ -309,8 +309,8 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
                 if (tickCount % 10 == 0) {
                     {
                         final Vec3 center = new Vec3(x, y, z);
-                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                        for (Entity entityiterator : entfound) {
+                        List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (LivingEntity entityiterator : entfound) {
                             if (!entityiterator.isAlive()) {
                                 continue;
                             }
