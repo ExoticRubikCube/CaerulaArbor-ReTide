@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.api;
+package com.susen36.caerulaarbor.api.anim;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.util.Mth;

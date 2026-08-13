@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity.isharmla;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.ServerGeoAnimator;
+import com.susen36.caerulaarbor.api.anim.ServerGeoAnimator;
 import com.susen36.caerulaarbor.client.model.entity.IsharmlaModel;
 import com.susen36.caerulaarbor.entity.GladiiaWhirlEntity;
 import com.susen36.caerulaarbor.entity.SkadiCorruptedEntity;

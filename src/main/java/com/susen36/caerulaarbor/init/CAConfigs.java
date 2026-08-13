@@ -20,7 +20,6 @@ public class CAConfigs {
 	public static final ModConfigSpec.ConfigValue<Double> CLONE_NUM;
 	public static final ModConfigSpec.ConfigValue<Double> SANITY_BREAK;
 	public static final ModConfigSpec.ConfigValue<Double> OCEANIZE_HEALTH;
-	public static final ModConfigSpec.ConfigValue<Boolean> RELIC_BAN;
 	public static final ModConfigSpec.ConfigValue<Double> HEALTH_MULT;
 	public static final ModConfigSpec.ConfigValue<Double> ATTACK_MULT;
 	public static final ModConfigSpec.ConfigValue<Double> ARMOR_MULT;
@@ -70,7 +69,6 @@ public class CAConfigs {
 		CLONE_NUM = BUILDER.comment("全局增殖上限。游戏规则增殖上限的最大有效值。").define("global_clone_number_limit", (double) 24);
 		SANITY_BREAK = BUILDER.comment("损伤爆发基础伤害。对非玩家生物的伤害上限为该值的 6 倍。").define("sanity_break_damage_base", (double) 12);
 		OCEANIZE_HEALTH = BUILDER.comment("海嗣化基础生命值界限。用于确定计划外海嗣化时转变为精英单位的生命值分界线。").define("oceanize_health_base", (double) 9);
-		RELIC_BAN = BUILDER.comment("禁用高级收藏品。无法持有且无法激活。").define("ban_advanced_relics", false);
 		EXTERNAL_ERROSION = BUILDER.comment("海嗣能够腐蚀来自真菌感染：孢子和魔法病的有机方块。").define("external_errosion", true);
 		LP_LIMIT = BUILDER.comment("全局目标生命上限。").define("life_point_global_limit", (double) 32767);
 		SHIELD_LIMIT = BUILDER.comment("全局护盾值上限。").define("player_shield_global_limit", (double) 99999);

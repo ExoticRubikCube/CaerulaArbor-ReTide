@@ -1,9 +1,10 @@
 package com.susen36.caerulaarbor.util;
 
+import com.susen36.babel.collectible.Collectibles;
+import com.susen36.babel.network.BabelNetwork;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.CARelics;
-import com.susen36.caerulaarbor.relic.RelicType;
+import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,6 +12,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -21,20 +24,19 @@ public class RelicUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	public static boolean hasRelic(RelicType relic, Entity entity) {
-		// TODO: 旧系统 RelicUtils 核心，通用 RelicType 判断暂不迁移到 babel Collectibles
-		return relic.gained(entity);
+	public static boolean hasRelic(Item relic, Entity entity) {
+		return entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(relic);
 	}
 
-	public static double getRelic(RelicType relic, Entity entity) {
-		return relic.get(entity);
+	public static double getRelic(Item relic, Entity entity) {
+		return entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(relic);
 	}
 
 	public static void gainArmor(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
 		if (entity == null)
 			return;
 		PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(entity);
-		if (CARelics.KING_ARMOR.get().gained(playerVariables))
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_ARMOR.get()))
 			return;
 
 		BlockPos pos = BlockPos.containing(x, y, z);
@@ -46,8 +48,9 @@ public class RelicUtils {
 		if (world instanceof ServerLevel level)
 			level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 
-		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-		CARelics.KING_ARMOR.get().gainAndSync(capability, entity);
+		entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).markUsed(CAItems.KING_ARMOR.get());
+		if (entity instanceof Player player)
+			BabelNetwork.syncCollectibles(player);
 
 		if (world.isClientSide())
 			Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
@@ -58,22 +61,23 @@ public class RelicUtils {
 		}
 
 		double shieldAfterLifeTransfer = playerVariables.player_shield + storedLives;
-		capability.player_shield = shieldAfterLifeTransfer;
-		capability.syncPlayerVariables(entity);
+		playerVariables.player_shield = shieldAfterLifeTransfer;
+		playerVariables.syncPlayerVariables(entity);
 
-		capability.player_shield = shieldAfterLifeTransfer + 3;
-		capability.syncPlayerVariables(entity);
+		playerVariables.player_shield = shieldAfterLifeTransfer + 3;
+		playerVariables.syncPlayerVariables(entity);
 	}
 
 	public static void gainSpear(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
-		if (entity != null && !hasRelic(CARelics.KING_SPEAR.get(), entity)) {
+		if (entity != null && !hasRelic(CAItems.KING_SPEAR.get(), entity)) {
 			if (world instanceof Level level) {
 				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
 				if (world instanceof ServerLevel serverLevel)
 					serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 			}
-			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			CARelics.KING_SPEAR.get().gainAndSync(capability, entity);
+			entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).markUsed(CAItems.KING_SPEAR.get());
+			if (entity instanceof Player player)
+				BabelNetwork.syncCollectibles(player);
 			if (world.isClientSide())
 				Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
 		}

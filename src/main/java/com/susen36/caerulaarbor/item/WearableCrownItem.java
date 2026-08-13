@@ -4,12 +4,13 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.caerulaarbor.api.anim.SyncedAnimationItem;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -35,17 +36,14 @@ public class WearableCrownItem extends ArmorItem implements GeoItem, SyncedAnima
 			),
 			16,
 			BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.AMETHYST_BLOCK_RESONATE),
-			() -> Ingredient.of(),
+                Ingredient::of,
 			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "wearable_crown"))),
 			2.5f,
 			0f
 		)), type, properties);
 	}
 
-	@Override
-	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, context, list, flag);
-	}
+	
 
 	private PlayState predicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {

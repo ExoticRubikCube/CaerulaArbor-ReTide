@@ -38,9 +38,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 	private final int x, y, z;
 	private final Player entity;
 	Button button_show_on_hud;
-	Button button_show_relic_ptc;
 	ImageButton imagebutton_relic_icon;
-	ImageButton imagebutton_nurture_gene_set;
 
 	public CaerulaRecordGUIScreen(CaerulaRecordGUIMenu container, Inventory inventory, Component text) {
 		super(container, inventory, text);
@@ -87,9 +85,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 				guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.caerula_record_gui.tooltip_flesh"), mouseX, mouseY);
 		if (mouseX > leftPos + 136 && mouseX < leftPos + 161 && mouseY > topPos + 7 && mouseY < topPos + 27) {
             String result;
-            if (entity == null) {
-                result = "";
-            } else if ((ModCapabilities.getPlayerVariables(entity)).player_oceanization == 3) {
+            if ((ModCapabilities.getPlayerVariables(entity)).player_oceanization == 3) {
                 result = Component.translatable("item.caerula_arbor.language_key.description_13").getString();
             } else if ((ModCapabilities.getPlayerVariables(entity)).player_oceanization == 2) {
                 result = Component.translatable("item.caerula_arbor.language_key.description_12").getString();
@@ -173,39 +169,21 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_health1"), 45, 71, -10092442, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_health"), 44, 71, -1, false);
-		guiGraphics.drawString(this.font,
-
-				EntityUtils.getHealth(entity), 82, 71, -10092442, false);
-		guiGraphics.drawString(this.font,
-
-				EntityUtils.getHealth(entity), 81, 71, -1, false);
-		guiGraphics.drawString(this.font,
-
-				EntityUtils.getLives(entity), 18, 33, -16764058, false);
-		guiGraphics.drawString(this.font,
-
-				EntityUtils.getLives(entity), 17, 33, -1, false);
-		guiGraphics.drawString(this.font,
-
-				EntityUtils.getLiveMaxShown(entity), 36, 33, -16764058, false);
-		guiGraphics.drawString(this.font,
-
-				EntityUtils.getLiveMaxShown(entity), 35, 33, -16724737, false);
-		guiGraphics.drawString(this.font,
-
-				EntityUtils.getShield(entity), 18, 53, -13421773, false);
-		guiGraphics.drawString(this.font,
-
-				EntityUtils.getShield(entity), 17, 53, -1, false);
+		guiGraphics.drawString(this.font, EntityUtils.getHealth(entity), 82, 71, -10092442, false);
+		guiGraphics.drawString(this.font, EntityUtils.getHealth(entity), 81, 71, -1, false);
+		guiGraphics.drawString(this.font, EntityUtils.getLives(entity), 18, 33, -16764058, false);
+		guiGraphics.drawString(this.font, EntityUtils.getLives(entity), 17, 33, -1, false);
+		guiGraphics.drawString(this.font, EntityUtils.getLiveMaxShown(entity), 36, 33, -16764058, false);
+		guiGraphics.drawString(this.font, EntityUtils.getLiveMaxShown(entity), 35, 33, -16724737, false);
+		guiGraphics.drawString(this.font, EntityUtils.getShield(entity), 18, 53, -13421773, false);
+		guiGraphics.drawString(this.font, EntityUtils.getShield(entity), 17, 53, -1, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_discolution"), 102, 86, -13434829, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_disoclution"), 101, 86, -3368449, false);
         String result = "";
         if (entity != null) {
             result = new java.text.DecimalFormat("##.##").format((ModCapabilities.getPlayerVariables(entity)).player_light);
         }
-        guiGraphics.drawString(this.font,
-
-                result, 100, -13, -1, false);
+        guiGraphics.drawString(this.font, result, 100, -13, -1, false);
 		if (PlayerStateUtils.isLightBright(entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_lightsablaze"), 100, -29, -3342337, false);
 		if (PlayerStateUtils.isLightWaving(entity))
@@ -222,10 +200,8 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		if (currentElement != null) {
 			String elementValue = Math.round(currentElement.getValue()) + "/" + Math.round(currentElement.getMaxValue());
 			guiGraphics.drawString(this.font,
-
 					elementValue, 124, 50, -16737895, false);
 			guiGraphics.drawString(this.font,
-
 					elementValue, 123, 50, -1, false);
 			guiGraphics.drawString(this.font, currentElement.getType().description(), 124, 41, -16737895, false);
 			guiGraphics.drawString(this.font, currentElement.getType().description(), 123, 41, -1, false);
@@ -235,51 +211,23 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_FLESH.get()))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_deformity"), 101, 147, -3368449, false);
         if (NDifficulty.difficultyLevel(world).isNormal())
-            guiGraphics.drawString(this.font,
-
-                    Component.translatable("key.surging_waves").getString() + "·" + NDifficulty.difficultyLevel(world).value(), -4, -13, -10040065, false);
+            guiGraphics.drawString(this.font, Component.translatable("key.surging_waves").getString() + "·" + NDifficulty.difficultyLevel(world).value(), -4, -13, -10040065, false);
 	}
 
 	@Override
 	public void init() {
 		super.init();
 		button_show_on_hud = new PlainTextButton(this.leftPos + 4, this.topPos + 123, 82, 20, Component.translatable("gui.caerula_arbor.caerula_record_gui.button_show_on_hud"), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(0, x, y, z));
-				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 0, x, y, z);
-			}
-		}, this.font);
+            PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(0, x, y, z));
+            CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 0, x, y, z);
+        }, this.font);
 		guistate.put("button:button_show_on_hud", button_show_on_hud);
 		this.addRenderableWidget(button_show_on_hud);
-		button_show_relic_ptc = new PlainTextButton(this.leftPos + 4, this.topPos + 147, 98, 20, Component.translatable("gui.caerula_arbor.caerula_record_gui.button_show_relic_ptc"), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(1, x, y, z));
-				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 1, x, y, z);
-			}
-		}, this.font);
-		guistate.put("button:button_show_relic_ptc", button_show_relic_ptc);
-		this.addRenderableWidget(button_show_relic_ptc);
 		imagebutton_relic_icon = new ImageButton(this.leftPos + 6, this.topPos + 99, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_icon"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_icon_highlighted")), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(2, x, y, z));
-				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 2, x, y, z);
-			}
-		});
+            PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(2, x, y, z));
+            CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 2, x, y, z);
+        });
 		guistate.put("button:imagebutton_relic_icon", imagebutton_relic_icon);
 		this.addRenderableWidget(imagebutton_relic_icon);
-		imagebutton_nurture_gene_set = new ImageButton(this.leftPos + 28, this.topPos + 99, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_nurture_gene_set"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_nurture_gene_set_highlighted")), e -> {
-			if (PlayerStateUtils.canPlayerEvo(entity)) {
-				PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(3, x, y, z));
-				CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 3, x, y, z);
-			}
-		}) {
-			@Override
-			public void renderWidget(GuiGraphics guiGraphics, int gx, int gy, float ticks) {
-				this.visible = PlayerStateUtils.canPlayerEvo(entity);
-				super.renderWidget(guiGraphics, gx, gy, ticks);
-			}
-		};
-		guistate.put("button:imagebutton_nurture_gene_set", imagebutton_nurture_gene_set);
-		this.addRenderableWidget(imagebutton_nurture_gene_set);
 	}
 }

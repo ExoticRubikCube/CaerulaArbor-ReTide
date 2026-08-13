@@ -3,9 +3,7 @@ package com.susen36.caerulaarbor.capability;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlockEntities;
-import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.network.receive.SavedDataSyncMessage;
-import com.susen36.caerulaarbor.relic.RelicType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -84,7 +82,7 @@ public class CapabilityEventHandler {
         Player player = event.getEntity();
         Player oldPlayer = event.getOriginal();
         oldPlayer.revive();
-        handlePlayerVariables(player, oldPlayer, event.isWasDeath());
+        handlePlayerVariables(player, oldPlayer);
     }
 
     @SubscribeEvent
@@ -113,7 +111,7 @@ public class CapabilityEventHandler {
         }
     }
 
-    private static void handlePlayerVariables(Player player, Player oldPlayer, boolean wasDeath) {
+    private static void handlePlayerVariables(Player player, Player oldPlayer) {
         PlayerVariable original = ModCapabilities.getPlayerVariables(oldPlayer);
         PlayerVariable clone = ModCapabilities.getPlayerVariables(player);
         clone.player_light = original.player_light;
@@ -122,44 +120,12 @@ public class CapabilityEventHandler {
         clone.player_shield = original.player_shield;
         clone.disoclusion = original.disoclusion;
         clone.show_stats = original.show_stats;
-        clone.kingShowPtc = original.kingShowPtc;
         clone.player_util_RAINBOW = original.player_util_RAINBOW;
         clone.player_util_AROMATIC = original.player_util_AROMATIC;
-        clone.player_king_suit = original.player_king_suit;
-        clone.player_demon_suit = original.player_demon_suit;
         clone.player_oceanization = original.player_oceanization;
         clone.plauyer_balance = original.plauyer_balance;
         clone.can_player_evo = original.can_player_evo;
         clone.reserve_quantity = original.reserve_quantity;
         clone.reserve_quality = original.reserve_quality;
-        clone.PEVO_NEXUS_no_rejection = original.PEVO_NEXUS_no_rejection;
-        clone.PEVO_NEXUS_reg_sanity = original.PEVO_NEXUS_reg_sanity;
-        clone.PEVO_NODE_add_def = original.PEVO_NODE_add_def;
-        clone.PEVO_NODE_add_resis = original.PEVO_NODE_add_resis;
-        clone.PEVO_NODE_add_speed = original.PEVO_NODE_add_speed;
-        clone.PEVO_NODE_add_sanity = original.PEVO_NODE_add_sanity;
-        clone.PEVO_NEXUS_reg_lights = original.PEVO_NEXUS_reg_lights;
-        clone.PEVO_NODE_add_damage = original.PEVO_NODE_add_damage;
-        clone.PEVO_NODE_less_damage = original.PEVO_NODE_less_damage;
-        clone.PEVO_NODE_living_barrier = original.PEVO_NODE_living_barrier;
-        clone.PEVO_NODE_add_miss = original.PEVO_NODE_add_miss;
-        clone.PEVO_NEXUS_perc_damage = original.PEVO_NEXUS_perc_damage;
-        clone.PEVO_NODE_real_damage = original.PEVO_NODE_real_damage;
-        clone.PEVO_NODE_heal_damage = original.PEVO_NODE_heal_damage;
-        clone.PEVO_NODE_worse_break = original.PEVO_NODE_worse_break;
-        clone.PEVO_NEXUS_expo_shield = original.PEVO_NEXUS_expo_shield;
-        clone.PEVO_NODE_eunectes = original.PEVO_NODE_eunectes;
-        clone.PEVO_NODE_less_armor = original.PEVO_NODE_less_armor;
-        // TODO: 旧系统 relic 数据克隆逻辑，待整体迁移到 babel Collectibles 后移除（涉及 babel attachment 数据克隆）
-        for (RelicType relic : CARelics.RELICS_REGISTRY) {
-            if (relic.gained(original)) {
-                relic.set(clone, relic.get(original));
-            } else {
-                relic.reset(clone);
-            }
-        }
-        if (!wasDeath) {
-            clone.chitin_knife_selected = original.chitin_knife_selected;
-        }
     }
 }

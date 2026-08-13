@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.BabelConfig;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.init.CAConfigs;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.network.chat.Component;
@@ -17,7 +17,7 @@ public class PlayerLogInEventHandler {
 	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
 		if (event.getEntity() instanceof ServerPlayer serverPlayer) {
 			ResourceLocation relicBanNoticeId = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "ban_relic_notice");
-			if (CAConfigs.RELIC_BAN.get()) {
+			if (BabelConfig.banAdvancedCollectibles) {
 				AdvancementHolder relicBanNoticeAdvancement = serverPlayer.server.getAdvancements().get(relicBanNoticeId);
                 AdvancementProgress relicBanNoticeProgress = serverPlayer.getAdvancements().getOrStartProgress(relicBanNoticeAdvancement);
                 if (!relicBanNoticeProgress.isDone()) {

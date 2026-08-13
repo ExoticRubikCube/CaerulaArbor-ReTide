@@ -2,8 +2,6 @@ package com.susen36.caerulaarbor.util;
 
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.effect.LessArmorMobEffect;
-import com.susen36.babel.elemental.base.AbstractEPCapability;
-import com.susen36.babel.manager.EPManager;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
@@ -40,35 +38,29 @@ public class PlayerStateUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	private static PlayerVariable getPlayerVariables(Entity entity) {
-		if (entity == null)
-			return new PlayerVariable();
-		return ModCapabilities.getPlayerVariables(entity);
-	}
-
 	// 生命点数
 	public static int getLifePoint(Entity entity) {
-		return (int) getPlayerVariables(entity).player_lives;
+		return (int) ModCapabilities.getPlayerVariables(entity).player_lives;
 	}
 
 	public static void setLifePoint(Entity entity, int value) {
 		if (value < 1)
 			return;
 		int maxPoint = getMaxLifePoint(entity);
-		PlayerVariable c = getPlayerVariables(entity);
+		PlayerVariable c = ModCapabilities.getPlayerVariables(entity);
 		c.player_lives = Math.min(value, maxPoint);
 		c.syncPlayerVariables(entity);
 	}
 
 	public static int getMaxLifePoint(Entity entity) {
-		return (int) getPlayerVariables(entity).player_maxlive;
+		return (int) ModCapabilities.getPlayerVariables(entity).player_maxlive;
 	}
 
 	public static void setMaxLifePoint(Entity entity, int value) {
 		if (value < 1)
 			return;
 		int clampedValue = (int) Math.min(value, CAConfigs.LP_LIMIT.get());
-		PlayerVariable c = getPlayerVariables(entity);
+		PlayerVariable c = ModCapabilities.getPlayerVariables(entity);
 		c.player_maxlive = clampedValue;
 		c.syncPlayerVariables(entity);
 		if (clampedValue < getLifePoint(entity))
@@ -77,25 +69,25 @@ public class PlayerStateUtils {
 
 	// 护盾点数
 	public static int getShieldPoint(Entity entity) {
-		return (int) getPlayerVariables(entity).player_shield;
+		return (int) ModCapabilities.getPlayerVariables(entity).player_shield;
 	}
 
 	public static void setShieldPoint(Entity entity, int value) {
 		if (value < 0)
 			return;
 		int clampedValue = (int) Math.min(value, CAConfigs.SHIELD_LIMIT.get());
-		PlayerVariable c = getPlayerVariables(entity);
+		PlayerVariable c = ModCapabilities.getPlayerVariables(entity);
 		c.player_shield = clampedValue;
 		c.syncPlayerVariables(entity);
 	}
 
 	// 光芒值
 	public static double getPlayerLight(Entity entity) {
-		return getPlayerVariables(entity).player_light;
+		return ModCapabilities.getPlayerVariables(entity).player_light;
 	}
 
 	public static void setLights(Entity entity, double value) {
-		PlayerVariable c = getPlayerVariables(entity);
+		PlayerVariable c = ModCapabilities.getPlayerVariables(entity);
 		c.player_light = Mth.clamp(value, 0, 100);
 		c.syncPlayerVariables(entity);
 	}
@@ -122,15 +114,6 @@ public class PlayerStateUtils {
 		return 1 <= light && light < 50;
 	}
 
-	// 理智损伤
-	public static void dealSanityInjury(LivingEntity living, double amount) {
-		EPUtils.causeSanityInjury(living, amount);
-	}
-
-	public static void healSanityInjury(LivingEntity living, double amount) {
-		EPManager.getEP(living).getEP(AbstractEPCapability.EPType.NERVOUS).heal(Mth.floor(amount));
-	}
-
 	// 护甲侵蚀
 	public static void armorErrosion(Entity entity, int amount, int limit) {
 		for (int i = 0; i < amount; i++) {
@@ -148,7 +131,7 @@ public class PlayerStateUtils {
 		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_protective")))) {
 			return;
 		}
-		if (entity instanceof LivingEntity livingEntity && getPlayerVariables(entity).player_oceanization < 3) {
+		if (entity instanceof LivingEntity livingEntity && ModCapabilities.getPlayerVariables(entity).player_oceanization < 3) {
 			EPUtils.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 16, 32));
 		}
 		if (world instanceof ServerLevel level) {
@@ -164,7 +147,7 @@ public class PlayerStateUtils {
 		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_protective")))) {
 			return;
 		}
-		if (entity instanceof LivingEntity livingEntity && getPlayerVariables(entity).player_oceanization < 2.85) {
+		if (entity instanceof LivingEntity livingEntity && ModCapabilities.getPlayerVariables(entity).player_oceanization < 2.85) {
 			EPUtils.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 32, 96));
 		}
 		if (world instanceof ServerLevel level) {
@@ -220,7 +203,7 @@ public class PlayerStateUtils {
 	}
 
 	public static boolean canPlayerEvo(Entity entity) {
-		return getPlayerVariables(entity).can_player_evo;
+		return ModCapabilities.getPlayerVariables(entity).can_player_evo;
 	}
 
 	public static double getSurvivor(Entity entity) {
@@ -232,32 +215,6 @@ public class PlayerStateUtils {
 	}
 
 	public static boolean hasAromatic(Entity entity) {
-		return getPlayerVariables(entity).player_util_AROMATIC;
-	}
-
-	public static boolean isNexusRegSanitySelected(Entity entity) {
-		return getPlayerVariables(entity).PEVO_NEXUS_reg_sanity;
-	}
-
-	public static boolean isNexusRegLightsSelected(Entity entity) {
-		return getPlayerVariables(entity).PEVO_NEXUS_reg_lights;
-	}
-
-	public static boolean isNexusPercDamageSelected(Entity entity) {
-		return getPlayerVariables(entity).PEVO_NEXUS_perc_damage;
-	}
-
-	public static boolean isNexusNoRejectionSelected(Entity entity) {
-		return getPlayerVariables(entity).PEVO_NEXUS_no_rejection;
-	}
-
-	public static boolean isNexusExpoShieldSelected(Entity entity) {
-		return getPlayerVariables(entity).PEVO_NEXUS_expo_shield;
-	}
-
-	public static void setEvoNode(Entity entity, String node) {
-		if (entity == null)
-			return;
-		entity.getPersistentData().putString("showcasingEvoNode", node);
+		return ModCapabilities.getPlayerVariables(entity).player_util_AROMATIC;
 	}
 }

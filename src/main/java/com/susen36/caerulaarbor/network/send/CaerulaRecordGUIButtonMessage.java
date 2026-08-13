@@ -57,10 +57,8 @@ public class CaerulaRecordGUIButtonMessage implements CustomPacketPayload {
 			int x = message.x;
 			int y = message.y;
 			int z = message.z;
-			if (entity != null) {
-				handleButtonAction(entity, buttonID, x, y, z);
-			}
-		});
+            handleButtonAction(entity, buttonID, x, y, z);
+        });
 	}
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
@@ -77,14 +75,6 @@ public class CaerulaRecordGUIButtonMessage implements CustomPacketPayload {
 			}
 		}
 		if (buttonID == 1) {
-			{
-				boolean setval = !(ModCapabilities.getPlayerVariables(entity)).kingShowPtc;
-				PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-					capability.kingShowPtc = setval;
-					capability.syncPlayerVariables(entity);
-			}
-		}
-		if (buttonID == 2) {
 			if ((Entity) entity instanceof ServerPlayer ent) {
 				BlockPos bpos = BlockPos.containing(x, y, z);
 				ent.openMenu(new MenuProvider() {

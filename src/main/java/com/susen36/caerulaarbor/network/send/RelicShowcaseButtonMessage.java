@@ -6,7 +6,6 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
@@ -120,7 +119,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.KING_CROWN.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.KING_CROWN.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -140,7 +139,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.KING_CROWN.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.KING_CROWN.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -170,7 +169,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.KING_SPEAR.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.KING_SPEAR.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -190,7 +189,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.KING_SPEAR.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.KING_SPEAR.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -219,7 +218,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.KING_ARMOR.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.KING_ARMOR.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -239,7 +238,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.KING_ARMOR.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.KING_ARMOR.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -268,7 +267,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.KING_EXTENSION.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.KING_EXTENSION.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -288,7 +287,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.KING_EXTENSION.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.KING_EXTENSION.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -317,7 +316,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.KING_CRYSTAL.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.KING_CRYSTAL.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -337,7 +336,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.KING_CRYSTAL.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.KING_CRYSTAL.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -366,7 +365,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.SARKAZ_KING_ARTIFACT.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.SARKAZ_KING_ARTIFACT.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -386,7 +385,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.SARKAZ_KING_ARTIFACT.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.SARKAZ_KING_ARTIFACT.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -415,7 +414,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.SARKAZ_KING_FLAG.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.SARKAZ_KING_FLAG.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -435,7 +434,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.SARKAZ_KING_FLAG.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.SARKAZ_KING_FLAG.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -450,7 +449,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.SARKAZ_KING_BED.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.SARKAZ_KING_BED.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                     if ((Entity) entity instanceof Player player) {
@@ -485,7 +484,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.SARKAZ_KING_BED.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.SARKAZ_KING_BED.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -514,7 +513,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     }
                     {
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HAND_THORNS.get().set(capability, 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_THORNS.get(), 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -534,7 +533,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HAND_THORNS.get().set(capability, 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_THORNS.get(), 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -564,7 +563,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HAND_STRANGLE.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_STRANGLE.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -584,7 +583,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HAND_STRANGLE.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_STRANGLE.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -614,7 +613,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HAND_FERTILITY.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_FERTILITY.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -634,7 +633,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HAND_FERTILITY.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_FERTILITY.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -664,7 +663,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HAND_OF_PULVERIZATION.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_OF_PULVERIZATION.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -684,7 +683,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HAND_OF_PULVERIZATION.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_OF_PULVERIZATION.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -714,7 +713,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HAND_SWIPE.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_SWIPE.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -734,7 +733,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HAND_SWIPE.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_SWIPE.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -745,11 +744,11 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
             ItemStack togive = ItemStack.EMPTY;
             if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
-                if (CARelics.HAND_ENGRAVE.get().get(entity) >= 0) {
+                if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.HAND_OF_ENGRAVE.get()) >= 0) {
                     {
                         double setval = -1;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HAND_ENGRAVE.get().set(capability, (int) setval);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_OF_ENGRAVE.get(), (int) setval);
                             capability.syncPlayerVariables(entity);
                     }
                     if ((Entity) entity instanceof Player player) {
@@ -780,11 +779,11 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
-                    if (CARelics.HAND_ENGRAVE.get().get(entity) >= 0) {
+                    if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.HAND_OF_ENGRAVE.get()) >= 0) {
                         {
                             double setval = -1;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HAND_ENGRAVE.get().set(capability, (int) setval);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_OF_ENGRAVE.get(), (int) setval);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -799,7 +798,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HAND_FIREWORK.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_FIREWORK.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                     if ((Entity) entity instanceof Player player) {
@@ -834,7 +833,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HAND_FIREWORK.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_FIREWORK.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -849,7 +848,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.TREATY.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.TREATY.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                     if ((Entity) entity instanceof Player player) {
@@ -884,7 +883,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.TREATY.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.TREATY.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -945,7 +944,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.CURSED_EMELIGHT.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.CURSED_EMELIGHT.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                     if ((Entity) entity instanceof Player player) {
@@ -980,7 +979,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.CURSED_EMELIGHT.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.CURSED_EMELIGHT.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -1010,7 +1009,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.CURSED_GLOWBODY.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.CURSED_GLOWBODY.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -1030,7 +1029,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.CURSED_GLOWBODY.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.CURSED_GLOWBODY.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -1060,7 +1059,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.CURSED_RESEARCH.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.CURSED_RESEARCH.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -1080,7 +1079,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.CURSED_RESEARCH.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.CURSED_RESEARCH.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -1095,7 +1094,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HAND_SWORD.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_SWORD.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                     if ((Entity) entity instanceof Player player) {
@@ -1130,7 +1129,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HAND_SWORD.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_SWORD.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -1145,7 +1144,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.LEGEND_CHITIN.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.LEGEND_CHITIN.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                     if ((Entity) entity instanceof Player player) {
@@ -1180,7 +1179,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.LEGEND_CHITIN.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.LEGEND_CHITIN.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -1210,7 +1209,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HAND_SPEED.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_SPEED.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                 }
@@ -1230,7 +1229,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HAND_SPEED.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HAND_SPEED.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -1245,7 +1244,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.HEMOST.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HEMOST.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                     if ((Entity) entity instanceof Player player) {
@@ -1280,7 +1279,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.HEMOST.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.HEMOST.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }
@@ -1295,7 +1294,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                     {
                         boolean setval = false;
                         PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                            CARelics.YEARNING.get().set(capability, setval ? 1 : 0);
+                            entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.YEARNING.get(), setval ? 1 : 0);
                             capability.syncPlayerVariables(entity);
                     }
                     if ((Entity) entity instanceof Player player) {
@@ -1330,7 +1329,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
                         {
                             boolean setval = false;
                             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                                CARelics.YEARNING.get().set(capability, setval ? 1 : 0);
+                                entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CAItems.YEARNING.get(), setval ? 1 : 0);
                                 capability.syncPlayerVariables(entity);
                         }
                     }

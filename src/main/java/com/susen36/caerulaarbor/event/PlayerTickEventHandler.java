@@ -1,14 +1,15 @@
 package com.susen36.caerulaarbor.event;
 
 import com.susen36.babel.collectible.Collectibles;
-import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.*;
-import com.susen36.caerulaarbor.util.EntityUtils;
+import com.susen36.caerulaarbor.init.CADamageTypes;
+import com.susen36.caerulaarbor.init.CAEnchantments;
+import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -44,7 +45,6 @@ public class PlayerTickEventHandler {
         Player player = event.getEntity();
         handleEssenceResistanceWithIce(player);
         handleHandSwipeFunc(player);
-        handlePlayerEvolutionTick(player);
         handlePlayerTickFunc(player);
     }
 
@@ -79,25 +79,6 @@ public class PlayerTickEventHandler {
                     }
                 }
             }
-        }
-    }
-
-    private static void handlePlayerEvolutionTick(Player entity) {
-        if (entity == null) return;
-        if (!EntityUtils.canPlayerEvo(entity)) return;
-
-        double tickCount = entity.tickCount;
-
-        if (PlayerStateUtils.isNexusNoRejectionSelected(entity)) {
-            if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get())) {
-                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                capability.disoclusion = -1;
-                capability.syncPlayerVariables(entity);
-            }
-        }
-
-        if (PlayerStateUtils.isNexusRegSanitySelected(entity)) {
-            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(1);
         }
     }
 
@@ -303,8 +284,7 @@ public class PlayerTickEventHandler {
     private static final ResourceLocation CHALISE_ATTACK_SPEED_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "golden_chalise_attack_speed");
 
     private static void handleGoldenChalise(Player entity) {
-        // TODO: GOLDEN_CHALISE 旧系统 relic 与 REGISTRY 物品 golden_chalise 路径冲突，暂未注册 babel collectible，待补不同名后迁移
-        if (!CARelics.GOLDEN_CHALISE.get().gained(entity)) {
+        if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.GOLDEN_CHALISE.get())) {
             AttributeInstance attr = entity.getAttribute(Attributes.ATTACK_SPEED);
             if (attr != null && attr.getModifier(CHALISE_ATTACK_SPEED_ID) != null) {
                 attr.removeModifier(CHALISE_ATTACK_SPEED_ID);

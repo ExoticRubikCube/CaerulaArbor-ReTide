@@ -8,7 +8,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 
 public class DatagenUtils {
-    public static interface MinecraftDamageTypeTags extends DamageTypeTags {
+    public interface MinecraftDamageTypeTags extends DamageTypeTags {
     }
 
     public static class MinecraftDamageTypes implements DamageTypes {

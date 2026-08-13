@@ -15,7 +15,6 @@ import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornTransformManager;
 import com.susen36.caerulaarbor.manager.upgrade.BreedUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
@@ -204,37 +203,48 @@ public class LivingDeathEventHandler {
         if (sourceentity == null) return;
         if (!world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) return;
 
-        if (sourceentity instanceof Player && EntityUtils.canPlayerEvo(sourceentity)) {
-            double r0 = 0, r1 = 0, r2 = 0;
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {
-                r0 = 0.5; r1 = 0.25; r2 = 0.125;
-            } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite")))) {
-                r0 = 0.3; r1 = 0.075; r2 = 0.0075;
-            } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
-                r0 = 0.15;
+        if (sourceentity instanceof Player) {
+            boolean result = false;
+            if (sourceentity != null) {
+                result = (ModCapabilities.getPlayerVariables(sourceentity)).can_player_evo
+                        && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get()) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization > 2.9);
             }
-            if (Math.random() < r0) {
-                if (world instanceof ServerLevel level) {
-                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_NORMAL.get()));
-                    entityToSpawn.setPickUpDelay(10);
-                    entityToSpawn.setUnlimitedLifetime();
-                    level.addFreshEntity(entityToSpawn);
+            if (result) {
+                double r0 = 0, r1 = 0, r2 = 0;
+                if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {
+                    r0 = 0.5;
+                    r1 = 0.25;
+                    r2 = 0.125;
+                } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite")))) {
+                    r0 = 0.3;
+                    r1 = 0.075;
+                    r2 = 0.0075;
+                } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
+                    r0 = 0.15;
                 }
-            }
-            if (Math.random() < r1) {
-                if (world instanceof ServerLevel level) {
-                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_UPGRADED.get()));
-                    entityToSpawn.setPickUpDelay(10);
-                    entityToSpawn.setUnlimitedLifetime();
-                    level.addFreshEntity(entityToSpawn);
+                if (Math.random() < r0) {
+                    if (world instanceof ServerLevel level) {
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_NORMAL.get()));
+                        entityToSpawn.setPickUpDelay(10);
+                        entityToSpawn.setUnlimitedLifetime();
+                        level.addFreshEntity(entityToSpawn);
+                    }
                 }
-            }
-            if (Math.random() < r2) {
-                if (world instanceof ServerLevel level) {
-                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_SUPERB.get()));
-                    entityToSpawn.setPickUpDelay(10);
-                    entityToSpawn.setUnlimitedLifetime();
-                    level.addFreshEntity(entityToSpawn);
+                if (Math.random() < r1) {
+                    if (world instanceof ServerLevel level) {
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_UPGRADED.get()));
+                        entityToSpawn.setPickUpDelay(10);
+                        entityToSpawn.setUnlimitedLifetime();
+                        level.addFreshEntity(entityToSpawn);
+                    }
+                }
+                if (Math.random() < r2) {
+                    if (world instanceof ServerLevel level) {
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_SUPERB.get()));
+                        entityToSpawn.setPickUpDelay(10);
+                        entityToSpawn.setUnlimitedLifetime();
+                        level.addFreshEntity(entityToSpawn);
+                    }
                 }
             }
         }

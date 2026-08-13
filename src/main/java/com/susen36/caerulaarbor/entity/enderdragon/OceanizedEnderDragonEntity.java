@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.entity.enderdragon;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.api.ServerGeoAnimator;
+import com.susen36.caerulaarbor.api.anim.ServerGeoAnimator;
 import com.susen36.caerulaarbor.client.model.entity.OceanizedEnderDragonModel;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;

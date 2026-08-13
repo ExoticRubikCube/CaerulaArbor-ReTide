@@ -7,7 +7,6 @@ import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CARelics;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import com.susen36.caerulaarbor.network.send.RelicShowcaseButtonMessage;
-import com.susen36.caerulaarbor.relic.RelicType;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.RelicUtils;
@@ -65,7 +64,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 	// ===== 显示条目（按原 init 创建顺序，保持布局语义） =====
 	private record RelicDisplayEntry(
 		String guiKey,
-		RelicType relic,
+		Item relic,
 		SpecialType special,
 		int buttonId,
 		String atlasBase,
@@ -195,7 +194,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 	}
 
 	// ===== 工厂辅助：普通 boolean 遗物 =====
-	private static RelicDisplayEntry e(String guiKey, RelicType relic, int buttonId, String atlasBase, String itemKey) {
+	private static RelicDisplayEntry e(String guiKey, Item relic, int buttonId, String atlasBase, String itemKey) {
 		return new RelicDisplayEntry(guiKey, relic, RelicDisplayEntry.SpecialType.NONE, buttonId,
 			atlasBase, itemKey,
 			entity -> RelicUtils.hasRelic(relic, entity),

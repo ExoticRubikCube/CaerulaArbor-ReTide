@@ -1,79 +1,40 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.babel.collectible.CollectibleActivation;
+import com.susen36.babel.collectible.CollectibleItem;
+import com.susen36.babel.collectible.CollectibleTiers;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.init.CARelics;
-import com.susen36.caerulaarbor.item.relic.RelicItemBase;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
-import java.util.List;
 
-
-public class VoyageOfGoldItem extends RelicItemBase {
+public class VoyageOfGoldItem extends CollectibleItem.CustomCollectibleItem {
 	public VoyageOfGoldItem() {
-		super(CARelics.PURE_GOLD_EXPEDITION, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, CollectibleTiers.NORMAL, 0, 1, 0,
+				CollectibleActivation.builder()
+						.sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
+						.particle(ParticleTypes.HAPPY_VILLAGER, 72)
+						.showOverlay(true)
+						.build());
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, context, list, flag);
-		 String hoverText;
-        String extra_lines;
-        String locId;
-        locId = itemstack.getDescriptionId();
-        extra_lines = Component.translatable((locId + ".description_2")).getString() + "\n"
-                + Component.translatable((locId + ".description_3")).getString();
-        if (itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-            hoverText = extra_lines + "\n" + Component.translatable("item.caerula_arbor.relics.used").getString();
-        } else {
-            hoverText = extra_lines;
-        }
-        for (String line : hoverText.split("\n")) {
-            list.add(Component.literal(line));
-        }
-    }
-
-	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-        double x = entity.getX();
-        double y = entity.getY();
-        double z = entity.getZ();
-        ItemStack itemstack = ar.getObject();
-        if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-            for (int index0 = 0; index0 < 8; index0++) {
-                if (world instanceof ServerLevel level)
-                    level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
-            }
-            if (!entity.level().isClientSide())
-                entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 400, 1, false, false));
-            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            CARelics.PURE_GOLD_EXPEDITION.get().set(capability, 1);
-            capability.syncPlayerVariables(entity);
-            if (world instanceof Level level) {
-                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
-            }
-            CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
-        }
-        return ar;
+	public void onUse(ItemStack stack, Level level, Player player) {
+		for (int index0 = 0; index0 < 8; index0++) {
+			if (level instanceof ServerLevel serverLevel)
+				serverLevel.addFreshEntity(new ExperienceOrb(serverLevel, (player.getX() + Mth.nextDouble(RandomSource.create(), -1, 1)), (player.getY() + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (player.getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
+		}
+		if (!level.isClientSide())
+			player.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH, 400, 1, false, false));
 	}
 }

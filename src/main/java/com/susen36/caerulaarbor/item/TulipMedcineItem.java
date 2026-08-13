@@ -1,78 +1,63 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.collectible.CollectibleActivation;
+import com.susen36.babel.collectible.CollectibleItem;
+import com.susen36.babel.collectible.CollectibleTiers;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.CARelics;
-import com.susen36.caerulaarbor.item.relic.RelicItemBase;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-import java.util.List;
 
-
-public class TulipMedcineItem extends RelicItemBase {
+public class TulipMedcineItem extends CollectibleItem.CustomCollectibleItem {
 	public TulipMedcineItem() {
-		super(CARelics.TULIP_MEDCINE, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(2f).alwaysEdible().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(3).saturationModifier(2f).alwaysEdible().build()), false, 25, CollectibleTiers.ADVANCED, 0, 1, 0,
+				CollectibleActivation.builder()
+						.sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
+						.particle(ParticleTypes.HAPPY_VILLAGER, 72)
+						.showOverlay(true)
+						.build());
 	}
 
-	@Override
-	public int getUseDuration(ItemStack itemstack, LivingEntity user) {
-		return 60;
-	}
+	
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, context, list, flag);
-	}
-
-	@Override
-	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-        if (world instanceof ServerLevel level)
-			level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.15);
-		double setval = 0;
-		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-		capability.disoclusion = setval;
-		capability.syncPlayerVariables(entity);
-        if (!entity.level().isClientSide()) {
-            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 400, 2));
-            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 1));
-            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 1));
-            entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 600, 2));
-        }
-        if (entity instanceof ServerPlayer player) {
-            AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "but_i_refuse"));
-            AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
-            if (!ap.isDone()) {
-                for (String criteria : ap.getRemainingCriteria())
-                    player.getAdvancements().award(adv, criteria);
-            }
-        }
-		// TODO: TULIP_MEDCINE 旧系统 relic 与 REGISTRY 物品 tulip_medcine 路径冲突，暂未注册 babel collectible，待补不同名后迁移
-		if (!CARelics.TULIP_MEDCINE.get().gained(entity)) {
-			boolean activated = true;
-			PlayerVariable cap = ModCapabilities.getPlayerVariables(entity);
-			CARelics.TULIP_MEDCINE.get().set(cap, activated ? 1 : 0);
-			cap.syncPlayerVariables(entity);
+	public void onUse(ItemStack stack, Level level, Player player) {
+		double x = player.getX();
+		double y = player.getY();
+		double z = player.getZ();
+		if (level instanceof ServerLevel serverLevel)
+			serverLevel.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.15);
+		PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
+		capability.disoclusion = 0;
+		capability.syncPlayerVariables(player);
+		if (!level.isClientSide()) {
+			player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 400, 2));
+			player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 1));
+			player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 1));
+			player.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 600, 2));
 		}
-		return itemstack;
+		if (player instanceof ServerPlayer serverPlayer) {
+			AdvancementHolder adv = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "but_i_refuse"));
+			AdvancementProgress ap = serverPlayer.getAdvancements().getOrStartProgress(adv);
+			if (!ap.isDone()) {
+				for (String criteria : ap.getRemainingCriteria())
+					serverPlayer.getAdvancements().award(adv, criteria);
+			}
+		}
 	}
 }

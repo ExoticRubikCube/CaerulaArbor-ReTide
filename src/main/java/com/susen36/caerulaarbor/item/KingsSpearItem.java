@@ -1,21 +1,19 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.collectible.CollectibleActivation;
+import com.susen36.babel.collectible.CollectibleItem;
+import com.susen36.babel.collectible.CollectibleTiers;
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.init.CARelics;
-import com.susen36.caerulaarbor.item.relic.RelicItemBase;
-import com.susen36.caerulaarbor.util.RelicUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -25,24 +23,22 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import java.util.List;
 
-
-public class KingsSpearItem extends RelicItemBase {
+public class KingsSpearItem extends CollectibleItem.CustomCollectibleItem {
 	public KingsSpearItem() {
-		super(CARelics.KING_SPEAR, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON), false, 25, CollectibleTiers.ADVANCED, 0, 1, 0,
+				CollectibleActivation.builder()
+						.sound(SoundEvents.TOTEM_USE, 2F, 1F)
+						.particle(ParticleTypes.ENCHANTED_HIT, 72)
+						.showOverlay(true)
+						.build());
 	}
 
-	@Override
-	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, context, list, flag);
-	}
+	
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-		RelicUtils.gainSpear(world, entity.getX(), entity.getY(), entity.getZ(), entity, ar.getObject());
-		return ar;
+	public void onUse(ItemStack stack, Level level, Player player) {
+		
 	}
 
 	@Override

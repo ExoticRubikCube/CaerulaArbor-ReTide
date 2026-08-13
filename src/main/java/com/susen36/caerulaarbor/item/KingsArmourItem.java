@@ -1,15 +1,17 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.collectible.CollectibleActivation;
+import com.susen36.babel.collectible.CollectibleItem;
+import com.susen36.babel.collectible.CollectibleTiers;
+import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.init.CARelics;
-import com.susen36.caerulaarbor.item.relic.RelicItemBase;
-import com.susen36.caerulaarbor.util.RelicUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -28,9 +30,14 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.util.List;
 
 
-public class KingsArmourItem extends RelicItemBase {
+public class KingsArmourItem extends CollectibleItem.CustomCollectibleItem {
 	public KingsArmourItem() {
-		super(CARelics.KING_ARMOR, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC));
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, CollectibleTiers.ADVANCED, 0, 1, 0,
+				CollectibleActivation.builder()
+						.sound(SoundEvents.TOTEM_USE, 2F, 1F)
+						.particle(ParticleTypes.ENCHANTED_HIT, 72)
+						.showOverlay(true)
+						.build());
 	}
 
 	@Override
@@ -39,10 +46,18 @@ public class KingsArmourItem extends RelicItemBase {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-		RelicUtils.gainArmor(world, entity.getX(), entity.getY(), entity.getZ(), entity, ar.getObject());
-		return ar;
+	public void onUse(ItemStack stack, Level level, Player player) {
+		PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(player);
+		double storedLives = playerVariables.player_lives;
+		if (storedLives > 1) {
+			playerVariables.player_lives = 1;
+			playerVariables.syncPlayerVariables(player);
+		}
+		double shieldAfterLifeTransfer = playerVariables.player_shield + storedLives;
+		playerVariables.player_shield = shieldAfterLifeTransfer;
+		playerVariables.syncPlayerVariables(player);
+		playerVariables.player_shield = shieldAfterLifeTransfer + 3;
+		playerVariables.syncPlayerVariables(player);
 	}
 
 	@Override

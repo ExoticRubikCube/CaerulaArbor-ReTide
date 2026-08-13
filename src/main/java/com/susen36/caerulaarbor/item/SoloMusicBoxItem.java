@@ -1,20 +1,15 @@
 package com.susen36.caerulaarbor.item;
 
-import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.CARelics;
-import com.susen36.caerulaarbor.item.relic.RelicItemBase;
-import net.minecraft.core.BlockPos;
+import com.susen36.babel.collectible.CollectibleActivation;
+import com.susen36.babel.collectible.CollectibleItem;
+import com.susen36.babel.collectible.CollectibleTiers;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -27,9 +22,14 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 
-public class SoloMusicBoxItem extends RelicItemBase {
+public class SoloMusicBoxItem extends CollectibleItem.CustomCollectibleItem {
 	public SoloMusicBoxItem() {
-		super(CARelics.UTIL_MUSICBOX, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON), false, 25, CollectibleTiers.NORMAL, 0, 1, 0,
+				CollectibleActivation.builder()
+						.sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
+						.particle(ParticleTypes.HAPPY_VILLAGER, 72)
+						.showOverlay(true)
+						.build());
 	}
 
 	@Override
@@ -41,26 +41,13 @@ public class SoloMusicBoxItem extends RelicItemBase {
     }
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-        double x = entity.getX();
-        double y = entity.getY();
-        double z = entity.getZ();
-        ItemStack itemstack = ar.getObject();
-        if (!itemstack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("used")) {
-            for (int index0 = 0; index0 < 8; index0++) {
-                if (world instanceof ServerLevel level)
-                    level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
-            }
-            boolean setval = true;
-            PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            CARelics.UTIL_MUSICBOX.get().set(capability, 1);
-            capability.syncPlayerVariables(entity);
-            CustomData.update(DataComponents.CUSTOM_DATA, itemstack, tag -> tag.putBoolean("used", true));
-            world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
-            if (world instanceof ServerLevel level)
-                level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 1);
-        }
-        return ar;
+	public void onUse(ItemStack stack, Level level, Player player) {
+		double x = player.getX();
+		double y = player.getY();
+		double z = player.getZ();
+		for (int index0 = 0; index0 < 8; index0++) {
+			if (level instanceof ServerLevel serverLevel)
+				serverLevel.addFreshEntity(new ExperienceOrb(serverLevel, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
+		}
 	}
 }

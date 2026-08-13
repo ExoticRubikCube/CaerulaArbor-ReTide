@@ -57,22 +57,15 @@ public class EntityUtils {
 	}
 	private static final OceanQueryCache OCEAN_QUERY_CACHE = new OceanQueryCache();
 
-	public static boolean canPlayerEvo(Entity entity) {
+	public static Entity catchNearestEnemy(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
-			return false;
-		return (ModCapabilities.getPlayerVariables(entity)).can_player_evo
-				&& (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get()) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
-	}
-
-	public static Entity catchNearestEnemy(LevelAccessor world, double x, double y, double z, Entity obj) {
-		if (obj == null)
 			return null;
 		Entity enemy = null;
 		double minDist = -1.0D;
 		double d;
 		for (LivingEntity entityiterator : world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 4), (y + 4), (z + 4), (x - 4), (y - 4), (z - 4)))) {
-			if (entityiterator instanceof Monster || (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == obj) {
-				d = obj.distanceToSqr(entityiterator);
+			if (entityiterator instanceof Monster || (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity) {
+				d = entity.distanceToSqr(entityiterator);
 				if (d <= 16.0D) {
 					if (minDist == -1.0D || d < minDist) {
 						minDist = d;
@@ -449,15 +442,13 @@ public class EntityUtils {
 		double less = 0;
 		if (entity.tickCount % 20 == 10) {
 			if (!(entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.INFANTRY))) {
-				{
-					final Vec3 center = new Vec3(x, y, z);
-					List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
-							e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "phalax"))));
-					for (LivingEntity ignored : entfound) {
-						less = less + 1;
-						if (less >= 10) {
-							break;
-						}
+				final Vec3 center = new Vec3(x, y, z);
+				List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(16 / 2d),
+						e -> e != entity && e.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "phalax"))));
+				for (LivingEntity ignored : entfound) {
+					less = less + 1;
+					if (less >= 10) {
+						break;
 					}
 				}
 				if (less > 0) {

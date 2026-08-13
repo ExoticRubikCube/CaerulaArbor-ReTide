@@ -1,124 +1,95 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.relic.RelicTier;
-import com.susen36.caerulaarbor.relic.RelicType;
-import com.susen36.caerulaarbor.relic.RelicType.BooleanRelicType;
-import com.susen36.caerulaarbor.relic.RelicType.NumericRelicType;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
-import net.neoforged.bus.api.IEventBus;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.NewRegistryEvent;
-import net.neoforged.neoforge.registries.RegistryBuilder;
 
 /**
- * 收藏品注册中心
- * <ol>
- *   <li>ResourceKey.createRegistryKey(caerula_arbor:relics) 创建自定义 RegistryKey</li>
- *   <li>RegistryBuilder + NewRegistryEvent 向 NeoForge 根注册表注册我们的自定义 Registry</li>
- *   <li>DeferredRegister&lt;RelicType&gt; 统一注册所有遗物条目，第三方 Mod 可通过同一个 DeferredRegister 注入新遗物</li>
- * </ol>
+ * 遗物兼容别名层：将旧 CARelics 遗物标记映射到 {@link CAItems} 中对应的收集品/物品字段。
+ * <p>
+ * 旧系统基于自定义 caerula_arbor:relics 注册表（CollectibleLike 标记），现统一迁移到
+ * babel Collectibles（以实际物品为键的 isUsed / getLayer / setLayer）。本类仅保留原字段名
+ * 作为别名常量，供尚未迁移的调用点平滑过渡；逻辑一律走 {@link CAItems} + babel 附件 API。
  */
 public final class CARelics {
+	private CARelics() {
+		throw new UnsupportedOperationException("Utility class");
+	}
 
-    public static final ResourceKey<Registry<RelicType>> RELICS_REGISTRY_KEY = RelicType.createRegistryKey(CaerulaArbor.MODID, "relics");
-    public static final Registry<RelicType> RELICS_REGISTRY = new RegistryBuilder<>(RELICS_REGISTRY_KEY).sync(true).create();
+	/* ========== featured / util 食物类 ========== */
+	public static final DeferredHolder<Item, ? extends Item> FEATURED_CANNED_MEAT = CAItems.FEATURED_CANNED_MEAT;
+	public static final DeferredHolder<Item, ? extends Item> SEAWEED_SALAD = CAItems.BOWL_SEAGRASS;
+	public static final DeferredHolder<Item, ? extends Item> ORANGE_STORM = CAItems.GOLDEN_STORM;
+	public static final DeferredHolder<Item, ? extends Item> COFFEE_PLAINS_COFFEE_CANDY = CAItems.COFFEE_CANDY;
+	public static final DeferredHolder<Item, ? extends Item> PITTS_ASSORTED_FRUITS = CAItems.CANNED_CHERRY;
 
-    public static final DeferredRegister<RelicType> REGISTRY = DeferredRegister.create(RELICS_REGISTRY, CaerulaArbor.MODID);
+	/* ========== cursed 诅咒类 ========== */
+	public static final DeferredHolder<Item, ? extends Item> CURSED_EMELIGHT = CAItems.CURSED_EMELIGHT;
+	public static final DeferredHolder<Item, ? extends Item> CURSED_GLOWBODY = CAItems.CURSED_GLOWBODY;
+	public static final DeferredHolder<Item, ? extends Item> CURSED_RESEARCH = CAItems.CURSED_RESEARCH;
+	public static final DeferredHolder<Item, ? extends Item> CURSED_HEART = CAItems.CURSED_HEART;
 
-    /* ========== featured / util 食物类 ========== */
-    public static final DeferredHolder<RelicType, RelicType> FEATURED_CANNED_MEAT = REGISTRY.register("featured_canned_meat", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> SEAWEED_SALAD = REGISTRY.register("seaweed_salad", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> ORANGE_STORM = REGISTRY.register("orange_storm", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> COFFEE_PLAINS_COFFEE_CANDY = REGISTRY.register("coffee_plains_coffee_candy", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> PITTS_ASSORTED_FRUITS = REGISTRY.register("pitts_assorted_fruits", () -> new BooleanRelicType());
+	/* ========== king 国王系列 ========== */
+	public static final DeferredHolder<Item, ? extends Item> KING_CROWN = CAItems.KING_CROWN;
+	public static final DeferredHolder<Item, ? extends Item> KING_ARMOR = CAItems.KING_ARMOR;
+	public static final DeferredHolder<Item, ? extends Item> KING_SPEAR = CAItems.KING_SPEAR;
+	public static final DeferredHolder<Item, ? extends Item> KING_EXTENSION = CAItems.KING_EXTENSION;
+	public static final DeferredHolder<Item, ? extends Item> KING_CRYSTAL = CAItems.KING_CRYSTAL;
+	public static final DeferredHolder<Item, ? extends Item> ROYALFATE = CAItems.ROYAL_FATE;
 
-    /* ========== cursed 诅咒类 ========== */
-    public static final DeferredHolder<RelicType, RelicType> CURSED_EMELIGHT = REGISTRY.register("cursed_emelight", () -> new BooleanRelicType(RelicTier.CURSED));
-    public static final DeferredHolder<RelicType, RelicType> CURSED_GLOWBODY = REGISTRY.register("cursed_glowbody", () -> new BooleanRelicType(RelicTier.CURSED));
-    public static final DeferredHolder<RelicType, RelicType> CURSED_RESEARCH = REGISTRY.register("cursed_research", () -> new BooleanRelicType(RelicTier.CURSED));
-    public static final DeferredHolder<RelicType, RelicType> CURSED_HEART = REGISTRY.register("cursed_heart", () -> new BooleanRelicType(RelicTier.CURSED));
+	/* ========== hand 职业手系列 ========== */
+	public static final DeferredHolder<Item, ? extends Item> HAND_THORNS = CAItems.HAND_THORNS;
+	public static final DeferredHolder<Item, ? extends Item> HAND_STRANGLE = CAItems.HAND_STRANGLE;
+	public static final DeferredHolder<Item, ? extends Item> HAND_FERTILITY = CAItems.HAND_FERTILITY;
+	public static final DeferredHolder<Item, ? extends Item> HAND_SPEED = CAItems.HAND_SPEED;
+	public static final DeferredHolder<Item, ? extends Item> HAND_OF_PULVERIZATION = CAItems.HAND_OF_PULVERIZATION;
+	public static final DeferredHolder<Item, ? extends Item> HAND_SWIPE = CAItems.HAND_SWIPE;
+	public static final DeferredHolder<Item, ? extends Item> HAND_FIREWORK = CAItems.HAND_FIREWORK;
+	public static final DeferredHolder<Item, ? extends Item> HAND_ENGRAVE = CAItems.HAND_OF_ENGRAVE;
+	public static final DeferredHolder<Item, ? extends Item> HAND_SWORD = CAItems.HAND_SWORD;
 
-    /* ========== king 国王系列 ========== */
-    public static final DeferredHolder<RelicType, RelicType> KING_CROWN = REGISTRY.register("king_crown", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> KING_ARMOR = REGISTRY.register("king_armor", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> KING_SPEAR = REGISTRY.register("king_spear", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> KING_EXTENSION = REGISTRY.register("king_extension", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> KING_CRYSTAL = REGISTRY.register("king_crystal", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> ROYALFATE = REGISTRY.register("royalfate", () -> new BooleanRelicType(RelicTier.RARE));
+	/* ========== archfi 始源之骸 ========== */
+	public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_ARTIFACT = CAItems.SARKAZ_KING_ARTIFACT;
+	public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_FLAG = CAItems.SARKAZ_KING_FLAG;
+	public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_BED = CAItems.SARKAZ_KING_BED;
+	public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_RYLFATE = CAItems.SARKAZ_KING_RYLFATE;
 
-    /* ========== hand 职业手系列 ========== */
-    public static final DeferredHolder<RelicType, RelicType> HAND_THORNS = REGISTRY.register("hand_thorns", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> HAND_STRANGLE = REGISTRY.register("hand_strangle", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> HAND_FERTILITY = REGISTRY.register("hand_fertility", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> HAND_SPEED = REGISTRY.register("hand_speed", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> HAND_OF_PULVERIZATION = REGISTRY.register("hand_of_pulverization", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> HAND_SWIPE = REGISTRY.register("hand_swipe", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> HAND_FIREWORK = REGISTRY.register("hand_firework", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> HAND_ENGRAVE = REGISTRY.register("hand_engrave", () -> new NumericRelicType(-1, 99, -1, RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> HAND_SWORD = REGISTRY.register("hand_sword", () -> new BooleanRelicType(RelicTier.ADVANCED));
+	/* ========== special / misc ========== */
+	public static final DeferredHolder<Item, ? extends Item> SURVIVOR_CONTRACT = CAItems.SURVIVOR_CONTRACT;
+	public static final DeferredHolder<Item, ? extends Item> TREATY = CAItems.TREATY;
+	public static final DeferredHolder<Item, ? extends Item> NURTURE_GENE_SET = CAItems.NURTURE_GENE_SET;
+	public static final DeferredHolder<Item, ? extends Item> OIL_AND_CREAM = CAItems.OIL_AND_CREAM;
+	public static final DeferredHolder<Item, ? extends Item> TULIP_MEDCINE = CAItems.TULIP_MEDCINE;
+	public static final DeferredHolder<Item, ? extends Item> GOLDEN_CHALISE = CAItems.GOLDEN_CHALISE;
+	public static final DeferredHolder<Item, ? extends Item> LEGEND_CHITIN = CAItems.LEGEND_CHITIN;
 
-    /* ========== archfi 始源之骸 ========== */
-    public static final DeferredHolder<RelicType, RelicType> SARKAZ_KING_ARTIFACT = REGISTRY.register("sarkaz_king_artifact", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> SARKAZ_KING_FLAG = REGISTRY.register("sarkaz_king_flag", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> SARKAZ_KING_BED = REGISTRY.register("sarkaz_king_bed", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> SARKAZ_KING_RYLFATE = REGISTRY.register("sarkaz_king_rylfate", () -> new BooleanRelicType(RelicTier.ADVANCED));
+	/* ========== util 实用物系列 ========== */
+	public static final DeferredHolder<Item, ? extends Item> UTIL_MUSICBOX = CAItems.SOLO_MUSIC_BOX;
+	public static final DeferredHolder<Item, ? extends Item> UTIL_IRIS = CAItems.REDSTONE_IRIS_FLOWER;
+	public static final DeferredHolder<Item, ? extends Item> WEIRD_FLUTE = CAItems.ODD_FLUTE;
+	public static final DeferredHolder<Item, ? extends Item> PURE_GOLD_EXPEDITION = CAItems.VOYAGE_OF_GOLD;
+	public static final DeferredHolder<Item, ? extends Item> DURIN_OVERGROUND_ODYSSEY = CAItems.DURIN_OVERGROUND_ODYSSEY;
+	public static final DeferredHolder<Item, ? extends Item> UTIL_TOPONYM = CAItems.TOPONYM_TEXTOLOGY;
+	public static final DeferredHolder<Item, ? extends Item> HOT_WATER_KETTLE = CAItems.KETTLE;
+	public static final DeferredHolder<Item, ? extends Item> UTIL_ALLEY = CAItems.UTIL_ALLAY;
+	public static final DeferredHolder<Item, ? extends Item> VAMPIRES_BED = CAItems.VAMPIRES_BED;
+	public static final DeferredHolder<Item, ? extends Item> PROOF_OF_LONGEVITY = CAItems.PROOF_OF_LONGEVITY;
+	public static final DeferredHolder<Item, ? extends Item> UTIL_OMNIKEY = CAItems.UTIL_OMNIKEY;
+	public static final DeferredHolder<Item, ? extends Item> UTIL_SCORE = CAItems.UTIL_SCORE;
+	public static final DeferredHolder<Item, ? extends Item> UTIL_RESCISSION = CAItems.UTIL_RESCISSION;
+	public static final DeferredHolder<Item, ? extends Item> UTIL_STARE = CAItems.UTIL_STARE;
+	public static final DeferredHolder<Item, ? extends Item> UTIL_ALLAY = CAItems.UTIL_ALLAY;
+	public static final DeferredHolder<Item, ? extends Item> UTIL_RAINBOW = CAItems.RAINBOW_CANDY;
 
-    /* ========== special / misc ========== */
-    public static final DeferredHolder<RelicType, RelicType> SURVIVOR_CONTRACT = REGISTRY.register("survivor_contract", () -> new NumericRelicType(-1, 32, -1, RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> TREATY = REGISTRY.register("treaty", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> NURTURE_GENE_SET = REGISTRY.register("nurture_gene_set", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> OIL_AND_CREAM = REGISTRY.register("oil_and_cream", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> TULIP_MEDCINE = REGISTRY.register("tulip_medcine", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> GOLDEN_CHALISE = REGISTRY.register("golden_chalise", () -> new BooleanRelicType(RelicTier.ADVANCED));
-    public static final DeferredHolder<RelicType, RelicType> LEGEND_CHITIN = REGISTRY.register("legend_chitin", () -> new BooleanRelicType(RelicTier.ADVANCED));
+	/* ========== diso 不适体系列 ========== */
+	public static final DeferredHolder<Item, ? extends Item> DISO = CAItems.DISO;
+	public static final DeferredHolder<Item, ? extends Item> DISO_FLESH = CAItems.DISO_FLESH;
+	public static final DeferredHolder<Item, ? extends Item> DISO_BLOOD = CAItems.DISO_BLOOD;
+	public static final DeferredHolder<Item, ? extends Item> DISO_NEURO = CAItems.DISO_NEURO;
+	public static final DeferredHolder<Item, ? extends Item> DISO_ATTENTION = CAItems.DISO_ATTENTION;
+	public static final DeferredHolder<Item, ? extends Item> AHND_SWIPE = CAItems.AHND_SWIPE;
+	public static final DeferredHolder<Item, ? extends Item> HANSHAND_SPIKE = CAItems.HANSHAND_SPIKE;
 
-    /* ========== util 实用物系列 ========== */
-    public static final DeferredHolder<RelicType, RelicType> UTIL_MUSICBOX = REGISTRY.register("util_musicbox", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> UTIL_IRIS = REGISTRY.register("util_iris", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> WEIRD_FLUTE = REGISTRY.register("weird_flute", () -> new BooleanRelicType(RelicTier.RARE));
-    public static final DeferredHolder<RelicType, RelicType> PURE_GOLD_EXPEDITION = REGISTRY.register("pure_gold_expedition", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> DURIN_OVERGROUND_ODYSSEY = REGISTRY.register("durin_overground_odyssey", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> UTIL_TOPONYM = REGISTRY.register("util_toponym", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> HOT_WATER_KETTLE = REGISTRY.register("hot_water_kettle", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> UTIL_ALLEY = REGISTRY.register("util_alley", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> VAMPIRES_BED = REGISTRY.register("vampires_bed", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> PROOF_OF_LONGEVITY = REGISTRY.register("proof_of_longevity", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> UTIL_OMNIKEY = REGISTRY.register("util_omnikey", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> UTIL_SCORE = REGISTRY.register("util_score", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> UTIL_RESCISSION = REGISTRY.register("util_rescission", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> UTIL_STARE = REGISTRY.register("util_stare", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> UTIL_ALLAY = REGISTRY.register("util_allay", () -> new BooleanRelicType());
-    public static final DeferredHolder<RelicType, RelicType> UTIL_RAINBOW = REGISTRY.register("util_rainbow", () -> new BooleanRelicType());
-
-    /* ========== diso 不适体系列 ========== */
-    public static final DeferredHolder<RelicType, RelicType> DISO = REGISTRY.register("diso", () -> new BooleanRelicType(RelicTier.RARE));
-    public static final DeferredHolder<RelicType, RelicType> DISO_FLESH = REGISTRY.register("diso_flesh", () -> new BooleanRelicType(RelicTier.RARE));
-    public static final DeferredHolder<RelicType, RelicType> DISO_BLOOD = REGISTRY.register("diso_blood", () -> new BooleanRelicType(RelicTier.RARE));
-    public static final DeferredHolder<RelicType, RelicType> DISO_NEURO = REGISTRY.register("diso_neuro", () -> new BooleanRelicType(RelicTier.RARE));
-    public static final DeferredHolder<RelicType, RelicType> DISO_ATTENTION = REGISTRY.register("diso_attention", () -> new BooleanRelicType(RelicTier.RARE));
-    public static final DeferredHolder<RelicType, RelicType> AHND_SWIPE = REGISTRY.register("ahnd_swipe", () -> new BooleanRelicType(RelicTier.RARE));
-    public static final DeferredHolder<RelicType, RelicType> HANSHAND_SPIKE = REGISTRY.register("hanshand_spike", () -> new BooleanRelicType(RelicTier.RARE));
-
-    /* ========== relic 杂项 ========== */
-    public static final DeferredHolder<RelicType, RelicType> HEMOST = REGISTRY.register("hemost", () -> new BooleanRelicType(RelicTier.RARE));
-    public static final DeferredHolder<RelicType, RelicType> YEARNING = REGISTRY.register("yearning", () -> new BooleanRelicType(RelicTier.ADVANCED));
-
-    private CARelics() {
-        throw new UnsupportedOperationException("Utility class");
-    }
-
-    /**
-     * 注册 DeferredRegister 条目。
-     * 需要在 CaerulaArbor 构造器里和 ModCapabilities.register() 类似位置调用。
-     */
-    public static void register(IEventBus modEventBus) {
-        modEventBus.addListener(CARelics::onRelicRegister);
-    }
-
-    private static void onRelicRegister(NewRegistryEvent event) {
-        event.register(RELICS_REGISTRY);
-    }
+	/* ========== relic 杂项 ========== */
+	public static final DeferredHolder<Item, ? extends Item> HEMOST = CAItems.HEMOST;
+	public static final DeferredHolder<Item, ? extends Item> YEARNING = CAItems.YEARNING;
 }
