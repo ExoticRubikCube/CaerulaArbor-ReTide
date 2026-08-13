@@ -224,7 +224,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		guistate.put("button:button_show_on_hud", button_show_on_hud);
 		this.addRenderableWidget(button_show_on_hud);
 		imagebutton_relic_icon = new ImageButton(this.leftPos + 6, this.topPos + 99, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_icon"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "overlay/atlas/imagebutton_relic_icon_highlighted")), e -> {
-            PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(2, x, y, z));
+            PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(1, x, y, z));
             CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 2, x, y, z);
         });
 		guistate.put("button:imagebutton_relic_icon", imagebutton_relic_icon);
