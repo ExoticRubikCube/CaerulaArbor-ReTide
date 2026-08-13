@@ -1,18 +1,21 @@
 package com.susen36.caerulaarbor.entity.helper;
 
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.anim.SyncedAnimationEntity;
+import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -81,12 +84,7 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     protected void playBreakSound(ServerLevel serverLevel) {
     }
 
-    public void handlePassengerLeftClick(Player passenger) {
-        this.playPassengerLeftClickSound(passenger);
-        WorldUtils.clearNetherseaAround(this.level(), this.getX(), this.getY() - 1, this.getZ(), this);
-    }
-
-    protected void playPassengerLeftClickSound(Player passenger) {
+    public void playPassengerLeftClickSound(Player passenger) {
     }
 
     @Override
@@ -199,7 +197,7 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
         if (this.tickCount % 30 == 5 && this.entityData.get(DATA_DURABILITY) < 4) {
             this.entityData.set(DATA_DURABILITY, this.entityData.get(DATA_DURABILITY) + 1);
         }
-        WorldUtils.clearNetherseaAround(this.level(), this.getX(), this.getY(), this.getZ(), this);
+        clearNetherseaAround();
         this.refreshDimensions();
     }
 
@@ -232,10 +230,50 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
         super.travel(dir);
     }
 
-    @Override
-    public void aiStep() {
-        super.aiStep();
-        this.updateSwingTime();
+    public void clearNetherseaAround() {
+        Level level = this.level();
+        double x = this.getX();
+        double y = this.getY()-1;
+        double z = this.getZ();
+        BlockState target;
+        boolean canBreak;
+        boolean mayDrop;
+        double px;
+        double pz;
+        double py;
+        if (!this.isVehicle()) {
+            return;
+        }
+        for (int index0 = 0; index0 < 3; index0++) {
+            for (int index1 = 0; index1 < 2; index1++) {
+                for (int index2 = 0; index2 < 3; index2++) {
+                    px = index0 - 1 + x;
+                    py = index1 + y;
+                    pz = index2 - 1 + z;
+                    target = level.getBlockState(BlockPos.containing(px, py, pz));
+                    canBreak = false;
+                    mayDrop = false;
+                    if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail")))) {
+                        canBreak = true;
+                    } else if (target.getBlock() == CABlocks.OCEAN_OVARY.get()) {
+                        canBreak = true;
+                        mayDrop = true;
+                    } else if (target.canBeReplaced()) {
+                        canBreak = true;
+                        mayDrop = true;
+                    }
+                    if (canBreak) {
+                        if (mayDrop) {
+                            BlockPos pos = BlockPos.containing(px, py, pz);
+                            net.minecraft.world.level.block.Block.dropResources(level.getBlockState(pos), level, BlockPos.containing(px + 0.5, py + 0.5, pz + 0.5), null);
+                            level.destroyBlock(pos, false);
+                        } else {
+                            level.destroyBlock(BlockPos.containing(px, py, pz), false);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static AttributeSupplier.Builder createAttributes() {

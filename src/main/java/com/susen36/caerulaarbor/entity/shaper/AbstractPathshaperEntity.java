@@ -1,17 +1,20 @@
 package com.susen36.caerulaarbor.entity.shaper;
 
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -29,9 +32,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
@@ -369,7 +379,24 @@ public abstract class AbstractPathshaperEntity extends SeaMonsterBoss {
 		if (this.deathTime == 20) {
 			this.remove(RemovalReason.KILLED);
 			this.dropExperience(this.getKillCredit());
-			WorldUtils.dropRelicRoute(this.level(), this.getX(), this.getY(), this.getZ());
+			LevelAccessor world = this.level();
+			if (world instanceof ServerLevel level) {
+				if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+					ResourceKey<LootTable> lootTableKey = ResourceKey.create(
+							Registries.LOOT_TABLE,
+							ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gameplay/relic_route")
+					);
+					LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableKey);
+					LootParams lootParams = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
+
+					for (ItemStack itemstackiterator : lootTable.getRandomItems(lootParams)) {
+						ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), itemstackiterator);
+						entityToSpawn.setPickUpDelay(10);
+						entityToSpawn.setUnlimitedLifetime();
+						level.addFreshEntity(entityToSpawn);
+					}
+				}
+			}
 		}
 	}
 }

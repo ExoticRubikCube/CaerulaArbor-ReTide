@@ -2,17 +2,17 @@ package com.susen36.caerulaarbor.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.babel.BabelMod;
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.difficulty.NDifficulty;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.init.CARelics;
+import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.susen36.caerulaarbor.network.send.CaerulaRecordGUIButtonMessage;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
-import com.susen36.caerulaarbor.util.RelicUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -67,22 +67,22 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		if (mouseX > leftPos + 4 && mouseX < leftPos + 28 && mouseY > topPos + 123 && mouseY < topPos + 147)
 			guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.caerula_record_gui.tooltip_occupy_warn"), mouseX, mouseY);
-		if (RelicUtils.hasRelic(CARelics.DISO_ATTENTION.get(), entity))
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_ATTENTION.get()))
 			if (mouseX > leftPos + 101 && mouseX < leftPos + 173 && mouseY > topPos + 147 && mouseY < topPos + 163)
 				guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.caerula_record_gui.tooltip_discon"), mouseX, mouseY);
-		if (RelicUtils.hasRelic(CARelics.DISO_BLOOD.get(), entity))
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_BLOOD.get()))
 			if (mouseX > leftPos + 101 && mouseX < leftPos + 173 && mouseY > topPos + 147 && mouseY < topPos + 163)
 				guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.caerula_record_gui.tooltip_haemp"), mouseX, mouseY);
 		if (mouseX > leftPos + 6 && mouseX < leftPos + 22 && mouseY > topPos + 99 && mouseY < topPos + 115)
 			guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.caerula_record_gui.tooltip_show_relics"), mouseX, mouseY);
-		if (RelicUtils.hasRelic(CARelics.DISO_NEURO.get(), entity))
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_NEURO.get()))
 			if (mouseX > leftPos + 101 && mouseX < leftPos + 173 && mouseY > topPos + 147 && mouseY < topPos + 163)
 				guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.caerula_record_gui.tooltip_neuro"), mouseX, mouseY);
 		if (mouseX > leftPos + 5 && mouseX < leftPos + 16 && mouseY > topPos + 32 && mouseY < topPos + 43)
 			guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.caerula_record_gui.tooltip_playerlife"), mouseX, mouseY);
 		if (mouseX > leftPos + 5 && mouseX < leftPos + 16 && mouseY > topPos + 53 && mouseY < topPos + 64)
 			guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.caerula_record_gui.tooltip_playershield"), mouseX, mouseY);
-		if (RelicUtils.hasRelic(CARelics.DISO_FLESH.get(), entity))
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_FLESH.get()))
 			if (mouseX > leftPos + 101 && mouseX < leftPos + 173 && mouseY > topPos + 147 && mouseY < topPos + 163)
 				guiGraphics.renderTooltip(font, Component.translatable("gui.caerula_arbor.caerula_record_gui.tooltip_flesh"), mouseX, mouseY);
 		if (mouseX > leftPos + 136 && mouseX < leftPos + 161 && mouseY > topPos + 7 && mouseY < topPos + 27) {
@@ -117,10 +117,10 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/target_shield.png"), this.leftPos + 4, this.topPos + 50, 0, 0, 24, 16, 24, 16);
 
-		if (RelicUtils.hasRelic(CARelics.DISO_ATTENTION.get(), entity)) {
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_ATTENTION.get())) {
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_attention.png"), this.leftPos + 96, this.topPos + 91, 0, 0, 64, 64, 64, 64);
 		}
-		if (RelicUtils.hasRelic(CARelics.DISO_BLOOD.get(), entity)) {
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_BLOOD.get())) {
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_blood.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
 		}
 		if (PlayerStateUtils.isLightBright(entity)) {
@@ -146,10 +146,10 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 					Mth.clamp(Mth.ceil(elementValue / maxElementValue * 20.0) * 16, 0, 304), 0, 16, 16, 320, 16);
 		}
 
-		if (RelicUtils.hasRelic(CARelics.DISO_NEURO.get(), entity)) {
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_NEURO.get())) {
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_neuro.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
 		}
-		if (RelicUtils.hasRelic(CARelics.DISO_FLESH.get(), entity)) {
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_FLESH.get())) {
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/disoclution_flesh.png"), this.leftPos + 99, this.topPos + 92, 0, 0, 64, 64, 64, 64);
 		}
 
@@ -214,9 +214,9 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_lightsdim"), 100, -29, -13159, false);
 		if (PlayerStateUtils.isLightCeased(entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_lightstranquil"), 100, -29, -26215, false);
-		if (RelicUtils.hasRelic(CARelics.DISO_ATTENTION.get(), entity))
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_ATTENTION.get()))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_disconcentration"), 101, 147, -3368449, false);
-		if (RelicUtils.hasRelic(CARelics.DISO_BLOOD.get(), entity))
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_BLOOD.get()))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_haemophilia"), 101, 147, -3368449, false);
 		AbstractEPCapability currentElement = EPManager.getEP(entity).getCurrentElement();
 		if (currentElement != null) {
@@ -230,9 +230,9 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.drawString(this.font, currentElement.getType().description(), 124, 41, -16737895, false);
 			guiGraphics.drawString(this.font, currentElement.getType().description(), 123, 41, -1, false);
 		}
-		if (RelicUtils.hasRelic(CARelics.DISO_NEURO.get(), entity))
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_NEURO.get()))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_neurodegression"), 101, 147, -3368449, false);
-		if (RelicUtils.hasRelic(CARelics.DISO_FLESH.get(), entity))
+		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_FLESH.get()))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_deformity"), 101, 147, -3368449, false);
         if (NDifficulty.difficultyLevel(world).isNormal())
             guiGraphics.drawString(this.font,

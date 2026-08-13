@@ -30,7 +30,8 @@ public class PlayerLeftClickEventHandler {
 
     public static void executeHelperLeftClick(Entity entity) {
         if (entity instanceof Player player && player.isPassenger() && player.getVehicle() instanceof LittleHelperEntity helper) {
-            helper.handlePassengerLeftClick(player);
+            helper.playPassengerLeftClickSound(player);
+            helper.clearNetherseaAround();
         }
     }
 

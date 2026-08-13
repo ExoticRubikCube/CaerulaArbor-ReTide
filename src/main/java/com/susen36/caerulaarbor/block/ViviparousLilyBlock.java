@@ -6,7 +6,6 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CABlockEntities;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -112,7 +111,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
-			return WorldUtils.canLilyExist(world, x, y, z);
+            return world.getBlockState(BlockPos.containing(x, (double) y - 1, z)).isFaceSturdy(world, BlockPos.containing(x, (double) y - 1, z), Direction.UP);
 		}
 		return super.canSurvive(blockstate, worldIn, pos);
 	}

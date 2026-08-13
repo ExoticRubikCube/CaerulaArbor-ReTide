@@ -136,27 +136,27 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		ALL_ENTRIES.add(e("imagebutton_kettle",               CARelics.HOT_WATER_KETTLE.get(),         -1, "imagebutton_kettle",               "kettle"));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_alley", CARelics.UTIL_ALLEY.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_alley", "allay_sculpture",
-			entity -> RelicUtils.hasRelic(CARelics.UTIL_ALLEY.get(), entity),
+			entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.UTIL_ALLAY.get()),
 			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_batbed", CARelics.VAMPIRES_BED.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_batbed", "bat_bed",
-			entity -> RelicUtils.hasRelic(CARelics.VAMPIRES_BED.get(), entity),
+			entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.VAMPIRES_BED.get()),
 			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_score", CARelics.UTIL_SCORE.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_score", "score",
-			entity -> RelicUtils.hasRelic(CARelics.UTIL_SCORE.get(), entity),
+			entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.UTIL_SCORE.get()),
 			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_rescission", CARelics.UTIL_RESCISSION.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_rescission", "rescission",
-			entity -> RelicUtils.hasRelic(CARelics.UTIL_RESCISSION.get(), entity),
+			entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.UTIL_RESCISSION.get()),
 			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_omnikey", CARelics.UTIL_OMNIKEY.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_omnikey", "omni_key",
-			entity -> RelicUtils.hasRelic(CARelics.UTIL_OMNIKEY.get(), entity),
+			entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.UTIL_OMNIKEY.get()),
 			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_stare", CARelics.UTIL_STARE.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_stare", "guardian_stare",
-			entity -> RelicUtils.hasRelic(CARelics.UTIL_STARE.get(), entity),
+			entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.UTIL_STARE.get()),
 			null, null));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_longevity", CARelics.PROOF_OF_LONGEVITY.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_longevity", "proof_of_longevity",
@@ -168,7 +168,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		ALL_ENTRIES.add(e("imagebutton_voyageofsmall",        CARelics.PURE_GOLD_EXPEDITION.get(),     -1, "imagebutton_voyageofsmall",        "voyage_of_gold"));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_piglin_diary", CARelics.DURIN_OVERGROUND_ODYSSEY.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_piglin_diary", "piglin_diary",
-			entity -> RelicUtils.hasRelic(CARelics.DURIN_OVERGROUND_ODYSSEY.get(), entity),
+			entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DURIN_OVERGROUND_ODYSSEY.get()),
 			"durin_diary.png", null));
 		ALL_ENTRIES.add(e("imagebutton_location_name",        CARelics.UTIL_TOPONYM.get(),             -1, "imagebutton_location_name",        "toponym_textology"));
 		ALL_ENTRIES.add(e("imagebutton_cursed_emelight_0",    CARelics.CURSED_EMELIGHT.get(),          19, "imagebutton_cursed_emelight_0",    "relic_curse_emelight"));
@@ -176,22 +176,22 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		ALL_ENTRIES.add(e("imagebutton_cursed_research_0",    CARelics.CURSED_RESEARCH.get(),          21, "imagebutton_cursed_research_0",    "relic_cursed_research"));
 		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_cursed_heart", CARelics.CURSED_HEART.get(), RelicDisplayEntry.SpecialType.NONE, -1,
 			"imagebutton_cursed_heart", "caerula_heart",
-			entity -> RelicUtils.hasRelic(CARelics.CURSED_HEART.get(), entity),
+			entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.CURSED_HEART.get()),
 			null, null));
 		ALL_ENTRIES.add(e("imagebutton_golden_chalise", CARelics.GOLDEN_CHALISE.get(), -1, "imagebutton_golden_chalise", "golden_chalise"));
 
 		ALL_ENTRIES.add(e("imagebutton_nurture_gene_set",    CARelics.NURTURE_GENE_SET.get(),    -1, "imagebutton_nurture_gene_set",    "nurture_gene_set"));
 		ALL_ENTRIES.add(e("imagebutton_oil_and_cream",       CARelics.OIL_AND_CREAM.get(),       -1, "imagebutton_oil_and_cream",       "oil_and_cream"));
 		ALL_ENTRIES.add(e("imagebutton_tulip_medcine",       CARelics.TULIP_MEDCINE.get(),       -1, "imagebutton_tulip_medcine",       "tulip_medcine"));
-		ALL_ENTRIES.add(e("imagebutton_util_allay",          CARelics.UTIL_ALLAY.get(),          -1, "imagebutton_util_allay",          "util_allay"));
-		ALL_ENTRIES.add(e("imagebutton_diso",                CARelics.DISO.get(),                -1, "imagebutton_diso",                "diso"));
-		ALL_ENTRIES.add(e("imagebutton_diso_flesh",          CARelics.DISO_FLESH.get(),          -1, "imagebutton_diso_flesh",          "diso_flesh"));
-		ALL_ENTRIES.add(e("imagebutton_diso_blood",          CARelics.DISO_BLOOD.get(),          -1, "imagebutton_diso_blood",          "diso_blood"));
-		ALL_ENTRIES.add(e("imagebutton_diso_neuro",          CARelics.DISO_NEURO.get(),          -1, "imagebutton_diso_neuro",          "diso_neuro"));
-		ALL_ENTRIES.add(e("imagebutton_diso_attention",      CARelics.DISO_ATTENTION.get(),      -1, "imagebutton_diso_attention",      "diso_attention"));
-		ALL_ENTRIES.add(e("imagebutton_ahnd_swipe",          CARelics.AHND_SWIPE.get(),          -1, "imagebutton_ahnd_swipe",          "ahnd_swipe"));
-		ALL_ENTRIES.add(e("imagebutton_hanshand_spike",      CARelics.HANSHAND_SPIKE.get(),      -1, "imagebutton_hanshand_spike",      "hanshand_spike"));
-		ALL_ENTRIES.add(e("imagebutton_sarkaz_king_rylfate", CARelics.SARKAZ_KING_RYLFATE.get(), -1, "imagebutton_sarkaz_king_rylfate", "sarkaz_king_rylfate"));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_util_allay", CARelics.UTIL_ALLAY.get(), RelicDisplayEntry.SpecialType.NONE, -1, "imagebutton_util_allay", "util_allay", entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.UTIL_ALLAY.get()), null, null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_diso", CARelics.DISO.get(), RelicDisplayEntry.SpecialType.NONE, -1, "imagebutton_diso", "diso", entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get()), null, null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_diso_flesh", CARelics.DISO_FLESH.get(), RelicDisplayEntry.SpecialType.NONE, -1, "imagebutton_diso_flesh", "diso_flesh", entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_FLESH.get()), null, null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_diso_blood", CARelics.DISO_BLOOD.get(), RelicDisplayEntry.SpecialType.NONE, -1, "imagebutton_diso_blood", "diso_blood", entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_BLOOD.get()), null, null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_diso_neuro", CARelics.DISO_NEURO.get(), RelicDisplayEntry.SpecialType.NONE, -1, "imagebutton_diso_neuro", "diso_neuro", entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_NEURO.get()), null, null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_diso_attention", CARelics.DISO_ATTENTION.get(), RelicDisplayEntry.SpecialType.NONE, -1, "imagebutton_diso_attention", "diso_attention", entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO_ATTENTION.get()), null, null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_ahnd_swipe", CARelics.AHND_SWIPE.get(), RelicDisplayEntry.SpecialType.NONE, -1, "imagebutton_ahnd_swipe", "ahnd_swipe", entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.AHND_SWIPE.get()), null, null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_hanshand_spike", CARelics.HANSHAND_SPIKE.get(), RelicDisplayEntry.SpecialType.NONE, -1, "imagebutton_hanshand_spike", "hanshand_spike", entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HANSHAND_SPIKE.get()), null, null));
+		ALL_ENTRIES.add(new RelicDisplayEntry("imagebutton_sarkaz_king_rylfate", CARelics.SARKAZ_KING_RYLFATE.get(), RelicDisplayEntry.SpecialType.NONE, -1, "imagebutton_sarkaz_king_rylfate", "sarkaz_king_rylfate", entity -> entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.SARKAZ_KING_RYLFATE.get()), null, null));
 	}
 
 	// ===== 工厂辅助：普通 boolean 遗物 =====

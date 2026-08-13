@@ -7,17 +7,12 @@ import com.susen36.caerulaarbor.init.CAGameRules;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -29,9 +24,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 public class WorldUtils {
 	private WorldUtils() {
@@ -49,6 +41,7 @@ public class WorldUtils {
 	 * @param world 世界
 	 * @param pos 目标方块位置
 	 */
+	//TODO 应该纳入接口
 	public static void addGrowAge(LevelAccessor world, BlockPos pos) {
 		BlockState state = world.getBlockState(pos);
 		if (state.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty growAgeProperty) {
@@ -111,11 +104,6 @@ public class WorldUtils {
 		}
 	}
 
-	//下放或使用基类或接口
-	public static boolean canLilyExist(LevelAccessor world, double x, double y, double z) {
-		return world.getBlockState(BlockPos.containing(x, y - 1, z)).isFaceSturdy(world, BlockPos.containing(x, y - 1, z), Direction.UP);
-	}
-
 	/**
 	 * 判断目标位置是否允许放置海嗣痕迹方块。
 	 *
@@ -129,6 +117,7 @@ public class WorldUtils {
 	 * @param z 目标 Z 坐标
 	 * @return 若当前位置允许放置海嗣痕迹，则返回 {@code true}
 	 */
+	// TODO 需要下放到Trail接口
 	public static boolean canPutTrail(LevelAccessor world, double x, double y, double z) {
 		BlockPos belowPos = BlockPos.containing(x, y - 1, z);
 		BlockState belowState = world.getBlockState(belowPos);
@@ -137,54 +126,7 @@ public class WorldUtils {
 				&& belowState.getBlock() != CABlocks.SEA_TRAIL_SOLID.get();
 	}
 
-	//可疑
-	public static void clearNetherseaAround(LevelAccessor world, double x, double y, double z, Entity entity) {
-		if (entity == null)
-			return;
-		BlockState target;
-		boolean canBreak;
-		boolean mayDrop;
-		double px;
-		double pz;
-		double py;
-		if (!entity.isVehicle()) {
-			return;
-		}
-		for (int index0 = 0; index0 < 3; index0++) {
-			for (int index1 = 0; index1 < 2; index1++) {
-				for (int index2 = 0; index2 < 3; index2++) {
-					px = index0 - 1 + x;
-					py = index1 + y;
-					pz = index2 - 1 + z;
-					target = world.getBlockState(BlockPos.containing(px, py, pz));
-					canBreak = false;
-					mayDrop = false;
-					if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail")))) {
-						canBreak = true;
-					} else if (target.getBlock() == CABlocks.OCEAN_OVARY.get()) {
-						canBreak = true;
-						mayDrop = true;
-					} else if (target.canBeReplaced()) {
-						canBreak = true;
-						mayDrop = true;
-					}
-					if (canBreak) {
-						if (mayDrop) {
-							{
-								BlockPos pos = BlockPos.containing(px, py, pz);
-								net.minecraft.world.level.block.Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(px + 0.5, py + 0.5, pz + 0.5), null);
-								world.destroyBlock(pos, false);
-							}
-						} else {
-							world.destroyBlock(BlockPos.containing(px, py, pz), false);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	//可以安排到那个BaseSeaborn
+	//可以安排到SeaMoster
 	public static boolean canCommonSeabornSpawn(LevelAccessor world, double x, double y, double z) {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "common_spawn_biome")))) {
 			return false;
@@ -233,27 +175,6 @@ public class WorldUtils {
 			return world.getBrightness(LightLayer.SKY, BlockPos.containing(x, y, z)) >= 10 && world.getBrightness(LightLayer.BLOCK, BlockPos.containing(x, y, z)) < 3;
 		}
 		return false;
-	}
-
-	//TODO 可疑，为什么不放在其他 util
-	public static void dropRelicRoute(LevelAccessor world, double x, double y, double z) {
-		if (world instanceof ServerLevel level) {
-			if (level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-				ResourceKey<LootTable> lootTableKey = ResourceKey.create(
-						Registries.LOOT_TABLE,
-						ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gameplay/relic_route")
-				);
-				LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableKey);
-				LootParams lootParams = new LootParams.Builder(level).create(LootContextParamSets.EMPTY);
-
-				for (ItemStack itemstackiterator : lootTable.getRandomItems(lootParams)) {
-					ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
-					entityToSpawn.setPickUpDelay(10);
-					entityToSpawn.setUnlimitedLifetime();
-					level.addFreshEntity(entityToSpawn);
-				}
-			}
-		}
 	}
 
 	/**

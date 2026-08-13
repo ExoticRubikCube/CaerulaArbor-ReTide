@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
+import com.susen36.babel.collectible.CollectibleActivation;
 import com.susen36.babel.collectible.CollectibleBuilder;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
@@ -10,7 +11,9 @@ import com.susen36.caerulaarbor.block.item.doll.PocketSeaDollDisplayItem;
 import com.susen36.caerulaarbor.block.item.doll.StonecutterDollDisplayItem;
 import com.susen36.caerulaarbor.block.item.doll.SwarmcallerDollDisplayItem;
 import com.susen36.caerulaarbor.item.*;
-import com.susen36.caerulaarbor.item.relic.*;
+import com.susen36.caerulaarbor.item.relic.BooleanCollectibleItem;
+import com.susen36.caerulaarbor.item.relic.HandOfEngraveItem;
+import com.susen36.caerulaarbor.item.relic.SurvivorContractItem;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -192,16 +195,12 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> OCEAN_CRYSTAL_BLOCK = block(CABlocks.OCEAN_CRYSTAL_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> COMPLEX_CHITIN_BLOCK = block(CABlocks.COMPLEX_CHITIN_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> GUARDIAN_STARE = REGISTRY.register("guardian_stare", GuardianStareItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_SWORD = REGISTRY.register("hand_sword",
-            SimpleRelicItem.simpleBoolean(CARelics.HAND_SWORD, Rarity.EPIC,
-                    () -> ActivateParams.builder()
-                            .mode(ActivateParams.ActivateMode.NOT_GAINED)
-                            .setValue(1)
-                            .sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
-                            .particle(ParticleTypes.CLOUD, 72)
-                            .showOverlay(true)
-                            .shrink(false)
-                            .build()));
+    public static final DeferredHolder<Item, ? extends Item> HAND_SWORD = COLLECTIBLE.registerCollectible("hand_sword",
+            () -> new BooleanCollectibleItem(Rarity.EPIC, CollectibleActivation.builder()
+                    .sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
+                    .particle(ParticleTypes.CLOUD, 72)
+                    .showOverlay(true)
+                    .build()));
     public static final DeferredHolder<Item, ? extends Item> TIDE_OBSERVATION = block(CABlocks.TIDE_OBSERVATION);
     public static final DeferredHolder<Item, ? extends Item> SAMPLE_BREED = REGISTRY.register("sample_breed", SampleBreedItem::new);
     public static final DeferredHolder<Item, ? extends Item> ANCHOR_LOWER = block(CABlocks.ANCHOR_LOWER);
@@ -687,7 +686,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_PRESERVED_EGG = tooltipItem("nethersea_preserved_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).alwaysEdible().effect(() -> new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 400, 1, false, true), 1.0F).effect(() -> new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 60, 0, false, false), 1.0F).build())), 1);
     public static final DeferredHolder<Item, ? extends Item> SEA_PRAIRIE_BOMB = block(CABlocks.SEA_PRAIRIE_BOMB);
     public static final DeferredHolder<Item, ? extends Item> CHEST_FISH_FOOD = block(CABlocks.CHEST_FISH_FOOD);
-    public static final DeferredHolder<Item, ? extends Item> LEGEND_CHITIN = REGISTRY.register("legend_chitin", SimpleRelicItem.simpleBoolean(CARelics.LEGEND_CHITIN));
+    public static final DeferredHolder<Item, ? extends Item> LEGEND_CHITIN = COLLECTIBLE.registerCollectible("legend_chitin", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
     public static final DeferredHolder<Item, ? extends Item> UTIL_ALLAY = COLLECTIBLE.registerCollectible("util_allay", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
     public static final DeferredHolder<Item, ? extends Item> DISO = COLLECTIBLE.registerCollectible("diso", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
     public static final DeferredHolder<Item, ? extends Item> DISO_FLESH = COLLECTIBLE.registerCollectible("diso_flesh", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
@@ -697,6 +696,35 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> AHND_SWIPE = COLLECTIBLE.registerCollectible("ahnd_swipe", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
     public static final DeferredHolder<Item, ? extends Item> HANSHAND_SPIKE = COLLECTIBLE.registerCollectible("hanshand_spike", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
     public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_RYLFATE = COLLECTIBLE.registerCollectible("sarkaz_king_rylfate", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> VAMPIRES_BED = COLLECTIBLE.registerCollectible("vampires_bed", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> UTIL_SCORE = COLLECTIBLE.registerCollectible("util_score", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> UTIL_RESCISSION = COLLECTIBLE.registerCollectible("util_rescission", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> UTIL_OMNIKEY = COLLECTIBLE.registerCollectible("util_omnikey", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> UTIL_STARE = COLLECTIBLE.registerCollectible("util_stare", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> DURIN_OVERGROUND_ODYSSEY = COLLECTIBLE.registerCollectible("durin_overground_odyssey", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> CURSED_HEART = COLLECTIBLE.registerCollectible("cursed_heart", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> HAND_FERTILITY = COLLECTIBLE.registerCollectible("hand_fertility", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> HAND_THORNS = COLLECTIBLE.registerCollectible("hand_thorns", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> KING_ARMOR = COLLECTIBLE.registerCollectible("king_armor", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> KING_SPEAR = COLLECTIBLE.registerCollectible("king_spear", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> KING_EXTENSION = COLLECTIBLE.registerCollectible("king_extension", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> KING_CROWN = COLLECTIBLE.registerCollectible("king_crown", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> KING_CRYSTAL = COLLECTIBLE.registerCollectible("king_crystal", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> HAND_STRANGLE = COLLECTIBLE.registerCollectible("hand_strangle", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> HAND_SPEED = COLLECTIBLE.registerCollectible("hand_speed", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> HAND_FIREWORK = COLLECTIBLE.registerCollectible("hand_firework", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> HAND_OF_PULVERIZATION = COLLECTIBLE.registerCollectible("hand_of_pulverization", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> HAND_SWIPE = COLLECTIBLE.registerCollectible("hand_swipe", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_FLAG = COLLECTIBLE.registerCollectible("sarkaz_king_flag", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_BED = COLLECTIBLE.registerCollectible("sarkaz_king_bed", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_ARTIFACT = COLLECTIBLE.registerCollectible("sarkaz_king_artifact", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> TREATY = COLLECTIBLE.registerCollectible("treaty", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> HEMOST = COLLECTIBLE.registerCollectible("hemost", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> YEARNING = COLLECTIBLE.registerCollectible("yearning", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> CURSED_EMELIGHT = COLLECTIBLE.registerCollectible("cursed_emelight", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> CURSED_GLOWBODY = COLLECTIBLE.registerCollectible("cursed_glowbody", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> CURSED_RESEARCH = COLLECTIBLE.registerCollectible("cursed_research", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
+    public static final DeferredHolder<Item, ? extends Item> FEATURED_CANNED_MEAT = COLLECTIBLE.registerCollectible("featured_canned_meat", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
 
     private static DeferredHolder<Item, ? extends Item> tooltipItem(String name, Supplier<Item> factory, int tooltipCount) {
         TOOLTIP_COUNTS.put(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, name), tooltipCount);

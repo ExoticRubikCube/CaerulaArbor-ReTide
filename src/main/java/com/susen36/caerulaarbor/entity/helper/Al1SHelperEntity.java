@@ -30,7 +30,7 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 	}
 
 	@Override
-	protected void playPassengerLeftClickSound(Player passenger) {
+    public void playPassengerLeftClickSound(Player passenger) {
 		if (!this.level().isClientSide()) {
 			this.level().playSound(null, BlockPos.containing(passenger.getX(), passenger.getY(), passenger.getZ()),
 					CASounds.AL1S_WORK.get(), SoundSource.BLOCKS, 3, 1);

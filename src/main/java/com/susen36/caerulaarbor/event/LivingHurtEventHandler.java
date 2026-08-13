@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.effect.LessArmorMobEffect;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.util.EPUtils;
@@ -9,7 +10,10 @@ import com.susen36.caerulaarbor.entity.*;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.upgrade.GrowUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SublimationUpgradeManger;
-import com.susen36.caerulaarbor.util.*;
+import com.susen36.caerulaarbor.util.EntityUtils;
+import com.susen36.caerulaarbor.util.MathUtils;
+import com.susen36.caerulaarbor.util.PlayerStateUtils;
+import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -402,7 +406,7 @@ public class LivingHurtEventHandler {
         boolean valid = false;
         String regName;
 
-        if (entity instanceof Player player && CARelics.TREATY.get().gained(player)) {
+        if (entity instanceof Player player && player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.TREATY.get())) {
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:nether_mobs")))) {
                 valid = true;
             } else {
@@ -465,14 +469,14 @@ public class LivingHurtEventHandler {
         if (sourceentity instanceof Player player && damagesource.is(DamageTypes.PLAYER_ATTACK)) {
             ItemStack item_temp = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (item_temp.getItem() instanceof HoeItem || item_temp.is(ItemTags.create(ResourceLocation.parse("minecraft:hoes")))) {
-                if (RelicUtils.hasRelic(CARelics.HAND_FERTILITY.get(), player)) {
+                if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_FERTILITY.get())) {
                     entity.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, sourceentity), (float) ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.075));
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.SQUID_INK, x, y, z, 8, 0.75, 0.9, 0.75, 0.1);
                 }
             }
             if (item_temp.getItem() instanceof SwordItem || item_temp.is(ItemTags.create(ResourceLocation.parse("minecraft:swords")))) {
-                if (RelicUtils.hasRelic(CARelics.HAND_SWORD.get(), player)) {
+                if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_SWORD.get())) {
                     if (!(entity instanceof LivingEntity livEnt11 && livEnt11.hasEffect(BabelMobEffects.LESS_ARMOR))) {
                         if (entity instanceof LivingEntity living && !entity.level().isClientSide())
                             living.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 120, 1));
@@ -495,7 +499,7 @@ public class LivingHurtEventHandler {
         if (sourceentity == null) return;
 
         if (entity instanceof Player && entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0) >= 5) {
-            if (entity instanceof Player player && RelicUtils.hasRelic(CARelics.HAND_THORNS.get(), player)) {
+            if (entity instanceof Player player && player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.HAND_THORNS.get())) {
                 if (!entity.isShiftKeyDown() && sourceentity.isAlive() && entity.isAlive()) {
                     if (!(sourceentity instanceof Player)) {
                         if (!damagesource.is(CADamageTypes.HAND_SPIKE) && !damagesource.is(DamageTypes.THORNS) && !damagesource.is(CADamageTypes.GUNMU_DAMAGE)) {
