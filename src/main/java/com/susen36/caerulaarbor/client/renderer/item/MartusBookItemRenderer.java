@@ -7,8 +7,6 @@ import com.susen36.caerulaarbor.item.MartusBookItem;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
@@ -17,22 +15,15 @@ public class MartusBookItemRenderer extends GeoItemRenderer<MartusBookItem> {
 		super(new MartusBookItemModel());
 	}
 
-	@Override
-	public RenderType getRenderType(MartusBookItem animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
-	}
-
-	private static final float SCALE_RECIPROCAL = 1.0f / 16.0f;
 	protected boolean renderArms = false;
 	protected MultiBufferSource currentBuffer;
 	protected RenderType renderType;
-	public ItemDisplayContext transformType;
+
 	protected MartusBookItem animatable;
 
 	@Override
-	public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack matrixStack, MultiBufferSource bufferIn, int combinedLightIn, int p_239207_6_) {
-		this.transformType = transformType;
-		super.renderByItem(stack, transformType, matrixStack, bufferIn, combinedLightIn, p_239207_6_);
+	public RenderType getRenderType(MartusBookItem animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
 	}
 
 	@Override

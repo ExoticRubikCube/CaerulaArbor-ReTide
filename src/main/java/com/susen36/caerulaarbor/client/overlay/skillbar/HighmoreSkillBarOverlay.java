@@ -5,7 +5,6 @@ import com.susen36.caerulaarbor.entity.HighmoreEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -35,15 +34,15 @@ public class HighmoreSkillBarOverlay {
 			y = entity.getY();
 			z = entity.getZ();
 		}
-        if (!world.getEntitiesOfClass(HighmoreEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e1 -> true).isEmpty()) {
+        double fx = x;
+        double fy = y;
+        double fz = z;
 
-            Entity ent;
+        if (!world.getEntitiesOfClass(HighmoreEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e1 -> true).isEmpty()) {
+            HighmoreEntity ent;
             double ind = 0;
-            ent = world.getEntitiesOfClass(HighmoreEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
-                Comparator<Entity> compareDistOf(double x, double y, double z) {
-                    return Comparator.comparingDouble(entity -> entity.distanceToSqr(x, y, z));
-                }
-            }.compareDistOf(x, y, z)).orElse(null);
+            ent = world.getEntitiesOfClass(HighmoreEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e -> true)
+                    .stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(fx, fy, fz))).orElse(null);
             if (!(ent == null)) {
                 ind = Math.round((float) (ent instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_SKILLP_2) : 0) / 8);
             }

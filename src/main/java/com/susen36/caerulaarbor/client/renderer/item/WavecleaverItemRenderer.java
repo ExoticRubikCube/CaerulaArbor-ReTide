@@ -1,14 +1,12 @@
 package com.susen36.caerulaarbor.client.renderer.item;
 
-import com.susen36.caerulaarbor.item.WavecleaverItem;
-import com.susen36.caerulaarbor.client.model.item.WavecleaverItemModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.susen36.caerulaarbor.client.model.item.WavecleaverItemModel;
+import com.susen36.caerulaarbor.item.WavecleaverItem;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
@@ -17,22 +15,14 @@ public class WavecleaverItemRenderer extends GeoItemRenderer<WavecleaverItem> {
 		super(new WavecleaverItemModel());
 	}
 
-	@Override
-	public RenderType getRenderType(WavecleaverItem animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
-	}
-
-	private static final float SCALE_RECIPROCAL = 1.0f / 16.0f;
 	protected boolean renderArms = false;
 	protected MultiBufferSource currentBuffer;
 	protected RenderType renderType;
-	public ItemDisplayContext transformType;
 	protected WavecleaverItem animatable;
 
 	@Override
-	public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack matrixStack, MultiBufferSource bufferIn, int combinedLightIn, int p_239207_6_) {
-		this.transformType = transformType;
-		super.renderByItem(stack, transformType, matrixStack, bufferIn, combinedLightIn, p_239207_6_);
+	public RenderType getRenderType(WavecleaverItem animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import com.susen36.caerulaarbor.entity.IzumikEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -35,16 +34,15 @@ public class IzumikSkillbarOverlay {
 			y = entity.getY();
 			z = entity.getZ();
 		}
-        if (!world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e1 -> true).isEmpty()) {
-
-            Entity ent;
+        double fx = x;
+        double fy = y;
+        double fz = z;
+        if (!world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e1 -> true).isEmpty()) {
+            IzumikEntity ent;
             double ind = 0;
             double phase;
-            ent = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
-                Comparator<Entity> compareDistOf(double x, double y, double z) {
-                    return Comparator.comparingDouble(entity -> entity.distanceToSqr(x, y, z));
-                }
-            }.compareDistOf(x, y, z)).orElse(null);
+            ent = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e -> true)
+                    .stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(fx, fy, fz))).orElse(null);
             if (!(ent == null)) {
                 phase = ent instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_PHASE) : 0;
                 ind = ent instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_SKILLP) : 0;
@@ -62,7 +60,6 @@ public class IzumikSkillbarOverlay {
                 ind = 0;
             }
             event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/izumik_skillbar.png"), 13, h / 2 + -48, Mth.clamp((int) ind * 4, 0, 400), 0, 4, 100, 404, 100);
-
 		}
 	}
 }
