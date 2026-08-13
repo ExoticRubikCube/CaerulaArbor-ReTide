@@ -1,7 +1,7 @@
-package com.susen36.caerulaarbor.client.overlay.skillbar;
+package com.susen36.caerulaarbor.client.gui.overlay.skillbar;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.IzumikEntity;
+import com.susen36.caerulaarbor.entity.HighmoreEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -18,8 +18,8 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import java.util.Comparator;
 
 @EventBusSubscriber({Dist.CLIENT})
-public class IzumikSkillbarOverlay {
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
+public class HighmoreSkillBarOverlay {
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		int w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
 		int h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
@@ -37,29 +37,22 @@ public class IzumikSkillbarOverlay {
         double fx = x;
         double fy = y;
         double fz = z;
-        if (!world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e1 -> true).isEmpty()) {
-            IzumikEntity ent;
+
+        if (!world.getEntitiesOfClass(HighmoreEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e1 -> true).isEmpty()) {
+            HighmoreEntity ent;
             double ind = 0;
-            double phase;
-            ent = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e -> true)
+            ent = world.getEntitiesOfClass(HighmoreEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e -> true)
                     .stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(fx, fy, fz))).orElse(null);
             if (!(ent == null)) {
-                phase = ent instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_PHASE) : 0;
-                ind = ent instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_SKILLP) : 0;
-                if (phase == 0) {
-                    ind = Math.round(ind * 20);
-                } else if (phase == 1) {
-                    ind = Math.round(ind / 6);
-                } else {
-                    ind = Math.round(ind / 4);
-                }
+                ind = Math.round((float) (ent instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_SKILLP_2) : 0) / 8);
             }
-            if (ind > 100) {
-                ind = 100;
+            if (ind > 85) {
+                ind = 85;
             } else if (ind < 0) {
                 ind = 0;
             }
-            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/izumik_skillbar.png"), 13, h / 2 + -48, Mth.clamp((int) ind * 4, 0, 400), 0, 4, 100, 404, 100);
+            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/highmore_skill_bar.png"), 8, h / 2 + -41, Mth.clamp((int) ind * 4, 0, 340), 0, 4, 87, 344, 87);
+
 		}
 	}
 }

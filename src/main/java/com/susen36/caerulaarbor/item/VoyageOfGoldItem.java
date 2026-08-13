@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 
 public class VoyageOfGoldItem extends CollectibleItem.CustomCollectibleItem {
 	public VoyageOfGoldItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, CollectibleTiers.NORMAL, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
 						.particle(ParticleTypes.HAPPY_VILLAGER, 72)
@@ -29,7 +29,7 @@ public class VoyageOfGoldItem extends CollectibleItem.CustomCollectibleItem {
 	}
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		for (int index0 = 0; index0 < 8; index0++) {
 			if (level instanceof ServerLevel serverLevel)
 				serverLevel.addFreshEntity(new ExperienceOrb(serverLevel, (player.getX() + Mth.nextDouble(RandomSource.create(), -1, 1)), (player.getY() + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (player.getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));

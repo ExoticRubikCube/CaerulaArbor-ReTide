@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 
 public class ProofOfLongevityItem extends CollectibleItem.CustomCollectibleItem {
 	public ProofOfLongevityItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, CollectibleTiers.NORMAL, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.AMBIENT_WARPED_FOREST_MOOD.value(), 3.5F, 1F)
 						.particle(ParticleTypes.HAPPY_VILLAGER, 72)
@@ -27,7 +27,7 @@ public class ProofOfLongevityItem extends CollectibleItem.CustomCollectibleItem 
 	
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
 		capability.player_maxlive = capability.player_maxlive + 6;
 		capability.syncPlayerVariables(player);

@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 
 public class RedstoneIrisFlowerItem extends CollectibleItem.CustomCollectibleItem {
 	public RedstoneIrisFlowerItem() {
-		super(new Item.Properties().stacksTo(16).rarity(Rarity.EPIC), true, 20, CollectibleTiers.NORMAL, 0, 1, 0,
+		super(new Item.Properties().stacksTo(16).rarity(Rarity.EPIC), true, 20, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
 						.particle(ParticleTypes.HAPPY_VILLAGER, 72)
@@ -33,7 +33,7 @@ public class RedstoneIrisFlowerItem extends CollectibleItem.CustomCollectibleIte
 	}
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		double x = player.getX();
 		double y = player.getY();
 		double z = player.getZ();

@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.client.gui;
+package com.susen36.caerulaarbor.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.caerulaarbor.CaerulaArbor;
@@ -69,9 +69,9 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/sidebar.png"), this.leftPos + -3, this.topPos + -3, 0, 0, 262, 174, 262, 174);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/sidebar.png"), this.leftPos + -3, this.topPos + -3, 0, 0, 262, 174, 262, 174);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bg_subsis.png"), this.leftPos, this.topPos, Mth.clamp((int) SubsistingUpgradeManager.getStraSubsis(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/bg_subsis.png"), this.leftPos, this.topPos, Mth.clamp((int) SubsistingUpgradeManager.getStraSubsis(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
 
         double result = 18;
         double rate;
@@ -82,7 +82,7 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
             }
             result = Math.round(18 * rate);
         }
-        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/barevo.png"), this.leftPos + 244, this.topPos + 20, Mth.clamp((int) result * 8, 0, 144), 0, 8, 72, 152, 72);
+        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/barevo.png"), this.leftPos + 244, this.topPos + 20, Mth.clamp((int) result * 8, 0, 144), 0, 8, 72, 152, 72);
 
 		RenderSystem.disableBlend();
 	}

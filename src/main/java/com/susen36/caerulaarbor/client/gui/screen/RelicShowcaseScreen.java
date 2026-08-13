@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.client.gui;
+package com.susen36.caerulaarbor.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.babel.collectible.Collectibles;
@@ -151,7 +151,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 312, 192, 312, 192);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 312, 192, 312, 192);
 		RenderSystem.disableBlend();
 	}
 

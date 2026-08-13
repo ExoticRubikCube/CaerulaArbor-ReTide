@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 
 public class ChitinKnifeItem extends CollectibleItem.CustomCollectibleItem {
 	public ChitinKnifeItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, CollectibleTiers.ADVANCED, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.BELL_BLOCK, 3.5F, 1F)
 						.particle(ParticleTypes.DOLPHIN, 72)
@@ -28,7 +28,7 @@ public class ChitinKnifeItem extends CollectibleItem.CustomCollectibleItem {
 	
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		double x = player.getX();
 		double y = player.getY();
 		double z = player.getZ();

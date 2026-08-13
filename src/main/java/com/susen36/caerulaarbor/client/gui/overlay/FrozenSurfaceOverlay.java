@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.client.overlay;
+package com.susen36.caerulaarbor.client.gui.overlay;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -32,7 +32,7 @@ public class FrozenSurfaceOverlay {
             result = entity.hasEffect(CAMobEffects.FROZEN);
         }
         if (result) {
-			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/frozensurface.png"), 0, 0, 0, 0, w, h, w, h);
+			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/frozensurface.png"), 0, 0, 0, 0, w, h, w, h);
 		}
 		RenderSystem.depthMask(true);
 		RenderSystem.defaultBlendFunc();

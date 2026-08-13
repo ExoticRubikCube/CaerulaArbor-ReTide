@@ -1,9 +1,9 @@
-package com.susen36.caerulaarbor.client.overlay;
+package com.susen36.caerulaarbor.client.gui.overlay;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -15,19 +15,19 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 @EventBusSubscriber({Dist.CLIENT})
-public class OceanizingOverlay {
+public class LessArmorOverlay {
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		Player player = Minecraft.getInstance().player;
 		ResourceLocation texture = null;
-		if (player.hasEffect(CAMobEffects.INFESTED)) {
-			int amplifier = player.getEffect(CAMobEffects.INFESTED).getAmplifier();
-			if (amplifier == 0) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/transforming0.png");
-			} else if (amplifier == 1) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/transforming1.png");
-			} else if (amplifier > 1) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/transforming2.png");
+		if (player.hasEffect(BabelMobEffects.LESS_ARMOR)) {
+			int amplifier = player.getEffect(BabelMobEffects.LESS_ARMOR).getAmplifier();
+			if (amplifier <= 4) {
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/low_armor_ui.png");
+			} else if (amplifier <= 9) {
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/less_armor_ui.png");
+			} else {
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/least_armor_ui.png");
 			}
 		}
 		if (texture != null) {

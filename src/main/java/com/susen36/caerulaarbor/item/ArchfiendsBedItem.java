@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 public class ArchfiendsBedItem extends CollectibleItem.CustomCollectibleItem {
 	public ArchfiendsBedItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), false, 25, CollectibleTiers.ADVANCED, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.TOTEM_USE, 2F, 1F)
 						.particle(ParticleTypes.DRIPPING_LAVA, 72)
@@ -23,6 +23,6 @@ public class ArchfiendsBedItem extends CollectibleItem.CustomCollectibleItem {
 	}
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 	}
 }

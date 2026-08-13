@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.client.overlay.skillbar;
+package com.susen36.caerulaarbor.client.gui.overlay.skillbar;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.isharmla.IsharmlaEntity;
@@ -20,7 +20,7 @@ import java.util.Comparator;
 @EventBusSubscriber({Dist.CLIENT})
 public class IsharmlasSkillBarOverlay {
 
-	public static final ResourceLocation BAR = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/isharmla_bar.png");
+	public static final ResourceLocation BAR = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/isharmla_bar.png");
 
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {

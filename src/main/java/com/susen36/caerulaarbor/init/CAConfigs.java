@@ -86,7 +86,7 @@ public class CAConfigs {
 		MORTAR_HEALTH = BUILDER.comment("阿戈尔重炮速射炮的生命值。").define("mortar_health", (double) 500);
 		MORTAR_ATTACK = BUILDER.comment("阿戈尔重炮速射炮的基础伤害。").define("mortar_attack", (double) 32);
 		BUILDER.pop();
-		BUILDER.push("overlay");
+		BUILDER.push("screen");
 		SANITY_BAR_STYLE = BUILDER.comment("神经损伤显示采用条状，若关闭则为明日方舟中的圆环。").define("sanity_bar_style", false);
 		LIGHTS_NEAT_STYLE = BUILDER.comment("灯火显示采用简约风格，true代表开启。").define("lights_neat_style", false);
 		X_OFFSET = BUILDER.comment("神经损伤条渲染x轴偏移。正数值为向右偏移").define("sanity_x_offset", (double) 0);

@@ -20,7 +20,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 public class KettleItem extends CollectibleItem.CustomCollectibleItem {
 	public KettleItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), true, 25, CollectibleTiers.NORMAL, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), true, 25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
 						.particle(ParticleTypes.HAPPY_VILLAGER, 72)
@@ -28,10 +28,8 @@ public class KettleItem extends CollectibleItem.CustomCollectibleItem {
 						.build());
 	}
 
-	
-
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		double x = player.getX();
 		double y = player.getY();
 		double z = player.getZ();

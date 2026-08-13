@@ -32,8 +32,7 @@ public class CaerulaArbor {
         CASounds.REGISTRY.register(modEventBus);
         CABlocks.REGISTRY.register(modEventBus);
         CABlockEntities.REGISTRY.register(modEventBus);
-        CAItems.REGISTRY.register(modEventBus);
-        CAItems.COLLECTIBLE.register(modEventBus);
+        CAItems.init(modEventBus);
         CAEntities.REGISTRY.register(modEventBus);
         CATabs.REGISTRY.register(modEventBus);
 

@@ -4,20 +4,16 @@ import com.susen36.babel.collectible.CollectibleActivation;
 import com.susen36.babel.collectible.CollectibleItem;
 import com.susen36.babel.collectible.CollectibleTiers;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-
-import java.util.List;
 
 public class ArchfiendsArtifactItem extends CollectibleItem.CustomCollectibleItem {
 	public ArchfiendsArtifactItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, CollectibleTiers.ADVANCED, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.TOTEM_USE, 2F, 1F)
 						.particle(ParticleTypes.DRIPPING_LAVA, 72)
@@ -26,12 +22,7 @@ public class ArchfiendsArtifactItem extends CollectibleItem.CustomCollectibleIte
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, context, list, flag);
-	}
-
-	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		
 	}
 }

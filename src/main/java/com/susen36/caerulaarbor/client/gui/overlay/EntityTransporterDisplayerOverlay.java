@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.client.overlay;
+package com.susen36.caerulaarbor.client.gui.overlay;
 
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.item.PersonnelTransporterItem;

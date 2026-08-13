@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 public class NurtureGeneSetItem extends CollectibleItem.CustomCollectibleItem {
 
     public NurtureGeneSetItem() {
-        super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), true, 25, CollectibleTiers.ADVANCED, 0, 1, 0,
+        super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), true, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
                 CollectibleActivation.builder()
                         .sound(SoundEvents.BEACON_ACTIVATE, 2.0f, 1.0f)
                         .particle(ParticleTypes.HAPPY_VILLAGER, 0)
@@ -25,7 +25,7 @@ public class NurtureGeneSetItem extends CollectibleItem.CustomCollectibleItem {
     }
 
     @Override
-    public void onUse(ItemStack stack, Level level, Player player) {
+    public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
         PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
         capability.can_player_evo = true;
         capability.syncPlayerVariables(player);

@@ -266,7 +266,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
                         "caerula_arbor:bucket_floater",
                         "advancements.encounter_from_the_ocean.title",
                         "advancements.encounter_from_the_ocean.descr",
-                        "caerula_arbor:textures/overlay/adv_bg.png",
+                        "caerula_arbor:textures/screen/adv_bg.png",
                         AdvancementType.TASK,
                         true,
                         false,

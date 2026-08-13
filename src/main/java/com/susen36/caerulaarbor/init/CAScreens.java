@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.caerulaarbor.client.gui.*;
+import com.susen36.caerulaarbor.client.gui.screen.*;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

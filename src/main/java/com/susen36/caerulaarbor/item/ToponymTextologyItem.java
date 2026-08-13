@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 
 public class ToponymTextologyItem extends CollectibleItem.CustomCollectibleItem {
 	public ToponymTextologyItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON), false, 25, CollectibleTiers.NORMAL, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON), false, 25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.AMETHYST_BLOCK_RESONATE, 2F, 1F)
 						.particle(ParticleTypes.NAUTILUS, 72)
@@ -25,7 +25,7 @@ public class ToponymTextologyItem extends CollectibleItem.CustomCollectibleItem 
 	}
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
         capability.player_shield = capability.player_shield + 6;
 		capability.syncPlayerVariables(player);

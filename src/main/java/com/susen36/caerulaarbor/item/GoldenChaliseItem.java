@@ -5,24 +5,20 @@ import com.susen36.babel.collectible.CollectibleItem;
 import com.susen36.babel.collectible.CollectibleTiers;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.List;
-
 public class GoldenChaliseItem extends CollectibleItem.CustomCollectibleItem {
 	public GoldenChaliseItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, CollectibleTiers.ADVANCED, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
 						.particle(ParticleTypes.HAPPY_VILLAGER, 72)
@@ -31,13 +27,7 @@ public class GoldenChaliseItem extends CollectibleItem.CustomCollectibleItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, context, list, flag);
-	}
-
-	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
-		
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 	}
 
 	@Override

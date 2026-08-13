@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
 
 public class OddFluteItem extends CollectibleItem.CustomCollectibleItem {
 	public OddFluteItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON), false, 40, CollectibleTiers.RARE, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON), false, 40, false, CollectibleTiers.RARE, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(CASounds.FLUTESONG.get(), 2F, 1F)
 						.particle(ParticleTypes.NOTE, 72)
@@ -35,7 +35,7 @@ public class OddFluteItem extends CollectibleItem.CustomCollectibleItem {
 	}
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		double x = player.getX();
 		double y = player.getY();
 		double z = player.getZ();

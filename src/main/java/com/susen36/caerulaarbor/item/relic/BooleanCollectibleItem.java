@@ -16,7 +16,7 @@ public class BooleanCollectibleItem extends CollectibleItem.CustomCollectibleIte
 
     public BooleanCollectibleItem(Rarity rarity, CollectibleActivation activation) {
         super(new Item.Properties().stacksTo(1).rarity(rarity),
-                false, 25, CollectibleTiers.NORMAL, 0, 1, 0, activation);
+                false, 25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0), activation);
     }
 
     /** 默认激活表现：对应原 {@code ActivateParams.standardBoolean()}。 */
@@ -29,7 +29,7 @@ public class BooleanCollectibleItem extends CollectibleItem.CustomCollectibleIte
     }
 
     @Override
-    public void onUse(ItemStack stack, Level level, Player player) {
+    public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
         // 布尔型收藏品：已拥有状态由 activate() 的 markUsed 维护
     }
 }

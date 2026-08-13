@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 public class SmellyHemostaticItem extends CollectibleItem.CustomCollectibleItem {
 	public SmellyHemostaticItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), false, 25, CollectibleTiers.RARE, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), false, 25, false, CollectibleTiers.RARE, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.PLAYER_LEVELUP, 3.5F, 1F)
 						.particle(ParticleTypes.DAMAGE_INDICATOR, 8)
@@ -25,6 +25,6 @@ public class SmellyHemostaticItem extends CollectibleItem.CustomCollectibleItem 
 	
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 	}
 }

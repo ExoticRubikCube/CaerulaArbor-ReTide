@@ -9,7 +9,6 @@ import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -17,7 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -27,12 +25,10 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import java.util.List;
-
 
 public class KingsArmourItem extends CollectibleItem.CustomCollectibleItem {
 	public KingsArmourItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, CollectibleTiers.ADVANCED, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.TOTEM_USE, 2F, 1F)
 						.particle(ParticleTypes.ENCHANTED_HIT, 72)
@@ -41,12 +37,7 @@ public class KingsArmourItem extends CollectibleItem.CustomCollectibleItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemstack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-		super.appendHoverText(itemstack, context, list, flag);
-	}
-
-	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(player);
 		double storedLives = playerVariables.player_lives;
 		if (storedLives > 1) {

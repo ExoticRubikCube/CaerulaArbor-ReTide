@@ -18,7 +18,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 public class AlleySculptureItem extends CollectibleItem.CustomCollectibleItem {
 	public AlleySculptureItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), false, 25, CollectibleTiers.NORMAL, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON), false, 25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.ALLAY_AMBIENT_WITH_ITEM, 3.5F, 1F)
 						.particle(ParticleTypes.RAIN, 72)
@@ -27,7 +27,7 @@ public class AlleySculptureItem extends CollectibleItem.CustomCollectibleItem {
 	}
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
 		capability.player_maxlive = capability.player_maxlive + 3;
 		capability.syncPlayerVariables(player);

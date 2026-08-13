@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class RainbowCandyItem extends CollectibleItem.CustomCollectibleItem {
 	public RainbowCandyItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build()), false, 25, CollectibleTiers.NORMAL, 0, 1, 0,
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.EPIC).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build()), false, 25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
 						.particle(ParticleTypes.HAPPY_VILLAGER, 72)
@@ -46,7 +46,7 @@ public class RainbowCandyItem extends CollectibleItem.CustomCollectibleItem {
 	}
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		if (!level.isClientSide()) {
 			player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 280, 1));
 			player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 280, 1));

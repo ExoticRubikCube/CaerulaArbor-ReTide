@@ -30,7 +30,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class RoyalFateItem extends CollectibleItem.CustomCollectibleItem {
 	public RoyalFateItem() {
-		super(new Item.Properties().stacksTo(2).fireResistant().rarity(Rarity.EPIC), false, 25, CollectibleTiers.RARE, 0, 1, 0,
+		super(new Item.Properties().stacksTo(2).fireResistant().rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.RARE, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.WARDEN_DEATH, 2F, 1F)
 						.particle(ParticleTypes.END_ROD, 72)
@@ -47,7 +47,7 @@ public class RoyalFateItem extends CollectibleItem.CustomCollectibleItem {
 	
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 		if (ModCapabilities.getPlayerVariables(player).player_maxlive > 1) {
 			double lives_left = ModCapabilities.getPlayerVariables(player).player_maxlive;
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
@@ -57,12 +57,10 @@ public class RoyalFateItem extends CollectibleItem.CustomCollectibleItem {
 			capability2.player_lives = 1;
 			capability2.syncPlayerVariables(player);
 			PlayerVariable capability3 = ModCapabilities.getPlayerVariables(player);
-			double setval = capability3.player_shield + lives_left;
-			capability3.player_shield = setval;
+            capability3.player_shield = capability3.player_shield + lives_left;
 			capability3.syncPlayerVariables(player);
 			PlayerVariable capability4 = ModCapabilities.getPlayerVariables(player);
-			double setval2 = capability4.player_shield + 3;
-			capability4.player_shield = setval2;
+            capability4.player_shield = capability4.player_shield + 3;
 			capability4.syncPlayerVariables(player);
 			stack.shrink(1);
 		}

@@ -5,6 +5,7 @@ import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
@@ -15,6 +16,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 @EventBusSubscriber
 public class AnvilRecipeHandler {
@@ -61,24 +63,68 @@ public class AnvilRecipeHandler {
 	}
 
 	@SubscribeEvent
-	public static void onItemTakenFromAnvil(AnvilRepairEvent event) {
+	public static void handleCustomAnvilRecipes(AnvilUpdateEvent event) {
 		ItemStack leftItem = event.getLeft();
-		ItemStack output = event.getOutput();
-		if (event.getRight().getItem() == CAItems.KNIGHT_CORPSE.get() && leftItem.getItem() == Items.IRON_SWORD) {
+		ItemStack rightItem = event.getRight();
+
+		if (leftItem.isEmpty() || rightItem.isEmpty()) return;
+
+		if (leftItem.is(Items.IRON_SWORD) && rightItem.is(CAItems.KNIGHT_CORPSE.get())) {
+			ItemStack output = leftItem.copy();
 			CompoundTag nbtTag = leftItem.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-			if (!nbtTag.isEmpty())
+			if (!nbtTag.isEmpty()) {
 				CustomData.update(DataComponents.CUSTOM_DATA, output, tag -> tag.merge(nbtTag));
-		} else if ((leftItem.getItem() == CAItems.LEGENDARY_SPEAR.get() || leftItem.getItem() == CAItems.HIGHMORE_SCYTHE.get())) {
-			Holder<Enchantment> sharpness = CAEnchantments.getHolder(event.getPlayer().level().registryAccess(), Enchantments.SHARPNESS);
-			Holder<Enchantment> synesthesia = CAEnchantments.getHolder(event.getPlayer().level().registryAccess(), CAEnchantments.SYNESTHESIA);
-			int sharpLevel = EnchantmentHelper.getItemEnchantmentLevel(sharpness, event.getRight());
+			}
+			event.setOutput(output);
+			event.setCost(1);
+			event.setMaterialCost(1);
+			return;
+		}
+
+		boolean isTargetWeapon = leftItem.is(CAItems.LEGENDARY_SPEAR.get()) || leftItem.is(CAItems.HIGHMORE_SCYTHE.get());
+		if (isTargetWeapon) {
+			var registryAccess = event.getPlayer().level().registryAccess();
+			Holder<Enchantment> sharpness = CAEnchantments.getHolder(registryAccess, Enchantments.SHARPNESS);
+			Holder<Enchantment> synesthesia = CAEnchantments.getHolder(registryAccess, CAEnchantments.SYNESTHESIA);
+
+			int sharpLevel = EnchantmentHelper.getItemEnchantmentLevel(sharpness, rightItem);
 			int synLevel = EnchantmentHelper.getItemEnchantmentLevel(synesthesia, leftItem);
+
 			if (sharpLevel > synLevel) {
-				ItemStack returned = event.getRight().copy();
-				EnchantmentHelper.updateEnchantments(returned, enchantments -> enchantments.removeIf(enchantment -> enchantment.equals(sharpness)));
-				if (!event.getPlayer().getInventory().add(returned)) {
-					event.getPlayer().drop(returned, false);
-				}
+				ItemStack output = leftItem.copy();
+				EnchantmentHelper.updateEnchantments(output, mutable -> mutable.set(synesthesia, sharpLevel));
+
+				event.setOutput(output);
+				event.setCost(sharpLevel * 2L);
+				event.setMaterialCost(1);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void refundSharpnessSourceItemOnTake(AnvilRepairEvent event) {
+		Player player = event.getEntity();
+		if (player.level().isClientSide()) return;
+
+		ItemStack leftItem = event.getLeft();
+		ItemStack rightItem = event.getRight();
+
+		boolean isTargetWeapon = leftItem.is(CAItems.LEGENDARY_SPEAR.get()) || leftItem.is(CAItems.HIGHMORE_SCYTHE.get());
+		if (isTargetWeapon) {
+			var registryAccess = player.level().registryAccess();
+			Holder<Enchantment> sharpness = CAEnchantments.getHolder(registryAccess, Enchantments.SHARPNESS);
+			Holder<Enchantment> synesthesia = CAEnchantments.getHolder(registryAccess, CAEnchantments.SYNESTHESIA);
+
+			int sharpLevel = EnchantmentHelper.getItemEnchantmentLevel(sharpness, rightItem);
+			int synLevel = EnchantmentHelper.getItemEnchantmentLevel(synesthesia, leftItem);
+
+			if (sharpLevel > synLevel) {
+				ItemStack returnedItem = rightItem.copy();
+				returnedItem.setCount(1);
+
+				EnchantmentHelper.updateEnchantments(returnedItem, mutable -> mutable.removeIf(holder -> holder.equals(sharpness)));
+
+				ItemHandlerHelper.giveItemToPlayer(player, returnedItem);
 			}
 		}
 	}

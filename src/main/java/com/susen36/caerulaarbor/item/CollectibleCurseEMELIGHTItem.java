@@ -31,12 +31,12 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 public class CollectibleCurseEMELIGHTItem extends CollectibleItem.CustomCollectibleItem {
 	public CollectibleCurseEMELIGHTItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, CollectibleTiers.CURSED, 0, 1, 0,
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.CURSED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.forTier(CollectibleTiers.CURSED));
 	}
 
 	@Override
-	public void onUse(ItemStack stack, Level level, Player player) {
+	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 	}
 
 	@Override

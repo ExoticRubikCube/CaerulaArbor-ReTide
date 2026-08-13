@@ -1,9 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.babel.collectible.CollectibleActivation;
-import com.susen36.babel.collectible.CollectibleBuilder;
-import com.susen36.babel.collectible.CollectibleTiers;
-import com.susen36.babel.collectible.Collectibles;
+import com.susen36.babel.collectible.*;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.manager.EPManager;
@@ -81,9 +78,9 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_ARTIFACT = REGISTRY.register("archfiends_artifact", ArchfiendsArtifactItem::new);
     public static final DeferredHolder<Item, ? extends Item> HAND_OF_FIREWORK = REGISTRY.register("hand_of_firework", HandOfFireworkItem::new);
     public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_FLAG = REGISTRY.register("archfiends_flag", ArchfiendsFlagItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_ENGRAVE = COLLECTIBLE.registerCollectible("hand_of_engrave",
-            (stack, level, player) -> player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(stack.getItem(), 0),
-            false, 25, CollectibleTiers.ADVANCED, 0, 99, 0,
+    public static final DeferredHolder<Item, ? extends Item> HAND_OF_ENGRAVE = COLLECTIBLE.registerCollectible("hand_of_engrave", false, 25, false,
+            (stack, level, player, self) -> player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(stack.getItem(), 0),
+            CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 99, 0),
             CollectibleActivation.builder()
                     .sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
                     .particle(ParticleTypes.CLOUD, 72)
@@ -782,9 +779,6 @@ public class CAItems {
         @SubscribeEvent
         public static void appendRegisteredTooltips(ItemTooltipEvent event) {
             ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(event.getItemStack().getItem());
-            if (itemId == null) {
-                return;
-            }
 
             Integer tooltipCount = TOOLTIP_COUNTS.get(itemId);
             if (tooltipCount != null && tooltipCount > 0) {

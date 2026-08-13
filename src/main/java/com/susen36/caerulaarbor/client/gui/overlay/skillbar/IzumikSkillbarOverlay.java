@@ -1,7 +1,7 @@
-package com.susen36.caerulaarbor.client.overlay.skillbar;
+package com.susen36.caerulaarbor.client.gui.overlay.skillbar;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.BishopFishEntity;
+import com.susen36.caerulaarbor.entity.IzumikEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -18,8 +18,8 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import java.util.Comparator;
 
 @EventBusSubscriber({Dist.CLIENT})
-public class BishopSkillBarOverlay {
-	@SubscribeEvent(priority = EventPriority.NORMAL)
+public class IzumikSkillbarOverlay {
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		int w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
 		int h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
@@ -37,20 +37,29 @@ public class BishopSkillBarOverlay {
         double fx = x;
         double fy = y;
         double fz = z;
-        if (!world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e1 -> true).isEmpty()) {
-			BishopFishEntity ent;
+        if (!world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e1 -> true).isEmpty()) {
+            IzumikEntity ent;
             double ind = 0;
-            ent = world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e -> true)
+            double phase;
+            ent = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e -> true)
                     .stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(fx, fy, fz))).orElse(null);
             if (!(ent == null)) {
-                ind = Math.round((float) ent.getEntityData().get(BishopFishEntity.DATA_ENDP) / 24);
+                phase = ent instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_PHASE) : 0;
+                ind = ent instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_SKILLP) : 0;
+                if (phase == 0) {
+                    ind = Math.round(ind * 20);
+                } else if (phase == 1) {
+                    ind = Math.round(ind / 6);
+                } else {
+                    ind = Math.round(ind / 4);
+                }
             }
             if (ind > 100) {
                 ind = 100;
             } else if (ind < 0) {
                 ind = 0;
             }
-            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/bishop_skill_bar.png"), 2, h / 2 + -48, Mth.clamp((int) ind * 4, 0, 400), 0, 4, 102, 404, 102);
+            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/izumik_skillbar.png"), 13, h / 2 + -48, Mth.clamp((int) ind * 4, 0, 400), 0, 4, 100, 404, 100);
 		}
 	}
 }

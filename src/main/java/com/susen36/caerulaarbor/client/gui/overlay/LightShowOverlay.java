@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.client.overlay;
+package com.susen36.caerulaarbor.client.gui.overlay;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -19,15 +19,15 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 @EventBusSubscriber({Dist.CLIENT})
 public class LightShowOverlay {
-	public static final ResourceLocation EXTINGUISH = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/light_extinguish.png");
-	public static final ResourceLocation DIM = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/light_dim.png");
-	public static final ResourceLocation WAVING = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/light_waving.png");
-	public static final ResourceLocation BRIGHT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/light.png");
+	public static final ResourceLocation EXTINGUISH = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/light_extinguish.png");
+	public static final ResourceLocation DIM = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/light_dim.png");
+	public static final ResourceLocation WAVING = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/light_waving.png");
+	public static final ResourceLocation BRIGHT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/light.png");
 
-	public static final ResourceLocation LIFE_POINT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/target_health.png");
-	public static final ResourceLocation SHIELD_POINT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/target_shield.png");
+	public static final ResourceLocation LIFE_POINT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/target_health.png");
+	public static final ResourceLocation SHIELD_POINT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/target_shield.png");
 
-	public static final ResourceLocation NEAT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/lights_neat.png");
+	public static final ResourceLocation NEAT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/lights_neat.png");
 
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

@@ -1,7 +1,7 @@
-package com.susen36.caerulaarbor.client.overlay.skillbar;
+package com.susen36.caerulaarbor.client.gui.overlay.skillbar;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.HighmoreEntity;
+import com.susen36.caerulaarbor.entity.BishopFishEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -18,7 +18,7 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import java.util.Comparator;
 
 @EventBusSubscriber({Dist.CLIENT})
-public class HighmoreSkillBarOverlay {
+public class BishopSkillBarOverlay {
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		int w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
@@ -37,22 +37,20 @@ public class HighmoreSkillBarOverlay {
         double fx = x;
         double fy = y;
         double fz = z;
-
-        if (!world.getEntitiesOfClass(HighmoreEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e1 -> true).isEmpty()) {
-            HighmoreEntity ent;
+        if (!world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e1 -> true).isEmpty()) {
+			BishopFishEntity ent;
             double ind = 0;
-            ent = world.getEntitiesOfClass(HighmoreEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e -> true)
+            ent = world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 64, 64, 64), e -> true)
                     .stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(fx, fy, fz))).orElse(null);
             if (!(ent == null)) {
-                ind = Math.round((float) (ent instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_SKILLP_2) : 0) / 8);
+                ind = Math.round((float) ent.getEntityData().get(BishopFishEntity.DATA_ENDP) / 24);
             }
-            if (ind > 85) {
-                ind = 85;
+            if (ind > 100) {
+                ind = 100;
             } else if (ind < 0) {
                 ind = 0;
             }
-            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/overlay/highmore_skill_bar.png"), 8, h / 2 + -41, Mth.clamp((int) ind * 4, 0, 340), 0, 4, 87, 344, 87);
-
+            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/bishop_skill_bar.png"), 2, h / 2 + -48, Mth.clamp((int) ind * 4, 0, 400), 0, 4, 102, 404, 102);
 		}
 	}
 }
