@@ -85,7 +85,7 @@ public abstract class WearableChestItem extends ArmorItem {
 					level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 
 				entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).markUsed(CACollectible.KING_ARMOR);
-				if (entity instanceof Player player1)
+				if (!world.isClientSide() && entity instanceof Player player1)
 					BabelNetwork.syncCollectibles(player1);
 
 				if (world.isClientSide())
