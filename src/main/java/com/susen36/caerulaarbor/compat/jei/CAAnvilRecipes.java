@@ -29,15 +29,15 @@ public class CAAnvilRecipes implements IModPlugin {
 		IVanillaRecipeFactory factory = registration.getVanillaRecipeFactory();
 		List<IJeiAnvilRecipe> anvilRecipes = new ArrayList<>();
 		ItemStack rightItem;
-		rightItem = new ItemStack(CACollectible.RELIC_CROWN.get());
+		rightItem = new ItemStack(CACollectible.RELIC_CROWN);
 		rightItem.setCount(1);
 		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(Items.IRON_HELMET), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.WEARABLE_CROWN_HELMET.get()))));
-		rightItem = new ItemStack(CACollectible.KING_ARMOR.get());
+		rightItem = new ItemStack(CACollectible.KING_ARMOR);
 		rightItem.setCount(1);
 		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(Items.IRON_CHESTPLATE), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.WEARABLE_CHEST_CHESTPLATE.get()))));
 		rightItem = new ItemStack(Items.COPPER_INGOT);
 		rightItem.setCount(1);
-		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(CACollectible.SOLO_MUSIC_BOX.get()), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.MUSIC_BOX_FIXED.get()))));
+		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(CACollectible.SOLO_MUSIC_BOX), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.MUSIC_BOX_FIXED.get()))));
 		rightItem = new ItemStack(CAItems.KNIGHT_CORPSE.get());
 		rightItem.setCount(1);
 		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(Items.IRON_SWORD), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.IRON_SWORD_OF_KNIGHT_CORPUS.get()))));

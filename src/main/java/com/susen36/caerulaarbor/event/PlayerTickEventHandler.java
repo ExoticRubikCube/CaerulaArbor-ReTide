@@ -60,7 +60,7 @@ public class PlayerTickEventHandler {
         if (entity == null) return;
         if (entity.tickCount % 20 != 0) return;
 
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_SWIPE.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_SWIPE)) {
             if (!((entity.getOffhandItem()).getItem() == net.minecraft.world.item.Items.BRUSH)) return;
 
             if (entity.hasEffect(MobEffects.REGENERATION)) {
@@ -123,15 +123,15 @@ public class PlayerTickEventHandler {
         if (capability.player_lives > 1) return;
 
         double suitKing = 0;
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_SPEAR.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_SPEAR)) {
             suitKing = suitKing + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BOOST, 20, 1, false, false));
         }
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_ARMOR.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_ARMOR)) {
             suitKing = suitKing + 1;
         }
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_EXTENSION.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_EXTENSION)) {
             suitKing = suitKing + 1;
             double amplifi = Math.ceil(entity.getMaxHealth() / 20);
             if (amplifi > 24) amplifi = 24;
@@ -140,7 +140,7 @@ public class PlayerTickEventHandler {
                     entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20, (int) amplifi, false, false));
             }
         }
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_CROWN.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_CROWN)) {
             suitKing = suitKing + 1;
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KINGS_BREATH, 20, suitKing < 3 ? 0 : 2, false, false));
@@ -150,7 +150,7 @@ public class PlayerTickEventHandler {
 
     private static void handleHandSpeed(Player entity, LevelAccessor world, double x, double y, double z) {
         ItemStack mainHandItem = (entity.getMainHandItem()).copy();
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_SPEED.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_SPEED)) {
             if (mainHandItem.getItem() instanceof PickaxeItem || mainHandItem.is(ItemTags.create(ResourceLocation.parse("minecraft:pickaxes")))) {
                 boolean valid = true;
                 final Vec3 center = new Vec3(x, y, z);
@@ -178,17 +178,17 @@ public class PlayerTickEventHandler {
             return;
 
         double suitArchfi = 0;
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.SARKAZ_KING_FLAG.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.SARKAZ_KING_FLAG)) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.FLAG_SWINGS, 20, 2, false, false));
         }
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.SARKAZ_KING_BED.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.SARKAZ_KING_BED)) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.KEEP_BEDDING, 20, 0, false, false));
         }
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.SARKAZ_KING_ARTIFACT.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.SARKAZ_KING_ARTIFACT)) {
             suitArchfi = suitArchfi + 1;
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SACREFICE, 20, suitArchfi < 3 ? 0 : 2, false, false));
@@ -197,13 +197,13 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleEngraveAndSurvivor(Player entity) {
-        int engrave = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.HAND_OF_ENGRAVE.get());
+        int engrave = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.HAND_OF_ENGRAVE);
         if (engrave > 0) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.ENGRAVED_TRIUMPH, 20,
                         engrave - 1, false, false));
         }
-        int survivor = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.SURVIVOR_CONTRACT.get());
+        int survivor = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.SURVIVOR_CONTRACT);
         if (survivor > 0) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SURVIVORS_GUIDE, 20,
@@ -255,14 +255,14 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleRelicHemost(Player entity) {
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HEMOST.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HEMOST)) {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.HEMOSTATIC, 20, 0, false, false));
         }
     }
 
     private static void handleRelicYearning(Player entity) {
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.YEARNING.get())) {
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.YEARNING)) {
             if (!(entity.getItemBySlot(EquipmentSlot.CHEST).getItem() == ItemStack.EMPTY.getItem())) {
                 double amplifi = Math.min(Math.floor(entity.experienceLevel * 0.25), 64);
                 if (amplifi >= 1 && !entity.level().isClientSide()) {
@@ -278,7 +278,7 @@ public class PlayerTickEventHandler {
 
     private static void handleLegendChitin(Player entity) {
         if (!entity.level().isClientSide()) {
-            boolean used = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.LEGEND_CHITIN.get());
+            boolean used = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.LEGEND_CHITIN);
             AttributeInstance attackAttr = entity.getAttribute(Attributes.ATTACK_DAMAGE);
             AttributeInstance healthAttr = entity.getAttribute(Attributes.MAX_HEALTH);
             if (used) {
@@ -300,7 +300,7 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleGoldenChalise(Player entity) {
-        if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.GOLDEN_CHALISE.get())) {
+        if (!entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.GOLDEN_CHALISE)) {
             AttributeInstance attr = entity.getAttribute(Attributes.ATTACK_SPEED);
             if (attr != null && attr.getModifier(CHALISE_ATTACK_SPEED_ID) != null) {
                 attr.removeModifier(CHALISE_ATTACK_SPEED_ID);

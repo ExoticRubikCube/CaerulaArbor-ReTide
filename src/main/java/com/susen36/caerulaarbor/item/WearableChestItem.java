@@ -72,7 +72,7 @@ public abstract class WearableChestItem extends ArmorItem {
 				double y = entity.getY();
 				double z = entity.getZ();
                 PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(entity);
-				if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_ARMOR.get()))
+				if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_ARMOR))
 					return;
 
 				BlockPos pos = BlockPos.containing(x, y, z);
@@ -84,7 +84,7 @@ public abstract class WearableChestItem extends ArmorItem {
 				if ((LevelAccessor) world instanceof ServerLevel level)
 					level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 
-				entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).markUsed(CACollectible.KING_ARMOR.get());
+				entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).markUsed(CACollectible.KING_ARMOR);
 				if (entity instanceof Player player1)
 					BabelNetwork.syncCollectibles(player1);
 

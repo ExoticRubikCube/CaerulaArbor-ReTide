@@ -31,7 +31,7 @@ public class PEVOHealEventHandle {
 
         boolean result;
         result = (ModCapabilities.getPlayerVariables(entity)).can_player_evo
-                && (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO.get()) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
+                && (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
         if (!entity.isShiftKeyDown() || !(entity instanceof Player livingEntity1) || !result) {
 			return;
 		}

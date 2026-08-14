@@ -22,7 +22,7 @@ public class PlayerAttackEventHandler {
 			return;
 		}
 
-		if (!attacker.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_OF_PULVERIZATION.get())) {
+		if (!attacker.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_OF_PULVERIZATION)) {
 			return;
 		}
 

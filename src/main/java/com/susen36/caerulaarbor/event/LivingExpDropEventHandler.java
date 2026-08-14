@@ -17,7 +17,7 @@ public class LivingExpDropEventHandler {
 		Player sourceentity = event.getAttackingPlayer();
 		if (sourceentity == null)
 			return;
-		if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_EXTENSION.get())) {
+		if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_EXTENSION)) {
 			if (ModCapabilities.getPlayerVariables(sourceentity).player_lives <= 1) {
 				event.setDroppedExperience((int) (event.getDroppedExperience() * 1.5));
 			}

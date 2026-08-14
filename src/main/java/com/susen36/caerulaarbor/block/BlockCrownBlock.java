@@ -104,7 +104,7 @@ public class BlockCrownBlock extends Block implements SimpleWaterloggedBlock {
 		int y = pos.getY();
 		int z = pos.getZ();
         if (world instanceof ServerLevel level) {
-            ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CACollectible.RELIC_CROWN.get()));
+            ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CACollectible.RELIC_CROWN));
             entityToSpawn.setPickUpDelay(10);
             level.addFreshEntity(entityToSpawn);
         }

@@ -23,19 +23,19 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 public class AnvilRecipeHandler {
 	@SubscribeEvent
 	public static void onAnvilUpdate(AnvilUpdateEvent event) {
-		if ((event.getLeft().getItem() == CACollectible.SOLO_MUSIC_BOX.get()) && (event.getRight().getItem() == Items.COPPER_INGOT)) {
+		if ((event.getLeft().getItem() == CACollectible.SOLO_MUSIC_BOX) && (event.getRight().getItem() == Items.COPPER_INGOT)) {
 			if ((event.getLeft().getCount() == 1) && (event.getRight().getCount() >= 1)) {
 				event.setMaterialCost(1);
 				event.setCost(4);
 				event.setOutput(new ItemStack(CAItems.MUSIC_BOX_FIXED.get()));
 			}
-		} else if ((event.getLeft().getItem() == Items.IRON_HELMET) && (event.getRight().getItem() == CACollectible.RELIC_CROWN.get())) {
+		} else if ((event.getLeft().getItem() == Items.IRON_HELMET) && (event.getRight().getItem() == CACollectible.RELIC_CROWN)) {
 			if ((event.getLeft().getCount() == 1) && (event.getRight().getCount() >= 1)) {
 				event.setMaterialCost(1);
 				event.setCost(5);
 				event.setOutput(new ItemStack(CAItems.WEARABLE_CROWN_HELMET.get()));
 			}
-		} else if ((event.getLeft().getItem() == Items.IRON_CHESTPLATE) && (event.getRight().getItem() == CACollectible.KING_ARMOR.get())) {
+		} else if ((event.getLeft().getItem() == Items.IRON_CHESTPLATE) && (event.getRight().getItem() == CACollectible.KING_ARMOR)) {
 			if ((event.getLeft().getCount() == 1) && (event.getRight().getCount() >= 1)) {
 				event.setMaterialCost(1);
 				event.setCost(5);

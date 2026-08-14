@@ -96,7 +96,7 @@ public class OceanizedFoxEntity extends SeaMonster {
         this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Salmon.class, true, true));
         this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, true));
         this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, true));
-        this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CACollectible.CANNED_CHERRY.get()), false));
+        this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CACollectible.CANNED_CHERRY.value()), false));
         this.goalSelector.addGoal(10, new RemoveBlockGoal(Blocks.SWEET_BERRY_BUSH, this, 1, 3));
         this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1) {
             @Override

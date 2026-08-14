@@ -48,7 +48,7 @@ public class BrewingRecipeHandler {
 		addPotionRecipe(builder, CAPotions.PERCENTAGE_REGENERATION, Items.GLOWSTONE_DUST, CAPotions.PERCENTAGE_REGENERATION_II);
 
 		// 制作浆果（物品产出）
-		addItemRecipe(builder, Potions.AWKWARD, Items.SWEET_BERRIES, CACollectible.CANNED_CHERRY.get());
+		addItemRecipe(builder, Potions.AWKWARD, Items.SWEET_BERRIES, CACollectible.CANNED_CHERRY.value());
 	}
 
 	private static void addPotionRecipe(PotionBrewing.Builder builder, Holder<Potion> input, ItemLike ingredient, Holder<Potion> output) {

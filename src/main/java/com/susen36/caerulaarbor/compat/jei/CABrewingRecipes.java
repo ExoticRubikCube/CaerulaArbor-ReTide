@@ -39,7 +39,7 @@ public class CABrewingRecipes implements IModPlugin {
 		List<ItemStack> inputStack = new ArrayList<>();
 		ingredientStack.add(new ItemStack(Items.SWEET_BERRIES));
 		potion.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.AWKWARD));
-		brewingRecipes.add(factory.createBrewingRecipe(List.copyOf(ingredientStack), potion.copy(), new ItemStack(CACollectible.CANNED_CHERRY.get())));
+		brewingRecipes.add(factory.createBrewingRecipe(List.copyOf(ingredientStack), potion.copy(), new ItemStack(CACollectible.CANNED_CHERRY)));
 		ingredientStack.clear();
 		ingredientStack.add(new ItemStack(CABlocks.TRAIL_MUSHROOM.get()));
 		potion.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.AWKWARD));

@@ -169,7 +169,7 @@ public class CustomBossBarEventHandler {
         INDEX.add(Pair.of("entity.caerula_arbor.oceanized_warden",CONTEXT_WARDEN));
         INDEX.add(Pair.of("entity.caerula_arbor.oceanized_wardenis",CONTEXT_WARDENIS));
         INDEX.add(Pair.of("entity.caerula_arbor.oceanized_enderina",CONTEXT_ENDERINA));
-        INDEX.add(Pair.of("entity.caerula_arbor.oceanized_enderina",CONTEXT_ENDER_DRAGON));
+        INDEX.add(Pair.of("entity.caerula_arbor.oceanized_ender_dragon",CONTEXT_ENDER_DRAGON));
         INDEX.add(Pair.of("entity.caerula_arbor.endspeaker_0",CONTEXT_ENDSPEAKER));
         INDEX.add(Pair.of("entity.caerula_arbor.endspeaker_1",CONTEXT_ENDSPEAKER));
         INDEX.add(Pair.of("entity.caerula_arbor.endspeaker_2",CONTEXT_ENDSPEAKER));

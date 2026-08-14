@@ -108,7 +108,7 @@ public class BlockCrystalBlock extends Block implements SimpleWaterloggedBlock {
 		double hitZ = hit.getLocation().z;
 		Direction direction = hit.getDirection();
         if (world instanceof ServerLevel level) {
-            ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CACollectible.KING_CRYSTAL.get()));
+            ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CACollectible.KING_CRYSTAL));
             entityToSpawn.setPickUpDelay(10);
             level.addFreshEntity(entityToSpawn);
         }

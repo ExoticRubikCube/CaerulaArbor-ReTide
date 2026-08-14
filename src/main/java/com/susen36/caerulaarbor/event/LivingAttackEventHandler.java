@@ -269,7 +269,7 @@ public class LivingAttackEventHandler {
             var itemKey = BuiltInRegistries.ITEM.getKey(mainHandItem.getItem());
             var registryName = itemKey.toString();
 
-            if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_STRANGLE.get()) && isStrangleWeapon(mainHandItem, registryName)
+            if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_STRANGLE) && isStrangleWeapon(mainHandItem, registryName)
                     && target.isAlive() && target.getHealth() < target.getMaxHealth() * 0.25F) {
                 target.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, player), target.getMaxHealth() * 99);
                 if (world instanceof ServerLevel level) {
@@ -278,14 +278,14 @@ public class LivingAttackEventHandler {
                 world.playSound(null, target.blockPosition(), SoundEvents.WITHER_HURT, SoundSource.NEUTRAL, 2, 1);
             }
 
-            if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_FIREWORK.get()) && isFireworkWeapon(mainHandItem, registryName)
+            if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_FIREWORK) && isFireworkWeapon(mainHandItem, registryName)
                     && player.getRandom().nextFloat() < 0.33F) {
                 world.playSound(null, player.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 3.6F, 1);
                 CaerulaArbor.queueServerWork(10, () -> detonateFireworkRelic(world, target, targetPosition, player, amount));
             }
         }
 
-        if (!player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.LEGEND_CHITIN.get()) || player.getRandom().nextFloat() >= 2.0F) return;
+        if (!player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.LEGEND_CHITIN) || player.getRandom().nextFloat() >= 2.0F) return;
 
         var healthPercent = EntityUtils.getHealthPerc(player);
         if (!world.isClientSide()) {

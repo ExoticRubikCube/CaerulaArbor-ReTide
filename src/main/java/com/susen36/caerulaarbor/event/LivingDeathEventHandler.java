@@ -203,7 +203,7 @@ public class LivingDeathEventHandler {
         if (sourceentity instanceof Player) {
             boolean result = false;
             result = (ModCapabilities.getPlayerVariables(sourceentity)).can_player_evo
-                    && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO.get()) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization > 2.9);
+                    && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization > 2.9);
             if (result) {
                 double r0 = 0, r1 = 0, r2 = 0;
                 if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {
@@ -304,15 +304,15 @@ public class LivingDeathEventHandler {
 
     private static void handlePlayerKillRelics(LivingDeathEvent event, LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity) {
         PlayerVariable capability = ModCapabilities.getPlayerVariables(sourceentity);
-        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.CURSED_EMELIGHT.get())) {
+        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.CURSED_EMELIGHT)) {
             capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.1, 0.2);
             capability.syncPlayerVariables(sourceentity);
         }
-        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.CURSED_GLOWBODY.get())) {
+        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.CURSED_GLOWBODY)) {
             capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.2, 0.3);
             capability.syncPlayerVariables(sourceentity);
         }
-        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.CURSED_RESEARCH.get())) {
+        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.CURSED_RESEARCH)) {
             capability.player_light = capability.player_light - Mth.nextDouble(RandomSource.create(), 0.3, 0.5);
             capability.syncPlayerVariables(sourceentity);
         }
@@ -320,7 +320,7 @@ public class LivingDeathEventHandler {
             capability.player_light = 0;
             capability.syncPlayerVariables(sourceentity);
         }
-        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_ARMOR.get())) {
+        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_ARMOR)) {
             if (Math.random() < 0.08) {
                 if (capability.player_lives > 1) {
                     capability.player_lives = capability.player_lives - 1;
@@ -330,7 +330,7 @@ public class LivingDeathEventHandler {
                 capability.syncPlayerVariables(sourceentity);
             }
         }
-        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_CRYSTAL.get())) {
+        if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_CRYSTAL)) {
             if (Math.random() < 0.1) {
                 if (capability.player_lives > 1) {
                     capability.player_lives = Math.max(capability.player_lives - 2, 1);
@@ -346,7 +346,7 @@ public class LivingDeathEventHandler {
             }
         }
         if (sourceentity instanceof Player player) {
-            int engrave = player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.HAND_OF_ENGRAVE.get());
+            int engrave = player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.HAND_OF_ENGRAVE);
             if (engrave >= 0 && engrave < 99) {
                 if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
                     boolean validweapon = false;
@@ -366,17 +366,17 @@ public class LivingDeathEventHandler {
                         }
                     }
                     if (validweapon) {
-                        player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CACollectible.HAND_OF_ENGRAVE.get(), engrave + 1);
+                        player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CACollectible.HAND_OF_ENGRAVE, engrave + 1);
                     }
                 }
             }
         }
-        int survivor = sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.SURVIVOR_CONTRACT.get());
+        int survivor = sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.SURVIVOR_CONTRACT);
         if (survivor >= 0
                 && survivor < 32) {
             if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
                 if (Math.random() < 0.035 || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses")))) {
-                    sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CACollectible.SURVIVOR_CONTRACT.get(), survivor + 1);
+                    sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(CACollectible.SURVIVOR_CONTRACT, survivor + 1);
                     if (sourceentity instanceof Player player)
                         BabelNetwork.syncCollectibles(player);
                     if (world instanceof ServerLevel level)

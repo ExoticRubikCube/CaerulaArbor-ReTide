@@ -32,10 +32,10 @@ public class CaerulaArbor {
         CASounds.REGISTRY.register(modEventBus);
         CABlocks.REGISTRY.register(modEventBus);
         CABlockEntities.REGISTRY.register(modEventBus);
-        CAItems.init(modEventBus);
+        CAItems.REGISTRY.register(modEventBus);
+        CACollectible.REGISTRY.register(modEventBus);
         CAEntities.REGISTRY.register(modEventBus);
         CATabs.REGISTRY.register(modEventBus);
-
         CAMobEffects.REGISTRY.register(modEventBus);
         CAPotions.REGISTRY.register(modEventBus);
         CAPaintings.REGISTRY.register(modEventBus);

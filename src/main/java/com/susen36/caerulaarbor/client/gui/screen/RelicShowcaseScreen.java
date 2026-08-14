@@ -248,8 +248,8 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			int[] lp = entry.labelPos();
 			String text = switch (entry.special()) {
 				case SURVIVOR ->
-						"" + Math.round(entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.SURVIVOR_CONTRACT.get()));
-				case NONE -> entry.relic() == CACollectible.HAND_OF_ENGRAVE.get() ? "" + entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.HAND_OF_ENGRAVE.get()) : "";
+						"" + Math.round(entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.SURVIVOR_CONTRACT));
+				case NONE -> entry.relic() == CACollectible.HAND_OF_ENGRAVE ? "" + entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.HAND_OF_ENGRAVE) : "";
 				default -> "";
 			};
 			if (!text.isEmpty()) {

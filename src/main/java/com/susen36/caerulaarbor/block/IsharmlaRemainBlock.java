@@ -169,7 +169,7 @@ public class IsharmlaRemainBlock extends Block {
             stat = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1;
             if (stat == 0) {
                 if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()
-                        && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CACollectible.CAERULA_HEART.get()) {
+                        && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CACollectible.CAERULA_HEART) {
                     skadi = world.getEntitiesOfClass(SkadiEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
                         Comparator<Entity> compareDistOf(double x, double y, double z) {
                             return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));

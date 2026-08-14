@@ -24,7 +24,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -663,11 +662,6 @@ public class CAItems {
 
     private static DeferredHolder<Item, ? extends Item> doubleBlock(DeferredHolder<Block, ? extends Block> block) {
         return REGISTRY.register(Objects.requireNonNull(block.getId()).getPath(), () -> new DoubleHighBlockItem(block.get(), new Item.Properties()));
-    }
-
-    public static void init(IEventBus modEventBus) {
-        REGISTRY.register(modEventBus);
-        CACollectible.COLLECTIBLE.register(modEventBus);
     }
 
     @SubscribeEvent

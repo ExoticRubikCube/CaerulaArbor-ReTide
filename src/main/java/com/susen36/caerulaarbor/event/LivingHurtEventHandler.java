@@ -405,7 +405,7 @@ public class LivingHurtEventHandler {
         boolean valid = false;
         String regName;
 
-        if (entity instanceof Player player && player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.TREATY.get())) {
+        if (entity instanceof Player player && player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.TREATY)) {
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:nether_mobs")))) {
                 valid = true;
             } else {
@@ -468,14 +468,14 @@ public class LivingHurtEventHandler {
         if (sourceentity instanceof Player player && damagesource.is(DamageTypes.PLAYER_ATTACK)) {
             ItemStack item_temp = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (item_temp.getItem() instanceof HoeItem || item_temp.is(ItemTags.create(ResourceLocation.parse("minecraft:hoes")))) {
-                if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_FERTILITY.get())) {
+                if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_FERTILITY)) {
                     entity.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, sourceentity), (float) ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.075));
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.SQUID_INK, x, y, z, 8, 0.75, 0.9, 0.75, 0.1);
                 }
             }
             if (item_temp.getItem() instanceof SwordItem || item_temp.is(ItemTags.create(ResourceLocation.parse("minecraft:swords")))) {
-                if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_SWORD.get())) {
+                if (player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_SWORD)) {
                     if (!(entity instanceof LivingEntity livEnt11 && livEnt11.hasEffect(BabelMobEffects.LESS_ARMOR))) {
                         if (entity instanceof LivingEntity living && !entity.level().isClientSide())
                             living.addEffect(new MobEffectInstance(BabelMobEffects.LESS_ARMOR, 120, 1));
@@ -498,7 +498,7 @@ public class LivingHurtEventHandler {
         if (sourceentity == null) return;
 
         if (entity instanceof Player && entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0) >= 5) {
-            if (entity instanceof Player player && player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_THORNS.get())) {
+            if (entity instanceof Player player && player.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_THORNS)) {
                 if (!entity.isShiftKeyDown() && sourceentity.isAlive() && entity.isAlive()) {
                     if (!(sourceentity instanceof Player)) {
                         if (!damagesource.is(CADamageTypes.HAND_SPIKE) && !damagesource.is(DamageTypes.THORNS) && !damagesource.is(CADamageTypes.GUNMU_DAMAGE)) {
