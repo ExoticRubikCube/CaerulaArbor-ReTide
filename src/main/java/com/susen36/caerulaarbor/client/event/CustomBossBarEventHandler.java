@@ -51,6 +51,7 @@ public class CustomBossBarEventHandler {
     public static final ResourceLocation WARDEN = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/warden_bossbar.png");
     public static final ResourceLocation WARDENIS = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/wardenis_bossbar.png");
     public static final ResourceLocation ENDERINA = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/enderina_bossbar.png");
+    public static final ResourceLocation ENDER_DRAGON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/ender_dragon_bossbar.png");
     public static final ResourceLocation ENDSPEAKER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/endspeaker_bossbar.png");
     public static final ResourceLocation WITHER_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/wither_bossstyle.png");
     public static final ResourceLocation WARDEN_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/warden_bossstyle.png");
@@ -80,6 +81,7 @@ public class CustomBossBarEventHandler {
     public static final BossBarRenderContext CONTEXT_WARDEN = BossBarRenderContext.of(WARDEN).frame(182,21).bar(180,3,1,8).offset(-10, 7).color(0x3FD2FA).withStyle(WARDEN_STYLE, 32);
     public static final BossBarRenderContext CONTEXT_WARDENIS = BossBarRenderContext.of(WARDENIS).frame(182,21).bar(180,3,1,8).offset(-10, 7).color(0x3FD2FA).withStyle(WARDEN_STYLE, 32);
     public static final BossBarRenderContext CONTEXT_ENDERINA = BossBarRenderContext.of(ENDERINA).frame(182,23).bar(180,3,1,13).offset(-12, 6).color(0x7B75D7);
+    public static final BossBarRenderContext CONTEXT_ENDER_DRAGON = BossBarRenderContext.of(ENDER_DRAGON).frame(182,23).bar(180,3,1,13).offset(-12, 6).color(0x7B75D7);
     public static final BossBarRenderContext CONTEXT_ENDSPEAKER = BossBarRenderContext.of(ENDSPEAKER).frame(182,24).bar(180,3,1,11).offset(-10, 6).color(0xD6E0F2);
 
 	public static final Map<BossEvent, Integer> CYCLE_MAP = new HashMap<>();
@@ -98,7 +100,7 @@ public class CustomBossBarEventHandler {
                     .name(bossEvent.getName().getString(), gui.guiWidth()/2, event.getY());
             ResourceLocation style = context.style;
             int cycle = 0;
-            if(style != null || context.equals(CONTEXT_ENDERINA)){
+            if(style != null){
                 if (CYCLE_MAP.containsKey(bossEvent)) {
                     cycle = CYCLE_MAP.get(bossEvent);
                     CYCLE_MAP.replace(bossEvent, cycle + 1);
@@ -135,7 +137,7 @@ public class CustomBossBarEventHandler {
             int VOffset = (cycle_progress / 4) % context.style_cycle;
             gui.blit(style, bx, by,
                     0, VOffset, real_px, context.bar_y, 256, 32);
-        } else if (context.equals(CONTEXT_ENDERINA)){
+        } else if (context.equals(CONTEXT_ENDERINA)||context.equals(CONTEXT_ENDER_DRAGON)){
             int uOffset = (cycle_progress * 5 / 16) % 218;
             int remain_len = real_px - 90;
             gui.blit(ENDERINA_STYLE, bx, by,
@@ -167,6 +169,7 @@ public class CustomBossBarEventHandler {
         INDEX.add(Pair.of("entity.caerula_arbor.oceanized_warden",CONTEXT_WARDEN));
         INDEX.add(Pair.of("entity.caerula_arbor.oceanized_wardenis",CONTEXT_WARDENIS));
         INDEX.add(Pair.of("entity.caerula_arbor.oceanized_enderina",CONTEXT_ENDERINA));
+        INDEX.add(Pair.of("entity.caerula_arbor.oceanized_enderina",CONTEXT_ENDER_DRAGON));
         INDEX.add(Pair.of("entity.caerula_arbor.endspeaker_0",CONTEXT_ENDSPEAKER));
         INDEX.add(Pair.of("entity.caerula_arbor.endspeaker_1",CONTEXT_ENDSPEAKER));
         INDEX.add(Pair.of("entity.caerula_arbor.endspeaker_2",CONTEXT_ENDSPEAKER));
