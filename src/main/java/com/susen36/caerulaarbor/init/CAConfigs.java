@@ -25,10 +25,7 @@ public class CAConfigs {
 	public static final ModConfigSpec.ConfigValue<Double> ARMOR_MULT;
 	public static final ModConfigSpec.ConfigValue<Double> MORTAR_HEALTH;
 	public static final ModConfigSpec.ConfigValue<Double> MORTAR_ATTACK;
-	public static final ModConfigSpec.ConfigValue<Boolean> SANITY_BAR_STYLE;
 	public static final ModConfigSpec.ConfigValue<Boolean> LIGHTS_NEAT_STYLE;
-	public static final ModConfigSpec.ConfigValue<Double> X_OFFSET;
-	public static final ModConfigSpec.ConfigValue<Double> Y_OFFSET;
 	public static final ModConfigSpec.ConfigValue<Double> X_OFFSET_LIGHT;
 	public static final ModConfigSpec.ConfigValue<Double> Y_OFFSET_LIGHT;
 	public static final ModConfigSpec.ConfigValue<Double> X_OFFSET_LIFE;
@@ -39,7 +36,6 @@ public class CAConfigs {
 	public static final ModConfigSpec.ConfigValue<Double> SHIELD_LIMIT;
 	public static final ModConfigSpec.ConfigValue<Boolean> CROSSOVER;
 	public static final ModConfigSpec.ConfigValue<Boolean> TRANS_BOSS;
-	public static final ModConfigSpec.ConfigValue<Boolean> DEBUG;
 	public static final ModConfigSpec.ConfigValue<Double> LP_INIT;
 	public static final ModConfigSpec.ConfigValue<Boolean> SANITY_PTC;
 	public static final ModConfigSpec.ConfigValue<Double> X_OFFSET_SHIELD;
@@ -74,7 +70,6 @@ public class CAConfigs {
 		SHIELD_LIMIT = BUILDER.comment("全局护盾值上限。").define("player_shield_global_limit", (double) 99999);
 		CROSSOVER = BUILDER.comment("仅使用本模组物品召唤联动头目。").define("independent_crossover", false);
 		TRANS_BOSS = BUILDER.comment("是否海嗣化Boss生物。").define("boss_oceanization", false);
-		DEBUG = BUILDER.comment("在日志输出调试信息。").define("show_debug_info", false);
 		LP_INIT = BUILDER.comment("初始目标生命。").define("initial_life_point", (double) 6);
 		SUBLIMATION_BAN = BUILDER.comment("禁用升华策略。").define("ban_sublimation", false);
 		SUBLIMATION_COEFFICIENT = BUILDER.comment("升华进化点数系数，实际进化所需点数=(下一阶段代数^3)*系数*12。").define("sublimation_coefficient", (double) 1);
@@ -87,10 +82,7 @@ public class CAConfigs {
 		MORTAR_ATTACK = BUILDER.comment("阿戈尔重炮速射炮的基础伤害。").define("mortar_attack", (double) 32);
 		BUILDER.pop();
 		BUILDER.push("screen");
-		SANITY_BAR_STYLE = BUILDER.comment("神经损伤显示采用条状，若关闭则为明日方舟中的圆环。").define("sanity_bar_style", false);
 		LIGHTS_NEAT_STYLE = BUILDER.comment("灯火显示采用简约风格，true代表开启。").define("lights_neat_style", false);
-		X_OFFSET = BUILDER.comment("神经损伤条渲染x轴偏移。正数值为向右偏移").define("sanity_x_offset", (double) 0);
-		Y_OFFSET = BUILDER.comment("神经损伤条渲染y轴偏移。正数值为向下偏移").define("sanity_y_offset", (double) 0);
 		X_OFFSET_LIGHT = BUILDER.comment("灯火渲染x轴偏移。正数值为向右偏移").define("lights_x_offset", (double) 0);
 		Y_OFFSET_LIGHT = BUILDER.comment("灯火渲染y轴偏移。正数值为向下偏移").define("lights_y_offset", (double) 0);
 		X_OFFSET_LIFE = BUILDER.comment("目标生命值渲染x轴偏移。正数值为向右偏移").define("life_point_x_offset", (double) 0);

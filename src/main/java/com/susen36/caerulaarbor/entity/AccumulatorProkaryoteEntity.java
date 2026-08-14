@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -292,7 +292,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 3);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.9D);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 18);
 		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}

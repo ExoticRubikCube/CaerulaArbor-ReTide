@@ -1,8 +1,12 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -143,7 +147,7 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 20);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 20);
 		builder = builder.add(Attributes.STEP_HEIGHT, 1f);
 		return builder;
 	}

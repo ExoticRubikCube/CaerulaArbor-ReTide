@@ -1,7 +1,6 @@
 package com.susen36.caerulaarbor.entity.shaper;
 
 import com.susen36.babel.init.BabelAttributes;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.server.level.ServerBossEvent;
@@ -81,7 +80,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 48);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 24);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 24);
 		builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
 		return builder;
 	}

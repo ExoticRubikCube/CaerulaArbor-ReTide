@@ -27,7 +27,7 @@
     {
       "type": "spotlight",
       "title": "遭诅古物",
-      "item": "caerula_arbor:relic_curse_emelight",
+      "item": "caerula_arbor:cursed_emelight",
       "scale": 1,
       "text": "获得后立即生效，通常会带来负面效果$(br)每个遭诅古物物品只能生效一次。非一次性效果的遭诅古物需要通过风雨际会才能消除效果。"
     }

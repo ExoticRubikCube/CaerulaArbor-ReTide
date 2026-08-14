@@ -4,6 +4,7 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.BaseProjectile;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
+import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -80,7 +81,7 @@ public class HealBullletEntity extends BaseProjectile implements ItemSupplier {
                                 if ((entityiterator instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
                                     if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
                                         livingEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 1));
-                                    com.susen36.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator, atk, 0);
+                                    EntityUtils.healWithParticles(world, entityiterator, atk, 0);
                                     if (!(entityiterator == entity)) {
                                         count = count + 1;
                                         if (count >= 3) {

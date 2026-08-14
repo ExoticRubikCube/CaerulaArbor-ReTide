@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.recipe;
 
+import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.Holder;
@@ -22,13 +23,13 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 public class AnvilRecipeHandler {
 	@SubscribeEvent
 	public static void onAnvilUpdate(AnvilUpdateEvent event) {
-		if ((event.getLeft().getItem() == CAItems.SOLO_MUSIC_BOX.get()) && (event.getRight().getItem() == Items.COPPER_INGOT)) {
+		if ((event.getLeft().getItem() == CACollectible.SOLO_MUSIC_BOX.get()) && (event.getRight().getItem() == Items.COPPER_INGOT)) {
 			if ((event.getLeft().getCount() == 1) && (event.getRight().getCount() >= 1)) {
 				event.setMaterialCost(1);
 				event.setCost(4);
 				event.setOutput(new ItemStack(CAItems.MUSIC_BOX_FIXED.get()));
 			}
-		} else if ((event.getLeft().getItem() == Items.IRON_HELMET) && (event.getRight().getItem() == CAItems.RELIC_CROWN.get())) {
+		} else if ((event.getLeft().getItem() == Items.IRON_HELMET) && (event.getRight().getItem() == CACollectible.RELIC_CROWN.get())) {
 			if ((event.getLeft().getCount() == 1) && (event.getRight().getCount() >= 1)) {
 				event.setMaterialCost(1);
 				event.setCost(5);

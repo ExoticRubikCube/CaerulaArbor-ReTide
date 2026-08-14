@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.isharmla;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.anim.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.init.*;
@@ -70,7 +71,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 60);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 60);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 6);
         builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;

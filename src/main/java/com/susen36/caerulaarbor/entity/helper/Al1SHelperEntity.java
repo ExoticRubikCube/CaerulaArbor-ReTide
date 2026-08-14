@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
-public class Al1SHelperEntity extends LittleHelperEntity {
+public class                                                                                                                                                                                                                                Al1SHelperEntity extends LittleHelperEntity {
 	public Al1SHelperEntity(Level world) {
 		this(CAEntities.AL_1_S_HELPER.get(), world);
 	}

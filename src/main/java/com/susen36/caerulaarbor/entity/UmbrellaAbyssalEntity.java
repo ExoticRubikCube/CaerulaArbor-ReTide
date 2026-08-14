@@ -1,12 +1,16 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.ai.MoveToTargetGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CADamageTypes;
+import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAParticles;
+import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ColorParticleOption;
@@ -227,7 +231,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 30);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 30);
 		builder = builder.add(Attributes.STEP_HEIGHT, 1f);
 		return builder;
 	}

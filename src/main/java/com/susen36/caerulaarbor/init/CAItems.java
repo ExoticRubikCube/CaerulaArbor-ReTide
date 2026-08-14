@@ -1,6 +1,5 @@
 package com.susen36.caerulaarbor.init;
 
-import com.susen36.babel.collectible.*;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.manager.EPManager;
@@ -10,10 +9,8 @@ import com.susen36.caerulaarbor.block.item.doll.PocketSeaDollDisplayItem;
 import com.susen36.caerulaarbor.block.item.doll.StonecutterDollDisplayItem;
 import com.susen36.caerulaarbor.block.item.doll.SwarmcallerDollDisplayItem;
 import com.susen36.caerulaarbor.item.*;
-import com.susen36.caerulaarbor.item.relic.BooleanCollectibleItem;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -27,6 +24,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -46,14 +44,8 @@ import java.util.function.Supplier;
 @EventBusSubscriber(value = Dist.CLIENT)
 public class CAItems {
     public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(BuiltInRegistries.ITEM, CaerulaArbor.MODID);
-    /** babel 收藏品构建器：藏品物品经此注册，写入 Collectibles 映射并可叠层存储。 */
-    public static final CollectibleBuilder COLLECTIBLE = CollectibleBuilder.create(CaerulaArbor.MODID);
     public static final DeferredHolder<Item, ? extends Item> CAERULA_RECORDER = REGISTRY.register("caerula_recorder", CaerulaRecorderItem::new);
-    public static final DeferredHolder<Item, ? extends Item> RELIC_CURSE_EMELIGHT = REGISTRY.register("relic_curse_emelight", CollectibleCurseEMELIGHTItem::new);
     public static final DeferredHolder<Item, ? extends Item> EMERGENCY_LIGHT = block(CABlocks.EMERGENCY_LIGHT);
-    public static final DeferredHolder<Item, ? extends Item> RELIC_CURSED_GLOWBODY = REGISTRY.register("relic_cursed_glowbody", CollectibleCursedGLOWBODYItem::new);
-    public static final DeferredHolder<Item, ? extends Item> RELIC_CURSED_RESEARCH = REGISTRY.register("relic_cursed_research", CollectibleCursedRESEARCHItem::new);
-    public static final DeferredHolder<Item, ? extends Item> RELIC_CROWN = REGISTRY.register("relic_crown", CollectibleCROWNItem::new);
     public static final DeferredHolder<Item, ? extends Item> KINGS_ARMOUR = REGISTRY.register("kings_armour", KingsArmourItem::new);
     public static final DeferredHolder<Item, ? extends Item> KINGS_ARMOR = block(CABlocks.KINGS_ARMOR);
     public static final DeferredHolder<Item, ? extends Item> BLOCK_CROWN = block(CABlocks.BLOCK_CROWN);
@@ -78,46 +70,21 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_ARTIFACT = REGISTRY.register("archfiends_artifact", ArchfiendsArtifactItem::new);
     public static final DeferredHolder<Item, ? extends Item> HAND_OF_FIREWORK = REGISTRY.register("hand_of_firework", HandOfFireworkItem::new);
     public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_FLAG = REGISTRY.register("archfiends_flag", ArchfiendsFlagItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_ENGRAVE = COLLECTIBLE.registerCollectible("hand_of_engrave", false, 25, false,
-            (stack, level, player, self) -> player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(stack.getItem(), 0),
-            CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 99, 0),
-            CollectibleActivation.builder()
-                    .sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
-                    .particle(ParticleTypes.CLOUD, 72)
-                    .showOverlay(true)
-                    .build());
     public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_BED = REGISTRY.register("archfiends_bed", ArchfiendsBedItem::new);
-    public static final DeferredHolder<Item, ? extends Item> SURVIVOR_CONTRACT = COLLECTIBLE.registerCollectible("survivor_contract",
-            (stack, level, player) -> player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(stack.getItem(), 0),
-            false, 25, CollectibleTiers.ADVANCED, 0, 32, 0,
-            CollectibleActivation.builder()
-                    .sound(SoundEvents.BEACON_ACTIVATE, 3.2F, 1F)
-                    .particle(ParticleTypes.GLOW, 72)
-                    .showOverlay(true)
-                    .build());
-    public static final DeferredHolder<Item, ? extends Item> ROYAL_FATE = COLLECTIBLE.registerCollectible("royal_fate", RoyalFateItem::new);
     public static final DeferredHolder<Item, ? extends Item> BLOCK_FATE = block(CABlocks.BLOCK_FATE);
     public static final DeferredHolder<Item, ? extends Item> CRIMSON_TREATY = REGISTRY.register("crimson_treaty", CrimsonTreatyItem::new);
     public static final DeferredHolder<Item, ? extends Item> MEAT_CAN = REGISTRY.register("meat_can", MeatCanItem::new);
     public static final DeferredHolder<Item, ? extends Item> EMPTY_CAN = REGISTRY.register("empty_can", EmptyCanItem::new);
-    public static final DeferredHolder<Item, ? extends Item> BOWL_SEAGRASS = COLLECTIBLE.registerCollectible("bowl_seagrass", BowlSeagrassItem::new);
-    public static final DeferredHolder<Item, ? extends Item> GOLDEN_STORM = COLLECTIBLE.registerCollectible("golden_storm", GoldenStormItem::new);
     public static final DeferredHolder<Item, ? extends Item> PAPER_BAG = REGISTRY.register("paper_bag", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> COFFEE_CANDY = REGISTRY.register("coffee_candy", CoffeeCandyItem::new);
-    public static final DeferredHolder<Item, ? extends Item> CANNED_CHERRY = COLLECTIBLE.registerCollectible("canned_cherry", CannedCherryItem::new);
     public static final DeferredHolder<Item, ? extends Item> BERRY_CAN = block(CABlocks.BERRY_CAN);
     public static final DeferredHolder<Item, ? extends Item> RAINBOW_CANDY = REGISTRY.register("rainbow_candy", RainbowCandyItem::new);
     public static final DeferredHolder<Item, ? extends Item> AROMATIC_COFFEE = REGISTRY.register("aromatic_coffee", AromaticCoffeeItem::new);
-    public static final DeferredHolder<Item, ? extends Item> SOLO_MUSIC_BOX = COLLECTIBLE.registerCollectible("solo_music_box", SoloMusicBoxItem::new);
     public static final DeferredHolder<Item, ? extends Item> MUSIC_BOX_FIXED = REGISTRY.register("music_box_fixed", MusicBoxFixedItem::new);
     public static final DeferredHolder<Item, ? extends Item> REDSTONE_IRIS = block(CABlocks.REDSTONE_IRIS);
-    public static final DeferredHolder<Item, ? extends Item> REDSTONE_IRIS_FLOWER = COLLECTIBLE.registerCollectible("redstone_iris_flower", RedstoneIrisFlowerItem::new);
     public static final DeferredHolder<Item, ? extends Item> REDSTONEIRIS_SEEDING = block(CABlocks.REDSTONEIRIS_SEEDING);
-    public static final DeferredHolder<Item, ? extends Item> ODD_FLUTE = COLLECTIBLE.registerCollectible("odd_flute", OddFluteItem::new);
-    public static final DeferredHolder<Item, ? extends Item> VOYAGE_OF_GOLD = COLLECTIBLE.registerCollectible("voyage_of_gold", VoyageOfGoldItem::new);
     public static final DeferredHolder<Item, ? extends Item> THERMOGRAPH = REGISTRY.register("thermograph", ThermographItem::new);
     public static final DeferredHolder<Item, ? extends Item> PIGLIN_DIARY = REGISTRY.register("piglin_diary", PiglinDiaryItem::new);
-    public static final DeferredHolder<Item, ? extends Item> TOPONYM_TEXTOLOGY = COLLECTIBLE.registerCollectible("toponym_textology", ToponymTextologyItem::new);
     public static final DeferredHolder<Item, ? extends Item> RUN_FISH_SPAWN_EGG = REGISTRY.register("run_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.RUN_FISH, -16777012, -3355444, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> SLIDER_FISH_SPAWN_EGG = REGISTRY.register("slider_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SLIDER_FISH, -13421569, -3355444, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> SUPER_SLIDER_SPAWN_EGG = REGISTRY.register("super_slider_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SUPER_SLIDER, -1, -1, new Item.Properties()));
@@ -156,7 +123,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> HOE_OCEAN_CRYSTAL = REGISTRY.register("hoe_ocean_crystal", OceanthornHoeItem::new);
     public static final DeferredHolder<Item, ? extends Item> CUTIN_STICK = REGISTRY.register("cutin_stick", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> PREDATOR_ABYSSAL_SPAWN_EGG = REGISTRY.register("predator_abyssal_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.PREDATOR_ABYSSAL, -16777063, -2056595, new Item.Properties()));
-    public static final DeferredHolder<Item, ? extends Item> KETTLE = COLLECTIBLE.registerCollectible("kettle", KettleItem::new);
     public static final DeferredHolder<Item, ? extends Item> BLOCK_KETTLE = block(CABlocks.BLOCK_KETTLE);
     public static final DeferredHolder<Item, ? extends Item> INSTANT_NOODLE = REGISTRY.register("instant_noodle", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(0.25f).build())));
     public static final DeferredHolder<Item, ? extends Item> CANNED_NOODLE = REGISTRY.register("canned_noodle", CannedNoodleItem::new);
@@ -176,7 +142,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> BAT_BED = REGISTRY.register("bat_bed", BatBedItem::new);
     public static final DeferredHolder<Item, ? extends Item> BLOCK_BATBED = block(CABlocks.BLOCK_BATBED);
     public static final DeferredHolder<Item, ? extends Item> BATBED_UPPER = block(CABlocks.BATBED_UPPER);
-    public static final DeferredHolder<Item, ? extends Item> PROOF_OF_LONGEVITY = COLLECTIBLE.registerCollectible("proof_of_longevity", ProofOfLongevityItem::new);
     public static final DeferredHolder<Item, ? extends Item> OMNI_KEY = REGISTRY.register("omni_key", OmniKeyItem::new);
     public static final DeferredHolder<Item, ? extends Item> SCORE = REGISTRY.register("score", ScoreItem::new);
     public static final DeferredHolder<Item, ? extends Item> RESCISSION = REGISTRY.register("rescission", RescissionItem::new);
@@ -206,12 +171,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> OCEAN_CRYSTAL_BLOCK = block(CABlocks.OCEAN_CRYSTAL_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> COMPLEX_CHITIN_BLOCK = block(CABlocks.COMPLEX_CHITIN_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> GUARDIAN_STARE = REGISTRY.register("guardian_stare", GuardianStareItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_SWORD = COLLECTIBLE.registerCollectible("hand_sword",
-            () -> new BooleanCollectibleItem(Rarity.EPIC, CollectibleActivation.builder()
-                    .sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
-                    .particle(ParticleTypes.CLOUD, 72)
-                    .showOverlay(true)
-                    .build()));
     public static final DeferredHolder<Item, ? extends Item> TIDE_OBSERVATION = block(CABlocks.TIDE_OBSERVATION);
     public static final DeferredHolder<Item, ? extends Item> SAMPLE_BREED = REGISTRY.register("sample_breed", SampleBreedItem::new);
     public static final DeferredHolder<Item, ? extends Item> ANCHOR_LOWER = block(CABlocks.ANCHOR_LOWER);
@@ -246,7 +205,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> TRAIL_BUTTON = block(CABlocks.TRAIL_BUTTON);
     public static final DeferredHolder<Item, ? extends Item> TRAIL_PRESSURE_PLATE = block(CABlocks.TRAIL_PRESSURE_PLATE);
     public static final DeferredHolder<Item, ? extends Item> TRAIL_TILE = block(CABlocks.TRAIL_TILE);
-    public static final DeferredHolder<Item, ? extends Item> CAERULA_HEART = REGISTRY.register("caerula_heart", CaerulaHeartItem::new);
     public static final DeferredHolder<Item, ? extends Item> COIN_OF_TRADE = REGISTRY.register("coin_of_trade", CoinOfTradeItem::new);
     public static final DeferredHolder<Item, ? extends Item> OCEAN_PEDUNCLE = REGISTRY.register("ocean_peduncle", OceanPeduncleItem::new);
     public static final DeferredHolder<Item, ? extends Item> ELITE_PEDUNCLE = REGISTRY.register("elite_peduncle", ElitePeduncleItem::new);
@@ -400,9 +358,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_ENDERMAN_SPAWN_EGG = REGISTRY.register("oceanized_enderman_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_ENDERMAN, -13878972, -10763556, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_WOLF_SPAWN_EGG = REGISTRY.register("oceanized_wolf_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_WOLF, -8420214, -11250088, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_DOG_SPAWN_EGG = REGISTRY.register("oceanized_dog_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_DOG, -8420214, -11250088, new Item.Properties()));
-    public static final DeferredHolder<Item, ? extends Item> TULIP_MEDCINE = COLLECTIBLE.registerCollectible("tulip_medcine", TulipMedcineItem::new);
     public static final DeferredHolder<Item, ? extends Item> IMMUNOSUPPRESSOR = REGISTRY.register("immunosuppressor", ImmunosuppressorItem::new);
-    public static final DeferredHolder<Item, ? extends Item> OIL_AND_CREAM = COLLECTIBLE.registerCollectible("oil_and_cream", OilAndCreamItem::new);
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_RAVAGER_SPAWN_EGG = REGISTRY.register("oceanized_ravager_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_RAVAGER, -10919578, -6771789, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_WITCH_SPAWN_EGG = REGISTRY.register("oceanized_witch_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_WITCH, -16176318, -12024617, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> IZUMIK_OFFSPRING_SPAWN_EGG = REGISTRY.register("izumik_offspring_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.IZUMIK_OFFSPRING, -592138, -405009, new Item.Properties()));
@@ -459,7 +415,6 @@ public class CAItems {
             () -> new HighmoreSpawningBlockDisplayItem(CABlocks.HIGHMORE_SPAWNING_BLOCK.get(), new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> TIDELINKED_SHIELD = REGISTRY.register("tidelinked_shield", TidelinkedShieldItem::new);
     public static final DeferredHolder<Item, ? extends Item> TIDELINKED_WAND = REGISTRY.register("tidelinked_wand", TidelinkedWandItem::new);
-    public static final DeferredHolder<Item, ? extends Item> GOLDEN_CHALISE = COLLECTIBLE.registerCollectible("golden_chalise", GoldenChaliseItem::new);
     public static final DeferredHolder<Item, ? extends Item> EMERGENCY_AID_BUILDING = block(CABlocks.EMERGENCY_AID_BUILDING);
     public static final DeferredHolder<Item, ? extends Item> EMERGENCY_AID_BUILDING_SALVIENTO = block(CABlocks.EMERGENCY_AID_BUILDING_SALVIENTO);
     public static final DeferredHolder<Item, ? extends Item> MIZUKI_STATUE = REGISTRY.register(Objects.requireNonNull(CABlocks.MIZUKI_STATUE.getId()).getPath(), () -> new MizukiStatueDisplayItem(CABlocks.MIZUKI_STATUE.get(), new Item.Properties()));
@@ -607,7 +562,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_SLIME_SPAWN_EGG = REGISTRY.register("nethersea_slime_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.NETHERSEA_SLIME, -10983573, -12426093, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> FISSION_PROKARYOTE_SLIME_SPAWN_EGG = REGISTRY.register("fission_prokaryote_slime_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.FISSION_PROKARYOTE_SLIME, -16776961, -1, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_SHULKER_SPAWN_EGG = REGISTRY.register("oceanized_shulker_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_SHULKER, -5999788, -13398106, new Item.Properties()));
-    public static final DeferredHolder<Item, ? extends Item> NURTURE_GENE_SET = COLLECTIBLE.registerCollectible("nurture_gene_set", NurtureGeneSetItem::new);
     public static final DeferredHolder<Item, ? extends Item> GENE_SAMPLE_NORMAL = REGISTRY.register("gene_sample_normal", GeneSampleNormalItem::new);
     public static final DeferredHolder<Item, ? extends Item> GENE_SAMPLE_UPGRADED = REGISTRY.register("gene_sample_upgraded", GeneSampleUpgradedItem::new);
     public static final DeferredHolder<Item, ? extends Item> GENE_SAMPLE_SUPERB = REGISTRY.register("gene_sample_superb", GeneSampleSuperbItem::new);
@@ -697,45 +651,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_PRESERVED_EGG = tooltipItem("nethersea_preserved_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).alwaysEdible().effect(() -> new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 400, 1, false, true), 1.0F).effect(() -> new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY, 60, 0, false, false), 1.0F).build())), 1);
     public static final DeferredHolder<Item, ? extends Item> SEA_PRAIRIE_BOMB = block(CABlocks.SEA_PRAIRIE_BOMB);
     public static final DeferredHolder<Item, ? extends Item> CHEST_FISH_FOOD = block(CABlocks.CHEST_FISH_FOOD);
-    public static final DeferredHolder<Item, ? extends Item> LEGEND_CHITIN = COLLECTIBLE.registerCollectible("legend_chitin", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> UTIL_ALLAY = COLLECTIBLE.registerCollectible("util_allay", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> DISO = COLLECTIBLE.registerCollectible("diso", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> DISO_FLESH = COLLECTIBLE.registerCollectible("diso_flesh", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> DISO_BLOOD = COLLECTIBLE.registerCollectible("diso_blood", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> DISO_NEURO = COLLECTIBLE.registerCollectible("diso_neuro", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> DISO_ATTENTION = COLLECTIBLE.registerCollectible("diso_attention", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> AHND_SWIPE = COLLECTIBLE.registerCollectible("ahnd_swipe", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> HANSHAND_SPIKE = COLLECTIBLE.registerCollectible("hanshand_spike", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_RYLFATE = COLLECTIBLE.registerCollectible("sarkaz_king_rylfate", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> VAMPIRES_BED = COLLECTIBLE.registerCollectible("vampires_bed", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> UTIL_SCORE = COLLECTIBLE.registerCollectible("util_score", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> UTIL_RESCISSION = COLLECTIBLE.registerCollectible("util_rescission", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> UTIL_OMNIKEY = COLLECTIBLE.registerCollectible("util_omnikey", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> UTIL_STARE = COLLECTIBLE.registerCollectible("util_stare", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> DURIN_OVERGROUND_ODYSSEY = COLLECTIBLE.registerCollectible("durin_overground_odyssey", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> CURSED_HEART = COLLECTIBLE.registerCollectible("cursed_heart", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> HAND_FERTILITY = COLLECTIBLE.registerCollectible("hand_fertility", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> HAND_THORNS = COLLECTIBLE.registerCollectible("hand_thorns", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> KING_ARMOR = COLLECTIBLE.registerCollectible("king_armor", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> KING_SPEAR = COLLECTIBLE.registerCollectible("king_spear", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> KING_EXTENSION = COLLECTIBLE.registerCollectible("king_extension", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> KING_CROWN = COLLECTIBLE.registerCollectible("king_crown", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> KING_CRYSTAL = COLLECTIBLE.registerCollectible("king_crystal", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> HAND_STRANGLE = COLLECTIBLE.registerCollectible("hand_strangle", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> HAND_SPEED = COLLECTIBLE.registerCollectible("hand_speed", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> HAND_FIREWORK = COLLECTIBLE.registerCollectible("hand_firework", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_PULVERIZATION = COLLECTIBLE.registerCollectible("hand_of_pulverization", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> HAND_SWIPE = COLLECTIBLE.registerCollectible("hand_swipe", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_FLAG = COLLECTIBLE.registerCollectible("sarkaz_king_flag", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_BED = COLLECTIBLE.registerCollectible("sarkaz_king_bed", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> SARKAZ_KING_ARTIFACT = COLLECTIBLE.registerCollectible("sarkaz_king_artifact", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> TREATY = COLLECTIBLE.registerCollectible("treaty", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> HEMOST = COLLECTIBLE.registerCollectible("hemost", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> YEARNING = COLLECTIBLE.registerCollectible("yearning", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> CURSED_EMELIGHT = COLLECTIBLE.registerCollectible("cursed_emelight", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> CURSED_GLOWBODY = COLLECTIBLE.registerCollectible("cursed_glowbody", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> CURSED_RESEARCH = COLLECTIBLE.registerCollectible("cursed_research", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
-    public static final DeferredHolder<Item, ? extends Item> FEATURED_CANNED_MEAT = COLLECTIBLE.registerCollectible("featured_canned_meat", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
 
     private static DeferredHolder<Item, ? extends Item> tooltipItem(String name, Supplier<Item> factory, int tooltipCount) {
         TOOLTIP_COUNTS.put(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, name), tooltipCount);
@@ -748,6 +663,11 @@ public class CAItems {
 
     private static DeferredHolder<Item, ? extends Item> doubleBlock(DeferredHolder<Block, ? extends Block> block) {
         return REGISTRY.register(Objects.requireNonNull(block.getId()).getPath(), () -> new DoubleHighBlockItem(block.get(), new Item.Properties()));
+    }
+
+    public static void init(IEventBus modEventBus) {
+        REGISTRY.register(modEventBus);
+        CACollectible.COLLECTIBLE.register(modEventBus);
     }
 
     @SubscribeEvent

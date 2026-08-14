@@ -116,7 +116,7 @@ public class SkadiCorruptedEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.FOLLOW_RANGE, 36);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.02);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 30);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 30);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
@@ -405,10 +405,10 @@ public class SkadiCorruptedEntity extends SeaMonsterBoss {
                         datEntSetI.getEntityData().set(DATA_DEAL, 0);
                     if ((Entity) this instanceof SkadiCorruptedEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_DURATION, 80);
-                    if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
-                        this.getAttribute(CAAttributes.MAGIC_RESISTANCE)
-                                .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
-                                        ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue()
+                    if (this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE))
+                        this.getAttribute(BabelAttributes.MAGIC_RESISTANCE)
+                                .setBaseValue(((this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)
+                                        ? this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).getBaseValue()
                                         : 0) + 50));
                     if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
@@ -675,7 +675,7 @@ public class SkadiCorruptedEntity extends SeaMonsterBoss {
         if (sourceEntity == null) {
             return true;
         }
-        if (sourceEntity.getType().is(EntityUtils.HUMAN)) {
+        if (sourceEntity.getType().is(CAEntityTypeTags.HUMAN)) {
             return true;
         }
         return sourceEntity instanceof Player;

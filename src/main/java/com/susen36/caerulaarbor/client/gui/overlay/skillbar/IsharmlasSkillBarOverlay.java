@@ -43,7 +43,7 @@ public class IsharmlasSkillBarOverlay {
 		IsharmlaEntity corrupted;
         corrupted = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 48, 48, 48), e1 -> true)
                 .stream().min(Comparator.<Entity>comparingDouble(entcnd -> entcnd.distanceToSqr(fx, fy, fz))).orElse(null);
-        if (corrupted.isMonster()) {
+        if (corrupted != null && corrupted.isMonster()) {
             double ind = 0;
 			IsharmlaEntity isharmla = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 48, 48, 48), e -> true)
                     .stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(fx, fy, fz))).orElse(null);

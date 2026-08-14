@@ -263,7 +263,7 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 					(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1));
 			Vec3 center = new Vec3(x, y, z);
 			List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius),
-					entity -> !(entity.getType().is(EntityUtils.SEABORN) && entity != target));
+					entity -> !(entity.getType().is(CAEntityTypeTags.SEABORN) && entity != target));
 			for (LivingEntity entityIterator : entities) {
 				if (center.distanceToSqr(entityIterator.position()) <= radius * radius) {
 					entityIterator.hurt(
@@ -702,7 +702,7 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 64);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
 		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 50);
 		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
 		builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
 		builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);

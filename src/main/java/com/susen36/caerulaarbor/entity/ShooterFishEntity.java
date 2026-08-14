@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FishShootEntity;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -237,7 +237,7 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 15);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 15);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
         builder = builder.add(Attributes.MAX_HEALTH, 14);
         builder = builder.add(Attributes.ARMOR, 0);

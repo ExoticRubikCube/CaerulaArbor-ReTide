@@ -4,8 +4,8 @@ package com.susen36.caerulaarbor.potion;
 import com.susen36.babel.api.entity.ElementalAttackModifier;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
+import com.susen36.caerulaarbor.init.CAEntityTypeTags;
 import com.susen36.caerulaarbor.init.CAMobEffects;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -30,10 +30,10 @@ public class TrailBuffMobEffect extends MobEffect implements ElementalAttackModi
         LevelAccessor world = entity.level();
         if (entity.isAlive() && (Entity) entity instanceof LivingEntity living) {
             MapVariables mapVars = MapVariables.get(world);
-            boolean isSeabornUnit = (living.getType().is(EntityUtils.SEABORN)
-                    || living.getType().is(EntityUtils.SEABORN_BOSS)
-                    || living.getType().is(EntityUtils.SEABORN_MINION))
-                    && !living.getType().is(EntityUtils.SEABORN_PET);
+            boolean isSeabornUnit = (living.getType().is(CAEntityTypeTags.SEABORN)
+                    || living.getType().is(CAEntityTypeTags.SEABORN_BOSS)
+                    || living.getType().is(CAEntityTypeTags.SEABORN_MINION))
+                    && !living.getType().is(CAEntityTypeTags.SEABORN_PET);
 
             if (living.tickCount % 20 == 0) {
                 if (isSeabornUnit) {

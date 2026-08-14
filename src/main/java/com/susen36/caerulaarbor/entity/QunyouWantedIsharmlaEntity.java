@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -230,7 +231,7 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.6);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 1656);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 90);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 90);
         builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
         return builder;
     }

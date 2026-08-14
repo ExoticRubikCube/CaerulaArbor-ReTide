@@ -268,7 +268,6 @@ public abstract class BaseProjectile extends Projectile {
         if (type != MoverType.SELF && this.shouldFall()) {
             this.startFalling();
         }
-
     }
 
     protected void tickDespawn() {

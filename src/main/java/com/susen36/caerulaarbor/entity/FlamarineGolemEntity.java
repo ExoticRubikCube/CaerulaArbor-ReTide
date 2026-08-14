@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.*;
@@ -447,7 +448,7 @@ public class FlamarineGolemEntity extends SeaMonster {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 5);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 15);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 15);
         builder = builder.add(CAAttributes.SANITY_RESISTANCE, 60);
         builder = builder.add(Attributes.MAX_HEALTH, 270);
         builder = builder.add(Attributes.ARMOR, 23);

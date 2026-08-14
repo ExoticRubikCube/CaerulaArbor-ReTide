@@ -1,6 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
@@ -774,7 +775,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.FOLLOW_RANGE, 48);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(CAAttributes.MISSRATE, 50);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 45);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 45);
         builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
         return builder;
     }

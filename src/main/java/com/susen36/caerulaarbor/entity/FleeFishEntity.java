@@ -3,9 +3,9 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FleefishBulletEntity;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -270,7 +270,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 18);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.4);
         builder = builder.add(Attributes.MAX_HEALTH, 85);
         builder = builder.add(Attributes.ARMOR, 0);

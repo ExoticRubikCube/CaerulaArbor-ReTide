@@ -810,8 +810,8 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 			this.setAnimation("animation.endspeaker_0.start");
 		} else if (this.getPhase() == 1) {
 			this.setAnimation("animation.endspeaker_1.start");
-			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
-				this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(30);
+			if (this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)) {
+				this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).setBaseValue(30);
 			}
 			this.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF, -1, 59, false, false));
 			if (!this.level().isClientSide()) {
@@ -822,8 +822,8 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 		} else if (this.getPhase() == 2) {
 			this.setAnimation("animation.endspeaker_2.start");
 			this.setSkillCooldown(100);
-			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
-				this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(30);
+			if (this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)) {
+				this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).setBaseValue(30);
 			}
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 68, 9, false, false));
@@ -833,8 +833,8 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 		} else if (!this.hasNextPhase()) {
 			this.setAnimation("animation.endspeaker_3.start");
 			this.setSkillCooldown(200);
-			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
-				this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(30);
+			if (this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)) {
+				this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).setBaseValue(30);
 			}
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 9, false, false));
@@ -846,8 +846,8 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 	}
 
 	private void applySpawnAbilities(LevelAccessor world) {
-		if (hasAbility(world, 0) && this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
-			this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue() + 40);
+		if (hasAbility(world, 0) && this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)) {
+			this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).setBaseValue(this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).getBaseValue() + 40);
 		}
 		if (hasAbility(world, 1) && this.getAttributes().hasAttribute(CAAttributes.MISSRATE)) {
 			this.getAttribute(CAAttributes.MISSRATE).setBaseValue(this.getAttribute(CAAttributes.MISSRATE).getBaseValue() + 50);

@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.entity.ai.MountVehicleGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -118,7 +118,7 @@ public class PunctureFishEntity extends SeaMonster {
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 15);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 15);
         builder = builder.add(Attributes.MAX_HEALTH, 45);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 9);

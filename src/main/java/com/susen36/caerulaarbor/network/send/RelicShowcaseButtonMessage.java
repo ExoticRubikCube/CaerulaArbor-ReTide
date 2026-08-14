@@ -5,6 +5,7 @@ import com.susen36.babel.network.BabelNetwork;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import io.netty.buffer.Unpooled;
@@ -43,17 +44,17 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
 	// 消耗 1 枚贸易币兑换随机遗物，然后关闭该遗物（layer 置 0）—— setLayer 在兑换之后
 	private static final Set<Item> REDEEM_STANDARD = Set.of(
-			CAItems.KING_CROWN.get(), CAItems.KING_SPEAR.get(), CAItems.KING_ARMOR.get(),
-			CAItems.KING_EXTENSION.get(), CAItems.KING_CRYSTAL.get(), CAItems.SARKAZ_KING_ARTIFACT.get(),
-			CAItems.SARKAZ_KING_FLAG.get(), CAItems.HAND_THORNS.get(), CAItems.HAND_STRANGLE.get(),
-			CAItems.HAND_FERTILITY.get(), CAItems.HAND_OF_PULVERIZATION.get(), CAItems.HAND_SWIPE.get(),
-			CAItems.CURSED_GLOWBODY.get(), CAItems.CURSED_RESEARCH.get(), CAItems.HAND_SPEED.get());
+			CACollectible.KING_CROWN.get(), CACollectible.KING_SPEAR.get(), CACollectible.KING_ARMOR.get(),
+			CACollectible.KING_EXTENSION.get(), CACollectible.KING_CRYSTAL.get(), CACollectible.SARKAZ_KING_ARTIFACT.get(),
+			CACollectible.SARKAZ_KING_FLAG.get(), CACollectible.HAND_THORNS.get(), CACollectible.HAND_STRANGLE.get(),
+			CACollectible.HAND_FERTILITY.get(), CACollectible.HAND_OF_PULVERIZATION.get(), CACollectible.HAND_SWIPE.get(),
+			CACollectible.CURSED_GLOWBODY.get(), CACollectible.CURSED_RESEARCH.get(), CACollectible.HAND_SPEED.get());
 
 	// 同 REDEEM_STANDARD，但 setLayer 在兑换之前执行
 	private static final Set<Item> REDEEM_LAYER_FIRST = Set.of(
-			CAItems.SARKAZ_KING_BED.get(), CAItems.HAND_FIREWORK.get(), CAItems.TREATY.get(),
-			CAItems.CURSED_EMELIGHT.get(), CAItems.HAND_SWORD.get(), CAItems.LEGEND_CHITIN.get(),
-			CAItems.HEMOST.get(), CAItems.YEARNING.get());
+			CACollectible.SARKAZ_KING_BED.get(), CACollectible.HAND_FIREWORK.get(), CACollectible.TREATY.get(),
+			CACollectible.CURSED_EMELIGHT.get(), CACollectible.HAND_SWORD.get(), CACollectible.LEGEND_CHITIN.get(),
+			CACollectible.HEMOST.get(), CACollectible.YEARNING.get());
 
 	// itemId 为 null 表示"返回"按钮（打开记录 GUI）
 	private final ResourceLocation itemId;
@@ -100,9 +101,9 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 		if (world.hasChunkAt(new BlockPos(x, y, z))) {
 			if (item == null) {
 				openRecordGUI(entity, x, y, z);
-			} else if (item == CAItems.HAND_OF_ENGRAVE.get()) {
+			} else if (item == CACollectible.HAND_OF_ENGRAVE.get()) {
 				redeemEngrave(entity);
-			} else if (item == CAItems.SURVIVOR_CONTRACT.get()) {
+			} else if (item == CACollectible.SURVIVOR_CONTRACT.get()) {
 				redeemSurvivor(entity);
 			} else if (REDEEM_LAYER_FIRST.contains(item)) {
 				redeemRelic(entity, item, true);
@@ -152,7 +153,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
 	// HAND_ENGRAVE：以 layer >= 0 为条件，兑换后置为 -1
 	private static void redeemEngrave(Player entity) {
-		Item relic = CAItems.HAND_OF_ENGRAVE.get();
+		Item relic = CACollectible.HAND_OF_ENGRAVE.get();
 		if (entity.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
 			if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(relic) >= 0) {
 				setLayer(entity, relic, -1);
@@ -168,7 +169,7 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 
 	// SURVIVOR_CONTRACT：以 layer >= 0 为条件，兑换后置为 -1，并同步收藏品
 	private static void redeemSurvivor(Player entity) {
-		Item relic = CAItems.SURVIVOR_CONTRACT.get();
+		Item relic = CACollectible.SURVIVOR_CONTRACT.get();
 		if (entity.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
 			if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(relic) >= 0) {
 				entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(relic, -1);

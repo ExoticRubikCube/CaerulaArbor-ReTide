@@ -4,6 +4,7 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.SkadiCorruptedEntity;
 import com.susen36.caerulaarbor.entity.SkadiEntity;
 import com.susen36.caerulaarbor.entity.isharmla.IsharmlaEntity;
+import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -28,7 +29,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -169,7 +169,7 @@ public class IsharmlaRemainBlock extends Block {
             stat = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1;
             if (stat == 0) {
                 if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()
-                        && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.CAERULA_HEART.get()) {
+                        && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CACollectible.CAERULA_HEART.get()) {
                     skadi = world.getEntitiesOfClass(SkadiEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
                         Comparator<Entity> compareDistOf(double x, double y, double z) {
                             return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));

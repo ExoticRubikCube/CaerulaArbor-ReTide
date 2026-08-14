@@ -2,14 +2,15 @@ package com.susen36.caerulaarbor.entity.ai;
 
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.init.CAEntityTypeTags;
 import com.susen36.caerulaarbor.manager.upgrade.MigrationUpgradeManager;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+
 import java.util.EnumSet;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class StrengthOfCrowdGoal extends Goal {
                 && attacker.isAlive()
                 && attacker != this.seaMonster
                 && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(attacker)
-                && !attacker.getType().is(EntityUtils.SEABORN);
+                && !attacker.getType().is(CAEntityTypeTags.SEABORN);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class StrengthOfCrowdGoal extends Goal {
         for (SeaMonster candidate : list) {
             if (this.seaMonster != candidate
                     && candidate.isAlive()
-                    && !candidate.getType().is(EntityUtils.SEABORN_PET)
+                    && !candidate.getType().is(CAEntityTypeTags.SEABORN_PET)
                     && candidate.getTarget() == null
                     && !candidate.isAlliedTo(target)) this.alertOther(candidate, target);
         }

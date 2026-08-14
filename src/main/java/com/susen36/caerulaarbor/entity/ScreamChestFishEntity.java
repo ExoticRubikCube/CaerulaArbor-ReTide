@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
@@ -289,7 +289,7 @@ public class ScreamChestFishEntity extends SeaMonster {
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 25);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 25);
         builder = builder.add(Attributes.MAX_HEALTH, 40);
         builder = builder.add(Attributes.ARMOR, 10);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 5);

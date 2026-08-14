@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.compat.jade;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -41,7 +42,7 @@ public enum CAAttributeProvider implements IEntityComponentProvider {
     }
 
     private double getResistance(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CAAttributes.MAGIC_RESISTANCE);
+        AttributeInstance instance = living.getAttribute(BabelAttributes.MAGIC_RESISTANCE);
         if (instance != null) return instance.getValue();
         return 0;
     }

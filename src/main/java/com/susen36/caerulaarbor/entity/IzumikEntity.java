@@ -685,7 +685,7 @@ public class IzumikEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.6);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 10);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 50);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         builder = builder.add(Attributes.STEP_HEIGHT, 2f);

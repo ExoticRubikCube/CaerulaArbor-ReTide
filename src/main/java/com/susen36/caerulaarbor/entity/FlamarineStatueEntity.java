@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -135,7 +136,7 @@ public class FlamarineStatueEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.15);
         builder = builder.add(Attributes.GRAVITY, 0);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 15);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 80);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 80);
         builder = builder.add(CAAttributes.SANITY_RESISTANCE, 50);
         builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;

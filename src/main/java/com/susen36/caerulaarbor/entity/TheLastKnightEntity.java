@@ -668,7 +668,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
                 .add(Attributes.MOVEMENT_SPEED, 0.20)
                 .add(NeoForgeMod.SWIM_SPEED, 8)
                 .add(CAAttributes.GENERAL_DEFENSE, 10)
-                .add(CAAttributes.MAGIC_RESISTANCE, 60)
+                .add(BabelAttributes.MAGIC_RESISTANCE, 60)
                 .add(Attributes.MAX_HEALTH, 400.0)
                 .add(Attributes.ARMOR, 24)
                 .add(Attributes.ATTACK_DAMAGE, 12)

@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
@@ -100,10 +101,10 @@ public class AbsorberLimbEntity extends SeaMonster {
 						.setBaseValue(Math.max((thirster instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
 								? livingEntity2.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
 								: 0) - 1, 0));
-			if (thirster instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)) {
-				livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE)
-						.setBaseValue(Math.max((livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
-								? livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue()
+			if (thirster instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)) {
+				livingEntity5.getAttribute(BabelAttributes.MAGIC_RESISTANCE)
+						.setBaseValue(Math.max((livingEntity5.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)
+								? livingEntity5.getAttribute(BabelAttributes.MAGIC_RESISTANCE).getBaseValue()
 								: 0) - 5, 0));
 			}
 		}

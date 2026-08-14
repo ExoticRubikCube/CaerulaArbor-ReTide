@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.util;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.init.CAEntityTypeTags;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
@@ -18,7 +19,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -65,7 +65,7 @@ public class EntityUtils {
 			if (world instanceof ServerLevel level) {
 				level.sendParticles(ParticleTypes.CHERRY_LEAVES,
 					entity.getX(), entity.getY() + 1, entity.getZ(),
-					24, 1, 1, 1, 0.1);
+					16, 1, 1, 1, 0.1);
 			}
 		}
 	}
@@ -79,7 +79,7 @@ public class EntityUtils {
 		List<LivingEntity> entfound = world.getEntitiesOfClass(
 				LivingEntity.class,
 				new AABB(searchCenter, searchCenter).inflate(16.0),
-				e -> e != center && e.getType().is(SEABORN) && !e.getType().is(SEABORN_BOSS) && !e.getType().is(SEABORN_MINION)
+				e -> e != center && e.getType().is(CAEntityTypeTags.SEABORN) && !e.getType().is(CAEntityTypeTags.SEABORN_BOSS) && !e.getType().is(CAEntityTypeTags.SEABORN_MINION)
 		);
 		double count = 0;
 		for (LivingEntity ignored : entfound) {
@@ -91,7 +91,7 @@ public class EntityUtils {
 	public static double getSeabornNum(Level world, double x, double y, double z) {
 		double count = 0;
 		final Vec3 center = new Vec3(x, y, z);
-		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d), e -> e.getType().is(SEABORN) && !e.getType().is(SEABORN_BOSS) && !e.getType().is(SEABORN_PET));
+		List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d), e -> e.getType().is(CAEntityTypeTags.SEABORN) && !e.getType().is(CAEntityTypeTags.SEABORN_BOSS) && !e.getType().is(CAEntityTypeTags.SEABORN_PET));
 		for (LivingEntity ignored : entfound) {
 			count = count + 1;
 		}
@@ -160,7 +160,7 @@ public class EntityUtils {
 		double minDist = -1.0D;
 		double d;
 		for (LivingEntity entityiterator : world.getEntitiesOfClass(LivingEntity.class, new AABB((x + 42), (y + 40), (z + 42), (x - 42), (y - 40), (z - 42)))) {
-			if (entityiterator.getType().is(SEABORN)) {
+			if (entityiterator.getType().is(CAEntityTypeTags.SEABORN)) {
 				continue;
 			}
 			d = obj.distanceToSqr(entityiterator);
@@ -171,7 +171,7 @@ public class EntityUtils {
 				if (entityiterator == exception1) {
 					continue;
 				}
-				if (entityiterator.getType().is(SEA_FRIEND)) {
+				if (entityiterator.getType().is(CAEntityTypeTags.SEA_FRIEND)) {
 					continue;
 				}
 				if (new Object() {
@@ -278,46 +278,6 @@ public class EntityUtils {
 		Team teamB = b.getTeam();
 		return teamA != null && teamB != null && teamA.isAlliedTo(teamB);
 	}
-
-	public static final TagKey<EntityType<?>> HUMAN = TagKey.create(
-			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "is_humanside")
-		);
-
-	public static final TagKey<EntityType<?>> SEABORN = TagKey.create(
-			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")
-		);
-
-	public static final TagKey<EntityType<?>> SEABORN_BOSS = TagKey.create(
-			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")
-	);
-
-	public static final TagKey<EntityType<?>> SEABORN_MINION = TagKey.create(
-			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_minion")
-	);
-
-	public static final TagKey<EntityType<?>> SEABORN_PET = TagKey.create(
-			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_pet")
-	);
-
-	public static final TagKey<EntityType<?>> SEA_FRIEND = TagKey.create(
-			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_friend")
-	);
-
-	public static final TagKey<EntityType<?>> ELITE = TagKey.create(
-			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "eLITE")
-	);
-
-	public static final TagKey<EntityType<?>> BOSSES = TagKey.create(
-			Registries.ENTITY_TYPE,
-			ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bosses")
-	);
 
 	public static void vanguardBuff(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)

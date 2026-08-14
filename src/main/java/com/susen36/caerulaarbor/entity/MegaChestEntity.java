@@ -3,7 +3,6 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.EntityUtils;
@@ -243,7 +242,7 @@ public class MegaChestEntity extends SeaMonsterBoss {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 40);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 40);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.7);
         builder = builder.add(Attributes.MAX_HEALTH, 240);
         builder = builder.add(Attributes.ARMOR, 17);

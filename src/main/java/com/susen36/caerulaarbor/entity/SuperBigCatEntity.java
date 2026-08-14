@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAGameRules;
@@ -209,7 +209,7 @@ public class SuperBigCatEntity extends SeaMonsterBoss {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 35);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 35);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
         builder = builder.add(Attributes.MAX_HEALTH, 500);
         builder = builder.add(Attributes.ARMOR, 10);

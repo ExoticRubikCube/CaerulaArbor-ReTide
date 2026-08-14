@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 服务端专用：GeckoLib 骨骼动画 + 模型空间位置计算泛型 Helper。
+ * 服务端GeckoLib骨骼动画 by SuSen36。
  * <p>
  * 把原本塞在每个 Geo Entity 里的 5 个字段（model/processor/bakedModel/animTick/lastUpdateTime）
  * 和 3 个方法（ensureInitialized/tickAnimation/calcBoneRecursive）抽出来，后续 Hydra/Leviathan 等

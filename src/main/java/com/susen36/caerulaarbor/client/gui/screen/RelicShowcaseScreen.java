@@ -3,8 +3,7 @@ package com.susen36.caerulaarbor.client.gui.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CARelics;
+import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import com.susen36.caerulaarbor.network.send.RelicShowcaseButtonMessage;
 import net.minecraft.client.gui.GuiGraphics;
@@ -249,8 +248,8 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			int[] lp = entry.labelPos();
 			String text = switch (entry.special()) {
 				case SURVIVOR ->
-						"" + Math.round(entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.SURVIVOR_CONTRACT.get()));
-				case NONE -> entry.relic() == CARelics.HAND_ENGRAVE.get() ? "" + entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CAItems.HAND_OF_ENGRAVE.get()) : "";
+						"" + Math.round(entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.SURVIVOR_CONTRACT.get()));
+				case NONE -> entry.relic() == CACollectible.HAND_OF_ENGRAVE.get() ? "" + entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(CACollectible.HAND_OF_ENGRAVE.get()) : "";
 				default -> "";
 			};
 			if (!text.isEmpty()) {

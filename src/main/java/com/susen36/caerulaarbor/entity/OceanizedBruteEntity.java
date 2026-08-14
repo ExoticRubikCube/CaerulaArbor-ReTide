@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
@@ -378,7 +379,7 @@ public class OceanizedBruteEntity extends SeaMonsterBoss {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 20);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 20);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
         builder = builder.add(Attributes.MAX_HEALTH, 115);
         builder = builder.add(Attributes.ARMOR, 5);

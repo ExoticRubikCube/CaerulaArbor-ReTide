@@ -1,8 +1,8 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.anim.SyncedAnimationEntity;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
@@ -333,7 +333,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 11);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 30);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 30);
 		builder = builder.add(Attributes.STEP_HEIGHT, 1f);
 		return builder;
 	}

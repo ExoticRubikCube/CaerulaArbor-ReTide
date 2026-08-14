@@ -123,7 +123,6 @@ public class MoveToTargetGoal  extends Goal {
                 if (!this.mob.getNavigation().moveTo(livingentity, this.speedModifier)) {
                     this.ticksUntilNextPathRecalculation += 15;
                 }
-
                 this.ticksUntilNextPathRecalculation = this.adjustedTickDelay(this.ticksUntilNextPathRecalculation);
             }
 

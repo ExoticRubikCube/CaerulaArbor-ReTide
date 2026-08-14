@@ -6,7 +6,6 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.entity.bullets.TellerShotEntity;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -274,7 +273,7 @@ public class FirstTellerEntity extends SeaMonsterBoss implements RangedAttackMob
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.17);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 15);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 15);
 		builder = builder.add(Attributes.MAX_HEALTH, 112);
 		builder = builder.add(Attributes.ARMOR, 10);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 7);

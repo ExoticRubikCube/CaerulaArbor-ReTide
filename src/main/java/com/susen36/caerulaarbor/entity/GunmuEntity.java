@@ -4,7 +4,6 @@ import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.manager.EPManager;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -219,7 +218,7 @@ public class GunmuEntity extends Monster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 750);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 100);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 100);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0);
         builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;

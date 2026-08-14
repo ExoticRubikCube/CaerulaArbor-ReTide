@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.entity.enderdragon.MoistDragonBreathEntity;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -28,7 +28,6 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -54,7 +53,7 @@ public class DragonWandItem extends Item {
 	private static ItemAttributeModifiers createAttributes() {
 		return ItemAttributeModifiers.builder()
 				.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerulaarbor", "dragon_wand_attack_damage"), 9.5D, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-				.add(CAAttributes.MAGIC_RESISTANCE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerulaarbor", "dragon_wand_magic_resistance"), 15.0D, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+				.add(BabelAttributes.MAGIC_RESISTANCE, new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerulaarbor", "dragon_wand_magic_resistance"), 15.0D, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
 				.build();
 	}
 

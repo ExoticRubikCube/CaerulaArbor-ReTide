@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAAttributes;
@@ -213,10 +214,10 @@ public class OceanizedShulkerEntity extends SeaMonster {
                             .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
                                     ? this.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
                                     : 0) + 5));
-                if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
-                    this.getAttribute(CAAttributes.MAGIC_RESISTANCE)
-                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
-                                    ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue()
+                if (this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE))
+                    this.getAttribute(BabelAttributes.MAGIC_RESISTANCE)
+                            .setBaseValue(((this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)
+                                    ? this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).getBaseValue()
                                     : 0) + 35));
                 if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE))
                     this.getAttribute(CAAttributes.SANITY_RESISTANCE)
@@ -255,10 +256,10 @@ public class OceanizedShulkerEntity extends SeaMonster {
                             .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
                                     ? this.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
                                     : 0) + 32767));
-                if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
-                    this.getAttribute(CAAttributes.MAGIC_RESISTANCE)
-                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
-                                    ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue()
+                if (this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE))
+                    this.getAttribute(BabelAttributes.MAGIC_RESISTANCE)
+                            .setBaseValue(((this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)
+                                    ? this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).getBaseValue()
                                     : 0) + 100));
                 if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE))
                     this.getAttribute(CAAttributes.SANITY_RESISTANCE)

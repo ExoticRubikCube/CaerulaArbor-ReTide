@@ -43,8 +43,8 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN_BOSS;
-import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN_MINION;
+import static com.susen36.caerulaarbor.init.CAEntityTypeTags.SEABORN_BOSS;
+import static com.susen36.caerulaarbor.init.CAEntityTypeTags.SEABORN_MINION;
 
 public abstract class SeaMonster extends Monster implements GeoEntity, SyncedAnimationEntity {
 	private static final TagKey<Block> NETHERSEA_WALKER = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions"));

@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.item;
 
 import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.api.anim.SyncedAnimationItem;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -58,7 +59,7 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
 				.add(CAAttributes.GENERAL_DEFENSE,
 					new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_general_defense"), 3.5, AttributeModifier.Operation.ADD_VALUE),
 					EquipmentSlotGroup.ARMOR)
-				.add(CAAttributes.MAGIC_RESISTANCE,
+				.add(BabelAttributes.MAGIC_RESISTANCE,
 					new AttributeModifier(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "trailrite_magic_resistance"), 8.0, AttributeModifier.Operation.ADD_VALUE),
 					EquipmentSlotGroup.ARMOR)
 				.build()));

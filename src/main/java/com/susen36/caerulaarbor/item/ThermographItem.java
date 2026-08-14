@@ -1,6 +1,7 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -36,8 +37,8 @@ public class ThermographItem extends Item {
         def = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
                 ? livingEntity0.getAttribute(CAAttributes.GENERAL_DEFENSE).getValue()
                 : 0)) / Math.pow(10, 2);
-        mgc = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE)
-                ? livingEntity2.getAttribute(CAAttributes.MAGIC_RESISTANCE).getValue()
+        mgc = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)
+                ? livingEntity2.getAttribute(BabelAttributes.MAGIC_RESISTANCE).getValue()
                 : 0)) / Math.pow(10, 2);
         snt = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE)
                 ? livingEntity4.getAttribute(CAAttributes.SANITY_RESISTANCE).getValue()

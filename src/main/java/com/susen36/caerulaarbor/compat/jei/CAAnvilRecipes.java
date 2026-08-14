@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.compat.jei;
 
 import com.susen36.caerulaarbor.CaerulaArbor;
 
+import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.init.CAItems;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -28,7 +29,7 @@ public class CAAnvilRecipes implements IModPlugin {
 		IVanillaRecipeFactory factory = registration.getVanillaRecipeFactory();
 		List<IJeiAnvilRecipe> anvilRecipes = new ArrayList<>();
 		ItemStack rightItem;
-		rightItem = new ItemStack(CAItems.RELIC_CROWN.get());
+		rightItem = new ItemStack(CACollectible.RELIC_CROWN.get());
 		rightItem.setCount(1);
 		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(Items.IRON_HELMET), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.WEARABLE_CROWN_HELMET.get()))));
 		rightItem = new ItemStack(CAItems.KINGS_ARMOUR.get());
@@ -36,7 +37,7 @@ public class CAAnvilRecipes implements IModPlugin {
 		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(Items.IRON_CHESTPLATE), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.WEARABLE_CHEST_CHESTPLATE.get()))));
 		rightItem = new ItemStack(Items.COPPER_INGOT);
 		rightItem.setCount(1);
-		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(CAItems.SOLO_MUSIC_BOX.get()), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.MUSIC_BOX_FIXED.get()))));
+		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(CACollectible.SOLO_MUSIC_BOX.get()), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.MUSIC_BOX_FIXED.get()))));
 		rightItem = new ItemStack(CAItems.KNIGHT_CORPSE.get());
 		rightItem.setCount(1);
 		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(Items.IRON_SWORD), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.IRON_SWORD_OF_KNIGHT_CORPUS.get()))));

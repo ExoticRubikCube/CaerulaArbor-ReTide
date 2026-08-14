@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
@@ -522,7 +523,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 40);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 40);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
         builder = builder.add(Attributes.MAX_HEALTH, 95);
         builder = builder.add(Attributes.ARMOR, 0);

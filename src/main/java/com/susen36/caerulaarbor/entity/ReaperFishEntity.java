@@ -1,11 +1,11 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -259,7 +259,7 @@ public class ReaperFishEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 40);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 40);
 		builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
 		return builder;
 	}

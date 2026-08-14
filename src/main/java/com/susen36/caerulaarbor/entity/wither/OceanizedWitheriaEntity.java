@@ -264,7 +264,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.45);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 65);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 65);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 5);
         return builder;
     }
@@ -347,7 +347,7 @@ public class OceanizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             if (entityiterator == this) {
                 continue;
             }
-            if (entityiterator.getType().is(EntityUtils.SEABORN)) {
+            if (entityiterator.getType().is(CAEntityTypeTags.SEABORN)) {
                 if (!(entityiterator == target)) {
                     continue;
                 }

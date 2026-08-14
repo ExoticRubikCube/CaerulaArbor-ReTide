@@ -2,7 +2,7 @@ package com.susen36.caerulaarbor.client.gui.overlay;
 
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -35,20 +35,20 @@ public class RelicFuncShowOverlay {
 
 	private static double computeKingSuit(Player entity) {
 		Collectibles collectibles = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get());
-		if (!collectibles.isUsed(CAItems.KING_CROWN.get())) {
+		if (!collectibles.isUsed(CACollectible.KING_CROWN.get())) {
 			return 0;
 		}
 		int suitKing = 0;
-		if (collectibles.isUsed(CAItems.KING_SPEAR.get())) {
+		if (collectibles.isUsed(CACollectible.KING_SPEAR.get())) {
 			suitKing++;
 		}
-		if (collectibles.isUsed(CAItems.KING_ARMOR.get())) {
+		if (collectibles.isUsed(CACollectible.KING_ARMOR.get())) {
 			suitKing++;
 		}
-		if (collectibles.isUsed(CAItems.KING_EXTENSION.get())) {
+		if (collectibles.isUsed(CACollectible.KING_EXTENSION.get())) {
 			suitKing++;
 		}
-		if (collectibles.isUsed(CAItems.KING_CROWN.get())) {
+		if (collectibles.isUsed(CACollectible.KING_CROWN.get())) {
 			suitKing++;
 		}
 		return suitKing < 3 ? 1 : 2;
@@ -56,17 +56,17 @@ public class RelicFuncShowOverlay {
 
 	private static double computeDemonSuit(Player entity) {
 		Collectibles collectibles = entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get());
-		if (!collectibles.isUsed(CAItems.SARKAZ_KING_ARTIFACT.get())) {
+		if (!collectibles.isUsed(CACollectible.SARKAZ_KING_ARTIFACT.get())) {
 			return 0;
 		}
 		int suitArchfi = 0;
-		if (collectibles.isUsed(CAItems.SARKAZ_KING_FLAG.get())) {
+		if (collectibles.isUsed(CACollectible.SARKAZ_KING_FLAG.get())) {
 			suitArchfi++;
 		}
-		if (collectibles.isUsed(CAItems.SARKAZ_KING_BED.get())) {
+		if (collectibles.isUsed(CACollectible.SARKAZ_KING_BED.get())) {
 			suitArchfi++;
 		}
-		if (collectibles.isUsed(CAItems.SARKAZ_KING_ARTIFACT.get())) {
+		if (collectibles.isUsed(CACollectible.SARKAZ_KING_ARTIFACT.get())) {
 			suitArchfi++;
 		}
 		return suitArchfi < 3 ? 1 : 2;

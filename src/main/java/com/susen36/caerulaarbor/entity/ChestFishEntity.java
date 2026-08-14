@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.AdvancementHolder;
@@ -238,7 +238,7 @@ public class ChestFishEntity extends SeaMonster {
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 18);
 		builder = builder.add(Attributes.MAX_HEALTH, 120);
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 12);

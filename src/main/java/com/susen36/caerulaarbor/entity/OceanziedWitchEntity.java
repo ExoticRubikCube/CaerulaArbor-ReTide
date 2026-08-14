@@ -1,10 +1,14 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.ai.MountVehicleGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.ThrowablePotionEntity;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CAPotions;
+import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -429,7 +433,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 90);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 90);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
         builder = builder.add(Attributes.MAX_HEALTH, 60);
         builder = builder.add(Attributes.ARMOR, 0);

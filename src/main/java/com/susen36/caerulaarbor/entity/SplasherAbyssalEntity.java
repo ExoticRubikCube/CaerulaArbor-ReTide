@@ -1,10 +1,10 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.entity.ai.MountVehicleGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FishShootEntity;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -212,16 +212,14 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		builder = builder.add(Attributes.ARMOR, 5);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 27);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 27);
 		builder = builder.add(Attributes.STEP_HEIGHT, 0.85f);
 		return builder;
 	}
 
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.splasher.move"));
 			}
 			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.splasher.idle"));

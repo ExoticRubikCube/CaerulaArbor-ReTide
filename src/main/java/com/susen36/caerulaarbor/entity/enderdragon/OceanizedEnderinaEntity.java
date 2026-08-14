@@ -265,8 +265,8 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 				this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() * 3);
 			if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
 				this.getAttribute(CAAttributes.GENERAL_DEFENSE).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue() * 2);
-			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE))
-				this.getAttribute(CAAttributes.MAGIC_RESISTANCE).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE).getBaseValue() + 20);
+			if (this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE))
+				this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).setBaseValue(this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).getBaseValue() + 20);
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 200, 1, false, false));
 				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH, 200, 1, false, false));
@@ -287,9 +287,9 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 		Entity attacker = source.getEntity();
 		if (attacker == null) return false;
 		if (attacker instanceof LivingEntity living && living.getOffhandItem().is(CAItems.OCEANIZED_ENDER_DRAGON_SPAWN_EGG.get())) return true;
-		if (attacker.getType().is(EntityUtils.SEABORN)) return false;
+		if (attacker.getType().is(CAEntityTypeTags.SEABORN)) return false;
 		if (attacker instanceof TamableAnimal tamable && tamable.isTame()) return false;
-		return !(attacker instanceof Player) && !attacker.getType().is(EntityUtils.HUMAN);
+		return !(attacker instanceof Player) && !attacker.getType().is(CAEntityTypeTags.HUMAN);
 	}
 
 	@Override
@@ -579,7 +579,7 @@ public class OceanizedEnderinaEntity extends SeaMonsterBoss implements RangedAtt
 		builder = builder.add(Attributes.FOLLOW_RANGE, 36);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
 		builder = builder.add(Attributes.FLYING_SPEED, 0.55);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 85);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 85);
 		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
 		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.0125);
 		builder = builder.add(CAAttributes.SANITY_RESISTANCE, 75);

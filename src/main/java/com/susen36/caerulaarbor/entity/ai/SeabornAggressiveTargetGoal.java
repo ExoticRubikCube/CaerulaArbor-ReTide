@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.ai;
 
+import com.susen36.caerulaarbor.init.CAEntityTypeTags;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.entity.EntitySelector;
@@ -23,19 +24,19 @@ public class SeabornAggressiveTargetGoal extends NearestAttackableTargetGoal<Liv
             if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(candidate)) {
                 return false;
             }
-            if (candidate.getType().is(EntityUtils.SEABORN)) {
+            if (candidate.getType().is(CAEntityTypeTags.SEABORN)) {
                 return false;
             }
-            if (candidate.getType().is(EntityUtils.SEABORN_PET)) {
+            if (candidate.getType().is(CAEntityTypeTags.SEABORN_PET)) {
                 return false;
             }
-            if (candidate.getType().is(EntityUtils.SEABORN_BOSS)) {
+            if (candidate.getType().is(CAEntityTypeTags.SEABORN_BOSS)) {
                 return false;
             }
-            if (candidate.getType().is(EntityUtils.SEABORN_MINION)) {
+            if (candidate.getType().is(CAEntityTypeTags.SEABORN_MINION)) {
                 return false;
             }
-            if (candidate.getType().is(EntityUtils.SEA_FRIEND)) {
+            if (candidate.getType().is(CAEntityTypeTags.SEA_FRIEND)) {
                 return false;
             }
             if (candidate.getPersistentData().getBoolean("seabornForgive")) {

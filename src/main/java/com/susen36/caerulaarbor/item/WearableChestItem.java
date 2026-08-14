@@ -5,7 +5,7 @@ import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.network.BabelNetwork;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CACollectible;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -72,7 +72,7 @@ public abstract class WearableChestItem extends ArmorItem {
 				double y = entity.getY();
 				double z = entity.getZ();
                 PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(entity);
-				if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.KING_ARMOR.get()))
+				if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_ARMOR.get()))
 					return;
 
 				BlockPos pos = BlockPos.containing(x, y, z);
@@ -84,7 +84,7 @@ public abstract class WearableChestItem extends ArmorItem {
 				if ((LevelAccessor) world instanceof ServerLevel level)
 					level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 
-				entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).markUsed(CAItems.KING_ARMOR.get());
+				entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).markUsed(CACollectible.KING_ARMOR.get());
 				if (entity instanceof Player player1)
 					BabelNetwork.syncCollectibles(player1);
 

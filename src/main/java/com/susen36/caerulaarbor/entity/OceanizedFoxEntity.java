@@ -1,10 +1,10 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CAAttributes;
+import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -96,7 +96,7 @@ public class OceanizedFoxEntity extends SeaMonster {
         this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Salmon.class, true, true));
         this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, true));
         this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, true));
-        this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CAItems.CANNED_CHERRY.get()), false));
+        this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CACollectible.CANNED_CHERRY.get()), false));
         this.goalSelector.addGoal(10, new RemoveBlockGoal(Blocks.SWEET_BERRY_BUSH, this, 1, 3));
         this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1) {
             @Override
@@ -309,7 +309,7 @@ public class OceanizedFoxEntity extends SeaMonster {
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 30);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 30);
         builder = builder.add(Attributes.MAX_HEALTH, 37);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);

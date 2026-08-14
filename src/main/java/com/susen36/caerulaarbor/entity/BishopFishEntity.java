@@ -496,7 +496,7 @@ public class BishopFishEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
         builder = builder.add(Attributes.FOLLOW_RANGE, 64);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 24);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 24);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         builder = builder.add(Attributes.STEP_HEIGHT, 2f);
         return builder;

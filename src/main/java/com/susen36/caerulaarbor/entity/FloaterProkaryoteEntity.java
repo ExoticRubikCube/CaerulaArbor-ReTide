@@ -1,9 +1,9 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FishSplashEntity;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CASounds;
@@ -331,7 +331,7 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.5);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 18);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 18);
 		builder = builder.add(Attributes.MAX_HEALTH, 20);
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 3);
@@ -356,7 +356,6 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

@@ -3,8 +3,8 @@ package com.susen36.caerulaarbor.event;
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -31,7 +31,7 @@ public class PEVOHealEventHandle {
 
         boolean result;
         result = (ModCapabilities.getPlayerVariables(entity)).can_player_evo
-                && (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CAItems.DISO.get()) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
+                && (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO.get()) || (ModCapabilities.getPlayerVariables(entity)).player_oceanization > 2.9);
         if (!entity.isShiftKeyDown() || !(entity instanceof Player livingEntity1) || !result) {
 			return;
 		}

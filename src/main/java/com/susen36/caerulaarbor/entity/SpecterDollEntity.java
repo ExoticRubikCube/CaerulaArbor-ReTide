@@ -226,7 +226,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
         builder = builder.add(Attributes.ATTACK_DAMAGE, 34);
         builder = builder.add(Attributes.FOLLOW_RANGE, 32);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 50);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.33);
         builder = builder.add(CAAttributes.MISSRATE, 18);
         builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);

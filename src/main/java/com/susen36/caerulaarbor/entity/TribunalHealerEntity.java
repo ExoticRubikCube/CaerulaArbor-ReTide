@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.api.anim.SyncedAnimationEntity;
 import com.susen36.caerulaarbor.entity.bullets.HealBullletEntity;
@@ -469,7 +470,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
         builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
         builder = builder.add(Attributes.FOLLOW_RANGE, 18);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.25);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 50);
         builder = builder.add(Attributes.STEP_HEIGHT, 0.8f);
         return builder;
     }

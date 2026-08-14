@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.compat.jei;
 import com.susen36.caerulaarbor.CaerulaArbor;
 
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAPotions;
 import mezz.jei.api.IModPlugin;
@@ -38,7 +39,7 @@ public class CABrewingRecipes implements IModPlugin {
 		List<ItemStack> inputStack = new ArrayList<>();
 		ingredientStack.add(new ItemStack(Items.SWEET_BERRIES));
 		potion.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.AWKWARD));
-		brewingRecipes.add(factory.createBrewingRecipe(List.copyOf(ingredientStack), potion.copy(), new ItemStack(CAItems.CANNED_CHERRY.get())));
+		brewingRecipes.add(factory.createBrewingRecipe(List.copyOf(ingredientStack), potion.copy(), new ItemStack(CACollectible.CANNED_CHERRY.get())));
 		ingredientStack.clear();
 		ingredientStack.add(new ItemStack(CABlocks.TRAIL_MUSHROOM.get()));
 		potion.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.AWKWARD));

@@ -17,7 +17,6 @@ import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.upgrade.MigrationUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SubsistingUpgradeManager;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -46,8 +45,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN;
-import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN_BOSS;
+import static com.susen36.caerulaarbor.init.CAEntityTypeTags.SEABORN;
+import static com.susen36.caerulaarbor.init.CAEntityTypeTags.SEABORN_BOSS;
 
 @EventBusSubscriber
 public class LivingTickEventHandler {
@@ -75,8 +74,8 @@ public class LivingTickEventHandler {
             return;
         }
         boolean isSeaborn = entity.getType().is(SEABORN);
-        boolean isSeabornPet = entity.getType().is(EntityUtils.SEABORN_PET);
-        boolean isSeaFriend = entity.getType().is(EntityUtils.SEA_FRIEND);
+        boolean isSeabornPet = entity.getType().is(CAEntityTypeTags.SEABORN_PET);
+        boolean isSeaFriend = entity.getType().is(CAEntityTypeTags.SEA_FRIEND);
         if (isSeaborn && !isSeabornPet && entity.level().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)) {
             boolean alreadyAdded = false;
             for (WrappedGoal goal : mob.targetSelector.getAvailableGoals()) {

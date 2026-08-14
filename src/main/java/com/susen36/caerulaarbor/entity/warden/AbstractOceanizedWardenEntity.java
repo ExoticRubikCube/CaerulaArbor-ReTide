@@ -4,7 +4,6 @@ import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -502,7 +501,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 50);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 48);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 75);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 75);
 		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
 		builder = builder.add(Attributes.STEP_HEIGHT, 0.6F);
 		return builder;

@@ -61,7 +61,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import static com.susen36.caerulaarbor.util.EntityUtils.SEABORN;
+import static com.susen36.caerulaarbor.init.CAEntityTypeTags.SEABORN;
 
 public class MartusEntity extends SeaMonsterBoss {
     private final DynamicGameEventListener<MartusDeathListener> dynamicDeathListener;
@@ -576,7 +576,7 @@ public class MartusEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.FLYING_SPEED, 0.5);
         builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.5);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 16384);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 100);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 100);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
         builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;

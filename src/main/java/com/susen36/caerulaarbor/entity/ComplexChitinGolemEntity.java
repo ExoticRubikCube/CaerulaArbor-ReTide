@@ -364,7 +364,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.17);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.05);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 50);
+        builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 50);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 12);
         builder = builder.add(Attributes.MAX_HEALTH, 675);
         builder = builder.add(Attributes.ARMOR, 16);

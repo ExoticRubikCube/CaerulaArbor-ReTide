@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.entity.ai;
 
+import com.susen36.caerulaarbor.init.CAEntityTypeTags;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.entity.EntitySelector;
@@ -18,10 +19,10 @@ public class SeabornCounterTargetGoal extends NearestAttackableTargetGoal<Monste
                 return false;
             }
             if (!EntityUtils.isSameTeam(mob, candidate)) {
-                return (candidate.getType().is(EntityUtils.SEABORN) ||
-                        candidate.getType().is(EntityUtils.SEABORN_BOSS) ||
-                        candidate.getType().is(EntityUtils.SEABORN_MINION)) &&
-                        !candidate.getType().is(EntityUtils.SEABORN_PET);
+                return (candidate.getType().is(CAEntityTypeTags.SEABORN) ||
+                        candidate.getType().is(CAEntityTypeTags.SEABORN_BOSS) ||
+                        candidate.getType().is(CAEntityTypeTags.SEABORN_MINION)) &&
+                        !candidate.getType().is(CAEntityTypeTags.SEABORN_PET);
             }
             return false;
         });

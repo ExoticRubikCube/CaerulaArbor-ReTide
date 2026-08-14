@@ -1,10 +1,10 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.warden.OceanizedWardenisEntity;
-import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.util.WorldUtils;
@@ -314,7 +314,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.35);
 		builder = builder.add(Attributes.FLYING_SPEED, 0.4);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE, 40);
+		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 40);
 		builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
 		return builder;
 	}
