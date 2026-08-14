@@ -109,29 +109,29 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/caerularecord.png"), this.leftPos, this.topPos, 0, 0, 168, 166, 168, 166);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/caerularecord.png"), this.leftPos, this.topPos, 0, 0, 168, 166, 168, 166);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/target_health.png"), this.leftPos + 4, this.topPos + 30, 0, 0, 24, 16, 24, 16);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/target_health.png"), this.leftPos + 4, this.topPos + 30, 0, 0, 24, 16, 24, 16);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/target_shield.png"), this.leftPos + 4, this.topPos + 50, 0, 0, 24, 16, 24, 16);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/target_shield.png"), this.leftPos + 4, this.topPos + 50, 0, 0, 24, 16, 24, 16);
 
 		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO_ATTENTION.get())) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/disoclution_attention.png"), this.leftPos + 96, this.topPos + 91, 0, 0, 64, 64, 64, 64);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_attention.png"), this.leftPos + 96, this.topPos + 91, 0, 0, 64, 64, 64, 64);
 		}
 		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO_BLOOD.get())) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/disoclution_blood.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_blood.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
 		}
 		if (PlayerStateUtils.isLightBright(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/light.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/light.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 		if (PlayerStateUtils.isLightWaving(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/light_waving.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/light_waving.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 		if (PlayerStateUtils.isLightDim(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/light_dim.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/light_dim.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 		if (PlayerStateUtils.isLightCeased(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/light_extinguish.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/light_extinguish.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 
 		AbstractEPCapability currentElement = EPManager.getEP(entity).getCurrentElement();
@@ -139,21 +139,21 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			double elementValue = currentElement.getValue();
 			double maxElementValue = currentElement.getMaxValue();
 			ResourceLocation elementIcon = ResourceLocation.fromNamespaceAndPath(BabelMod.MODID,
-					"textures/screen/ep/" + currentElement.getType().getNickName() + ".png");
+					"textures/gui/screen/ep/" + currentElement.getType().getNickName() + ".png");
 			guiGraphics.blit(elementIcon, this.leftPos + 106, this.topPos + 43,
 					Mth.clamp(Mth.ceil(elementValue / maxElementValue * 20.0) * 16, 0, 304), 0, 16, 16, 320, 16);
 		}
 
 		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO_NEURO.get())) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/disoclution_neuro.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_neuro.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
 		}
 		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO_FLESH.get())) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/disoclution_flesh.png"), this.leftPos + 99, this.topPos + 92, 0, 0, 64, 64, 64, 64);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_flesh.png"), this.leftPos + 99, this.topPos + 92, 0, 0, 64, 64, 64, 64);
 		}
 
         double result = 0;
         result = ModCapabilities.getPlayerVariables(entity).player_oceanization;
-        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/oceanize_icon.png"), this.leftPos + 137, this.topPos + 7, Mth.clamp((int) result * 24, 0, 72), 0, 24, 20, 96, 20);
+        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/oceanize_icon.png"), this.leftPos + 137, this.topPos + 7, Mth.clamp((int) result * 24, 0, 72), 0, 24, 20, 96, 20);
 
 		RenderSystem.disableBlend();
 	}

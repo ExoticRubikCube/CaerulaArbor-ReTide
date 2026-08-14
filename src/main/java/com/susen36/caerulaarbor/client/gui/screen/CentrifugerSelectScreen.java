@@ -25,7 +25,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
 
-// TODO: 新增了 textures/gui/sprites/screen/atlas/ 目录下的 sprite 文件。原来的 textures/screen/atlas/ 目录中的纹理文件可以保留（其他地方可能还在使用），也可以后续清理
 public class CentrifugerSelectScreen extends AbstractContainerScreen<CentrifugerSelectMenu> {
 	private final static HashMap<String, Object> guistate = CentrifugerSelectMenu.guistate;
 	private final Level world;
@@ -84,7 +83,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/centrifuger_select_bg.png"), this.leftPos, this.topPos, 0, 0, 194, 130, 194, 130);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/centrifuger_select_bg.png"), this.leftPos, this.topPos, 0, 0, 194, 130, 194, 130);
 
 		RenderSystem.disableBlend();
 	}
@@ -107,43 +106,33 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 	public void init() {
 		super.init();
 		imagebutton_cent_button_skadi_0 = new ImageButton(this.leftPos + 36, this.topPos + 40, 26, 18, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_cent_button_skadi_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_cent_button_skadi_0_highlighted")), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(0, x, y, z));
-				CentrifugerSelectButtonMessage.handleButtonAction(entity, 0, x, y, z);
-			}
-		});
+            PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(0, x, y, z));
+            CentrifugerSelectButtonMessage.handleButtonAction(entity, 0, x, y, z);
+        });
 		guistate.put("button:imagebutton_cent_button_skadi_0", imagebutton_cent_button_skadi_0);
 		this.addRenderableWidget(imagebutton_cent_button_skadi_0);
 		imagebutton_cent_button_ulpians_0 = new ImageButton(this.leftPos + 68, this.topPos + 40, 26, 18, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_cent_button_ulpians_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_cent_button_ulpians_0_highlighted")), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(1, x, y, z));
-				CentrifugerSelectButtonMessage.handleButtonAction(entity, 1, x, y, z);
-			}
-		});
+            PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(1, x, y, z));
+            CentrifugerSelectButtonMessage.handleButtonAction(entity, 1, x, y, z);
+        });
 		guistate.put("button:imagebutton_cent_button_ulpians_0", imagebutton_cent_button_ulpians_0);
 		this.addRenderableWidget(imagebutton_cent_button_ulpians_0);
 		imagebutton_cent_button_gladiia_0 = new ImageButton(this.leftPos + 36, this.topPos + 72, 26, 18, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_cent_button_gladiia_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_cent_button_gladiia_0_highlighted")), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(2, x, y, z));
-				CentrifugerSelectButtonMessage.handleButtonAction(entity, 2, x, y, z);
-			}
-		});
+            PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(2, x, y, z));
+            CentrifugerSelectButtonMessage.handleButtonAction(entity, 2, x, y, z);
+        });
 		guistate.put("button:imagebutton_cent_button_gladiia_0", imagebutton_cent_button_gladiia_0);
 		this.addRenderableWidget(imagebutton_cent_button_gladiia_0);
 		imagebutton_cent_button_done_0 = new ImageButton(this.leftPos + 116, this.topPos + 104, 26, 18, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_cent_button_done_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_cent_button_done_0_highlighted")), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(3, x, y, z));
-				CentrifugerSelectButtonMessage.handleButtonAction(entity, 3, x, y, z);
-			}
-		});
+            PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(3, x, y, z));
+            CentrifugerSelectButtonMessage.handleButtonAction(entity, 3, x, y, z);
+        });
 		guistate.put("button:imagebutton_cent_button_done_0", imagebutton_cent_button_done_0);
 		this.addRenderableWidget(imagebutton_cent_button_done_0);
 		imagebutton_cen_button_specter_0 = new ImageButton(this.leftPos + 68, this.topPos + 72, 26, 18, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_cen_button_specter_0"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_cen_button_specter_0_highlighted")), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(4, x, y, z));
-				CentrifugerSelectButtonMessage.handleButtonAction(entity, 4, x, y, z);
-			}
-		});
+            PacketDistributor.sendToServer(new CentrifugerSelectButtonMessage(4, x, y, z));
+            CentrifugerSelectButtonMessage.handleButtonAction(entity, 4, x, y, z);
+        });
 		guistate.put("button:imagebutton_cen_button_specter_0", imagebutton_cen_button_specter_0);
 		this.addRenderableWidget(imagebutton_cen_button_specter_0);
 	}

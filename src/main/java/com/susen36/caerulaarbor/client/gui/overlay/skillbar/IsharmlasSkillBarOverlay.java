@@ -20,7 +20,7 @@ import java.util.Comparator;
 @EventBusSubscriber({Dist.CLIENT})
 public class IsharmlasSkillBarOverlay {
 
-	public static final ResourceLocation BAR = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/isharmla_bar.png");
+	public static final ResourceLocation BAR = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/isharmla_bar.png");
 
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {

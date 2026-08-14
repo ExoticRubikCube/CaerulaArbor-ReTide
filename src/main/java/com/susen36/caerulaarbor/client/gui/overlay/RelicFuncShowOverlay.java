@@ -21,14 +21,14 @@ public class RelicFuncShowOverlay {
 		Player entity = Minecraft.getInstance().player;
 		if (entity != null) {
 			double result = computeKingSuit(entity);
-			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/icon_king.png"), 6, 8, Mth.clamp((int) result * 16, 0, 32), 0, 16, 16, 48, 16);
+			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/icon_king.png"), 6, 8, Mth.clamp((int) result * 16, 0, 32), 0, 16, 16, 48, 16);
 
 			double result3 = computeDemonSuit(entity);
-			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/icon_artifi.png"), 22, 8, Mth.clamp((int) result3 * 16, 0, 32), 0, 16, 16, 48, 16);
+			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/icon_artifi.png"), 22, 8, Mth.clamp((int) result3 * 16, 0, 32), 0, 16, 16, 48, 16);
 
 			boolean result1 = entity.hasEffect(CAMobEffects.TIDE_OF_CHITIN);
 			if (result1) {
-				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/icon_chitin.png"), 38, 8, 0, 0, 16, 16, 16, 16);
+				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/icon_chitin.png"), 38, 8, 0, 0, 16, 16, 16, 16);
 			}
 		}
 	}

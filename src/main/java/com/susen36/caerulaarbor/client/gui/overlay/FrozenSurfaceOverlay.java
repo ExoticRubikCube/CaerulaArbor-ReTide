@@ -32,7 +32,7 @@ public class FrozenSurfaceOverlay {
             result = entity.hasEffect(CAMobEffects.FROZEN);
         }
         if (result) {
-			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/frozensurface.png"), 0, 0, 0, 0, w, h, w, h);
+			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/frozensurface.png"), 0, 0, 0, 0, w, h, w, h);
 		}
 		RenderSystem.depthMask(true);
 		RenderSystem.defaultBlendFunc();

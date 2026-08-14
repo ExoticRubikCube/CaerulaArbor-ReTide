@@ -36,7 +36,7 @@ public class PalsyOverlay {
             result = entity.hasEffect(BabelMobEffects.PALSY);
         }
         if (result) {
-			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/palsy.png"), w / 2 + 5, h / 2 + -8, 0, 0, 16, 16, 16, 16);
+			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/palsy.png"), w / 2 + 5, h / 2 + -8, 0, 0, 16, 16, 16, 16);
 
 			event.getGuiGraphics().drawString(Minecraft.getInstance().font,
 					getPalsy(entity), w / 2 + 17, h / 2 + -3, -13421773, false);

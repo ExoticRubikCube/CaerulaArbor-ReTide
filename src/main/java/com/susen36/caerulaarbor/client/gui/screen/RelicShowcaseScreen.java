@@ -150,7 +150,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 312, 192, 312, 192);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 312, 192, 312, 192);
 		RenderSystem.disableBlend();
 	}
 

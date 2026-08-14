@@ -85,12 +85,12 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/wetplayer.png"), this.leftPos, this.topPos, 0, 0, 200, 120, 200, 120);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/wetplayer.png"), this.leftPos, this.topPos, 0, 0, 200, 120, 200, 120);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/silence.png"), this.leftPos + 0, this.topPos + -34, Mth.clamp((int) SilenceUpgradeManager.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/silence.png"), this.leftPos + 0, this.topPos + -34, Mth.clamp((int) SilenceUpgradeManager.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
 
 		if (MapVariables.get(world).if_sublimation) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/sublimation.png"), this.leftPos + 35, this.topPos + -33, Mth.clamp((int) MapVariables.get(world).strategy_sublimation * 28, 0, 112), 0, 28, 32, 140, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/sublimation.png"), this.leftPos + 35, this.topPos + -33, Mth.clamp((int) MapVariables.get(world).strategy_sublimation * 28, 0, 112), 0, 28, 32, 140, 32);
 		}
 
 		RenderSystem.disableBlend();
