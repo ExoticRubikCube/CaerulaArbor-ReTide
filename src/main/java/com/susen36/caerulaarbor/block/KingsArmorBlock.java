@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CACollectible;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -103,7 +103,7 @@ public class KingsArmorBlock extends Block implements SimpleWaterloggedBlock {
 		int y = pos.getY();
 		int z = pos.getZ();
         if (world instanceof ServerLevel level) {
-            ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.KINGS_ARMOUR.get()));
+            ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CACollectible.KING_ARMOR.get()));
             entityToSpawn.setPickUpDelay(10);
             level.addFreshEntity(entityToSpawn);
         }

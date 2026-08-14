@@ -258,7 +258,7 @@ public class OceanizedBruteEntity extends SeaMonsterBoss {
                     }
                 }
                 if (world instanceof ServerLevel level) {
-                    ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), (this.getY() + 0.5), this.getZ(), new ItemStack(CAItems.CRIMSON_TREATY.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), (this.getY() + 0.5), this.getZ(), new ItemStack(CACollectible.TREATY.get()));
                     entityToSpawn.setPickUpDelay(10);
                     entityToSpawn.setUnlimitedLifetime();
                     level.addFreshEntity(entityToSpawn);

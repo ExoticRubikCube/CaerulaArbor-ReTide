@@ -2,7 +2,7 @@
 package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CACollectible;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -108,7 +108,7 @@ public class BlockCrystalBlock extends Block implements SimpleWaterloggedBlock {
 		double hitZ = hit.getLocation().z;
 		Direction direction = hit.getDirection();
         if (world instanceof ServerLevel level) {
-            ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.KINGS_CRYSTAL.get()));
+            ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CACollectible.KING_CRYSTAL.get()));
             entityToSpawn.setPickUpDelay(10);
             level.addFreshEntity(entityToSpawn);
         }

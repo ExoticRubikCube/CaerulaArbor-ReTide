@@ -46,45 +46,45 @@ public class CAItems {
     public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(BuiltInRegistries.ITEM, CaerulaArbor.MODID);
     public static final DeferredHolder<Item, ? extends Item> CAERULA_RECORDER = REGISTRY.register("caerula_recorder", CaerulaRecorderItem::new);
     public static final DeferredHolder<Item, ? extends Item> EMERGENCY_LIGHT = block(CABlocks.EMERGENCY_LIGHT);
-    public static final DeferredHolder<Item, ? extends Item> KINGS_ARMOUR = REGISTRY.register("kings_armour", KingsArmourItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> KINGS_ARMOR = block(CABlocks.KINGS_ARMOR);
     public static final DeferredHolder<Item, ? extends Item> BLOCK_CROWN = block(CABlocks.BLOCK_CROWN);
-    public static final DeferredHolder<Item, ? extends Item> KINGS_SPEAR = REGISTRY.register("kings_spear", KingsSpearItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> BLOCK_SPEAR = block(CABlocks.BLOCK_SPEAR);
-    public static final DeferredHolder<Item, ? extends Item> KINGS_EXTENSION = REGISTRY.register("kings_extension", KingsExtensionItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> BLOCK_EXTENSION = block(CABlocks.BLOCK_EXTENSION);
-    public static final DeferredHolder<Item, ? extends Item> KINGS_CRYSTAL = REGISTRY.register("kings_crystal", KingsCrystalItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> BLOCK_CRYSTAL = block(CABlocks.BLOCK_CRYSTAL);
     public static final DeferredHolder<Item, ? extends Item> REDSTONE_INGOT = REGISTRY.register("redstone_ingot", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> THE_SPEAR = REGISTRY.register("the_spear", TheSpearItem::new);
     public static final DeferredHolder<Item, ? extends Item> WEARABLE_CHEST_CHESTPLATE = REGISTRY.register("wearable_chest_chestplate", WearableChestItem.Chestplate::new);
     public static final DeferredHolder<Item, ? extends Item> WEARABLE_CROWN_HELMET = REGISTRY.register("wearable_crown_helmet", () -> new WearableCrownItem(ArmorItem.Type.HELMET, new Item.Properties().fireResistant()));
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_THORNS = REGISTRY.register("hand_of_thorns", HandOfThornsItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_STRANGLE = REGISTRY.register("hand_of_strangle", HandOfStrangleItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_FERTILIY = REGISTRY.register("hand_of_fertiliy", HandOfFertiliyItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_SPEED = REGISTRY.register("hand_of_speed", HandOfSpeedItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_BARREN = REGISTRY.register("hand_of_barren", HandOfBarrenItem::new);
+    
+    
+    
+    
+    
     public static final DeferredHolder<Item, ? extends Item> FLUORE_BERRIES = REGISTRY.register("fluore_berries", FluoreBerriesItem::new);
     public static final DeferredHolder<Item, ? extends Item> RADIANT_BERRIES = REGISTRY.register("radiant_berries", RadiantBerriesItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_SPOTLESS = REGISTRY.register("hand_of_spotless", HandOfSwipeItem::new);
-    public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_ARTIFACT = REGISTRY.register("archfiends_artifact", ArchfiendsArtifactItem::new);
-    public static final DeferredHolder<Item, ? extends Item> HAND_OF_FIREWORK = REGISTRY.register("hand_of_firework", HandOfFireworkItem::new);
-    public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_FLAG = REGISTRY.register("archfiends_flag", ArchfiendsFlagItem::new);
-    public static final DeferredHolder<Item, ? extends Item> ARCHFIENDS_BED = REGISTRY.register("archfiends_bed", ArchfiendsBedItem::new);
+    
+    
+    
+    
+    
     public static final DeferredHolder<Item, ? extends Item> BLOCK_FATE = block(CABlocks.BLOCK_FATE);
-    public static final DeferredHolder<Item, ? extends Item> CRIMSON_TREATY = REGISTRY.register("crimson_treaty", CrimsonTreatyItem::new);
-    public static final DeferredHolder<Item, ? extends Item> MEAT_CAN = REGISTRY.register("meat_can", MeatCanItem::new);
+    
+    
     public static final DeferredHolder<Item, ? extends Item> EMPTY_CAN = REGISTRY.register("empty_can", EmptyCanItem::new);
     public static final DeferredHolder<Item, ? extends Item> PAPER_BAG = REGISTRY.register("paper_bag", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
-    public static final DeferredHolder<Item, ? extends Item> COFFEE_CANDY = REGISTRY.register("coffee_candy", CoffeeCandyItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> BERRY_CAN = block(CABlocks.BERRY_CAN);
-    public static final DeferredHolder<Item, ? extends Item> RAINBOW_CANDY = REGISTRY.register("rainbow_candy", RainbowCandyItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> AROMATIC_COFFEE = REGISTRY.register("aromatic_coffee", AromaticCoffeeItem::new);
     public static final DeferredHolder<Item, ? extends Item> MUSIC_BOX_FIXED = REGISTRY.register("music_box_fixed", MusicBoxFixedItem::new);
     public static final DeferredHolder<Item, ? extends Item> REDSTONE_IRIS = block(CABlocks.REDSTONE_IRIS);
     public static final DeferredHolder<Item, ? extends Item> REDSTONEIRIS_SEEDING = block(CABlocks.REDSTONEIRIS_SEEDING);
     public static final DeferredHolder<Item, ? extends Item> THERMOGRAPH = REGISTRY.register("thermograph", ThermographItem::new);
-    public static final DeferredHolder<Item, ? extends Item> PIGLIN_DIARY = REGISTRY.register("piglin_diary", PiglinDiaryItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> RUN_FISH_SPAWN_EGG = REGISTRY.register("run_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.RUN_FISH, -16777012, -3355444, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> SLIDER_FISH_SPAWN_EGG = REGISTRY.register("slider_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SLIDER_FISH, -13421569, -3355444, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> SUPER_SLIDER_SPAWN_EGG = REGISTRY.register("super_slider_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SUPER_SLIDER, -1, -1, new Item.Properties()));
@@ -128,7 +128,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> CANNED_NOODLE = REGISTRY.register("canned_noodle", CannedNoodleItem::new);
     public static final DeferredHolder<Item, ? extends Item> CANNED_BOILED_WATER = REGISTRY.register("canned_boiled_water", CannedBoiledWaterItem::new);
     public static final DeferredHolder<Item, ? extends Item> OBISIDIAN_BALL = REGISTRY.register("obisidian_ball", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
-    public static final DeferredHolder<Item, ? extends Item> CHITIN_KNIFE = REGISTRY.register("chitin_knife", ChitinKnifeItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> COMPLEX_CHITIN_SWORD = REGISTRY.register("complex_chitin_sword", ComplexChitinSwordItem::new);
     public static final DeferredHolder<Item, ? extends Item> COMPLEX_CHITIN_PICKAXE = REGISTRY.register("complex_chitin_pickaxe", ComplexChitinPickaxeItem::new);
     public static final DeferredHolder<Item, ? extends Item> COMPLEX_CHITIN_AXE = REGISTRY.register("complex_chitin_axe", ComplexChitinAxeItem::new);
@@ -137,14 +137,14 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> OCEAN_FARMLAND = block(CABlocks.OCEAN_FARMLAND);
     public static final DeferredHolder<Item, ? extends Item> PHLOEM_BOW = REGISTRY.register("phloem_bow", PhloemBowItem::new);
     public static final DeferredHolder<Item, ? extends Item> LEGENDARY_SPEAR = REGISTRY.register("legendary_spear", LegendarySpearItem::new);
-    public static final DeferredHolder<Item, ? extends Item> ALLAY_SCULPTURE = REGISTRY.register("allay_sculpture", AlleySculptureItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> ALLAY_BLOCK = block(CABlocks.ALLAY_BLOCK);
-    public static final DeferredHolder<Item, ? extends Item> BAT_BED = REGISTRY.register("bat_bed", BatBedItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> BLOCK_BATBED = block(CABlocks.BLOCK_BATBED);
     public static final DeferredHolder<Item, ? extends Item> BATBED_UPPER = block(CABlocks.BATBED_UPPER);
-    public static final DeferredHolder<Item, ? extends Item> OMNI_KEY = REGISTRY.register("omni_key", OmniKeyItem::new);
-    public static final DeferredHolder<Item, ? extends Item> SCORE = REGISTRY.register("score", ScoreItem::new);
-    public static final DeferredHolder<Item, ? extends Item> RESCISSION = REGISTRY.register("rescission", RescissionItem::new);
+    
+    
+    
     public static final DeferredHolder<Item, ? extends Item> TRAIL_CAKE = block(CABlocks.TRAIL_CAKE);
     public static final DeferredHolder<Item, ? extends Item> TRAIL_CAKE_PIECE = REGISTRY.register("trail_cake_piece", TrailCakePieceItem::new);
     public static final DeferredHolder<Item, ? extends Item> CARAMEL_CAKE = block(CABlocks.CARAMEL_CAKE);
@@ -170,7 +170,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> OCEAN_MACHINE = REGISTRY.register("ocean_machine", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)));
     public static final DeferredHolder<Item, ? extends Item> OCEAN_CRYSTAL_BLOCK = block(CABlocks.OCEAN_CRYSTAL_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> COMPLEX_CHITIN_BLOCK = block(CABlocks.COMPLEX_CHITIN_BLOCK);
-    public static final DeferredHolder<Item, ? extends Item> GUARDIAN_STARE = REGISTRY.register("guardian_stare", GuardianStareItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> TIDE_OBSERVATION = block(CABlocks.TIDE_OBSERVATION);
     public static final DeferredHolder<Item, ? extends Item> SAMPLE_BREED = REGISTRY.register("sample_breed", SampleBreedItem::new);
     public static final DeferredHolder<Item, ? extends Item> ANCHOR_LOWER = block(CABlocks.ANCHOR_LOWER);
@@ -262,7 +262,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> ACCUMULATOR_PROKARYOTE_SPAWN_EGG = REGISTRY.register("accumulator_prokaryote_spawn_egg",
             () -> new DeferredSpawnEggItem(CAEntities.ACCUMULATOR_PROKARYOTE, -14863367, -15721602, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> TIDEWAY_CRADLE = REGISTRY.register(Objects.requireNonNull(CABlocks.TIDEWAY_CRADLE.getId()).getPath(), () -> new TidewayCradleDisplayItem(CABlocks.TIDEWAY_CRADLE.get(), new Item.Properties()));
-    public static final DeferredHolder<Item, ? extends Item> SMELLY_HEMOSTATIC = REGISTRY.register("smelly_hemostatic", SmellyHemostaticItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> PATH_INAUGURATOR = REGISTRY.register("path_inaugurator", PathInauguratorItem::new);
     public static final DeferredHolder<Item, ? extends Item> COOKED_FAKEEGG = REGISTRY.register("cooked_fakeegg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(4).saturationModifier(0.7f).alwaysEdible().build())));
     public static final DeferredHolder<Item, ? extends Item> COLLECTOR_MEAT = REGISTRY.register("collector_meat", CollectorMeatItem::new);
@@ -345,7 +345,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> PHLOEM_BLOCK = block(CABlocks.PHLOEM_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> FIBRE_BLOCK = block(CABlocks.FIBRE_BLOCK);
     public static final DeferredHolder<Item, ? extends Item> COOKED_FIBRE_BLOCK = block(CABlocks.COOKED_FIBRE_BLOCK);
-    public static final DeferredHolder<Item, ? extends Item> UNRIPE_YEARNING = REGISTRY.register("unripe_yearning", UnripeYearningItem::new);
+    
     public static final DeferredHolder<Item, ? extends Item> CIRCULAR_SAW = REGISTRY.register("circular_saw", CircularSawItem::new);
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_PIGLIN_SPAWN_EGG = REGISTRY.register("oceanized_piglin_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_PIGLIN, -10136240, -3168112, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_BRUTE_SPAWN_EGG = REGISTRY.register("oceanized_brute_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_BRUTE, -1, -1, new Item.Properties()));

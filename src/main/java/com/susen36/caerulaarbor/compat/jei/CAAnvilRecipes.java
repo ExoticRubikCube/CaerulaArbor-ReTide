@@ -32,7 +32,7 @@ public class CAAnvilRecipes implements IModPlugin {
 		rightItem = new ItemStack(CACollectible.RELIC_CROWN.get());
 		rightItem.setCount(1);
 		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(Items.IRON_HELMET), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.WEARABLE_CROWN_HELMET.get()))));
-		rightItem = new ItemStack(CAItems.KINGS_ARMOUR.get());
+		rightItem = new ItemStack(CACollectible.KING_ARMOR.get());
 		rightItem.setCount(1);
 		anvilRecipes.add(factory.createAnvilRecipe(new ItemStack(Items.IRON_CHESTPLATE), List.of(rightItem.copy()), List.of(new ItemStack(CAItems.WEARABLE_CHEST_CHESTPLATE.get()))));
 		rightItem = new ItemStack(Items.COPPER_INGOT);

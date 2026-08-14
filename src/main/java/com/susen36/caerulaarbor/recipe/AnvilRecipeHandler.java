@@ -35,7 +35,7 @@ public class AnvilRecipeHandler {
 				event.setCost(5);
 				event.setOutput(new ItemStack(CAItems.WEARABLE_CROWN_HELMET.get()));
 			}
-		} else if ((event.getLeft().getItem() == Items.IRON_CHESTPLATE) && (event.getRight().getItem() == CAItems.KINGS_ARMOUR.get())) {
+		} else if ((event.getLeft().getItem() == Items.IRON_CHESTPLATE) && (event.getRight().getItem() == CACollectible.KING_ARMOR.get())) {
 			if ((event.getLeft().getCount() == 1) && (event.getRight().getCount() >= 1)) {
 				event.setMaterialCost(1);
 				event.setCost(5);
