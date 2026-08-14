@@ -50,9 +50,6 @@ repositories {
         name = 'Modrinth'
         url = 'https://api.modrinth.com/maven'
     }
-    flatDir {
-        dirs 'libs'
-    }
 }
 
 base {
@@ -143,7 +140,7 @@ configurations {
 }
 
 dependencies {
-    implementation files("libs/babel-${babel_version}.jar")
+    implementation("com.susen36.babel:babel-lib")
     implementation "curse.maven:geckolib-388172:${geckolib_version}"
 
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"

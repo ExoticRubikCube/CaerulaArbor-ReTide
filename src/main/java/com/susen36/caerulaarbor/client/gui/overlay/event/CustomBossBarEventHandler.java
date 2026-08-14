@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.client.event;
+package com.susen36.caerulaarbor.client.gui.overlay.event;
 
 import com.mojang.datafixers.util.Pair;
 import com.susen36.caerulaarbor.CaerulaArbor;
@@ -52,10 +52,11 @@ public class CustomBossBarEventHandler {
     public static final ResourceLocation WARDENIS = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/wardenis_bossbar.png");
     public static final ResourceLocation ENDERINA = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/enderina_bossbar.png");
     public static final ResourceLocation ENDER_DRAGON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/ender_dragon_bossbar.png");
+    public static final ResourceLocation ENDER_DRAGON_HEAD = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/ender_dragon_bossbar_head.png");
     public static final ResourceLocation ENDSPEAKER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/endspeaker_bossbar.png");
     public static final ResourceLocation WITHER_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/wither_bossstyle.png");
     public static final ResourceLocation WARDEN_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/warden_bossstyle.png");
-    public static final ResourceLocation ENDERINA_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/enderina_style.png");
+    public static final ResourceLocation ENDERINA_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/enderina_style.png");
 
     public static final BossBarRenderContext CONTEXT_GENERIC = BossBarRenderContext.of(GENERIC).frame(158,26).bar(156,3,1,11).offset(-9, 5);
     public static final BossBarRenderContext CONTEXT_PATHSHAPER = BossBarRenderContext.of(PATHSHAPER).frame(182,13).bar(180,7,1,4).offset(-1, -5).color(0x628CFE);
@@ -146,6 +147,10 @@ public class CustomBossBarEventHandler {
 	            gui.blit(ENDERINA_STYLE, bx + 90, by,
 	            			uOffset, 67, remain_len, context.bar_y, 308, 134);
             }
+        }
+        if (context.equals(CONTEXT_ENDER_DRAGON)){
+            gui.blit(ENDER_DRAGON_HEAD, context.x, context.y + offset_y, 0, 0,
+                    context.frame_x, context.frame_y, 256, 32);
         }
         gui.drawCenteredString(Minecraft.getInstance().font, context.name, context.name_x, context.name_y + context.name_offset_y, pColor);
     }
@@ -247,7 +252,7 @@ public class CustomBossBarEventHandler {
 
     public static class BossBarRenderContext{
         public ResourceLocation texture;
-        public int x, y, frame_x, frame_y, bar_x, bar_y, bg_x, bg_y, name_x, name_y, bar_offset_x, bar_offset_y;
+        public int x, y, frame_x, frame_y, bar_x, bar_y, name_x, name_y, bar_offset_x, bar_offset_y;
         public String name;
         public int color, name_offset_y, render_offset_y;
         public ResourceLocation style;

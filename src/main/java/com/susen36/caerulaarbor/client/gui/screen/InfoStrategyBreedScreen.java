@@ -83,7 +83,7 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
             }
             result = Math.round(18 * rate);
         }
-        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/barevo.png"), this.leftPos + 244, this.topPos + 20, Mth.clamp((int) result * 8, 0, 144), 0, 8, 72, 152, 72);
+        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/barevo_skill_bar.png"), this.leftPos + 244, this.topPos + 20, Mth.clamp((int) result * 8, 0, 144), 0, 8, 72, 152, 72);
 
 		RenderSystem.disableBlend();
 	}

@@ -14,7 +14,7 @@ import snownee.jade.overlay.OverlayRenderer;
 public class CABarrierElement extends Element {
     private final String barrier;
 
-    private static final ResourceLocation BARRIER_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/living_barrier.png");
+    private static final ResourceLocation BARRIER_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/living_barrier.png");
 
     public CABarrierElement(double barrier) {
         barrier = Math.ceil(barrier);

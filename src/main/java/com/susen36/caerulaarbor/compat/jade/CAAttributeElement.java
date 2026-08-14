@@ -18,8 +18,8 @@ public class CAAttributeElement extends Element {
     private final boolean showDefense;
     private final boolean showResistance;
 
-    private static final ResourceLocation DEFENSE_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/defense.png");
-    private static final ResourceLocation MAGIC_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/screen/magic_resistance.png");
+    private static final ResourceLocation DEFENSE_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/defense.png");
+    private static final ResourceLocation MAGIC_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/magic_resistance.png");
 
     public CAAttributeElement(double defense, double resistance) {
         defense = Math.ceil(defense);

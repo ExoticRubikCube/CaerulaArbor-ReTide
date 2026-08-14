@@ -70,7 +70,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		if (MapVariables.get(world).if_sublimation && mouseX > leftPos + 36 && mouseX < leftPos + 61 && mouseY > topPos + -30 && mouseY < topPos + -5) {
 			String result = "";
 			if (MapVariables.get(world).strategy_sublimation >= 4) {
-				result = "\u00A7dFinished";
+				result = "§dFinished";
 			} else {
 				result = Math.round(MapVariables.get(world).evo_point_sublimation) + "\u00A7c/"
 						+ Math.round(Math.pow(MapVariables.get(world).strategy_sublimation + 1, 3) * CAConfigs.SUBLIMATION_COEFFICIENT.get() * 12);
@@ -114,43 +114,33 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 	public void init() {
 		super.init();
 		button_evolution_tree = new PlainTextButton(this.leftPos + -1, this.topPos + 121, 76, 20, Component.translatable("gui.caerula_arbor.info_strategy_all.button_evolution_tree"), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(0, x, y, z));
-				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 0, x, y, z);
-			}
-		}, this.font);
+            PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(0, x, y, z));
+            InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 0, x, y, z);
+        }, this.font);
 		guistate.put("button:button_evolution_tree", button_evolution_tree);
 		this.addRenderableWidget(button_evolution_tree);
 		imagebutton_breed_lit = new ImageButton(this.leftPos + 100, this.topPos + 29, 32, 32, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_breed_lit"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_breed_lit_highlighted")), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(1, x, y, z));
-				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 1, x, y, z);
-			}
-		});
+            PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(1, x, y, z));
+            InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 1, x, y, z);
+        });
 		guistate.put("button:imagebutton_breed_lit", imagebutton_breed_lit);
 		this.addRenderableWidget(imagebutton_breed_lit);
 		imagebutton_grow_lit = new ImageButton(this.leftPos + 30, this.topPos + 29, 32, 32, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_grow_lit"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_grow_lit_highlighted")), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(2, x, y, z));
-				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 2, x, y, z);
-			}
-		});
+            PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(2, x, y, z));
+            InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 2, x, y, z);
+        });
 		guistate.put("button:imagebutton_grow_lit", imagebutton_grow_lit);
 		this.addRenderableWidget(imagebutton_grow_lit);
 		imagebutton_mig_lit = new ImageButton(this.leftPos + 138, this.topPos + 29, 32, 32, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_mig_lit"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_mig_lit_highlighted")), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(3, x, y, z));
-				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 3, x, y, z);
-			}
-		});
+            PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(3, x, y, z));
+            InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 3, x, y, z);
+        });
 		guistate.put("button:imagebutton_mig_lit", imagebutton_mig_lit);
 		this.addRenderableWidget(imagebutton_mig_lit);
 		imagebutton_subs_lit = new ImageButton(this.leftPos + 67, this.topPos + 30, 32, 32, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_subs_lit"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_subs_lit_highlighted")), e -> {
-			if (true) {
-				PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(4, x, y, z));
-				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 4, x, y, z);
-			}
-		});
+            PacketDistributor.sendToServer(new InfoStrategyNavigationButtonMessage(4, x, y, z));
+            InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 4, x, y, z);
+        });
 		guistate.put("button:imagebutton_subs_lit", imagebutton_subs_lit);
 		this.addRenderableWidget(imagebutton_subs_lit);
 	}
