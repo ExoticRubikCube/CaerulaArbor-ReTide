@@ -160,7 +160,7 @@ public interface NetherseaBrandBlock {
 						damage = damage + 1.0F;
 					}
 					entity.hurt(CADamageTypes.source(world, CADamageTypes.TRAIL_DAMAGE), damage);
-					EPUtils.causeSanityInjury(livingEntity, 15 + damage * 8);
+					EPUtils.causeSanityInjury(livingEntity, 0.75 + damage * 0.4);
 				}
 			}
 		}

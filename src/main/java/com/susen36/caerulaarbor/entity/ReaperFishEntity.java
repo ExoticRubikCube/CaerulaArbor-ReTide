@@ -208,7 +208,7 @@ public class ReaperFishEntity extends SeaMonster {
 							if (entityiterator instanceof LivingEntity target) {
 								EPUtils.causeSanityInjury(target,
 										this,
-										(this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12);
+										(this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.6);
 							}
 						}
 					}

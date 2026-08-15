@@ -45,7 +45,7 @@ public class NourishedApplePieItem extends Item {
 			entity.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 3600, 0));
 		}
 		entity.setHealth((float) (entity.getHealth() + entity.getMaxHealth() * 0.15));
-		EPUtils.causeSanityInjury(entity, 75);
+		EPUtils.causeSanityInjury(entity, 4);
 		return retval;
 	}
 }

@@ -19,7 +19,7 @@ public class SanityImmueMobEffect extends MobEffect {
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity.isAlive()) {
-            EPUtils.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, 5);
+            EPUtils.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, 1);
         }
         return true;
     }

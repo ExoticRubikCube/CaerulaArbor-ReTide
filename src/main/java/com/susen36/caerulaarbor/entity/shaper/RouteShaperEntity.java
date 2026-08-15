@@ -81,7 +81,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 48);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
 		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 24);
-		builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+		builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 100);
 		return builder;
 	}
 }

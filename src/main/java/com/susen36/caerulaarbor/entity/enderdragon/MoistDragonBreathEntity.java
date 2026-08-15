@@ -418,9 +418,9 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                                 (float) d);
                         if (entityiterator instanceof LivingEntity livingTarget) {
                             if (owner instanceof LivingEntity attacker) {
-                                EPUtils.causeSanityInjury(livingTarget, attacker, d * 20);
+                                EPUtils.causeSanityInjury(livingTarget, attacker, d * 1.0);
                             } else {
-                                EPUtils.causeSanityInjury(livingTarget, d * 20);
+                                EPUtils.causeSanityInjury(livingTarget, d * 1.0);
                             }
                         }
                     }

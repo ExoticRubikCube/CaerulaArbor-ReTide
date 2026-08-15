@@ -138,7 +138,7 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 		boolean result = super.hurtEnemy(itemstack, entity, sourceentity);
 		if (sourceentity instanceof Player player && this.canUseSpecialAttack(player, itemstack)) {
 			EPManager.hurtElemental(entity, AbstractEPCapability.EPType.CORROSION, sourceentity,
-					Mth.floor(sourceentity.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.35D + 4.0D));
+					Mth.floor((sourceentity.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.35D + 4.0D) / 20.0D));
 			this.setAttackAnimation(itemstack);
 			if (!sourceentity.level().isClientSide()) {
 				this.scheduleAreaAttack(itemstack, sourceentity, entity.getX(), entity.getY(), entity.getZ());
@@ -182,7 +182,7 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 						CADamageTypes.source(level, CADamageTypes.HIGHMORE_ATTACK, attacker),
 						(float) (attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * (1.5F + 0.2F * EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(attacker.level().registryAccess(), CAEnchantments.SYNESTHESIA), itemstack))));
 				EPManager.hurtElemental((LivingEntity) nearbyEntity, AbstractEPCapability.EPType.CORROSION, attacker,
-						Mth.floor(attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.35D + 4.0D));
+						Mth.floor((attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.35D + 4.0D) / 20.0D));
 			}
 			if (!(attacker instanceof Player player) || !player.getAbilities().instabuild) {
 				if (level instanceof ServerLevel _level) {

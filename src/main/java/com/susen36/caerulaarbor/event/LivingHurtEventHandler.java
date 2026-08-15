@@ -561,7 +561,7 @@ public class LivingHurtEventHandler {
         if (arrow instanceof Arrow) {
             if (arrow.getPersistentData().getBoolean("ComplexChitin")) {
                 if (entity instanceof LivingEntity target) {
-                    EPUtils.causeSanityInjury(target, amount * 4);
+                    EPUtils.causeSanityInjury(target, amount * 0.2);
                 }
                 for (int index0 = 0; index0 < 3; index0++) {
                     double yaw = Mth.nextInt(RandomSource.create(), -30, 30);
@@ -629,9 +629,9 @@ public class LivingHurtEventHandler {
                         level.sendParticles(CAParticles.MOIST_BOOM.get(), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
                     if (entity instanceof LivingEntity target) {
                         if (entity1 instanceof LivingEntity attacker) {
-                            EPUtils.causeSanityInjury(target, attacker, amount * 5);
+                            EPUtils.causeSanityInjury(target, attacker, amount * 0.25);
                         } else {
-                            EPUtils.causeSanityInjury(target, amount * 5);
+                            EPUtils.causeSanityInjury(target, amount * 0.25);
                         }
                     }
                     if (entity instanceof LivingEntity living)
@@ -656,7 +656,7 @@ public class LivingHurtEventHandler {
         if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_REAPER), mainHandItem) != 0) {
             double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(entity.level().registryAccess(), CAEnchantments.SANITY_REAPER), mainHandItem);
             if (entity instanceof LivingEntity target && sourceentity instanceof LivingEntity attacker) {
-                EPUtils.causeSanityInjury(target, attacker, amount * 2 * lvl);
+                EPUtils.causeSanityInjury(target, attacker, amount * 0.1 * lvl);
             }
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 1 + entity.getBbHeight() * 0.5), z, (int) Math.min(8 * lvl, 40), 1, 1, 1.2, 0.1);

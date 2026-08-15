@@ -26,7 +26,7 @@ public class ShieldEventHandler {
 		double blockedDamage = event.getBlockedDamage();
 		if (activeItem.getItem() == CAItems.COMPLEX_CHITIN_SHIELD.get()) {
 			if (attacker instanceof LivingEntity livingAttacker && blocker instanceof LivingEntity livingBlocker) {
-				EPUtils.causeSanityInjury(livingAttacker, livingBlocker, Math.min(blockedDamage * 2, 333));
+				EPUtils.causeSanityInjury(livingAttacker, livingBlocker, Math.min(blockedDamage * 0.1, 17));
 			}
 			if (blocker.level() instanceof ServerLevel serverLevel)
 				serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, attacker.getX(), attacker.getY() + 0.5, attacker.getZ(), 8, 0.5, 0.5, 0.5, 0.1);

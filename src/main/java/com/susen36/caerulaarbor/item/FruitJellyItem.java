@@ -32,7 +32,7 @@ public class FruitJellyItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(150);
+		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(8);
 		if (entity instanceof Player) {
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 			capability.player_light = Math.min(capability.player_light + 16, 100.0);

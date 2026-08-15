@@ -53,7 +53,7 @@ public class NetherseaCoffeItem extends Item {
             entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 400, 2));
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 500, 1));
         }
-        EPUtils.causeSanityInjury(entity, 45);
+        EPUtils.causeSanityInjury(entity, 2);
         if (!(entity instanceof Player)) {
             resultStack.shrink(1);
             ItemStack emptyCup = new ItemStack(CAItems.OCEANGLASS_CUP.get());

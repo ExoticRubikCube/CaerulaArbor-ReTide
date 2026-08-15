@@ -212,7 +212,7 @@ public class BishopFishEntity extends SeaMonsterBoss {
                                     this,
                                     (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * EPManager.getElementalAttackConfig(this).rate()
-                                            * 1.5);
+                                            * 0.75);
                         }
                         if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 60, 0, false, false));
@@ -497,7 +497,7 @@ public class BishopFishEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.FOLLOW_RANGE, 64);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 24);
-        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 100);
         builder = builder.add(Attributes.STEP_HEIGHT, 2f);
         return builder;
     }

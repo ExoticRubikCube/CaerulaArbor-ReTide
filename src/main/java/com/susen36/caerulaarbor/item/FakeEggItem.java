@@ -28,7 +28,7 @@ public class FakeEggItem extends Item {
 		double y = entity.getY();
 		double z = entity.getZ();
         if ((Entity) entity instanceof LivingEntity livingEntity) {
-            EPUtils.causeSanityInjury(livingEntity, 160);
+            EPUtils.causeSanityInjury(livingEntity, 8);
         }
         if (world instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.8, z, 48, 0.5, 1, 0.5, 0.1);

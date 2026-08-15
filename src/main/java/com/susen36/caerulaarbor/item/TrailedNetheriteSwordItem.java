@@ -43,7 +43,7 @@ public class TrailedNetheriteSwordItem extends SwordItem {
             sharpnessLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SHARPNESS)
                     .map(itemstack::getEnchantmentLevel).orElse(0);
         }
-        dam = 80 + 16 * sharpnessLevel;
+        dam = (80 + 16 * sharpnessLevel) / 20.0;
         EPUtils.causeSanityInjury(entity, sourceentity, dam);
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {

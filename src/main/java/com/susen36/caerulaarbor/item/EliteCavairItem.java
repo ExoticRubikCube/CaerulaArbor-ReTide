@@ -68,7 +68,7 @@ public class EliteCavairItem extends Item {
             capability.player_light = setval;
             capability.syncPlayerVariables(entity);
         }
-        EPUtils.causeSanityInjury(entity, 45);
+        EPUtils.causeSanityInjury(entity, 2);
         if ((Entity) entity instanceof ServerPlayer player) {
             AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "but_i_refuse"));
             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);

@@ -34,7 +34,7 @@ public class CollectibleCursedGLOWBODYItem extends CollectibleItem.CustomCollect
 			player.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
 		if (level instanceof ServerLevel serverLevel)
 			serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, player.getX(), player.getY(), player.getZ(), 72, 1, 2, 1, 0.1);
-		EPUtils.causeSanityInjury(player, 500);
+		EPUtils.causeSanityInjury(player, 25);
 		player.getCooldowns().addCooldown(stack.getItem(), 200);
 	}
 }

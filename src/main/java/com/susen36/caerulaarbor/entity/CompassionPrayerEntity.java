@@ -347,7 +347,7 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
                             if (distanceTo(entityiterator) <= 5) {
                                 entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                                         (float) (d * 0.2));
-                                EPUtils.causeSanityInjury(entityiterator, d * 30);
+                                EPUtils.causeSanityInjury(entityiterator, d * 1.5);
                             }
                         }
                     }

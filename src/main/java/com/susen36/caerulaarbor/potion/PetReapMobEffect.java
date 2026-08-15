@@ -48,7 +48,7 @@ public class PetReapMobEffect extends MobEffect {
                     if (!(entityiterator == entity)) {
                         EPUtils.causeSanityInjury(entityiterator,
                                 entity,
-                                (entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12);
+                                (entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.6);
                     }
                 }
                 if (((Entity) entity instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == entityiterator && !entity.level().isClientSide())

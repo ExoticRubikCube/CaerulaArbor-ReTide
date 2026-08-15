@@ -100,7 +100,7 @@ public class  FirstTellerSkillMobEffect extends MobEffect {
                 }
                 entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                         (float) (ayk * 0.6));
-                EPUtils.causeSanityInjury(livingEntity, ayk * 60);
+                EPUtils.causeSanityInjury(livingEntity, ayk * 3);
             }
             if (world instanceof ServerLevel projectileLevel) {
                 TellerShotEntity entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), projectileLevel);
@@ -111,7 +111,7 @@ public class  FirstTellerSkillMobEffect extends MobEffect {
                 projectileLevel.addFreshEntity(entityToSpawn);
             }
             entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC), (float) (ayk * 0.6));
-            EPUtils.causeSanityInjury(entity, ayk * 60);
+            EPUtils.causeSanityInjury(entity, ayk * 3);
         }
         return true;
     }

@@ -42,7 +42,7 @@ public class MutagenisisCapsuleItem extends Item {
         double ocean;
         ocean = ModCapabilities.getPlayerVariables(entity).player_oceanization;
         if (ocean < 2.9) {
-            EPUtils.causeSanityInjury(entity, (ocean + 1) * 40);
+            EPUtils.causeSanityInjury(entity, (ocean + 1) * 2);
             entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEANIZE_DAMAGE), (float) (3 * (ocean + 1)));
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 2400, (int) ocean));

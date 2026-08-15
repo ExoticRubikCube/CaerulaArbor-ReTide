@@ -81,7 +81,7 @@ public class NetherseaStimutantItem extends Item {
                 } else if (!entity.level().isClientSide()) {
                     entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 280, 0));
                 }
-                EPUtils.causeSanityInjury(entity, 125);
+                EPUtils.causeSanityInjury(entity, 6);
             }
         });
         return resultStack;

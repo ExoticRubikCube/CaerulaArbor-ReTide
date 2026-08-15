@@ -243,7 +243,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
             entity.hurt(CADamageTypes.source(level, CADamageTypes.OCEAN_MAGIC, this),
                     (float) attackDamage);
             if ((Entity) this instanceof LivingEntity attacker && entity instanceof LivingEntity target) {
-                EPUtils.causeSanityInjury(target, attacker, attackDamage * 150);
+                EPUtils.causeSanityInjury(target, attacker, attackDamage * 7.5);
             }
         }
     }
@@ -511,7 +511,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
                         if (!(entityiterator instanceof LivingEntity)) {
                             continue;
                         }
-                        EPUtils.causeSanityInjury((LivingEntity) entityiterator, this, daam * 4);
+                        EPUtils.causeSanityInjury((LivingEntity) entityiterator, this, daam * 0.2);
                         entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                                 (float) (daam * 0.5));
                     }

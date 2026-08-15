@@ -30,7 +30,7 @@ public class NetherseaStewItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(Items.BOWL);
 		super.finishUsingItem(itemstack, world, entity);
-		EPUtils.causeSanityInjury(entity, 75);
+		EPUtils.causeSanityInjury(entity, 4);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

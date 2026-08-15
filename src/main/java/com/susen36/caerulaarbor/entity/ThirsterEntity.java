@@ -84,7 +84,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 10);
         builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 95);
-        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 100);
         builder = builder.add(Attributes.STEP_HEIGHT, 1.25f);
         return builder;
     }
@@ -421,7 +421,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
                                 if (distanceToSqr(entityiterator) < 400) {
                                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.TRAIL_DAMAGE),
                                             (float) num);
-                                    EPUtils.causeSanityInjury(entityiterator, this, num * 25);
+                                    EPUtils.causeSanityInjury(entityiterator, this, num * 1.25);
                                 }
                             }
                         }
@@ -474,7 +474,7 @@ public class ThirsterEntity extends SeaMonsterBoss {
 
         for (LivingEntity entityiterator : nearbyEntities) {
             if (this.distanceToSqr(entityiterator) < 400) {
-                EPUtils.causeSanityInjury(entityiterator, this, 1000);
+                EPUtils.causeSanityInjury(entityiterator, this, 50);
             }
         }
     }

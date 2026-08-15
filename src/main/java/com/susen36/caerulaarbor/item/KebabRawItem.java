@@ -30,7 +30,7 @@ public class KebabRawItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(Items.STICK);
 		super.finishUsingItem(itemstack, world, entity);
-		EPUtils.causeSanityInjury(entity, 50);
+		EPUtils.causeSanityInjury(entity, 3);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

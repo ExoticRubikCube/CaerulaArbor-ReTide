@@ -48,7 +48,7 @@ public class OceanCavairItem extends Item {
 			entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, 600, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0));
 		}
-		EPUtils.causeSanityInjury(entity, 325);
+		EPUtils.causeSanityInjury(entity, 16);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else if (entity instanceof Player player && !player.getAbilities().instabuild) {

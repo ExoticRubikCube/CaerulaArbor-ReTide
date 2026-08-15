@@ -39,7 +39,7 @@ public class CellClusterItem extends Item {
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 1));
 		}
-		EPUtils.causeSanityInjury(entity, 225);
+		EPUtils.causeSanityInjury(entity, 11);
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 64, 0.75, 2, 0.75, 0.1);
 		}

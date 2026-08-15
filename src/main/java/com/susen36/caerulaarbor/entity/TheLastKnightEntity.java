@@ -674,7 +674,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
                 .add(Attributes.ATTACK_DAMAGE, 12)
                 .add(Attributes.FOLLOW_RANGE, 36)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 10)
-                .add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000.0);
+                .add(BabelAttributes.MAX_ELEMENTAL_VALUE, 100.0);
         builder = builder.add(Attributes.STEP_HEIGHT, 1.25F);
         return builder;
     }

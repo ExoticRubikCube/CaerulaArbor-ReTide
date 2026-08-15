@@ -23,7 +23,7 @@ public class InstantSanityMobEffect extends MobEffect {
     @Override
     public void applyInstantenousEffect(Entity source, Entity indirectSource, LivingEntity entity, int amplifier, double health) {
         if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "immue_to_inst_sanity")))) {
-            EPUtils.causeSanityInjury(entity, 125 * ((double) amplifier + 1));
+            EPUtils.causeSanityInjury(entity, 6.25 * ((double) amplifier + 1));
         }
     }
 

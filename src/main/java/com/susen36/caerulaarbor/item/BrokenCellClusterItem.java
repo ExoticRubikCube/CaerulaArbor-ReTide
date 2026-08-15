@@ -39,7 +39,7 @@ public class BrokenCellClusterItem extends Item {
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 0));
 		}
-		EPUtils.causeSanityInjury(entity, 75);
+		EPUtils.causeSanityInjury(entity, 4);
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 1, z, 32, 0.5, 1, 0.5, 0.1);
 		}

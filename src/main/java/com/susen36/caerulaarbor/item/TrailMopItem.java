@@ -55,7 +55,7 @@ public class TrailMopItem extends Item {
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		itemstack.hurtAndBreak(2, entity, EquipmentSlot.MAINHAND);
         LevelAccessor world = entity.level();
-        EPUtils.causeSanityInjury(entity, sourceentity, 40);
+        EPUtils.causeSanityInjury(entity, sourceentity, 2);
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 if (world instanceof ServerLevel level)

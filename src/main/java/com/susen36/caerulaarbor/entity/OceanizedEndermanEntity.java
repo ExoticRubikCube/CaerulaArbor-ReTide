@@ -232,7 +232,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                     if (sourceentity instanceof LivingEntity target) {
                         EPUtils.causeSanityInjury(target,
                                 this,
-                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 15);
+                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75);
                         this.setTarget(target);
                     }
                     sourceentity.hurt(

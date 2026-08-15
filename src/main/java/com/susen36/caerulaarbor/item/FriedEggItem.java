@@ -20,7 +20,7 @@ public class FriedEggItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(45);
+		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(2);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1));
 		return retval;

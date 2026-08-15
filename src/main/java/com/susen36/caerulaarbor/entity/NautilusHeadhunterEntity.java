@@ -231,7 +231,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 						vehicle.hurt(CADamageTypes.source(this.level(), DamageTypes.IN_WALL, this),
 								(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
 						if (vehicle instanceof LivingEntity livingTarget) {
-							EPUtils.causeSanityInjury(livingTarget, this, 50);
+							EPUtils.causeSanityInjury(livingTarget, this, 2.5);
 						}
 					}
 				} else {

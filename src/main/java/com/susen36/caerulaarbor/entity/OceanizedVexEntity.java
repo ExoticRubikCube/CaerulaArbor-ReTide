@@ -327,7 +327,7 @@ public class OceanizedVexEntity extends SeaMonster {
                     if (distanceTo(entityiterator) <= 4) {
                         entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, this), (float) (sanity * 3));
                         if (entityiterator instanceof LivingEntity target) {
-                            EPUtils.causeSanityInjury(target, this, sanity * 20);
+                            EPUtils.causeSanityInjury(target, this, sanity * 1.0);
                         }
                     }
                 }

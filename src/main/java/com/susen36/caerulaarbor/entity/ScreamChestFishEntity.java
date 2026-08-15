@@ -274,7 +274,7 @@ public class ScreamChestFishEntity extends SeaMonster {
                             if (!(entityiterator instanceof LivingEntity)) {
                                 continue;
                             }
-                            EPUtils.causeSanityInjury((LivingEntity) entityiterator, this, 5);
+                            EPUtils.causeSanityInjury((LivingEntity) entityiterator, this, 0.25);
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1));
                         }

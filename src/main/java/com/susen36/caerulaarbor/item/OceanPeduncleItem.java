@@ -40,7 +40,7 @@ public class OceanPeduncleItem extends Item {
 		double z = entity.getZ();
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                EPUtils.causeSanityInjury(entity, 20);
+                EPUtils.causeSanityInjury(entity, 1);
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.9), z, 16, 0.55, 1, 0.55, 0.1);
                 if (world instanceof Level level) {

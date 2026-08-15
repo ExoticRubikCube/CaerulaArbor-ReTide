@@ -107,7 +107,7 @@ public class TidelinkedArchonEntity extends AbstractTidelinkedEntity {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.65);
-        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 100);
         return builder;
     }
 }

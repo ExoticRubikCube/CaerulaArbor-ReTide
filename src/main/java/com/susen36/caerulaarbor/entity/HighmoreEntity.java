@@ -555,7 +555,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         builder = builder.add(Attributes.FOLLOW_RANGE, 48);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.6);
-        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 100);
         builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }

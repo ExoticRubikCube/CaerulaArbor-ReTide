@@ -94,7 +94,7 @@ public class InfestedMobEffect extends MobEffect {
                     capability.player_oceanization = setval;
                     capability.syncPlayerVariables(entity);
             }
-            EPUtils.causeSanityInjury(entity, 750 * ((double) amplifier + 1));
+            EPUtils.causeSanityInjury(entity, 37.5 * ((double) amplifier + 1));
             if ((Entity) entity instanceof ServerPlayer player) {
                 AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "they_shall_welcome"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);

@@ -52,7 +52,7 @@ public class ColourfulAppleJuiceItem extends Item {
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 2));
 		}
-		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(80);
+		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(4);
 		if (entity instanceof Player) {
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 			capability.player_light = Math.min(capability.player_light + 12, 100.0);

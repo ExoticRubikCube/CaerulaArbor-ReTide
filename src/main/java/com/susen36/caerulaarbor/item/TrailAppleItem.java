@@ -20,7 +20,7 @@ public class TrailAppleItem extends Item {
         double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		EPUtils.causeSanityInjury(entity, 75);
+		EPUtils.causeSanityInjury(entity, 4);
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.8, z, 48, 0.5, 1, 0.5, 0.1);
 		}

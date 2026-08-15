@@ -39,7 +39,7 @@ public class EnchantedTrailGoldenAppleItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		EPUtils.causeSanityInjury(entity, 120);
+		EPUtils.causeSanityInjury(entity, 6);
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 1750, 4));
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 3));

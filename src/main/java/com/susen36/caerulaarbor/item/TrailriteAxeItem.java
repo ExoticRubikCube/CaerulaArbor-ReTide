@@ -68,7 +68,7 @@ public class TrailriteAxeItem extends AxeItem {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EMPTY, SoundSource.PLAYERS, 1, 1);
             }
         }
-        EPUtils.causeSanityInjury(entity, sourceentity, 225);
+        EPUtils.causeSanityInjury(entity, sourceentity, 11);
         return retval;
 	}
 

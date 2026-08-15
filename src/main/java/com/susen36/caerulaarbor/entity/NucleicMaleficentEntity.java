@@ -193,7 +193,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
                         if (!(entityiterator == this)) {
                             EPUtils.causeSanityInjury(entityiterator,
                                     this,
-                                    (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 6);
+                                    (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.3);
                         }
                     }
                 }

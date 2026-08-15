@@ -704,7 +704,7 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 		builder = builder.add(CAAttributes.GENERAL_DEFENSE, 4);
 		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 50);
 		builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.01);
-		builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+		builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 100);
 		builder = builder.add(Attributes.STEP_HEIGHT, 1.5f);
 		return builder;
 	}

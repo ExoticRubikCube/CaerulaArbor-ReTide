@@ -25,7 +25,7 @@ public class TrailGoldenAppleItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-        EPUtils.causeSanityInjury(entity, 80);
+        EPUtils.causeSanityInjury(entity, 4);
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 1250, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 2));

@@ -52,7 +52,7 @@ public class TrailriteSwordItem extends SwordItem {
         double z = entity.getZ();
         double absorp;
         double rate;
-        EPUtils.causeSanityInjury(entity, sourceentity, 330);
+        EPUtils.causeSanityInjury(entity, sourceentity, 17);
         if (!(entity instanceof Player)) {
             int lootingLevel = 0;
             int sharpnessLevel = 0;

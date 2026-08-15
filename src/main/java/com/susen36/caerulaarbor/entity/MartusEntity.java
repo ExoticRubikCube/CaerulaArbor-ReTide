@@ -577,7 +577,7 @@ public class MartusEntity extends SeaMonsterBoss {
         builder = builder.add(NeoForgeMod.SWIM_SPEED, 0.5);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE, 16384);
         builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 100);
-        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 100);
         builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }

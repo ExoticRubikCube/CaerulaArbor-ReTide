@@ -34,7 +34,7 @@ public class PowerOfAnchorMobEffect extends MobEffect implements ElementalDefens
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity instanceof Player) {
-            EPUtils.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, 10);
+            EPUtils.healElemental(entity, AbstractEPCapability.EPType.NERVOUS, 1);
             ModCapabilities.getPlayerVariables(entity).player_light = Math.min(ModCapabilities.getPlayerVariables(entity).player_light + 0.125, 100.0);
             ModCapabilities.getPlayerVariables(entity).syncPlayerVariables(entity);
         }

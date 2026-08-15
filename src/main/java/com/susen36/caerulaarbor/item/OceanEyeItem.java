@@ -38,7 +38,7 @@ public class OceanEyeItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		EPUtils.causeSanityInjury(entity, 325);
+		EPUtils.causeSanityInjury(entity, 16);
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 72, 1, 2, 1, 0.1);
 		}

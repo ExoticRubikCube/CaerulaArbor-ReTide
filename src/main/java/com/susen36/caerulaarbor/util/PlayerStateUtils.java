@@ -120,7 +120,7 @@ public class PlayerStateUtils {
 			return;
 		}
 		if (entity instanceof LivingEntity livingEntity && ModCapabilities.getPlayerVariables(entity).player_oceanization < 3) {
-			EPUtils.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 16, 32));
+			EPUtils.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 1, 2));
 		}
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x + 0.5, y + 0.5, z + 0.5, 12, 0.75, 0.75, 0.75, 0.1);
@@ -136,7 +136,7 @@ public class PlayerStateUtils {
 			return;
 		}
 		if (entity instanceof LivingEntity livingEntity && ModCapabilities.getPlayerVariables(entity).player_oceanization < 2.85) {
-			EPUtils.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 32, 96));
+			EPUtils.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 2, 5));
 		}
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x + 0.5, y + 0.5, z + 0.5, 16, 0.75, 0.75, 0.75, 0.1);

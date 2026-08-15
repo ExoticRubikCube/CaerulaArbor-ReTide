@@ -152,7 +152,7 @@ public class CAItems {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
             ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(15);
+            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(1);
             return retval;
         }
     });
@@ -210,7 +210,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> COOKED_PEDUNCLE = REGISTRY.register("cooked_peduncle", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(1f).build())) {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
-            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(15);
+            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(1);
             return super.finishUsingItem(itemstack, world, entity);
         }
     });
@@ -224,7 +224,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> BOILED_EGG = REGISTRY.register("boiled_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5f).alwaysEdible().build())) {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
-            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(125);
+            EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(6);
             return super.finishUsingItem(itemstack, world, entity);
         }
     });

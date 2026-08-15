@@ -117,7 +117,7 @@ public class SkadiCorruptedEntity extends SeaMonsterBoss {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(BabelAttributes.ELEMENTAL_MODIFIER, 0.02);
         builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 30);
-        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 2000);
+        builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 100);
         builder = builder.add(Attributes.STEP_HEIGHT, 1f);
         return builder;
     }

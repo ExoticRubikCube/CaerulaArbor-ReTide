@@ -128,9 +128,9 @@ public class EmergencyAidBuildingBlock extends Block implements SimpleWaterlogge
 					continue;
 				}
 				if (livingEntity instanceof Player) {
-						EPManager.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(20);
+						EPManager.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(1);
 					} else {
-					EPManager.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(10);
+					EPManager.getEP(livingEntity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(1);
 				}
 			}
 			for (int index0 = 0; index0 < 120; index0++) {

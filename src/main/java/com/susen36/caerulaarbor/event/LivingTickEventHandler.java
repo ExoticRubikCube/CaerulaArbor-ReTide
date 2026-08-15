@@ -385,7 +385,7 @@ public class LivingTickEventHandler {
                 lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), chest)
                         + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), boot);
                 if (lvl > 0) {
-                    EPUtils.causeSanityInjury(living, lvl);
+                    EPUtils.causeSanityInjury(living, lvl / 20.0);
                 }
             }
             double lvl0 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), helm);

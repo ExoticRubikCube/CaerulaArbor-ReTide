@@ -31,7 +31,7 @@ public class KebabCookedItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(Items.STICK);
 		super.finishUsingItem(itemstack, world, entity);
-		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(50);
+		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(3);
 		if (itemstack.isEmpty()) {
 			return retval;
 		} else {

@@ -25,7 +25,7 @@ public class DeductOneSanityMobEffect extends MobEffect {
 
 	@Override
 	public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        EPUtils.causeSanityInjury(entity, (double) amplifier + 1);
+        EPUtils.causeSanityInjury(entity, ((double) amplifier + 1) / 20.0);
 	    return true;
     }
 

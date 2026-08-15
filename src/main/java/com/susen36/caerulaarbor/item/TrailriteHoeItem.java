@@ -38,7 +38,7 @@ public class TrailriteHoeItem extends HoeItem {
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
-		EPUtils.causeSanityInjury(entity, sourceentity, 128);
+		EPUtils.causeSanityInjury(entity, sourceentity, 6);
 		return retval;
 	}
 

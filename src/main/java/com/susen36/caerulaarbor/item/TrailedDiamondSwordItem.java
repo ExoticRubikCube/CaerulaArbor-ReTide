@@ -43,7 +43,7 @@ public class TrailedDiamondSwordItem extends SwordItem {
             sharpnessLevel = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.SHARPNESS)
                     .map(itemstack::getEnchantmentLevel).orElse(0);
         }
-        dam = 70 + 14 * sharpnessLevel;
+        dam = (70 + 14 * sharpnessLevel) / 20.0;
         EPUtils.causeSanityInjury(entity, dam);
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {

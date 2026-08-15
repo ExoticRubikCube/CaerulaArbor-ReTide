@@ -180,7 +180,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss {
 				double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
 				if (isSonic) {
 					nearbyEntity.hurt(CADamageTypes.wardenSonic(this.level(), this), (float) damage);
-					EPUtils.causeSanityInjury(nearbyEntity, damage * 1.5);
+					EPUtils.causeSanityInjury(nearbyEntity, damage * 0.75);
 				} else {
 					nearbyEntity.hurt(CADamageTypes.wardenAttack(this.level(), this), (float) damage);
 				}

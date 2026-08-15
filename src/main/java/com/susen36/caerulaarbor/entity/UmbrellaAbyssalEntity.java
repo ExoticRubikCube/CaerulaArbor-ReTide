@@ -126,7 +126,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                     if (entityiterator instanceof LivingEntity target) {
                         EPUtils.causeSanityInjury(target,
                                 this,
-                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4);
+                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.2);
                     }
                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                             (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -148,7 +148,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                         }
                         EPUtils.causeSanityInjury(target,
                                 this,
-                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4);
+                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.2);
                         entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                                 (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                         this.applyActivePotionEffects(target);

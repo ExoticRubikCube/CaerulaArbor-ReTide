@@ -17,7 +17,7 @@ public class NetherseaPumpkinPieItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		EPUtils.causeSanityInjury(entity, 50);
+		EPUtils.causeSanityInjury(entity, 3);
 		return retval;
 	}
 }

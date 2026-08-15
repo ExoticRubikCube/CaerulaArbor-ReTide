@@ -128,7 +128,7 @@ public class OceanizedSheepEntity extends SeaMonster {
 					level.addFreshEntity(entityToSpawn);
 				}
 			}
-			EPUtils.causeSanityInjury(sourceentity, this, 64);
+			EPUtils.causeSanityInjury(sourceentity, this, 3.2);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;

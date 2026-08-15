@@ -22,7 +22,7 @@ public class CaramelCakePieceItem extends Item {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 80, 1));
-		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(125);
+		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(6);
 		return retval;
 	}
 }

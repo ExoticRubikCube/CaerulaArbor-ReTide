@@ -63,7 +63,7 @@ public class PEVOHealEventHandle {
 			}
 			nearbyEntity.hurt(wipeMagicDamage, (float) sanityDamage);
 			if (sanityDamage > 0) {
-                EPUtils.causeSanityInjury(target, livingEntity1, sanityDamage);
+                EPUtils.causeSanityInjury(target, livingEntity1, sanityDamage / 20.0);
             }
 		}
 	}
