@@ -25,8 +25,6 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
     public boolean can_player_evo = false;
     public double reserve_quantity = 0;
     public double reserve_quality = 0;
-    public boolean PEVO_NEXUS_no_rejection = false;
-    public boolean PEVO_NEXUS_reg_sanity = false;
     public String current_theme = "PARCHMENT";
 
     public void syncPlayerVariables(Entity entity) {

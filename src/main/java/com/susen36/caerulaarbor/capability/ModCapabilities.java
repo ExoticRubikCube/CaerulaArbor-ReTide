@@ -8,6 +8,7 @@ import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.capability.world.WorldVariables;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -43,7 +44,7 @@ public class ModCapabilities {
         return MapVariables.get(world);
     }
 
-    public static WorldVariables getWorldVariables(LevelAccessor world) {
+    public static WorldVariables getWorldVariables(Level world) {
         return WorldVariables.get(world);
     }
 
