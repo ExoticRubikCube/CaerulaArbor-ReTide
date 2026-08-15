@@ -19,10 +19,9 @@ public class CaramelCakePieceItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		if (!entity.level().isClientSide())
+        if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 80, 1));
 		EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS).heal(6);
-		return retval;
+		return super.finishUsingItem(itemstack, world, entity);
 	}
 }

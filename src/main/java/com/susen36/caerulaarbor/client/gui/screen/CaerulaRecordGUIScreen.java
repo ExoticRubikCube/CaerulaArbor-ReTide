@@ -111,9 +111,9 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/caerularecord.png"), this.leftPos, this.topPos, 0, 0, 168, 166, 168, 166);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/target_health.png"), this.leftPos + 4, this.topPos + 30, 0, 0, 24, 16, 24, 16);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/target_health.png"), this.leftPos + 4, this.topPos + 30, 0, 0, 24, 16, 24, 16);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/target_shield.png"), this.leftPos + 4, this.topPos + 50, 0, 0, 24, 16, 24, 16);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/target_shield.png"), this.leftPos + 4, this.topPos + 50, 0, 0, 24, 16, 24, 16);
 
 		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO_ATTENTION)) {
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_attention.png"), this.leftPos + 96, this.topPos + 91, 0, 0, 64, 64, 64, 64);
@@ -122,25 +122,25 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_blood.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
 		}
 		if (PlayerStateUtils.isLightBright(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/light.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/light.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 		if (PlayerStateUtils.isLightWaving(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/light_waving.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/light_waving.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 		if (PlayerStateUtils.isLightDim(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/light_dim.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/light_dim.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 		if (PlayerStateUtils.isLightCeased(entity)) {
-			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/light_extinguish.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
+			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/light_extinguish.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 
 		AbstractEPCapability currentElement = EPManager.getEP(entity).getCurrentElement();
 		if (currentElement != null) {
 			double elementValue = currentElement.getValue();
 			double maxElementValue = currentElement.getMaxValue();
-			ResourceLocation elementIcon = ResourceLocation.fromNamespaceAndPath(BabelMod.MODID,
-					"textures/gui/screen/ep/" + currentElement.getType().getNickName() + ".png");
-			guiGraphics.blit(elementIcon, this.leftPos + 106, this.topPos + 43,
+			ResourceLocation elementRing = ResourceLocation.fromNamespaceAndPath(BabelMod.MODID,
+					"textures/gui/ep/" + currentElement.getType().getTextureName() + ".png");
+			guiGraphics.blit(elementRing, this.leftPos + 106, this.topPos + 43,
 					Mth.clamp(Mth.ceil(elementValue / maxElementValue * 20.0) * 16, 0, 304), 0, 16, 16, 320, 16);
 		}
 
@@ -182,9 +182,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_discolution"), 102, 86, -13434829, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_disoclution"), 101, 86, -3368449, false);
         String result = "";
-        if (entity != null) {
-            result = new java.text.DecimalFormat("##.##").format((ModCapabilities.getPlayerVariables(entity)).player_light);
-        }
+        result = new DecimalFormat("##.##").format((ModCapabilities.getPlayerVariables(entity)).player_light);
         guiGraphics.drawString(this.font, result, 100, -13, -1, false);
 		if (PlayerStateUtils.isLightBright(entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_lightsablaze"), 100, -29, -3342337, false);
