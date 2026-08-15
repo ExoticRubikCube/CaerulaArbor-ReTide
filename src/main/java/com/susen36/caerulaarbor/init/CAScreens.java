@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
+import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.client.gui.screen.*;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -10,7 +11,13 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 public class CAScreens {
     @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
-        event.register(CAMenus.CAERULA_RECORD_GUI.get(), CaerulaRecordGUIScreen::new);
+        event.register(CAMenus.CAERULA_RECORD_GUI.get(), (container, inventory, text) -> {
+            String themeName = ModCapabilities.getPlayerVariables(container.entity).current_theme;
+            if ("DEEPBLUE".equals(themeName)) {
+                return new RecordCaerulaScreen(container, inventory, text);
+            }
+            return new RecordCommonScreen(container, inventory, text);
+        });
         event.register(CAMenus.RELIC_SHOWCASE.get(), RelicShowcaseScreen::new);
         event.register(CAMenus.INFO_STRATEGY_SUBSIS.get(), InfoStrategySubsisScreen::new);
         event.register(CAMenus.INFO_STRATEGY_BREED.get(), InfoStrategyBreedScreen::new);

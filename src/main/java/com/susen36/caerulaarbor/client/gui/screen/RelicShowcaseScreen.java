@@ -3,9 +3,11 @@ package com.susen36.caerulaarbor.client.gui.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import com.susen36.caerulaarbor.network.send.RelicShowcaseButtonMessage;
+import com.susen36.caerulaarbor.util.RecordColor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -150,7 +152,10 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 312, 192, 312, 192);
+		int relicBgColor = RecordColor.fromName(ModCapabilities.getPlayerVariables(entity).current_theme).getSubBgColor();
+		RenderSystem.setShaderColor(((relicBgColor >> 16) & 0xFF) / 255.0F, ((relicBgColor >> 8) & 0xFF) / 255.0F, (relicBgColor & 0xFF) / 255.0F, 1.0F);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/relic_bg__gray.png"), this.leftPos, this.topPos, 0, 0, 312, 192, 312, 192);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.disableBlend();
 	}
 

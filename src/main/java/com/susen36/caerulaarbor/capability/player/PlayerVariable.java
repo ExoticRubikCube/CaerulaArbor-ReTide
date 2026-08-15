@@ -27,6 +27,7 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
     public double reserve_quality = 0;
     public boolean PEVO_NEXUS_no_rejection = false;
     public boolean PEVO_NEXUS_reg_sanity = false;
+    public String current_theme = "PARCHMENT";
 
     public void syncPlayerVariables(Entity entity) {
         if (entity instanceof ServerPlayer serverPlayer) {
@@ -49,6 +50,7 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
         nbt.putBoolean("can_player_evo", can_player_evo);
         nbt.putDouble("reserve_quantity", reserve_quantity);
         nbt.putDouble("reserve_quality", reserve_quality);
+        nbt.putString("current_theme", current_theme);
         return nbt;
     }
 
@@ -87,6 +89,9 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
         can_player_evo = nbt.getBoolean("can_player_evo");
         reserve_quantity = nbt.getDouble("reserve_quantity");
         reserve_quality = nbt.getDouble("reserve_quality");
+        if (nbt.contains("current_theme")) {
+            current_theme = nbt.getString("current_theme");
+        }
     }
 
     @Override

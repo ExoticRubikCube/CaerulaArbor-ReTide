@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.network.send;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.susen36.caerulaarbor.menu.RelicShowcaseMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
@@ -67,10 +68,29 @@ public class CaerulaRecordGUIButtonMessage implements CustomPacketPayload {
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;
 		if (buttonID == 0) {
-			boolean setval = !(ModCapabilities.getPlayerVariables(entity)).show_stats;
 			PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-			capability.show_stats = setval;
+			boolean isParchment = "PARCHMENT".equals(capability.current_theme);
+			if (isParchment) {
+				capability.current_theme = "DEEPBLUE";
+			} else {
+				capability.current_theme = "PARCHMENT";
+			}
 			capability.syncPlayerVariables(entity);
+			// 主题切换后服务端重开界面，客户端按新主题打开对应子类
+			if (entity instanceof ServerPlayer serverPlayer) {
+				BlockPos bpos = BlockPos.containing(x, y, z);
+				serverPlayer.openMenu(new MenuProvider() {
+					@Override
+					public Component getDisplayName() {
+						return Component.literal("CaerulaRecordGUI");
+					}
+
+					@Override
+					public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+						return new CaerulaRecordGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
+					}
+				}, bpos);
+			}
 		}
 		if (buttonID == 1) {
 			if ((Entity) entity instanceof ServerPlayer ent) {

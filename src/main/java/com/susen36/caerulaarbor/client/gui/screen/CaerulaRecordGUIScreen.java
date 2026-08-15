@@ -13,6 +13,7 @@ import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.susen36.caerulaarbor.network.send.CaerulaRecordGUIButtonMessage;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
+import com.susen36.caerulaarbor.util.RecordColor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -33,7 +34,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
-public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecordGUIMenu> {
+public abstract class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecordGUIMenu> {
 	private final static HashMap<String, Object> guistate = CaerulaRecordGUIMenu.guistate;
 	private static final DecimalFormat HEALTH_FORMAT = new DecimalFormat("#.##");
 	private final Level world;
@@ -52,6 +53,10 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		this.imageWidth = 168;
 		this.imageHeight = 166;
 	}
+
+	public abstract RecordColor recordColor();
+
+	public abstract String themeKey();
 
 	@Override
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
@@ -109,7 +114,10 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/caerularecord.png"), this.leftPos, this.topPos, 0, 0, 168, 166, 168, 166);
+		int recordColor = recordColor().getMainColor();
+		RenderSystem.setShaderColor(((recordColor >> 16) & 0xFF) / 255.0F, ((recordColor >> 8) & 0xFF) / 255.0F, (recordColor & 0xFF) / 255.0F, 1.0F);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/caerularecord__gray.png"), this.leftPos, this.topPos, 0, 0, 168, 166, 168, 166);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/target_health.png"), this.leftPos + 4, this.topPos + 30, 0, 0, 24, 16, 24, 16);
 
@@ -217,7 +225,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 	@Override
 	public void init() {
 		super.init();
-		button_show_on_hud = new PlainTextButton(this.leftPos + 4, this.topPos + 123, 82, 20, Component.translatable("gui.caerula_arbor.caerula_record_gui.button_show_on_hud"), e -> {
+		button_show_on_hud = new PlainTextButton(this.leftPos + 4, this.topPos + 123, 82, 20, Component.translatable(themeKey()), e -> {
             PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(0, x, y, z));
             CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 0, x, y, z);
         }, this.font);
@@ -226,7 +234,18 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		imagebutton_relic_icon = new ImageButton(this.leftPos + 6, this.topPos + 99, 16, 16, new WidgetSprites(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_relic_icon"), ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "screen/atlas/imagebutton_relic_icon_highlighted")), e -> {
             PacketDistributor.sendToServer(new CaerulaRecordGUIButtonMessage(1, x, y, z));
             CaerulaRecordGUIButtonMessage.handleButtonAction(entity, 2, x, y, z);
-        });
+        }) {
+			@Override
+			public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+				if (!this.visible) {
+					return;
+				}
+				int iconColor = recordColor().getSubIconColor();
+				RenderSystem.setShaderColor(((iconColor >> 16) & 0xFF) / 255.0F, ((iconColor >> 8) & 0xFF) / 255.0F, (iconColor & 0xFF) / 255.0F, 1.0F);
+				guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/relic_icon__gray.png"), this.getX(), this.getY(), 0, 0, 16, 16, 16, 16);
+				RenderSystem.setShaderColor(1, 1, 1, 1);
+			}
+		};
 		guistate.put("button:imagebutton_relic_icon", imagebutton_relic_icon);
 		this.addRenderableWidget(imagebutton_relic_icon);
 	}
