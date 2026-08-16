@@ -20,15 +20,29 @@ public class LessArmorOverlay {
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		Player player = Minecraft.getInstance().player;
 		ResourceLocation texture = null;
-		if (player.hasEffect(BabelMobEffects.LESS_ARMOR)) {
-			int amplifier = player.getEffect(BabelMobEffects.LESS_ARMOR).getAmplifier();
-			if (amplifier <= 4) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/low_armor_ui.png");
-			} else if (amplifier <= 9) {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/less_armor_ui.png");
-			} else {
-				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/least_armor_ui.png");
-			}
+		boolean hasArmor = player.hasEffect(BabelMobEffects.LESS_ARMOR);
+		boolean hasMagic = player.hasEffect(BabelMobEffects.WEAK_MAGIC);
+		int amplifier;
+		if (hasArmor && hasMagic) {
+			amplifier = (player.getEffect(BabelMobEffects.LESS_ARMOR).getAmplifier()
+					+ player.getEffect(BabelMobEffects.WEAK_MAGIC).getAmplifier()) / 2;
+		} else if (hasArmor) {
+			amplifier = player.getEffect(BabelMobEffects.LESS_ARMOR).getAmplifier();
+		} else if (hasMagic) {
+			amplifier = player.getEffect(BabelMobEffects.WEAK_MAGIC).getAmplifier();
+		} else {
+			amplifier = 0;
+		}
+		boolean least = amplifier > 9;
+		if (hasArmor && hasMagic) {
+			texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID,
+					"textures/gui/overlay/" + (least ? "least" : "less") + "_armor_ui.png");
+		} else if (hasArmor) {
+			texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID,
+					"textures/gui/overlay/" + (least ? "least" : "less") + "_armor_ui_blue.png");
+		} else if (hasMagic) {
+			texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID,
+					"textures/gui/overlay/" + (least ? "least" : "less") + "_armor_ui_purple.png");
 		}
 		if (texture != null) {
 			int width = Minecraft.getInstance().getWindow().getGuiScaledWidth();
