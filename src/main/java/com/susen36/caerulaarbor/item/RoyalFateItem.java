@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.babel.collectible.CollectibleActivation;
 import com.susen36.babel.collectible.CollectibleItem;
 import com.susen36.babel.collectible.CollectibleTiers;
-import com.susen36.babel.util.HealthUtils;
+import com.susen36.babel.util.LifePointUtils;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,7 +29,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class RoyalFateItem extends CollectibleItem.CustomCollectibleItem {
 	public RoyalFateItem() {
-		super(new Item.Properties().stacksTo(2).fireResistant().rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.RARE, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(2).fireResistant().rarity(Rarity.EPIC), 25, false, CollectibleTiers.RARE, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.WARDEN_DEATH, 2F, 1F)
 						.particle(ParticleTypes.END_ROD, 72)
@@ -47,12 +47,12 @@ public class RoyalFateItem extends CollectibleItem.CustomCollectibleItem {
 
 	@Override
 	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
-		if (HealthUtils.getMaxLifePoint(player) > 1) {
-			double lives_left = HealthUtils.getMaxLifePoint(player);
-			HealthUtils.setMaxLifePoint(player, 1);
-			HealthUtils.setLifePoint(player, 1);
-			HealthUtils.setShieldPoint(player, HealthUtils.getShieldPoint(player) + (int) lives_left);
-			HealthUtils.setShieldPoint(player, HealthUtils.getShieldPoint(player) + 3);
+		if (LifePointUtils.getMaxLifePoint(player) > 1) {
+			double lives_left = LifePointUtils.getMaxLifePoint(player);
+			LifePointUtils.setMaxLifePoint(player, 1);
+			LifePointUtils.setLifePoint(player, 1);
+			LifePointUtils.setShieldPoint(player, LifePointUtils.getShieldPoint(player) + (int) lives_left);
+			LifePointUtils.setShieldPoint(player, LifePointUtils.getShieldPoint(player) + 3);
 			stack.shrink(1);
 		}
 	}

@@ -143,9 +143,7 @@ public class CATabs {
                 tabData.accept(CABlocks.POCKET_SEA_DOLL.get().asItem());
                 tabData.accept(CABlocks.SWARMCALLER_DOLL.get().asItem());
                 tabData.accept(CABlocks.STONECUTTER_DOLL.get().asItem());
-                tabData.accept(CABlocks.BLOCK_KETTLE.get().asItem());
                 tabData.accept(CABlocks.ALLAY_BLOCK.get().asItem());
-                tabData.accept(CABlocks.BLOCK_BATBED.get().asItem());
                 tabData.accept(CAItems.REDSTONE_INGOT.get());
                 tabData.accept(CAItems.REDSTONIUM.get());
                 tabData.accept(CAItems.COIN_OF_TRADE.get());
@@ -225,7 +223,7 @@ public class CATabs {
             }).build());
 
     public static final DeferredHolder<CreativeModeTab, ? extends CreativeModeTab> CAECULA_RELICS = REGISTRY.register("caecula_relics",
-            () -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caecula_relics")).icon(() -> new ItemStack(CACollectible.KETTLE)).displayItems((parameters, tabData) -> {
+            () -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caecula_relics")).icon(() -> new ItemStack(CACollectible.CAERULA_HEART)).displayItems((parameters, tabData) -> {
                 tabData.accept(new ItemStack(CACollectible.CURSED_EMELIGHT));
                 tabData.accept(new ItemStack(CACollectible.CURSED_GLOWBODY));
                 tabData.accept(new ItemStack(CACollectible.CURSED_RESEARCH));
@@ -259,22 +257,14 @@ public class CATabs {
                 tabData.accept(new ItemStack(CACollectible.BOWL_SEAGRASS));
                 tabData.accept(new ItemStack(CACollectible.GOLDEN_STORM));
                 tabData.accept(new ItemStack(CACollectible.CANNED_CHERRY));
-                tabData.accept(new ItemStack(CACollectible.AROMATIC_COFFEE));
                 tabData.accept(new ItemStack(CACollectible.COFFEE_CANDY));
-                tabData.accept(new ItemStack(CACollectible.RAINBOW_CANDY));
                 tabData.accept(new ItemStack(CACollectible.SOLO_MUSIC_BOX));
                 tabData.accept(new ItemStack(CACollectible.ODD_FLUTE));
-                tabData.accept(new ItemStack(CACollectible.REDSTONE_IRIS_FLOWER));
                 tabData.accept(new ItemStack(CACollectible.UTIL_RESCISSION));
                 tabData.accept(new ItemStack(CACollectible.UTIL_SCORE));
-                tabData.accept(new ItemStack(CACollectible.UTIL_OMNIKEY));
                 tabData.accept(new ItemStack(CACollectible.UTIL_STARE));
-                tabData.accept(new ItemStack(CACollectible.VOYAGE_OF_GOLD));
-                tabData.accept(new ItemStack(CACollectible.PIGLIN_DIARY));
                 tabData.accept(new ItemStack(CACollectible.TOPONYM_TEXTOLOGY));
-                tabData.accept(new ItemStack(CACollectible.KETTLE));
                 tabData.accept(new ItemStack(CACollectible.UTIL_ALLAY));
-                tabData.accept(new ItemStack(CACollectible.BAT_BED));
                 tabData.accept(new ItemStack(CACollectible.PROOF_OF_LONGEVITY));
                 tabData.accept(new ItemStack(CACollectible.HEMOST));
                 tabData.accept(new ItemStack(CACollectible.YEARNING));

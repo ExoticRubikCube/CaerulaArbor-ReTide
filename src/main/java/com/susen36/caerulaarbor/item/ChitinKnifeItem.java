@@ -17,15 +17,13 @@ import net.minecraft.world.level.Level;
 
 public class ChitinKnifeItem extends CollectibleItem.CustomCollectibleItem {
 	public ChitinKnifeItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.BELL_BLOCK, 3.5F, 1F)
 						.particle(ParticleTypes.DOLPHIN, 72)
 						.showOverlay(true)
 						.build());
 	}
-
-	
 
 	@Override
 	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {

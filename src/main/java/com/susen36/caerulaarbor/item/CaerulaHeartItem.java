@@ -22,7 +22,7 @@ import net.minecraft.world.level.Level;
 
 public class CaerulaHeartItem extends CollectibleItem.CustomCollectibleItem {
 	public CaerulaHeartItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.CURSED, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), 25, false, CollectibleTiers.CURSED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.forTier(CollectibleTiers.CURSED));
 	}
 

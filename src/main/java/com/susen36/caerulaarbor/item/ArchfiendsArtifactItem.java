@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 public class ArchfiendsArtifactItem extends CollectibleItem.CustomCollectibleItem {
 	public ArchfiendsArtifactItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.TOTEM_USE, 2F, 1F)
 						.particle(ParticleTypes.DRIPPING_LAVA, 72)

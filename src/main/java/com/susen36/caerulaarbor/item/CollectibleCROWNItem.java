@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 public class CollectibleCROWNItem extends CollectibleItem.CustomCollectibleItem {
 	public CollectibleCROWNItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.TOTEM_USE, 2F, 1F)
 						.particle(ParticleTypes.ENCHANTED_HIT, 72)

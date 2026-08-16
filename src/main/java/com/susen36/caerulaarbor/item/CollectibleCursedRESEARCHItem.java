@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 
 public class CollectibleCursedRESEARCHItem extends CollectibleItem.CustomCollectibleItem {
 	public CollectibleCursedRESEARCHItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.CURSED, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), 25, false, CollectibleTiers.CURSED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.forTier(CollectibleTiers.CURSED));
 	}
 

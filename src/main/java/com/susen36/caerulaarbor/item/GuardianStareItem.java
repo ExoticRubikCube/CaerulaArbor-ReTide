@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 
 public class GuardianStareItem extends CollectibleItem.CustomCollectibleItem {
 	public GuardianStareItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), 25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
 						.particle(ParticleTypes.NAUTILUS, 72)

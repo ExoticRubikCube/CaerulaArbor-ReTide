@@ -139,8 +139,9 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 			int sx = this.leftPos + slotX(i);
 			int sy = this.topPos + slotY(i);
 			if (mouseX >= sx && mouseX < sx + SLOT_SIZE && mouseY >= sy && mouseY < sy + SLOT_SIZE) {
-				String title = Component.translatable("item.caerula_arbor." + entry.itemKey()).getString();
-				String desc = Component.translatable("item.caerula_arbor." + entry.itemKey() + ".description_0").getString();
+				String itemId = entry.relic().getDescriptionId();
+				String title = Component.translatable(itemId).getString();
+				String desc = Component.translatable(itemId + ".description_0").getString();
 				guiGraphics.renderTooltip(font, Component.literal(title + ": " + desc), mouseX, mouseY);
 			}
 		}

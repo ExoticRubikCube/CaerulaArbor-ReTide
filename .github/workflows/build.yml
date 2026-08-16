@@ -1,0 +1,33 @@
+name: build
+on: [pull_request, push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6.0.2
+        with:
+          submodules: recursive
+        
+      - name: setup jdk
+        uses: actions/setup-java@v5.2.0
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+          
+      - name: validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+        
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+        
+      - name: build
+        run: ./gradlew build
+        
+      - name: capture build artifacts
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: mod jars
+          path: build/libs/
+          archive: false

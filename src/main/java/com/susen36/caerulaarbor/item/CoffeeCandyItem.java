@@ -19,7 +19,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 public class CoffeeCandyItem extends CollectibleItem.CustomCollectibleItem {
 	public CoffeeCandyItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(1f).build()), true, 30, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(1f).build()), 30, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F)
 						.particle(ParticleTypes.HAPPY_VILLAGER, 72)

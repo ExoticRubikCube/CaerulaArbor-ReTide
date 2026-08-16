@@ -27,7 +27,6 @@ public class CACollectible {
     public static Holder<Item> VAMPIRES_BED;
     public static Holder<Item> UTIL_SCORE;
     public static Holder<Item> UTIL_RESCISSION;
-    public static Holder<Item> UTIL_OMNIKEY;
     public static Holder<Item> UTIL_STARE;
     public static Holder<Item> DURIN_OVERGROUND_ODYSSEY;
     public static Holder<Item> CURSED_HEART;
@@ -56,11 +55,8 @@ public class CACollectible {
     public static Holder<Item> CAERULA_HEART;
     public static Holder<Item> FEATURED_CANNED_MEAT;
     public static Holder<Item> HAND_OF_BARREN;
-    public static Holder<Item> BAT_BED;
-    public static Holder<Item> PIGLIN_DIARY;
     public static Holder<Item> CHITIN_KNIFE;
     public static Holder<Item> COFFEE_CANDY;
-    public static Holder<Item> RAINBOW_CANDY;
     public static Holder<Item> HAND_OF_ENGRAVE;
     public static Holder<Item> SURVIVOR_CONTRACT;
     public static Holder<Item> ROYAL_FATE;
@@ -68,11 +64,8 @@ public class CACollectible {
     public static Holder<Item> GOLDEN_STORM;
     public static Holder<Item> CANNED_CHERRY;
     public static Holder<Item> SOLO_MUSIC_BOX;
-    public static Holder<Item> REDSTONE_IRIS_FLOWER;
     public static Holder<Item> ODD_FLUTE;
-    public static Holder<Item> VOYAGE_OF_GOLD;
     public static Holder<Item> TOPONYM_TEXTOLOGY;
-    public static Holder<Item> KETTLE;
     public static Holder<Item> PROOF_OF_LONGEVITY;
     public static Holder<Item> TULIP_MEDCINE;
     public static Holder<Item> NURTURE_GENE_SET;
@@ -95,7 +88,6 @@ public class CACollectible {
         VAMPIRES_BED = REGISTRY.registerCollectible("vampires_bed", ArchfiendsBedItem::new);
         UTIL_SCORE = REGISTRY.registerCollectible("util_score", ScoreItem::new);
         UTIL_RESCISSION = REGISTRY.registerCollectible("util_rescission", RescissionItem::new);
-        UTIL_OMNIKEY = REGISTRY.registerCollectible("util_omnikey", OmniKeyItem::new);
         UTIL_STARE = REGISTRY.registerCollectible("util_stare", GuardianStareItem::new);
         DURIN_OVERGROUND_ODYSSEY = REGISTRY.registerCollectible("durin_overground_odyssey", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
         CURSED_HEART = REGISTRY.registerCollectible("cursed_heart", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
@@ -118,24 +110,20 @@ public class CACollectible {
         HEMOST = REGISTRY.registerCollectible("hemost", SmellyHemostaticItem::new);
         YEARNING = REGISTRY.registerCollectible("yearning", UnripeYearningItem::new);
         CURSED_EMELIGHT = REGISTRY.registerCollectible("cursed_emelight", CollectibleCurseEMELIGHTItem::new);
-        CURSED_GLOWBODY = REGISTRY.registerCollectible("cursed_glowbody", CollectibleCursedGLOWBODYItem::new);
+        CURSED_GLOWBODY = REGISTRY.registerCollectible("cursed_glowbody", GlowBodyItem::new);
         CURSED_RESEARCH = REGISTRY.registerCollectible("cursed_research", CollectibleCursedRESEARCHItem::new);
         RELIC_CROWN = REGISTRY.registerCollectible("relic_crown", CollectibleCROWNItem::new);
         CAERULA_HEART = REGISTRY.registerCollectible("caerula_heart", CaerulaHeartItem::new);
         FEATURED_CANNED_MEAT = REGISTRY.registerCollectible("featured_canned_meat", MeatCanItem::new);
         HAND_OF_BARREN = REGISTRY.registerCollectible("hand_of_barren", HandOfBarrenItem::new);
-        BAT_BED = REGISTRY.registerCollectible("bat_bed", BatBedItem::new);
-        PIGLIN_DIARY = REGISTRY.registerCollectible("piglin_diary", PiglinDiaryItem::new);
         CHITIN_KNIFE = REGISTRY.registerCollectible("chitin_knife", ChitinKnifeItem::new);
         COFFEE_CANDY = REGISTRY.registerCollectible("coffee_candy", CoffeeCandyItem::new);
-        AROMATIC_COFFEE = REGISTRY.registerCollectible("aromatic_coffee", AromaticCoffeeItem::new);
-        RAINBOW_CANDY = REGISTRY.registerCollectible("rainbow_candy", RainbowCandyItem::new);
-        HAND_OF_ENGRAVE = REGISTRY.registerCollectible("hand_of_engrave", false, 25, false,
+        HAND_OF_ENGRAVE = REGISTRY.registerCollectible("hand_of_engrave", 25, false,
                 CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 99, 0),
                 CollectibleActivation.builder().sound(SoundEvents.PLAYER_LEVELUP, 2F, 1F).particle(ParticleTypes.CLOUD, 72).showOverlay(true).build(),
                 (stack, level, player, self) -> player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(stack.getItem(), 0));
         SURVIVOR_CONTRACT = REGISTRY.registerCollectible("survivor_contract",
-                false, 25, false,
+                25, false,
                 CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 32, 0),
                 CollectibleActivation.builder().sound(SoundEvents.BEACON_ACTIVATE, 3.2F, 1F).particle(ParticleTypes.GLOW, 72).showOverlay(true).build(),
                 (stack, level, player, self) -> player.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(stack.getItem(), 0));
@@ -144,11 +132,8 @@ public class CACollectible {
         GOLDEN_STORM = REGISTRY.registerCollectible("golden_storm", GoldenStormItem::new);
         CANNED_CHERRY = REGISTRY.registerCollectible("canned_cherry", CannedCherryItem::new);
         SOLO_MUSIC_BOX = REGISTRY.registerCollectible("solo_music_box", SoloMusicBoxItem::new);
-        REDSTONE_IRIS_FLOWER = REGISTRY.registerCollectible("redstone_iris_flower", RedstoneIrisFlowerItem::new);
         ODD_FLUTE = REGISTRY.registerCollectible("odd_flute", OddFluteItem::new);
-        VOYAGE_OF_GOLD = REGISTRY.registerCollectible("voyage_of_gold", VoyageOfGoldItem::new);
         TOPONYM_TEXTOLOGY = REGISTRY.registerCollectible("toponym_textology", ToponymTextologyItem::new);
-        KETTLE = REGISTRY.registerCollectible("kettle", KettleItem::new);
         PROOF_OF_LONGEVITY = REGISTRY.registerCollectible("proof_of_longevity", ProofOfLongevityItem::new);
         TULIP_MEDCINE = REGISTRY.registerCollectible("tulip_medcine", TulipMedcineItem::new);
         NURTURE_GENE_SET = REGISTRY.registerCollectible("nurture_gene_set", NurtureGeneSetItem::new);

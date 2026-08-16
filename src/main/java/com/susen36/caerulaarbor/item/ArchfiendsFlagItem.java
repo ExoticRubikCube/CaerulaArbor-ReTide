@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 public class ArchfiendsFlagItem extends CollectibleItem.CustomCollectibleItem {
 	public ArchfiendsFlagItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON), 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.TOTEM_USE, 2F, 1F)
 						.particle(ParticleTypes.DRIPPING_LAVA, 72)

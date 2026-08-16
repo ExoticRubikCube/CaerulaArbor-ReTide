@@ -29,11 +29,8 @@ public class CABlocks {
     public static final DeferredHolder<Block, ? extends Block> OCEAN_GLASS = REGISTRY.register("ocean_glass", OceanGlassBlock::new);
     public static final DeferredHolder<Block, ? extends Block> OCEAN_GLASSPANE = REGISTRY.register("ocean_glasspane", OceanGlasspaneBlock::new);
     public static final DeferredHolder<Block, ? extends Block> CHITIN_BLOCK = REGISTRY.register("chitin_block", ChitinBlockBlock::new);
-    public static final DeferredHolder<Block, ? extends Block> BLOCK_KETTLE = REGISTRY.register("block_kettle", BlockKettleBlock::new);
     public static final DeferredHolder<Block, ? extends Block> OCEAN_FARMLAND = REGISTRY.register("ocean_farmland", OceanFarmlandBlock::new);
     public static final DeferredHolder<Block, ? extends Block> ALLAY_BLOCK = REGISTRY.register("allay_block", AllayBlockBlock::new);
-    public static final DeferredHolder<Block, ? extends Block> BLOCK_BATBED = REGISTRY.register("block_batbed", BlockBatbedBlock::new);
-    public static final DeferredHolder<Block, ? extends Block> BATBED_UPPER = REGISTRY.register("batbed_upper", BatbedUpperBlock::new);
     public static final DeferredHolder<Block, ? extends Block> TRAIL_CAKE = REGISTRY.register("trail_cake", TrailCakeBlock::new);
     public static final DeferredHolder<Block, ? extends Block> CARAMEL_CAKE = REGISTRY.register("caramel_cake", CaramelCakeBlock::new);
     public static final DeferredHolder<Block, ? extends Block> OCEAN_CRYSTAL_BLOCK = REGISTRY.register("ocean_crystal_block", OceanCrystalBlockBlock::new);

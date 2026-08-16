@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.event;
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.manager.EPManager;
-import com.susen36.babel.util.HealthUtils;
+import com.susen36.babel.util.LifePointUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.init.CACollectible;
@@ -118,7 +118,7 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleKingSuit(Player entity) {
-        if (HealthUtils.getLifePoint(entity) > 1) return;
+        if (LifePointUtils.getLifePoint(entity) > 1) return;
 
         double suitKing = 0;
         if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_SPEAR)) {
@@ -171,7 +171,7 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleArchfiSuit(Player entity) {
-        if (HealthUtils.getLifePoint(entity) < HealthUtils.getMaxLifePoint(entity))
+        if (LifePointUtils.getLifePoint(entity) < LifePointUtils.getMaxLifePoint(entity))
             return;
 
         double suitArchfi = 0;

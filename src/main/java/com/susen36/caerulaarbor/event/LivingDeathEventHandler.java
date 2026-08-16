@@ -6,7 +6,7 @@ import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelGameRules;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.babel.network.BabelNetwork;
-import com.susen36.babel.util.HealthUtils;
+import com.susen36.babel.util.LifePointUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
@@ -315,16 +315,16 @@ public class LivingDeathEventHandler {
         }
         if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_ARMOR)) {
             if (Math.random() < 0.08) {
-                if (HealthUtils.getLifePoint(sourceentity) > 1) {
-                    HealthUtils.setLifePoint(sourceentity, HealthUtils.getLifePoint(sourceentity) - 1);
+                if (LifePointUtils.getLifePoint(sourceentity) > 1) {
+                    LifePointUtils.setLifePoint(sourceentity, LifePointUtils.getLifePoint(sourceentity) - 1);
                 }
-                HealthUtils.setShieldPoint(sourceentity, HealthUtils.getShieldPoint(sourceentity) + 1);
+                LifePointUtils.setShieldPoint(sourceentity, LifePointUtils.getShieldPoint(sourceentity) + 1);
             }
         }
         if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_CRYSTAL)) {
             if (Math.random() < 0.1) {
-                if (HealthUtils.getLifePoint(sourceentity) > 1) {
-                    HealthUtils.setLifePoint(sourceentity, Math.max(HealthUtils.getLifePoint(sourceentity) - 2, 1));
+                if (LifePointUtils.getLifePoint(sourceentity) > 1) {
+                    LifePointUtils.setLifePoint(sourceentity, Math.max(LifePointUtils.getLifePoint(sourceentity) - 2, 1));
                 }
                 if (sourceentity instanceof Player player)
                     player.giveExperienceLevels(1);

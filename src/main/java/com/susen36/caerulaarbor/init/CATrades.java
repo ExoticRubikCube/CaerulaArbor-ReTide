@@ -16,9 +16,6 @@ public class CATrades {
         if (event.getType() == VillagerProfession.LIBRARIAN) {
             event.getTrades().get(2).add(new BasicItemListing(new ItemStack(CAItems.REDSTONE_INGOT.get(), 8), new ItemStack(Items.PAPER), new ItemStack(CACollectible.UTIL_RESCISSION), 4, 4, 0.02f));
         }
-        if (event.getType() == VillagerProfession.TOOLSMITH) {
-            event.getTrades().get(3).add(new BasicItemListing(new ItemStack(CAItems.REDSTONE_INGOT.get(), 12), new ItemStack(Items.EMERALD, 8), new ItemStack(CACollectible.UTIL_OMNIKEY), 2, 8, 0.05f));
-        }
         if (event.getType() == CAVillagerProfessions.CANNOT_GOODENOUGH.get()) {
             event.getTrades().get(5).add(new BasicItemListing(new ItemStack(CAItems.REDSTONE_INGOT.get(), 24), new ItemStack(Blocks.RED_WOOL, 16), new ItemStack(CACollectible.SARKAZ_KING_FLAG), 1, 36, 0.04f));
             event.getTrades().get(4).add(new BasicItemListing(new ItemStack(CAItems.REDSTONE_INGOT.get(), 16), new ItemStack(Items.WHITE_BED), new ItemStack(CACollectible.VAMPIRES_BED), 1, 24, 0.04f));

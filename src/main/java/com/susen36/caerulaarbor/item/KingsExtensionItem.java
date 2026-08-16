@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 public class KingsExtensionItem extends CollectibleItem.CustomCollectibleItem {
 	public KingsExtensionItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.COMMON), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.COMMON), 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.TOTEM_USE, 2F, 1F)
 						.particle(ParticleTypes.ENCHANTED_HIT, 72)

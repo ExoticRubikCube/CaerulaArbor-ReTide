@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 public class UnripeYearningItem extends CollectibleItem.CustomCollectibleItem {
 	public UnripeYearningItem() {
-		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), false, 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
+		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC), 25, false, CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 1, 0),
 				CollectibleActivation.builder()
 						.sound(SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, 2F, 1F)
 						.particle(ParticleTypes.DOLPHIN, 72)

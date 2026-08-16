@@ -16,7 +16,7 @@ public class BooleanCollectibleItem extends CollectibleItem.CustomCollectibleIte
 
     public BooleanCollectibleItem(Rarity rarity, CollectibleActivation activation) {
         super(new Item.Properties().stacksTo(1).rarity(rarity),
-                false, 25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0), activation);
+                25, false, CollectibleTiers.NORMAL, new CollectibleItem.Levels(0, 1, 0), activation);
     }
 
     /** 默认激活表现：对应原 {@code ActivateParams.standardBoolean()}。 */

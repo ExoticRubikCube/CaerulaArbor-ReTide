@@ -5,11 +5,9 @@ import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.EntityUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -19,10 +17,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -120,20 +116,8 @@ public class UnambiguousDirectionItem extends Item {
                 entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 2.4, 0);
                 projectileLevel.addFreshEntity(entityToSpawn);
             }
-			//TODO 需要去mcr化
-            if (!(new Object() {
-                public boolean checkGamemode(Entity ent) {
-                    if (ent instanceof ServerPlayer serverPlayer) {
-                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
-                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                    }
-                    return false;
-                }
-            }.checkGamemode((Entity) entity))) {
-                if ((Entity) entity instanceof Player player)
-                    player.getCooldowns().addCooldown(itemstack.getItem(), 900);
+			if (entity instanceof Player player && !player.isCreative()) {
+                player.getCooldowns().addCooldown(itemstack.getItem(), 900);
             }
         }
     }

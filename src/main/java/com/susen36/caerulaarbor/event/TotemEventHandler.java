@@ -1,6 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
-import com.susen36.babel.util.HealthUtils;
+import com.susen36.babel.util.LifePointUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.OceanizedEvokerEntity;
 import com.susen36.caerulaarbor.init.CAMobEffects;
@@ -33,7 +33,7 @@ public class TotemEventHandler {
 		}
 
 		if (event.getEntity() instanceof Player player) {
-			HealthUtils.setShieldPoint(player, HealthUtils.getShieldPoint(player) + 1);
+			LifePointUtils.setShieldPoint(player, LifePointUtils.getShieldPoint(player) + 1);
 		}
 	}
 }

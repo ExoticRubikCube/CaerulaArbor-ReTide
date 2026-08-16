@@ -121,7 +121,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> HOE_OCEAN_CRYSTAL = REGISTRY.register("hoe_ocean_crystal", OceanthornHoeItem::new);
     public static final DeferredHolder<Item, ? extends Item> CUTIN_STICK = REGISTRY.register("cutin_stick", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> PREDATOR_ABYSSAL_SPAWN_EGG = REGISTRY.register("predator_abyssal_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.PREDATOR_ABYSSAL, -16777063, -2056595, new Item.Properties()));
-    public static final DeferredHolder<Item, ? extends Item> BLOCK_KETTLE = block(CABlocks.BLOCK_KETTLE);
     public static final DeferredHolder<Item, ? extends Item> INSTANT_NOODLE = REGISTRY.register("instant_noodle", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(0.25f).build())));
     public static final DeferredHolder<Item, ? extends Item> CANNED_NOODLE = REGISTRY.register("canned_noodle", CannedNoodleItem::new);
     public static final DeferredHolder<Item, ? extends Item> CANNED_BOILED_WATER = REGISTRY.register("canned_boiled_water", CannedBoiledWaterItem::new);
@@ -137,11 +136,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> LEGENDARY_SPEAR = REGISTRY.register("legendary_spear", LegendarySpearItem::new);
     
     public static final DeferredHolder<Item, ? extends Item> ALLAY_BLOCK = block(CABlocks.ALLAY_BLOCK);
-    
-    public static final DeferredHolder<Item, ? extends Item> BLOCK_BATBED = block(CABlocks.BLOCK_BATBED);
-    public static final DeferredHolder<Item, ? extends Item> BATBED_UPPER = block(CABlocks.BATBED_UPPER);
-    
-    
     
     public static final DeferredHolder<Item, ? extends Item> TRAIL_CAKE = block(CABlocks.TRAIL_CAKE);
     public static final DeferredHolder<Item, ? extends Item> TRAIL_CAKE_PIECE = REGISTRY.register("trail_cake_piece", TrailCakePieceItem::new);

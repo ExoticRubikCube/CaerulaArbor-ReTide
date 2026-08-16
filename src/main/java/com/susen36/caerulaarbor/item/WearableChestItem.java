@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.item;
 import com.google.common.collect.Iterables;
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.network.BabelNetwork;
-import com.susen36.babel.util.HealthUtils;
+import com.susen36.babel.util.LifePointUtils;
 import com.susen36.caerulaarbor.init.CACollectible;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -39,8 +39,7 @@ public abstract class WearableChestItem extends ArmorItem {
 				ArmorItem.Type.BOOTS, 2
 			),
 			16,
-			SoundEvents.ARMOR_EQUIP_NETHERITE,
-			() -> Ingredient.of(),
+			SoundEvents.ARMOR_EQUIP_NETHERITE, Ingredient::of,
 			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath("caerula_arbor", "kingarmor"))),
 			2.5f,
 			0.2f
@@ -74,7 +73,7 @@ public abstract class WearableChestItem extends ArmorItem {
 					return;
 
 				BlockPos pos = BlockPos.containing(x, y, z);
-				double storedLives = HealthUtils.getLifePoint(entity);
+				double storedLives = LifePointUtils.getLifePoint(entity);
 
 				if ((LevelAccessor) world instanceof Level level) {
 					level.playSound(null, pos, SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
@@ -90,12 +89,12 @@ public abstract class WearableChestItem extends ArmorItem {
 					Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
 
 				if (storedLives > 1) {
-					HealthUtils.setLifePoint(entity, 1);
+					LifePointUtils.setLifePoint(entity, 1);
 				}
 
-				double shieldAfterLifeTransfer = HealthUtils.getShieldPoint(entity) + storedLives;
-				HealthUtils.setShieldPoint(entity, (int) shieldAfterLifeTransfer);
-				HealthUtils.setShieldPoint(entity, (int) (shieldAfterLifeTransfer + 3));
+				double shieldAfterLifeTransfer = LifePointUtils.getShieldPoint(entity) + storedLives;
+				LifePointUtils.setShieldPoint(entity, (int) shieldAfterLifeTransfer);
+				LifePointUtils.setShieldPoint(entity, (int) (shieldAfterLifeTransfer + 3));
 			}
 		}
 	}

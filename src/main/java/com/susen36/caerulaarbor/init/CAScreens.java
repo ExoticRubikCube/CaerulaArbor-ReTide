@@ -10,7 +10,7 @@ import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 public class CAScreens {
     @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
-        event.register(CAMenus.CAERULA_RECORD_GUI.get(), CaerulaRecordGUIScreen::create);
+        event.register(CAMenus.CAERULA_RECORD_GUI.get(), RecordGUIScreen::create);
         event.register(CAMenus.RELIC_SHOWCASE.get(), RelicShowcaseScreen::new);
         event.register(CAMenus.INFO_STRATEGY_SUBSIS.get(), InfoStrategySubsisScreen::new);
         event.register(CAMenus.INFO_STRATEGY_BREED.get(), InfoStrategyBreedScreen::new);

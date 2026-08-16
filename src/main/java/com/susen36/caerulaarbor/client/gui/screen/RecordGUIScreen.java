@@ -33,7 +33,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
-public abstract class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecordGUIMenu> {
+public abstract class RecordGUIScreen extends AbstractContainerScreen<CaerulaRecordGUIMenu> {
 	private final static HashMap<String, Object> guistate = CaerulaRecordGUIMenu.guistate;
 	private static final DecimalFormat HEALTH_FORMAT = new DecimalFormat("#.##");
 	private final Level world;
@@ -42,7 +42,7 @@ public abstract class CaerulaRecordGUIScreen extends AbstractContainerScreen<Cae
 	Button button_show_on_hud;
 	ImageButton imagebutton_relic_icon;
 
-	public CaerulaRecordGUIScreen(CaerulaRecordGUIMenu container, Inventory inventory, Component text) {
+	public RecordGUIScreen(CaerulaRecordGUIMenu container, Inventory inventory, Component text) {
 		super(container, inventory, text);
 		this.world = container.world;
 		this.x = container.x;
@@ -53,12 +53,12 @@ public abstract class CaerulaRecordGUIScreen extends AbstractContainerScreen<Cae
 		this.imageHeight = 166;
 	}
 
-	public static CaerulaRecordGUIScreen create(CaerulaRecordGUIMenu container, Inventory inventory, Component text) {
+	public static RecordGUIScreen create(CaerulaRecordGUIMenu container, Inventory inventory, Component text) {
 		String theme = container.entity != null ? ModCapabilities.getPlayerVariables(container.entity).current_theme : "PARCHMENT";
 		if ("DEEPBLUE".equals(theme)) {
-			return new DeepBlueCaerulaRecordScreen(container, inventory, text);
+			return new DeepBlueRecordScreen(container, inventory, text);
 		} else {
-			return new RecordCaerulaScreen(container, inventory, text);
+			return new CommonRecordScreen(container, inventory, text);
 		}
 	}
 
@@ -247,7 +247,7 @@ public abstract class CaerulaRecordGUIScreen extends AbstractContainerScreen<Cae
 				if (!this.visible) {
 					return;
 				}
-				guiGraphics.blit(CaerulaRecordGUIScreen.this.getIconTexture(), this.getX(), this.getY(), 0, 0, 16, 16, 16, 16);
+				guiGraphics.blit(RecordGUIScreen.this.getIconTexture(), this.getX(), this.getY(), 0, 0, 16, 16, 16, 16);
 			}
 		};
 		guistate.put("button:imagebutton_relic_icon", imagebutton_relic_icon);
