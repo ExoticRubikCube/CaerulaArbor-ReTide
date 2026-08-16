@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.util.HealthUtils;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.util.Mth;
@@ -23,8 +24,7 @@ public class PlayerWakeUpEventHandler {
 				capability.syncPlayerVariables(entity);
 			}
 			if (Math.random() < 0.2) {
-				capability.player_shield = capability.player_shield + 1;
-				capability.syncPlayerVariables(entity);
+				HealthUtils.setShieldPoint(entity, HealthUtils.getShieldPoint(entity) + 1);
 			}
 		}
 	}

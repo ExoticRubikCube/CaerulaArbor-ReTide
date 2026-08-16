@@ -3,8 +3,6 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.babel.collectible.CollectibleActivation;
 import com.susen36.babel.collectible.CollectibleItem;
 import com.susen36.babel.collectible.CollectibleTiers;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -52,8 +50,5 @@ public class RainbowCandyItem extends CollectibleItem.CustomCollectibleItem {
 			player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 280, 1));
 			player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 560, 1));
 		}
-		PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
-		capability.player_util_RAINBOW = true;
-		capability.syncPlayerVariables(player);
 	}
 }

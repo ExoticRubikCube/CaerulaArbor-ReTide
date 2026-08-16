@@ -1,9 +1,12 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.api.event.HealthConsumeEvent;
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
+import com.susen36.babel.init.BabelGameRules;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.babel.network.BabelNetwork;
+import com.susen36.babel.util.HealthUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
@@ -63,8 +66,72 @@ public class LivingDeathEventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onEntityDeath(LivingDeathEvent event) {
-        handleLifePoint(event);
+        handleGameRuleOffLightCost(event);
         handleBarrierReset(event);
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onHealthConsumePre(HealthConsumeEvent.Pre event) {
+        if (event.getSource().is(BYPASS)) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onHealthConsumePost(HealthConsumeEvent.Post event) {
+        LivingEntity livingEntity = event.getEntity();
+        Level world = livingEntity.level();
+        DamageSource source = event.getSource();
+        double x = livingEntity.getX();
+        double y = livingEntity.getY();
+        double z = livingEntity.getZ();
+
+        if (event.isBlocked()) {
+            if (livingEntity instanceof ServerPlayer serverPlayer) {
+                AdvancementHolder adv = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "another_breath"));
+                AdvancementProgress ap = serverPlayer.getAdvancements().getOrStartProgress(adv);
+                if (!ap.isDone()) {
+                    for (String criteria : ap.getRemainingCriteria())
+                        serverPlayer.getAdvancements().award(adv, criteria);
+                }
+            }
+            if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, (float) 0.33, 1);
+                level.playSound(null, BlockPos.containing(x, y, z), CASounds.TARGET_DAMAGED.get(), SoundSource.PLAYERS, (float) 0.33, 1);
+            }
+            EPManager.healToFull(livingEntity, AbstractEPCapability.EPType.NERVOUS);
+            if (event.isShieldConsumed()) {
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(CAParticles.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
+                if (!world.isClientSide()) {
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0));
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 4));
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 100, 0));
+                }
+                livingEntity.setHealth(livingEntity.getMaxHealth());
+            } else if (event.isLivesConsumed()) {
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(CAParticles.LIFELOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
+                if (!world.isClientSide())
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 2));
+                livingEntity.setHealth(livingEntity.getMaxHealth() * 0.5f);
+                double lightCost;
+                if (source.is(CADamageTags.RARE)) {
+                    lightCost = 15;
+                } else if (source.is(CADamageTags.HORROR)) {
+                    lightCost = 10;
+                } else {
+                    lightCost = 5;
+                }
+                PlayerVariable capability = ModCapabilities.getPlayerVariables(livingEntity);
+                capability.player_light = Math.max(0, capability.player_light - lightCost);
+                capability.syncPlayerVariables(livingEntity);
+            }
+        } else {
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(livingEntity);
+            capability.player_light = Math.max(0, capability.player_light - 50);
+            capability.syncPlayerVariables(livingEntity);
+        }
     }
 
     @SubscribeEvent
@@ -81,87 +148,13 @@ public class LivingDeathEventHandler {
         handleTrailriteArmorSelfMend(event);
     }
 
-    private static void handleLifePoint(LivingDeathEvent event) {
-        LivingEntity entity = event.getEntity();
-
-        Level world = entity.level();
-        DamageSource damagesource = event.getSource();
-
-        double x = entity.getX();
-        double y = entity.getY();
-        double z = entity.getZ();
-        boolean death_blocked = false;
-        boolean is_shield = false;
-        boolean should_func = world.getLevelData().getGameRules().getBoolean(CAGameRules.TARGET_LIFE_FUNCTION);
-        double light_cost = 0;
-
-        if (entity instanceof Player && !event.isCanceled()) {
-            if (damagesource.is(BYPASS)) {
-                return;
-            }
-            if (!should_func) {
-                light_cost = 25;
-            } else {
-                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                if (capability.player_shield > 0) {
-                    death_blocked = true;
-                    is_shield = true;
-                    capability.player_shield = capability.player_shield - 1;
-                    capability.syncPlayerVariables(entity);
-                } else if (capability.player_lives > 1) {
-                    death_blocked = true;
-                    capability.player_lives = capability.player_lives - 1;
-                    capability.syncPlayerVariables(entity);
-                } else {
-                    light_cost = 50;
-                }
-            }
-            if (death_blocked) {
-                event.setCanceled(true);
-                if (entity instanceof ServerPlayer player) {
-                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "another_breath"));
-                    AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
-                    if (!ap.isDone()) {
-                        for (String criteria : ap.getRemainingCriteria())
-                            player.getAdvancements().award(adv, criteria);
-                    }
-                }
-                if (world instanceof Level level) {
-                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, (float) 0.33, 1);
-                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.TARGET_DAMAGED.get(), SoundSource.PLAYERS, (float) 0.33, 1);
-                }
-                AbstractEPCapability sanityInjury = EPManager.getEP(entity).getEP(AbstractEPCapability.EPType.NERVOUS);
-                EPManager.healToFull(entity, AbstractEPCapability.EPType.NERVOUS);
-                if (is_shield) {
-                    if (world instanceof ServerLevel level)
-                        level.sendParticles(CAParticles.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
-                    if (!world.isClientSide()) {
-                        entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0));
-                        entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 4));
-                        entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 100, 0));
-                    }
-                    entity.setHealth(entity.getMaxHealth());
-                } else {
-                    if (world instanceof ServerLevel level)
-                        level.sendParticles(CAParticles.LIFELOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
-                    if (!world.isClientSide())
-                        entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 2));
-                    entity.setHealth(entity.getMaxHealth() * 0.5f);
-                    if (damagesource.is(CADamageTags.RARE)) {
-                        light_cost = 15;
-                    } else if (damagesource.is(CADamageTags.HORROR)) {
-                        light_cost = 10;
-                    } else {
-                        light_cost = 5;
-                    }
-                }
-            }
-            if (light_cost > 0) {
-                PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                double cur_light = capability.player_light;
-                capability.player_light = Math.max(0, cur_light - light_cost);
-                capability.syncPlayerVariables(entity);
-            }
+    private static void handleGameRuleOffLightCost(LivingDeathEvent event) {
+        if (!event.isCanceled() && event.getEntity() instanceof Player player && !player.level().isClientSide()
+                && !player.level().getLevelData().getGameRules().getBoolean(BabelGameRules.TARGET_LIFE_FUNCTION)
+                && !event.getSource().is(BYPASS)) {
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
+            capability.player_light = Math.max(0, capability.player_light - 25);
+            capability.syncPlayerVariables(player);
         }
     }
 
@@ -322,19 +315,16 @@ public class LivingDeathEventHandler {
         }
         if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_ARMOR)) {
             if (Math.random() < 0.08) {
-                if (capability.player_lives > 1) {
-                    capability.player_lives = capability.player_lives - 1;
-                    capability.syncPlayerVariables(sourceentity);
+                if (HealthUtils.getLifePoint(sourceentity) > 1) {
+                    HealthUtils.setLifePoint(sourceentity, HealthUtils.getLifePoint(sourceentity) - 1);
                 }
-                capability.player_shield = capability.player_shield + 1;
-                capability.syncPlayerVariables(sourceentity);
+                HealthUtils.setShieldPoint(sourceentity, HealthUtils.getShieldPoint(sourceentity) + 1);
             }
         }
         if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_CRYSTAL)) {
             if (Math.random() < 0.1) {
-                if (capability.player_lives > 1) {
-                    capability.player_lives = Math.max(capability.player_lives - 2, 1);
-                    capability.syncPlayerVariables(sourceentity);
+                if (HealthUtils.getLifePoint(sourceentity) > 1) {
+                    HealthUtils.setLifePoint(sourceentity, Math.max(HealthUtils.getLifePoint(sourceentity) - 2, 1));
                 }
                 if (sourceentity instanceof Player player)
                     player.giveExperienceLevels(1);

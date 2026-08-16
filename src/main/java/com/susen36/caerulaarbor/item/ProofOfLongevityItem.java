@@ -3,8 +3,7 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.babel.collectible.CollectibleActivation;
 import com.susen36.babel.collectible.CollectibleItem;
 import com.susen36.babel.collectible.CollectibleTiers;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.babel.util.HealthUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
@@ -28,11 +27,7 @@ public class ProofOfLongevityItem extends CollectibleItem.CustomCollectibleItem 
 
 	@Override
 	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
-		PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
-		capability.player_maxlive = capability.player_maxlive + 6;
-		capability.syncPlayerVariables(player);
-		PlayerVariable capability2 = ModCapabilities.getPlayerVariables(player);
-		capability2.player_lives = capability2.player_lives + 6;
-		capability2.syncPlayerVariables(player);
+		HealthUtils.setMaxLifePoint(player, HealthUtils.getMaxLifePoint(player) + 6);
+		HealthUtils.setLifePoint(player, HealthUtils.getLifePoint(player) + 6);
 	}
 }

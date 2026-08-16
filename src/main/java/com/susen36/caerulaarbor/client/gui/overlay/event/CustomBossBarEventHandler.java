@@ -11,10 +11,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.BossEvent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -87,40 +88,48 @@ public class CustomBossBarEventHandler {
 
 	public static final Map<BossEvent, Integer> CYCLE_MAP = new HashMap<>();
 
-	@OnlyIn(Dist.CLIENT)
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void customBossBarRender(CustomizeGuiOverlayEvent.BossEventProgress event){
-    	if(!CAConfigs.BOSSBAR.get()) return;
-    	if(event.isCanceled()) return;
-        LerpingBossEvent bossEvent = event.getBossEvent();
-        BossBarRenderContext context = getContext(bossEvent);
-        GuiGraphics gui = event.getGuiGraphics();
-        if(context != null) {
-            float progress = bossEvent.getProgress();
-            context = context.loc((gui.guiWidth() - context.frame_x)/2, event.getY())
-                    .name(bossEvent.getName().getString(), gui.guiWidth()/2, event.getY());
-            ResourceLocation style = context.style;
-            int cycle = 0;
-            if(style != null){
-                if (CYCLE_MAP.containsKey(bossEvent)) {
-                    cycle = CYCLE_MAP.get(bossEvent);
-                    CYCLE_MAP.replace(bossEvent, cycle + 1);
-                }
-                else CYCLE_MAP.put(bossEvent, 0);
-            }
-            renderBossBar(gui, context, progress, context.color, cycle);
-        }
-    }
-
+    /** 原版 Boss 血条渲染前：取消自定义血条的原版绘制，避免重复渲染 */
     @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent
     public static void customBossBarCancel(CustomizeGuiOverlayEvent.BossEventProgress event){
     	if(!CAConfigs.BOSSBAR.get()) return;
     	if(event.isCanceled()) return;
-        LerpingBossEvent bossEvent = event.getBossEvent();
-        BossBarRenderContext context = getContext(bossEvent);
-        if(context != null) {
+        if(getContext(event.getBossEvent()) != null) {
             event.setCanceled(true);
+        }
+    }
+
+    /**
+     * 与参考项目一致：在 BOSS_OVERLAY 层渲染完成之后，直接遍历原版血条列表绘制自定义血条。
+     * 不占用原版 Boss 层的高 Z 层级，从而不会遮挡 Jade 等后续渲染的 GUI。
+     */
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void renderCustomBossBars(RenderGuiLayerEvent.Post event){
+    	if(!CAConfigs.BOSSBAR.get()) return;
+    	if(!event.getName().equals(VanillaGuiLayers.BOSS_OVERLAY)) return;
+        GuiGraphics gui = event.getGuiGraphics();
+        int y = 12;
+        for (LerpingBossEvent bossEvent : Minecraft.getInstance().gui.getBossOverlay().events.values()) {
+            BossBarRenderContext context = getContext(bossEvent);
+            if(context != null) {
+                context = context.loc((gui.guiWidth() - context.frame_x)/2, y)
+                        .name(bossEvent.getName().getString(), gui.guiWidth()/2, y);
+                ResourceLocation style = context.style;
+                int cycle = 0;
+                if(style != null){
+                    if (CYCLE_MAP.containsKey(bossEvent)) {
+                        cycle = CYCLE_MAP.get(bossEvent);
+                        CYCLE_MAP.replace(bossEvent, cycle + 1);
+                    }
+                    else CYCLE_MAP.put(bossEvent, 0);
+                }
+                renderBossBar(gui, context, bossEvent.getProgress(), context.color, cycle);
+            }
+            y += 19;
+            if (y >= gui.guiHeight()/3) {
+                break;
+            }
         }
     }
 

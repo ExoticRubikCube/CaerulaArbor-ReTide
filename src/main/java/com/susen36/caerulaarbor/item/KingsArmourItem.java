@@ -3,8 +3,7 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.babel.collectible.CollectibleActivation;
 import com.susen36.babel.collectible.CollectibleItem;
 import com.susen36.babel.collectible.CollectibleTiers;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.babel.util.HealthUtils;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,17 +37,13 @@ public class KingsArmourItem extends CollectibleItem.CustomCollectibleItem {
 
 	@Override
 	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
-		PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(player);
-		double storedLives = playerVariables.player_lives;
+		double storedLives = HealthUtils.getLifePoint(player);
 		if (storedLives > 1) {
-			playerVariables.player_lives = 1;
-			playerVariables.syncPlayerVariables(player);
+			HealthUtils.setLifePoint(player, 1);
 		}
-		double shieldAfterLifeTransfer = playerVariables.player_shield + storedLives;
-		playerVariables.player_shield = shieldAfterLifeTransfer;
-		playerVariables.syncPlayerVariables(player);
-		playerVariables.player_shield = shieldAfterLifeTransfer + 3;
-		playerVariables.syncPlayerVariables(player);
+		double shieldAfterLifeTransfer = HealthUtils.getShieldPoint(player) + storedLives;
+		HealthUtils.setShieldPoint(player, (int) shieldAfterLifeTransfer);
+		HealthUtils.setShieldPoint(player, (int) (shieldAfterLifeTransfer + 3));
 	}
 
 	@Override

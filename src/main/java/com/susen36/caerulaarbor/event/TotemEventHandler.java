@@ -1,8 +1,7 @@
 package com.susen36.caerulaarbor.event;
 
+import com.susen36.babel.util.HealthUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.entity.OceanizedEvokerEntity;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,10 +33,7 @@ public class TotemEventHandler {
 		}
 
 		if (event.getEntity() instanceof Player player) {
-			double nextShield = ModCapabilities.getPlayerVariables(player).player_shield + 1;
-			PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
-			capability.player_shield = nextShield;
-			capability.syncPlayerVariables(player);
+			HealthUtils.setShieldPoint(player, HealthUtils.getShieldPoint(player) + 1);
 		}
 	}
 }

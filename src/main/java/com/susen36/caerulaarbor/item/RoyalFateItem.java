@@ -3,8 +3,7 @@ package com.susen36.caerulaarbor.item;
 import com.susen36.babel.collectible.CollectibleActivation;
 import com.susen36.babel.collectible.CollectibleItem;
 import com.susen36.babel.collectible.CollectibleTiers;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.babel.util.HealthUtils;
 import com.susen36.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -48,20 +47,12 @@ public class RoyalFateItem extends CollectibleItem.CustomCollectibleItem {
 
 	@Override
 	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
-		if (ModCapabilities.getPlayerVariables(player).player_maxlive > 1) {
-			double lives_left = ModCapabilities.getPlayerVariables(player).player_maxlive;
-			PlayerVariable capability = ModCapabilities.getPlayerVariables(player);
-			capability.player_maxlive = 1;
-			capability.syncPlayerVariables(player);
-			PlayerVariable capability2 = ModCapabilities.getPlayerVariables(player);
-			capability2.player_lives = 1;
-			capability2.syncPlayerVariables(player);
-			PlayerVariable capability3 = ModCapabilities.getPlayerVariables(player);
-            capability3.player_shield = capability3.player_shield + lives_left;
-			capability3.syncPlayerVariables(player);
-			PlayerVariable capability4 = ModCapabilities.getPlayerVariables(player);
-            capability4.player_shield = capability4.player_shield + 3;
-			capability4.syncPlayerVariables(player);
+		if (HealthUtils.getMaxLifePoint(player) > 1) {
+			double lives_left = HealthUtils.getMaxLifePoint(player);
+			HealthUtils.setMaxLifePoint(player, 1);
+			HealthUtils.setLifePoint(player, 1);
+			HealthUtils.setShieldPoint(player, HealthUtils.getShieldPoint(player) + (int) lives_left);
+			HealthUtils.setShieldPoint(player, HealthUtils.getShieldPoint(player) + 3);
 			stack.shrink(1);
 		}
 	}

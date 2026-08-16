@@ -3,9 +3,9 @@ package com.susen36.caerulaarbor.event;
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.manager.EPManager;
+import com.susen36.babel.util.HealthUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import com.susen36.caerulaarbor.init.CAEnchantments;
@@ -96,7 +96,6 @@ public class PlayerTickEventHandler {
         handleHandSpeed(entity, world, x, y, z);
         handleArchfiSuit(entity);
         handleEngraveAndSurvivor(entity);
-        handlePlayerLives(entity);
         handleSanityDefendEnchant(entity);
         handleOceanizationEffects(entity);
         handleRelicHemost(entity);
@@ -119,8 +118,7 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleKingSuit(Player entity) {
-        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-        if (capability.player_lives > 1) return;
+        if (HealthUtils.getLifePoint(entity) > 1) return;
 
         double suitKing = 0;
         if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_SPEAR)) {
@@ -173,8 +171,7 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleArchfiSuit(Player entity) {
-        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-        if (capability.player_lives < capability.player_maxlive)
+        if (HealthUtils.getLifePoint(entity) < HealthUtils.getMaxLifePoint(entity))
             return;
 
         double suitArchfi = 0;
@@ -208,20 +205,6 @@ public class PlayerTickEventHandler {
             if (!entity.level().isClientSide())
                 entity.addEffect(new MobEffectInstance(CAMobEffects.SURVIVORS_GUIDE, 20,
                         survivor - 1, false, false));
-        }
-    }
-
-    private static void handlePlayerLives(Player entity) {
-        PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-        double playerLives = capability.player_lives;
-        double maxLives = capability.player_maxlive;
-
-        if (playerLives > maxLives) {
-            capability.player_lives = capability.player_maxlive;
-            capability.syncPlayerVariables(entity);
-        } else if (playerLives < 1) {
-            capability.player_lives = 1;
-            capability.syncPlayerVariables(entity);
         }
     }
 

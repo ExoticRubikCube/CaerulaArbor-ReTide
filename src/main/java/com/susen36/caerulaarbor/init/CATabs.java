@@ -259,7 +259,7 @@ public class CATabs {
                 tabData.accept(new ItemStack(CACollectible.BOWL_SEAGRASS));
                 tabData.accept(new ItemStack(CACollectible.GOLDEN_STORM));
                 tabData.accept(new ItemStack(CACollectible.CANNED_CHERRY));
-                tabData.accept(CAItems.AROMATIC_COFFEE.get());
+                tabData.accept(new ItemStack(CACollectible.AROMATIC_COFFEE));
                 tabData.accept(new ItemStack(CACollectible.COFFEE_CANDY));
                 tabData.accept(new ItemStack(CACollectible.RAINBOW_CANDY));
                 tabData.accept(new ItemStack(CACollectible.SOLO_MUSIC_BOX));

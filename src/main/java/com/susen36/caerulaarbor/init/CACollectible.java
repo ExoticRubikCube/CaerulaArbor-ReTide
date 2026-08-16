@@ -128,6 +128,7 @@ public class CACollectible {
         PIGLIN_DIARY = REGISTRY.registerCollectible("piglin_diary", PiglinDiaryItem::new);
         CHITIN_KNIFE = REGISTRY.registerCollectible("chitin_knife", ChitinKnifeItem::new);
         COFFEE_CANDY = REGISTRY.registerCollectible("coffee_candy", CoffeeCandyItem::new);
+        AROMATIC_COFFEE = REGISTRY.registerCollectible("aromatic_coffee", AromaticCoffeeItem::new);
         RAINBOW_CANDY = REGISTRY.registerCollectible("rainbow_candy", RainbowCandyItem::new);
         HAND_OF_ENGRAVE = REGISTRY.registerCollectible("hand_of_engrave", false, 25, false,
                 CollectibleTiers.ADVANCED, new CollectibleItem.Levels(0, 99, 0),

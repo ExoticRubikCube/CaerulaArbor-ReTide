@@ -173,14 +173,18 @@ public class RelicShowcaseButtonMessage implements CustomPacketPayload {
 		if (entity.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
 			if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(relic) >= 0) {
 				entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(relic, -1);
-				BabelNetwork.syncCollectibles(entity);
+				if (entity instanceof ServerPlayer) {
+					BabelNetwork.syncCollectibles(entity);
+				}
 				removeCoin(entity);
 				giveRandomRelic(entity);
 			}
 		} else if (isCreative(entity)) {
 			if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).getLayer(relic) >= 0) {
 				entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE_LAYER.get()).setLayer(relic, -1);
-				BabelNetwork.syncCollectibles(entity);
+				if (entity instanceof ServerPlayer) {
+					BabelNetwork.syncCollectibles(entity);
+				}
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.util;
 
+import com.susen36.babel.util.HealthUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
@@ -206,7 +207,7 @@ public class EntityUtils {
 	public static String getLiveMaxShown(Entity entity) {
 		if (entity == null)
 			return "";
-		return "/" + Math.round((ModCapabilities.getPlayerVariables(entity)).player_maxlive);
+		return "/" + Math.round(HealthUtils.getMaxLifePoint(entity));
 	}
 
 	public static void giveSpearFight(Entity entity) {
@@ -241,13 +242,13 @@ public class EntityUtils {
 	public static String getLives(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).player_lives);
+		return "" + Math.round(HealthUtils.getLifePoint(entity));
 	}
 
 	public static String getShield(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((ModCapabilities.getPlayerVariables(entity)).player_shield);
+		return "" + Math.round(HealthUtils.getShieldPoint(entity));
 	}
 
 	public static double getHealthPerc(LivingEntity living) {

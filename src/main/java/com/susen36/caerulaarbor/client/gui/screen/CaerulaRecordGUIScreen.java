@@ -13,7 +13,6 @@ import com.susen36.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.susen36.caerulaarbor.network.send.CaerulaRecordGUIButtonMessage;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
-import com.susen36.caerulaarbor.util.RecordColor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
@@ -54,7 +53,18 @@ public abstract class CaerulaRecordGUIScreen extends AbstractContainerScreen<Cae
 		this.imageHeight = 166;
 	}
 
-	public abstract RecordColor recordColor();
+	public static CaerulaRecordGUIScreen create(CaerulaRecordGUIMenu container, Inventory inventory, Component text) {
+		String theme = container.entity != null ? ModCapabilities.getPlayerVariables(container.entity).current_theme : "PARCHMENT";
+		if ("DEEPBLUE".equals(theme)) {
+			return new DeepBlueCaerulaRecordScreen(container, inventory, text);
+		} else {
+			return new RecordCaerulaScreen(container, inventory, text);
+		}
+	}
+
+	public abstract ResourceLocation getBackgroundTexture();
+
+	public abstract ResourceLocation getIconTexture();
 
 	public abstract String themeKey();
 
@@ -114,14 +124,11 @@ public abstract class CaerulaRecordGUIScreen extends AbstractContainerScreen<Cae
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		int recordColor = recordColor().getMainColor();
-		RenderSystem.setShaderColor(((recordColor >> 16) & 0xFF) / 255.0F, ((recordColor >> 8) & 0xFF) / 255.0F, (recordColor & 0xFF) / 255.0F, 1.0F);
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/caerularecord__gray.png"), this.leftPos, this.topPos, 0, 0, 168, 166, 168, 166);
-		RenderSystem.setShaderColor(1, 1, 1, 1);
+		guiGraphics.blit(this.getBackgroundTexture(), this.leftPos, this.topPos, 0, 0, 168, 166, 168, 166);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/target_health.png"), this.leftPos + 4, this.topPos + 30, 0, 0, 24, 16, 24, 16);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(BabelMod.MODID, "textures/gui/overlay/target_health.png"), this.leftPos + 4, this.topPos + 30, 0, 0, 24, 16, 24, 16);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/target_shield.png"), this.leftPos + 4, this.topPos + 50, 0, 0, 24, 16, 24, 16);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(BabelMod.MODID, "textures/gui/overlay/target_shield.png"), this.leftPos + 4, this.topPos + 50, 0, 0, 24, 16, 24, 16);
 
 		if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO_ATTENTION)) {
 			guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_attention.png"), this.leftPos + 96, this.topPos + 91, 0, 0, 64, 64, 64, 64);
@@ -240,10 +247,7 @@ public abstract class CaerulaRecordGUIScreen extends AbstractContainerScreen<Cae
 				if (!this.visible) {
 					return;
 				}
-				int iconColor = recordColor().getSubIconColor();
-				RenderSystem.setShaderColor(((iconColor >> 16) & 0xFF) / 255.0F, ((iconColor >> 8) & 0xFF) / 255.0F, (iconColor & 0xFF) / 255.0F, 1.0F);
-				guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/relic_icon__gray.png"), this.getX(), this.getY(), 0, 0, 16, 16, 16, 16);
-				RenderSystem.setShaderColor(1, 1, 1, 1);
+				guiGraphics.blit(CaerulaRecordGUIScreen.this.getIconTexture(), this.getX(), this.getY(), 0, 0, 16, 16, 16, 16);
 			}
 		};
 		guistate.put("button:imagebutton_relic_icon", imagebutton_relic_icon);

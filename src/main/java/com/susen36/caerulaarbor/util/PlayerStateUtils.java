@@ -5,7 +5,6 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CABlocks;
-import com.susen36.caerulaarbor.init.CAConfigs;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -33,49 +32,6 @@ public class PlayerStateUtils {
 
 	private PlayerStateUtils() {
 		throw new UnsupportedOperationException("Utility class");
-	}
-
-	// 生命点数
-	public static int getLifePoint(Entity entity) {
-		return (int) ModCapabilities.getPlayerVariables(entity).player_lives;
-	}
-
-	public static void setLifePoint(Entity entity, int value) {
-		if (value < 1)
-			return;
-		int maxPoint = getMaxLifePoint(entity);
-		PlayerVariable c = ModCapabilities.getPlayerVariables(entity);
-		c.player_lives = Math.min(value, maxPoint);
-		c.syncPlayerVariables(entity);
-	}
-
-	public static int getMaxLifePoint(Entity entity) {
-		return (int) ModCapabilities.getPlayerVariables(entity).player_maxlive;
-	}
-
-	public static void setMaxLifePoint(Entity entity, int value) {
-		if (value < 1)
-			return;
-		int clampedValue = (int) Math.min(value, CAConfigs.LP_LIMIT.get());
-		PlayerVariable c = ModCapabilities.getPlayerVariables(entity);
-		c.player_maxlive = clampedValue;
-		c.syncPlayerVariables(entity);
-		if (clampedValue < getLifePoint(entity))
-			setLifePoint(entity, clampedValue);
-	}
-
-	// 护盾点数
-	public static int getShieldPoint(Entity entity) {
-		return (int) ModCapabilities.getPlayerVariables(entity).player_shield;
-	}
-
-	public static void setShieldPoint(Entity entity, int value) {
-		if (value < 0)
-			return;
-		int clampedValue = (int) Math.min(value, CAConfigs.SHIELD_LIMIT.get());
-		PlayerVariable c = ModCapabilities.getPlayerVariables(entity);
-		c.player_shield = clampedValue;
-		c.syncPlayerVariables(entity);
 	}
 
 	// 光芒值

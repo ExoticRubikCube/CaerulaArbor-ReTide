@@ -24,9 +24,6 @@ public class LightShowOverlay {
 	public static final ResourceLocation WAVING = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/light_waving.png");
 	public static final ResourceLocation BRIGHT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/light.png");
 
-	public static final ResourceLocation LIFE_POINT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/target_health.png");
-	public static final ResourceLocation SHIELD_POINT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/target_shield.png");
-
 	public static final ResourceLocation NEAT = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/lights_neat.png");
 
 
@@ -100,39 +97,6 @@ public class LightShowOverlay {
 			}
 		}
 
-		// 目标生命与目标护盾不受 show_stats 控制，始终显示
-		int lifeDx = CAConfigs.X_OFFSET_LIFE.get().intValue();
-		int lifeDy = CAConfigs.Y_OFFSET_LIFE.get().intValue() - 16;
-		int shieldDx = lifeDx + CAConfigs.X_OFFSET_SHIELD.get().intValue();
-		int shieldDy = lifeDy + CAConfigs.Y_OFFSET_SHIELD.get().intValue();
-
-		event.getGuiGraphics().blit(LIFE_POINT, 
-			6 + lifeDx, h - 24 + lifeDy, 0, 0, 24, 16, 24, 16);
-
-		boolean result;
-		result = ModCapabilities.getPlayerVariables(entity).player_shield > 0;
-		if (result) {
-			event.getGuiGraphics().blit(SHIELD_POINT, 
-				6 + shieldDx, h - 40 + shieldDy, 0, 0, 24, 16, 24, 16);
-			String shield = EntityUtils.getShield(entity);
-			event.getGuiGraphics().drawString(Minecraft.getInstance().font,
-					shield, 21 + shieldDx, h - 36 + shieldDy, -16777216, false);
-			event.getGuiGraphics().drawString(Minecraft.getInstance().font,
-					shield, 20 + shieldDx, h - 36 + shieldDy, -1, false);
-		}
-
-		String life_max = EntityUtils.getLiveMaxShown(entity), life = EntityUtils.getLives(entity);
-		event.getGuiGraphics().drawString(Minecraft.getInstance().font,
-				life_max, 37 + lifeDx, h - 21 + lifeDy, -16764109, false);
-			
-		event.getGuiGraphics().drawString(Minecraft.getInstance().font,
-				life_max, 36 + lifeDx, h - 21 + lifeDy, -10040065, false);
-				
-		event.getGuiGraphics().drawString(Minecraft.getInstance().font,
-				life, 21 + lifeDx, h - 21 + lifeDy, -16764109, false);
-			
-		event.getGuiGraphics().drawString(Minecraft.getInstance().font,
-				life, 20 + lifeDx, h - 21 + lifeDy, -1, false);
 		RenderSystem.depthMask(true);
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableDepthTest();

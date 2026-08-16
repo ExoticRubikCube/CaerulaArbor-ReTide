@@ -78,7 +78,6 @@ public class CAItems {
     
     public static final DeferredHolder<Item, ? extends Item> BERRY_CAN = block(CABlocks.BERRY_CAN);
     
-    public static final DeferredHolder<Item, ? extends Item> AROMATIC_COFFEE = REGISTRY.register("aromatic_coffee", AromaticCoffeeItem::new);
     public static final DeferredHolder<Item, ? extends Item> MUSIC_BOX_FIXED = REGISTRY.register("music_box_fixed", MusicBoxFixedItem::new);
     public static final DeferredHolder<Item, ? extends Item> REDSTONE_IRIS = block(CABlocks.REDSTONE_IRIS);
     public static final DeferredHolder<Item, ? extends Item> REDSTONEIRIS_SEEDING = block(CABlocks.REDSTONEIRIS_SEEDING);

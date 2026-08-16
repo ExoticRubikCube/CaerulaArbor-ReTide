@@ -14,7 +14,6 @@ import com.susen36.caerulaarbor.manager.upgrade.SublimationUpgradeManger;
 import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.MathUtils;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
-import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -40,7 +39,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.ShulkerBullet;
-import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -83,7 +81,6 @@ public class LivingHurtEventHandler {
         handleOnArrowHit(event);
         handleSanityReaper(event);
         handleSeabornKiller(event);
-        handleSeabornsGetOffShip(event);
         handleMoreFallDamageEffect(event);
         handleWarriorTactic(event);
         handleKillMuteSelf(event);
@@ -680,22 +677,6 @@ public class LivingHurtEventHandler {
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, (y + 0.6), z, 24, 0.6, 0.6, 0.6, 0.1);
             event.setNewDamage((float) (amount + addition));
-        }
-    }
-
-    //TODO 需要迁移到bable,n12及以上生效
-    private static void handleSeabornsGetOffShip(LivingDamageEvent.Pre event) {
-        Level world = event.getEntity().level();
-        Entity entity = event.getEntity();
-
-        if ((entity.getType().is(CAEntityTypeTags.ELITE)||(entity.getType().is(CAEntityTypeTags.BOSSES)) && WorldUtils.canGrief(world))) {
-            LivingEntity living = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-            if (living != null && living.isAlive()) {
-                Entity boat = entity.getVehicle();
-                if (boat instanceof Boat) {
-                    boat.hurt(CADamageTypes.source(world, CADamageTypes.GENERIC_SEABORN_ATTACK), 20);
-                }
-            }
         }
     }
 

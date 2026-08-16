@@ -5,7 +5,6 @@ import net.minecraft.world.level.GameRules;
 public class CAGameRules {
     public static void init() {}
 
-    public static final GameRules.Key<GameRules.BooleanValue> TARGET_LIFE_FUNCTION = GameRules.register("targetLifeFunction", GameRules.Category.PLAYER, GameRules.BooleanValue.create(true));
     public static final GameRules.Key<GameRules.BooleanValue> NATURAL_EVOLUTION = GameRules.register("naturalEvolution", GameRules.Category.MOBS, GameRules.BooleanValue.create(true));
     public static final GameRules.Key<GameRules.IntegerValue> CLONE_NUMBER_LIMIT = GameRules.register("cloneNumberLimit", GameRules.Category.MOBS, GameRules.IntegerValue.create(24));
     public static final GameRules.Key<GameRules.IntegerValue> SPREAD_RATE = GameRules.register("spreadRate", GameRules.Category.PLAYER, GameRules.IntegerValue.create(100));

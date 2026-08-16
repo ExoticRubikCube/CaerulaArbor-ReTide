@@ -3,8 +3,7 @@ package com.susen36.caerulaarbor.item;
 import com.google.common.collect.Iterables;
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.network.BabelNetwork;
-import com.susen36.caerulaarbor.capability.ModCapabilities;
-import com.susen36.caerulaarbor.capability.player.PlayerVariable;
+import com.susen36.babel.util.HealthUtils;
 import com.susen36.caerulaarbor.init.CACollectible;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -71,12 +70,11 @@ public abstract class WearableChestItem extends ArmorItem {
 				double x = entity.getX();
 				double y = entity.getY();
 				double z = entity.getZ();
-                PlayerVariable playerVariables = ModCapabilities.getPlayerVariables(entity);
 				if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_ARMOR))
 					return;
 
 				BlockPos pos = BlockPos.containing(x, y, z);
-				double storedLives = playerVariables.player_lives;
+				double storedLives = HealthUtils.getLifePoint(entity);
 
 				if ((LevelAccessor) world instanceof Level level) {
 					level.playSound(null, pos, SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
@@ -92,16 +90,12 @@ public abstract class WearableChestItem extends ArmorItem {
 					Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
 
 				if (storedLives > 1) {
-					playerVariables.player_lives = 1;
-					playerVariables.syncPlayerVariables(entity);
+					HealthUtils.setLifePoint(entity, 1);
 				}
 
-				double shieldAfterLifeTransfer = playerVariables.player_shield + storedLives;
-				playerVariables.player_shield = shieldAfterLifeTransfer;
-				playerVariables.syncPlayerVariables(entity);
-
-				playerVariables.player_shield = shieldAfterLifeTransfer + 3;
-				playerVariables.syncPlayerVariables(entity);
+				double shieldAfterLifeTransfer = HealthUtils.getShieldPoint(entity) + storedLives;
+				HealthUtils.setShieldPoint(entity, (int) shieldAfterLifeTransfer);
+				HealthUtils.setShieldPoint(entity, (int) (shieldAfterLifeTransfer + 3));
 			}
 		}
 	}

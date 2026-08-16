@@ -115,13 +115,8 @@ public class CapabilityEventHandler {
         PlayerVariable original = ModCapabilities.getPlayerVariables(oldPlayer);
         PlayerVariable clone = ModCapabilities.getPlayerVariables(player);
         clone.player_light = original.player_light;
-        clone.player_lives = original.player_lives;
-        clone.player_maxlive = original.player_maxlive;
-        clone.player_shield = original.player_shield;
         clone.disoclusion = original.disoclusion;
         clone.show_stats = original.show_stats;
-        clone.player_util_RAINBOW = original.player_util_RAINBOW;
-        clone.player_util_AROMATIC = original.player_util_AROMATIC;
         clone.player_oceanization = original.player_oceanization;
         clone.plauyer_balance = original.plauyer_balance;
         clone.can_player_evo = original.can_player_evo;

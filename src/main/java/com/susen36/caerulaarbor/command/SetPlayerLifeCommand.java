@@ -4,7 +4,6 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.init.CAConfigs;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
@@ -21,98 +20,7 @@ public class SetPlayerLifeCommand {
 	@SubscribeEvent
 	public static void registerCommand(RegisterCommandsEvent event) {
 		event.getDispatcher().register(Commands.literal("caerula_arbor:player_data").requires(s -> s.hasPermission(2))
-				.then(Commands.argument("name", EntityArgument.players()).then(Commands.literal("life_point").then(Commands.argument("life", DoubleArgumentType.doubleArg(0, 255)).executes(arguments -> {
-					Level world = arguments.getSource().getUnsidedLevel();
-                    Entity entity = arguments.getSource().getEntity();
-					if (entity == null && world instanceof ServerLevel servLevel)
-						entity = FakePlayerFactory.getMinecraft(servLevel);
-                    if (entity != null)
-                        entity.getDirection();
-
-                    String info;
-                    double setval;
-                    try {
-                        for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
-                            setval = Math.min(DoubleArgumentType.getDouble(arguments, "life"), Math.min(CAConfigs.LP_LIMIT.get(), ModCapabilities.getPlayerVariables(entityiterator).player_maxlive));
-                            {
-                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
-                                capability.player_lives = setval;
-                                capability.syncPlayerVariables(entityiterator);
-                            }
-                            info = Component.translatable("command.set_life").getString();
-                            info = info.replace("<player>", entityiterator.getDisplayName().getString());
-                            info = info.replace("<num>", "" + Math.round(setval));
-                            {
-                                final String success = info;
-                                final boolean informAdmins = true;
-                                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
-                            }
-                        }
-                    } catch (CommandSyntaxException e) {
-                        e.printStackTrace();
-                    }
-                    return 0;
-				}))).then(Commands.literal("max_life_point").then(Commands.argument("life", DoubleArgumentType.doubleArg(1, 255)).executes(arguments -> {
-					Level world = arguments.getSource().getUnsidedLevel();
-                    Entity entity = arguments.getSource().getEntity();
-					if (entity == null && world instanceof ServerLevel servLevel)
-						entity = FakePlayerFactory.getMinecraft(servLevel);
-                    if (entity != null)
-                        entity.getDirection();
-
-                    String info;
-                    try {
-                        for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
-                            {
-                                double setval = Math.min(DoubleArgumentType.getDouble(arguments, "life"), CAConfigs.LP_LIMIT.get());
-                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
-                                capability.player_maxlive = setval;
-                                capability.syncPlayerVariables(entityiterator);
-                            }
-                            info = Component.translatable("command.set_maxlife").getString();
-                            info = info.replace("<player>", entityiterator.getDisplayName().getString());
-                            info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "life")));
-                            {
-                                final String success = info;
-                                final boolean informAdmins = true;
-                                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
-                            }
-                        }
-                    } catch (CommandSyntaxException e) {
-                        e.printStackTrace();
-                    }
-                    return 0;
-				}))).then(Commands.literal("shield").then(Commands.argument("shield", DoubleArgumentType.doubleArg(0, 999)).executes(arguments -> {
-					Level world = arguments.getSource().getUnsidedLevel();
-                    Entity entity = arguments.getSource().getEntity();
-					if (entity == null && world instanceof ServerLevel servLevel)
-						entity = FakePlayerFactory.getMinecraft(servLevel);
-                    if (entity != null)
-                        entity.getDirection();
-
-                    String info;
-                    try {
-                        for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
-                            {
-                                double setval = Math.min(DoubleArgumentType.getDouble(arguments, "shield"), CAConfigs.SHIELD_LIMIT.get());
-                                PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
-                                capability.player_shield = setval;
-                                capability.syncPlayerVariables(entityiterator);
-                            }
-                            info = Component.translatable("command.set_shield").getString();
-                            info = info.replace("<player>", entityiterator.getDisplayName().getString());
-                            info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "shield")));
-                            {
-                                final String success = info;
-                                final boolean informAdmins = true;
-                                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
-                            }
-                        }
-                    } catch (CommandSyntaxException e) {
-                        e.printStackTrace();
-                    }
-                    return 0;
-				}))).then(Commands.literal("lights").then(Commands.literal("ablaze").executes(arguments -> {
+				.then(Commands.argument("name", EntityArgument.players()).then(Commands.literal("lights").then(Commands.literal("ablaze").executes(arguments -> {
 					Level world = arguments.getSource().getUnsidedLevel();
                     Entity entity = arguments.getSource().getEntity();
 					if (entity == null && world instanceof ServerLevel servLevel)

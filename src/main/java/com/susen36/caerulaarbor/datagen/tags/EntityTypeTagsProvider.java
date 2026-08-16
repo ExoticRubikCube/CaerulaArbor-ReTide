@@ -36,7 +36,7 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
     private static final TagKey<EntityType<?>> IZUMIK_DISCOVERS = caEntityTypeTag("izumik_discovers");
     private static final TagKey<EntityType<?>> MARINEMOBS = caEntityTypeTag("marinemobs");
     private static final TagKey<EntityType<?>> NO_JOIN_WHIRL = caEntityTypeTag("no_join_whirl");
-    private static final TagKey<EntityType<?>> ELITE = caEntityTypeTag("elite");
+    private static final TagKey<EntityType<?>> ELITE = babelEntityTypeTag("elite");
     private static final TagKey<EntityType<?>> SEABORN = caEntityTypeTag("seaborn");
     private static final TagKey<EntityType<?>> SEABORN_MINION = caEntityTypeTag("seaborn_minion");
     private static final TagKey<EntityType<?>> SEABORN_PET= caEntityTypeTag("seaborn_pet");
@@ -121,6 +121,16 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
      */
     private static TagKey<EntityType<?>> caEntityTypeTag(String path) {
         return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, path));
+    }
+
+    /**
+     * 创建 babel 命名空间的实体类型标签 key
+     *
+     * @param path 标签路径
+     * @return 实体类型标签 key
+     */
+    private static TagKey<EntityType<?>> babelEntityTypeTag(String path) {
+        return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("babel", path));
     }
 
     /**
