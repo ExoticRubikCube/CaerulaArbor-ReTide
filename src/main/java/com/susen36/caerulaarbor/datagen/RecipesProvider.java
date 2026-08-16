@@ -1784,7 +1784,7 @@ public class RecipesProvider extends RecipeProvider {
                 "craft_iris",
                 "misc",
                 null,
-                result("caerula_arbor:redstone_iris_flower", 1),
+                result("babel:redstone_iris_flower", 1),
                 ingredients(item("caerula_arbor:redstone_iris"))
         );
         shaped(
@@ -2109,7 +2109,7 @@ public class RecipesProvider extends RecipeProvider {
                 "craft_rainbow_candy",
                 "misc",
                 null,
-                result("caerula_arbor:rainbow_candy", 3),
+                result("babel:rainbow_candy", 3),
                 ingredients(tag("minecraft:fruits"), tag("minecraft:fruits"), tag("minecraft:fruits"), item("caerula_arbor:paper_bag"), item("caerula_arbor:paper_bag"), item("caerula_arbor:paper_bag"), item("minecraft:gold_nugget"), item("minecraft:gold_nugget"), item("minecraft:gold_nugget"))
         );
         shaped(

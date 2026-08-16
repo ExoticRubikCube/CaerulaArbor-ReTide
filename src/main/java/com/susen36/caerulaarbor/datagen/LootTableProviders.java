@@ -1241,7 +1241,7 @@ public final class LootTableProviders {
                             entry("minecraft:book", 25, cond(), setCount(u(4.0F, 8.0F))),
                             entry("caerula_arbor:treaty_empty", 5, cond(), setCount(u(1.0F, 2.0F))),
                             entry("caerula_arbor:canned_noodle", 5, cond(), setCount(u(1.0F, 2.0F))),
-                            entry("caerula_arbor:kettle", 5, cond(), setCount(u(1.0F, 1.0F)))));
+                            entry("babel:kettle", 5, cond(), setCount(u(1.0F, 1.0F)))));
         }
 
         private static TableDef caegirStore() {
@@ -1441,7 +1441,7 @@ public final class LootTableProviders {
                             entry("caerula_arbor:ocean_cutin", 55, cond(), setCount(u(2.0F, 3.0F)))),
                     pool(u(2.0F, 3.0F), u(0.0F, 1.0F), cond(),
                             entry("minecraft:golden_apple", 33, cond(), setCount(u(1.0F, 3.0F))),
-                            entry("caerula_arbor:voyage_of_gold", 22, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:voyage_of_gold", 22, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:ocean_arrow", 44, cond(), setCount(u(2.0F, 3.0F)))),
                     pool(u(1.0F, 2.0F), null, cond(),
                             entry("minecraft:crossbow", 50, cond(), setCount(u(1.0F, 1.0F)), enchantWithLevels(u(2.0F, 3.0F), true)),
@@ -1505,7 +1505,7 @@ public final class LootTableProviders {
         private static TableDef ccombatBarrel() {
             return table("chests/combat_barrel",
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:kettle", 33, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:kettle", 33, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:score", 33, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:allay_sculpture", 33, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:bowl_seagrass", 33, cond(), setCount(u(1.0F, 1.0F))),
@@ -1614,7 +1614,7 @@ public final class LootTableProviders {
                             entry("caerula_arbor:ocean_phloem", 33, cond(), setCount(u(3.0F, 4.0F))),
                             entry("caerula_arbor:ocean_chitin", 33, cond(), setCount(u(2.0F, 5.0F)))),
                     pool(u(1.0F, 2.0F), null, cond(),
-                            entry("caerula_arbor:voyage_of_gold", 33, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:voyage_of_gold", 33, cond(), setCount(u(1.0F, 1.0F))),
                             entry("minecraft:gold_ingot", 33, cond(), setCount(u(3.0F, 6.0F))),
                             entry("caerula_arbor:redstone_ingot", 33, cond(), setCount(u(4.0F, 8.0F)))));
         }
@@ -1703,7 +1703,7 @@ public final class LootTableProviders {
                             entry("caerula_arbor:radiant_berries", 10, cond(), setCount(u(1.0F, 2.0F))),
                             entry("caerula_arbor:fluore_berries", 25, cond(), setCount(u(2.0F, 4.0F))),
                             entry("caerula_arbor:bowl_seagrass", 25, cond(), setCount(u(1.0F, 3.0F))),
-                            entry("caerula_arbor:rainbow_candy", 15, cond(), setCount(u(1.0F, 4.0F))),
+                            entry("babel:rainbow_candy", 15, cond(), setCount(u(1.0F, 4.0F))),
                             entry("caerula_arbor:nethersea_coffee", 15, cond(), setCount(u(1.0F, 2.0F)))));
         }
 
@@ -1814,7 +1814,7 @@ public final class LootTableProviders {
                             entry("minecraft:gold_ingot", 33, cond(), setCount(u(4.0F, 6.0F))),
                             entry("caerula_arbor:treaty_gold", 15, cond(), setCount(u(1.0F, 1.0F))),
                             entry("minecraft:raw_gold", 33, cond(), setCount(u(3.0F, 6.0F))),
-                            entry("caerula_arbor:voyage_of_gold", 5, cond(), setCount(u(1.0F, 1.0F)))),
+                            entry("babel:voyage_of_gold", 5, cond(), setCount(u(1.0F, 1.0F)))),
                     pool(u(5.0F, 8.0F), null, cond(),
                             entry("minecraft:cookie", 33, cond(), setCount(u(3.0F, 6.0F))),
                             entry("minecraft:cake", 11, cond(), setCount(u(1.0F, 1.0F))),
@@ -2167,7 +2167,7 @@ public final class LootTableProviders {
         private static TableDef cspawnBonusAppendix() {
             return table("chests/spawn_bonus_appendix",
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:kettle", 99, cond(), setCount(u(1.0F, 1.0F)))),
+                            entry("babel:kettle", 99, cond(), setCount(u(1.0F, 1.0F)))),
                     pool(number(1.0F), null, cond(),
                             entry("caerula_arbor:instant_noodle", 99, cond(), setCount(u(2.0F, 4.0F)))));
         }
@@ -2692,7 +2692,7 @@ public final class LootTableProviders {
                             entry("minecraft:brain_coral", 22, cond(), setCount(u(1.0F, 1.0F)))),
                     pool(number(1.0F), null, cond(),
                             entry("minecraft:book", 56, cond(), setCount(u(1.0F, 2.0F))),
-                            entry("caerula_arbor:piglin_diary", 44, cond(), setCount(u(1.0F, 1.0F)))));
+                            entry("babel:piglin_diary", 44, cond(), setCount(u(1.0F, 1.0F)))));
         }
 
         private static TableDef eoceanizedCow() {
@@ -3095,13 +3095,13 @@ public final class LootTableProviders {
                             entry("caerula_arbor:redstone_ingot", 100, cond(), setCount(u(16.0F, 27.0F)))),
                     pool(u(1.0F, 2.0F), null, cond(),
                             entry("caerula_arbor:toponym_textology", 40, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:piglin_diary", 30, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:piglin_diary", 30, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:survivor_contract", 10, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:redstone_iris_flower", 30, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:relic_cursed_glowbody", 10, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:redstone_iris_flower", 30, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("caerula_arbor:cursed_glowbody", 10, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:hand_of_barren", 10, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:relic_crown", 10, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:kettle", 20, cond(), setCount(u(1.0F, 1.0F)))));
+                            entry("babel:kettle", 20, cond(), setCount(u(1.0F, 1.0F)))));
         }
 
         private static TableDef gmereGeenSample() {
@@ -3115,12 +3115,12 @@ public final class LootTableProviders {
                     pool(number(1.0F), null, cond(),
                             entry("caerula_arbor:redstone_ingot", 1, cond(), setCount(u(8.0F, 16.0F)), oreBonus())),
                     pool(number(1.0F), u(0.0F, 1.0F), cond(),
-                            entry("caerula_arbor:redstone_iris_flower", 10, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:redstone_iris_flower", 10, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:kings_spear", 4, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:solo_music_box", 10, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:guardian_stare", 10, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:kings_crystal", 6, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:piglin_diary", 16, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:piglin_diary", 16, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:coffee_candy", 14, cond(), setCount(u(2.0F, 3.0F))),
                             entry("caerula_arbor:caerula_heart", 1, cond(), setCount(u(1.0F, 1.0F)))));
         }
@@ -3135,7 +3135,7 @@ public final class LootTableProviders {
                             entry("caerula_arbor:archfiends_flag", 10, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:archfiends_bed", 15, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:guardian_stare", 25, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:voyage_of_gold", 25, cond(), setCount(u(1.0F, 1.0F)))),
+                            entry("babel:voyage_of_gold", 25, cond(), setCount(u(1.0F, 1.0F)))),
                     pool(number(1.0F), null, cond(),
                             entry("caerula_arbor:hand_of_thorns", 5, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:hand_of_strangle", 5, cond(), setCount(u(1.0F, 1.0F))),
@@ -3146,7 +3146,7 @@ public final class LootTableProviders {
                             entry("caerula_arbor:hand_of_firework", 5, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:hand_of_engrave", 5, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:hand_sword", 5, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:redstone_iris_flower", 50, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:redstone_iris_flower", 50, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:coin_of_trade", 30, cond(), setCount(u(2.0F, 4.0F)))),
                     pool(u(1.0F, 2.0F), null, cond(),
                             entry("caerula_arbor:redstone_ingot", 64, cond(), setCount(u(32.0F, 56.0F))),
@@ -3168,7 +3168,7 @@ public final class LootTableProviders {
                             entry("caerula_arbor:relic_crown", 22, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:kings_spear", 33, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:kings_armour", 33, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:kettle", 44, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:kettle", 44, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:caerula_heart", 8, cond(), setCount(u(1.0F, 1.0F)))),
                     pool(number(1.0F), null, cond(),
                             entry("caerula_arbor:coin_of_trade", 100, cond(), setCount(u(1.0F, 3.0F)))));
@@ -3179,7 +3179,7 @@ public final class LootTableProviders {
                     pool(number(1.0F), null, cond(),
                             entry("caerula_arbor:redstone_ingot", 99, cond(), setCount(u(6.0F, 14.0F)), oreBonus())),
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:voyage_of_gold", 20, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:voyage_of_gold", 20, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:kings_extension", 5, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:aromatic_coffee", 15, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:score", 20, cond(), setCount(u(1.0F, 1.0F))),
@@ -3197,9 +3197,9 @@ public final class LootTableProviders {
                             entry("caerula_arbor:relic_cursed_research", 5, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:hand_of_firework", 30, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:hand_of_engrave", 30, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:piglin_diary", 45, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:rainbow_candy", 55, cond(), setCount(u(1.0F, 1.0F))),
-                            entry("caerula_arbor:piglin_diary", 45, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:piglin_diary", 45, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:rainbow_candy", 55, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("babel:piglin_diary", 45, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:allay_sculpture", 45, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:omni_key", 45, cond(), setCount(u(1.0F, 1.0F)))));
         }

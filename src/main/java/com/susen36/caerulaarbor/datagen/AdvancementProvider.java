@@ -274,7 +274,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
                 ))
                 .addCriterion("encounter_from_the_ocean_0", impossible())
                 .rewards(recipeRewards(
-                        "caerula_arbor:craft_meat_can",
+                        "babel:craft_meat_can",
                         "caerula_arbor:craft_can",
                         "caerula_arbor:craft_bowl_seagrass",
                         "caerula_arbor:extract_caffeine",
@@ -1226,7 +1226,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
         var sheComing = Advancement.Builder.advancement()
                 .parent(toTerminateEvolution)
                 .display(display(
-                        "caerula_arbor:relic_cursed_research",
+                        "caerula_arbor:cursed_research",
                         "advancements.she_coming.title",
                         "advancements.she_coming.descr",
                         null,
@@ -1238,7 +1238,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
                 .addCriterion("she_coming_0", impossible())
                 .rewards(recipeRewards(
                         "caerula_arbor:craft_spear",
-                        "caerula_arbor:craft_meat_can",
+                        "babel:craft_meat_can",
                         "caerula_arbor:craft_can",
                         "caerula_arbor:craft_bowl_seagrass",
                         "caerula_arbor:craft_orangestorm",
@@ -1540,7 +1540,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
         var killBrute = Advancement.Builder.advancement()
                 .parent(forcedWelcome)
                 .display(display(
-                        "caerula_arbor:crimson_treaty",
+                        "caerula_arbor:treaty",
                         "advancements.kill_brute.title",
                         "advancements.kill_brute.descr",
                         null,
