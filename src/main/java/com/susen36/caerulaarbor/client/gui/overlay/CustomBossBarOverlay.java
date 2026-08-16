@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.client.gui.overlay.event;
+package com.susen36.caerulaarbor.client.gui.overlay;
 
 import com.mojang.datafixers.util.Pair;
 import com.susen36.caerulaarbor.CaerulaArbor;
@@ -22,7 +22,7 @@ import java.util.*;
 
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT)
-public class CustomBossBarEventHandler {
+public class CustomBossBarOverlay {
 	public static final Map<BossEvent, BossBarRenderContext> CACHE = new HashMap<>();
 	public static final Map<BossEvent, String> CACHE_NAME = new HashMap<>();
 	public static final Map<BossEvent, BossEvent.BossBarColor> CACHE_COLOR = new HashMap<>();
