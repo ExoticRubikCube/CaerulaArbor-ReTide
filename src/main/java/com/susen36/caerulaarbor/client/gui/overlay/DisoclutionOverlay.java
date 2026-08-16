@@ -15,7 +15,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
 @EventBusSubscriber({Dist.CLIENT})
-public class DisShowOverlay {
+public class DisoclutionOverlay {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		Player entity = Minecraft.getInstance().player;
