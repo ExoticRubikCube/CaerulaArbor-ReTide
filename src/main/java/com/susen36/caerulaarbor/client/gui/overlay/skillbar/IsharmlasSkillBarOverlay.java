@@ -4,7 +4,6 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.isharmla.IsharmlaEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -20,7 +19,7 @@ import java.util.Comparator;
 @EventBusSubscriber({Dist.CLIENT})
 public class IsharmlasSkillBarOverlay {
 
-	public static final ResourceLocation BAR = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/isharmla_bar.png");
+	public static final ResourceLocation BAR = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/skillbar/isharmla_bar.png");
 
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
@@ -42,7 +41,7 @@ public class IsharmlasSkillBarOverlay {
 
 		IsharmlaEntity corrupted;
         corrupted = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 48, 48, 48), e1 -> true)
-                .stream().min(Comparator.<Entity>comparingDouble(entcnd -> entcnd.distanceToSqr(fx, fy, fz))).orElse(null);
+                .stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(fx, fy, fz))).orElse(null);
         if (corrupted != null && corrupted.isMonster()) {
             double ind = 0;
 			IsharmlaEntity isharmla = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(fx, fy, fz), 48, 48, 48), e -> true)
