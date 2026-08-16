@@ -573,7 +573,8 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> OCEAN_PHLOEM = tooltipItem("ocean_phloem", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
     public static final DeferredHolder<Item, ? extends Item> OCEAN_FIBRE = tooltipItem("ocean_fibre",
             () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(0.2f).build())), 1);
-    public static final DeferredHolder<Item, ? extends Item> CHITIN_COOKIE_RAW = REGISTRY.register("chitin_cookie_raw", ChitinCookieRawItem::new);
+    public static final DeferredHolder<Item, ? extends Item> CHITIN_COOKIE_RAW = REGISTRY.register("chitin_cookie_raw",
+            () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.3f).alwaysEdible().build())));
     public static final DeferredHolder<Item, ? extends Item> CHITIN_COOKIE_DONE = REGISTRY.register("chitin_cookie_done", ChitinCookieDoneItem::new);
     public static final DeferredHolder<Item, ? extends Item> OCEAN_CRYSTAL = tooltipItem("ocean_crystal", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
     public static final DeferredHolder<Item, ? extends Item> OCEAN_CUTIN = tooltipItem("ocean_cutin", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);

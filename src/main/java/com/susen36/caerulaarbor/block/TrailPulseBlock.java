@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -105,7 +106,7 @@ public class TrailPulseBlock extends Block implements NetherseaBrandBlock {
 		super.tick(blockstate, world, pos, random);
 		BlockState seaTrailInitState = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
 		double strategyGrow = MapVariables.get(world).strategy_grow;
-		float effectiveSpreadRate = 0.25F * 0.9F * (1.0F + 0.10F * (float) strategyGrow);
+		float effectiveSpreadRate = 0.25F * 0.9F * (1.0F + 0.10F * (float) strategyGrow) * (world.getGameRules().getInt(CAGameRules.SPREAD_RATE) / 100.0F);
 		boolean put = false;
 		for (Direction direction : Direction.Plane.HORIZONTAL) {
 			for (int dy = 0; dy <= 2; dy++) {

@@ -92,7 +92,7 @@ public class TrailLogBlock extends Block {
 		}
 		if (growAge > 30 && growAge < 64 && longevity > 0) {
 			double strategyGrow = MapVariables.get(world).strategy_grow;
-			float effectiveSpreadRate = 0.2F * 0.9F * (1.0F + 0.10F * (float) strategyGrow);
+			float effectiveSpreadRate = 0.2F * 0.9F * (1.0F + 0.10F * (float) strategyGrow) * (world.getGameRules().getInt(CAGameRules.SPREAD_RATE) / 100.0F);
 			for (Direction direction : Direction.values()) {
 				if (random.nextFloat() < effectiveSpreadRate) {
 					int spreadLongevity = random.nextFloat() < 0.5F ? longevity - 1 : longevity;

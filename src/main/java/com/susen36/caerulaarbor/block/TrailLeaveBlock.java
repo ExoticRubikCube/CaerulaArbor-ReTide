@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.block;
 
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.init.CABlocks;
+import com.susen36.caerulaarbor.init.CAGameRules;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -67,7 +68,7 @@ public class TrailLeaveBlock extends LeavesBlock {
 		if (growAge > 16 && growAge < 62) {
 			if (longevity > 0) {
 				double strategyGrow = MapVariables.get(world).strategy_grow;
-				float effectiveSpreadRate = 0.2F * 0.9F * (1.0F + 0.10F * (float) strategyGrow);
+				float effectiveSpreadRate = 0.2F * 0.9F * (1.0F + 0.10F * (float) strategyGrow) * (world.getGameRules().getInt(CAGameRules.SPREAD_RATE) / 100.0F);
 				for (Direction direction : Direction.values()) {
 					if (random.nextFloat() < effectiveSpreadRate) {
 						int spreadLongevity = random.nextFloat() < 0.25F ? longevity - 1 : longevity;

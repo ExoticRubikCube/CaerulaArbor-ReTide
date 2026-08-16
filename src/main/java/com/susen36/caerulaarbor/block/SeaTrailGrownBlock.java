@@ -162,7 +162,7 @@ public class SeaTrailGrownBlock extends Block implements NetherseaBrandBlock, Si
 			double strategyGrow = MapVariables.get(world).strategy_grow;
 			int boostedExpand = Math.max(1, (int) Math.round(expand * (1.0 + 0.10 * strategyGrow)));
 			boolean valid = !this.hasLargeLivingEntityNearby(world, pos);
-			float effectiveSpreadRate = world.getGameRules().getInt(CAGameRules.SPREAD_RATE) * 0.9f * (1.0f + 0.10f * (float) strategyGrow);
+			float effectiveSpreadRate = world.getGameRules().getInt(CAGameRules.SPREAD_RATE) * 0.5f * (1.0f + 0.225f * (float) strategyGrow);
 			if (valid && growAge > 29 && longevity > 0 && random.nextFloat() * 100.0F < effectiveSpreadRate) {
 				if (this.canSpread()) {
 				if (SilenceUpgradeManager.isSilence(world)) {
