@@ -993,7 +993,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
         var startPlayerEvo = Advancement.Builder.advancement()
                 .parent(theyShallPay)
                 .display(display(
-                        "caerula_arbor:gene_sample_normal",
+                        "caerula_arbor:evolutionary_gene",
                         "advancements.start_player_evo.title",
                         "advancements.start_player_evo.descr",
                         null,
@@ -1010,7 +1010,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
         var endPlayerEvo = Advancement.Builder.advancement()
                 .parent(startPlayerEvo)
                 .display(display(
-                        "caerula_arbor:gene_sample_superb",
+                        "caerula_arbor:experimental_gene",
                         "advancements.end_player_evo.title",
                         "advancements.end_player_evo.descr",
                         null,

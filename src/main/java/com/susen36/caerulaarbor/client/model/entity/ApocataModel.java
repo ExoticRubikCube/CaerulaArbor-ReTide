@@ -11,7 +11,7 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class ApocataModel extends GeoModel<ApocataEntity> {
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/new_bocchi.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/apocata.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(ApocataEntity entity) {

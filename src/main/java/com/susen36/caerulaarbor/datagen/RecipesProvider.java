@@ -901,7 +901,7 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:dna_horse", 2),
-                ingredients(item("caerula_arbor:dna_horse"), item("caerula_arbor:gene_sample_normal"), item("caerula_arbor:gene_sample_normal"), item("caerula_arbor:gene_sample_normal"), item("caerula_arbor:gene_sample_normal"))
+                ingredients(item("caerula_arbor:dna_horse"), item("caerula_arbor:evolutionary_gene"), item("caerula_arbor:evolutionary_gene"), item("caerula_arbor:evolutionary_gene"), item("caerula_arbor:evolutionary_gene"))
         );
         shapeless(
                 writer,
@@ -909,7 +909,7 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:hunter_gene", 2),
-                ingredients(item("caerula_arbor:hunter_gene"), item("caerula_arbor:gene_sample_upgraded"), item("caerula_arbor:gene_sample_upgraded"), item("caerula_arbor:gene_sample_upgraded"), item("caerula_arbor:gene_sample_upgraded"))
+                ingredients(item("caerula_arbor:hunter_gene"), item("caerula_arbor:evolutionary_genome"), item("caerula_arbor:evolutionary_genome"), item("caerula_arbor:evolutionary_genome"), item("caerula_arbor:evolutionary_genome"))
         );
         shapeless(
                 writer,
@@ -917,7 +917,7 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:dna_reaper", 2),
-                ingredients(item("caerula_arbor:dna_reaper"), item("caerula_arbor:gene_sample_normal"), item("caerula_arbor:gene_sample_normal"), item("caerula_arbor:gene_sample_normal"), item("caerula_arbor:gene_sample_normal"))
+                ingredients(item("caerula_arbor:dna_reaper"), item("caerula_arbor:evolutionary_gene"), item("caerula_arbor:evolutionary_gene"), item("caerula_arbor:evolutionary_gene"), item("caerula_arbor:evolutionary_gene"))
         );
         shapeless(
                 writer,
@@ -925,7 +925,7 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:targeted_base", 2),
-                ingredients(item("caerula_arbor:targeted_base"), item("caerula_arbor:gene_sample_superb"), item("caerula_arbor:gene_sample_superb"), item("caerula_arbor:gene_sample_superb"), item("caerula_arbor:gene_sample_superb"))
+                ingredients(item("caerula_arbor:targeted_base"), item("caerula_arbor:experimental_gene"), item("caerula_arbor:experimental_gene"), item("caerula_arbor:experimental_gene"), item("caerula_arbor:experimental_gene"))
         );
         shaped(
                 writer,

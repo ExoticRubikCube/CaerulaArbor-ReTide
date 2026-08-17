@@ -50,7 +50,7 @@ public class MutagenisisCapsuleItem extends Item {
             }
             if (entity.isAlive()) {
                 {
-                    double setval = ocean + 1;
+                    int setval = (int) (ocean + 1);
                     PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                     capability.player_oceanization = setval;
                     capability.syncPlayerVariables(entity);

@@ -3107,7 +3107,7 @@ public final class LootTableProviders {
         private static TableDef gmereGeenSample() {
             return table("gameplay/mere_geen_sample",
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:gene_sample_superb", 100, cond(), setCount(u(1.0F, 1.0F)))));
+                            entry("caerula_arbor:experimental_gene", 100, cond(), setCount(u(1.0F, 1.0F)))));
         }
 
         private static TableDef grelicBishop() {

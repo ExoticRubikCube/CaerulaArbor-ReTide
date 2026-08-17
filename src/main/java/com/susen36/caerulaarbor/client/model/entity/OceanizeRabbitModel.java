@@ -11,7 +11,6 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizeRabbitModel extends GeoModel<OceanizeRabbitEntity> {
-	private static final ResourceLocation BLOODY_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_rabbit_bloody.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceanizeRabbitEntity entity) {
@@ -27,7 +26,8 @@ public class OceanizeRabbitModel extends GeoModel<OceanizeRabbitEntity> {
 	public ResourceLocation getTextureResource(OceanizeRabbitEntity entity) {
 		int variant = entity.getEntityData().get(OceanizeRabbitEntity.DATA_VARIANT);
 		if (variant == 5) {
-			return BLOODY_TEXTURE;
+			//TODO 需要移除雪狼变种
+			//return BLOODY_TEXTURE;
 		}
 		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_rabbit_" + variant + ".png");
 	}

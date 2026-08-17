@@ -5,24 +5,18 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAEntityTypeTags;
-import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -97,61 +91,6 @@ public class EntityUtils {
 			count = count + 1;
 		}
 		return count;
-	}
-
-	// 给玩家发放储备相关物品
-	public static void givePlayerReserve(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
-		if (entity == null)
-			return;
-		double r = 0;
-		double exp = 0;
-		double r_a = 0;
-		boolean creative;
-		creative = new Object() {
-			public boolean checkGamemode(Entity ent) {
-				if (ent instanceof ServerPlayer serverPlayer) {
-					return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-				} else if (ent.level().isClientSide() && ent instanceof Player player) {
-					return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-				}
-				return false;
-			}
-		}.checkGamemode(entity);
-		if (itemstack.getItem() == CAItems.GENE_SAMPLE_NORMAL.get()) {
-			r = 1;
-			exp = 1;
-		} else if (itemstack.getItem() == CAItems.GENE_SAMPLE_UPGRADED.get()) {
-			r = 4;
-			exp = 2;
-		} else if (itemstack.getItem() == CAItems.GENE_SAMPLE_SUPERB.get()) {
-			r_a = 1;
-			exp = 3;
-		}
-		if (exp > 0) {
-			if ((entity instanceof Player plr ? plr.experienceLevel : 0) >= exp || creative) {
-				{
-					PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                    capability.reserve_quantity = capability.reserve_quantity + r;
-					capability.syncPlayerVariables(entity);
-				}
-				{
-					PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-                    capability.reserve_quality = capability.reserve_quality + r_a;
-					capability.syncPlayerVariables(entity);
-				}
-				if (!creative) {
-					if (entity instanceof Player player)
-						player.giveExperienceLevels(-((int) exp));
-				}
-				if (world instanceof Level level) {
-						level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 2, 1);
-				}
-				itemstack.shrink(1);
-			} else {
-				if (entity instanceof Player player && !player.level().isClientSide())
-					player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.gene_sample.no_exp").getString())), true);
-			}
-		}
 	}
 
 	public static Entity getNearestEnemy(LevelAccessor world, double x, double y, double z, Entity exception0, Entity exception1, Entity obj) {
@@ -305,7 +244,7 @@ public class EntityUtils {
 
 	public static boolean isOceanizedPlayer(Entity entity) {
 		return entity instanceof Player player
-				&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 2.9D;
+				&& ModCapabilities.getPlayerVariables(player).player_oceanization >= 3;
 	}
 
 	// 应用环绕运动

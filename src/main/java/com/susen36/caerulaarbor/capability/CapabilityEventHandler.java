@@ -117,10 +117,9 @@ public class CapabilityEventHandler {
         clone.player_light = original.player_light;
         clone.disoclusion = original.disoclusion;
         clone.show_stats = original.show_stats;
-        clone.player_oceanization = original.player_oceanization;
         clone.plauyer_balance = original.plauyer_balance;
-        clone.can_player_evo = original.can_player_evo;
-        clone.reserve_quantity = original.reserve_quantity;
-        clone.reserve_quality = original.reserve_quality;
+        clone.permanent_evo = original.permanent_evo;
+        // 永久进化决定临时进化能否在死亡/重生后保留；无永久进化则临时进化随死亡清除
+        clone.can_player_evo = original.permanent_evo;
     }
 }

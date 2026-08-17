@@ -554,9 +554,9 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_SLIME_SPAWN_EGG = REGISTRY.register("nethersea_slime_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.NETHERSEA_SLIME, -10983573, -12426093, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> FISSION_PROKARYOTE_SLIME_SPAWN_EGG = REGISTRY.register("fission_prokaryote_slime_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.FISSION_PROKARYOTE_SLIME, -16776961, -1, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_SHULKER_SPAWN_EGG = REGISTRY.register("oceanized_shulker_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_SHULKER, -5999788, -13398106, new Item.Properties()));
-    public static final DeferredHolder<Item, ? extends Item> GENE_SAMPLE_NORMAL = REGISTRY.register("gene_sample_normal", GeneSampleNormalItem::new);
-    public static final DeferredHolder<Item, ? extends Item> GENE_SAMPLE_UPGRADED = REGISTRY.register("gene_sample_upgraded", GeneSampleUpgradedItem::new);
-    public static final DeferredHolder<Item, ? extends Item> GENE_SAMPLE_SUPERB = REGISTRY.register("gene_sample_superb", GeneSampleSuperbItem::new);
+    public static final DeferredHolder<Item, ? extends Item> EVOLUTIONARY_GENE = REGISTRY.register("evolutionary_gene", EvolutionaryGeneItem::new);
+    public static final DeferredHolder<Item, ? extends Item> EVOLUTIONARY_GENOME = REGISTRY.register("evolutionary_genome", EvolutionaryGenomeItem::new);
+    public static final DeferredHolder<Item, ? extends Item> EXPERIMENTAL_GENE = REGISTRY.register("experimental_gene", ExperimentalGeneItem::new);
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_SAMPLING = block(CABlocks.NETHERSEA_SAMPLING);
     public static final DeferredHolder<Item, ? extends Item> HIGHMORE_DOLL = block(CABlocks.HIGHMORE_DOLL);
     public static final DeferredHolder<Item, ? extends Item> MIZUKI_DOLL = block(CABlocks.MIZUKI_DOLL);

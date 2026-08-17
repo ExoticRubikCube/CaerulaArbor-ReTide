@@ -57,10 +57,10 @@ public class ComplexChitinBowItem extends BowItem {
     public static final Predicate<ItemStack> ALSO_OCEAN_ARROW = (itemStack) -> ARROW_ONLY.test(itemStack) || itemStack.getItem() == CAItems.OCEAN_ARROW.get();
 
     private double getRate(Player player) {
-        // 攻击力加成只影响海嗣（>=3）/ 海嗣化（2.9~3）/ 进化玩家，其余玩家无加成（保留弓自身基础倍率，伤害高于原版箭）
+        // 攻击力加成只影响海嗣（>=3）/ 半海嗣（1~2）/ 进化玩家，其余玩家无加成（保留弓自身基础倍率，伤害高于原版箭）
         PlayerVariable vars = ModCapabilities.getPlayerVariables(player);
         boolean isSeaborn = vars.player_oceanization >= 3;
-        boolean isOceanized = vars.player_oceanization >= 2.9 && vars.player_oceanization < 3;
+        boolean isOceanized = vars.player_oceanization >= 1 && vars.player_oceanization < 3;
         boolean isEvolved = vars.can_player_evo;
         double rate;
         if (isSeaborn || isOceanized || isEvolved) {

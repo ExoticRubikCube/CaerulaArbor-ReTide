@@ -213,9 +213,9 @@ public class CATabs {
                 tabData.accept(CAItems.MUTAGENISIS_CAPSULE.get());
                 tabData.accept(CAItems.OCEANIZE_CATALYST.get());
                 tabData.accept(CAItems.COLOURFULL_JELLY.get());
-                tabData.accept(CAItems.GENE_SAMPLE_NORMAL.get());
-                tabData.accept(CAItems.GENE_SAMPLE_UPGRADED.get());
-                tabData.accept(CAItems.GENE_SAMPLE_SUPERB.get());
+                tabData.accept(CAItems.EVOLUTIONARY_GENE.get());
+                tabData.accept(CAItems.EVOLUTIONARY_GENOME.get());
+                tabData.accept(CAItems.EXPERIMENTAL_GENE.get());
                 tabData.accept(CAItems.ARCHIVE_SAL_VIENTO.get());
                 tabData.accept(CAItems.ARCHIVE_OF_TIDELINK.get());
                 tabData.accept(CAItems.ARCHIVE_OF_MARTUS.get());

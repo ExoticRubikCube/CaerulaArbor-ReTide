@@ -196,7 +196,7 @@ public class LivingDeathEventHandler {
         if (sourceentity instanceof Player) {
             boolean result = false;
             result = (ModCapabilities.getPlayerVariables(sourceentity)).can_player_evo
-                    && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization > 2.9);
+                    && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization >= 3);
             if (result) {
                 double r0 = 0, r1 = 0, r2 = 0;
                 if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {
@@ -212,7 +212,7 @@ public class LivingDeathEventHandler {
                 }
                 if (Math.random() < r0) {
                     if (world instanceof ServerLevel level) {
-                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_NORMAL.get()));
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.EVOLUTIONARY_GENE.get()));
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
                         level.addFreshEntity(entityToSpawn);
@@ -220,7 +220,7 @@ public class LivingDeathEventHandler {
                 }
                 if (Math.random() < r1) {
                     if (world instanceof ServerLevel level) {
-                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_UPGRADED.get()));
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.EVOLUTIONARY_GENOME.get()));
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
                         level.addFreshEntity(entityToSpawn);
@@ -228,7 +228,7 @@ public class LivingDeathEventHandler {
                 }
                 if (Math.random() < r2) {
                     if (world instanceof ServerLevel level) {
-                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_SUPERB.get()));
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.EXPERIMENTAL_GENE.get()));
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
                         level.addFreshEntity(entityToSpawn);
@@ -498,10 +498,8 @@ public class LivingDeathEventHandler {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_PLACE, SoundSource.PLAYERS, (float) 0.75, 1);
             }
             PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-            if (capability.player_oceanization < 2.9) {
-                capability.player_oceanization = 0;
-                capability.syncPlayerVariables(entity);
-            }
+            capability.player_oceanization = 0;
+            capability.syncPlayerVariables(entity);
         }
     }
 

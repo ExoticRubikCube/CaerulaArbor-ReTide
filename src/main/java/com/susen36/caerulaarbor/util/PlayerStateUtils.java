@@ -91,7 +91,7 @@ public class PlayerStateUtils {
 		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_protective")))) {
 			return;
 		}
-		if (entity instanceof LivingEntity livingEntity && ModCapabilities.getPlayerVariables(entity).player_oceanization < 2.85) {
+		if (entity instanceof LivingEntity livingEntity && ModCapabilities.getPlayerVariables(entity).player_oceanization < 3) {
 			EPUtils.causeSanityInjury(livingEntity, Mth.nextInt(RandomSource.create(), 2, 5));
 		}
 		if (world instanceof ServerLevel level) {

@@ -89,7 +89,7 @@ public class InfestedMobEffect extends MobEffect {
                 ampli = 2;
             }
             {
-                double setval = ampli + 1;
+                int setval = (int) (ampli + 1);
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
                     capability.player_oceanization = setval;
                     capability.syncPlayerVariables(entity);

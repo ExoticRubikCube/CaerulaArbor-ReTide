@@ -21,14 +21,16 @@ public class OceanizingOverlay {
 		Player player = Minecraft.getInstance().player;
 		if (player != null) {
 			ResourceLocation texture = null;
+			float opacity = 0.0F;
 			if (player.hasEffect(CAMobEffects.INFESTED)) {
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/transforming1.png");
 				int amplifier = player.getEffect(CAMobEffects.INFESTED).getAmplifier();
 				if (amplifier == 0) {
-					texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/transforming0.png");
+					opacity = 0.35F;
 				} else if (amplifier == 1) {
-					texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/transforming1.png");
+					opacity = 0.65F;
 				} else if (amplifier > 1) {
-					texture = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/transforming2.png");
+					opacity = 0.95F;
 				}
 			}
 			if (texture != null) {
@@ -39,7 +41,7 @@ public class OceanizingOverlay {
 				RenderSystem.enableBlend();
 				RenderSystem.setShader(GameRenderer::getPositionTexShader);
 				RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-				RenderSystem.setShaderColor(1, 1, 1, 1);
+				RenderSystem.setShaderColor(1, 1, 1, opacity);
 				event.getGuiGraphics().blit(texture, 0, 0, 0, 0, width, height, width, height);
 				RenderSystem.depthMask(true);
 				RenderSystem.defaultBlendFunc();

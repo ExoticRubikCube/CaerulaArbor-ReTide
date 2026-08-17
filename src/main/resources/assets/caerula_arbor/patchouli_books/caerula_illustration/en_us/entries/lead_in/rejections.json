@@ -10,10 +10,10 @@
       "title": "排异反应",
       "border": true,
       "images": [
-        "caerula_arbor:textures/screens/disoclution_attention.png",
-        "caerula_arbor:textures/screens/disoclution_blood.png",
-        "caerula_arbor:textures/screens/disoclution_flesh.png",
-        "caerula_arbor:textures/screens/disoclution_neuro.png"
+        "caerula_arbor:textures/gui/screen/disoclution_attention.png",
+        "caerula_arbor:textures/gui/screen/disoclution_combos/disoclution_blood.png",
+        "caerula_arbor:textures/gui/screen/disoclution_combos/disoclution_flesh.png",
+        "caerula_arbor:textures/gui/screen/disoclution_combos/disoclution_neuro.png"
       ],
       "text": "玩家的血肉被海嗣入侵，这是Ta身体发生的变化……"
     },

@@ -184,7 +184,7 @@ public class SetPlayerLifeCommand {
                             {
                                 double setval = DoubleArgumentType.getDouble(arguments, "state");
                                 PlayerVariable capability = ModCapabilities.getPlayerVariables(entityiterator);
-                                capability.player_oceanization = setval;
+                                capability.player_oceanization = (int) setval;
                                 capability.syncPlayerVariables(entityiterator);
                             }
                             info = Component.translatable("command.oceanize").getString();

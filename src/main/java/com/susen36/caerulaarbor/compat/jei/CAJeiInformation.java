@@ -24,7 +24,7 @@ public class CAJeiInformation implements IModPlugin {
 	public void registerRecipes(IRecipeRegistration registration) {
 		registration.addIngredientInfo(List.of(new ItemStack(CAItems.OCARINA.get())), VanillaTypes.ITEM_STACK, Component.translatable("jei.caerula_arbor.descr_ocarino"));
 		registration.addIngredientInfo(List.of(new ItemStack(CAItems.MOIST_STAR.get())), VanillaTypes.ITEM_STACK, Component.translatable("jei.caerula_arbor.desc_moist_star"));
-		registration.addIngredientInfo(List.of(new ItemStack(CAItems.GENE_SAMPLE_NORMAL.get()), new ItemStack(CAItems.GENE_SAMPLE_UPGRADED.get()), new ItemStack(CAItems.GENE_SAMPLE_SUPERB.get())),
+		registration.addIngredientInfo(List.of(new ItemStack(CAItems.EVOLUTIONARY_GENE.get()), new ItemStack(CAItems.EVOLUTIONARY_GENOME.get()), new ItemStack(CAItems.EXPERIMENTAL_GENE.get())),
 				VanillaTypes.ITEM_STACK, Component.translatable("jei.caerula_arbor.desc_gene_sample"));
 	}
 }
