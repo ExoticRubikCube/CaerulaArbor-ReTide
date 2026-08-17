@@ -45,6 +45,19 @@ public class DisconcentrationEventHandler {
     private static final int NEURODEGENERATION_REJECTION_STAGE = 3;
     private static final int FLESHDEFORMITY_REJECTION_STAGE = 4;
 
+    /** 高难度阈值：难度 >= 17 时排异反应进化为组合排异（wiki Composite Rejections）。 */
+    private static final int HIGH_DIFFICULTY_THRESHOLD = 17;
+
+    // 组合排异值域（5-10），对应 wiki 的 6 种固定组合（命名 X and Y，X 为左、Y 为右）
+    private static final int NEURO_ATTENTION_COMBO_STAGE = 5;   // Degeneration and Disorder
+    private static final int NEURO_BLOOD_COMBO_STAGE = 6;       // Degeneration and Inhibition
+    private static final int NEURO_FLESH_COMBO_STAGE = 7;       // Degeneration and Aberration
+    private static final int ATTENTION_BLOOD_COMBO_STAGE = 8;   // Disorder and Inhibition
+    private static final int ATTENTION_FLESH_COMBO_STAGE = 9;   // Disorder and Aberration
+    private static final int BLOOD_FLESH_COMBO_STAGE = 10;      // Inhibition and Aberration
+    private static final int FIRST_COMBO_STAGE = NEURO_ATTENTION_COMBO_STAGE;
+    private static final int LAST_COMBO_STAGE = BLOOD_FLESH_COMBO_STAGE;
+
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();

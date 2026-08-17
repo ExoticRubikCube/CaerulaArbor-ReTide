@@ -207,7 +207,7 @@ public class CAItems {
             return super.finishUsingItem(itemstack, world, entity);
         }
     });
-    public static final DeferredHolder<Item, ? extends Item> OCEAN_ARROW = REGISTRY.register("ocean_arrow", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
+    public static final DeferredHolder<Item, ? extends Item> OCEAN_ARROW = REGISTRY.register("ocean_arrow", () -> new OceanArrowItem(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> FIRST_TO_TALK_SPAWN_EGG = REGISTRY.register("first_to_talk_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.FIRST_TO_TALK, -1, -1, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> REAPER_PET_SPAWN_EGG = REGISTRY.register("reaper_pet_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.REAPER_PET, -6750157, -3355444, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> OCEAN_EXTRACTOR = REGISTRY.register("ocean_extractor", OceanExtractorItem::new);
@@ -545,7 +545,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> THIRST_CORAL = block(CABlocks.THIRST_CORAL);
     public static final DeferredHolder<Item, ? extends Item> COMPLEX_CHITIN_BOW = REGISTRY.register("complex_chitin_bow", ComplexChitinBowItem::new);
     public static final DeferredHolder<Item, ? extends Item> TRAILRITE_BOW = REGISTRY.register("trailrite_bow", TrailriteBowItem::new);
-    public static final DeferredHolder<Item, ? extends Item> TRAILRITE_ARROW = REGISTRY.register("trailrite_arrow", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
+    public static final DeferredHolder<Item, ? extends Item> TRAILRITE_ARROW = REGISTRY.register("trailrite_arrow", () -> new TrailriteArrowItem(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> TRAILRITE_NUGGET = REGISTRY.register("trailrite_nugget", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
     public static final DeferredHolder<Item, ? extends Item> SCREAM_CHEST_FISH_SPAWN_EGG = REGISTRY.register("scream_chest_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SCREAM_CHEST_FISH, -9079426, -12746559, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> OCEANIZED_CHICKEN_SPAWN_EGG = REGISTRY.register("oceanized_chicken_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEANIZED_CHICKEN, -9467992, -16762940, new Item.Properties()));

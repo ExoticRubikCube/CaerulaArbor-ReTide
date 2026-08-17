@@ -29,16 +29,20 @@ public class DisoclutionOverlay {
 			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			double rejectionStage = ModCapabilities.getPlayerVariables(entity).disoclusion;
+			// 进化玩家使用金色背景贴图且不显示阶段图标，非进化正常显示
+			boolean evolved = ModCapabilities.getPlayerVariables(entity).can_player_evo;
 			if (rejectionStage != 0) {
-				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_bg.png"), w - 64, h - 128, 0, 0, 64, 128, 64, 128);
-				if (rejectionStage == 1) {
-					event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_attention.png"), w - 69, h - 72, 0, 0, 64, 64, 64, 64);
-				} else if (rejectionStage == 2) {
-					event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_blood.png"), w - 69, h - 72, 0, 0, 64, 64, 64, 64);
-				} else if (rejectionStage == 3) {
-					event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_neuro.png"), w - 69, h - 72, 0, 0, 64, 64, 64, 64);
-				} else if (rejectionStage == 4) {
-					event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_flesh.png"), w - 69, h - 72, 0, 0, 64, 64, 64, 64);
+				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, evolved ? "textures/gui/overlay/disoclution_gold_bg.png" : "textures/gui/overlay/disoclution_bg.png"), w - 64, h - 128, 0, 0, 64, 128, 64, 128);
+				if (!evolved) {
+					if (rejectionStage == 1) {
+						event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_attention.png"), w - 52, h - 52, 0, 0, 48, 48, 64, 64);
+					} else if (rejectionStage == 2) {
+						event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_blood.png"), w - 52, h - 52, 0, 0, 48, 48, 64, 64);
+					} else if (rejectionStage == 3) {
+						event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_neuro.png"), w - 52, h - 52, 0, 0, 48, 48, 64, 64);
+					} else if (rejectionStage == 4) {
+						event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/screen/disoclution_flesh.png"), w - 52, h - 52, 0, 0, 48, 48, 64, 64);
+					}
 				}
 			}
 			RenderSystem.depthMask(true);

@@ -1,27 +1,41 @@
 package com.susen36.caerulaarbor.entity.bullets;
 
+import com.susen36.babel.effect.LessArmorMobEffect;
+import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
+import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CAParticles;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+
+import java.util.List;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier {
@@ -65,18 +79,116 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-        Entity entity = entityHitResult.getEntity();
-        Entity sourceentity = this.getOwner();
-        if (sourceentity == null)
-            return;
-        if (!(entity == sourceentity)) {
-            entity.invulnerableTime = 0;
-        }
-        CaerulaArbor.queueServerWork(10, () -> {
-            if (!level().isClientSide())
-                discard();
-        });
-    }
+		Entity entity = entityHitResult.getEntity();
+		Entity sourceentity = this.getOwner();
+		if (sourceentity == null)
+			return;
+		if (!(entity == sourceentity)) {
+			entity.invulnerableTime = 0;
+		}
+		if (!this.level().isClientSide()) {
+			// 下放自 LivingHurtEventHandler.handleOnArrowHit：ComplexChitin 分裂 / TrailriteLink 连锁
+			float f = (float) this.getDeltaMovement().length();
+			double d0 = this.getBaseDamage();
+			DamageSource damagesource = this.damageSources().arrow(this, sourceentity != null ? sourceentity : this);
+			if (this.getWeaponItem() != null && this.level() instanceof ServerLevel serverlevel) {
+				d0 = EnchantmentHelper.modifyDamage(serverlevel, this.getWeaponItem(), entity, damagesource, (float) d0);
+			}
+			int j = Mth.ceil(Mth.clamp(f * d0, 0.0, 2.147483647E9));
+			if (this.isCritArrow()) {
+				long k = this.random.nextInt(j / 2 + 2);
+				j = (int) Math.min(k + j, 2147483647L);
+			}
+			double amount = j;
+			double x = entity.getX();
+			double y = entity.getY();
+			double z = entity.getZ();
+
+			if (this.getPersistentData().getBoolean("ComplexChitin")) {
+				if (entity instanceof LivingEntity target) {
+					EPUtils.causeSanityInjury(target, amount * 0.2);
+				}
+				for (int index0 = 0; index0 < 3; index0++) {
+					double yaw = Mth.nextInt(RandomSource.create(), -30, 30);
+					float sine = Mth.sin((float) Math.toRadians(yaw));
+					float cosine = Mth.cos((float) Math.toRadians(yaw));
+					double vx = this.getDeltaMovement().x();
+					double vz = this.getDeltaMovement().z();
+					if (this.level() instanceof ServerLevel projectileLevel) {
+						AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, projectileLevel);
+						entityToSpawn.setOwner(sourceentity);
+						entityToSpawn.setBaseDamage((float) (amount * 0.64));
+						entityToSpawn.setCritArrow(true);
+						entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+						entityToSpawn.setPos(x, this.getY(), z);
+						entityToSpawn.shoot((1.5 * (vx * cosine + vz * sine)), (1.5 + this.getDeltaMovement().y()), (1.5 + vz * cosine - vx * sine), (float) 1.5, (float) 0.05);
+						projectileLevel.addFreshEntity(entityToSpawn);
+					}
+				}
+			}
+			double lll = this.getPersistentData().getDouble("TrailriteLink");
+			if (lll > 0) {
+				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 20, 0, false, false));
+				double y1 = this.getY();
+				Entity entity1 = sourceentity;
+				if (entity1 != null) {
+					final Vec3 center = new Vec3(x, y1, z);
+					List<LivingEntity> entfound = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24 / 2d),
+							e -> e != entity1 && !e.hasEffect(CAMobEffects.COOLDOWN_SINAL));
+					LivingEntity nextTarget = null;
+					double minDist = -1.0D;
+					Entity recentVictim = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtMob() : null;
+					Entity recentAttacker = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtByMob() : null;
+					for (LivingEntity entityiterator : entfound) {
+						boolean isValid;
+						if (entityiterator instanceof Monster) {
+							isValid = true;
+						} else {
+							isValid = (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity1
+									|| entityiterator == recentVictim
+									|| entityiterator == recentAttacker;
+						}
+						if (isValid) {
+							double d = entityiterator.distanceToSqr(x, y1, z);
+							if (minDist == -1.0D || d < minDist) {
+								minDist = d;
+								nextTarget = entityiterator;
+							}
+						}
+					}
+					if (nextTarget != null && this.level() instanceof ServerLevel projectileLevel) {
+						AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, projectileLevel);
+						entityToSpawn.setOwner(entity1);
+						entityToSpawn.setBaseDamage((float) amount);
+						entityToSpawn.setCritArrow(true);
+						entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+						entityToSpawn.setPos(x, y1, z);
+						entityToSpawn.getPersistentData().putDouble("TrailriteLink", lll - 1);
+						entityToSpawn.shoot((nextTarget.getX() - x), ((nextTarget.getY() + nextTarget.getBbHeight() * 0.9) - y1), (nextTarget.getZ() - z), (float) 1.75, 0);
+						projectileLevel.addFreshEntity(entityToSpawn);
+					}
+				}
+				if (lll > 4) {
+					if (this.level() instanceof ServerLevel level)
+						level.sendParticles(CAParticles.MOIST_BOOM.get(), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
+					if (entity instanceof LivingEntity target) {
+						if (entity1 instanceof LivingEntity attacker) {
+							EPUtils.causeSanityInjury(target, attacker, amount * 0.25);
+						} else {
+							EPUtils.causeSanityInjury(target, amount * 0.25);
+						}
+					}
+					if (entity instanceof LivingEntity living)
+						LessArmorMobEffect.apply(living);
+				}
+			}
+		}
+		CaerulaArbor.queueServerWork(10, () -> {
+			if (!level().isClientSide())
+				discard();
+		});
+	}
 
 	@Override
 	public void tick() {

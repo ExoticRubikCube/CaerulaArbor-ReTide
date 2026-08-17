@@ -1,6 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -60,11 +62,24 @@ public class TrailriteBowItem extends BowItem {
         || itemStack.getItem() == CAItems.TRAILRITE_ARROW.get();
     };
 
-    private double getRate(Player player){
-        AttributeInstance inst = player.getAttribute(Attributes.ATTACK_DAMAGE);
-        if(inst == null) return 1;
-        if(inst.getBaseValue() <= 0) return 1;
-        return Math.max(inst.getValue() / inst.getBaseValue(), 1);
+    private double getRate(Player player) {
+        // 攻击力加成只影响海嗣（>=3）/ 海嗣化（2.9~3）/ 进化玩家，其余玩家无加成（保留弓自身基础倍率，伤害高于原版箭）
+        PlayerVariable vars = ModCapabilities.getPlayerVariables(player);
+        boolean isSeaborn = vars.player_oceanization >= 3;
+        boolean isOceanized = vars.player_oceanization >= 2.9 && vars.player_oceanization < 3;
+        boolean isEvolved = vars.can_player_evo;
+        double rate;
+        if (isSeaborn || isOceanized || isEvolved) {
+            AttributeInstance inst = player.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (inst == null || inst.getBaseValue() <= 0) {
+                rate = 1;
+            } else {
+                rate = Math.max(inst.getValue() / inst.getBaseValue(), 1);
+            }
+        } else {
+            rate = 1;
+        }
+        return rate;
     }
 
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {

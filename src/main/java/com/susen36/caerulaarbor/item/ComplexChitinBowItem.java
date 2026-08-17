@@ -1,6 +1,8 @@
 
 package com.susen36.caerulaarbor.item;
 
+import com.susen36.caerulaarbor.capability.ModCapabilities;
+import com.susen36.caerulaarbor.capability.player.PlayerVariable;
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -55,11 +57,23 @@ public class ComplexChitinBowItem extends BowItem {
     public static final Predicate<ItemStack> ALSO_OCEAN_ARROW = (itemStack) -> ARROW_ONLY.test(itemStack) || itemStack.getItem() == CAItems.OCEAN_ARROW.get();
 
     private double getRate(Player player) {
-        AttributeInstance atk = player.getAttribute(Attributes.ATTACK_DAMAGE);
-        if (atk == null || atk.getBaseValue() <= 0.0) {
-            return 0.0;
+        // 攻击力加成只影响海嗣（>=3）/ 海嗣化（2.9~3）/ 进化玩家，其余玩家无加成（保留弓自身基础倍率，伤害高于原版箭）
+        PlayerVariable vars = ModCapabilities.getPlayerVariables(player);
+        boolean isSeaborn = vars.player_oceanization >= 3;
+        boolean isOceanized = vars.player_oceanization >= 2.9 && vars.player_oceanization < 3;
+        boolean isEvolved = vars.can_player_evo;
+        double rate;
+        if (isSeaborn || isOceanized || isEvolved) {
+            AttributeInstance atk = player.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (atk == null || atk.getBaseValue() <= 0.0) {
+                rate = 0.0;
+            } else {
+                rate = Math.max(atk.getValue() / atk.getBaseValue(), 1.0);
+            }
+        } else {
+            rate = 1.0;
         }
-        return Math.max(atk.getValue() / atk.getBaseValue(), 1.0);
+        return rate;
     }
 
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {

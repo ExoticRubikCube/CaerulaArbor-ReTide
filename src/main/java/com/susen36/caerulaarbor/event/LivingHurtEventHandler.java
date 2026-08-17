@@ -34,10 +34,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
@@ -78,7 +75,6 @@ public class LivingHurtEventHandler {
         handleHandHoeSword(event);
         handleHandThorns(event);
         handleHuntersHit(event);
-        handleOnArrowHit(event);
         handleSanityReaper(event);
         handleSeabornKiller(event);
         handleMoreFallDamageEffect(event);
@@ -543,101 +539,6 @@ public class LivingHurtEventHandler {
     }
 
     //TODO 可能需要下放
-    private static void handleOnArrowHit(LivingDamageEvent.Pre event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        double amount = event.getNewDamage();
-
-        if (world.isClientSide()) return;
-
-        Entity arrow = damagesource.getDirectEntity();
-        if (arrow instanceof Arrow) {
-            if (arrow.getPersistentData().getBoolean("ComplexChitin")) {
-                if (entity instanceof LivingEntity target) {
-                    EPUtils.causeSanityInjury(target, amount * 0.2);
-                }
-                for (int index0 = 0; index0 < 3; index0++) {
-                    double yaw = Mth.nextInt(RandomSource.create(), -30, 30);
-                    double sine = Math.sin(Math.toRadians(yaw));
-                    double cosine = Math.cos(Math.toRadians(yaw));
-                    double vx = arrow.getDeltaMovement().x();
-                    double vz = arrow.getDeltaMovement().z();
-                    if (world instanceof ServerLevel projectileLevel) {
-                        AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, projectileLevel);
-                        entityToSpawn.setOwner(damagesource.getEntity());
-                        entityToSpawn.setBaseDamage((float) (amount * 0.64));
-                        entityToSpawn.setCritArrow(true);
-                        entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-                        entityToSpawn.setPos(x, (arrow.getY()), z);
-                        entityToSpawn.shoot((1.5 * (vx * cosine + vz * sine)), (1.5 + arrow.getDeltaMovement().y()), (1.5 + vz * cosine - vx * sine), (float) 1.5, (float) 0.05);
-                        projectileLevel.addFreshEntity(entityToSpawn);
-                    }
-                }
-            }
-            double lll = arrow.getPersistentData().getDouble("TrailriteLink");
-            if (lll > 0) {
-                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 20, 0, false, false));
-                double y1 = arrow.getY();
-                Entity entity1 = damagesource.getEntity();
-                if (entity1 != null) {
-                    final Vec3 center = new Vec3(x, y1, z);
-                    List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(24 / 2d),
-                            e -> e != entity1 && !e.hasEffect(CAMobEffects.COOLDOWN_SINAL));
-                    LivingEntity nextTarget = null;
-                    double minDist = -1.0D;
-                    Entity recentVictim = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtMob() : null;
-                    Entity recentAttacker = (entity1 instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtByMob() : null;
-                    for (LivingEntity entityiterator : entfound) {
-                        boolean isValid;
-                        if (entityiterator instanceof Monster) {
-                            isValid = true;
-                        } else {
-                            isValid = (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity1
-                                    || entityiterator == recentVictim
-                                    || entityiterator == recentAttacker;
-                        }
-                        if (isValid) {
-                            double d = entityiterator.distanceToSqr(x, y1, z);
-                            if (minDist == -1.0D || d < minDist) {
-                                minDist = d;
-                                nextTarget = entityiterator;
-                            }
-                        }
-                    }
-                    if (nextTarget != null && world instanceof ServerLevel projectileLevel) {
-                        AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, projectileLevel);
-                        entityToSpawn.setOwner(entity1);
-                        entityToSpawn.setBaseDamage((float) amount);
-                        entityToSpawn.setCritArrow(true);
-                        entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-                        entityToSpawn.setPos(x, y1, z);
-                        entityToSpawn.getPersistentData().putDouble("TrailriteLink", lll - 1);
-                        entityToSpawn.shoot((nextTarget.getX() - x), ((nextTarget.getY() + nextTarget.getBbHeight() * 0.9) - y1), (nextTarget.getZ() - z), (float) 1.75, 0);
-                        projectileLevel.addFreshEntity(entityToSpawn);
-                    }
-                }
-                if (lll > 4) {
-                    if (world instanceof ServerLevel level)
-                        level.sendParticles(CAParticles.MOIST_BOOM.get(), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
-                    if (entity instanceof LivingEntity target) {
-                        if (entity1 instanceof LivingEntity attacker) {
-                            EPUtils.causeSanityInjury(target, attacker, amount * 0.25);
-                        } else {
-                            EPUtils.causeSanityInjury(target, amount * 0.25);
-                        }
-                    }
-                    if (entity instanceof LivingEntity living)
-                        LessArmorMobEffect.apply(living);
-                }
-            }
-        }
-    }
-
     private static void handleSanityReaper(LivingDamageEvent.Pre event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
@@ -680,7 +581,6 @@ public class LivingHurtEventHandler {
         }
     }
 
-    //TODO 需要评估是否需要下放
     private static void handleMoreFallDamageEffect(LivingDamageEvent.Pre event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();

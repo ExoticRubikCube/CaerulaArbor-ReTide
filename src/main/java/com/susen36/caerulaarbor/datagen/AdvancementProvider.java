@@ -274,8 +274,6 @@ public class AdvancementProvider implements AdvancementSubProvider {
                 ))
                 .addCriterion("encounter_from_the_ocean_0", impossible())
                 .rewards(recipeRewards(
-                        "babel:craft_meat_can",
-                        "caerula_arbor:craft_can",
                         "caerula_arbor:craft_bowl_seagrass",
                         "caerula_arbor:extract_caffeine",
                         "caerula_arbor:craft_coffee_candy",
@@ -1238,8 +1236,6 @@ public class AdvancementProvider implements AdvancementSubProvider {
                 .addCriterion("she_coming_0", impossible())
                 .rewards(recipeRewards(
                         "caerula_arbor:craft_spear",
-                        "babel:craft_meat_can",
-                        "caerula_arbor:craft_can",
                         "caerula_arbor:craft_bowl_seagrass",
                         "caerula_arbor:craft_orangestorm",
                         "caerula_arbor:make_paperbag",
