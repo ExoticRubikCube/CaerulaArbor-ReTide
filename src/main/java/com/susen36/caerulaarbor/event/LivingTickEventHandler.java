@@ -13,15 +13,15 @@ import com.susen36.caerulaarbor.entity.enderdragon.MoistEnderCrystalEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedBishopEntity;
 import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedImmortalEntity;
-import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.init.CAEnchantments;
+import com.susen36.caerulaarbor.init.CAEntityTypeTags;
+import com.susen36.caerulaarbor.init.CAGameRules;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.manager.upgrade.MigrationUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SubsistingUpgradeManager;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -31,9 +31,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -50,15 +47,11 @@ import static com.susen36.caerulaarbor.init.CAEntityTypeTags.SEABORN_BOSS;
 
 @EventBusSubscriber
 public class LivingTickEventHandler {
-    static final ResourceLocation NETHERSEA_WALKER_SPEED_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_movement_speed");
-    static final ResourceLocation NETHERSEA_WALKER_EFFICIENCY_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_movement_efficiency");
-
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Post event) {
         handleModeGoals(event);
         handleChangeAttackGoal(event);
         handleMobTick(event);
-        handleNetherseaWalker(event);
         handleArmorEnchantFunc(event);
     }
 
@@ -290,72 +283,6 @@ public class LivingTickEventHandler {
                     pnt * Math.max(MapVariables.get(world).strategy_subsisting + MapVariables.get(world).strategy_grow + MapVariables.get(world).strategy_breed, 1));
             MigrationUpgradeManager.applyMigrationUpgrade(world);
             SilenceUpgradeManager.applySilenceUpgrade(world, pnt);
-        }
-    }
-
-    private static void handleNetherseaWalker(EntityTickEvent.Post event) {
-        Entity entity = event.getEntity();
-        if (entity instanceof LivingEntity living && entity.tickCount % 5 == 0) {
-            Level world = living.level();
-            double x = living.getX();
-            double y = living.getY();
-            double z = living.getZ();
-            ItemStack boots = living.getItemBySlot(EquipmentSlot.FEET);
-            int lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.NETHERSEA_WALKER), boots);
-            boolean onValidBlock = world.getBlockState(BlockPos.containing(x, y - 0.5, z)).is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "nethersea_walker_functions")));
-            double dx = x - entity.xo;
-            double dz = z - entity.zo;
-            double distSqr = Mth.square(dx) + Mth.square(dz);
-            boolean moving = distSqr > 1.0E-6D;
-            boolean active = lvl > 0 && onValidBlock && entity.onGround() && !living.isFallFlying() && moving;
-            if (!world.isClientSide()) {
-                AttributeInstance speedAttr = living.getAttribute(Attributes.MOVEMENT_SPEED);
-                if (speedAttr != null) {
-                    if (active) {
-                        double speedValue = 0.3D + (double) lvl * 0.115D;
-                        AttributeModifier existing = speedAttr.getModifier(NETHERSEA_WALKER_SPEED_ID);
-                        if (existing == null) {
-                            speedAttr.addTransientModifier(new AttributeModifier(NETHERSEA_WALKER_SPEED_ID, speedValue, AttributeModifier.Operation.ADD_VALUE));
-                        } else if (Math.abs(existing.amount() - speedValue) > 1.0E-7D) {
-                            speedAttr.removeModifier(NETHERSEA_WALKER_SPEED_ID);
-                            speedAttr.addTransientModifier(new AttributeModifier(NETHERSEA_WALKER_SPEED_ID, speedValue, AttributeModifier.Operation.ADD_VALUE));
-                        }
-                    } else if (speedAttr.getModifier(NETHERSEA_WALKER_SPEED_ID) != null) {
-                        speedAttr.removeModifier(NETHERSEA_WALKER_SPEED_ID);
-                    }
-                }
-                AttributeInstance effAttr = living.getAttribute(Attributes.MOVEMENT_EFFICIENCY);
-                if (effAttr != null) {
-                    if (active) {
-                        if (effAttr.getModifier(NETHERSEA_WALKER_EFFICIENCY_ID) == null) {
-                            effAttr.addTransientModifier(new AttributeModifier(NETHERSEA_WALKER_EFFICIENCY_ID, 1.0D, AttributeModifier.Operation.ADD_VALUE));
-                        }
-                    } else if (effAttr.getModifier(NETHERSEA_WALKER_EFFICIENCY_ID) != null) {
-                        effAttr.removeModifier(NETHERSEA_WALKER_EFFICIENCY_ID);
-                    }
-                }
-            } else if (active) {
-                RandomSource rand = entity.getRandom();
-                world.addParticle(
-                        CAParticles.SEA_SPLASH.get(),
-                        x + (rand.nextDouble() - 0.5D) * (double) entity.getBbWidth(),
-                        y + 0.1D,
-                        z + (rand.nextDouble() - 0.5D) * (double) entity.getBbWidth(),
-                        (rand.nextDouble() - 0.5D) * 0.05D,
-                        0.02D,
-                        (rand.nextDouble() - 0.5D) * 0.05D
-                );
-                if (rand.nextFloat() < 0.35F) {
-                    world.playSound(
-                            living instanceof Player ? (Player) living : null,
-                            BlockPos.containing(x, y, z),
-                            CASounds.SHALLOW_SEA.get(),
-                            SoundSource.PLAYERS,
-                            0.6F,
-                            0.6F + rand.nextFloat() * 0.4F
-                    );
-                }
-            }
         }
     }
 

@@ -51,6 +51,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -104,7 +105,7 @@ public class TheLastKnightEntity extends PathfinderMob implements GeoEntity, Syn
     }
 
     @Override
-    protected Component getTypeName() {
+    protected @NotNull Component getTypeName() {
         if (this.getPhase() == 1) {
             return Component.translatable("entity.caerula_arbor.last_knight_and_horse");
         }

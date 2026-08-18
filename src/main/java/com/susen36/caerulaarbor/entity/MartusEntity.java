@@ -364,7 +364,7 @@ public class MartusEntity extends SeaMonsterBoss {
                         this.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                     }
                 } else {
-                    if (tickCount % 10 == 0) {
+                    if (tickCount % 10 == 0 && !this.level().isClientSide()) {
                         Entity result;
                         Entity tgt_ent = null;
                         double num = 0;
@@ -384,6 +384,9 @@ public class MartusEntity extends SeaMonsterBoss {
                             if (entityiterator instanceof MartusEntity) {
                                 continue;
                             }
+                            if (entityiterator.getType().is(CAEntityTypeTags.SEABORN_BOSS)) {
+                                continue;
+                            }
                             if (entityiterator.getPersistentData().getBoolean("blessed")) {
                                 num = num + 1;
                                 continue;
@@ -399,23 +402,27 @@ public class MartusEntity extends SeaMonsterBoss {
                         result = tgt_ent;
                         tgt = result;
                         if (!(tgt == null) && tgt.isAlive() && !tgt.getPersistentData().getBoolean("blessed")) {
-                            this.getEntityData().set(DATA_SKILLP_1, 400);
-                            this.setAnimation("animation.martus.buff");
-                            tgt.getPersistentData().putBoolean("blessed", true);
                             LivingEntity blessedTgt = (LivingEntity) tgt;
-                            perc = blessedTgt.getHealth() / blessedTgt.getMaxHealth();
-                            if (blessedTgt.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
-                                blessedTgt.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(
-                                        new AttributeModifier(BLESS_MAX_HEALTH_MODIFIER, 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                            // 已被其他 Martus 祝福的海嗣（祝福修饰器已存在）不再施加属性，防止多个 Martus 叠加增益
+                            boolean hasBlessModifier = blessedTgt.getAttributes().hasAttribute(Attributes.MAX_HEALTH)
+                                    && blessedTgt.getAttribute(Attributes.MAX_HEALTH).hasModifier(BLESS_MAX_HEALTH_MODIFIER);
+                            if (!hasBlessModifier) {
+                                this.getEntityData().set(DATA_SKILLP_1, 400);
+                                this.setAnimation("animation.martus.buff");
+                                tgt.getPersistentData().putBoolean("blessed", true);
+                                perc = blessedTgt.getHealth() / blessedTgt.getMaxHealth();
+                                if (blessedTgt.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
+                                    blessedTgt.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(
+                                            new AttributeModifier(BLESS_MAX_HEALTH_MODIFIER, 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                                }
+                                if (blessedTgt.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+                                    blessedTgt.getAttribute(Attributes.ATTACK_DAMAGE).addTransientModifier(
+                                            new AttributeModifier(BLESS_ATTACK_DAMAGE_MODIFIER, 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                                }
+                                blessedTgt.setHealth((float) (blessedTgt.getMaxHealth() * perc));
+                                if (!this.level().isClientSide())
+                                    blessedTgt.addEffect(new MobEffectInstance(MobEffects.GLOWING, -1, 0, false, false));
                             }
-                            if (blessedTgt.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
-                                blessedTgt.getAttribute(Attributes.ATTACK_DAMAGE).addTransientModifier(
-                                        new AttributeModifier(BLESS_ATTACK_DAMAGE_MODIFIER, 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-                            }
-                            blessedTgt.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF, -1, 24, false, false));
-                            blessedTgt.setHealth((float) (blessedTgt.getMaxHealth() * perc));
-                            if (!this.level().isClientSide())
-                                blessedTgt.addEffect(new MobEffectInstance(MobEffects.GLOWING, -1, 0, false, false));
                         }
                     }
                 }
@@ -629,11 +636,7 @@ public class MartusEntity extends SeaMonsterBoss {
 
     @Override
     public void heal(float amount) {
-        if (this.getEntityData().get(DATA_PHASE) >= 1) {
-            super.heal(0);
-        } else {
-            super.heal(amount);
-        }
+        super.heal(0);
     }
 
     @Override
@@ -685,7 +688,7 @@ public class MartusEntity extends SeaMonsterBoss {
         double targetHp = killedEntity.getMaxHealth();
 
         if (killedEntity.getPersistentData().getBoolean("blessed")) {
-            double rawDamage = Math.min(maxHp * 0.25, targetHp * 0.4);
+            double rawDamage = Math.min(maxHp * 0.35, targetHp * 0.4);
             this.hurtMartus(killer, rawDamage, 0);
         } else if (killedEntity.getType().is(SEABORN) && this.getEntityData().get(DATA_PHASE) >= 1) {
             double rawDamage = Math.min(maxHp * 0.018, targetHp * 0.036);

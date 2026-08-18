@@ -94,7 +94,6 @@ public class ClientListener {
 			CAMobEffects.KEEP_BEDDING.get(),
 			CAMobEffects.SURVIVORS_GUIDE.get(),
 			CAMobEffects.ADD_REACH.get(),
-			CAMobEffects.TRAIL_BUFF.get(),
 			CAMobEffects.TIDE_OF_CHITIN.get(),
 			CAMobEffects.SANIDY_DEFENDER.get(),
 			CAMobEffects.UNTAME_CONFIRM.get(),

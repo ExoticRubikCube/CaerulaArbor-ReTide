@@ -18,21 +18,25 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.animation.AnimationState;
 
 public class PredatorAbyssalEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(PredatorAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
@@ -40,6 +44,9 @@ public class PredatorAbyssalEntity extends SeaMonster {
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
+
+    private static final TagKey<Block> SEA_TRAIL_TAG = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_trail"));
+
 
     public PredatorAbyssalEntity(Level world) {
         this(CAEntities.PREDATOR_ABYSSAL.get(), world);
@@ -89,29 +96,40 @@ public class PredatorAbyssalEntity extends SeaMonster {
     public void baseTick() {
         super.baseTick();
         LevelAccessor world = this.level();
-        if (tickCount % 20 == 0 && (world.getBlockState(BlockPos.containing(this.getX(), this.getY(), this.getZ()))).is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "sea_trail")))) {
-            if (!this.level().isClientSide())
+
+        if (!world.isClientSide() && this.tickCount % 20 == 0) {
+            if (world.getBlockState(this.blockPosition()).is(SEA_TRAIL_TAG)) {
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 1));
+            }
         }
-        if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
-            this.getAttribute(CAAttributes.MISSRATE).setBaseValue(80);
-        if (MapVariables.get(world).strategy_subsisting >= 4) {
-            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
-                this.getAttribute(CAAttributes.MISSRATE).setBaseValue(90);
+
+        AttributeInstance missRateAttr = this.getAttribute(CAAttributes.MISSRATE);
+        if (missRateAttr != null) {
+            double targetMissRate = 60;
+
+            if (MapVariables.get(world).strategy_subsisting >= 4) {
+                targetMissRate = 90;
+            }else if (MapVariables.get(world).strategy_subsisting >= 2) {
+                targetMissRate = 80;
+            }
+
+            if ((this.isOnFire() && !this.fireImmune()) ||
+                    this.hasEffect(BabelMobEffects.STUN) ||
+                    this.hasEffect(CAMobEffects.FROZEN) ||
+                    this.hasEffect(MobEffects.LEVITATION) ||
+                    this.hasEffect(MobEffects.MOVEMENT_SLOWDOWN) ||
+                    this.hasEffect(MobEffects.SLOW_FALLING)) {
+
+                targetMissRate = 0;
+            }
+
+            if (missRateAttr.getBaseValue() != targetMissRate) {
+                missRateAttr.setBaseValue(targetMissRate);
+            }
         }
-        if (isOnFire() && !fireImmune()) {
-            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
-                this.getAttribute(CAAttributes.MISSRATE).setBaseValue(0);
-        }
-        if ((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(BabelMobEffects.STUN) || (Entity) this instanceof LivingEntity livEnt10 && livEnt10.hasEffect(CAMobEffects.FROZEN)
-                || (Entity) this instanceof LivingEntity livEnt11 && livEnt11.hasEffect(MobEffects.LEVITATION) || (Entity) this instanceof LivingEntity livEnt12 && livEnt12.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
-                || (Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(MobEffects.SLOW_FALLING)) {
-            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE))
-                this.getAttribute(CAAttributes.MISSRATE).setBaseValue(0);
-        }
+
         this.refreshDimensions();
     }
-
 
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
         event.register(CAEntities.PREDATOR_ABYSSAL.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {

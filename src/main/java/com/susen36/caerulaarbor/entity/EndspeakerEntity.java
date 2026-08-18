@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.block.NetherseaBrandBlock;
 import com.susen36.caerulaarbor.capability.ModCapabilities;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
@@ -481,7 +482,7 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 		}
 		if (this.hasAbility(3)) {
 			Entity sourceEntity = source.getEntity();
-			if (this.hasEffect(CAMobEffects.TRAIL_BUFF) || sourceEntity instanceof LivingEntity livingSource && livingSource.hasEffect(CAMobEffects.TRAIL_BUFF)) {
+			if (NetherseaBrandBlock.isOnActiveTrail(this) || sourceEntity instanceof LivingEntity livingSource && NetherseaBrandBlock.isOnActiveTrail(livingSource)) {
 				amount *= 0.65F;
 			}
 		}
@@ -489,7 +490,7 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 	}
 
 	private boolean hurtWithEndspeakerAttack(LivingEntity target, float amount) {
-		if (this.hasAbility(3) && target.hasEffect(CAMobEffects.TRAIL_BUFF)) {
+		if (this.hasAbility(3) && NetherseaBrandBlock.isOnActiveTrail(target)) {
 			amount *= 1.5F;
 		}
 		boolean damaged = target.hurt(
@@ -813,7 +814,6 @@ public class EndspeakerEntity extends SeaMonsterBoss {
 			if (this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)) {
 				this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).setBaseValue(30);
 			}
-			this.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF, -1, 59, false, false));
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 50, 9, false, false));
 			}

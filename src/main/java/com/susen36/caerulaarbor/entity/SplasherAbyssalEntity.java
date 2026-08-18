@@ -1,13 +1,17 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.babel.api.entity.ElementalAttacker;
+import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelAttributes;
+import com.susen36.caerulaarbor.block.NetherseaBrandBlock;
 import com.susen36.caerulaarbor.entity.ai.MountVehicleGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.entity.bullets.FishShootEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.init.CAEntityTypeTags;
 import com.susen36.caerulaarbor.init.CASounds;
+import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -15,9 +19,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -33,10 +35,11 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import software.bernie.geckolib.animation.*;
 
-import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.List;
 
-public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob {
+public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob, ElementalAttacker {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(SplasherAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(SplasherAbyssalEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
@@ -61,103 +64,105 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	}
 
 	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.goalSelector.addGoal(13, new MountVehicleGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
-		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 40, 6f) {
-			@Override
-			public boolean canContinueToUse() {
-				return this.canUse();
-			}
-		});
+	public AbstractEPCapability.EPType getElementalType() {
+		return AbstractEPCapability.EPType.NERVOUS;
 	}
 
-	public class RangedAttackGoal extends Goal {
-		private final Mob mob;
-		private final RangedAttackMob rangedAttackMob;
-		@Nullable
-		private LivingEntity target;
-		private int attackTime = -1;
+	@Override
+	public double getElementalRate() {
+		return 0.15D;
+	}
+
+	@Override
+	public double getElementalInjuryDamage() {
+		return 0.0D;
+	}
+
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(9, new MountVehicleGoal(this, OceanizedPolarBearEntity.class, OceanizedHorseEntity.class));
+		this.goalSelector.addGoal(13, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(1, new MultiTargetRangedAttackGoal(this, 1.25));
+	}
+
+	public static class MultiTargetRangedAttackGoal extends Goal {
+		private static final int ATTACK_INTERVAL = 40;
+		private static final double NORMAL_ATTACK_RADIUS = 18.0;
+		private static final int MAX_TARGETS = 3;
+
+		private final SplasherAbyssalEntity mob;
 		private final double speedModifier;
-		private int seeTime;
-		private final int attackIntervalMin;
-		private final int attackIntervalMax;
-		private final float attackRadius;
-		private final float attackRadiusSqr;
+		private int attackTime = -1;
 
-		public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
-			this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
+		public MultiTargetRangedAttackGoal(SplasherAbyssalEntity mob, double speedModifier) {
+			this.mob = mob;
+			this.speedModifier = speedModifier;
+			this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 		}
 
-		public RangedAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25775_, int p_25776_, float p_25777_) {
-			if (!(p_25773_ instanceof LivingEntity)) {
-				throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
-			} else {
-				this.rangedAttackMob = p_25773_;
-				this.mob = (Mob) p_25773_;
-				this.speedModifier = p_25774_;
-				this.attackIntervalMin = p_25775_;
-				this.attackIntervalMax = p_25776_;
-				this.attackRadius = p_25777_;
-				this.attackRadiusSqr = p_25777_ * p_25777_;
-				this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-			}
-		}
-
+		@Override
 		public boolean canUse() {
-			LivingEntity livingentity = this.mob.getTarget();
-			if (livingentity != null && livingentity.isAlive()) {
-				this.target = livingentity;
-				return true;
-			} else {
-				return false;
-			}
+			return !this.collectTargets().isEmpty();
 		}
 
+		@Override
 		public boolean canContinueToUse() {
-			return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
+			return this.canUse();
 		}
 
+		@Override
 		public void stop() {
-			this.target = null;
-			this.seeTime = 0;
+			this.mob.entityData.set(DATA_SHOOT, false);
 			this.attackTime = -1;
-			((SplasherAbyssalEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 
+		@Override
 		public boolean requiresUpdateEveryTick() {
 			return true;
 		}
 
+		// 站在活性溟痕上的目标无视攻击距离，仅受寻敌半径(FOLLOW_RANGE)约束，其余目标限制在18格内；取前3个
+		private List<LivingEntity> collectTargets() {
+			double followRange = this.mob.getAttributeValue(Attributes.FOLLOW_RANGE);
+			List<LivingEntity> candidates = this.mob.level().getEntitiesOfClass(LivingEntity.class,
+					this.mob.getBoundingBox().inflate(followRange),
+					e -> e != this.mob && e.isAlive()
+							&& !e.getType().is(CAEntityTypeTags.SEABORN)
+							&& !EntityUtils.isOceanizedPlayer(e));
+			return candidates.stream()
+					.filter(e -> NetherseaBrandBlock.isOnActiveTrail(e)
+							|| this.mob.distanceToSqr(e) <= NORMAL_ATTACK_RADIUS * NORMAL_ATTACK_RADIUS)
+					.sorted(Comparator
+							.comparingDouble((LivingEntity e) -> NetherseaBrandBlock.isOnActiveTrail(e) ? 0 : 1)
+							.thenComparingDouble(this.mob::distanceToSqr))
+					.limit(MAX_TARGETS)
+					.toList();
+		}
+
+		@Override
 		public void tick() {
-			double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-			boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
-			if (flag) {
-				++this.seeTime;
-			} else {
-				this.seeTime = 0;
-			}
-			if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
-				this.mob.getNavigation().stop();
-			} else {
-				this.mob.getNavigation().moveTo(this.target, this.speedModifier);
-			}
-			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
-			if (--this.attackTime == 0) {
-				if (!flag) {
-					((SplasherAbyssalEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
-					return;
+			List<LivingEntity> targets = this.collectTargets();
+			if (!targets.isEmpty()) {
+				LivingEntity primary = targets.getFirst();
+				// 保留追击移动行为，无视视线遮挡
+				this.mob.getNavigation().moveTo(primary, this.speedModifier);
+				this.mob.getLookControl().setLookAt(primary, 30.0F, 30.0F);
+				if (--this.attackTime == 0) {
+					this.mob.entityData.set(DATA_SHOOT, true);
+					for (LivingEntity target : targets) {
+						this.mob.performRangedAttack(target, 1.0F);
+					}
+					this.attackTime = ATTACK_INTERVAL;
+				} else if (this.attackTime < 0) {
+					// 首次激活时先初始化冷却，避免激活即开火
+					this.attackTime = ATTACK_INTERVAL;
+				} else {
+					this.mob.entityData.set(DATA_SHOOT, false);
 				}
-				((SplasherAbyssalEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
-				float f = (float) Math.sqrt(d0) / this.attackRadius;
-				float f1 = Mth.clamp(f, 0.1F, 1.0F);
-				this.rangedAttackMob.performRangedAttack(this.target, f1);
-				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
-			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
-			} else
-				((SplasherAbyssalEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+			} else {
+				this.mob.entityData.set(DATA_SHOOT, false);
+			}
 		}
 	}
 
@@ -182,16 +187,6 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	}
 
 	@Override
-	public void baseTick() {
-		super.baseTick();
-		if (!this.hasEffect(CAMobEffects.SPLASHER_ATTACK)) {
-			if (!this.level().isClientSide())
-				this.addEffect(new MobEffectInstance(CAMobEffects.SPLASHER_ATTACK, -1, 0, false, false));
-		}
-		this.refreshDimensions();
-	}
-
-	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
 		FishShootEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * 0.2);
 	}
@@ -207,11 +202,11 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.175);
 		builder = builder.add(Attributes.MAX_HEALTH, 15);
 		builder = builder.add(Attributes.ARMOR, 5);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+		builder = builder.add(Attributes.FOLLOW_RANGE, 18);
 		builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 27);
 		builder = builder.add(Attributes.STEP_HEIGHT, 0.85f);
 		return builder;

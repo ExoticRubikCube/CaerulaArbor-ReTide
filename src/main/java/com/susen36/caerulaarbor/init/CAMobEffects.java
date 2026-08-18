@@ -26,11 +26,9 @@ public class CAMobEffects {
     public static final DeferredHolder<MobEffect, ? extends MobEffect> SURVIVORS_GUIDE = REGISTRY.register("survivors_guide", SurvivorsGuideMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ADD_REACH = REGISTRY.register("add_reach", AddReachMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> FROZEN = REGISTRY.register("frozen", FrozenMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> TRAIL_BUFF = REGISTRY.register("trail_buff", TrailBuffMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> TIDE_OF_CHITIN = REGISTRY.register("tide_of_chitin", TideOfChitinMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> SANIDY_DEFENDER = REGISTRY.register("sanidy_defender", SanidyDefenderMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> UNTAME_CONFIRM = REGISTRY.register("untame_confirm", UntameConfirmMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> SPLASHER_ATTACK = REGISTRY.register("splasher_attack", SplasherAttackMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> INSTANT_SANITY = REGISTRY.register("instant_sanity", InstantSanityMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> SANITY_HEAL = REGISTRY.register("sanity_heal", SanityHealMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> POWER_OF_ANCHOR = REGISTRY.register("power_of_anchor", PowerOfAnchorMobEffect::new);
