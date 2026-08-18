@@ -54,7 +54,7 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
 		}
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		if (mouseX > leftPos + 244 && mouseX < leftPos + 253 && mouseY > topPos + 20 && mouseY < topPos + 92) {
-            String result = "\u00A7bFinished";
+            String result = "\u00A7b" + Component.translatable("gui.caerula_arbor.info_strategy.finished").getString();
             double rate = 0;
             if (!(MapVariables.get(world).strategy_breed >= 4)) {
                 result = Math.round(MapVariables.get(world).evo_point_breed) + "\u00A7b/"

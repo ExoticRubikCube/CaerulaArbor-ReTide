@@ -70,7 +70,7 @@ public class MigrationUpgradeManager {
 					}
 				}
 				if (!world.isClientSide() && world.getServer() != null)
-					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.sample_migration.description_5").getString() + num)), false);
+					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.sample_migration.description_5").getString().replace("{num}", num))), false);
 			}
 		} else {
 			for (Player entityiterator : new ArrayList<>(world.players())) {

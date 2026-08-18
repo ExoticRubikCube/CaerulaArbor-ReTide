@@ -339,7 +339,8 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))
                                     && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_pet")))) {
                                 if (entityiterator instanceof Mob mob)
-                                    mob.setTarget(mob);
+                                    // 原版意图：海嗣仇恨锁定开启演算台的玩家，而非目标设为自己（否则海嗣会互相攻击）
+                                    mob.setTarget(entity);
                             }
                         }
                     }

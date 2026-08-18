@@ -84,7 +84,7 @@ public class SublimationUpgradeManger {
                     }
 
                     if (!world.isClientSide() && world.getServer() != null) {
-                        world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(prefix + Component.translatable("evolution.caerula_arbor.sublimation").getString() + num), false);
+                        world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(prefix + Component.translatable("evolution.caerula_arbor.sublimation").getString().replace("{num}", num)), false);
                     }
                 }
             } else {

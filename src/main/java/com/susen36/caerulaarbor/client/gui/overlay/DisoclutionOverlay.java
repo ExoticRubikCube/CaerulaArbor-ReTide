@@ -35,13 +35,13 @@ public class DisoclutionOverlay {
 			// 进化与满海嗣化(>=3)均不显示阶段图标
 			if (rejectionStage != 0) {
 				boolean suppressIcon = evolved || ModCapabilities.getPlayerVariables(entity).player_oceanization >= 3;
-				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, evolved ? "textures/gui/overlay/transforming_gold.png" : (semiOceanized ? "textures/gui/overlay/transforming_blue.png" : "textures/gui/overlay/transforming.png")), w - 64, h - 128, 0, 0, 64, 128, 64, 128);
+				event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, evolved ? "textures/gui/overlay/transforming_gold.png" : (semiOceanized ? "textures/gui/overlay/transforming_blue.png" : "textures/gui/overlay/transforming0.png")), w - 64, h - 128, 0, 0, 64, 128, 64, 128);
 				if (!suppressIcon) {
 					int regionX = w - 4 - 64;
-					int regionY = h - 4 - 32;
+					int regionY = h - 16 - 32;
 					String baseIcon = semiOceanized ? "textures/gui/screen/disoclution_combos/disoclution_" : "";
 					if (rejectionStage == 1) {
-						event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, semiOceanized ? baseIcon + "attention_blue.png" : "textures/gui/screen/disoclution_attention.png"), regionX, regionY, 64, 32, 0, 0, 64, 32, 64, 32);
+						event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, semiOceanized ? baseIcon + "attention_blue.png" : "textures/gui/screen/disoclution_combos/disoclution_attention.png"), regionX, regionY, 64, 32, 0, 0, 64, 32, 64, 32);
 					} else if (rejectionStage == 2) {
 						event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, semiOceanized ? baseIcon + "blood_blue.png" : "textures/gui/screen/disoclution_combos/disoclution_blood.png"), regionX, regionY, 64, 32, 0, 0, 64, 32, 64, 32);
 					} else if (rejectionStage == 3) {

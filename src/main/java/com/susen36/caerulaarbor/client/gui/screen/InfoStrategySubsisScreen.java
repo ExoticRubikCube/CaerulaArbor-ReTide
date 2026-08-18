@@ -54,7 +54,7 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
 		}
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		if (mouseX > leftPos + 244 && mouseX < leftPos + 253 && mouseY > topPos + 20 && mouseY < topPos + 92) {
-            String result = "§bFinished";
+            String result = "§b" + Component.translatable("gui.caerula_arbor.info_strategy.finished").getString();
             if (!(MapVariables.get(world).strategy_subsisting >= 4)) {
                 result = Math.round(MapVariables.get(world).evo_point_subsisting) + "\u00A7b/"
                         + Math.round(Math.pow(MapVariables.get(world).strategy_subsisting + 1, 3) * CAConfigs.COEFFICIENT.get());

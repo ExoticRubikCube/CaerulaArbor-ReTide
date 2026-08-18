@@ -54,7 +54,7 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 		}
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		if (mouseX > leftPos + 244 && mouseX < leftPos + 253 && mouseY > topPos + 20 && mouseY < topPos + 92) {
-            String result = "§bFinished";
+            String result = "§b" + Component.translatable("gui.caerula_arbor.info_strategy.finished").getString();
             double rate = 0;
             if (!(MapVariables.get(world).strategy_grow >= 4)) {
                 result = Math.round(MapVariables.get(world).evo_point_grow) + "\u00A7b/"

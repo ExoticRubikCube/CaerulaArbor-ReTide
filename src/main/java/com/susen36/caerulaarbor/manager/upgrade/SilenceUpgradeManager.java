@@ -92,7 +92,7 @@ public class SilenceUpgradeManager {
 						}
 					}
 					if (!world.isClientSide() && world.getServer() != null)
-						world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.language_key.description_4").getString() + num)), false);
+						world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.language_key.description_4").getString().replace("{num}", num))), false);
 				}
 			} else {
 				MapVariablesHandler.setEvoPoint(world, StrategyType.SILENCE, 0);

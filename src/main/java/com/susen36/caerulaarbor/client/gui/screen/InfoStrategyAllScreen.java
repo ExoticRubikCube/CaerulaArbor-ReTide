@@ -70,7 +70,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		if (MapVariables.get(world).if_sublimation && mouseX > leftPos + 36 && mouseX < leftPos + 61 && mouseY > topPos + -30 && mouseY < topPos + -5) {
 			String result = "";
 			if (MapVariables.get(world).strategy_sublimation >= 4) {
-				result = "§dFinished";
+				result = "§d" + Component.translatable("gui.caerula_arbor.info_strategy.finished").getString();
 			} else {
 				result = Math.round(MapVariables.get(world).evo_point_sublimation) + "\u00A7c/"
 						+ Math.round(Math.pow(MapVariables.get(world).strategy_sublimation + 1, 3) * CAConfigs.SUBLIMATION_COEFFICIENT.get() * 12);
