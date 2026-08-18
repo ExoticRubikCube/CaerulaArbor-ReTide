@@ -1785,7 +1785,7 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("babel:redstone_iris_flower", 1),
-                ingredients(item("caerula_arbor:redstone_iris"))
+                ingredients(item("caerula_arbor:originium_iris"))
         );
         shaped(
                 writer,
@@ -2605,7 +2605,7 @@ public class RecipesProvider extends RecipeProvider {
                 "dessemble_redstonium",
                 "redstone",
                 null,
-                result("caerula_arbor:redstone_ingot", 9),
+                result("babel:originium_ingot", 9),
                 ingredients(item("caerula_arbor:redstonium"))
         );
         shapeless(
@@ -2828,7 +2828,7 @@ public class RecipesProvider extends RecipeProvider {
                         "aaa",
                         "aaa"
                 ),
-                key('a', item("caerula_arbor:redstone_ingot"))
+                key('a', item("babel:originium_ingot"))
         );
         shaped(
                 writer,
@@ -3236,7 +3236,7 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:treaty_copper", 1),
-                ingredients(item("minecraft:copper_ingot"), item("caerula_arbor:treaty_empty"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstone_ingot"))
+                ingredients(item("minecraft:copper_ingot"), item("caerula_arbor:treaty_empty"), item("babel:originium_ingot"), item("babel:originium_ingot"), item("babel:originium_ingot"), item("babel:originium_ingot"), item("babel:originium_ingot"))
         );
         shaped(
                 writer,
@@ -3261,7 +3261,7 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:treaty_diamond", 1),
-                ingredients(item("minecraft:diamond"), item("caerula_arbor:treaty_empty"), item("caerula_arbor:trail_powder"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstonium"))
+                ingredients(item("minecraft:diamond"), item("caerula_arbor:treaty_empty"), item("caerula_arbor:trail_powder"), item("babel:originium_ingot"), item("babel:originium_ingot"), item("caerula_arbor:redstonium"))
         );
         shapeless(
                 writer,
@@ -3285,7 +3285,7 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:treaty_iron", 1),
-                ingredients(item("minecraft:iron_ingot"), item("caerula_arbor:treaty_copper"), item("minecraft:white_tulip"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstone_ingot"))
+                ingredients(item("minecraft:iron_ingot"), item("caerula_arbor:treaty_copper"), item("minecraft:white_tulip"), item("babel:originium_ingot"), item("babel:originium_ingot"))
         );
         shapeless(
                 writer,
@@ -3322,11 +3322,11 @@ public class RecipesProvider extends RecipeProvider {
         );
         cooking(
                 writer,
-                "smelt_redstine_ingot",
+                "smelt_originium_ingot",
                 "minecraft:blasting",
                 "misc",
                 null,
-                item("caerula_arbor:redstone_ingot"),
+                item("babel:originium_ingot"),
                 "minecraft:redstone",
                 4f,
                 160

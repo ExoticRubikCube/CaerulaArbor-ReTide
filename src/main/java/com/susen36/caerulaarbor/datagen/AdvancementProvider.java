@@ -353,7 +353,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
                         "caerula_arbor:campfire_block_fibre",
                         "caerula_arbor:camp_kebab",
                         "caerula_arbor:reverse_emelight",
-                        "caerula_arbor:smelt_redstine_ingot",
+                        "caerula_arbor:smelt_originium_ingot",
                         "caerula_arbor:smelt_redstoninium",
                         "caerula_arbor:stonecut_shell",
                         "caerula_arbor:brew_fast_swim",
@@ -1468,7 +1468,7 @@ public class AdvancementProvider implements AdvancementSubProvider {
                         "caerula_arbor:craft_anchor_ingot",
                         "caerula_arbor:smith_anchor",
                         "caerula_arbor:craft_hand_anchor",
-                        "caerula_arbor:smelt_redstine_ingot",
+                        "caerula_arbor:smelt_originium_ingot",
                         "caerula_arbor:smelt_redstoninium"
                 ))
                 .save(saver, modLoc("she_coming"));

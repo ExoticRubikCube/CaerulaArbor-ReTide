@@ -306,8 +306,8 @@ public final class LootTableProviders {
                     bphloemBlock(),
                     breaperEgg(),
                     bredOvary(),
-                    bredstoneIris(),
-                    bredstoneirisSeeding(),
+                    bredOriginiumIris(),
+                    bredOriginiumIrisSeeding(),
                     bsaltsand(),
                     bsaltwindBrickSlab(),
                     bsaltwindBrick(),
@@ -760,16 +760,16 @@ public final class LootTableProviders {
                             entry("caerula_arbor:red_ovary", 100, cond(silkTouch()), setCount(u(1.0F, 1.0F)))));
         }
 
-        private static TableDef bredstoneIris() {
-            return table("blocks/redstone_iris",
+        private static TableDef bredOriginiumIris() {
+            return table("blocks/originium_iris",
                     pool(number(1.0F), null, cond(survivesExplosion()),
-                            entry("caerula_arbor:redstone_iris", 1, cond())));
+                            entry("caerula_arbor:originium_iris", 1, cond())));
         }
 
-        private static TableDef bredstoneirisSeeding() {
-            return table("blocks/redstoneiris_seeding",
+        private static TableDef bredOriginiumIrisSeeding() {
+            return table("blocks/originium_iris_seeding",
                     pool(number(1.0F), null, cond(survivesExplosion()),
-                            entry("caerula_arbor:redstoneiris_seeding", 1, cond())));
+                            entry("caerula_arbor:originium_iris_seeding", 1, cond())));
         }
 
         private static TableDef bsaltsand() {
@@ -1216,7 +1216,7 @@ public final class LootTableProviders {
                             entry("minecraft:iron_ingot", 25, cond(), setCount(u(12.0F, 18.0F))),
                             entry("caerula_arbor:item_helper", 1, cond(), setCount(u(1.0F, 1.0F))),
                             entry("minecraft:redstone", 25, cond(), setCount(u(7.0F, 9.0F))),
-                            entry("caerula_arbor:redstone_ingot", 15, cond(), setCount(u(2.0F, 5.0F))),
+                            entry("babel:originium_ingot", 15, cond(), setCount(u(2.0F, 5.0F))),
                             entry("minecraft:paper", 35, cond(), setCount(u(8.0F, 12.0F)))),
                     pool(number(1.0F), null, cond(),
                             entry("caerula_arbor:personnel_transporter", 1, cond(), setCount(u(1.0F, 1.0F)))),
@@ -1564,7 +1564,7 @@ public final class LootTableProviders {
                             entry("caerula_arbor:trail_apple", 33, cond(), setCount(u(2.0F, 3.0F))),
                             entry("minecraft:gunpowder", 33, cond(), setCount(u(1.0F, 3.0F)))),
                     pool(u(1.0F, 2.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 25, cond(), setCount(u(1.0F, 2.0F))),
+                            entry("babel:originium_ingot", 25, cond(), setCount(u(1.0F, 2.0F))),
                             entry("caerula_arbor:trail_brick", 30, cond(), setCount(u(1.0F, 3.0F))),
                             entry("caerula_arbor:cracked_trail_brick", 30, cond(), setCount(u(1.0F, 3.0F))),
                             entry("minecraft:redstone", 25, cond(), setCount(u(4.0F, 5.0F))),
@@ -1616,7 +1616,7 @@ public final class LootTableProviders {
                     pool(u(1.0F, 2.0F), null, cond(),
                             entry("babel:voyage_of_gold", 33, cond(), setCount(u(1.0F, 1.0F))),
                             entry("minecraft:gold_ingot", 33, cond(), setCount(u(3.0F, 6.0F))),
-                            entry("caerula_arbor:redstone_ingot", 33, cond(), setCount(u(4.0F, 8.0F)))));
+                            entry("babel:originium_ingot", 33, cond(), setCount(u(4.0F, 8.0F)))));
         }
 
         private static TableDef cfactoryFruits() {
@@ -1714,7 +1714,7 @@ public final class LootTableProviders {
                             entry("minecraft:iron_nugget", 25, cond(), setCount(u(6.0F, 9.0F))),
                             entry("minecraft:copper_ingot", 30, cond(), setCount(u(4.0F, 6.0F))),
                             entry("minecraft:gold_nugget", 15, cond(), setCount(u(3.0F, 5.0F))),
-                            entry("caerula_arbor:redstone_ingot", 15, cond(), setCount(u(5.0F, 7.0F)))),
+                            entry("babel:originium_ingot", 15, cond(), setCount(u(5.0F, 7.0F)))),
                     pool(u(3.0F, 6.0F), null, cond(),
                             entry("minecraft:amethyst_shard", 50, cond(), setCount(u(3.0F, 6.0F))),
                             entry("minecraft:cake", 5, cond(), setCount(u(1.0F, 1.0F))),
@@ -1783,7 +1783,7 @@ public final class LootTableProviders {
                             entry("minecraft:purple_dye", 30, cond(), setCount(u(2.0F, 3.0F))),
                             entry("minecraft:purple_candle", 30, cond(), setCount(u(1.0F, 1.0F)))),
                     pool(u(2.0F, 4.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 99, cond(), setCount(u(2.0F, 4.0F)))));
+                            entry("babel:originium_ingot", 99, cond(), setCount(u(2.0F, 4.0F)))));
         }
 
         private static TableDef cinquiHomeCommon() {
@@ -1828,7 +1828,7 @@ public final class LootTableProviders {
                     pool(u(4.0F, 6.0F), null, cond(),
                             entry("caerula_arbor:complex_chitin", 4, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:phloem_block", 33, cond(), setCount(u(1.0F, 3.0F))),
-                            entry("caerula_arbor:redstoneiris_seeding", 22, cond(), setCount(u(1.0F, 1.0F))),
+                            entry("caerula_arbor:originium_iris_seeding", 22, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:cooked_peduncle", 33, cond(), setCount(u(2.0F, 4.0F))),
                             entry("caerula_arbor:caramel_cake_piece", 22, cond(), setCount(u(3.0F, 6.0F))),
                             entry("caerula_arbor:trail_cake_piece", 33, cond(), setCount(u(5.0F, 9.0F))),
@@ -2175,7 +2175,7 @@ public final class LootTableProviders {
         private static TableDef csubmarineContents() {
             return table("chests/submarine_contents",
                     pool(u(2.0F, 4.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 33, cond(), setCount(u(8.0F, 16.0F))),
+                            entry("babel:originium_ingot", 33, cond(), setCount(u(8.0F, 16.0F))),
                             entry("minecraft:redstone", 33, cond(), setCount(u(12.0F, 24.0F))),
                             entry("minecraft:repeater", 22, cond(), setCount(u(8.0F, 10.0F)))),
                     pool(u(3.0F, 6.0F), null, cond(),
@@ -2375,7 +2375,7 @@ public final class LootTableProviders {
         private static TableDef echestFish() {
             return table("entities/chest_fish",
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 100, cond(), setCount(u(9.0F, 12.0F)))),
+                            entry("babel:originium_ingot", 100, cond(), setCount(u(9.0F, 12.0F)))),
                     pool(u(2.0F, 3.0F), null, cond(),
                             entry("minecraft:emerald", 20, cond(), setCount(u(3.0F, 5.0F))),
                             entry("minecraft:diamond", 20, cond(), setCount(u(4.0F, 6.0F))),
@@ -2637,7 +2637,7 @@ public final class LootTableProviders {
         private static TableDef emegaChest() {
             return table("entities/mega_chest",
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 100, cond(), setCount(u(22.0F, 36.0F)))),
+                            entry("babel:originium_ingot", 100, cond(), setCount(u(22.0F, 36.0F)))),
                     pool(u(3.0F, 4.0F), null, cond(),
                             entry("minecraft:diamond", 30, cond(), setCount(u(5.0F, 9.0F))),
                             entry("minecraft:netherite_scrap", 20, cond(), setCount(u(3.0F, 5.0F))),
@@ -2976,7 +2976,7 @@ public final class LootTableProviders {
         private static TableDef espikeChest() {
             return table("entities/spike_chest",
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 100, cond(), setCount(u(12.0F, 18.0F)))),
+                            entry("babel:originium_ingot", 100, cond(), setCount(u(12.0F, 18.0F)))),
                     pool(u(1.0F, 5.0F), null, cond(),
                             entry("caerula_arbor:ocean_chitin", 45, cond(), setCount(u(3.0F, 8.0F))),
                             entry("minecraft:fire_coral_fan", 35, cond(), setCount(u(1.0F, 1.0F))),
@@ -3092,7 +3092,7 @@ public final class LootTableProviders {
         private static TableDef ghighmoreRelics() {
             return table("gameplay/highmore_relics",
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 100, cond(), setCount(u(16.0F, 27.0F)))),
+                            entry("babel:originium_ingot", 100, cond(), setCount(u(16.0F, 27.0F)))),
                     pool(u(1.0F, 2.0F), null, cond(),
                             entry("caerula_arbor:toponym_textology", 40, cond(), setCount(u(1.0F, 1.0F))),
                             entry("babel:piglin_diary", 30, cond(), setCount(u(1.0F, 1.0F))),
@@ -3113,7 +3113,7 @@ public final class LootTableProviders {
         private static TableDef grelicBishop() {
             return table("gameplay/relic_bishop",
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 1, cond(), setCount(u(8.0F, 16.0F)), oreBonus())),
+                            entry("babel:originium_ingot", 1, cond(), setCount(u(8.0F, 16.0F)), oreBonus())),
                     pool(number(1.0F), u(0.0F, 1.0F), cond(),
                             entry("babel:redstone_iris_flower", 10, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:kings_spear", 4, cond(), setCount(u(1.0F, 1.0F))),
@@ -3149,14 +3149,14 @@ public final class LootTableProviders {
                             entry("babel:redstone_iris_flower", 50, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:coin_of_trade", 30, cond(), setCount(u(2.0F, 4.0F)))),
                     pool(u(1.0F, 2.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 64, cond(), setCount(u(32.0F, 56.0F))),
+                            entry("babel:originium_ingot", 64, cond(), setCount(u(32.0F, 56.0F))),
                             entry("caerula_arbor:redstonium", 32, cond(), setCount(u(1.0F, 2.0F)))));
         }
 
         private static TableDef grelicIzumik() {
             return table("gameplay/relic_izumik",
                     pool(u(1.0F, 2.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 64, cond(), setCount(u(35.0F, 68.0F))),
+                            entry("babel:originium_ingot", 64, cond(), setCount(u(35.0F, 68.0F))),
                             entry("caerula_arbor:redstonium", 36, cond(), setCount(u(3.0F, 5.0F)))),
                     pool(number(3.0F), null, cond(),
                             entry("caerula_arbor:chitin_knife", 22, cond(), setCount(u(1.0F, 1.0F))),
@@ -3177,7 +3177,7 @@ public final class LootTableProviders {
         private static TableDef grelicRoute() {
             return table("gameplay/relic_route",
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 99, cond(), setCount(u(6.0F, 14.0F)), oreBonus())),
+                            entry("babel:originium_ingot", 99, cond(), setCount(u(6.0F, 14.0F)), oreBonus())),
                     pool(number(1.0F), null, cond(),
                             entry("babel:voyage_of_gold", 20, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:kings_extension", 5, cond(), setCount(u(1.0F, 1.0F))),
@@ -3192,7 +3192,7 @@ public final class LootTableProviders {
         private static TableDef grelicTidebi() {
             return table("gameplay/relic_tidebi",
                     pool(number(1.0F), null, cond(),
-                            entry("caerula_arbor:redstone_ingot", 100, cond(), setCount(u(5.0F, 9.0F)))),
+                            entry("babel:originium_ingot", 100, cond(), setCount(u(5.0F, 9.0F)))),
                     pool(number(1.0F), null, cond(),
                             entry("caerula_arbor:relic_cursed_research", 5, cond(), setCount(u(1.0F, 1.0F))),
                             entry("caerula_arbor:hand_of_firework", 30, cond(), setCount(u(1.0F, 1.0F))),

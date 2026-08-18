@@ -15,8 +15,6 @@ public class HaemophiliaMobEffect extends MobEffect {
         super(MobEffectCategory.NEUTRAL, -3381505);
     }
 
-    
-
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();

@@ -79,7 +79,7 @@ public abstract class LivingEntityEffectMixin {
     @Inject(method = "canBeSeenAsEnemy", at = @At("HEAD"), cancellable = true)
     public void fakeDeathCannotBeSeenAsEnemy(CallbackInfoReturnable<Boolean> cir) {
         LivingEntity me = (LivingEntity) (Object) this;
-        if (me.hasEffect(CAMobEffects.FAKE_DEATH)) {
+        if (me.hasEffect(CAMobEffects.FAKE_DEATH)||me.hasEffect(CAMobEffects.INVULNERABLE)) {
             cir.setReturnValue(false);
         }
     }

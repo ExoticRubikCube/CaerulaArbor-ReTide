@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.datagen.tags;
 
+import com.susen36.babel.init.BabelItems;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.init.CACollectible;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -139,7 +140,7 @@ public class ItemTagsProvider extends TagsProvider.RegistryTagsProvider<Item> {
         addTagsToTag(FORGE_ARMORS, FORGE_ARMOR_LEGGINGS, FORGE_ARMOR_CHESTPLATES, FORGE_ARMOR_BOOTS, FORGE_ARMOR_HELMETS);
         addItemsToTag(FORGE_FENCES, CAItems.TRAIL_PLANKS_FENCE);
         addItemsToTag(FORGE_FENCES_WOODEN, CAItems.TRAIL_PLANKS_FENCE);
-        addItemsToTag(FORGE_INGOTS, CAItems.REDSTONE_INGOT, CAItems.TRAILRITE);
+        addItemsToTag(FORGE_INGOTS, BabelItems.ORIGINIUM_INGOT, CAItems.TRAILRITE);
         addItemsToTag(FORGE_MEATS, CAItems.OCEAN_FIBRE, CAItems.COOKED_FIBRE, CAItems.OCEAN_PEDUNCLE, CAItems.ELITE_PEDUNCLE, CAItems.COOKED_PEDUNCLE, CAItems.COLLECTOR_MEAT, CAItems.COOKED_COLLECTOR);
         addTagsToTag(FORGE_MEATS, MINECRAFT_MEAT);
         addItemsToTag(MINECRAFT_MEAT, CAItems.BROKEN_CELL_CLUSTER, CAItems.CELL_CLUSTER, CAItems.COLLECTOR_MEAT, CAItems.KEBAB_RAW, CAItems.KEBAB_COOKED, CACollectible.FEATURED_CANNED_MEAT, CAItems.NETHERSEA_EGG_CUSTARD, CAItems.OCEAN_EYE, CAItems.OCEAN_PEDUNCLE, CAItems.TRANSFORM_CELL);

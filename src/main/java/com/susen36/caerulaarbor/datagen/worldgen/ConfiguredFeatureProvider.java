@@ -14,12 +14,7 @@ import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.CherryFoliagePlacer;
@@ -50,7 +45,7 @@ import java.util.List;
  *             // 垂直方向扩散范围
  *             3,
  *             // 直接引用已注册的模组方块
- *             CABlocks.REDSTONEIRIS_SEEDING.get(),
+ *             CABlocks.ORIGINIUM_IRIS_SEEDING.get(),
  *             // 放置位置需要满足的条件
  *             BlockPredicate.matchesBlocks(Blocks.AIR)
  *     ));
@@ -96,12 +91,12 @@ public final class ConfiguredFeatureProvider {
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
         register(context, WorldgenKeys.ConfiguredFeatures.BRANDED_LAND_TREE, new ConfiguredFeature<>(Feature.TREE, brandedLandTree()));
         register(context, WorldgenKeys.ConfiguredFeatures.BURNT_TRAILS, new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, burntTrails()));
-        register(context, WorldgenKeys.ConfiguredFeatures.IRIS_DISTRIBUTE, randomPatch(2, 2, 2, CABlocks.REDSTONEIRIS_SEEDING.get(), BlockPredicate.allOf(
+        register(context, WorldgenKeys.ConfiguredFeatures.IRIS_DISTRIBUTE, randomPatch(2, 2, 2, CABlocks.ORIGINIUM_IRIS_SEEDING.get(), BlockPredicate.allOf(
                 BlockPredicate.matchesBlocks(Blocks.AIR),
                 BlockPredicate.matchesBlocks(new Vec3i(0, -1, 0), Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.REDSTONE_ORE)
         )));
         register(context, WorldgenKeys.ConfiguredFeatures.NETHERSEA_TREE, new ConfiguredFeature<>(Feature.TREE, netherseaTree()));
-        register(context, WorldgenKeys.ConfiguredFeatures.REDSTONEIRIS_SEEDING, randomPatch(2, 7, 3, CABlocks.REDSTONEIRIS_SEEDING.get(), BlockPredicate.matchesBlocks(Blocks.AIR)));
+        register(context, WorldgenKeys.ConfiguredFeatures.ORIGINIUM_IRIS_SEEDING, randomPatch(2, 7, 3, CABlocks.ORIGINIUM_IRIS_SEEDING.get(), BlockPredicate.matchesBlocks(Blocks.AIR)));
         register(context, WorldgenKeys.ConfiguredFeatures.SLIDER_FLOWER, randomPatch(3, 4, 3, CABlocks.VIVIPAROUS_LILY.get(), BlockPredicate.allOf(
                 BlockPredicate.matchesBlocks(Blocks.AIR),
                 BlockPredicate.matchesBlocks(new Vec3i(0, -1, 0), Blocks.GRASS_BLOCK)

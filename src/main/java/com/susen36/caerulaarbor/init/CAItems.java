@@ -54,7 +54,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> BLOCK_EXTENSION = block(CABlocks.BLOCK_EXTENSION);
     
     public static final DeferredHolder<Item, ? extends Item> BLOCK_CRYSTAL = block(CABlocks.BLOCK_CRYSTAL);
-    public static final DeferredHolder<Item, ? extends Item> REDSTONE_INGOT = REGISTRY.register("redstone_ingot", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> THE_SPEAR = REGISTRY.register("the_spear", TheSpearItem::new);
     public static final DeferredHolder<Item, ? extends Item> WEARABLE_CHEST_CHESTPLATE = REGISTRY.register("wearable_chest_chestplate", WearableChestItem.Chestplate::new);
     public static final DeferredHolder<Item, ? extends Item> WEARABLE_CROWN_HELMET = REGISTRY.register("wearable_crown_helmet", () -> new WearableCrownItem(ArmorItem.Type.HELMET, new Item.Properties().fireResistant()));
@@ -79,8 +78,8 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> BERRY_CAN = block(CABlocks.BERRY_CAN);
     
     public static final DeferredHolder<Item, ? extends Item> MUSIC_BOX_FIXED = REGISTRY.register("music_box_fixed", MusicBoxFixedItem::new);
-    public static final DeferredHolder<Item, ? extends Item> REDSTONE_IRIS = block(CABlocks.REDSTONE_IRIS);
-    public static final DeferredHolder<Item, ? extends Item> REDSTONEIRIS_SEEDING = block(CABlocks.REDSTONEIRIS_SEEDING);
+    public static final DeferredHolder<Item, ? extends Item> ORIGINIUM_IRIS = block(CABlocks.ORIGINIUM_IRIS);
+    public static final DeferredHolder<Item, ? extends Item> ORIGINIUM_IRIS_SEEDING = block(CABlocks.ORIGINIUM_IRIS_SEEDING);
     public static final DeferredHolder<Item, ? extends Item> THERMOGRAPH = REGISTRY.register("thermograph", ThermographItem::new);
     
     public static final DeferredHolder<Item, ? extends Item> RUN_FISH_SPAWN_EGG = REGISTRY.register("run_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.RUN_FISH, -16777012, -3355444, new Item.Properties()));

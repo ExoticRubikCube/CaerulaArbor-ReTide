@@ -29,7 +29,7 @@ public final class WorldgenKeys {
         public static final ResourceKey<ConfiguredFeature<?, ?>> BURNT_TRAILS = modKey(Registries.CONFIGURED_FEATURE, "burnt_trails");
         public static final ResourceKey<ConfiguredFeature<?, ?>> IRIS_DISTRIBUTE = modKey(Registries.CONFIGURED_FEATURE, "iris_distribute");
         public static final ResourceKey<ConfiguredFeature<?, ?>> NETHERSEA_TREE = modKey(Registries.CONFIGURED_FEATURE, "nethersea_tree");
-        public static final ResourceKey<ConfiguredFeature<?, ?>> REDSTONEIRIS_SEEDING = modKey(Registries.CONFIGURED_FEATURE, "redstoneiris_seeding");
+        public static final ResourceKey<ConfiguredFeature<?, ?>> ORIGINIUM_IRIS_SEEDING = modKey(Registries.CONFIGURED_FEATURE, "originium_iris_seeding");
         public static final ResourceKey<ConfiguredFeature<?, ?>> SLIDER_FLOWER = modKey(Registries.CONFIGURED_FEATURE, "slider_flower");
         public static final ResourceKey<ConfiguredFeature<?, ?>> TRAIL_MUSHROOM = modKey(Registries.CONFIGURED_FEATURE, "trail_mushroom");
 
@@ -47,7 +47,7 @@ public final class WorldgenKeys {
         public static final ResourceKey<PlacedFeature> BRANDED_LAND_TREE = modKey(Registries.PLACED_FEATURE, "branded_land_tree");
         public static final ResourceKey<PlacedFeature> BURNT_TRAILS = modKey(Registries.PLACED_FEATURE, "burnt_trails");
         public static final ResourceKey<PlacedFeature> IRIS_DISTRIBUTE = modKey(Registries.PLACED_FEATURE, "iris_distribute");
-        public static final ResourceKey<PlacedFeature> REDSTONEIRIS_SEEDING = modKey(Registries.PLACED_FEATURE, "redstoneiris_seeding");
+        public static final ResourceKey<PlacedFeature> ORIGINIUM_IRIS_SEEDING = modKey(Registries.PLACED_FEATURE, "originium_iris_seeding");
         public static final ResourceKey<PlacedFeature> SLIDER_FLOWER = modKey(Registries.PLACED_FEATURE, "slider_flower");
         public static final ResourceKey<PlacedFeature> TRAIL_MUSHROOM = modKey(Registries.PLACED_FEATURE, "trail_mushroom");
 

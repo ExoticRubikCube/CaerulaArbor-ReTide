@@ -139,14 +139,12 @@ public class DisconcentrationEventHandler {
                     + Component.translatable("item.caerula_arbor.rejection_key.description_" + (int) capability.disoclusion).getString()), false);
         }
 
-        boolean serverSide = !player.level().isClientSide();
-
         // 造血障碍（持续扣血）：单个(2)或含血(6/8/10)时附加（深度 amp2=每40tick掉7.5%），否则移除
         int haemAmp = deepHaem ? DEEP_HAEMOPHILIA_AMPLIFIER : HAEMOPHILIA_AMPLIFIER;
         if (rejectionStage == HAEMOPHILIA_REJECTION_STAGE || rejectionStage == NEURO_BLOOD_COMBO_STAGE
                 || rejectionStage == ATTENTION_BLOOD_COMBO_STAGE || rejectionStage == BLOOD_FLESH_COMBO_STAGE) {
             MobEffectInstance currentHaem = player.getEffect(CAMobEffects.HAEMOPHILIA);
-            if (serverSide && (currentHaem == null || currentHaem.getAmplifier() != haemAmp)) {
+            if (!player.level().isClientSide() && (currentHaem == null || currentHaem.getAmplifier() != haemAmp)) {
                 player.removeEffect(CAMobEffects.HAEMOPHILIA);
                 player.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA, -1, haemAmp, false, false));
             }
@@ -155,7 +153,7 @@ public class DisconcentrationEventHandler {
         }
 
         // 深度造血障碍低血增伤：每缺失10%血量+10%攻击（生命值低于75%生效），动态随血量变化
-        if (deepHaem && serverSide) {
+        if (deepHaem && !player.level().isClientSide()) {
             double maxHealth = player.getMaxHealth();
             double healthPercent = maxHealth <= 0.0 ? 1.0 : player.getHealth() / maxHealth;
             double missingBlocks = healthPercent < 0.75 ? Mth.floor((1.0 - healthPercent) * 10.0) : 0;
@@ -164,14 +162,14 @@ public class DisconcentrationEventHandler {
             } else {
                 removeModifier(player, Attributes.ATTACK_DAMAGE, HAEM_LOW_HEALTH_BONUS_ID);
             }
-        } else if (serverSide) {
+        } else if (!player.level().isClientSide()) {
             removeModifier(player, Attributes.ATTACK_DAMAGE, HAEM_LOW_HEALTH_BONUS_ID);
         }
 
         // 血肉畸变：单个(4)或含肉(7/9/10)时生效；削弱与补偿均由本handler动态施加（基础各-25%，深度各-50%+攻速/移速/游泳补偿），否则移除
         if (rejectionStage == FLESHDEFORMITY_REJECTION_STAGE || rejectionStage == NEURO_FLESH_COMBO_STAGE
                 || rejectionStage == ATTENTION_FLESH_COMBO_STAGE || rejectionStage == BLOOD_FLESH_COMBO_STAGE) {
-            if (serverSide) {
+            if (!player.level().isClientSide()) {
                 if (deepFlesh) {
                     setModifier(player, Attributes.ARMOR, FLESHDEFORMITY_ARMOR_ID, -0.50, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
                     setModifier(player, Attributes.MAX_HEALTH, FLESHDEFORMITY_MAX_HEALTH_ID, -0.50, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
@@ -188,11 +186,8 @@ public class DisconcentrationEventHandler {
                     removeModifier(player, NeoForgeMod.SWIM_SPEED, DEEP_FLESHDEFORMITY_SWIM_SPEED_ID);
                 }
             }
-            if (!player.hasEffect(CAMobEffects.FLESHDEFORMITY)) {
-                player.addEffect(new MobEffectInstance(CAMobEffects.FLESHDEFORMITY, -1, 0, false, false));
-            }
         } else {
-            if (serverSide) {
+            if (!player.level().isClientSide()) {
                 removeModifier(player, Attributes.ARMOR, FLESHDEFORMITY_ARMOR_ID);
                 removeModifier(player, Attributes.MAX_HEALTH, FLESHDEFORMITY_MAX_HEALTH_ID);
                 removeModifier(player, Attributes.ATTACK_DAMAGE, FLESHDEFORMITY_ATTACK_DAMAGE_ID);
@@ -200,11 +195,10 @@ public class DisconcentrationEventHandler {
                 removeModifier(player, Attributes.MOVEMENT_SPEED, DEEP_FLESHDEFORMITY_MOVE_SPEED_ID);
                 removeModifier(player, NeoForgeMod.SWIM_SPEED, DEEP_FLESHDEFORMITY_SWIM_SPEED_ID);
             }
-            player.removeEffect(CAMobEffects.FLESHDEFORMITY);
         }
 
         // 服务端瞬态跨期：深度专注失调发作期（攻速-10%、攻击+25%，持续5s）与深度神经退行受击加成（攻击+80%、护甲+100%）
-        if (serverSide) {
+        if (!player.level().isClientSide()) {
             UUID playerId = player.getUUID();
 
             Integer disorderRemain = DISORDER_FLARE_REMAINING.get(playerId);

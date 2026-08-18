@@ -9,15 +9,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.RarityFilter;
-import net.minecraft.world.level.levelgen.placement.SurfaceWaterDepthFilter;
+import net.minecraft.world.level.levelgen.placement.*;
 
 import java.util.List;
 
@@ -95,7 +87,7 @@ public class PlacedFeatureProvider {
                 InSquarePlacement.spread(),
                 HeightmapPlacement.onHeightmap(Heightmap.Types.MOTION_BLOCKING)
         ));
-        register(context, configuredFeatures, WorldgenKeys.PlacedFeatures.REDSTONEIRIS_SEEDING, WorldgenKeys.ConfiguredFeatures.REDSTONEIRIS_SEEDING, List.of(
+        register(context, configuredFeatures, WorldgenKeys.PlacedFeatures.ORIGINIUM_IRIS_SEEDING, WorldgenKeys.ConfiguredFeatures.ORIGINIUM_IRIS_SEEDING, List.of(
                 RarityFilter.onAverageOnceEvery(32),
                 InSquarePlacement.spread(),
                 HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),

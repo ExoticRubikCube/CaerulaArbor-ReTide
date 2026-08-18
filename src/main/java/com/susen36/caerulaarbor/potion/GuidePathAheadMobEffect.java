@@ -30,22 +30,18 @@ public class GuidePathAheadMobEffect extends MobEffect {
         this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "guide_path_ahead_armor_toughness"), 9, AttributeModifier.Operation.ADD_VALUE);
     }
 
-    
-
     @Override
-    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        LevelAccessor world = entity.level();
-        double x = entity.getX();
-        double y = entity.getY();
-        double z = entity.getZ();
-        if (entity == null)
-             return true;
+    public boolean applyEffectTick(LivingEntity living, int amplifier) {
+        LevelAccessor world = living.level();
+        double x = living.getX();
+        double y = living.getY();
+        double z = living.getZ();
         BlockState target;
-        if (entity.isAlive()) {
-            if (WorldUtils.canGrief(world) && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
-                if (!((Entity) entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.MUTE))) {
+        if (living.isAlive()) {
+            if (WorldUtils.canGrief(world) && (living instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) living instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
+                if (!(living instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.MUTE))) {
                     target = (world.getBlockState(BlockPos.containing(x, y, z)));
-                    if (((Entity) entity instanceof GuideAbyssalEntity datEntI ? datEntI.getEntityData().get(GuideAbyssalEntity.DATA_LAYLIMIT) : 0) > 0) {
+                    if (((Entity) living instanceof GuideAbyssalEntity datEntI ? datEntI.getEntityData().get(GuideAbyssalEntity.DATA_LAYLIMIT) : 0) > 0) {
                         if ((target.canBeReplaced() || !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) && !(target.getBlock() == CABlocks.SEA_TRAIL_GROWN.get())
                                 && target.getDestroySpeed(world, BlockPos.containing(0, 0, 0)) >= 0) {
                             if (CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z))) {
@@ -62,11 +58,11 @@ public class GuidePathAheadMobEffect extends MobEffect {
                                 if (world instanceof Level level) {
                                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_STEP, SoundSource.NEUTRAL, 2, 1);
                                 }
-                                if ((Entity) entity instanceof GuideAbyssalEntity datEntSetI)
-                                    datEntSetI.getEntityData().set(GuideAbyssalEntity.DATA_LAYLIMIT, ((Entity) entity instanceof GuideAbyssalEntity datEntI ? datEntI.getEntityData().get(GuideAbyssalEntity.DATA_LAYLIMIT) : 0) - 1);
+                                if ((Entity) living instanceof GuideAbyssalEntity datEntSetI)
+                                    datEntSetI.getEntityData().set(GuideAbyssalEntity.DATA_LAYLIMIT, ((Entity) living instanceof GuideAbyssalEntity datEntI ? datEntI.getEntityData().get(GuideAbyssalEntity.DATA_LAYLIMIT) : 0) - 1);
                             }
                         }
-                    } else if (((Entity) entity instanceof OceanizedHorseEntity datEntI ? datEntI.getEntityData().get(OceanizedHorseEntity.DATA_LAY_LIMIT) : 0) > 0) {
+                    } else if (((Entity) living instanceof OceanizedHorseEntity datEntI ? datEntI.getEntityData().get(OceanizedHorseEntity.DATA_LAY_LIMIT) : 0) > 0) {
                         if (target.canBeReplaced()) {
                             if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z))) {
                                 {
@@ -78,8 +74,8 @@ public class GuidePathAheadMobEffect extends MobEffect {
                                 if (world instanceof Level level) {
                                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_STEP, SoundSource.NEUTRAL, 2, 1);
                                 }
-                                if ((Entity) entity instanceof OceanizedHorseEntity datEntSetI)
-                                    datEntSetI.getEntityData().set(OceanizedHorseEntity.DATA_LAY_LIMIT, ((Entity) entity instanceof OceanizedHorseEntity datEntI ? datEntI.getEntityData().get(OceanizedHorseEntity.DATA_LAY_LIMIT) : 0) - 1);
+                                if ((Entity) living instanceof OceanizedHorseEntity datEntSetI)
+                                    datEntSetI.getEntityData().set(OceanizedHorseEntity.DATA_LAY_LIMIT, ((Entity) living instanceof OceanizedHorseEntity datEntI ? datEntI.getEntityData().get(OceanizedHorseEntity.DATA_LAY_LIMIT) : 0) - 1);
                             }
                         }
                     }

@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.entity;
 
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.block.AbandonedSulptureBlock;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.init.*;
@@ -14,6 +15,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -30,7 +33,9 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -47,9 +52,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.gameevent.*;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -72,6 +74,12 @@ public class MartusEntity extends SeaMonsterBoss {
     public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<CompoundTag> DATA_BLESSED_IDS = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.COMPOUND_TAG);
+
+    // 祝福属性修饰器ID：断连时按ID移除即可无损还原，避免对baseValue做乘除运算留下精度/叠加残留
+    private static final ResourceLocation BLESS_MAX_HEALTH_MODIFIER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bless_max_health");
+    private static final ResourceLocation BLESS_ATTACK_DAMAGE_MODIFIER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "bless_attack_damage");
+
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -87,6 +95,7 @@ public class MartusEntity extends SeaMonsterBoss {
         xpReward = 64;
         setNoAi(false);
         setNoGravity(true);
+        this.noCulling = true;
         setPersistenceRequired();
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
@@ -98,6 +107,7 @@ public class MartusEntity extends SeaMonsterBoss {
         builder.define(DATA_PHASE, 0);
         builder.define(DATA_SKILLP_1, 200);
         builder.define(DATA_SKILLP_2, 200);
+        builder.define(DATA_BLESSED_IDS, new CompoundTag());
     }
 
     @Override
@@ -140,6 +150,11 @@ public class MartusEntity extends SeaMonsterBoss {
 
     @Override
     public boolean causeFallDamage(float l, float d, DamageSource source) {
+        return false;
+    }
+
+    @Override
+    public boolean canBeSeenAsEnemy() {
         return false;
     }
 
@@ -207,29 +222,18 @@ public class MartusEntity extends SeaMonsterBoss {
                     ty = MartusEntity.this.getY() + Mth.nextDouble(RandomSource.create(), 4, 9);
                     tz = MartusEntity.this.getZ() + d * Math.sin(r);
                     if ((world1.getBlockState(BlockPos.containing(tx, ty, tz))).canBeReplaced()) {
-                        if (world1 instanceof ServerLevel level)
-                            FallingBlockEntity.fall(level, BlockPos.containing(tx, ty, tz), (new Object() {
-                                public BlockState with(BlockState bs, Direction newValue) {
-                                    Property<?> prop = bs.getBlock().getStateDefinition().getProperty("facing");
-                                    if (prop instanceof DirectionProperty dp && dp.getPossibleValues().contains(newValue))
-                                        return bs.setValue(dp, newValue);
-                                    prop = bs.getBlock().getStateDefinition().getProperty("axis");
-                                    return prop instanceof EnumProperty ep && ep.getPossibleValues().contains(newValue.getAxis()) ? bs.setValue(ep, newValue.getAxis()) : bs;
-                                }
-                            }.with(CABlocks.ABANDONED_SULPTURE.get().defaultBlockState(), new Object() {
-                                public Direction getValue() {
-                                    Direction dir = Direction.NORTH;
-                                    int num = Mth.nextInt(RandomSource.create(), 1, 4);
-                                    if (num == 1) {
-                                        dir = Direction.EAST;
-                                    } else if (num == 2) {
-                                        dir = Direction.SOUTH;
-                                    } else if (num == 3) {
-                                        dir = Direction.WEST;
-                                    }
-                                    return dir;
-                                }
-                            }.getValue())));
+                        if (world1 instanceof ServerLevel level) {
+                            Direction dir = Direction.NORTH;
+                            int num = Mth.nextInt(RandomSource.create(), 1, 4);
+                            if (num == 1) {
+                                dir = Direction.EAST;
+                            } else if (num == 2) {
+                                dir = Direction.SOUTH;
+                            } else if (num == 3) {
+                                dir = Direction.WEST;
+                            }
+                            FallingBlockEntity.fall(level, BlockPos.containing(tx, ty, tz), CABlocks.ABANDONED_SULPTURE.get().defaultBlockState().setValue(AbandonedSulptureBlock.FACING, dir));
+                        }
                         break;
                     }
                 }
@@ -279,9 +283,10 @@ public class MartusEntity extends SeaMonsterBoss {
         double phase;
         double perc;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof MartusEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
-            sklp2 = (Entity) this instanceof MartusEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
-            phase = (Entity) this instanceof MartusEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0;
+            sklp1 = this.getEntityData().get(DATA_SKILLP_1);
+            sklp2 = this.getEntityData().get(DATA_SKILLP_2);
+            phase = this.getEntityData().get(DATA_PHASE);
+
             if (tickCount % 12 == 0) {
                 double num = 0;
                 double limit;
@@ -289,27 +294,22 @@ public class MartusEntity extends SeaMonsterBoss {
                 if (MapVariables.get(world).strategy_subsisting > 3) {
                     limit = 3;
                 }
-                {
-                    final Vec3 center = new Vec3(x, y, z);
-                    List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(48), e -> true);
-                    for (Mob entityiterator : entfound) {
-                        if (entityiterator.hasEffect(CAMobEffects.GUIDED_EVO)) {
-                            num = num + 1;
-                            this.spawnParticleLink(entityiterator);
-                            CaerulaArbor.queueServerWork(3, () -> {
-                                this.spawnParticleLink(entityiterator);
-                            });
-                            CaerulaArbor.queueServerWork(6, () -> {
-                                this.spawnParticleLink(entityiterator);
-                            });
-                            CaerulaArbor.queueServerWork(9, () -> {
-                                this.spawnParticleLink(entityiterator);
-                            });
-                        }
-                        if (num >= limit) {
-                            break;
-                        }
+                final Vec3 center = new Vec3(x, y, z);
+                List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(48), e -> true);
+                ListTag blessedIds = new ListTag();
+                for (Mob entityiterator : entfound) {
+                    if (entityiterator.getPersistentData().getBoolean("blessed")) {
+                        num = num + 1;
+                        blessedIds.add(IntTag.valueOf(entityiterator.getId()));
                     }
+                    if (num >= limit) {
+                        break;
+                    }
+                }
+                if (!world.isClientSide()) {
+                    CompoundTag syncTag = new CompoundTag();
+                    syncTag.put("Blessed", blessedIds);
+                    this.getEntityData().set(DATA_BLESSED_IDS, syncTag);
                 }
             }
             if (tickCount % 100 == 0) {
@@ -317,20 +317,51 @@ public class MartusEntity extends SeaMonsterBoss {
                     push(0, (-0.64), 0);
                 }
             }
-            if (phase < 0.33) {
-                if (tickCount % 2 == 0) {
-                    this.spawnMartusParticleRim();
+            // 粒子光环：第一形态常驻，第二形态仅在血量高于 33% 时保留
+            if (tickCount % 2 == 0) {
+                if (phase < 0.33 || this.getHealth() > this.getMaxHealth() * 0.33) {
+                    double angleOffset = Mth.nextInt(RandomSource.create(), 0, 59);
+                    for (int index0 = 0; index0 < 60; index0++) {
+                        double angle = angleOffset + index0 * 6;
+                        double radius = 2.5 + 0.5 * Math.sin(Math.toRadians(index0 * 24));
+                        double particleX = this.getX() + radius * Math.sin(Math.toRadians(angle));
+                        double particleZ = this.getZ() + radius * Math.cos(Math.toRadians(angle));
+                        this.level().addParticle(CAParticles.MARTUS_CHARS.get(), particleX, this.getY() + 1, particleZ, 0, 0.15, 0);
+                        this.level().addParticle(CAParticles.MARTUS_CHARS.get(), particleX, this.getY() + 0.8, particleZ, 0, -0.08, 0);
+                    }
                 }
+                if (!this.level().isClientSide() && !this.hasEffect(MobEffects.GLOWING)) {
+                    this.addEffect(new MobEffectInstance(MobEffects.GLOWING, -1, 0, false, false));
+                }
+            }
+            // 断连判定：被祝福海嗣离开48格外则取消祝福，移除发光与祝福属性修饰器，让出祝福名额供重新祝福
+            if (tickCount % 10 == 0 && !this.level().isClientSide()) {
+                for (Entity entityiterator : world.getEntities(this, new AABB((x + 64), (y + 64), (z + 64), (x - 64), (y - 64), (z - 64)))) {
+                    if (!(entityiterator instanceof LivingEntity livEnt) || !livEnt.getPersistentData().getBoolean("blessed")) {
+                        continue;
+                    }
+                    if (livEnt.distanceToSqr(this) <= 2304.0) {
+                        continue;
+                    }
+                    livEnt.getPersistentData().putBoolean("blessed", false);
+                    livEnt.removeEffect(MobEffects.GLOWING);
+                    if (livEnt.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
+                        livEnt.getAttribute(Attributes.MAX_HEALTH).removeModifier(BLESS_MAX_HEALTH_MODIFIER);
+                    }
+                    if (livEnt.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+                        livEnt.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(BLESS_ATTACK_DAMAGE_MODIFIER);
+                    }
+                }
+            }
+            if (phase < 0.33) {
                 if (!this.hasEffect(CAMobEffects.INVULNERABLE)) {
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, -1, 9, false, false));
                 }
                 if (sklp1 > 0) {
-                    if ((Entity) this instanceof MartusEntity datEntSetI)
-                        datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                    this.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                     if (MapVariables.get(world).strategy_subsisting > 3) {
-                        if ((Entity) this instanceof MartusEntity datEntSetI)
-                            datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                        this.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                     }
                 } else {
                     if (tickCount % 10 == 0) {
@@ -361,34 +392,30 @@ public class MartusEntity extends SeaMonsterBoss {
                                 break;
                             }
                             if (livEnt1.getMaxHealth() > max_h) {
-                                max_h = entityiterator instanceof LivingEntity _livEnt1 ? _livEnt1.getMaxHealth() : -1;
+                                max_h = livEnt1.getMaxHealth();
                                 tgt_ent = entityiterator;
                             }
                         }
                         result = tgt_ent;
                         tgt = result;
                         if (!(tgt == null) && tgt.isAlive() && !tgt.getPersistentData().getBoolean("blessed")) {
-                            if ((Entity) this instanceof MartusEntity datEntSetI)
-                                datEntSetI.getEntityData().set(DATA_SKILLP_1, 400);
-                            if (this instanceof MartusEntity) {
-                                this.setAnimation("animation.martus.buff");
-                            }
+                            this.getEntityData().set(DATA_SKILLP_1, 400);
+                            this.setAnimation("animation.martus.buff");
                             tgt.getPersistentData().putBoolean("blessed", true);
-                            perc = (tgt instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (tgt instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
-                            if (tgt instanceof LivingEntity livingEntity22 && livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
-                                livingEntity22.getAttribute(Attributes.MAX_HEALTH)
-                                        .setBaseValue((livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity22.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.5);
+                            LivingEntity blessedTgt = (LivingEntity) tgt;
+                            perc = blessedTgt.getHealth() / blessedTgt.getMaxHealth();
+                            if (blessedTgt.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
+                                blessedTgt.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(
+                                        new AttributeModifier(BLESS_MAX_HEALTH_MODIFIER, 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
                             }
-                            if (tgt instanceof LivingEntity livingEntity24 && livingEntity24.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                livingEntity24.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                        ((tgt instanceof LivingEntity livingEntity23 && livingEntity23.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity23.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 2.5));
-                            if (tgt instanceof LivingEntity livingTarget) {
-                                livingTarget.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF, -1, 24, false, false));
+                            if (blessedTgt.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+                                blessedTgt.getAttribute(Attributes.ATTACK_DAMAGE).addTransientModifier(
+                                        new AttributeModifier(BLESS_ATTACK_DAMAGE_MODIFIER, 1.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
                             }
-                            if (tgt instanceof LivingEntity entity)
-                                entity.setHealth((float) ((tgt instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc));
-                            if (tgt instanceof LivingEntity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CAMobEffects.GUIDED_EVO, -1, 0));
+                            blessedTgt.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF, -1, 24, false, false));
+                            blessedTgt.setHealth((float) (blessedTgt.getMaxHealth() * perc));
+                            if (!this.level().isClientSide())
+                                blessedTgt.addEffect(new MobEffectInstance(MobEffects.GLOWING, -1, 0, false, false));
                         }
                     }
                 }
@@ -396,29 +423,22 @@ public class MartusEntity extends SeaMonsterBoss {
                     martusTimedSpawn(world, x, y, z);
                 }
             } else {
-                if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.33) {
-                    if (!((Entity) this instanceof LivingEntity livEnt33 && livEnt33.hasEffect(CAMobEffects.INVULNERABLE))) {
+                if (this.getHealth() > this.getMaxHealth() * 0.33) {
+                    if (!this.hasEffect(CAMobEffects.INVULNERABLE)) {
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE, 20, 9, false, false));
                     }
-                    if (tickCount % 2 == 0) {
-                        this.spawnMartusParticleRim();
-                    }
                 }
                 if (sklp1 > 0) {
-                    if ((Entity) this instanceof MartusEntity datEntSetI)
-                        datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                    this.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                 } else {
                     if (tickCount % 10 == 0 && EntityUtils.getSeabornAround(world, x, y, z, this) > 0) {
-                        if ((Entity) this instanceof MartusEntity datEntSetI)
-                            datEntSetI.getEntityData().set(DATA_SKILLP_1, 1000);
-                        if (this instanceof MartusEntity) {
-                            this.setAnimation("animation.martus.cure");
-                        }
+                        this.getEntityData().set(DATA_SKILLP_1, 1000);
+                        this.setAnimation("animation.martus.cure");
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                if (((Entity) MartusEntity.this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > ((Entity) MartusEntity.this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.02) {
-                                    MartusEntity.this.hurtMartus(null, 0, 0.02);
+                                if (MartusEntity.this.getHealth() > MartusEntity.this.getMaxHealth() * 0.02) {
+                                    MartusEntity.this.hurtMartus(null, 0, 0.015);
                                 }
                                 final int tick2 = ticks;
                                 CaerulaArbor.queueServerWork(tick2, () -> {
@@ -451,34 +471,30 @@ public class MartusEntity extends SeaMonsterBoss {
                     }
                 }
                 if (sklp2 > 0) {
-                    if ((Entity) this instanceof MartusEntity datEntSetI)
-                        datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
+                    this.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
                 } else {
-                    if ((Entity) this instanceof MartusEntity datEntSetI)
-                        datEntSetI.getEntityData().set(DATA_SKILLP_2, 600);
-                    if (this instanceof MartusEntity) {
-                        this.setAnimation("animation.martus.reject");
-                    }
+                    this.getEntityData().set(DATA_SKILLP_2, 600);
+                    this.setAnimation("animation.martus.reject");
                     CaerulaArbor.queueServerWork(15, () -> {
                         Entity tgt_ent;
                         double max_h = 0;
                         tgt_ent = this.getTarget();
-                        if (tgt_ent == null || tgt_ent instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.SUB_HAEMO)) {
-                            tgt_ent = ((Entity) this instanceof LivingEntity entity) ? entity.getLastHurtByMob() : null;
+                        if (tgt_ent == null || (tgt_ent instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.SUB_HAEMO))) {
+                            tgt_ent = this.getLastHurtByMob();
                         }
-                        if (tgt_ent == null || tgt_ent instanceof LivingEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.SUB_HAEMO)) {
+                        if (tgt_ent == null || (tgt_ent instanceof LivingEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.SUB_HAEMO))) {
                             for (Entity entityiterator : world.getEntities(this, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
-                                if (!(entityiterator instanceof Mob)) {
+                                if (!(entityiterator instanceof Mob livEnt8)) {
                                     continue;
                                 }
                                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                                     continue;
                                 }
-                                if (entityiterator instanceof LivingEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.SUB_HAEMO)) {
+                                if (livEnt8.hasEffect(CAMobEffects.SUB_HAEMO)) {
                                     continue;
                                 }
-                                if ((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) > max_h) {
-                                    max_h = entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1;
+                                if (livEnt8.getMaxHealth() > max_h) {
+                                    max_h = livEnt8.getMaxHealth();
                                     tgt_ent = entityiterator;
                                 }
                             }
@@ -519,39 +535,6 @@ public class MartusEntity extends SeaMonsterBoss {
                 SeabornSpawnManager.summonRandomSeaborn(world, 0.33, x, y, z);
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.CLOUD, x, y, z, 18, 0.6, 0.6, 0.6, 0.16);
-            }
-        }
-    }
-
-    private void spawnMartusParticleRim() {
-        double angleOffset = Mth.nextInt(RandomSource.create(), 0, 59);
-        for (int index0 = 0; index0 < 60; index0++) {
-            double angle = angleOffset + index0 * 6;
-            double radius = 2.5 + 0.5 * Math.sin(Math.toRadians(index0 * 24));
-            double particleX = this.getX() + radius * Math.sin(Math.toRadians(angle));
-            double particleZ = this.getZ() + radius * Math.cos(Math.toRadians(angle));
-            this.level().addParticle(CAParticles.MARTUS_CHARS.get(), particleX, this.getY() + 1, particleZ, 0, 0.15, 0);
-            this.level().addParticle(CAParticles.MARTUS_CHARS.get(), particleX, this.getY() + 0.8, particleZ, 0, -0.08, 0);
-        }
-    }
-
-    private void spawnParticleLink(Entity target) {
-        if (!this.isAlive() || target == null || !(this.level() instanceof ServerLevel serverLevel)) {
-            return;
-        }
-
-        double vx = target.getX() - this.getX();
-        double vy = target.getY() + target.getBbHeight() * 0.5 - (this.getY() + this.getBbHeight() * 0.5);
-        double vz = target.getZ() - this.getZ();
-        double size = Math.clamp(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 1, 32) * 3;
-        for (int index0 = 0; index0 < (int) size; index0++) {
-            double particleX = this.getX() + vx / size * index0;
-            double particleY = this.getY() + vy / size * index0 + this.getBbHeight() * 0.5;
-            double particleZ = this.getZ() + vz / size * index0;
-            if (Math.random() > 0.5) {
-                serverLevel.sendParticles(ParticleTypes.END_ROD, particleX, particleY, particleZ, 1, 0.08, 0.08, 0.08, 0);
-            } else {
-                serverLevel.sendParticles(ParticleTypes.FIREWORK, particleX, particleY, particleZ, 1, 0.08, 0.08, 0.08, 0);
             }
         }
     }
@@ -638,10 +621,7 @@ public class MartusEntity extends SeaMonsterBoss {
     @Override
     public void remove(RemovalReason pReason) {
         if (this.level().getDifficulty() != Difficulty.PEACEFUL && pReason == RemovalReason.DISCARDED) {
-            this.hurt(
-                    CADamageTypes.source(this.level(), CADamageTypes.OCEANKILLER_DAMAGE),
-                    20
-            );
+            this.hurt(CADamageTypes.source(this.level(), CADamageTypes.OCEANKILLER_DAMAGE), 20);
             return;
         }
         super.remove(pReason);
@@ -649,13 +629,18 @@ public class MartusEntity extends SeaMonsterBoss {
 
     @Override
     public void heal(float amount) {
-        super.heal(0);
+        if (this.getEntityData().get(DATA_PHASE) >= 1) {
+            super.heal(0);
+        } else {
+            super.heal(amount);
+        }
     }
 
     @Override
     public void setHealth(float pHealth) {
-        if (this.releaseTime > 0) super.setHealth(pHealth);
-        if (this.hasEffect(CAMobEffects.INVULNERABLE) && pHealth < this.getHealth()) return;
+        if (this.releaseTime <= 0) {
+            if (this.hasEffect(CAMobEffects.INVULNERABLE) && pHealth < this.getHealth()) return;
+        }
         super.setHealth(pHealth);
     }
 
@@ -695,15 +680,15 @@ public class MartusEntity extends SeaMonsterBoss {
         }
     }
 
-    public void respondToNearbyCreatureDeath(Entity killedEntity, @Nullable Entity killer) {
+    public void respondToNearbyCreatureDeath(LivingEntity killedEntity, @Nullable LivingEntity killer) {
         float maxHp = this.getMaxHealth();
-        double targetHp = killedEntity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : 0;
+        double targetHp = killedEntity.getMaxHealth();
 
         if (killedEntity.getPersistentData().getBoolean("blessed")) {
-            double rawDamage = Mth.clamp(targetHp * 0.25, 0.0, maxHp * 0.4) * 0.05;
+            double rawDamage = Math.min(maxHp * 0.25, targetHp * 0.4);
             this.hurtMartus(killer, rawDamage, 0);
         } else if (killedEntity.getType().is(SEABORN) && this.getEntityData().get(DATA_PHASE) >= 1) {
-            double rawDamage = Mth.clamp(targetHp * 0.03, maxHp * 0.018, maxHp * 0.025);
+            double rawDamage = Math.min(maxHp * 0.018, targetHp * 0.036);
             this.hurtMartus(killer, rawDamage, 0);
         }
     }

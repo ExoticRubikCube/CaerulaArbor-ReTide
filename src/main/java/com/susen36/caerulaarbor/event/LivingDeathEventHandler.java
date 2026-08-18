@@ -4,6 +4,7 @@ import com.susen36.babel.api.event.HealthConsumeEvent;
 import com.susen36.babel.collectible.Collectibles;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelGameRules;
+import com.susen36.babel.init.BabelItems;
 import com.susen36.babel.manager.EPManager;
 import com.susen36.babel.network.BabelNetwork;
 import com.susen36.babel.util.LifePointUtils;
@@ -329,7 +330,7 @@ public class LivingDeathEventHandler {
                 if (sourceentity instanceof Player player)
                     player.giveExperienceLevels(1);
                 if (world instanceof ServerLevel level) {
-                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.REDSTONE_INGOT.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(BabelItems.ORIGINIUM_INGOT.get()));
                     entityToSpawn.setPickUpDelay(10);
                     level.addFreshEntity(entityToSpawn);
                 }

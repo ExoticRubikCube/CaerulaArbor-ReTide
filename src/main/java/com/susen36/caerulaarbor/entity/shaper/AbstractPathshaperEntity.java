@@ -301,19 +301,6 @@ public abstract class AbstractPathshaperEntity extends SeaMonsterBoss {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		if (this.tickCount % 20 == 7) {
-			if (this instanceof LineringPathshaperEntity || this instanceof RouteShaperEntity routeShaper && routeShaper.getPhase() == 1) {
-				Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
-				List<Mob> nearbyEntities = this.level().getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(32), entity -> true);
-				for (Mob nearbyEntity : nearbyEntities) {
-					if (nearbyEntity instanceof RouteFractalEntity routeFractal && !routeFractal.hasEffect(CAMobEffects.SEEK_OF_FRACTAL)) {
-						if (!routeFractal.level().isClientSide()) {
-							routeFractal.addEffect(new MobEffectInstance(CAMobEffects.SEEK_OF_FRACTAL, -1, 0));
-						}
-					}
-				}
-			}
-		}
 		this.refreshDimensions();
 	}
 

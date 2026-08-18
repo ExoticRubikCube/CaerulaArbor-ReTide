@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
+import com.susen36.babel.init.BabelItems;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -44,8 +45,8 @@ public class CATabs {
                 tabData.accept(CAItems.MUSIC_BOX_FIXED.get());
                 tabData.accept(CAItems.OCARINA.get());
                 tabData.accept(CAItems.BREATH_OF_TIDE.get());
-                tabData.accept(CABlocks.REDSTONE_IRIS.get().asItem());
-                tabData.accept(CABlocks.REDSTONEIRIS_SEEDING.get().asItem());
+                tabData.accept(CABlocks.ORIGINIUM_IRIS.get().asItem());
+                tabData.accept(CABlocks.ORIGINIUM_IRIS_SEEDING.get().asItem());
                 tabData.accept(CABlocks.TRAIL_MUSHROOM.get().asItem());
                 tabData.accept(CABlocks.VIVIPAROUS_LILY.get().asItem());
                 tabData.accept(CABlocks.HUGE_LILY.get().asItem());
@@ -144,7 +145,6 @@ public class CATabs {
                 tabData.accept(CABlocks.SWARMCALLER_DOLL.get().asItem());
                 tabData.accept(CABlocks.STONECUTTER_DOLL.get().asItem());
                 tabData.accept(CABlocks.ALLAY_BLOCK.get().asItem());
-                tabData.accept(CAItems.REDSTONE_INGOT.get());
                 tabData.accept(CAItems.REDSTONIUM.get());
                 tabData.accept(CAItems.COIN_OF_TRADE.get());
                 tabData.accept(CAItems.OCEAN_EYE.get());
@@ -545,6 +545,8 @@ public class CATabs {
             tabData.accept(CABlocks.AEGIR_GLASS_ARCH.get().asItem());
         } else if (tabData.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             tabData.accept(CABlocks.MOTAR_BASE_BLOCK.get().asItem());
+        } else if (tabData.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            tabData.accept(BabelItems.ORIGINIUM_INGOT.get());
         } else if (tabData.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             tabData.accept(CAItems.BLOODY_RECORD.get());
             tabData.accept(CAItems.RECORD_WHISPER.get());

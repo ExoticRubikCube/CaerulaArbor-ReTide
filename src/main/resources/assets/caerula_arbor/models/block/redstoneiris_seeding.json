@@ -1,8 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "caerula_arbor:block/originium_root",
-    "particle": "caerula_arbor:block/originium_root"
-  },
-  "render_type": "cutout"
-}

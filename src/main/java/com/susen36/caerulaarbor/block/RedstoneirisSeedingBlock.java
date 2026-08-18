@@ -62,7 +62,7 @@ public class RedstoneirisSeedingBlock extends FlowerBlock implements Bonemealabl
 	@Override
 	public void randomTick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		if (Math.random() < 0.05) {
-			BlockState bs = CABlocks.REDSTONE_IRIS.get().defaultBlockState();
+			BlockState bs = CABlocks.ORIGINIUM_IRIS.get().defaultBlockState();
 			BlockState bso = world.getBlockState(pos);
 			for (Map.Entry<Property<?>, Comparable<?>> entry : bso.getValues().entrySet()) {
 				Property<?> property = bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
@@ -94,7 +94,7 @@ public class RedstoneirisSeedingBlock extends FlowerBlock implements Bonemealabl
 	@Override
 	public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState blockstate) {
 		if (Math.random() < 0.05) {
-			BlockState bs = CABlocks.REDSTONE_IRIS.get().defaultBlockState();
+			BlockState bs = CABlocks.ORIGINIUM_IRIS.get().defaultBlockState();
 			BlockState bso = world.getBlockState(pos);
 			for (Map.Entry<Property<?>, Comparable<?>> entry : bso.getValues().entrySet()) {
 				Property<?> property = bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());

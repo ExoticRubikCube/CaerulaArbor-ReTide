@@ -7,8 +7,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-public class FlexibilityBuffMobEffect extends MobEffect {
-    public FlexibilityBuffMobEffect() {
+public class FlexibilityMobEffect extends MobEffect {
+    public FlexibilityMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -6697729);
         this.addAttributeModifier(CAAttributes.MISSRATE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "flexibility_buff_missrate"), 3, AttributeModifier.Operation.ADD_VALUE);
     }

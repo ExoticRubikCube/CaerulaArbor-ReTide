@@ -30,8 +30,6 @@ public class FrozenMobEffect extends MobEffect {
         this.addAttributeModifier(Attributes.ATTACK_DAMAGE, ResourceLocation.fromNamespaceAndPath("caerulaarbor", "frozen_attack_damage"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
 
-    
-
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();

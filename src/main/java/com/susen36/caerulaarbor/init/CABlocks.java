@@ -20,8 +20,8 @@ public class CABlocks {
     public static final DeferredHolder<Block, ? extends Block> BLOCK_CRYSTAL = REGISTRY.register("block_crystal", BlockCrystalBlock::new);
     public static final DeferredHolder<Block, ? extends Block> BLOCK_FATE = REGISTRY.register("block_fate", BlockFateBlock::new);
     public static final DeferredHolder<Block, ? extends Block> BERRY_CAN = REGISTRY.register("berry_can", BerryCanBlock::new);
-    public static final DeferredHolder<Block, ? extends Block> REDSTONE_IRIS = REGISTRY.register("redstone_iris", ResdtoneIrisBlock::new);
-    public static final DeferredHolder<Block, ? extends Block> REDSTONEIRIS_SEEDING = REGISTRY.register("redstoneiris_seeding", RedstoneirisSeedingBlock::new);
+    public static final DeferredHolder<Block, ? extends Block> ORIGINIUM_IRIS = REGISTRY.register("originium_iris", ResdtoneIrisBlock::new);
+    public static final DeferredHolder<Block, ? extends Block> ORIGINIUM_IRIS_SEEDING = REGISTRY.register("originium_iris_seeding", RedstoneirisSeedingBlock::new);
     public static final DeferredHolder<Block, ? extends Block> SEA_TRAIL_INIT = REGISTRY.register("sea_trail_init", SeaTrailInitBlock::new);
     public static final DeferredHolder<Block, ? extends Block> SEA_TRAIL_GROWING = REGISTRY.register("sea_trail_growing", SeaTrailGrowingBlock::new);
     public static final DeferredHolder<Block, ? extends Block> SEA_TRAIL_GROWN = REGISTRY.register("sea_trail_grown", SeaTrailGrownBlock::new);

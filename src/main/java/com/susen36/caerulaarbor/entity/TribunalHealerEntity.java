@@ -530,8 +530,7 @@ public class TribunalHealerEntity extends TamableAnimal implements RangedAttackM
     protected void tickDeath() {
         ++this.deathTime;
         if (this.deathTime == 24) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
+            super.tickDeath();
         }
     }
 

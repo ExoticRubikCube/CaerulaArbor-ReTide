@@ -5,8 +5,10 @@ import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -20,7 +22,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -35,7 +36,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import software.bernie.geckolib.animation.*;
 
 public class OceanizedCowEntity extends SeaMonster {
@@ -137,9 +138,7 @@ public class OceanizedCowEntity extends SeaMonster {
                 ItemStack bucket = sourceentity.getMainHandItem();
                 bucket.shrink(1);
                 ItemStack milk = new ItemStack(CAItems.NETHERSEA_MILK.get());
-                if (sourceentity.getInventory().add(milk)) {
-                    // success
-                } else {
+                if (!sourceentity.getInventory().add(milk)) {
                     sourceentity.drop(milk, false);
                 }
                 this.entityData.set(DATA_MILK_COOLDOWN, Mth.nextInt(RandomSource.create(), 1200, 2400));
@@ -153,10 +152,26 @@ public class OceanizedCowEntity extends SeaMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
-        if (!this.hasEffect(CAMobEffects.MUTE) && (Entity) this instanceof OceanizedCowEntity datEntL1 && datEntL1.getEntityData().get(DATA_SKILL) && WorldUtils.canGrief(world)) {
-            if (!this.level().isClientSide() && !datEntL1.hasEffect(CAMobEffects.COW_BUFF)) {
-                this.addEffect(new MobEffectInstance(CAMobEffects.COW_BUFF, 20, 0, false, false));
+        Level world = this.level();
+        if (!this.hasEffect(CAMobEffects.MUTE) && this.getEntityData().get(DATA_SKILL) && WorldUtils.canGrief(world)) {
+            if (!this.level().isClientSide() && this.getHealth() <= this.getMaxHealth() * 0.5) {
+                double x = this.getX();
+                double y = this.getY();
+                double z = this.getZ();
+                if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
+                    PlayerStateUtils.replaceTrail(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
+                }
+                for (Direction directioniterator : Direction.Plane.HORIZONTAL) {
+                    if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ()))
+                            && !(world.getBlockFloorHeight(BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ())) > 0)) {
+                        if (Math.random() < 0.33) {
+                            PlayerStateUtils.replaceTrail(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(),
+                                    (world.getFluidState(BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ())).createLegacyBlock()).getBlock() == Blocks.WATER, x + directioniterator.getStepX(), y,
+                                    z + directioniterator.getStepZ());
+                        }
+                    }
+                }
+                this.getEntityData().set(DATA_SKILL, false);
             }
         }
         int milkCooldown = this.entityData.get(DATA_MILK_COOLDOWN);
