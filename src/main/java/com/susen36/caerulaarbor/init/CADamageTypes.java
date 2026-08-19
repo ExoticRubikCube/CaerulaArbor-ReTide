@@ -59,7 +59,6 @@ public class CADamageTypes {
     public static final ResourceKey<DamageType> SUPER_CAT_ATTACK = DamageTypes.SUPER_CAT_ATTACK;
     public static final ResourceKey<DamageType> TRAIL_DAMAGE = DamageTypes.TRAIL_DAMAGE;
     public static final ResourceKey<DamageType> WARDEN_ATTACK = DamageTypes.WARDEN_ATTACK;
-    public static final ResourceKey<DamageType> WARDEN_SONIC = DamageTypes.WARDEN_SONIC;
     public static final ResourceKey<DamageType> WIPE_MAGIC = DamageTypes.WIPE_MAGIC;
 
     private CADamageTypes() {
@@ -96,10 +95,6 @@ public class CADamageTypes {
 
     public static DamageSource playerAttack(LevelReader level, Entity attacker) {
         return source(level, DatagenUtils.MinecraftDamageTypes.PLAYER_ATTACK, attacker);
-    }
-
-    public static DamageSource wardenSonic(LevelReader level, Entity attacker) {
-        return source(level, WARDEN_SONIC, attacker);
     }
 
 }

@@ -292,13 +292,6 @@ public class DamageTypes {
             0.25f
     );
 
-    public static final ResourceKey<DamageType> WARDEN_SONIC = create(
-            "warden_sonic",
-            "warden_sonic",
-            DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER,
-            0f
-    );
-
     public static final ResourceKey<DamageType> WIPE_MAGIC = create(
             "wipe_magic",
             "wipe_magic",
