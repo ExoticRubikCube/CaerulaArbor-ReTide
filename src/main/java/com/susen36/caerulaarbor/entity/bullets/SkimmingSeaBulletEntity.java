@@ -18,19 +18,19 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
-public class FleefishBulletEntity extends BaseProjectile implements ItemSupplier {
-	public FleefishBulletEntity(Level world) {
-		super(CAEntities.FLEEFISH_BULLET.get(), world);
+public class SkimmingSeaBulletEntity extends BaseProjectile implements ItemSupplier {
+	public SkimmingSeaBulletEntity(Level world) {
+		super(CAEntities.SKIMMING_SEA_BULLET.get(), world);
 	}
-	public FleefishBulletEntity(EntityType<? extends FleefishBulletEntity> type, Level world) {
+	public SkimmingSeaBulletEntity(EntityType<? extends SkimmingSeaBulletEntity> type, Level world) {
 		super(type, world);
 	}
 
-	public FleefishBulletEntity(EntityType<? extends FleefishBulletEntity> type, double x, double y, double z, Level world) {
+	public SkimmingSeaBulletEntity(EntityType<? extends SkimmingSeaBulletEntity> type, double x, double y, double z, Level world) {
 		super(type, x, y, z, world);
 	}
 
-	public FleefishBulletEntity(EntityType<? extends FleefishBulletEntity> type, LivingEntity entity, Level world) {
+	public SkimmingSeaBulletEntity(EntityType<? extends SkimmingSeaBulletEntity> type, LivingEntity entity, Level world) {
 		super(type, entity, world);
 	}
 
@@ -58,16 +58,16 @@ public class FleefishBulletEntity extends BaseProjectile implements ItemSupplier
 			this.discard();
 	}
 
-	public static FleefishBulletEntity shoot(Level world, LivingEntity entity, RandomSource source) {
+	public static SkimmingSeaBulletEntity shoot(Level world, LivingEntity entity, RandomSource source) {
 		return shoot(world, entity, source, 1.2f, 3.2, 0);
 	}
 
-	public static FleefishBulletEntity shoot(Level world, LivingEntity entity, RandomSource source, float pullingPower) {
+	public static SkimmingSeaBulletEntity shoot(Level world, LivingEntity entity, RandomSource source, float pullingPower) {
 		return shoot(world, entity, source, pullingPower * 1.2f, 3.2, 0);
 	}
 
-	public static FleefishBulletEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		FleefishBulletEntity entityarrow = new FleefishBulletEntity(CAEntities.FLEEFISH_BULLET.get(), entity, world);
+	public static SkimmingSeaBulletEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
+		SkimmingSeaBulletEntity entityarrow = new SkimmingSeaBulletEntity(CAEntities.SKIMMING_SEA_BULLET.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -83,12 +83,12 @@ public class FleefishBulletEntity extends BaseProjectile implements ItemSupplier
 	 * 该回退重载会使用当前射手的平均倍率。
 	 */
 	@Deprecated
-	public static FleefishBulletEntity shoot(LivingEntity entity, LivingEntity target) {
+	public static SkimmingSeaBulletEntity shoot(LivingEntity entity, LivingEntity target) {
 		return shoot(entity, target, (entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (16.0 / 21.0));
 	}
 
-	public static FleefishBulletEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
-		FleefishBulletEntity entityarrow = new FleefishBulletEntity(CAEntities.FLEEFISH_BULLET.get(), entity, entity.level());
+	public static SkimmingSeaBulletEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
+		SkimmingSeaBulletEntity entityarrow = new SkimmingSeaBulletEntity(CAEntities.SKIMMING_SEA_BULLET.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

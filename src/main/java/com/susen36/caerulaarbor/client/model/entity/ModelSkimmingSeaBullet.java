@@ -14,11 +14,11 @@ import net.minecraft.world.entity.Entity;
 // 使用 Blockbench 4.12.4 制作
 // 面向 Minecraft 1.17 及以上版本导出，使用 Mojang 映射
 // 将此类粘贴到你的模组中，并生成所需的全部导入语句
-public class ModelFleefishBullet<T extends Entity> extends EntityModel<T> {
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "fleefish_bullet"), "main");
+public class ModelSkimmingSeaBullet<T extends Entity> extends EntityModel<T> {
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "skimming_sea_bullet"), "main");
 	public final ModelPart thrower;
 
-	public ModelFleefishBullet(ModelPart root) {
+	public ModelSkimmingSeaBullet(ModelPart root) {
 		this.thrower = root.getChild("thrower");
 	}
 

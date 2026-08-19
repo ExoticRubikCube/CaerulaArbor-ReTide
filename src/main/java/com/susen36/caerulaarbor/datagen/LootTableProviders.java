@@ -2489,7 +2489,7 @@ public final class LootTableProviders {
         }
 
         private static TableDef efleeFish() {
-            return table("entities/flee_fish",
+            return table("entities/skimming_sea_drifter",
                     pool(u(1.0F, 2.0F), u(0.0F, 1.0F), cond(),
                             entry("caerula_arbor:ocean_fibre", 44, cond(), setCount(u(1.0F, 3.0F))),
                             entry("caerula_arbor:ocean_phloem", 44, cond(), setCount(u(2.0F, 2.0F))),

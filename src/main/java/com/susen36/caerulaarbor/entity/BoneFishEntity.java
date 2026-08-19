@@ -115,7 +115,7 @@ public class BoneFishEntity extends SeaMonster implements Bucketable, ElementalA
 
 	@Override
 	public double getElementalInjuryDamage() {
-		return 4;
+		return 1;
 	}
 
 	@Override

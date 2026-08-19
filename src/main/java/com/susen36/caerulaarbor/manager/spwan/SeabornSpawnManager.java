@@ -72,7 +72,7 @@ public class SeabornSpawnManager {
 		CAEntities.REAPER_FISH,
 		CAEntities.UMBRELLA_ABYSSAL,
 		CAEntities.PREGNANT_FISH,
-		CAEntities.FLEE_FISH,
+		CAEntities.SKIMMING_SEA_DRIFTER,
 		CAEntities.CHEST_FISH
 	};
 

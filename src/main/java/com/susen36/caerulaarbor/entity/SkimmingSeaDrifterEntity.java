@@ -4,9 +4,11 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelAttributes;
+import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.entity.bullets.FleefishBulletEntity;
+import com.susen36.caerulaarbor.entity.bullets.SkimmingSeaBulletEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -19,14 +21,20 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.level.Level;
@@ -40,22 +48,32 @@ import software.bernie.geckolib.animation.AnimationState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class FleeFishEntity extends SeaMonster implements RangedAttackMob, ElementalAttacker {
-    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FleeFishEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(FleeFishEntity.class, EntityDataSerializers.STRING);
+public class SkimmingSeaDrifterEntity extends SeaMonster implements RangedAttackMob, ElementalAttacker {
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(SkimmingSeaDrifterEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(SkimmingSeaDrifterEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_WALK = SynchedEntityData.defineId(SkimmingSeaDrifterEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean swinging;
     private long lastSwing;
+    public final MoveControl flyControl;
+    public final MoveControl walkControl;
+    public final FlyingPathNavigation flyNavigation;
+    public final GroundPathNavigation walkNavigation;
     public String animationprocedure = "empty";
 
-    public FleeFishEntity(Level world) {
-        this(CAEntities.FLEE_FISH.get(), world);
+    public SkimmingSeaDrifterEntity(Level world) {
+        this(CAEntities.SKIMMING_SEA_DRIFTER.get(), world);
     }
 
-    public FleeFishEntity(EntityType<FleeFishEntity> type, Level world) {
+    public SkimmingSeaDrifterEntity(EntityType<SkimmingSeaDrifterEntity> type, Level world) {
         super(type, world);
         xpReward = 8;
         setNoAi(false);
-        this.moveControl = new FlyingMoveControl(this, 10, true);
+        this.flyControl = new FlyingMoveControl(this, 10, true);
+        this.walkControl = new MoveControl(this);
+        this.moveControl = this.flyControl;
+        this.flyNavigation = new FlyingPathNavigation(this, world);
+        this.walkNavigation = new GroundPathNavigation(this, world);
+        this.navigation = this.flyNavigation;
     }
 
     @Override
@@ -63,6 +81,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
         super.defineSynchedData(builder);
         builder.define(DATA_SHOOT, false);
         builder.define(DATA_ANIMATION, "undefined");
+        builder.define(DATA_WALK, false);
     }
 
     @Override
@@ -72,12 +91,12 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
 
     @Override
     public double getElementalRate() {
-        return 0.6D;
+        return 0.5D;
     }
 
     @Override
     public double getElementalInjuryDamage() {
-        return 5.0D;
+        return 0.0D;
     }
 
     @Override
@@ -91,15 +110,36 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
         this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1, 20) {
             @Override
             protected Vec3 getPosition() {
-                RandomSource random = FleeFishEntity.this.getRandom();
-                double dir_x = FleeFishEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
-                double dir_y = FleeFishEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
-                double dir_z = FleeFishEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
-                return new Vec3(dir_x, dir_y, dir_z);
+                SkimmingSeaDrifterEntity drifter = SkimmingSeaDrifterEntity.this;
+                if (drifter.walking()) {
+                    return super.getPosition();
+                } else {
+                    RandomSource random = drifter.getRandom();
+                    double dirX = drifter.getX() + ((random.nextFloat() * 2 - 1) * 16);
+                    double dirY = drifter.getY() + ((random.nextFloat() * 2 - 1) * 16);
+                    double dirZ = drifter.getZ() + ((random.nextFloat() * 2 - 1) * 16);
+                    return new Vec3(dirX, dirY, dirZ);
+                }
+            }
+
+            @Override
+            public boolean canUse() {
+                return super.canUse() && !SkimmingSeaDrifterEntity.this.walking();
             }
         });
         this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 
+        this.goalSelector.addGoal(13, new MeleeAttackGoal(this, 1.0, false) {
+            @Override
+            public boolean canUse() {
+                return SkimmingSeaDrifterEntity.this.walking() && super.canUse();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return SkimmingSeaDrifterEntity.this.walking() && super.canContinueToUse();
+            }
+        });
         this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 60, 9f) {
             @Override
             public boolean canContinueToUse() {
@@ -142,7 +182,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
 
         public boolean canUse() {
             LivingEntity livingentity = this.mob.getTarget();
-            if (livingentity != null && livingentity.isAlive()) {
+            if (!SkimmingSeaDrifterEntity.this.walking() && livingentity != null && livingentity.isAlive()) {
                 this.target = livingentity;
                 return true;
             } else {
@@ -158,7 +198,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
             this.target = null;
             this.seeTime = 0;
             this.attackTime = -1;
-            ((FleeFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+            ((SkimmingSeaDrifterEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -184,10 +224,10 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
                 if (!flag) {
-                    ((FleeFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+                    ((SkimmingSeaDrifterEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
                     return;
                 }
-                ((FleeFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
+                ((SkimmingSeaDrifterEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
                 float f = (float) Math.sqrt(d0) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -195,7 +235,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
             } else if (this.attackTime < 0) {
                 this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
-                ((FleeFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+                ((SkimmingSeaDrifterEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
     }
 
@@ -222,11 +262,15 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
+        compound.putBoolean("DataWALK", this.walking());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
+        if (compound.contains("DataWALK")) {
+            this.entityData.set(DATA_WALK, compound.getBoolean("DataWALK"));
+        }
     }
 
     @Override
@@ -236,13 +280,27 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide()) {
+            if (this.walking()) {
+                this.navigation = this.walkNavigation;
+                this.moveControl = this.walkControl;
+            } else {
+                this.navigation = this.flyNavigation;
+                this.moveControl = this.flyControl;
+            }
+        }
+    }
+
+    @Override
     public EntityDimensions getDefaultDimensions(Pose p_33597_) {
         return super.getDefaultDimensions(p_33597_).scale((float) 1.2);
     }
 
     @Override
     public void performRangedAttack(LivingEntity target, float flval) {
-        FleefishBulletEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (3.2 / 7.0));
+        SkimmingSeaBulletEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (3.2 / 7.0));
     }
 
     @Override
@@ -250,17 +308,60 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
     }
 
     @Override
-    public void setNoGravity(boolean ignored) {
-        super.setNoGravity(true);
+    public boolean addEffect(MobEffectInstance effect, Entity source) {
+        MobEffect mobEffect = effect.getEffect().value();
+        if (this.shouldMakeMeWalk(mobEffect, effect.getAmplifier())) {
+            this.startWalk();
+        }
+        return super.addEffect(effect, source);
     }
 
-    public void aiStep() {
-        super.aiStep();
-        this.setNoGravity(true);
+    public boolean walking() {
+        return this.entityData.get(DATA_WALK);
+    }
+
+    public void setWalking(boolean walk) {
+        this.entityData.set(DATA_WALK, walk);
+    }
+
+    public void startWalk() {
+        if (!this.walking()) {
+            this.setWalking(true);
+            AttributeInstance movement = this.getAttribute(Attributes.MOVEMENT_SPEED);
+            if (movement != null) {
+                movement.setBaseValue(movement.getBaseValue() * 0.5);
+            }
+            this.setNoGravity(false);
+            this.moveControl = this.walkControl;
+        }
+    }
+
+    public boolean shouldMakeMeWalk(MobEffect effect, int amplifier) {
+        if ( true||effect == CAMobEffects.FROZEN.get() || effect == BabelMobEffects.STUN.get()) {
+            return true;
+        }
+        boolean[] hasStrongMovementModifier = {false};
+        effect.createModifiers(amplifier, (attribute, modifier) -> {
+            if (hasStrongMovementModifier[0]) {
+                return;
+            }
+            if (attribute == Attributes.MOVEMENT_SPEED || attribute == Attributes.FLYING_SPEED) {
+                if (modifier.amount() <= -0.95) {
+                    hasStrongMovementModifier[0] = true;
+                }
+            }
+        });
+
+        return hasStrongMovementModifier[0];
+    }
+
+    @Override
+    public void setNoGravity(boolean ignored) {
+        super.setNoGravity(this.walking() || this.isDeadOrDying() ? ignored : true);
     }
 
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
-        event.register(CAEntities.FLEE_FISH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+        event.register(CAEntities.SKIMMING_SEA_DRIFTER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
             int x = pos.getX();
             int y = pos.getY();
             int z = pos.getZ();
@@ -271,7 +372,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(BabelAttributes.MAGIC_RESISTANCE, 18);
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.4);
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.35);
         builder = builder.add(Attributes.MAX_HEALTH, 85);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
@@ -284,19 +385,23 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
 
     private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
-            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && this.onGround() && !this.isAggressive()) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.fleefish.idle"));
-            }
             if (this.isDeadOrDying()) {
-                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.fleefish.die"));
+                if (this.walking()) {
+                    return event.setAndContinue(RawAnimation.begin().thenPlay("animation.skimming_sea_drifter.die_ground"));
+                } else {
+                    return event.setAndContinue(RawAnimation.begin().thenPlay("animation.skimming_sea_drifter.die"));
+                }
+            } else if (this.walking()) {
+                if (this.isAggressive() && event.isMoving()) {
+                    return event.setAndContinue(RawAnimation.begin().thenLoop("animation.skimming_sea_drifter.move_ground"));
+                } else {
+                    return event.setAndContinue(RawAnimation.begin().thenLoop("animation.skimming_sea_drifter.idle_ground"));
+                }
+            } else if (this.isAggressive() && event.isMoving()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.skimming_sea_drifter.move"));
+            } else {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.skimming_sea_drifter.idle"));
             }
-            if (!this.onGround()) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.fleefish.idle"));
-            }
-            if (this.isAggressive() && event.isMoving()) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.fleefish.move"));
-            }
-            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.fleefish.idle"));
         }
         return PlayState.STOP;
     }
@@ -311,7 +416,8 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob, Eleme
         }
         if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
-            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.fleefish.attack"));
+            String attackAnimation = this.walking() ? "animation.skimming_sea_drifter.attack_ground" : "animation.skimming_sea_drifter.attack";
+            return event.setAndContinue(RawAnimation.begin().thenPlay(attackAnimation));
         }
         return PlayState.CONTINUE;
     }

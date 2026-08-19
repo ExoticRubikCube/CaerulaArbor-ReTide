@@ -56,6 +56,7 @@ public class FloatingSeaDrifterEntity extends SeaMonster implements RangedAttack
         super(type, world);
         xpReward = 4;
         setNoAi(false);
+        setNoGravity(true);
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
@@ -231,11 +232,6 @@ public class FloatingSeaDrifterEntity extends SeaMonster implements RangedAttack
         super.setNoGravity(true);
     }
 
-    public void aiStep() {
-        super.aiStep();
-        this.setNoGravity(true);
-    }
-
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
         event.register(CAEntities.FLOATING_SEA_DRIFTER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
             int x = pos.getX();
@@ -316,7 +312,6 @@ public class FloatingSeaDrifterEntity extends SeaMonster implements RangedAttack
         data.add(new AnimationController<>(this, "attacking", 5, this::attackingPredicate));
         data.add(new AnimationController<>(this, "procedure", 5, this::procedurePredicate));
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

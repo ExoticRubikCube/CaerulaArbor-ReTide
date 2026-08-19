@@ -4,7 +4,7 @@ import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.ai.MountVehicleGoal;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.entity.bullets.FleefishBulletEntity;
+import com.susen36.caerulaarbor.entity.bullets.SkimmingSeaBulletEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAGameRules;
 import com.susen36.caerulaarbor.init.CAParticles;
@@ -371,7 +371,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                                             }
                                         } else if (rd < 1) {
                                             if (world instanceof ServerLevel level) {
-                                                Entity entityToSpawn = CAEntities.FLEE_FISH.get().spawn(level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                                Entity entityToSpawn = CAEntities.SKIMMING_SEA_DRIFTER.get().spawn(level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                                 }
@@ -452,7 +452,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 
     @Override
     public void performRangedAttack(LivingEntity target, float flval) {
-        FleefishBulletEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (3.2 / 3.0));
+        SkimmingSeaBulletEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (3.2 / 3.0));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

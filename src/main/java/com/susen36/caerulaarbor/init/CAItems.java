@@ -187,7 +187,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> OCEAN_STONECUTTE_SPAWN_EGG = REGISTRY.register("ocean_stonecutte_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.OCEAN_STONECUTTE, -10053121, -1, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> PREGNANT_FISH_SPAWN_EGG = REGISTRY.register("pregnant_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.PREGNANT_FISH, -10066177, -404566, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> FAKE_OFFSPRING_SPAWN_EGG = REGISTRY.register("fake_offspring_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.FAKE_OFFSPRING, -856596, -6711916, new Item.Properties()));
-    public static final DeferredHolder<Item, ? extends Item> FLEE_FISH_SPAWN_EGG = REGISTRY.register("flee_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.FLEE_FISH, -16764007, -29083, new Item.Properties()));
+    public static final DeferredHolder<Item, ? extends Item> SKIMMING_SEA_DRIFTER_SPAWN_EGG = REGISTRY.register("skimming_sea_drifter_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SKIMMING_SEA_DRIFTER, -16764007, -29083, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> ROUTE_FRACTAL_SPAWN_EGG = REGISTRY.register("route_fractal_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.ROUTE_FRACTAL, -16711423, -15260869, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> SEA_TRAIL_SOLID = block(CABlocks.SEA_TRAIL_SOLID);
     public static final DeferredHolder<Item, ? extends Item> TRAIL_BRICK = block(CABlocks.TRAIL_BRICK);

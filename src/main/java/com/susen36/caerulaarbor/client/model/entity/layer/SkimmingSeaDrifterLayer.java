@@ -3,7 +3,7 @@ package com.susen36.caerulaarbor.client.model.entity.layer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.susen36.caerulaarbor.CaerulaArbor;
-import com.susen36.caerulaarbor.entity.FleeFishEntity;
+import com.susen36.caerulaarbor.entity.SkimmingSeaDrifterEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -12,15 +12,15 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
-public class FleeFishLayer extends GeoRenderLayer<FleeFishEntity> {
-	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/fleelit.png");
+public class SkimmingSeaDrifterLayer extends GeoRenderLayer<SkimmingSeaDrifterEntity> {
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/skimming_sea_drifter_lit.png");
 
-	public FleeFishLayer(GeoRenderer<FleeFishEntity> entityRenderer) {
+	public SkimmingSeaDrifterLayer(GeoRenderer<SkimmingSeaDrifterEntity> entityRenderer) {
 		super(entityRenderer);
 	}
 
 	@Override
-	public void render(PoseStack poseStack, FleeFishEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+	public void render(PoseStack poseStack, SkimmingSeaDrifterEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
 		RenderType glowRenderType = RenderType.eyes(LAYER);
 		getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 	}

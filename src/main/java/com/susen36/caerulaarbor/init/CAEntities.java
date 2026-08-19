@@ -124,10 +124,10 @@ public class CAEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<FakeOffspringEntity>> FAKE_OFFSPRING = register("fake_offspring", FakeOffspringEntity.class,
             EntityType.Builder.<FakeOffspringEntity>of(FakeOffspringEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.6f, 0.6f));
-    public static final DeferredHolder<EntityType<?>, EntityType<FleefishBulletEntity>> FLEEFISH_BULLET = register("fleefish_bullet", FleefishBulletEntity.class,
-            EntityType.Builder.<FleefishBulletEntity>of(FleefishBulletEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
-    public static final DeferredHolder<EntityType<?>, EntityType<FleeFishEntity>> FLEE_FISH = register("flee_fish", FleeFishEntity.class,
-            EntityType.Builder.<FleeFishEntity>of(FleeFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
+    public static final DeferredHolder<EntityType<?>, EntityType<SkimmingSeaBulletEntity>> SKIMMING_SEA_BULLET = register("skimming_sea_bullet", SkimmingSeaBulletEntity.class,
+            EntityType.Builder.<SkimmingSeaBulletEntity>of(SkimmingSeaBulletEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
+    public static final DeferredHolder<EntityType<?>, EntityType<SkimmingSeaDrifterEntity>> SKIMMING_SEA_DRIFTER = register("skimming_sea_drifter", SkimmingSeaDrifterEntity.class,
+            EntityType.Builder.<SkimmingSeaDrifterEntity>of(SkimmingSeaDrifterEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.8f, 1.1f));
     public static final DeferredHolder<EntityType<?>, EntityType<RouteShaperEntity>> ROUTE_SHAPER = register("route_shaper", RouteShaperEntity.class,
             EntityType.Builder.<RouteShaperEntity>of(RouteShaperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(16).setUpdateInterval(3)
@@ -453,7 +453,7 @@ public class CAEntities {
         addAttributeRegistration(OCEAN_STONECUTTE, OceanStonecutteEntity::createAttributes);
         addAttributeRegistration(PREGNANT_FISH, PregnantFishEntity::createAttributes);
         addAttributeRegistration(FAKE_OFFSPRING, FakeOffspringEntity::createAttributes);
-        addAttributeRegistration(FLEE_FISH, FleeFishEntity::createAttributes);
+        addAttributeRegistration(SKIMMING_SEA_DRIFTER, SkimmingSeaDrifterEntity::createAttributes);
         addAttributeRegistration(ROUTE_SHAPER, RouteShaperEntity::createAttributes);
         addAttributeRegistration(ROUTE_FRACTAL, RouteFractalEntity::createAttributes);
         addAttributeRegistration(FIRST_TO_TALK, FirstTellerEntity::createAttributes);
@@ -574,7 +574,7 @@ public class CAEntities {
         markSummonable(OCEAN_STONECUTTE);
         markSummonable(PREGNANT_FISH);
         markSummonable(FAKE_OFFSPRING);
-        markSummonable(FLEE_FISH);
+        markSummonable(SKIMMING_SEA_DRIFTER);
         markSummonable(ROUTE_SHAPER);
         markSummonable(ROUTE_FRACTAL);
         markSummonable(FIRST_TO_TALK);
@@ -646,7 +646,7 @@ public class CAEntities {
         addSpawnPlacementRegistration(BONE_FISH, BoneFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(OCEAN_STONECUTTE, OceanStonecutteEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(PREGNANT_FISH, PregnantFishEntity::registerSpawnPlacements);
-        addSpawnPlacementRegistration(FLEE_FISH, FleeFishEntity::registerSpawnPlacements);
+        addSpawnPlacementRegistration(SKIMMING_SEA_DRIFTER, SkimmingSeaDrifterEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(FIRST_TO_TALK, FirstTellerEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(FLOATER_PROKARYOTE, FloaterProkaryoteEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(APOSTLE_PROKARYOTE, ApostleProkaryoteEntity::registerSpawnPlacements);
@@ -781,8 +781,8 @@ public class CAEntities {
             addRenderer(CAEntities.FAKERGG_SHOOT, FakerggShootRenderer::new);
             addRenderer(CAEntities.PREGNANT_FISH, PregnantFishRenderer::new);
             addRenderer(CAEntities.FAKE_OFFSPRING, FakeOffspringRenderer::new);
-            addRenderer(CAEntities.FLEEFISH_BULLET, FleefishBulletRenderer::new);
-            addRenderer(CAEntities.FLEE_FISH, FleeFishRenderer::new);
+            addRenderer(CAEntities.SKIMMING_SEA_BULLET, SkimmingSeaBulletRenderer::new);
+            addRenderer(CAEntities.SKIMMING_SEA_DRIFTER, SkimmingSeaDrifterRenderer::new);
             addRenderer(CAEntities.ROUTE_SHAPER, RouteShaperRenderer::new);
             addRenderer(CAEntities.ROUTE_FRACTAL, RouteFractalRenderer::new);
             addRenderer(CAEntities.TELLER_SHOT, TellerShotRenderer::new);
@@ -915,7 +915,7 @@ public class CAEntities {
             LAYER_DEFINITIONS.put(ModelAnchorFly.LAYER_LOCATION, ModelAnchorFly::createBodyLayer);
             LAYER_DEFINITIONS.put(ModelSealeatherChitinArmor.LAYER_LOCATION, ModelSealeatherChitinArmor::createBodyLayer);
             LAYER_DEFINITIONS.put(ModelHighmoreShoot.LAYER_LOCATION, ModelHighmoreShoot::createBodyLayer);
-            LAYER_DEFINITIONS.put(ModelFleefishBullet.LAYER_LOCATION, ModelFleefishBullet::createBodyLayer);
+            LAYER_DEFINITIONS.put(ModelSkimmingSeaBullet.LAYER_LOCATION, ModelSkimmingSeaBullet::createBodyLayer);
             LAYER_DEFINITIONS.put(ModelFakerggShoot.LAYER_LOCATION, ModelFakerggShoot::createBodyLayer);
             LAYER_DEFINITIONS.put(ModelOceanArrow.LAYER_LOCATION, ModelOceanArrow::createBodyLayer);
         }

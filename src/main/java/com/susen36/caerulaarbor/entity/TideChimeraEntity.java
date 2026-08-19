@@ -703,7 +703,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
             ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
             tz = z + d * Math.sin(r);
             if (world instanceof ServerLevel projectileLevel) {
-                FleefishBulletEntity entityToSpawn = new FleefishBulletEntity(CAEntities.FLEEFISH_BULLET.get(), projectileLevel);
+                SkimmingSeaBulletEntity entityToSpawn = new SkimmingSeaBulletEntity(CAEntities.SKIMMING_SEA_BULLET.get(), projectileLevel);
                 entityToSpawn.setOwner(this);
                 entityToSpawn.setBaseDamage((float) dama);
                 entityToSpawn.setSilent(true);

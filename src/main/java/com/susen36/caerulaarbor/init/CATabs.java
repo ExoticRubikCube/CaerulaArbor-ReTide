@@ -298,7 +298,7 @@ public class CATabs {
                 tabData.accept(CAItems.OCEAN_STONECUTTE_SPAWN_EGG.get());
                 tabData.accept(CAItems.PREGNANT_FISH_SPAWN_EGG.get());
                 tabData.accept(CAItems.FAKE_OFFSPRING_SPAWN_EGG.get());
-                tabData.accept(CAItems.FLEE_FISH_SPAWN_EGG.get());
+                tabData.accept(CAItems.SKIMMING_SEA_DRIFTER_SPAWN_EGG.get());
                 tabData.accept(CAItems.COMPASSION_PRAYER_SPAWN_EGG.get());
                 tabData.accept(CAItems.FIRST_TO_TALK_SPAWN_EGG.get());
                 tabData.accept(CAItems.THIRSTER_SPAWN_EGG.get());
