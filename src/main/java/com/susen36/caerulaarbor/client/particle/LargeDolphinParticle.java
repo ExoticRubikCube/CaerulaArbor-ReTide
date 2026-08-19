@@ -16,8 +16,8 @@ public class LargeDolphinParticle extends SuspendedTownParticle {
         this.pickSprite(spriteSet);
         this.setColor(0.3F, 0.5F, 1.0F);
         this.setAlpha(1.0F - this.random.nextFloat() * 0.7F - 0.15F);
-        this.setLifetime(this.getLifetime() / 2);
-        this.quadSize *= 1.75F;
+        this.lifetime = 15 + this.random.nextInt(10);
+        this.quadSize *= 1.8F;
     }
 
     public static LargeDolphinParticleProvider provider(SpriteSet spriteSet) {

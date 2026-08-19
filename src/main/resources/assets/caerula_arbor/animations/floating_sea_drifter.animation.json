@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.flyfish.idle": {
+		"animation.floating_sea_drifter.idle": {
 			"loop": true,
 			"animation_length": 2,
 			"bones": {
@@ -262,7 +262,7 @@
 				}
 			}
 		},
-		"animation.flyfish.attack": {
+		"animation.floating_sea_drifter.attack": {
 			"animation_length": 1,
 			"bones": {
 				"body": {

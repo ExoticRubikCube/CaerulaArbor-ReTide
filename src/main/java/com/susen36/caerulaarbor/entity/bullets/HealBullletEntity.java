@@ -22,7 +22,6 @@ import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -33,7 +32,6 @@ import java.util.List;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class HealBullletEntity extends BaseProjectile implements ItemSupplier {
-	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.AMETHYST_SHARD);
 	public HealBullletEntity(Level world) {
 		super(CAEntities.HEAL_BULLLET.get(), world);
 	}
@@ -54,13 +52,13 @@ public class HealBullletEntity extends BaseProjectile implements ItemSupplier {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack getItem() {
-		return PROJECTILE_ITEM;
+		return new ItemStack(Items.AMETHYST_SHARD);
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();

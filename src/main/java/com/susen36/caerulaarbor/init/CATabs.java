@@ -275,7 +275,7 @@ public class CATabs {
                 tabData.accept(CAItems.RUN_FISH_SPAWN_EGG.get());
                 tabData.accept(CAItems.SLIDER_FISH_SPAWN_EGG.get());
                 tabData.accept(CAItems.SHOOTER_FISH_SPAWN_EGG.get());
-                tabData.accept(CAItems.FLY_FISH_SPAWN_EGG.get());
+                tabData.accept(CAItems.FLOATING_SEA_DRIFTER_SPAWN_EGG.get());
                 tabData.accept(CAItems.REAPER_FISH_SPAWN_EGG.get());
                 tabData.accept(CAItems.POCKET_SEA_CREEPER_SPAWN_EGG.get());
                 tabData.accept(CAItems.POCKET_SEA_CRAWLER_SPAWN_EGG.get());

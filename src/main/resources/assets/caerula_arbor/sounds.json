@@ -1322,11 +1322,11 @@
       }
     ]
   },
-  "flyfish_attack": {
-    "subtitle": "subtitles.flyfish_attack",
+  "floating_sea_drifter_attack": {
+    "subtitle": "subtitles.floating_sea_drifter_attack",
     "sounds": [
       {
-        "name": "caerula_arbor:fly_fish_attack",
+        "name": "caerula_arbor:floating_sea_drifter_attack",
         "stream": false
       }
     ]

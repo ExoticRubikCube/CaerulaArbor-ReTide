@@ -103,7 +103,6 @@ public class ClientListener {
 			CAMobEffects.DEDUCT_ONE_SANITY.get(),
 			CAMobEffects.FIRST_TELLER_SKILL.get(),
 			CAMobEffects.PET_REAP.get(),
-			CAMobEffects.RUNNING_ON_TRAIL.get(),
 			CAMobEffects.ANGER_OF_BISHOP.get(),
 			CAMobEffects.FAKE_DEATH.get(),
 			CAMobEffects.HEMOSTATIC.get(),

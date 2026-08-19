@@ -19,7 +19,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class FleefishBulletEntity extends BaseProjectile implements ItemSupplier {
-	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.MAGMA_CREAM);
 	public FleefishBulletEntity(Level world) {
 		super(CAEntities.FLEEFISH_BULLET.get(), world);
 	}
@@ -38,7 +37,7 @@ public class FleefishBulletEntity extends BaseProjectile implements ItemSupplier
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack getItem() {
-		return PROJECTILE_ITEM;
+		return new ItemStack(Items.MAGMA_CREAM);
 	}
 
 	@Override

@@ -72,8 +72,8 @@ public class CAEntities {
                     .sized(0.6f, 1.2f));
     public static final DeferredHolder<EntityType<?>, EntityType<FishShootEntity>> FISH_SHOOT = register("fish_shoot", FishShootEntity.class,
             EntityType.Builder.<FishShootEntity>of(FishShootEntity::new, MobCategory.MISC).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
-    public static final DeferredHolder<EntityType<?>, EntityType<FlyFishEntity>> FLY_FISH = register("fly_fish", FlyFishEntity.class,
-            EntityType.Builder.<FlyFishEntity>of(FlyFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
+    public static final DeferredHolder<EntityType<?>, EntityType<FloatingSeaDrifterEntity>> FLOATING_SEA_DRIFTER = register("floating_sea_drifter", FloatingSeaDrifterEntity.class,
+            EntityType.Builder.<FloatingSeaDrifterEntity>of(FloatingSeaDrifterEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3)
                     .sized(0.6f, 0.9f));
     public static final DeferredHolder<EntityType<?>, EntityType<ReaperFishEntity>> REAPER_FISH = register("reaper_fish", ReaperFishEntity.class,
             EntityType.Builder.<ReaperFishEntity>of(ReaperFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(10).setUpdateInterval(3)
@@ -437,7 +437,7 @@ public class CAEntities {
         addAttributeRegistration(SLIDER_FISH, SliderFishEntity::createAttributes);
         addAttributeRegistration(SUPER_SLIDER, SuperSliderEntity::createAttributes);
         addAttributeRegistration(SHOOTER_FISH, ShooterFishEntity::createAttributes);
-        addAttributeRegistration(FLY_FISH, FlyFishEntity::createAttributes);
+        addAttributeRegistration(FLOATING_SEA_DRIFTER, FloatingSeaDrifterEntity::createAttributes);
         addAttributeRegistration(REAPER_FISH, ReaperFishEntity::createAttributes);
         addAttributeRegistration(POCKET_SEA_CREEPER, PocketSeaCreeperEntity::createAttributes);
         addAttributeRegistration(POCKET_SEA_CRAWLER, PocketSeaCrawlerEntity::createAttributes);
@@ -558,7 +558,7 @@ public class CAEntities {
         markSummonable(SLIDER_FISH);
         markSummonable(SUPER_SLIDER);
         markSummonable(SHOOTER_FISH);
-        markSummonable(FLY_FISH);
+        markSummonable(FLOATING_SEA_DRIFTER);
         markSummonable(REAPER_FISH);
         markSummonable(POCKET_SEA_CREEPER);
         markSummonable(POCKET_SEA_CRAWLER);
@@ -631,9 +631,10 @@ public class CAEntities {
         addSpawnPlacementRegistration(RUN_FISH, RunFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(SLIDER_FISH, SliderFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(SHOOTER_FISH, ShooterFishEntity::registerSpawnPlacements);
-        addSpawnPlacementRegistration(FLY_FISH, FlyFishEntity::registerSpawnPlacements);
+        addSpawnPlacementRegistration(FLOATING_SEA_DRIFTER, FloatingSeaDrifterEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(REAPER_FISH, ReaperFishEntity::registerSpawnPlacements);
          addSpawnPlacementRegistration(POCKET_SEA_CRAWLER, PocketSeaCrawlerEntity::registerSpawnPlacements);
+         addSpawnPlacementRegistration(POCKET_SEA_CREEPER, PocketSeaCreeperEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(PUNCTURE_FISH, PunctureFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(BASELAYER_ABYSSAL, BaselayerAbyssalEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(PREDATOR_ABYSSAL, PredatorAbyssalEntity::registerSpawnPlacements);
@@ -762,7 +763,7 @@ public class CAEntities {
             addRenderer(CAEntities.SUPER_SLIDER, SuperSliderRenderer::new);
             addRenderer(CAEntities.SHOOTER_FISH, ShooterFishRenderer::new);
             addRenderer(CAEntities.FISH_SHOOT, FishShootRenderer::new);
-            addRenderer(CAEntities.FLY_FISH, FlyFishRenderer::new);
+            addRenderer(CAEntities.FLOATING_SEA_DRIFTER, FloatingSeaDrifterRenderer::new);
             addRenderer(CAEntities.REAPER_FISH, ReaperFishRenderer::new);
             addRenderer(CAEntities.POCKET_SEA_CREEPER, PocketSeaCreeperRenderer::new);
             addRenderer(CAEntities.POCKET_SEA_CRAWLER, PocketSeaCrawlerRenderer::new);
@@ -843,7 +844,7 @@ public class CAEntities {
             addRenderer(CAEntities.OCEANIZED_WARDENIS, OceanizedWardenisRenderer::new);
             addRenderer(CAEntities.NUCLEIC_MALEFICENT, NucleicMaleficentRenderer::new);
             addRenderer(CAEntities.OCEANIZED_WITHER, OceanizedWitherRenderer::new);
-            addRenderer(CAEntities.WITHER_SHOOT_PRE, ThrownItemRenderer::new);
+            addRenderer(CAEntities.WITHER_SHOOT_PRE, WitherShootPreRenderer::new);
             addRenderer(CAEntities.OCEANIZED_WITHERIA, OceannizedWitheriaRenderer::new);
             addRenderer(CAEntities.THE_LAST_KNIGHT, TheLastKnightRenderer::new);
             addRenderer(CAEntities.ROCINANTE, RocinanteRenderer::new);

@@ -105,7 +105,6 @@ public class PunctureFishEntity extends SeaMonster {
         this.refreshDimensions();
     }
 
-
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
         event.register(CAEntities.PUNCTURE_FISH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
             int x = pos.getX();

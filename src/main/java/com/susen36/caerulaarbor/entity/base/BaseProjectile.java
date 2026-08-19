@@ -245,7 +245,6 @@ public abstract class BaseProjectile extends Projectile {
             this.setPos(d7, d2, d3);
             this.checkInsideBlocks();
         }
-
     }
 
     protected double getDefaultGravity() {
@@ -283,6 +282,7 @@ public abstract class BaseProjectile extends Projectile {
         }
     }
 
+    @Override
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         Entity entity = result.getEntity();
@@ -312,7 +312,7 @@ public abstract class BaseProjectile extends Projectile {
         }
 
         if (this.isCritArrow()) {
-            long k = (long)this.random.nextInt(j / 2 + 2);
+            long k = this.random.nextInt(j / 2 + 2);
             j = (int)Math.min(k + (long)j, 2147483647L);
         }
 
@@ -335,13 +335,11 @@ public abstract class BaseProjectile extends Projectile {
                 if (!this.level().isClientSide && this.getPierceLevel() <= 0) {
                     livingentity.setArrowCount(livingentity.getArrowCount() + 1);
                 }
-
                 this.doKnockback(livingentity, damagesource);
                 Level var13 = this.level();
                 if (var13 instanceof ServerLevel serverlevel1) {
                     EnchantmentHelper.doPostAttackEffectsWithItemSource(serverlevel1, livingentity, damagesource, this.getWeaponItem());
                 }
-
                 this.doPostHurtEffects(livingentity);
                 if (livingentity != entity1 && livingentity instanceof Player && entity1 instanceof ServerPlayer && !this.isSilent()) {
                     ((ServerPlayer)entity1).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));

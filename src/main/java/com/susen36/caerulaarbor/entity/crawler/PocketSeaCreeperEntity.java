@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.entity.crawler;
 
 
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
@@ -9,6 +10,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -16,6 +18,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 
 import java.util.EnumSet;
 
@@ -62,10 +66,19 @@ public class PocketSeaCreeperEntity extends AbstractPocketSeaCrawlerEntity {
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
 		builder = builder.add(Attributes.MAX_HEALTH, 65);
 		builder = builder.add(Attributes.ARMOR, 0);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 4);
+		builder = builder.add(Attributes.ATTACK_DAMAGE, 4.5F);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 36);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
 		return builder;
+	}
+
+	public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+		event.register(CAEntities.POCKET_SEA_CREEPER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+			int x = pos.getX();
+			int y = pos.getY();
+			int z = pos.getZ();
+			return WorldUtils.canRareSeabornSpawn(world, x, y, z);
+		}, RegisterSpawnPlacementsEvent.Operation.REPLACE);
 	}
 
 

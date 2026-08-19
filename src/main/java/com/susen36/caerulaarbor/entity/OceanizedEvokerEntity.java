@@ -350,7 +350,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                                             }
                                         } else if (rd < 0.65) {
                                             if (world instanceof ServerLevel level) {
-                                                Entity entityToSpawn = CAEntities.FLY_FISH.get().spawn(level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                                Entity entityToSpawn = CAEntities.FLOATING_SEA_DRIFTER.get().spawn(level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                                 }

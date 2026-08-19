@@ -21,7 +21,6 @@ import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -60,7 +59,7 @@ public class PrayerSplashEntity extends BaseProjectile implements ItemSupplier {
 	@Override
 	public void tick() {
 		super.tick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();

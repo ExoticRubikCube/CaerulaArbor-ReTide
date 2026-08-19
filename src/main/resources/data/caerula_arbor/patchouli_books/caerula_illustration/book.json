@@ -1,9 +1,0 @@
-{
-  "name": "text.caerula_arbor.patchouli.title",
-  "version": 325,
-  "landing_text": "海风从肩旁吹过，去往大海的另外一端。$(br)你的终点正在那里，而此时的你尚未起步。$(br)收拾行李，做好准备，大海等待着你的到来。$(br)————哈基玖，妮芙 合著",
-  "book_texture": "patchouli:textures/gui/book_blue.png",
-  "creative_tab": "minecraft:tools_and_utilities",
-  "model": "caerula_arbor:caerula_book_holder",
-  "use_resource_pack": true
-}

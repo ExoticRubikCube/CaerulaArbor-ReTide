@@ -17,7 +17,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.api.distmarker.Dist;
@@ -51,7 +50,7 @@ public class FakerggShootEntity extends BaseProjectile implements ItemSupplier {
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-        LevelAccessor world = this.level();
+        Level world = this.level();
         Entity entity = entityHitResult.getEntity();
         Entity sourceentity = this.getOwner();
         if (sourceentity == null)
@@ -72,7 +71,7 @@ public class FakerggShootEntity extends BaseProjectile implements ItemSupplier {
 	@Override
 	public void onHitBlock(BlockHitResult blockHitResult) {
 		super.onHitBlock(blockHitResult);
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = blockHitResult.getBlockPos().getX();
         double y = blockHitResult.getBlockPos().getY();
         double z = blockHitResult.getBlockPos().getZ();

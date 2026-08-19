@@ -90,7 +90,7 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
 			// 下放自 LivingHurtEventHandler.handleOnArrowHit：ComplexChitin 分裂 / TrailriteLink 连锁
 			float f = (float) this.getDeltaMovement().length();
 			double d0 = this.getBaseDamage();
-			DamageSource damagesource = this.damageSources().arrow(this, sourceentity != null ? sourceentity : this);
+			DamageSource damagesource = this.damageSources().arrow(this, sourceentity);
 			if (this.getWeaponItem() != null && this.level() instanceof ServerLevel serverlevel) {
 				d0 = EnchantmentHelper.modifyDamage(serverlevel, this.getWeaponItem(), entity, damagesource, (float) d0);
 			}

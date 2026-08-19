@@ -14,7 +14,6 @@ import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -57,7 +56,7 @@ public class FishSplashEntity extends BaseProjectile implements ItemSupplier {
 	@Override
 	public void tick() {
 		super.tick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         world.addParticle(ParticleTypes.DOLPHIN, this.getX(), this.getY(), this.getZ(), ((-0.05) * getDeltaMovement().x()), ((-0.05) * getDeltaMovement().y()), ((-0.05) * getDeltaMovement().z()));
         if (tickCount >= 200) {
             if (!level().isClientSide())

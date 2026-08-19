@@ -11,19 +11,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.projectile.ItemSupplier;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.EntityHitResult;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
-@OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
-public class WitherShootPreEntity extends BaseProjectile implements ItemSupplier {
-	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Blocks.WITHER_SKELETON_SKULL);
-	public WitherShootPreEntity(Level world) {
+public class WitherShootPreEntity extends BaseProjectile {
+    public WitherShootPreEntity(Level world) {
 		super(CAEntities.WITHER_SHOOT_PRE.get(), world);
 	}
 
@@ -40,14 +32,8 @@ public class WitherShootPreEntity extends BaseProjectile implements ItemSupplier
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
-	public ItemStack getItem() {
-		return PROJECTILE_ITEM;
-	}
-
-	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -90,7 +76,7 @@ public class WitherShootPreEntity extends BaseProjectile implements ItemSupplier
 	@Override
 	public void tick() {
 		super.tick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -128,7 +114,7 @@ public class WitherShootPreEntity extends BaseProjectile implements ItemSupplier
 			this.discard();
 	}
 
-	private void shootWitherToTarget(LevelAccessor world, Entity from, Entity target) {
+	private void shootWitherToTarget(Level world, Entity from, Entity target) {
 		if (from == null || target == null) {
 			return;
 		}

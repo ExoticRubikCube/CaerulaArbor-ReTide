@@ -3,21 +3,21 @@ package com.susen36.caerulaarbor.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.susen36.caerulaarbor.client.model.entity.FlyFishModel;
-import com.susen36.caerulaarbor.entity.FlyFishEntity;
+import com.susen36.caerulaarbor.client.model.entity.FloatingSeaDrifterModel;
+import com.susen36.caerulaarbor.entity.FloatingSeaDrifterEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-public class FlyFishRenderer extends GeoEntityRenderer<FlyFishEntity> {
-	public FlyFishRenderer(EntityRendererProvider.Context renderManager) {
-		super(renderManager, new FlyFishModel());
+public class FloatingSeaDrifterRenderer extends GeoEntityRenderer<FloatingSeaDrifterEntity> {
+	public FloatingSeaDrifterRenderer(EntityRendererProvider.Context renderManager) {
+		super(renderManager, new FloatingSeaDrifterModel());
 		this.shadowRadius = 0.3f;
 	}
 
 	@Override
-	public void preRender(PoseStack poseStack, FlyFishEntity entity, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
+	public void preRender(PoseStack poseStack, FloatingSeaDrifterEntity entity, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
 		float scale = 1.5f;
 		this.scaleHeight = scale;
 		this.scaleWidth = scale;

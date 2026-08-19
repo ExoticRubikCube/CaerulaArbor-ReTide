@@ -31,7 +31,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -95,7 +94,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
 
         if (!world.isClientSide() && this.tickCount % 20 == 0) {
             if (world.getBlockState(this.blockPosition()).is(SEA_TRAIL_TAG)) {

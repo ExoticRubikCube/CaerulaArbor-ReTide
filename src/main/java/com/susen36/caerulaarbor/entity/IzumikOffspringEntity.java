@@ -81,12 +81,33 @@ public class IzumikOffspringEntity extends SeaMonster {
 		builder.define(DATA_ANIMATION, "undefined");
 	}
 
-
 	public boolean spawnRandomEntityFromTag(ServerLevel serverLevel, double x, double y, double z) {
 		if (serverLevel == null) {
 			return false;
 		}
-		return spawnEntity(serverLevel, x, y, z);
+		Optional<EntityType<?>> optionalEntityType = randomEntityTypeInTag(serverLevel, ENTITY_TAG);
+		if (optionalEntityType.isEmpty()) {
+			return false;
+		}
+		Entity entity = optionalEntityType.get().spawn(serverLevel, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+		if (entity != null) {
+			entity.setYRot(serverLevel.getRandom().nextFloat() * 360.0F);
+			if (entity instanceof Mob after) {
+				Team team = this.getTeam();
+				MinecraftServer server = after.getServer();
+				if (server != null && team instanceof PlayerTeam playerTeam) {
+					server.getScoreboard().addPlayerToTeam(after.getScoreboardName(), playerTeam);
+				}
+			}
+			if (entity instanceof OceanizedWardenisEntity warden) {
+				var mh = warden.getAttribute(Attributes.MAX_HEALTH);
+				if (mh != null) {
+					mh.setBaseValue(mh.getBaseValue() * 0.35);
+				}
+				warden.setHealth(warden.getMaxHealth());
+			}
+		}
+		return entity != null;
 	}
 
 	public static Optional<EntityType<?>> randomEntityTypeInTag(Level level, TagKey<EntityType<?>> tag) {
@@ -102,32 +123,6 @@ public class IzumikOffspringEntity extends SeaMonster {
 		RandomSource random = level.getRandom();
 		EntityType<?> selected = entitiesInTag.get(random.nextInt(entitiesInTag.size())).value();
 		return Optional.of(selected);
-	}
-
-	private boolean spawnEntity(ServerLevel level, double x, double y, double z) {
-		Optional<EntityType<?>> optionalEntityType = randomEntityTypeInTag(level, ENTITY_TAG);
-		if (optionalEntityType.isEmpty()) {
-			return false;
-		}
-		Entity entity = optionalEntityType.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-		if (entity != null) {
-			entity.setYRot(level.getRandom().nextFloat() * 360.0F);
-			if ((Entity) this instanceof Mob before && entity instanceof Mob after) {
-				Team team = before.getTeam();
-				MinecraftServer server = after.getServer();
-				if (server != null && team instanceof PlayerTeam playerTeam) {
-					server.getScoreboard().addPlayerToTeam(after.getScoreboardName(), playerTeam);
-				}
-			}
-			if (entity instanceof OceanizedWardenisEntity warden) {
-				var mh = warden.getAttribute(Attributes.MAX_HEALTH);
-				if (mh != null) {
-					mh.setBaseValue(mh.getBaseValue() * 0.35);
-				}
-				warden.setHealth(warden.getMaxHealth());
-			}
-		}
-		return entity != null;
 	}
 
 	@Override
@@ -179,7 +174,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();

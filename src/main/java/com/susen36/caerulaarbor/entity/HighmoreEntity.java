@@ -64,6 +64,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 
@@ -162,7 +163,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
 
         });
         this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 80, 19f) {
+        this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 80, 14f) {
             @Override
             public boolean canContinueToUse() {
                 return this.canUse();
@@ -170,7 +171,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         });
     }
 
-    public class RangedAttackGoal extends Goal {
+    public static class RangedAttackGoal extends Goal {
         private final Mob mob;
         private final RangedAttackMob rangedAttackMob;
         @Nullable
@@ -180,8 +181,8 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         private int seeTime;
         private final int attackIntervalMin;
         private final int attackIntervalMax;
-        private final float attackRadius;
-        private final float attackRadiusSqr;
+        private float attackRadius;
+        private float attackRadiusSqr;
 
         public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
             this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
@@ -227,10 +228,25 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
             return true;
         }
 
+        private void updateAttackRadius() {
+            // 攻击半径随时形态增长，上限32格防失控
+            float radius = Mth.clamp(((HighmoreEntity) rangedAttackMob).entityData.get(DATA_PHASE) == 0 ? 11F : 15F, 1F, 32F);
+            this.attackRadius = radius;
+            this.attackRadiusSqr = radius * radius;
+        }
+
         public void tick() {
-            double d0 = 0;
+            this.updateAttackRadius();
+            double distSqr = 0;
+            boolean inVerticalBand = true;
+            double upperY = this.mob.getY() + this.mob.getBbHeight() + 3.0D;
+            double lowerY = this.mob.getY() - 9.0D;
             if (this.target != null) {
-                d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+                // 圆柱判定：水平距离 + 与光环一致的不等高垂直带
+                double dx = this.target.getX() - this.mob.getX();
+                double dz = this.target.getZ() - this.mob.getZ();
+                distSqr = Mth.square(dx) + Mth.square(dz);
+                inVerticalBand = this.target.getY() <= upperY && this.target.getY() >= lowerY;
             }
             boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
             if (flag) {
@@ -238,7 +254,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
             } else {
                 this.seeTime = 0;
             }
-            if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
+            if (distSqr <= (double) this.attackRadiusSqr && inVerticalBand && this.seeTime >= 5) {
                 this.mob.getNavigation().stop();
             } else {
                 this.mob.getNavigation().moveTo(this.target, this.speedModifier);
@@ -250,12 +266,12 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
                     return;
                 }
                 ((HighmoreEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
-                float f = (float) Math.sqrt(d0) / this.attackRadius;
+                float f = (float) Math.sqrt(distSqr) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
                 this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
             } else if (this.attackTime < 0) {
-                this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
+                this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(distSqr) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
                 ((HighmoreEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
@@ -288,27 +304,21 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        LevelAccessor world = this.level();
-        for (Entity entityiterator : new ArrayList<>(world.players())) {
-            if ((level().dimension()) == (entityiterator.level().dimension())) {
-                if (entityiterator instanceof ServerPlayer player) {
-                    AdvancementHolder adv = player.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "speechless_break"));
-                    AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+        Level world = this.level();
+        for (Player player : new ArrayList<>(world.players())) {
+            if ((level().dimension()) == (player.level().dimension())) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    AdvancementHolder adv = serverPlayer.server.getAdvancements().get(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "speechless_break"));
+                    AdvancementProgress ap = serverPlayer.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
-                            player.getAdvancements().award(adv, criteria);
+                            serverPlayer.getAdvancements().award(adv, criteria);
                     }
                 }
             }
         }
-        if (source.is(DamageTypes.DROWN))
-            return false;
 
-        boolean hurt = super.hurt(source, amount);
-        if (hurt) {
-            this.handleCounter(source, source.getEntity());
-        }
-        return hurt;
+        return super.hurt(source, amount);
     }
 
     public void awardPreciousDaysAdvancement() {
@@ -361,26 +371,30 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         double y = this.getY();
         double z = this.getZ();
         double range;
-        double lvl = 0;
+        double lvl;
         double sklp1;
         double sklp2;
-        if (((Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0) == 0) {
-            range = 7;
-            lvl = 2;
-        } else if (((Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0) == 1) {
+        if (this.getEntityData().get(DATA_PHASE) >= 1) {
+            range = 15;
+            lvl = 3;
+        }else {
             range = 11;
-            lvl = 3;
-        } else {
-            range = 17;
-            lvl = 3;
+            lvl = 2;
         }
         sklp1 = (Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
         sklp2 = (Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
         if (this.isAlive()) {
             if (!this.hasEffect(CAMobEffects.FAKE_DEATH)) {
-                for (int index0 = 0; index0 < 120; index0++) {
-                    if (world instanceof ServerLevel level)
-                        level.sendParticles(CAParticles.LARGE_DOLPHIN.get(), (x + range * Math.sin(Math.toRadians(3 * index0))), y, (z + range * Math.cos(Math.toRadians(3 * index0))), 2, 0.15, 0.2, 0.15, 0.1);
+                // 光环粒子：步长1°共360处、每处2颗，每4tick补发一整圈
+                if (this.tickCount % 4 == 0) {
+                    for (int index0 = 0; index0 < 360; index0++) {
+                        if (world instanceof ServerLevel level)
+                            level.sendParticles(CAParticles.LARGE_DOLPHIN.get(), (x + range * Math.sin(Math.toRadians(index0))), y, (z + range * Math.cos(Math.toRadians(index0))), 2, 0.15, 0.2, 0.15, 0.1);
+                    }
+                }
+                // 3阶段起常驻发光
+                if (!this.level().isClientSide() && !this.hasEffect(MobEffects.GLOWING) && this.entityData.get(DATA_PHASE) >= 2) {
+                    this.addEffect(new MobEffectInstance(MobEffects.GLOWING, -1, 0, false, false));
                 }
                 final Vec3 center = new Vec3(x, (y + 1.5), z);
                 List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(range * 2), e -> true);
@@ -396,8 +410,13 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
                     if (entityiterator instanceof Player player && player.isCreative()) {
                         continue;
                     }
-                    if (distanceToSqr(entityiterator) <= range * range) {
-                        if (!this.level().isClientSide()) {
+                    // 水平按圆柱半径range，垂直带以碰撞箱中心为基准，下界额外外扩5格增强贴地覆盖
+                    double dx = entityiterator.getX() - x;
+                    double dz = entityiterator.getZ() - z;
+                    if (Mth.square(dx) + Mth.square(dz) <= range * range) {
+                        double upperY = y + this.getBbHeight() + 3.0D;
+                        double lowerY = y - 9.0D;
+                        if (entityiterator.getY() <= upperY && entityiterator.getY() >= lowerY && !this.level().isClientSide()) {
                             if (!entityiterator.hasEffect(MobEffects.MOVEMENT_SLOWDOWN))
                                 entityiterator.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, (int) lvl, false, true));
                             if (!entityiterator.hasEffect(BabelMobEffects.FEEBLENESS))
@@ -440,7 +459,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
                         datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                 }
                 if (sklp2 <= 0) {
-                    if (!(null == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
+                    if (this.getTarget() != null) {
                         if (this instanceof HighmoreEntity) {
                             this.setAnimation("animation.highmore.charge");
                         }
@@ -464,12 +483,9 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
                                         entityToSpawn.setBaseDamage((float) ((HighmoreEntity.this instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                                         entityToSpawn.setSilent(true);
                                         entityToSpawn.setPos(x, (y + 9), z);
+                                        entityToSpawn.setKnockback(0);
                                         entityToSpawn.shoot((rng * Math.sin(angl)), (-9), (rng * Math.cos(angl)), (float) 1.5, 5);
                                         projectileLevel.addFreshEntity(entityToSpawn);
-                                    }
-                                    for (int index0 = 0; index0 < 120; index0++) {
-                                        if (world instanceof ServerLevel level)
-                                            level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 24 * Math.sin(Math.toRadians(3 * index0))), y, (z + 24 * Math.cos(Math.toRadians(3 * index0))), 3, 0.15, 0.15, 0.15, 0.1);
                                     }
                                     final int tick2 = ticks;
                                     CaerulaArbor.queueServerWork(tick2, () -> {
@@ -513,7 +529,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
     }
 
     @Override
-    public void performRangedAttack(LivingEntity target, float flval) {
+    public void performRangedAttack(@NotNull LivingEntity target, float flval) {
         HighmoreShootEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (3.5 / 6.0));
     }
 
@@ -694,14 +710,8 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
     }
 
     public void handleCounter(DamageSource damageSource, Entity sourceEntity) {
-        if (sourceEntity == null || this.hasEffect(CAMobEffects.COOLDOWN_SINAL)
-                || damageSource.is(CADamageTypes.HAND_SPIKE) || damageSource.is(DamageTypes.THORNS)
-                || sourceEntity instanceof HighmoreEntity) {
+        if (sourceEntity == null || this.hasEffect(CAMobEffects.COOLDOWN_SINAL) || damageSource.is(CADamageTypes.HAND_SPIKE) || damageSource.is(DamageTypes.THORNS) || sourceEntity instanceof HighmoreEntity) {
             return;
-        }
-
-        if (!this.level().isClientSide()) {
-            this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL, 100, 0, false, false));
         }
 
         int phase = this.getEntityData().get(DATA_PHASE);
@@ -790,10 +800,6 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
                         this.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 40, 0));
                 }
             }
-        }
-        for (int index0 = 0; index0 < 120; index0++) {
-            if (world instanceof ServerLevel level)
-                level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 24 * Math.sin(Math.toRadians(3 * index0))), y, (z + 24 * Math.cos(Math.toRadians(3 * index0))), 6, 0.15, 0.15, 0.15, 0.1);
         }
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {

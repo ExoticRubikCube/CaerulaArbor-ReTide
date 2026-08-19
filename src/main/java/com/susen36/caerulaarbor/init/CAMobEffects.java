@@ -41,7 +41,6 @@ public class CAMobEffects {
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ADD_ATTACK_PERCLY = REGISTRY.register("add_attack_percly", AddAttackPerclyMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> FIRST_TELLER_SKILL = REGISTRY.register("first_teller_skill", FirstTellerSkillMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> PET_REAP = REGISTRY.register("pet_reap", PetReapMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> RUNNING_ON_TRAIL = REGISTRY.register("running_on_trail", RunningOnTrailMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ANGER_OF_BISHOP = REGISTRY.register("anger_of_bishop", AngerOfBishopMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> FAKE_DEATH = REGISTRY.register("fake_death", FakeDeathMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> MUTE = REGISTRY.register("mute", MuteMobEffect::new);

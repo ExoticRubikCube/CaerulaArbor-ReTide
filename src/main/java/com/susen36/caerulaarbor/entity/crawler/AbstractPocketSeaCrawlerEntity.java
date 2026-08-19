@@ -4,9 +4,9 @@ import com.susen36.babel.api.entity.ElementalAttacker;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
-import com.susen36.caerulaarbor.init.CADamageTypes;
-import com.susen36.caerulaarbor.init.CAItems;
-import com.susen36.caerulaarbor.init.CASounds;
+import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.util.PlayerStateUtils;
+import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -20,6 +20,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,6 +35,8 @@ import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
@@ -50,6 +53,7 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
     public static final EntityDataAccessor<Integer> DATA_SWELL_DIR = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SWELL = SynchedEntityData.defineId(AbstractPocketSeaCrawlerEntity.class, EntityDataSerializers.INT);
     public static int maxSwell = 30;
+    public static final double EXPLOSION_RADIUS = 3.0D;
     public String animationprocedure = "empty";
 
     protected AbstractPocketSeaCrawlerEntity(EntityType<? extends Monster> entityType, Level level) {
@@ -125,7 +129,7 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
             Vec3 centerPos = new Vec3(x, y, z);
             List<LivingEntity> nearbyEntities = serverLevel.getEntitiesOfClass(
                     LivingEntity.class,
-                    new AABB(centerPos, centerPos).inflate(3.0D),
+                    new AABB(centerPos, centerPos).inflate(EXPLOSION_RADIUS),
                     entity -> entity != this && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))
             );
 
@@ -138,6 +142,18 @@ public abstract class AbstractPocketSeaCrawlerEntity extends SeaMonster implemen
             if (damagesSelf) {
                 float selfDamage = this.getMaxHealth() * 0.3F;
                 if (this.getHealth() <= selfDamage) {
+                    // 最后一次爆炸：像深溟奠基者一样在脚下生成溟痕，水平位置为爆炸中心偏移半径的1/3（1格），方向随机；受MUTE药水影响则不生成
+                    if (WorldUtils.canGrief(this.level()) && !this.hasEffect(CAMobEffects.MUTE)) {
+                        float yaw = this.random.nextFloat() * Mth.TWO_PI;
+                        double px = x + Mth.cos(yaw) * (EXPLOSION_RADIUS / 3.0D);
+                        double pz = z + Mth.sin(yaw) * (EXPLOSION_RADIUS / 3.0D);
+                        BlockPos trailPos = BlockPos.containing(px, y, pz);
+                        BlockState trail = CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState();
+                        if (trail.canSurvive(this.level(), trailPos) && !(this.level().getBlockFloorHeight(trailPos) > 0)) {
+                            boolean water = this.level().getFluidState(trailPos).createLegacyBlock().getBlock() == Blocks.WATER;
+                            PlayerStateUtils.replaceTrail(this.level(), trail, water, px, y, pz);
+                        }
+                    }
                     this.dead = true;
                     this.triggerOnDeathMobEffects(Entity.RemovalReason.KILLED);
                     this.discard();

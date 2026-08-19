@@ -93,7 +93,6 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
                 return hasEffect(CAMobEffects.FAKE_DEATH);
             }
         });
-        // TODO: 子类专属 goalSelector 行为（假死状态下随机游荡），与基类 targetSelector 统一目标不冲突
         this.goalSelector.addGoal(13, new RandomStrollGoal(this, 0.8) {
             @Override
             public boolean canUse() {
@@ -107,7 +106,6 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
                 return hasEffect(CAMobEffects.FAKE_DEATH);
             }
         });
-        // TODO: 子类专属 goalSelector 行为（假死状态下随机环顾），与基类 targetSelector 统一目标不冲突
         this.goalSelector.addGoal(14, new RandomLookAroundGoal(this) {
             @Override
             public boolean canUse() {

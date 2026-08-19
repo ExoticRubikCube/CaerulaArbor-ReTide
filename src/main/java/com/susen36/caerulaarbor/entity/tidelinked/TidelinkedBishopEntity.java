@@ -60,6 +60,7 @@ public class TidelinkedBishopEntity extends SeaMonsterBoss implements RangedAtta
     public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(TidelinkedBishopEntity.class, EntityDataSerializers.INT);
     public String animationprocedure = "empty";
     String prevAnim = "empty";
+    private boolean procedurePlaying;
     private boolean swinging;
     private long lastSwing;
     private final boolean variant;
@@ -356,19 +357,26 @@ public class TidelinkedBishopEntity extends SeaMonsterBoss implements RangedAtta
     }
 
     private PlayState procedurePredicate(AnimationState event) {
-        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-            if (!this.animationprocedure.equals(prevAnim))
-                event.getController().forceAnimationReset();
-            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-                this.animationprocedure = "empty";
-                event.getController().forceAnimationReset();
-            }
-        } else if (animationprocedure.equals("empty")) {
+        if (this.animationprocedure.equals("empty")) {
             prevAnim = "empty";
+            procedurePlaying = false;
             return PlayState.STOP;
         }
-        prevAnim = this.animationprocedure;
+        if (!this.animationprocedure.equals(prevAnim)) {
+            // 特殊攻击：重置并仅播放一次
+            event.getController().forceAnimationReset();
+            prevAnim = this.animationprocedure;
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            procedurePlaying = false;
+        } else if (procedurePlaying && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            // 特殊攻击播放完成，回归常规动作
+            this.animationprocedure = "empty";
+            prevAnim = "empty";
+            procedurePlaying = false;
+            event.getController().forceAnimationReset();
+        } else if (event.getController().getAnimationState() != AnimationController.State.STOPPED) {
+            procedurePlaying = true;
+        }
         return PlayState.CONTINUE;
     }
 

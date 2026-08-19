@@ -17,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -57,7 +56,7 @@ public class AnchorFlyEntity extends BaseProjectile implements ItemSupplier {
 
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -74,25 +73,23 @@ public class AnchorFlyEntity extends BaseProjectile implements ItemSupplier {
                 livingEntity.setHealth((float) ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc));
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 72, 3, 3, 3, 0.5);
-            {
-                final Vec3 center = new Vec3(x, y, z);
-                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                for (Entity entityiterator : entfound) {
-                    if (entityiterator == sourceentity) {
-                        continue;
-                    }
-                    if ((entityiterator instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == sourceentity) {
-                        continue;
-                    }
-                    if (!(entityiterator instanceof Mob)) {
-                        continue;
-                    }
-                    if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
-                        entityiterator.hurt(
-                                CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, sourceentity), (float) ((sourceentity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
-                        if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                            livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 120, 0, false, false));
-                    }
+            final Vec3 center = new Vec3(x, y, z);
+            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+            for (Entity entityiterator : entfound) {
+                if (entityiterator == sourceentity) {
+                    continue;
+                }
+                if ((entityiterator instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == sourceentity) {
+                    continue;
+                }
+                if (!(entityiterator instanceof Mob)) {
+                    continue;
+                }
+                if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
+                    entityiterator.hurt(
+                            CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, sourceentity), (float) ((sourceentity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
+                    if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                        livingEntity.addEffect(new MobEffectInstance(BabelMobEffects.STUN, 120, 0, false, false));
                 }
             }
             sourceentity.teleportTo(x, y, z);
@@ -115,7 +112,7 @@ public class AnchorFlyEntity extends BaseProjectile implements ItemSupplier {
 	@Override
 	public void onHitBlock(BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = blockHitResult.getBlockPos().getX();
         double y = blockHitResult.getBlockPos().getY();
         double z = blockHitResult.getBlockPos().getZ();
@@ -166,7 +163,7 @@ public class AnchorFlyEntity extends BaseProjectile implements ItemSupplier {
 	@Override
 	public void tick() {
 		super.tick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();

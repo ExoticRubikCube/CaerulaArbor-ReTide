@@ -213,6 +213,10 @@ public abstract class AbstractTidelinkedEntity extends SeaMonsterBoss implements
                 this.hurt(this.level().damageSources().fellOutOfWorld(), 114514);
             }
         } else {
+            // 复活复位：假死效果解除后收起卧倒姿态，避免永久停留在 die_loop 上
+            if (this.isShiftKeyDown()) {
+                this.setShiftKeyDown(false);
+            }
             double skillCooldown = this.getEntityData().get(DATA_SKILLP);
             double skillDuration = this.getEntityData().get(DATA_DURATION);
             if (skillDuration > 0) {
@@ -283,21 +287,29 @@ public abstract class AbstractTidelinkedEntity extends SeaMonsterBoss implements
     }
 
     String prevAnim = "empty";
+    private boolean procedurePlaying;
 
     private PlayState procedurePredicate(AnimationState event) {
-        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-            if (!this.animationprocedure.equals(prevAnim))
-                event.getController().forceAnimationReset();
-            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-                this.animationprocedure = "empty";
-                event.getController().forceAnimationReset();
-            }
-        } else if (animationprocedure.equals("empty")) {
+        if (this.animationprocedure.equals("empty")) {
             prevAnim = "empty";
+            procedurePlaying = false;
             return PlayState.STOP;
         }
-        prevAnim = this.animationprocedure;
+        if (!this.animationprocedure.equals(prevAnim)) {
+            // 特殊攻击：重置并仅播放一次
+            event.getController().forceAnimationReset();
+            prevAnim = this.animationprocedure;
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            procedurePlaying = false;
+        } else if (procedurePlaying && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            // 特殊攻击播放完成，回归常规动作
+            this.animationprocedure = "empty";
+            prevAnim = "empty";
+            procedurePlaying = false;
+            event.getController().forceAnimationReset();
+        } else if (event.getController().getAnimationState() != AnimationController.State.STOPPED) {
+            procedurePlaying = true;
+        }
         return PlayState.CONTINUE;
     }
 
@@ -305,9 +317,8 @@ public abstract class AbstractTidelinkedEntity extends SeaMonsterBoss implements
     protected void tickDeath() {
         ++this.deathTime;
         if (this.deathTime == 22) {
-            this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
             TidelinkedBishopEntity.dropRelicTidebi(this.level(), this.getX(), this.getY(), this.getZ());
+            super.tickDeath();
         }
     }
 

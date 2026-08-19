@@ -56,7 +56,7 @@ public class BiomeModifiersProvider implements DataProvider {
         addSpawn(modifiers, "first_to_talk_biome_modifier", anyBiome(), "caerula_arbor:first_to_talk", 1, 1, 1);
         addSpawn(modifiers, "flee_fish_biome_modifier", anyBiome(), "caerula_arbor:flee_fish", 35, 1, 2);
         addSpawn(modifiers, "floater_prokaryote_biome_modifier", anyBiome(), "caerula_arbor:floater_prokaryote", 50, 1, 2);
-        addSpawn(modifiers, "fly_fish_biome_modifier", anyBiome(), "caerula_arbor:fly_fish", 50, 2, 4);
+        addSpawn(modifiers, "floating_sea_drifter_biome_modifier", anyBiome(), "caerula_arbor:floating_sea_drifter", 50, 2, 4);
         addSpawn(modifiers, "guide_abyssal_biome_modifier", anyBiome(), "caerula_arbor:guide_abyssal", 35, 1, 1);
         addFeature(modifiers, "iris_distribute_biome_modifier", biomes("plains", "sunflower_plains", "flower_forest"), features("caerula_arbor:iris_distribute"), "surface_structures");
         addSpawn(modifiers, "izumik_offspring_biome_modifier", biomes("cold_ocean", "deep_cold_ocean", "deep_frozen_ocean", "deep_lukewarm_ocean", "deep_ocean", "frozen_ocean", "lukewarm_ocean", "ocean", "warm_ocean"), "caerula_arbor:izumik_offspring", 2, 1, 2);

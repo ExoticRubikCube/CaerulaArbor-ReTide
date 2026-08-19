@@ -41,18 +41,18 @@ import software.bernie.geckolib.animation.*;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
-    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FlyFishEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(FlyFishEntity.class, EntityDataSerializers.STRING);
+public class FloatingSeaDrifterEntity extends SeaMonster implements RangedAttackMob {
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FloatingSeaDrifterEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(FloatingSeaDrifterEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public FlyFishEntity(Level world) {
-        this(CAEntities.FLY_FISH.get(), world);
+    public FloatingSeaDrifterEntity(Level world) {
+        this(CAEntities.FLOATING_SEA_DRIFTER.get(), world);
     }
 
-    public FlyFishEntity(EntityType<FlyFishEntity> type, Level world) {
+    public FloatingSeaDrifterEntity(EntityType<FloatingSeaDrifterEntity> type, Level world) {
         super(type, world);
         xpReward = 4;
         setNoAi(false);
@@ -78,10 +78,10 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
         this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1, 20) {
             @Override
             protected Vec3 getPosition() {
-                RandomSource random = FlyFishEntity.this.getRandom();
-                double dir_x = FlyFishEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
-                double dir_y = FlyFishEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
-                double dir_z = FlyFishEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
+                RandomSource random = FloatingSeaDrifterEntity.this.getRandom();
+                double dir_x = FloatingSeaDrifterEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
+                double dir_y = FloatingSeaDrifterEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
+                double dir_z = FloatingSeaDrifterEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
                 return new Vec3(dir_x, dir_y, dir_z);
             }
         });
@@ -94,7 +94,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
         });
     }
 
-    public class RangedAttackGoal extends Goal {
+    public static class RangedAttackGoal extends Goal {
         private final Mob mob;
         private final RangedAttackMob rangedAttackMob;
         @Nullable
@@ -144,7 +144,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
             this.target = null;
             this.seeTime = 0;
             this.attackTime = -1;
-            ((FlyFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+            ((FloatingSeaDrifterEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -170,10 +170,10 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
                 if (!flag) {
-                    ((FlyFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+                    ((FloatingSeaDrifterEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
                     return;
                 }
-                ((FlyFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
+                ((FloatingSeaDrifterEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
                 float f = (float) Math.sqrt(d0) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -181,7 +181,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
             } else if (this.attackTime < 0) {
                 this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
-                ((FlyFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+                ((FloatingSeaDrifterEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
     }
 
@@ -237,7 +237,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
     }
 
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
-        event.register(CAEntities.FLY_FISH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+        event.register(CAEntities.FLOATING_SEA_DRIFTER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
             int x = pos.getX();
             int y = pos.getY();
             int z = pos.getZ();
@@ -261,9 +261,9 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
     private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flyfish.idle"));
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.floating_sea_drifter.idle"));
             }
-            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flyfish.idle"));
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.floating_sea_drifter.idle"));
         }
         return PlayState.STOP;
     }
@@ -278,7 +278,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
         }
         if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
-            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.flyfish.attack"));
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.floating_sea_drifter.attack"));
         }
         return PlayState.CONTINUE;
     }

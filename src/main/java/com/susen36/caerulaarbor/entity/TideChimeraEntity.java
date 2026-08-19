@@ -218,7 +218,7 @@ public class TideChimeraEntity extends SeaMonsterBoss {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double attackDamage = (Entity) this instanceof LivingEntity livingEntity && livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+        double attackDamage = this instanceof LivingEntity livingEntity && livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 
         float selfDamage = this.getMaxHealth() * 0.3f;
         this.setHealth(this.getHealth() - selfDamage);

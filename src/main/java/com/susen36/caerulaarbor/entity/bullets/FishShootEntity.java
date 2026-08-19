@@ -13,7 +13,6 @@ import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -48,7 +47,7 @@ public class FishShootEntity extends BaseProjectile implements ItemSupplier {
 	@Override
 	public void tick() {
 		super.tick();
-		LevelAccessor world = this.level();
+		Level world = this.level();
 		world.addParticle(CAParticles.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 		if (this.inGround)
 			this.discard();
@@ -70,7 +69,7 @@ public class FishShootEntity extends BaseProjectile implements ItemSupplier {
 		entityarrow.setBaseDamage(damage);
 		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
-		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.FLYFISH_ATTACK.get(), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
+		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.FLOATING_SEA_DRIFTER_ATTACK.get(), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
 	}
 
@@ -92,7 +91,7 @@ public class FishShootEntity extends BaseProjectile implements ItemSupplier {
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(damage);
 		entity.level().addFreshEntity(entityarrow);
-		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.FLYFISH_ATTACK.get(), SoundSource.PLAYERS, 1,
+		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.FLOATING_SEA_DRIFTER_ATTACK.get(), SoundSource.PLAYERS, 1,
 				1f / (RandomSource.create().nextFloat() * 0.5f + 1));
 		return entityarrow;
 	}

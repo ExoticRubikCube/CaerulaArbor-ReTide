@@ -20,7 +20,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -62,7 +61,7 @@ public class AbandonedShootEntity extends BaseProjectile implements ItemSupplier
 
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -73,20 +72,18 @@ public class AbandonedShootEntity extends BaseProjectile implements ItemSupplier
         entity.invulnerableTime = 0;
         if (world instanceof ServerLevel level)
             level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 32, 4, 4, 4, 0.15);
-        {
-            final Vec3 center = new Vec3(x, y, z);
-            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-            for (Entity entityiterator : entfound) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
-                    continue;
-                }
-                if (!(entityiterator instanceof LivingEntity)) {
-                    continue;
-                }
-                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
-                        (float) ((sourceentity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity4.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
-            }
-        }
+		final Vec3 center = new Vec3(x, y, z);
+		List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+		for (Entity entityiterator : entfound) {
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
+				continue;
+			}
+			if (!(entityiterator instanceof LivingEntity)) {
+				continue;
+			}
+			entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
+					(float) ((sourceentity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity4.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
+		}
         if (!level().isClientSide())
             discard();
     }
@@ -94,7 +91,7 @@ public class AbandonedShootEntity extends BaseProjectile implements ItemSupplier
 	@Override
 	public void onHitBlock(BlockHitResult blockHitResult) {
 		super.onHitBlock(blockHitResult);
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = blockHitResult.getBlockPos().getX();
         double y = blockHitResult.getBlockPos().getY();
         double z = blockHitResult.getBlockPos().getZ();
@@ -103,20 +100,18 @@ public class AbandonedShootEntity extends BaseProjectile implements ItemSupplier
             return;
         if (world instanceof ServerLevel level)
             level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 0.5), (y + 0.5), (z + 0.5), 32, 4, 4, 4, 0.15);
-        {
-            final Vec3 center = new Vec3((x + 0.5), (y + 0.5), (z + 0.5));
-            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-            for (Entity entityiterator : entfound) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
-                    continue;
-                }
-                if (!(entityiterator instanceof LivingEntity)) {
-                    continue;
-                }
-                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
-                        (float) ((entity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
-            }
-        }
+		final Vec3 center = new Vec3((x + 0.5), (y + 0.5), (z + 0.5));
+		List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+		for (Entity entityiterator : entfound) {
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
+				continue;
+			}
+			if (!(entityiterator instanceof LivingEntity)) {
+				continue;
+			}
+			entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
+					(float) ((entity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
+		}
     }
 
 	@Override

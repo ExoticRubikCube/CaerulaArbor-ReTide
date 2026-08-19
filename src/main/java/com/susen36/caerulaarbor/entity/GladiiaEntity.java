@@ -69,13 +69,10 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	}
 
 	public static GladiiaEntity getGladiiaAround(LevelAccessor world, double x, double y, double z) {
-		GladiiaEntity gladiia = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
-			Comparator<GladiiaEntity> compareDistOf(double queryX, double queryY, double queryZ) {
-				return Comparator.comparingDouble(candidate -> candidate.distanceToSqr(queryX, queryY, queryZ));
-			}
-		}.compareDistOf(x, y, z)).orElse(null);
-		if (gladiia != null && gladiia.isAlive()) {
-			return gladiia;
+		GladiiaEntity nearest = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream()
+				.min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
+		if (nearest != null && nearest.isAlive()) {
+			return nearest;
 		}
 		return null;
 	}
@@ -84,12 +81,8 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		if (entity == null) {
 			return;
 		}
-		if (entity.tickCount % 5 == 0) {
-			if (getGladiiaAround(world, x, y, z) != null) {
-				if (entity instanceof LivingEntity livingEntity) {
-					livingEntity.setHealth((float) (livingEntity.getHealth() + livingEntity.getMaxHealth() * 0.008));
-				}
-			}
+		if (entity.tickCount % 5 == 0 && getGladiiaAround(world, x, y, z) != null && entity instanceof LivingEntity livingEntity) {
+			livingEntity.setHealth((float) (livingEntity.getHealth() + livingEntity.getMaxHealth() * 0.008));
 		}
 	}
 
