@@ -24,7 +24,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -262,14 +261,14 @@ public class SkimmingSeaDrifterEntity extends SeaMonster implements RangedAttack
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putBoolean("DataWALK", this.walking());
+        compound.putBoolean("DataWalk", this.walking());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("DataWALK")) {
-            this.entityData.set(DATA_WALK, compound.getBoolean("DataWALK"));
+        if (compound.contains("DataWalk")) {
+            this.entityData.set(DATA_WALK, compound.getBoolean("DataWalk"));
         }
     }
 
@@ -327,17 +326,13 @@ public class SkimmingSeaDrifterEntity extends SeaMonster implements RangedAttack
     public void startWalk() {
         if (!this.walking()) {
             this.setWalking(true);
-            AttributeInstance movement = this.getAttribute(Attributes.MOVEMENT_SPEED);
-            if (movement != null) {
-                movement.setBaseValue(movement.getBaseValue() * 0.5);
-            }
             this.setNoGravity(false);
             this.moveControl = this.walkControl;
         }
     }
 
     public boolean shouldMakeMeWalk(MobEffect effect, int amplifier) {
-        if ( true||effect == CAMobEffects.FROZEN.get() || effect == BabelMobEffects.STUN.get()) {
+        if (effect == CAMobEffects.FROZEN.get() || effect == BabelMobEffects.STUN.get()) {
             return true;
         }
         boolean[] hasStrongMovementModifier = {false};
@@ -346,7 +341,7 @@ public class SkimmingSeaDrifterEntity extends SeaMonster implements RangedAttack
                 return;
             }
             if (attribute == Attributes.MOVEMENT_SPEED || attribute == Attributes.FLYING_SPEED) {
-                if (modifier.amount() <= -0.95) {
+                if (modifier.amount() <= -0.9) {
                     hasStrongMovementModifier[0] = true;
                 }
             }
@@ -455,7 +450,6 @@ public class SkimmingSeaDrifterEntity extends SeaMonster implements RangedAttack
         data.add(new AnimationController<>(this, "attacking", 3, this::attackingPredicate));
         data.add(new AnimationController<>(this, "procedure", 3, this::procedurePredicate));
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

@@ -9,6 +9,7 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.entity.base.SeaMonsterBoss;
 import com.susen36.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import com.susen36.caerulaarbor.init.*;
+import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -33,18 +34,22 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
@@ -60,6 +65,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.FlyNodeEvaluator;
+import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.level.pathfinder.PathfindingContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
@@ -79,8 +88,13 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
     public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_WALK = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean swinging;
     private long lastSwing;
+    public final MoveControl flyControl;
+    public final MoveControl walkControl;
+    public final FlyingPathNavigation flyNavigation;
+    public final GroundPathNavigation walkNavigation;
     public String animationprocedure = "empty";
 
     public HighmoreEntity(Level world) {
@@ -94,7 +108,12 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         setNoAi(false);
         setPersistenceRequired();
         setNoGravity(true);
-        this.moveControl = new FlyingMoveControl(this, 10, true);
+        this.flyControl = new FlyingMoveControl(this, 10, true);
+        this.walkControl = new MoveControl(this);
+        this.moveControl = this.flyControl;
+        this.flyNavigation = new HighAltitudeFlyingPathNavigation(this, world);
+        this.walkNavigation = new GroundPathNavigation(this, world);
+        this.navigation = this.flyNavigation;
     }
 
     @Override
@@ -105,11 +124,12 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         builder.define(DATA_PHASE, 0);
         builder.define(DATA_SKILLP_1, 200);
         builder.define(DATA_SKILLP_2, 100);
+        builder.define(DATA_WALK, false);
     }
 
     @Override
     protected PathNavigation createNavigation(Level world) {
-        return new FlyingPathNavigation(this, world);
+        return new HighAltitudeFlyingPathNavigation(this, world);
     }
 
     @Override
@@ -143,10 +163,16 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
             @Override
             protected Vec3 getPosition() {
                 RandomSource random = HighmoreEntity.this.getRandom();
-                double dir_x = HighmoreEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
-                double dir_y = HighmoreEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
-                double dir_z = HighmoreEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
-                return new Vec3(dir_x, dir_y, dir_z);
+                if (HighmoreEntity.this.walking()) {
+                    return super.getPosition();
+                } else {
+                    double dirX = HighmoreEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
+                    double dirZ = HighmoreEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
+                    BlockPos targetPos = new BlockPos((int) dirX, (int) HighmoreEntity.this.getY(), (int) dirZ);
+                    int groundY = HighmoreEntity.this.level().getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, targetPos).getY();
+                    double dirY = groundY + 5 + random.nextInt(5);
+                    return new Vec3(dirX, dirY, dirZ);
+                }
             }
 
             @Override
@@ -257,7 +283,13 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
             if (distSqr <= (double) this.attackRadiusSqr && inVerticalBand && this.seeTime >= 5) {
                 this.mob.getNavigation().stop();
             } else {
-                this.mob.getNavigation().moveTo(this.target, this.speedModifier);
+                if (((HighmoreEntity) this.mob).walking()) {
+                    this.mob.getNavigation().moveTo(this.target, this.speedModifier);
+                } else {
+                    BlockPos targetPos = this.target.blockPosition();
+                    int groundY = this.mob.level().getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, targetPos).getY();
+                    this.mob.getNavigation().moveTo(targetPos.getX(), groundY + 7, targetPos.getZ(), this.speedModifier);
+                }
             }
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
@@ -347,6 +379,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         compound.putInt("Phase", this.entityData.get(DATA_PHASE));
         compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
         compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
+        compound.putBoolean("DataWalk", this.walking());
     }
 
     @Override
@@ -361,12 +394,15 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         if (compound.contains("Skillp2")) {
             this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
         }
+        if (compound.contains("DataWalk")) {
+            this.entityData.set(DATA_WALK, compound.getBoolean("DataWalk"));
+        }
     }
 
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
+        Level world = (Level) this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -377,13 +413,21 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         if (this.getEntityData().get(DATA_PHASE) >= 1) {
             range = 15;
             lvl = 3;
-        }else {
+        } else {
             range = 11;
             lvl = 2;
         }
         sklp1 = (Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
         sklp2 = (Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
         if (this.isAlive()) {
+            if (this.tickCount % 100 == 0 && !this.walking()) {
+                if (!WorldUtils.hasNoSolidGroundBelow(world, x, y, z, 5)) {
+                    push(0, 0.35, 0);
+                }
+                if (WorldUtils.hasNoSolidGroundBelow(world, x, y, z, 20)) {
+                    push(0, -0.35, 0);
+                }
+            }
             if (!this.hasEffect(CAMobEffects.FAKE_DEATH)) {
                 // 光环粒子：步长1°共360处、每处2颗，每4tick补发一整圈
                 if (this.tickCount % 4 == 0) {
@@ -421,8 +465,10 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
                                 entityiterator.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, (int) lvl, false, true));
                             if (!entityiterator.hasEffect(BabelMobEffects.FEEBLENESS))
                                 entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.FEEBLENESS, 20, (int) lvl, false, true));
-                            if (!entityiterator.hasEffect(BabelMobEffects.MASS_LOSS))
-                                entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.MASS_LOSS, 20, (int) lvl, false, true));
+                            if (!entityiterator.hasEffect(BabelMobEffects.MASS_LOSS)&&this.entityData.get(DATA_PHASE) >= 1) {
+                                int massLossLvl = this.entityData.get(DATA_PHASE) >= 2 ? (int) lvl : (int) lvl-1;
+                                entityiterator.addEffect(new MobEffectInstance(BabelMobEffects.MASS_LOSS, 20, massLossLvl, false, true));
+                            }
                             if (!entityiterator.hasEffect(MobEffects.DIG_SLOWDOWN))
                                 entityiterator.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 20, (int) lvl, false, true));
                         }
@@ -558,19 +604,84 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide()) {
+            if (this.walking()) {
+                this.navigation = this.walkNavigation;
+                this.moveControl = this.walkControl;
+            } else {
+                this.navigation = this.flyNavigation;
+                this.moveControl = this.flyControl;
+            }
+        }
+    }
+
+    @Override
+    public boolean addEffect(MobEffectInstance effect, Entity source) {
+        MobEffect mobEffect = effect.getEffect().value();
+        // 三阶段（PHASE >= 2）时，免疫变为陆地状态的逻辑
+        if (this.getEntityData().get(DATA_PHASE) < 2 && this.shouldMakeMeWalk(mobEffect, effect.getAmplifier())) {
+            this.startWalk();
+        }
+        return super.addEffect(effect, source);
+    }
+
+    public boolean walking() {
+        return this.entityData.get(DATA_WALK);
+    }
+
+    public void setWalking(boolean walk) {
+        this.entityData.set(DATA_WALK, walk);
+    }
+
+    public void startWalk() {
+        if (!this.walking()) {
+            this.setWalking(true);
+            this.setNoGravity(false);
+            this.moveControl = this.walkControl;
+        }
+    }
+
+    public void startFly() {
+        if (this.walking()) {
+            this.setWalking(false);
+            this.setNoGravity(true);
+            this.moveControl = this.flyControl;
+        }
+    }
+
+    public boolean shouldMakeMeWalk(MobEffect effect, int amplifier) {
+        if (effect == CAMobEffects.FROZEN.get() || effect == BabelMobEffects.STUN.get()) {
+            return true;
+        }
+        boolean[] hasStrongMovementModifier = {false};
+        effect.createModifiers(amplifier, (attribute, modifier) -> {
+            if (!hasStrongMovementModifier[0]) {
+                if (attribute == Attributes.MOVEMENT_SPEED || attribute == Attributes.FLYING_SPEED) {
+                    if (modifier.amount() <= -0.9) {
+                        hasStrongMovementModifier[0] = true;
+                    }
+                }
+            }
+        });
+        return hasStrongMovementModifier[0];
+    }
+
+    @Override
     public void setNoGravity(boolean ignored) {
-        super.setNoGravity(true);
+        super.setNoGravity(this.walking() || this.isDeadOrDying() ? ignored : true);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.6);
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.45);
         builder = builder.add(Attributes.MAX_HEALTH, 210);
         builder = builder.add(Attributes.ARMOR, 0);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 6);
         builder = builder.add(Attributes.FOLLOW_RANGE, 48);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(Attributes.FLYING_SPEED, 0.6);
+        builder = builder.add(Attributes.FLYING_SPEED, 0.55);
         builder = builder.add(BabelAttributes.MAX_ELEMENTAL_VALUE, 100);
         builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
@@ -578,16 +689,25 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
 
     private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
-            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && this.onGround()) {
-                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.highmore.move"));
-            }
             if (this.isDeadOrDying()) {
-                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.highmore.die"));
-            }
-            if (!this.onGround()) {
+                if (this.walking()) {
+                    return event.setAndContinue(RawAnimation.begin().thenPlay("animation.highmore.die_ground"));
+                } else {
+                    return event.setAndContinue(RawAnimation.begin().thenPlay("animation.highmore.die"));
+                }
+            } else if (this.walking()) {
+                if (event.isMoving()) {
+                    return event.setAndContinue(RawAnimation.begin().thenLoop("animation.highmore.move_ground"));
+                } else {
+                    return event.setAndContinue(RawAnimation.begin().thenLoop("animation.highmore.idle_ground"));
+                }
+            } else if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && this.onGround()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.highmore.move_ground"));
+            } else if (!this.onGround()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.highmore.move"));
+            } else {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.highmore.idle_ground"));
             }
-            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.highmore.idle"));
         }
         return PlayState.STOP;
     }
@@ -602,7 +722,8 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
         }
         if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
-            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.highmore.attack"));
+            String attackAnimation = this.walking() ? "animation.highmore.attack_ground" : "animation.highmore.attack";
+            return event.setAndContinue(RawAnimation.begin().thenPlay(attackAnimation));
         }
         return PlayState.CONTINUE;
     }
@@ -668,6 +789,14 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
             CaerulaArbor.queueServerWork(300, () -> {
                 if (this.isAlive()) {
                     this.getEntityData().set(DATA_PHASE, 1);
+                    // 阶段转换时重置为飞行状态
+                    this.setWalking(false);
+                    AttributeInstance movement = this.getAttribute(Attributes.MOVEMENT_SPEED);
+                    if (movement != null) {
+                        movement.setBaseValue(0.6); // 恢复初始速度
+                    }
+                    this.setNoGravity(true);
+                    this.moveControl = this.flyControl;
                 }
             });
             return;
@@ -686,6 +815,7 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
             CaerulaArbor.queueServerWork(150, () -> {
                 if (this.isAlive()) {
                     this.getEntityData().set(DATA_PHASE, 2);
+                    this.startFly();
                 }
             });
             return;
@@ -827,5 +957,62 @@ public class HighmoreEntity extends SeaMonsterBoss implements RangedAttackMob, E
     @Override
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;
+    }
+
+    public static class HighAltitudeFlyNodeEvaluator extends FlyNodeEvaluator {
+        @Override
+        public PathType getPathType(PathfindingContext context, int x, int y, int z) {
+            PathType pathtype = context.getPathTypeFromState(x, y, z);
+            if (pathtype == PathType.OPEN && y >= context.level().getMinBuildHeight() + 1) {
+                BlockPos blockpos = new BlockPos(x, y - 1, z);
+                PathType pathtype1 = context.getPathTypeFromState(blockpos.getX(), blockpos.getY(), blockpos.getZ());
+                if (pathtype1 != PathType.DAMAGE_FIRE && pathtype1 != PathType.LAVA) {
+                    if (pathtype1 == PathType.DAMAGE_OTHER) {
+                        pathtype = PathType.DAMAGE_OTHER;
+                    } else if (pathtype1 == PathType.COCOA) {
+                        pathtype = PathType.COCOA;
+                    } else if (pathtype1 == PathType.FENCE) {
+                        if (!blockpos.equals(context.mobPosition())) {
+                            pathtype = PathType.FENCE;
+                        }
+                    } else {
+                        pathtype = pathtype1 != PathType.WALKABLE && pathtype1 != PathType.OPEN && pathtype1 != PathType.WATER ? PathType.WALKABLE : PathType.OPEN;
+                    }
+                } else {
+                    pathtype = PathType.DAMAGE_FIRE;
+                }
+            }
+
+            if (pathtype == PathType.WALKABLE || pathtype == PathType.OPEN) {
+                pathtype = checkNeighbourBlocks(context, x, y, z, pathtype);
+            }
+
+            int distToGround = 0;
+            for (int i = 1; i <= 16; i++) {
+                if (!context.getBlockState(new BlockPos(x, y - i, z)).isAir()) {
+                    distToGround = i;
+                    break;
+                }
+            }
+
+            if (distToGround < 5 || distToGround > 9) {
+                return PathType.DANGER_OTHER;
+            }
+
+            return pathtype;
+        }
+    }
+
+    public static class HighAltitudeFlyingPathNavigation extends FlyingPathNavigation {
+        public HighAltitudeFlyingPathNavigation(Mob mob, Level level) {
+            super(mob, level);
+        }
+
+        @Override
+        protected PathFinder createPathFinder(int maxVisitedNodes) {
+            this.nodeEvaluator = new HighAltitudeFlyNodeEvaluator();
+            this.nodeEvaluator.setCanPassDoors(true);
+            return new PathFinder(this.nodeEvaluator, maxVisitedNodes);
+        }
     }
 }
