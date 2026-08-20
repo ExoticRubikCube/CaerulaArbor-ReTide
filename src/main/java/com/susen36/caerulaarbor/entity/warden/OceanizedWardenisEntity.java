@@ -50,11 +50,6 @@ public class OceanizedWardenisEntity extends AbstractOceanizedWardenEntity {
 	}
 
 	@Override
-	protected int getInitialHeartbeatGap() {
-		return 0;
-	}
-
-	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata) {
 		SpawnGroupData spawnGroupData = super.finalizeSpawn(world, difficulty, reason, livingdata);
 		this.setAnimation("animation.oceanized_wardenis.start");

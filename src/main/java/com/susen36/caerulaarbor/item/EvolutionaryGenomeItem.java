@@ -39,6 +39,10 @@ public class EvolutionaryGenomeItem extends Item {
 			capability.can_player_evo = true;
 			capability.syncPlayerVariables(entity);
 			world.playSound(null, entity.blockPosition(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F);
+			// 永久进化提示，金色以区别于紫色排异消息
+			if (!world.isClientSide()) {
+				entity.displayClientMessage(Component.translatable("item.caerula_arbor.evo_message_permanent"), false);
+			}
 		} else {
 			// 已拥有永久进化时，对等折算为经验等级补充
 			if (!world.isClientSide()) {

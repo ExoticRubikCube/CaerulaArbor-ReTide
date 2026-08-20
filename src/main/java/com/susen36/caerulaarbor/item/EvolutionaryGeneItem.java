@@ -43,6 +43,10 @@ public class EvolutionaryGeneItem extends Item {
 		capability.can_player_evo = true;
 		capability.syncPlayerVariables(entity);
 		world.playSound(null, entity.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
+		// 一次性进化提示，金色以区别于排异消息的紫色
+		if (!world.isClientSide()) {
+			entity.displayClientMessage(Component.translatable("item.caerula_arbor.evo_message_temporary"), false);
+		}
 		// 创造模式不消耗物品，仅普通模式扣除（原版判据：instabuild 许可）
 		if (!entity.getAbilities().instabuild) {
 			entity.getItemInHand(hand).shrink(1);

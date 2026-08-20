@@ -398,6 +398,8 @@
   "item.caerula_arbor.hand_of_barren": "Hand Of Barren",
   "item.caerula_arbor.puncture_fish_spawn_egg": "Primal Sea Piercer Spawn Egg",
   "item.caerula_arbor.evolutionary_genome.description_1": "§7Right-click to gain permanent evolution. Reuse grants 10 levels of experience.",
+  "item.caerula_arbor.evo_message_temporary": "§6You've gained Evolution",
+  "item.caerula_arbor.evo_message_permanent": "§6You've gained Permanent Evolution",
   "item.caerula_arbor.chitin_knife.description_0": "§bPlayer got 5% chance to attack +100%, maxhealth +100% for 25s when hold his current weapon,and buff vanishes when he changes weapon",
   "death.attack.gunmu_damage": "%1$s was killed for no reason",
   "item.caerula_arbor.hand_anchor.description_0": "§7§oDesigned for convinience though, arm strength is required to carry it.",

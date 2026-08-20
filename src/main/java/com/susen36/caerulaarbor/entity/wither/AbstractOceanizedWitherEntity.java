@@ -173,7 +173,11 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonsterBoss imple
         if (this.entityData.get(DATA_SHELLED) && source.is(DamageTypeTags.IS_PROJECTILE)) {
             return false;
         }
-        return super.hurt(source, amount);
+        if (this.hasEffect(CAMobEffects.INVULNERABLE)) {
+            return false;
+        }
+        float cappedAmount = Math.min(amount, this.getMaxHealth() * 0.35F);
+        return super.hurt(source, cappedAmount);
     }
 
     public void applyOceanMagicFollowup(Entity target, Entity directSource) {
@@ -408,13 +412,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonsterBoss imple
 
     @Override
     public void setHealth(float health) {
-        float currentHealth = this.getHealth();
-        float maxHealth = this.getMaxHealth();
-        if (this.hasEffect(CAMobEffects.INVULNERABLE) && health < currentHealth) {
-            return;
-        }
-        float reduction = currentHealth - health;
-        super.setHealth(reduction >= maxHealth * 0.35F ? currentHealth - maxHealth * 0.35F : currentHealth - reduction);
+        super.setHealth(health);
     }
 
     public boolean isWitherDurative() {

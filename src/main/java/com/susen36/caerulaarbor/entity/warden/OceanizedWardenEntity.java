@@ -17,12 +17,12 @@ public class OceanizedWardenEntity extends AbstractOceanizedWardenEntity {
 	}
 
 	@Override
-        protected SoundEvent getAmbientSound() {
+	protected SoundEvent getAmbientSound() {
                 return SoundEvents.WARDEN_AMBIENT;
 	}
 
 	@Override
-        protected SoundEvent getHurtSound(DamageSource source) {
+	protected SoundEvent getHurtSound(DamageSource source) {
                 return SoundEvents.WARDEN_HURT;
 	}
 
@@ -39,10 +39,5 @@ public class OceanizedWardenEntity extends AbstractOceanizedWardenEntity {
 	@Override
 	protected int getAttackAnimationLength() {
 		return 18;
-	}
-
-	@Override
-	protected int getInitialHeartbeatGap() {
-		return 40;
 	}
 }

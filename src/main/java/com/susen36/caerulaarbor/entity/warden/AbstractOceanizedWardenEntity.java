@@ -40,15 +40,12 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.monster.warden.AngerManagement;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.DynamicGameEventListener;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
@@ -61,7 +58,10 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss implements VibrationSystem {
@@ -70,42 +70,29 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 	protected static final EntityDataAccessor<Integer> DATA_SKILL_1 = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> DATA_SKILL_2 = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.INT);
-	protected static final EntityDataAccessor<Integer> CLIENT_ANGER_LEVEL = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.INT);
 	private static final int VIBRATION_COOLDOWN_TICKS = 40;
-	private static final int RECENT_PROJECTILE_TICK_THRESHOLD = 100;
-	private static final int PROJECTILE_ANGER = 10;
-	private static final int DEFAULT_ANGER = 35;
 	private static final int PROJECTILE_ANGER_DISTANCE = 30;
 	public String animationprocedure = "empty";
 	protected String prevAnim = "empty";
 	protected boolean swinging;
 	protected long lastSwing;
-	public AngerManagement angerManagement;
 	private final DynamicGameEventListener<VibrationSystem.Listener> dynamicGameEventListener;
 	private final VibrationSystem.User vibrationUser;
 	private VibrationSystem.Data vibrationData;
 	private int vibrationCooldown;
-	private int recentProjectileCooldown;
-	private int tendrilAnimation;
-	private int tendrilAnimationO;
-	private int heartAnimation;
-	private int heartAnimationO;
-	private int heartbeatDelayCounter;
+	@Nullable
+	private LivingEntity pendingVibrationTarget;
 
 	protected AbstractOceanizedWardenEntity(EntityType<? extends AbstractOceanizedWardenEntity> type, Level world) {
 		super(type, world);
-		this.angerManagement = new AngerManagement(this::canTargetEntity, Collections.emptyList());
 		this.vibrationUser = new VibrationUser();
 		this.vibrationData = new VibrationSystem.Data();
 		this.dynamicGameEventListener = new DynamicGameEventListener<>(new VibrationSystem.Listener(this));
 		this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 		this.xpReward = 1024;
 		this.setNoAi(false);
-
 		this.setPersistenceRequired();
 	}
-
-
 
 	@Override
 	protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -115,7 +102,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 		builder.define(DATA_SKILL_1, 100);
 		builder.define(DATA_SKILL_2, 120);
 		builder.define(DATA_DURATION, 0);
-		builder.define(CLIENT_ANGER_LEVEL, 0);
 	}
 
 	public String getSyncedAnimation() {
@@ -143,12 +129,11 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 		double targetZ = target.getZ();
 		if (!this.level().isClientSide()) {
 			CaerulaArbor.queueServerWork(10, () -> {
-				if (target.isAlive() && this.distanceTo(target) <= 6) {
+				if (target.isAlive() && this.distanceTo(target) <= 3) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							SoundEvents.WARDEN_ATTACK_IMPACT, SoundSource.HOSTILE,
 							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1), 1);
 					this.performRangedAttack(false, 1, targetX, targetY, targetZ, null, null);
-					this.entityData.set(DATA_SKILL_1, Math.max(this.entityData.get(DATA_SKILL_1), 30));
 				}
 			});
 		}
@@ -158,7 +143,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.addGoal(0, new AngerTargetGoal(SeaMonster.class));
+		this.targetSelector.addGoal(5, new VibrationTargetGoal(SeaMonster.class));
 		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 2, true) {
 
 			@Override
@@ -171,7 +156,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 				return super.canContinueToUse() && AbstractOceanizedWardenEntity.this.isDurative();
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
 		this.goalSelector.addGoal(4, new RandomStrollGoal(AbstractOceanizedWardenEntity.this, 1) {
 			@Override
 			public boolean canUse() {
@@ -199,34 +183,55 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 
 	protected void performRangedAttack(boolean isSonic, double rate, double x, double y, double z, @Nullable Set<Integer> knockedEntities, @Nullable Vec3 knockbackDir) {
 		LivingEntity target = this.getTarget();
-		double radius = isSonic ? 4.5 : 3;
+		double radius = 2.5;
+		double radiusSq = radius * radius;
 		Vec3 center = new Vec3(x, y, z);
-		List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius), entity -> true);
-		for (LivingEntity nearbyEntity : nearbyEntities) {
-			if (!(nearbyEntity instanceof Mob) && !(nearbyEntity instanceof Player)) {
-				continue;
+		boolean melee = !isSonic;
+		List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(radius), entity -> {
+			if (!(entity instanceof Mob) && !(entity instanceof Player)) {
+				return false;
 			}
-			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))) && nearbyEntity != target) {
-				continue;
+			if (entity == this) {
+				return false;
 			}
-			if (nearbyEntity == this) {
-				continue;
+			if (center.distanceToSqr(new Vec3(entity.getX(), entity.getY(), entity.getZ())) > radiusSq) {
+				return false;
 			}
-			if (center.distanceToSqr(new Vec3(nearbyEntity.getX(), nearbyEntity.getY(), nearbyEntity.getZ())) <= radius * radius) {
-				double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
-				if (isSonic) {
-					if (nearbyEntity.hurt(this.level().damageSources().sonicBoom(this), (float) damage)) {
-						EPUtils.causeSanityInjury(nearbyEntity, damage * 0.5);
-						if (knockedEntities != null && knockbackDir != null && knockedEntities.add(nearbyEntity.getId())) {
-							double kbRes = nearbyEntity.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE) ? 1.0 - nearbyEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) : 1.0;
-							double horizontal = 2.5 * kbRes;
-							double vertical = 0.5 * kbRes;
-							nearbyEntity.push(knockbackDir.x * horizontal, knockbackDir.y * vertical, knockbackDir.z * horizontal);
-						}
+			if (melee) {
+				double dx = entity.getX() - this.getX();
+				double dz = entity.getZ() - this.getZ();
+				double horLen = Math.sqrt(dx * dx + dz * dz);
+				if (horLen > 1.0E-4D) {
+					float yaw = this.getYRot() * ((float) Math.PI / 180F);
+					float facingX = -Mth.sin(yaw);
+					float facingZ = Mth.cos(yaw);
+					double tx = dx / horLen;
+					double tz = dz / horLen;
+					double cosAngle = facingX * tx + facingZ * tz;
+					if (cosAngle < Math.cos(Math.PI / 4.0D)) {
+						return false;
 					}
-				} else {
-					nearbyEntity.hurt(CADamageTypes.wardenAttack(this.level(), this), (float) damage);
 				}
+			}
+			if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))) && entity != target) {
+				return false;
+			}
+			return true;
+		});
+		for (LivingEntity nearbyEntity : nearbyEntities) {
+			double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
+			if (isSonic) {
+				if (nearbyEntity.hurt(this.level().damageSources().sonicBoom(this), (float) damage)) {
+					EPUtils.causeSanityInjury(nearbyEntity, damage * 0.5);
+					if (knockedEntities != null && knockbackDir != null && knockedEntities.add(nearbyEntity.getId())) {
+						double kbRes = nearbyEntity.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE) ? 1.0 - nearbyEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) : 1.0;
+						double horizontal = 2.5 * kbRes;
+						double vertical = 0.5 * kbRes;
+						nearbyEntity.push(knockbackDir.x * horizontal, knockbackDir.y * vertical, knockbackDir.z * horizontal);
+					}
+				}
+			} else {
+				nearbyEntity.hurt(CADamageTypes.wardenAttack(this.level(), this), (float) damage);
 			}
 		}
 	}
@@ -273,7 +278,20 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 		if (source.is(DamageTypes.FALL)) {
 			return false;
 		}
-		return super.hurt(source, amount);
+		if (this.hasEffect(CAMobEffects.INVULNERABLE)) {
+			return false;
+		}
+		float cappedAmount = Math.min(amount, this.getMaxHealth() * 0.3F);
+		return super.hurt(source, cappedAmount);
+	}
+
+	@Override
+	public void setTarget(@Nullable LivingEntity target) {
+		LivingEntity previousTarget = this.getTarget();
+		super.setTarget(target);
+		if (target != null && target != previousTarget) {
+			this.entityData.set(DATA_SKILL_1, Math.max(this.entityData.get(DATA_SKILL_1), 100));
+		}
 	}
 
 	@Override
@@ -351,7 +369,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 		CaerulaArbor.queueServerWork(47, () -> {
 			boolean hasSound = false;
 			Vec3 center = new Vec3(x, y, z);
-			List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32), entity -> true);
+			List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(21), entity -> true);
 			for (LivingEntity nearbyEntity : nearbyEntities) {
 				if (!(nearbyEntity instanceof Mob) && !(nearbyEntity instanceof Player)) {
 					continue;
@@ -365,7 +383,12 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 				if (nearbyEntity instanceof Player player && player.isCreative()) {
 					continue;
 				}
-				if (this.distanceTo(nearbyEntity) <= 32) {
+				double dx = x - nearbyEntity.getX();
+				double dz = z - nearbyEntity.getZ();
+				double dy = y - nearbyEntity.getY();
+				double hDistSqr = Mth.square(dx) + Mth.square(dz);
+				double vDist = Math.abs(dy);
+				if (hDistSqr <= Mth.square(21.0) && vDist <= 21.0) {
 					this.performSonicBoom(nearbyEntity, 0.25, 3);
 					hasSound = true;
 				}
@@ -382,9 +405,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 		compound.putInt("Skill1", this.entityData.get(DATA_SKILL_1));
 		compound.putInt("Skill2", this.entityData.get(DATA_SKILL_2));
 		compound.putInt("Duration", this.entityData.get(DATA_DURATION));
-		AngerManagement.codec(this::canTargetEntity).encodeStart(NbtOps.INSTANCE, this.angerManagement)
-			.resultOrPartial(CaerulaArbor.LOGGER::error)
-			.ifPresent(nbt -> compound.put("anger", nbt));
 		VibrationSystem.Data.CODEC.encodeStart(NbtOps.INSTANCE, this.vibrationData)
 			.resultOrPartial(CaerulaArbor.LOGGER::error)
 			.ifPresent(nbt -> compound.put("listener", nbt));
@@ -402,11 +422,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 		if (compound.contains("Duration")) {
 		    this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
 		}
-		if (compound.contains("anger")) {
-			AngerManagement.codec(this::canTargetEntity).parse(new Dynamic<>(NbtOps.INSTANCE, compound.get("anger")))
-				.resultOrPartial(CaerulaArbor.LOGGER::error)
-				.ifPresent(anger -> this.angerManagement = anger);
-		}
 		if (compound.contains("listener", 10)) {
 			VibrationSystem.Data.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compound.getCompound("listener")))
 				.resultOrPartial(CaerulaArbor.LOGGER::error)
@@ -421,9 +436,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 			if (this.vibrationCooldown > 0) {
 				--this.vibrationCooldown;
 			}
-			if (this.recentProjectileCooldown > 0) {
-				--this.recentProjectileCooldown;
-			}
 		}
 		super.tick();
 	}
@@ -431,66 +443,19 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 	@Override
 	public void customServerAiStep() {
 		super.customServerAiStep();
-		if (this.level() instanceof ServerLevel serverLevel) {
-			if (this.tickCount + this.getId() % 120 == 0) {
-				MobEffectInstance mobeffectinstance = new MobEffectInstance(MobEffects.DARKNESS, 260, 0, false, false);
-				MobEffectUtil.addEffectToPlayersAround((ServerLevel) this.level(), this, this.position(), 20, mobeffectinstance, 200);
-			}
-			if (this.tickCount % 20 == 0) {
-				this.angerManagement.tick(serverLevel, this::canTargetEntity);
-				this.syncClientAngerLevel();
-			}
+		if (this.tickCount + this.getId() % 120 == 0) {
+			MobEffectInstance mobeffectinstance = new MobEffectInstance(MobEffects.DARKNESS, 260, 0, false, false);
+			MobEffectUtil.addEffectToPlayersAround((ServerLevel) this.level(), this, this.position(), 20, mobeffectinstance, 200);
 		}
-	}
-
-	private void syncClientAngerLevel() {
-		this.entityData.set(CLIENT_ANGER_LEVEL, this.angerManagement.getActiveAnger(this.getTarget()));
-	}
-
-	public int getClientAngerLevel() {
-		return this.entityData.get(CLIENT_ANGER_LEVEL);
-	}
-
-	public float getTendrilAnimation(float partialTick) {
-		return Mth.lerp(partialTick, (float) this.tendrilAnimationO, (float) this.tendrilAnimation) / 10.0F;
-	}
-
-	public float getHeartAnimation(float partialTick) {
-		return Mth.lerp(partialTick, (float) this.heartAnimationO, (float) this.heartAnimation) / 10.0F;
-	}
-
-	private int getHeartBeatDelay() {
-		float f = (float) this.getClientAngerLevel() / 80.0F;
-		int base = this.getInitialHeartbeatGap();
-		return base - Mth.floor(Mth.clamp(f, 0.0F, 1.0F) * (float) (base - 10));
 	}
 
 	protected abstract String getAnimationPrefix();
 
 	protected abstract int getAttackAnimationLength();
 
-	protected abstract int getInitialHeartbeatGap();
-
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		if (this.level().isClientSide()) {
-			this.tendrilAnimationO = this.tendrilAnimation;
-			this.heartAnimationO = this.heartAnimation;
-			if (this.tendrilAnimation > 0) {
-				this.tendrilAnimation = Mth.clamp(this.tendrilAnimation - 1, 0, 10);
-			}
-			if (this.heartAnimation > 0) {
-				this.heartAnimation = Mth.clamp(this.heartAnimation - 1, 0, 10);
-			}
-			if (this.heartbeatDelayCounter > 0) {
-				this.heartbeatDelayCounter--;
-			}
-			if (this.heartbeatDelayCounter <= 0) {
-				this.heartAnimation = 10;
-				this.heartbeatDelayCounter = this.getHeartBeatDelay();
-			}
-		}
 		Level world = this.level();
 		double x = this.getX();
 		double y = this.getY();
@@ -510,7 +475,10 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 			if (skillp1 > 0) {
 				this.entityData.set(DATA_SKILL_1, skillp1 - 1);
 			} else if (target != null && target.isAlive()) {
-				if (!(this.distanceTo(target) > 32 || duration > 0)) {
+				double hDistSqr = Mth.square(target.getX() - this.getX()) + Mth.square(target.getZ() - this.getZ());
+				double vDist = Math.abs(target.getY() - this.getY());
+				if (!(hDistSqr > Mth.square(21.0) || vDist > 21.0 || duration > 0 || !this.canTargetEntity(target))) {
+					final LivingEntity lockedTarget = target;
 					this.entityData.set(DATA_DURATION, 45);
 					this.setAnimation(this.getAnimationPrefix() + ".sonic");
 					if (!this.level().isClientSide()) {
@@ -521,12 +489,26 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 						level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 2, 1);
 					}
 					CaerulaArbor.queueServerWork(30, () -> {
-						if (this.isAlive()) {
-							if (world instanceof Level level) {
-								level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 2, 1);
-							}
-							this.performSonicBoom(this.getTarget(), 0.25, 3);
+						boolean valid = this.isAlive() && lockedTarget.isAlive();
+						if (valid) {
+							double dx = this.getX() - lockedTarget.getX();
+							double dz = this.getZ() - lockedTarget.getZ();
+							double dy = this.getY() - lockedTarget.getY();
+							double cbHDistSqr = Mth.square(dx) + Mth.square(dz);
+							double cbVDist = Math.abs(dy);
+							valid = cbHDistSqr <= Mth.square(21.0) && cbVDist <= 21.0;
 						}
+						if (!valid) {
+							this.entityData.set(DATA_DURATION, 0);
+							this.setAnimation("undefined");
+							this.removeEffect(CAMobEffects.INVULNERABLE);
+							this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+							return;
+						}
+						if (world instanceof Level level) {
+							level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 2, 1);
+						}
+						this.performSonicBoom(lockedTarget, 0.25, 3);
 					});
 					this.entityData.set(DATA_SKILL_1, 200);
 				}
@@ -536,16 +518,18 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 				this.entityData.set(DATA_SKILL_2, skillp2 - 1);
 			} else if (target != null && target.isAlive()) {
 				if (!(this.distanceTo(target) > 4 || duration > 0)) {
+					final LivingEntity lockedTarget = target;
 					this.entityData.set(DATA_DURATION, 45);
 					this.setAnimation(this.getAnimationPrefix() + ".combo");
 					CaerulaArbor.queueServerWork(12, () -> {
-						Entity currentTarget = this.getTarget();
-						if (this.isAlive() && currentTarget != null) {
-							if (this.distanceTo(currentTarget) <= 4) {
-								currentTarget.hurt(CADamageTypes.wardenAttack(world, this),
-										(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
-							}
-							currentTarget.push(0, 1.25, 0);
+						if (this.isAlive() && lockedTarget.isAlive() && this.distanceTo(lockedTarget) <= 4) {
+							lockedTarget.hurt(CADamageTypes.wardenAttack(world, this),
+									(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
+							double dx = lockedTarget.getX() - this.getX();
+							double dz = lockedTarget.getZ() - this.getZ();
+							lockedTarget.knockback(2.5, dx, dz);
+							Vec3 velocity = lockedTarget.getDeltaMovement();
+							lockedTarget.setDeltaMovement(velocity.x, 1.25, velocity.z);
 						}
 					});
 					CaerulaArbor.queueServerWork(20, () -> {
@@ -560,16 +544,15 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 						if (world instanceof Level level) {
 							level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.HOSTILE, 2, 1);
 						}
-						Entity currentTarget = this.getTarget();
-						if (currentTarget != null) {
-							this.performSonicBoom(currentTarget, 0.15, 1);
+						if (lockedTarget.isAlive()) {
+							this.performSonicBoom(lockedTarget, 0.15, 1);
 						}
 					});
 					this.entityData.set(DATA_SKILL_2, 300);
 				}
 			}
 
-			int gap = this.getInitialHeartbeatGap();
+			int gap = 40;
 			if (skillp1 < 60) {
 				gap = 10;
 			} else if (skillp1 < 100) {
@@ -609,8 +592,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 	public void handleEntityEvent(byte id) {
 		if (id == 4) {
 			this.swinging = true;
-		} else if (id == 61) {
-			this.tendrilAnimation = 10;
 		} else if (id == 62) {
 			this.setAnimation(this.getAnimationPrefix() + ".sonic");
 		} else {
@@ -618,48 +599,68 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 		}
 	}
 
-	@Override
-	public float getWalkTargetValue(BlockPos pos, LevelReader level) {
-		return 0.0F;
-	}
-
-	class AngerTargetGoal extends TargetGoal {
+	class VibrationTargetGoal extends TargetGoal {
 		private final Class<?>[] toIgnoreDamage;
+		@Nullable
+		protected LivingEntity target;
+		protected TargetingConditions targetConditions;
 
-		public AngerTargetGoal(Class<?>... toIgnoreDamage) {
+		public VibrationTargetGoal(Class<?>... toIgnoreDamage) {
 			super(AbstractOceanizedWardenEntity.this, false, false);
 			this.toIgnoreDamage = toIgnoreDamage;
+			this.setFlags(EnumSet.of(Flag.TARGET));
+			this.targetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).ignoreLineOfSight().ignoreInvisibilityTesting().selector(living -> {
+				if (!AbstractOceanizedWardenEntity.this.canTargetEntity(living)) {
+					return false;
+				}
+				if (AbstractOceanizedWardenEntity.this.isInWater() ^ living.isInWater()) {
+					return false;
+				}
+				for (Class<?> oclass : this.toIgnoreDamage) {
+					if (oclass.isAssignableFrom(living.getClass())) {
+						return false;
+					}
+				}
+				return true;
+			});
 		}
 
 		@Override
 		public boolean canUse() {
-			Optional<LivingEntity> activeEntity = AbstractOceanizedWardenEntity.this.angerManagement.getActiveEntity();
-			if (activeEntity.isPresent() && AbstractOceanizedWardenEntity.this.canTargetEntity(activeEntity.get())) {
-				LivingEntity livingentity = activeEntity.get();
-				if (livingentity.getType() == EntityType.PLAYER && AbstractOceanizedWardenEntity.this.level().getGameRules().getBoolean(GameRules.RULE_UNIVERSAL_ANGER)) {
-					return false;
-				}
-				for (Class<?> oclass : this.toIgnoreDamage) {
-					if (oclass.isAssignableFrom(livingentity.getClass())) {
-						return false;
-					}
-				}
-				this.targetMob = livingentity;
-				return true;
+			if (AbstractOceanizedWardenEntity.this.getTarget() != null) {
+				return false;
 			}
-			return false;
+			this.findTarget();
+			return this.target != null;
+		}
+
+		protected void findTarget() {
+			LivingEntity candidate = AbstractOceanizedWardenEntity.this.pendingVibrationTarget;
+			if (candidate != null && candidate.isAlive() && this.canAttack(candidate, this.targetConditions)) {
+				this.target = candidate;
+			} else {
+				this.target = null;
+				AbstractOceanizedWardenEntity.this.pendingVibrationTarget = null;
+			}
 		}
 
 		@Override
 		public void start() {
-			AbstractOceanizedWardenEntity.this.setTarget(this.targetMob);
+			AbstractOceanizedWardenEntity.this.setTarget(this.target);
+			this.targetMob = this.target;
+			this.unseenMemoryTicks = 300;
+			AbstractOceanizedWardenEntity.this.pendingVibrationTarget = null;
 			super.start();
+		}
+
+		public void setTarget(@Nullable LivingEntity target) {
+			this.target = target;
 		}
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.185);
 		builder = builder.add(Attributes.MAX_HEALTH, 650);
 		builder = builder.add(Attributes.ARMOR, 8);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 38);
@@ -750,13 +751,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 
 	@Override
 	public void setHealth(float health) {
-		float currentHealth = this.getHealth();
-		float maxHealth = this.getMaxHealth();
-		if (this.hasEffect(CAMobEffects.INVULNERABLE) && health < currentHealth) {
-			return;
-		}
-		float reduction = currentHealth - health;
-		super.setHealth(reduction >= maxHealth * 0.3F ? currentHealth - maxHealth * 0.3F : currentHealth - reduction);
+		super.setHealth(health);
 	}
 
 	@Override
@@ -826,7 +821,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 
 		@Override
 		public boolean canReceiveVibration(ServerLevel level, BlockPos pos, Holder<GameEvent> event, GameEvent.Context context) {
-			if (AbstractOceanizedWardenEntity.this.isNoAi() || AbstractOceanizedWardenEntity.this.isDeadOrDying() || AbstractOceanizedWardenEntity.this.vibrationCooldown > 0 || !level.getWorldBorder().isWithinBounds(pos)) {
+			if (AbstractOceanizedWardenEntity.this.getTarget() != null || AbstractOceanizedWardenEntity.this.isNoAi() || AbstractOceanizedWardenEntity.this.isDeadOrDying() || AbstractOceanizedWardenEntity.this.vibrationCooldown > 0 || !level.getWorldBorder().isWithinBounds(pos)) {
 				return false;
 			}
 			Entity sourceEntity = context.sourceEntity();
@@ -837,20 +832,18 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonsterBoss imple
 		public void onReceiveVibration(ServerLevel level, BlockPos pos, Holder<GameEvent> event, @Nullable Entity sourceEntity, @Nullable Entity projectileOwner, float distance) {
 			if (!AbstractOceanizedWardenEntity.this.isDeadOrDying()) {
 				AbstractOceanizedWardenEntity.this.vibrationCooldown = VIBRATION_COOLDOWN_TICKS;
-				level.broadcastEntityEvent(AbstractOceanizedWardenEntity.this, (byte) 61);
 				AbstractOceanizedWardenEntity.this.playSound(SoundEvents.WARDEN_TENDRIL_CLICKS, 5.0F, AbstractOceanizedWardenEntity.this.getVoicePitch());
 
+				LivingEntity targetEntity = null;
 				if (projectileOwner != null) {
-					if (AbstractOceanizedWardenEntity.this.closerThan(projectileOwner, PROJECTILE_ANGER_DISTANCE)) {
-						if (AbstractOceanizedWardenEntity.this.recentProjectileCooldown > 0) {
-							AbstractOceanizedWardenEntity.this.angerManagement.increaseAnger(projectileOwner, DEFAULT_ANGER);
-						} else {
-							AbstractOceanizedWardenEntity.this.angerManagement.increaseAnger(projectileOwner, PROJECTILE_ANGER);
-						}
+					if (AbstractOceanizedWardenEntity.this.closerThan(projectileOwner, PROJECTILE_ANGER_DISTANCE) && projectileOwner instanceof LivingEntity living && AbstractOceanizedWardenEntity.this.canTargetEntity(living) && !(AbstractOceanizedWardenEntity.this.isInWater() ^ living.isInWater())) {
+						targetEntity = living;
 					}
-					AbstractOceanizedWardenEntity.this.recentProjectileCooldown = RECENT_PROJECTILE_TICK_THRESHOLD;
-				} else {
-					AbstractOceanizedWardenEntity.this.angerManagement.increaseAnger(sourceEntity, DEFAULT_ANGER);
+				} else if (sourceEntity instanceof LivingEntity living && AbstractOceanizedWardenEntity.this.canTargetEntity(living) && !(AbstractOceanizedWardenEntity.this.isInWater() ^ living.isInWater())) {
+					targetEntity = living;
+				}
+				if (targetEntity != null) {
+					AbstractOceanizedWardenEntity.this.pendingVibrationTarget = targetEntity;
 				}
 			}
 		}

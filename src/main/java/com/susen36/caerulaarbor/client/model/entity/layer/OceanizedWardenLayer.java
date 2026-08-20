@@ -21,15 +21,7 @@ public class OceanizedWardenLayer extends GeoRenderLayer<OceanizedWardenEntity> 
 
 	@Override
 	public void render(PoseStack poseStack, OceanizedWardenEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-		float tendril = animatable.getTendrilAnimation(partialTick);
-		float heart = animatable.getHeartAnimation(partialTick);
-		float intensity = Math.max(tendril, heart);
-		if (intensity <= 0.0F) {
-			return;
-		}
-		int a = Math.max(4, (int) (intensity * 255.0F));
-		int color = 0x00FFFFFF | (a << 24);
 		RenderType glowRenderType = RenderType.eyes(LAYER);
-		getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, color);
+		getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 	}
 }

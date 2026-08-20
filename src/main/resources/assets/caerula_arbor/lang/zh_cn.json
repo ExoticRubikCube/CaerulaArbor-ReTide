@@ -402,6 +402,8 @@
   "item.caerula_arbor.hand_of_barren": "荒芜之手",
   "item.caerula_arbor.puncture_fish_spawn_egg": "始海穿刺者刷怪蛋",
   "item.caerula_arbor.evolutionary_genome.description_1": "§7右键使用后获得永久进化，重复使用将折算为 10 级经验。",
+  "item.caerula_arbor.evo_message_temporary": "§6你获得了进化",
+  "item.caerula_arbor.evo_message_permanent": "§6你获得了永久进化",
   "item.caerula_arbor.chitin_knife.description_0": "§b玩家攻击时有5%概率攻击力+100%，生命值+100%，持续25秒。更换主手物品时提前结束",
   "death.attack.gunmu_damage": "%1$s 死于无妄之灾",
   "item.caerula_arbor.hand_anchor.description_0": "§7§o采用便携设计，但对持有者的臂力仍有一定要求。",
