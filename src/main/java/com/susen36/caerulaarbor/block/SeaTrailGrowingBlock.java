@@ -121,7 +121,8 @@ public class SeaTrailGrowingBlock extends Block implements NetherseaBrandBlock, 
 		int growAge = blockstate.getValue(GROW_AGE);
 		int nextGrowAge = growAge + expand;
 		if (nextGrowAge <= 48) {
-			world.setBlock(pos, blockstate.setValue(GROW_AGE, nextGrowAge), 3);
+			// 仅自身数值变化，用 2 只同步客户端，跳过邻居/形状/光照更新
+			world.setBlock(pos, blockstate.setValue(GROW_AGE, nextGrowAge), 2);
 		}
 		if (growAge > 24) {
 			Direction facing = switch (random.nextInt(4)) {

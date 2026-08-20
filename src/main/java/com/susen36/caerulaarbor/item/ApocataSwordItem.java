@@ -1,5 +1,4 @@
 package com.susen36.caerulaarbor.item;
-
 import com.susen36.caerulaarbor.init.CADamageTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.BlockTags;

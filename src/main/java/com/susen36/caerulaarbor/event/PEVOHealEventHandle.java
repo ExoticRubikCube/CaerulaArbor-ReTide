@@ -9,6 +9,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -53,18 +54,14 @@ public class PEVOHealEventHandle {
 			}
 		}
 
-        var wipeMagicDamage = CADamageTypes.source(world, CADamageTypes.WIPE_MAGIC, entity);
-		for (Entity nearbyEntity : world.getEntities(entity, new AABB(x - 3, y - 1, z - 3, x + 3, y + 3, z + 3))) {
-			if (entity.distanceTo(nearbyEntity) > 3 || !(nearbyEntity instanceof LivingEntity target)) {
+        DamageSource wipeMagicDamage = CADamageTypes.source(world, CADamageTypes.WIPE_MAGIC, entity);
+		// 生命溢出时对以自身为圆心半径 3 格内的敌对目标造成同等损伤并触发理智伤口
+		for (LivingEntity target : world.getEntitiesOfClass(LivingEntity.class, new AABB(x - 3, y - 1, z - 3, x + 3, y + 3, z + 3), candidate -> candidate != entity && entity.distanceToSqr(candidate) <= 9.0)) {
+			if (!(target instanceof Monster) && (!(target instanceof Mob mob) || mob.getTarget() != entity)) {
 				continue;
 			}
-			if (!(nearbyEntity instanceof Monster) && (!(nearbyEntity instanceof Mob mob) || mob.getTarget() != entity)) {
-				continue;
-			}
-			nearbyEntity.hurt(wipeMagicDamage, (float) sanityDamage);
-			if (sanityDamage > 0) {
-                EPUtils.causeSanityInjury(target, livingEntity1, sanityDamage / 20.0);
-            }
+			target.hurt(wipeMagicDamage, (float) sanityDamage);
+			EPUtils.causeSanityInjury(target, livingEntity1, sanityDamage / 20.0);
 		}
 	}
 }

@@ -50,14 +50,12 @@ public class PlayerEatEventHandler {
 				} catch (Exception exception) {
 					maximumLightGain = 0;
 				}
-				{
-					double setval = Math.min(100,
-							ModCapabilities.getPlayerVariables(entity).player_light
-									+ Mth.nextInt(RandomSource.create(), (int) minimumLightGain, (int) maximumLightGain));
-					PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
-					capability.player_light = setval;
-					capability.syncPlayerVariables(entity);
-				}
+				double setval = Math.min(100,
+						ModCapabilities.getPlayerVariables(entity).player_light
+								+ Mth.nextInt(RandomSource.create(), (int) minimumLightGain, (int) maximumLightGain));
+				PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
+				capability.player_light = setval;
+				capability.syncPlayerVariables(entity);
 			}
 		}
 	}

@@ -2,7 +2,6 @@ package com.susen36.caerulaarbor.event;
 
 import com.susen36.babel.init.BabelMobEffects;
 import com.susen36.babel.util.EPUtils;
-import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
@@ -20,9 +19,7 @@ import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.manager.upgrade.MigrationUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SilenceUpgradeManager;
 import com.susen36.caerulaarbor.manager.upgrade.SubsistingUpgradeManager;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,6 +31,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -42,8 +40,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
-import static com.susen36.caerulaarbor.init.CAEntityTypeTags.SEABORN;
-import static com.susen36.caerulaarbor.init.CAEntityTypeTags.SEABORN_BOSS;
+import static com.susen36.caerulaarbor.init.CAEntityTypeTags.*;
 
 @EventBusSubscriber
 public class LivingTickEventHandler {
@@ -203,7 +200,7 @@ public class LivingTickEventHandler {
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"))))
+        if (entity.getType().is(SEABORN))
         {
             handleMobBuffs(world, entity);
             handleNaturalEvolution(world, x, y, z, entity);
@@ -247,8 +244,8 @@ public class LivingTickEventHandler {
                 if (!entity.getPersistentData().getBoolean("sublimationBlessed") && finalMigra >= 3.0) {
                     float currentHealth = living.getHealth();
                     if (currentHealth < maxHealth * 0.3) {
-                        boolean isElite = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite")));
-                        boolean isTiny = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "tiny_seaborn")));
+                        boolean isElite = entity.getType().is(OCEAN_ELITE);
+                        boolean isTiny = entity.getType().is(TINY_SEABORN);
                         entity.getPersistentData().putBoolean("sublimationBlessed", true);
 
                         if (!isTiny) {
@@ -275,7 +272,7 @@ public class LivingTickEventHandler {
     private static void handleNaturalEvolution(Level world, double x, double y, double z, Entity entity) {
         if (!world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) return;
         if (entity.tickCount % 10 != 0) return;
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_pet")))) return;
+        if (entity.getType().is(SEABORN_PET)) return;
 
         if (Math.random() < 0.16 && !world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).isEmpty()) {
             double pnt = Mth.nextDouble(RandomSource.create(), 0, 0.005);
@@ -290,35 +287,39 @@ public class LivingTickEventHandler {
     private static void handleArmorEnchantFunc(EntityTickEvent.Post event) {
         Entity entity = event.getEntity();
         if (entity instanceof LivingEntity living) {
-            ItemStack helm = living.getItemBySlot(EquipmentSlot.HEAD).copy();
-            ItemStack chest = living.getItemBySlot(EquipmentSlot.CHEST).copy();
-            ItemStack legg = living.getItemBySlot(EquipmentSlot.LEGS).copy();
-            ItemStack boot = living.getItemBySlot(EquipmentSlot.FEET).copy();
+            ItemStack helm = living.getItemBySlot(EquipmentSlot.HEAD);
+            ItemStack chest = living.getItemBySlot(EquipmentSlot.CHEST);
+            ItemStack legg = living.getItemBySlot(EquipmentSlot.LEGS);
+            ItemStack boot = living.getItemBySlot(EquipmentSlot.FEET);
             if (living.tickCount % 5 == 0) {
-                double lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.FLEXIBILITY), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.FLEXIBILITY), chest)
-                        + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.FLEXIBILITY), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.FLEXIBILITY), boot);
+                Holder<Enchantment> flexibility = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.FLEXIBILITY);
+                Holder<Enchantment> magicTolerance = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE);
+                Holder<Enchantment> sanityInjury = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE);
+                double lvl = EnchantmentHelper.getItemEnchantmentLevel(flexibility, helm) + EnchantmentHelper.getItemEnchantmentLevel(flexibility, chest)
+                        + EnchantmentHelper.getItemEnchantmentLevel(flexibility, legg) + EnchantmentHelper.getItemEnchantmentLevel(flexibility, boot);
                 if (lvl > 0) {
                     if (!living.level().isClientSide()) {
                         living.addEffect(new MobEffectInstance(CAMobEffects.FLEXIBILITY_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
                     }
                 }
-                lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), chest)
-                        + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE), boot);
+                lvl = EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, helm) + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, chest)
+                        + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, legg) + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, boot);
                 if (lvl > 0) {
                     if (!living.level().isClientSide()) {
                         living.addEffect(new MobEffectInstance(CAMobEffects.MAGIC_RESIS_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
                     }
                 }
-                lvl = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), helm) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), chest)
-                        + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), legg) + EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE), boot);
+                lvl = EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, helm) + EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, chest)
+                        + EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, legg) + EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, boot);
                 if (lvl > 0) {
                     EPUtils.causeSanityInjury(living, lvl / 20.0);
                 }
             }
-            double lvl0 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), helm);
-            double lvl1 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), chest);
-            double lvl2 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), legg);
-            double lvl3 = EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION), boot);
+            Holder<Enchantment> hazardProtection = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION);
+            double lvl0 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, helm);
+            double lvl1 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, chest);
+            double lvl2 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, legg);
+            double lvl3 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, boot);
             double lvl = lvl0 + lvl1 + lvl2 + lvl3;
             if (lvl > 0) {
                 double gap = Math.max(600 - 25 * lvl, 300);

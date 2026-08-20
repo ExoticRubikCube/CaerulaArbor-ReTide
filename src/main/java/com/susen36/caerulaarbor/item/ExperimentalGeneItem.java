@@ -37,7 +37,7 @@ public class ExperimentalGeneItem extends Item {
 			capability.player_oceanization = 2;
 			capability.syncPlayerVariables(entity);
 			world.playSound(null, entity.blockPosition(), SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.PLAYERS, 1.0F, 1.0F);
-			// 创造模式不消耗物品，仅普通模式扣除（原版判据：instabuild 许可）
+			
 			if (!entity.getAbilities().instabuild) {
 				entity.getItemInHand(hand).shrink(1);
 			}

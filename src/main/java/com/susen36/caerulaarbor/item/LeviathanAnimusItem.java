@@ -17,7 +17,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
@@ -65,11 +64,16 @@ public class LeviathanAnimusItem extends Item {
                 level.sendParticles(CAParticles.MOIST_BOOM.get(), x, (y + 2), z, 32, 2, 2, 2, 0.33);
             if (!world.isClientSide() && world.getServer() != null)
                 world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_14").getString())), false);
-            itemstack.shrink(1);
+            // 创造模式不消耗，与其余进化基因样本一致
+            if (!(entity instanceof Player player) || !player.getAbilities().instabuild) {
+                itemstack.shrink(1);
+            }
         } else {
             if (MapVariables.get(world).strategy_silence < 4 && SilenceUpgradeManager.canEnableSilence(world)) {
                 SilenceUpgradeManager.applySilenceUpgrade(world, 99999999);
-                itemstack.shrink(1);
+                if (!(entity instanceof Player player) || !player.getAbilities().instabuild) {
+                    itemstack.shrink(1);
+                }
             } else {
                 if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CANDLE_EXTINGUISH, SoundSource.PLAYERS, 2, 1);

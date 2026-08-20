@@ -190,7 +190,8 @@ public class TrailPulseBlock extends Block implements NetherseaBrandBlock {
 		if (growAge > 0) {
 			BlockState currentState = world.getBlockState(pos);
 			if (currentState.hasProperty(GROW_AGE)) {
-				world.setBlock(pos, currentState.setValue(GROW_AGE, growAge - 1), 3);
+				// 仅自身数值变化，用 2 只同步客户端，跳过邻居/形状/光照更新
+				world.setBlock(pos, currentState.setValue(GROW_AGE, growAge - 1), 2);
 			}
 		}
 		world.scheduleTick(pos, this, 80);

@@ -52,7 +52,6 @@ public class CAMobEffects {
     public static final DeferredHolder<MobEffect, ? extends MobEffect> IZUMIK_LEARN = REGISTRY.register("izumik_learn", IzumikLearnMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> IZUMIK_SHOCK = REGISTRY.register("izumik_shock", IzumikShockMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> INFANTRY = REGISTRY.register("infantry", InfantryMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> SUB_HAEMO = REGISTRY.register("sub_haemo", SubHaemoMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> FAST_SWIM = REGISTRY.register("fast_swim", FastSwimMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> MARTUS_PROTECTION = REGISTRY.register("martus_protection", MartusProtectionMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ENDSPEAER_BRANDGUIDE_BUFF = REGISTRY.register("endspeaer_brandguide_buff", EndspeaerBrandguideBuffMobEffect::new);

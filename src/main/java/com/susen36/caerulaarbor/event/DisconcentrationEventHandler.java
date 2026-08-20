@@ -57,7 +57,7 @@ public class DisconcentrationEventHandler {
     private static final int NEURODEGENERATION_REJECTION_STAGE = 3;
     private static final int FLESHDEFORMITY_REJECTION_STAGE = 4;
 
-    // 组合排异值域（5-10），对应 wiki 的 6 种固定组合（命名 X and Y，X 为左、Y 为右）
+    // 组合排异值域（5-10），对应6种固定组合
     private static final int NEURO_ATTENTION_COMBO_STAGE = 5;   // Degeneration and Disorder
     private static final int NEURO_BLOOD_COMBO_STAGE = 6;       // Degeneration and Inhibition
     private static final int NEURO_FLESH_COMBO_STAGE = 7;       // Degeneration and Aberration
@@ -67,11 +67,10 @@ public class DisconcentrationEventHandler {
     private static final int FIRST_COMBO_STAGE = NEURO_ATTENTION_COMBO_STAGE;
     private static final int LAST_COMBO_STAGE = BLOOD_FLESH_COMBO_STAGE;
 
-    // ---- 深度排异 (半海嗣化, 1<=oceanization<3) 特有参数 ----
-    // 造血障碍放大器：基础 amp1(每40tick掉5%)，深度 amp2(每40tick掉7.5%)
+    // 造血障碍：基础 amp1(每40tick掉5%)，深度 amp2(每40tick掉7.5%)
     private static final int HAEMOPHILIA_AMPLIFIER = 1;
     private static final int DEEP_HAEMOPHILIA_AMPLIFIER = 2;
-    // 血肉畸变削弱修正（由 DisconcentrationEventHandler 动态施加）：基础各-25%、深度各-50%
+    // 血肉畸变：基础各-25%、深度各-50%
     private static final ResourceLocation FLESHDEFORMITY_ARMOR_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "deep_flesh_armor");
     private static final ResourceLocation FLESHDEFORMITY_MAX_HEALTH_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "deep_flesh_max_health");
     private static final ResourceLocation FLESHDEFORMITY_ATTACK_DAMAGE_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "deep_flesh_attack_damage");
@@ -105,9 +104,9 @@ public class DisconcentrationEventHandler {
         }
         double rejectionStage = getRejectionStage(player);
 
-        // 满海嗣化(>=3)免疫排异负面效果：保留排异状态供背景/记录展示，本 tick 置零以跳过全部效果施加
+        // 进化或拥纳免疫排异负面效果：保留排异状态供背景/记录展示，本 tick 置零以跳过全部效果施加（含造血障碍扣血与血肉畸变削弱）
         PlayerVariable playerVariables = getPlayerVariables(player);
-        if (playerVariables.player_oceanization >= 3) {
+        if (playerVariables.can_player_evo || playerVariables.permanent_evo || playerVariables.player_oceanization >= 3) {
             rejectionStage = NO_REJECTION_STAGE;
         }
 
@@ -250,9 +249,11 @@ public class DisconcentrationEventHandler {
         }
 
         double rejectionStage = getRejectionStage(player);
-        // 神经退行：单个(3)或含神经(5/6/7)时受击有几率冻结
-        if (rejectionStage != NEURODEGENERATION_REJECTION_STAGE && rejectionStage != NEURO_ATTENTION_COMBO_STAGE
-                && rejectionStage != NEURO_BLOOD_COMBO_STAGE && rejectionStage != NEURO_FLESH_COMBO_STAGE) {
+        PlayerVariable playerVariables = getPlayerVariables(player);
+        // 进化或拥纳时排异全面失效：受击不再触发神经退行冻结，仅保留单项/含神经排异的判定
+        if (playerVariables.can_player_evo || playerVariables.permanent_evo || playerVariables.player_oceanization >= 3
+                || (rejectionStage != NEURODEGENERATION_REJECTION_STAGE && rejectionStage != NEURO_ATTENTION_COMBO_STAGE
+                && rejectionStage != NEURO_BLOOD_COMBO_STAGE && rejectionStage != NEURO_FLESH_COMBO_STAGE)) {
             return;
         }
 
@@ -296,7 +297,8 @@ public class DisconcentrationEventHandler {
         }
 
         PlayerVariable playerVariables = getPlayerVariables(player);
-        if (playerVariables.player_oceanization > 2) {
+        // 进化或拥纳玩家不再获得新的排异反应
+        if (playerVariables.can_player_evo || playerVariables.permanent_evo || playerVariables.player_oceanization > 2) {
             return;
         }
 
@@ -414,7 +416,6 @@ public class DisconcentrationEventHandler {
         }
     }
 
-    /** 从给定的一组排异阶段中随机返回一个。 */
     private static int randomOf(int... stages) {
         return stages[Mth.nextInt(RandomSource.create(), 0, stages.length - 1)];
     }
@@ -442,7 +443,6 @@ public class DisconcentrationEventHandler {
         }
     }
 
-    /** 移除实体上指定 ID 的瞬态属性修正（若存在）。 */
     private static void removeModifier(Entity entity, Holder<Attribute> attribute, ResourceLocation id) {
         if (entity instanceof LivingEntity livingEntity) {
             AttributeInstance instance = livingEntity.getAttribute(attribute);

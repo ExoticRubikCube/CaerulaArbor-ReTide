@@ -47,7 +47,7 @@ public class EvolutionaryGeneItem extends Item {
 		if (!world.isClientSide()) {
 			entity.displayClientMessage(Component.translatable("item.caerula_arbor.evo_message_temporary"), false);
 		}
-		// 创造模式不消耗物品，仅普通模式扣除（原版判据：instabuild 许可）
+		
 		if (!entity.getAbilities().instabuild) {
 			entity.getItemInHand(hand).shrink(1);
 		}

@@ -63,7 +63,8 @@ public class TrailLeaveBlock extends LeavesBlock {
 		int growAge = blockstate.getValue(GROW_AGE);
 		int longevity = blockstate.getValue(LONGEVITY);
 		if (growAge < 64) {
-			world.setBlock(pos, blockstate.setValue(GROW_AGE, growAge + 1), 3);
+			// 仅自身数值变化，用 2 只同步客户端，跳过邻居/形状/光照更新
+			world.setBlock(pos, blockstate.setValue(GROW_AGE, growAge + 1), 2);
 		}
 		if (growAge > 16 && growAge < 62) {
 			if (longevity > 0) {

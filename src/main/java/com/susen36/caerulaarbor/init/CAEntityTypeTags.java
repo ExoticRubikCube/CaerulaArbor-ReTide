@@ -20,8 +20,10 @@ public interface CAEntityTypeTags {
 	TagKey<EntityType<?>> SEABORN_BOSS = create("seaborn_boss");
 	TagKey<EntityType<?>> SEABORN_MINION = create("seaborn_minion");
 	TagKey<EntityType<?>> SEABORN_PET = create("seaborn_pet");
+	TagKey<EntityType<?>> TINY_SEABORN = create("tiny_seaborn");
 	TagKey<EntityType<?>> SEA_FRIEND = create("sea_friend");
 	TagKey<EntityType<?>> ELITE = create("elite");
+	TagKey<EntityType<?>> OCEAN_ELITE = create("oceanelite");
 	TagKey<EntityType<?>> BOSSES = create("bosses");
 
 	private static TagKey<EntityType<?>> create(String name) {

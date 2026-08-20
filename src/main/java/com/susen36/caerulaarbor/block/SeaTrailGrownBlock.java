@@ -204,7 +204,8 @@ public class SeaTrailGrownBlock extends Block implements NetherseaBrandBlock, Si
 		}
 		int nextGrowAge = growAge + boostedExpand;
 		if (nextGrowAge <= 64) {
-			world.setBlock(pos, blockstate.setValue(GROW_AGE, nextGrowAge), 3);
+			// 仅自身数值变化，用 2 只同步客户端，跳过邻居/形状/光照更新
+			world.setBlock(pos, blockstate.setValue(GROW_AGE, nextGrowAge), 2);
 		}
 	} else {
 			BlockPos belowPos = pos.below();

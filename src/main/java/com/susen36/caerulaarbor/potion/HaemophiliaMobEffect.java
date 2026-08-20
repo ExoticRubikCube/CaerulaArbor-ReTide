@@ -36,7 +36,8 @@ public class HaemophiliaMobEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return (double) duration % (double) 40 == 0;
+        // 随机 tick 触发扣血，概率 0.025 保持约每 40 tick 一次的均值（与固定节拍强度相近）；是否扣取决于 applyEffectTick 里的非满血判断
+        return Math.random() < 0.025;
     }
 
 }
