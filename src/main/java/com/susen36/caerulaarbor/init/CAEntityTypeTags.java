@@ -22,6 +22,8 @@ public interface CAEntityTypeTags {
 	TagKey<EntityType<?>> SEABORN_PET = create("seaborn_pet");
 	TagKey<EntityType<?>> TINY_SEABORN = create("tiny_seaborn");
 	TagKey<EntityType<?>> SEA_FRIEND = create("sea_friend");
+	TagKey<EntityType<?>> MARINEMOBS = create("marinemobs");
+	TagKey<EntityType<?>> GOLEMS = create("golems");
 	TagKey<EntityType<?>> ELITE = create("elite");
 	TagKey<EntityType<?>> OCEAN_ELITE = create("oceanelite");
 	TagKey<EntityType<?>> BOSSES = create("bosses");

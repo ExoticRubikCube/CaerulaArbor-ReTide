@@ -117,8 +117,8 @@ public class DeepSeagrassBlock extends Block implements SimpleWaterloggedBlock {
 	private void updateSeagrassStyle(LevelAccessor world, BlockPos pos) {
 		int blockStateValue = world.getBlockState(pos.above()).getBlock() == CABlocks.DEEP_SEAGRASS.get() ? 1 : 0;
 		BlockState state = world.getBlockState(pos);
-		if (state.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProperty && integerProperty.getPossibleValues().contains(blockStateValue)) {
-			world.setBlock(pos, state.setValue(integerProperty, blockStateValue), 3);
+		if (BLOCKSTATE.getPossibleValues().contains(blockStateValue)) {
+			world.setBlock(pos, state.setValue(BLOCKSTATE, blockStateValue), 3);
 		}
 	}
 }

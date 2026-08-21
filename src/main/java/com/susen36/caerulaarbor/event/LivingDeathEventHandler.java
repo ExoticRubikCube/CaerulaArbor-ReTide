@@ -14,7 +14,6 @@ import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.susen36.caerulaarbor.capability.player.PlayerVariable;
-import com.susen36.caerulaarbor.entity.SkadiEntity;
 import com.susen36.caerulaarbor.init.*;
 import com.susen36.caerulaarbor.manager.spwan.SeabornTransformManager;
 import com.susen36.caerulaarbor.manager.upgrade.BreedUpgradeManager;
@@ -82,7 +81,6 @@ public class LivingDeathEventHandler {
     public static void onHealthConsumePost(HealthConsumeEvent.Post event) {
         LivingEntity livingEntity = event.getEntity();
         Level world = livingEntity.level();
-        DamageSource source = event.getSource();
         double x = livingEntity.getX();
         double y = livingEntity.getY();
         double z = livingEntity.getZ();
@@ -116,16 +114,8 @@ public class LivingDeathEventHandler {
                 if (!world.isClientSide())
                     livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 2));
                 livingEntity.setHealth(livingEntity.getMaxHealth() * 0.5f);
-                double lightCost;
-                if (source.is(CADamageTags.RARE)) {
-                    lightCost = 15;
-                } else if (source.is(CADamageTags.HORROR)) {
-                    lightCost = 10;
-                } else {
-                    lightCost = 5;
-                }
                 PlayerVariable capability = ModCapabilities.getPlayerVariables(livingEntity);
-                capability.player_light = Math.max(0, capability.player_light - lightCost);
+                capability.player_light = Math.max(0, capability.player_light - 5);
                 capability.syncPlayerVariables(livingEntity);
             }
         } else {
@@ -143,7 +133,7 @@ public class LivingDeathEventHandler {
         handleGeneSampleDrop(event);
         handleKillFunc(event);
         handleMobDiedOnTrail(event);
-        handlePlayerDiedFunc(event);
+        handleLivingDied(event);
         handlePlayerDiedInOceanization(event);
         handleSeabornTransform(event);
         handleTrailriteArmorSelfMend(event);
@@ -195,20 +185,20 @@ public class LivingDeathEventHandler {
         if (!world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) return;
 
         if (sourceentity instanceof Player) {
-            boolean result = false;
+            boolean result;
             result = (ModCapabilities.getPlayerVariables(sourceentity)).can_player_evo
                     && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization >= 3);
             if (result) {
                 double r0 = 0, r1 = 0, r2 = 0;
-                if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_boss")))) {
+                if (entity.getType().is(CAEntityTypeTags.SEABORN_BOSS)) {
                     r0 = 0.5;
                     r1 = 0.25;
                     r2 = 0.125;
-                } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite")))) {
+                } else if (entity.getType().is(CAEntityTypeTags.OCEAN_ELITE)) {
                     r0 = 0.3;
                     r1 = 0.075;
                     r2 = 0.0075;
-                } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
+                } else if (entity.getType().is(CAEntityTypeTags.SEABORN)) {
                     r0 = 0.15;
                 }
                 if (Math.random() < r0) {
@@ -244,7 +234,6 @@ public class LivingDeathEventHandler {
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
-        DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
 
@@ -254,7 +243,7 @@ public class LivingDeathEventHandler {
             handlePlayerKillRelics(event, world, x, y, z, entity, sourceentity);
         }
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
+        if (entity.getType().is(CAEntityTypeTags.SEABORN)) {
             if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
                 if (!world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).isEmpty()) {
                     MapVariablesHandler.addEvoPoint(world, StrategyType.BREED, (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.1);
@@ -264,7 +253,7 @@ public class LivingDeathEventHandler {
             }
         }
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanelite")))) {
+        if (entity.getType().is(CAEntityTypeTags.OCEAN_ELITE)) {
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (Math.random() < 0.1) {
                     if (world instanceof Level level) {
@@ -285,7 +274,7 @@ public class LivingDeathEventHandler {
             int unbreakingLevel = 0;
             if (entity.level() instanceof ServerLevel serverLevel) {
                 unbreakingLevel = serverLevel.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.UNBREAKING)
-                        .map(h -> weapon.getEnchantmentLevel(h)).orElse(0);
+                        .map(weapon::getEnchantmentLevel).orElse(0);
             }
             double dama = weapon.getDamageValue() - Mth.nextInt(RandomSource.create(), 1, 5 + unbreakingLevel);
             if (dama <= 0) {
@@ -385,8 +374,6 @@ public class LivingDeathEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
 
-        if (entity instanceof SkadiEntity) return;
-
         if (damagesource.is(CADamageTags.CAN_TRIGGER_OCEANIZATION)) {
             if (SeabornTransformManager.transformToSeaborn(world, x, y, z, entity)) {
                 if (!entity.level().isClientSide())
@@ -395,8 +382,8 @@ public class LivingDeathEventHandler {
         }
     }
 
-    private static void handlePlayerDiedFunc(LivingDeathEvent event) {
-        LevelAccessor world = event.getEntity().level();
+    private static void handleLivingDied(LivingDeathEvent event) {
+        Level world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
@@ -407,79 +394,75 @@ public class LivingDeathEventHandler {
 
         if (MapVariables.get(world).strategy_breed >= 3) {
             if (!damagesource.is(DamageTypes.GENERIC_KILL)) {
-                handleTrailGrowth(world, x, y, z, entity);
-            }
-        }
-    }
-
-    private static void handleTrailGrowth(LevelAccessor world, double x, double y, double z, Entity entity) {
-        double dx, dy, dz, num, light_cost;
-        dx = -1;
-        for (int index0 = 0; index0 < 3; index0++) {
-            dz = -1;
-            for (int index1 = 0; index1 < 3; index1++) {
-                dy = -1;
-                for (int index2 = 0; index2 < 3; index2++) {
-                    if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.SEA_TRAIL_INIT.get()
-                            || (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.SEA_TRAIL_GROWING.get()) {
-                        int value = ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty getip6
-                                ? (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getValue(getip6)
-                                : -1) + 4;
-                        BlockPos pos = BlockPos.containing(x + dx, y + dy, z + dz);
-                        BlockState bs = world.getBlockState(pos);
-                        if (bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
-                    }
-                    dy = dy + 1;
-                }
-                dz = dz + 1;
-            }
-            dx = dx + 1;
-        }
-        num = Math.round(Math.sqrt(entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1));
-        light_cost = 1;
-        if (num > 8) {
-            light_cost = 2;
-        }
-        if (num > 24) {
-            num = 24;
-            light_cost = 4;
-        }
-        if (num > 0) {
-            dx = (-1) * num;
-            for (int index3 = 0; index3 < (int) (2 * num); index3++) {
-                dz = (-1) * num;
-                for (int index4 = 0; index4 < (int) (2 * num); index4++) {
-                    dy = (-1) * num;
-                    for (int index5 = 0; index5 < (int) (2 * num); index5++) {
-                        if (light_cost <= 0) {
-                            return;
-                        }
-                        if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.OCEAN_OVARY.get()) {
-                            if (1 == ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip12
-                                    ? (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getValue(getip12)
-                                    : -1)) {
+                double dx, dy, dz, num, light_cost;
+                dx = -1;
+                for (int index0 = 0; index0 < 3; index0++) {
+                    dz = -1;
+                    for (int index1 = 0; index1 < 3; index1++) {
+                        dy = -1;
+                        for (int index2 = 0; index2 < 3; index2++) {
+                            if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.SEA_TRAIL_INIT.get()
+                                    || (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.SEA_TRAIL_GROWING.get()) {
+                                int value = ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty getip6
+                                        ? (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getValue(getip6)
+                                        : -1) + 4;
                                 BlockPos pos = BlockPos.containing(x + dx, y + dy, z + dz);
                                 BlockState bs = world.getBlockState(pos);
-                                if (bs.getBlock().getStateDefinition().getProperty("output") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(0))
-                                    world.setBlock(pos, bs.setValue(integerProp, 0), 3);
-                                bs = world.getBlockState(pos);
-                                if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(0))
-                                    world.setBlock(pos, bs.setValue(integerProp, 0), 3);
-                                light_cost = light_cost - 1;
+                                if (bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                                    world.setBlock(pos, bs.setValue(integerProp, value), 3);
                             }
+                            dy = dy + 1;
                         }
-                        dy = dy + 1;
+                        dz = dz + 1;
                     }
-                    dz = dz + 1;
+                    dx = dx + 1;
                 }
-                dx = dx + 1;
+                num = Math.round(Math.sqrt(entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1));
+                light_cost = 1;
+                if (num > 8) {
+                    light_cost = 2;
+                }
+                if (num > 24) {
+                    num = 24;
+                    light_cost = 4;
+                }
+                if (num > 0) {
+                    dx = (-1) * num;
+                    for (int index3 = 0; index3 < (int) (2 * num); index3++) {
+                        dz = (-1) * num;
+                        for (int index4 = 0; index4 < (int) (2 * num); index4++) {
+                            dy = (-1) * num;
+                            for (int index5 = 0; index5 < (int) (2 * num); index5++) {
+                                if (light_cost <= 0) {
+                                    return;
+                                }
+                                if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.OCEAN_OVARY.get()) {
+                                    if (1 == ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip12
+                                            ? (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getValue(getip12)
+                                            : -1)) {
+                                        BlockPos pos = BlockPos.containing(x + dx, y + dy, z + dz);
+                                        BlockState bs = world.getBlockState(pos);
+                                        if (bs.getBlock().getStateDefinition().getProperty("output") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(0))
+                                            world.setBlock(pos, bs.setValue(integerProp, 0), 3);
+                                        bs = world.getBlockState(pos);
+                                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(0))
+                                            world.setBlock(pos, bs.setValue(integerProp, 0), 3);
+                                        light_cost = light_cost - 1;
+                                    }
+                                }
+                                dy = dy + 1;
+                            }
+                            dz = dz + 1;
+                        }
+                        dx = dx + 1;
+                    }
+                }
             }
         }
     }
 
     private static void handlePlayerDiedInOceanization(LivingDeathEvent event) {
-        LevelAccessor world = event.getEntity().level();
+        Level world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();

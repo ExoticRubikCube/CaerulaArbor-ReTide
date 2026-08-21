@@ -25,10 +25,6 @@ public class OceanizeRabbitModel extends GeoModel<OceanizeRabbitEntity> {
 	@Override
 	public ResourceLocation getTextureResource(OceanizeRabbitEntity entity) {
 		int variant = entity.getEntityData().get(OceanizeRabbitEntity.DATA_VARIANT);
-		if (variant == 5) {
-			//TODO 需要移除雪狼变种
-			//return BLOODY_TEXTURE;
-		}
 		return ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_rabbit_" + variant + ".png");
 	}
 

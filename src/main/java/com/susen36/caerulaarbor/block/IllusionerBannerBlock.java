@@ -147,7 +147,7 @@ public class IllusionerBannerBlock extends BaseEntityBlock implements SimpleWate
 		int z = pos.getZ();
         ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         double state;
-        state = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1;
+        state = blockstate.getValue(BLOCKSTATE);
         if (state == 0) {
             if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
                 if (world instanceof ServerLevel level) {
@@ -161,15 +161,15 @@ public class IllusionerBannerBlock extends BaseEntityBlock implements SimpleWate
                     int value = 1;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                    if (BLOCKSTATE.getPossibleValues().contains(value))
+                        world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                 }
                 {
                     int value = 1;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                    if (DATA_ANIMATION.getPossibleValues().contains(value))
+                        world.setBlock(pos, bs.setValue(DATA_ANIMATION, value), 3);
                 }
                 result = ItemInteractionResult.SUCCESS;
             } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()

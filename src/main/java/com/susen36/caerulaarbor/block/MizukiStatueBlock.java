@@ -142,7 +142,7 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
         if (entity == null)
             return;
         if ((entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.MIZUKI_DETERMINATION.get()
-                && (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1) == 1) {
+                && blockstate.getValue(BLOCKSTATE) == 1) {
             (entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
             if (world instanceof ServerLevel level)
                 level.sendParticles(ParticleTypes.END_ROD, (x + 0.5), (y + 2), (z + 0.5), 48, 2, 2, 2, 0.15);
@@ -153,8 +153,8 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
                 int value = 0;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
                 BlockState bs = world.getBlockState(pos);
-                if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                if (BLOCKSTATE.getPossibleValues().contains(value))
+                    world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
             }
         }
     }

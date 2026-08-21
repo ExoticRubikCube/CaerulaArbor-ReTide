@@ -19,6 +19,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -228,19 +229,29 @@ public class SilenceUpgradeManager {
 	}
 
 	private static double countNearbySeaMonster(Player player, double silenceLevel) {
-		// 先按基础范围获得海嗣数，再据此扩大动态范围；最终衰减以扩大后的范围内海嗣数为准
+		// 单次以最大动态范围扫描，同时完成基数统计与距离权重，避免两次 getEntitiesOfClass
 		double baseRange = baseRange(silenceLevel);
-		double baseCount = player.level().getEntitiesOfClass(SeaMonster.class, player.getBoundingBox().inflate(baseRange)).size();
-		double finalRange = Math.min(baseRange + baseCount * RANGE_GROWTH_PER_SEABORN, baseRange + MAX_RANGE_GROWTH);
-		// 距离衰减：海嗣距玩家越远权重越低(按基础范围平方递减)，基础范围内满权重、远处趋零
-		List<SeaMonster> seamonsters = player.level().getEntitiesOfClass(SeaMonster.class, player.getBoundingBox().inflate(finalRange));
+		double maxRange = baseRange + MAX_RANGE_GROWTH;
+		List<SeaMonster> seamonsters = player.level().getEntitiesOfClass(SeaMonster.class, player.getBoundingBox().inflate(maxRange));
+		// baseCount：与基础范围包围盒相交的海嗣数，用于决定动态半径(与 baseRange 内 getEntitiesOfClass 等价，因 maxRange 覆盖 baseRange)
+		AABB baseAab = player.getBoundingBox().inflate(baseRange);
+		double baseCount = 0;
+		for (SeaMonster seamonster : seamonsters) {
+			if (seamonster.getBoundingBox().intersects(baseAab)) {
+				baseCount++;
+			}
+		}
+		double finalRange = Math.min(baseRange + baseCount * RANGE_GROWTH_PER_SEABORN, maxRange);
+		// 距离衰减：海嗣距玩家越远权重越低(按基础范围平方递减)，基础范围内满权重、远处趋零；全程用平方距离避免开方
+		double finalRangeSqr = finalRange * finalRange;
+		double baseRangeSqr = baseRange * baseRange;
 		double totalWeight = 0.0;
 		for (SeaMonster seamonster : seamonsters) {
-			double distance = player.distanceTo(seamonster);
-			if (distance > finalRange) {
+			double distanceSqr = player.distanceToSqr(seamonster);
+			if (distanceSqr > finalRangeSqr) {
 				continue;
 			}
-			double weight = 1.0 - (distance * distance) / (baseRange * baseRange);
+			double weight = 1.0 - distanceSqr / baseRangeSqr;
 			totalWeight += Math.max(weight, 0.0);
 		}
 		return totalWeight;

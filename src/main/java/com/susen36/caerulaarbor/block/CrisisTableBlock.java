@@ -19,9 +19,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
@@ -57,6 +57,8 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
 	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 4);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+	private static final TagKey<EntityType<?>> SEABORN = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"));
+	private static final TagKey<EntityType<?>> SEABORN_PET = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_pet"));
 
 	public CrisisTableBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(256f, 32f).lightLevel(s -> (new Object() {
@@ -148,7 +150,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
             double x = pos.getX();
             double y = pos.getY();
             double z = pos.getZ();
-            if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 1) {
+            if (blockstate.getValue(BLOCKSTATE) == 1) {
                 if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.START.get(), SoundSource.BLOCKS, 1, 1);
                 }
@@ -156,15 +158,15 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                     int value = 2;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                    if (DATA_ANIMATION.getPossibleValues().contains(value))
+                        world.setBlock(pos, bs.setValue(DATA_ANIMATION, value), 3);
                 }
             }
         } else {
             double x = pos.getX();
             double y = pos.getY();
             double z = pos.getZ();
-            if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 1) {
+            if (blockstate.getValue(BLOCKSTATE) == 1) {
                 if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.QUIT.get(), SoundSource.BLOCKS, 1, 1);
                 }
@@ -172,8 +174,8 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                     int value = 3;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                    if (DATA_ANIMATION.getPossibleValues().contains(value))
+                        world.setBlock(pos, bs.setValue(DATA_ANIMATION, value), 3);
                 }
             }
         }
@@ -191,29 +193,27 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 0) {
+            if (blockstate.getValue(BLOCKSTATE) == 0) {
                 {
                     int value = 1;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                    if (BLOCKSTATE.getPossibleValues().contains(value))
+                        world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                 }
                 {
                     int value = 1;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                    if (DATA_ANIMATION.getPossibleValues().contains(value))
+                        world.setBlock(pos, bs.setValue(DATA_ANIMATION, value), 3);
                 }
                 if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.START.get(), SoundSource.BLOCKS, 1, 1);
                 }
                 CaerulaArbor.queueServerWork(25, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
-                            && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip8
-                            ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip8)
-                            : -1) == 1) {
+                            && (world.getBlockState(BlockPos.containing(x, y, z))).getValue(BLOCKSTATE) == 1) {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_0").getString())), false);
                         if (world instanceof Level level) {
@@ -223,9 +223,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                 });
                 CaerulaArbor.queueServerWork(45, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
-                            && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip16
-                            ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip16)
-                            : -1) == 1) {
+                            && (world.getBlockState(BlockPos.containing(x, y, z))).getValue(BLOCKSTATE) == 1) {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_1").getString())), false);
                         if (world instanceof Level level) {
@@ -235,9 +233,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                 });
                 CaerulaArbor.queueServerWork(55, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
-                            && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip24
-                            ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip24)
-                            : -1) == 1) {
+                            && (world.getBlockState(BlockPos.containing(x, y, z))).getValue(BLOCKSTATE) == 1) {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_2").getString())), false);
                         if (world instanceof Level level) {
@@ -247,9 +243,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                 });
                 CaerulaArbor.queueServerWork(65, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
-                            && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip32
-                            ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip32)
-                            : -1) == 1) {
+                            && (world.getBlockState(BlockPos.containing(x, y, z))).getValue(BLOCKSTATE) == 1) {
                         double creeper;
                         double gap;
                         new Object() {
@@ -296,7 +290,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                                 });
                             }
                         }.timedLoop(0, 2, 15);
-                        creeper = Mth.nextInt(RandomSource.create(), 2, 6);
+                        creeper = Mth.nextInt(world.getRandom(), 2, 6);
                         gap = Math.round(30 / creeper);
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -318,9 +312,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                 });
                 CaerulaArbor.queueServerWork(95, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
-                            && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip40
-                            ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip40)
-                            : -1) == 1) {
+                            && (world.getBlockState(BlockPos.containing(x, y, z))).getValue(BLOCKSTATE) == 1) {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_4").getString())), false);
                         if ((Entity) entity instanceof ServerPlayer player) {
@@ -336,8 +328,8 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         final Vec3 center = new Vec3(x, y, z);
                         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                         for (Entity entityiterator : entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))
-                                    && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_pet")))) {
+                            if (entityiterator.getType().is(SEABORN)
+                                    && !entityiterator.getType().is(SEABORN_PET)) {
                                 if (entityiterator instanceof Mob mob)
                                     // 原版意图：海嗣仇恨锁定开启演算台的玩家，而非目标设为自己（否则海嗣会互相攻击）
                                     mob.setTarget(entity);
@@ -347,9 +339,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                 });
                 CaerulaArbor.queueServerWork(105, () -> {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
-                            && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip52
-                            ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip52)
-                            : -1) == 1) {
+                            && (world.getBlockState(BlockPos.containing(x, y, z))).getValue(BLOCKSTATE) == 1) {
                         if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.QUIT.get(), SoundSource.BLOCKS, 1, 1);
                         }
@@ -376,8 +366,8 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 			}
 		}.getDirection(blockstate);
 		dire1 = dire.getCounterClockWise(Direction.Axis.Y);
-		offset0 = Mth.nextDouble(RandomSource.create(), -3, 4);
-		offset1 = Mth.nextDouble(RandomSource.create(), -5, 6);
+		offset0 = Mth.nextDouble(world.getRandom(), -3, 4);
+		offset1 = Mth.nextDouble(world.getRandom(), -5, 6);
 		if (world instanceof ServerLevel level) {
 			Entity entityToSpawn = CAEntities.POCKET_SEA_CREEPER.get().spawn(level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
 					MobSpawnType.MOB_SUMMONED);
@@ -402,8 +392,8 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 			}
 		}.getDirection(blockstate);
 		dire1 = dire.getCounterClockWise(Direction.Axis.Y);
-		offset0 = Mth.nextDouble(RandomSource.create(), -3, 4);
-		offset1 = Mth.nextDouble(RandomSource.create(), -5, 6);
+		offset0 = Mth.nextDouble(world.getRandom(), -3, 4);
+		offset1 = Mth.nextDouble(world.getRandom(), -5, 6);
 		if (world instanceof ServerLevel level) {
 			Entity entityToSpawn = CAEntities.REAPER_FISH.get().spawn(level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
 					MobSpawnType.MOB_SUMMONED);
@@ -428,8 +418,8 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 			}
 		}.getDirection(blockstate);
 		dire1 = dire.getCounterClockWise(Direction.Axis.Y);
-		offset0 = Mth.nextDouble(RandomSource.create(), -3, 4);
-		offset1 = Mth.nextDouble(RandomSource.create(), -5, 6);
+		offset0 = Mth.nextDouble(world.getRandom(), -3, 4);
+		offset1 = Mth.nextDouble(world.getRandom(), -5, 6);
 		if (world instanceof ServerLevel level) {
 			Entity entityToSpawn = CAEntities.SHOOTER_FISH.get().spawn(level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
 					MobSpawnType.MOB_SUMMONED);
@@ -454,8 +444,8 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 			}
 		}.getDirection(blockstate);
 		dire1 = dire.getCounterClockWise(Direction.Axis.Y);
-		offset0 = Mth.nextDouble(RandomSource.create(), -3, 4);
-		offset1 = Mth.nextDouble(RandomSource.create(), -5, 6);
+		offset0 = Mth.nextDouble(world.getRandom(), -3, 4);
+		offset1 = Mth.nextDouble(world.getRandom(), -5, 6);
 		if (world instanceof ServerLevel level) {
 			Entity entityToSpawn = CAEntities.FIRST_TO_TALK.get().spawn(level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
 					MobSpawnType.MOB_SUMMONED);

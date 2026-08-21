@@ -32,6 +32,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -46,7 +47,6 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
@@ -61,6 +61,9 @@ public class OceanizedShulkerEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_WALKING = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> DATA_PEEK_TIME = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
+    private static final ResourceLocation SHULKER_BUFF_ARMOR_ID = ResourceLocation.fromNamespaceAndPath("caerulaarbor", "shulker_buff_armor");
+    private static final ResourceLocation SHULKER_BUFF_ARMOR_TOUGHNESS_ID = ResourceLocation.fromNamespaceAndPath("caerulaarbor", "shulker_buff_armor_toughness");
+    private static final ResourceLocation SHULKER_BUFF_GENERAL_DEFENSE_ID = ResourceLocation.fromNamespaceAndPath("caerulaarbor", "shulker_buff_general_defense");
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -173,7 +176,6 @@ public class OceanizedShulkerEntity extends SeaMonster {
     @Override
     public void setHealth(float pHealth) {
         if (pHealth <= 0 && startWalking()) return;
-        if (isBedrock() && peekTime() <= 0) return;
         super.setHealth(pHealth);
     }
 
@@ -239,40 +241,6 @@ public class OceanizedShulkerEntity extends SeaMonster {
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
                             serverPlayer.getAdvancements().award(adv, criteria);
-                    }
-                }
-                ths = InteractionResult.SUCCESS;
-            } else if (player.getMainHandItem().getItem() == Blocks.BEDROCK.asItem()) {
-                if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
-                    datEntSetI.getEntityData().set(DATA_VARIANT, 3);
-                if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                    this.getAttribute(Attributes.MAX_HEALTH)
-                            .setBaseValue(((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 18));
-                if (this.getAttributes().hasAttribute(Attributes.ARMOR))
-                    this.getAttribute(Attributes.ARMOR)
-                            .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 10));
-                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE))
-                    this.getAttribute(CAAttributes.GENERAL_DEFENSE)
-                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE)
-                                    ? this.getAttribute(CAAttributes.GENERAL_DEFENSE).getBaseValue()
-                                    : 0) + 32767));
-                if (this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE))
-                    this.getAttribute(BabelAttributes.MAGIC_RESISTANCE)
-                            .setBaseValue(((this.getAttributes().hasAttribute(BabelAttributes.MAGIC_RESISTANCE)
-                                    ? this.getAttribute(BabelAttributes.MAGIC_RESISTANCE).getBaseValue()
-                                    : 0) + 100));
-                if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE))
-                    this.getAttribute(CAAttributes.SANITY_RESISTANCE)
-                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE)
-                                    ? this.getAttribute(CAAttributes.SANITY_RESISTANCE).getBaseValue()
-                                    : 0) + 100));
-                player.getMainHandItem().shrink(1);
-                this.setHealth(this.getMaxHealth());
-                if (world instanceof Level level) {
-                    if (!level.isClientSide()) {
-                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1);
-                    } else {
-                        level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1, false);
                     }
                 }
                 ths = InteractionResult.SUCCESS;
@@ -419,20 +387,23 @@ public class OceanizedShulkerEntity extends SeaMonster {
                     datEntSetS.getEntityData().set(DATA_DIRECTION, "up");
             }
             if (peekTime <= 0) {
-                if (variant == 2) {
-                    if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF, 5, 2, false, false));
-                } else if (variant == 3) {
-                    if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF, 5, 9, false, false));
-                } else {
-                    if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF, 5, 0, false, false));
+                if (!this.level().isClientSide()) {
+                    this.getAttribute(Attributes.ARMOR).removeModifier(SHULKER_BUFF_ARMOR_ID);
+                    this.getAttribute(Attributes.ARMOR_TOUGHNESS).removeModifier(SHULKER_BUFF_ARMOR_TOUGHNESS_ID);
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE).removeModifier(SHULKER_BUFF_GENERAL_DEFENSE_ID);
+                    double shulkerAmp = (variant == 2 ? 2 : 0) + 1;
+                    this.getAttribute(Attributes.ARMOR).addPermanentModifier(new AttributeModifier(SHULKER_BUFF_ARMOR_ID, 2.0 * shulkerAmp, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+                    this.getAttribute(Attributes.ARMOR_TOUGHNESS).addPermanentModifier(new AttributeModifier(SHULKER_BUFF_ARMOR_TOUGHNESS_ID, 5.0 * shulkerAmp, AttributeModifier.Operation.ADD_VALUE));
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE).addPermanentModifier(new AttributeModifier(SHULKER_BUFF_GENERAL_DEFENSE_ID, 5.0 * shulkerAmp, AttributeModifier.Operation.ADD_VALUE));
                 }
             } else {
                 if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_PEEK_TIME, (int) (peekTime - 1));
-                this.removeEffect(CAMobEffects.SHULKER_BUFF);
+                if (!this.level().isClientSide()) {
+                    this.getAttribute(Attributes.ARMOR).removeModifier(SHULKER_BUFF_ARMOR_ID);
+                    this.getAttribute(Attributes.ARMOR_TOUGHNESS).removeModifier(SHULKER_BUFF_ARMOR_TOUGHNESS_ID);
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE).removeModifier(SHULKER_BUFF_GENERAL_DEFENSE_ID);
+                }
             }
             target = this.getTarget();
             if (shootDelay <= 0) {
@@ -580,13 +551,6 @@ public class OceanizedShulkerEntity extends SeaMonster {
                         entityToSpawn.setUnlimitedLifetime();
                         level.addFreshEntity(entityToSpawn);
                     }
-                } else if (v == 3) {
-                    if (world instanceof ServerLevel level) {
-                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(Blocks.BEDROCK));
-                        entityToSpawn.setPickUpDelay(5);
-                        entityToSpawn.setUnlimitedLifetime();
-                        level.addFreshEntity(entityToSpawn);
-                    }
                 }
             }
             this.dropExperience(this.getKillCredit());
@@ -625,10 +589,6 @@ public class OceanizedShulkerEntity extends SeaMonster {
 
     public Direction getAttachDirection() {
         return Direction.byName(this.entityData.get(DATA_DIRECTION));
-    }
-
-    private boolean isBedrock() {
-        return this.entityData.get(DATA_VARIANT) == 3;
     }
 
     public boolean canStay(LevelAccessor world, Direction dire) {

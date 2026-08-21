@@ -25,7 +25,6 @@ public class CACollectible {
     public static Holder<Item> HANSHAND_SPIKE;
     public static Holder<Item> SARKAZ_KING_RYLFATE;
     public static Holder<Item> VAMPIRES_BED;
-    public static Holder<Item> UTIL_SCORE;
     public static Holder<Item> UTIL_RESCISSION;
     public static Holder<Item> UTIL_STARE;
     public static Holder<Item> DURIN_OVERGROUND_ODYSSEY;
@@ -86,7 +85,6 @@ public class CACollectible {
         HANSHAND_SPIKE = REGISTRY.registerCollectible("hanshand_spike", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
         SARKAZ_KING_RYLFATE = REGISTRY.registerCollectible("sarkaz_king_rylfate", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));
         VAMPIRES_BED = REGISTRY.registerCollectible("vampires_bed", ArchfiendsBedItem::new);
-        UTIL_SCORE = REGISTRY.registerCollectible("util_score", ScoreItem::new);
         UTIL_RESCISSION = REGISTRY.registerCollectible("util_rescission", RescissionItem::new);
         UTIL_STARE = REGISTRY.registerCollectible("util_stare", GuardianStareItem::new);
         DURIN_OVERGROUND_ODYSSEY = REGISTRY.registerCollectible("durin_overground_odyssey", () -> new BooleanCollectibleItem(Rarity.UNCOMMON, BooleanCollectibleItem.standardActivation()));

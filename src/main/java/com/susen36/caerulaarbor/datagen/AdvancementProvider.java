@@ -546,13 +546,6 @@ public class AdvancementProvider implements AdvancementSubProvider {
                 .save(saver, modLoc("aurgelmir"));
         advancements.add(aurgelmir);
 
-        /* ban_relic_notice (caerula_arbor:encounter_from_the_ocean) */
-        var banRelicNotice = Advancement.Builder.advancement()
-                .parent(encounterFromTheOcean)
-                .addCriterion("ban_relic_notice_0", impossible())
-                .save(saver, modLoc("ban_relic_notice"));
-        advancements.add(banRelicNotice);
-
         /* extension_of_calamity (caerula_arbor:start_of_calamity) */
         var extensionOfCalamity = Advancement.Builder.advancement()
                 .parent(startOfCalamity)

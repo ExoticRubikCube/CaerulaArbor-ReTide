@@ -1,8 +1,0 @@
-{
-  "sound_event": "caerula_arbor:bloodywolf_openmouth",
-  "description": {
-    "translate": "item.caerula_arbor.score.desc"
-  },
-  "length_in_seconds": 59.0,
-  "comparator_output": 8
-}

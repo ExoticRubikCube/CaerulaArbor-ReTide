@@ -29,12 +29,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -274,7 +272,8 @@ public class LivingTickEventHandler {
         if (entity.tickCount % 10 != 0) return;
         if (entity.getType().is(SEABORN_PET)) return;
 
-        if (Math.random() < 0.16 && !world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).isEmpty()) {
+        // 用廉价的半径判定替代96格方体全量实体扫描，避免每次分配Vec3与AABB并扫描加载实体
+        if (Math.random() < 0.16 && world.hasNearbyAlivePlayer(x, y, z, 83.0)) {
             double pnt = Mth.nextDouble(RandomSource.create(), 0, 0.005);
             MapVariablesHandler.addEvoPoint(world, StrategyType.MIGRATION,
                     pnt * Math.max(MapVariables.get(world).strategy_subsisting + MapVariables.get(world).strategy_grow + MapVariables.get(world).strategy_breed, 1));
@@ -291,42 +290,45 @@ public class LivingTickEventHandler {
             ItemStack chest = living.getItemBySlot(EquipmentSlot.CHEST);
             ItemStack legg = living.getItemBySlot(EquipmentSlot.LEGS);
             ItemStack boot = living.getItemBySlot(EquipmentSlot.FEET);
-            if (living.tickCount % 5 == 0) {
-                Holder<Enchantment> flexibility = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.FLEXIBILITY);
-                Holder<Enchantment> magicTolerance = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE);
-                Holder<Enchantment> sanityInjury = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE);
-                double lvl = EnchantmentHelper.getItemEnchantmentLevel(flexibility, helm) + EnchantmentHelper.getItemEnchantmentLevel(flexibility, chest)
-                        + EnchantmentHelper.getItemEnchantmentLevel(flexibility, legg) + EnchantmentHelper.getItemEnchantmentLevel(flexibility, boot);
-                if (lvl > 0) {
-                    if (!living.level().isClientSide()) {
-                        living.addEffect(new MobEffectInstance(CAMobEffects.FLEXIBILITY_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
+            // 四格全空则不可能携带本类附魔，跳过每 tick 的附魔查询以省开销
+            if (!helm.isEmpty() || !chest.isEmpty() || !legg.isEmpty() || !boot.isEmpty()) {
+                if (living.tickCount % 5 == 0) {
+                    Holder<Enchantment> flexibility = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.FLEXIBILITY);
+                    Holder<Enchantment> magicTolerance = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE);
+                    Holder<Enchantment> sanityInjury = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE);
+                    double lvl = EnchantmentHelper.getItemEnchantmentLevel(flexibility, helm) + EnchantmentHelper.getItemEnchantmentLevel(flexibility, chest)
+                            + EnchantmentHelper.getItemEnchantmentLevel(flexibility, legg) + EnchantmentHelper.getItemEnchantmentLevel(flexibility, boot);
+                    if (lvl > 0) {
+                        if (!living.level().isClientSide()) {
+                            living.addEffect(new MobEffectInstance(CAMobEffects.FLEXIBILITY_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
+                        }
+                    }
+                    lvl = EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, helm) + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, chest)
+                            + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, legg) + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, boot);
+                    if (lvl > 0) {
+                        if (!living.level().isClientSide()) {
+                            living.addEffect(new MobEffectInstance(CAMobEffects.MAGIC_RESIS_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
+                        }
+                    }
+                    lvl = EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, helm) + EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, chest)
+                            + EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, legg) + EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, boot);
+                    if (lvl > 0) {
+                        EPUtils.causeSanityInjury(living, lvl / 20.0);
                     }
                 }
-                lvl = EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, helm) + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, chest)
-                        + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, legg) + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, boot);
+                Holder<Enchantment> hazardProtection = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION);
+                double lvl0 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, helm);
+                double lvl1 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, chest);
+                double lvl2 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, legg);
+                double lvl3 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, boot);
+                double lvl = lvl0 + lvl1 + lvl2 + lvl3;
                 if (lvl > 0) {
-                    if (!living.level().isClientSide()) {
-                        living.addEffect(new MobEffectInstance(CAMobEffects.MAGIC_RESIS_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
-                    }
-                }
-                lvl = EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, helm) + EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, chest)
-                        + EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, legg) + EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, boot);
-                if (lvl > 0) {
-                    EPUtils.causeSanityInjury(living, lvl / 20.0);
-                }
-            }
-            Holder<Enchantment> hazardProtection = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.HAZARD_PROTECTION);
-            double lvl0 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, helm);
-            double lvl1 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, chest);
-            double lvl2 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, legg);
-            double lvl3 = EnchantmentHelper.getItemEnchantmentLevel(hazardProtection, boot);
-            double lvl = lvl0 + lvl1 + lvl2 + lvl3;
-            if (lvl > 0) {
-                double gap = Math.max(600 - 25 * lvl, 300);
-                double maxAmplif = Math.min(Math.max(Math.max(lvl0, lvl1), Math.max(lvl2, lvl3)), 2);
-                if (living.tickCount % (int) gap == 64) {
-                    if (!living.level().isClientSide()) {
-                        living.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 260, (int) (maxAmplif - 1), false, false));
+                    double gap = Math.max(600 - 25 * lvl, 300);
+                    double maxAmplif = Math.min(Math.max(Math.max(lvl0, lvl1), Math.max(lvl2, lvl3)), 2);
+                    if (living.tickCount % (int) gap == 64) {
+                        if (!living.level().isClientSide()) {
+                            living.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 260, (int) (maxAmplif - 1), false, false));
+                        }
                     }
                 }
             }

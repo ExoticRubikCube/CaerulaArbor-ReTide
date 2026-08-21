@@ -166,7 +166,7 @@ public class IsharmlaRemainBlock extends Block {
         double stat;
         Entity skadi;
         if (world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
-            stat = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1;
+            stat = blockstate.getValue(BLOCKSTATE);
             if (stat == 0) {
                 if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()
                         && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CACollectible.CAERULA_HEART) {
@@ -203,8 +203,8 @@ public class IsharmlaRemainBlock extends Block {
                                         int value = 1;
                                         BlockPos blockPos = BlockPos.containing((double) x + index0 - 1, (double) y + index1 - 1, (double) z + index2 - 1);
                                         BlockState bs = world.getBlockState(pos);
-                                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                                        if (BLOCKSTATE.getPossibleValues().contains(value))
+                                            world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                                     }
                                 }
                             }
@@ -230,8 +230,8 @@ public class IsharmlaRemainBlock extends Block {
                                 int value = 0;
                                 BlockPos blockPos = BlockPos.containing((double) x + index3 - 1, (double) y + index4 - 1, (double) z + index5 - 1);
                                 BlockState bs = world.getBlockState(pos);
-                                if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                                    world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                                if (BLOCKSTATE.getPossibleValues().contains(value))
+                                    world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                             }
                         }
                     }

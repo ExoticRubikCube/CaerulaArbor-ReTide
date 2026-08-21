@@ -25,14 +25,6 @@
       }
     ]
   },
-  "bloodywolf_openmouth": {
-    "sounds": [
-      {
-        "name": "caerula_arbor:mouthopen",
-        "stream": true
-      }
-    ]
-  },
   "grow1": {
     "subtitle": "subtitles.grow1",
     "sounds": [
@@ -156,14 +148,6 @@
       {
         "name": "caerula_arbor:scythe_highmore_2",
         "stream": false
-      }
-    ]
-  },
-  "bloody_wolf": {
-    "sounds": [
-      {
-        "name": "caerula_arbor:bloodywolf_song",
-        "stream": true
       }
     ]
   },

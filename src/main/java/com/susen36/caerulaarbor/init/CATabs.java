@@ -261,7 +261,6 @@ public class CATabs {
                 tabData.accept(new ItemStack(CACollectible.SOLO_MUSIC_BOX));
                 tabData.accept(new ItemStack(CACollectible.ODD_FLUTE));
                 tabData.accept(new ItemStack(CACollectible.UTIL_RESCISSION));
-                tabData.accept(new ItemStack(CACollectible.UTIL_SCORE));
                 tabData.accept(new ItemStack(CACollectible.UTIL_STARE));
                 tabData.accept(new ItemStack(CACollectible.TOPONYM_TEXTOLOGY));
                 tabData.accept(new ItemStack(CACollectible.UTIL_ALLAY));
@@ -548,7 +547,6 @@ public class CATabs {
         } else if (tabData.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             tabData.accept(BabelItems.ORIGINIUM_INGOT.get());
         } else if (tabData.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            tabData.accept(CAItems.BLOODY_RECORD.get());
             tabData.accept(CAItems.RECORD_WHISPER.get());
             tabData.accept(CAItems.RECORD_DEEPNESS.get());
             tabData.accept(CAItems.RECORD_PATH_AHEAD.get());

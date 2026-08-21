@@ -294,7 +294,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> TIDE_WAND = REGISTRY.register("tide_wand", TideWandItem::new);
     public static final DeferredHolder<Item, ? extends Item> TRAIL_PLANK_DOOR = doubleBlock(CABlocks.TRAIL_PLANK_DOOR);
     public static final DeferredHolder<Item, ? extends Item> TRAIL_MOP = REGISTRY.register("trail_mop", TrailMopItem::new);
-    public static final DeferredHolder<Item, ? extends Item> BLOODY_RECORD = REGISTRY.register("bloody_record", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(CAJukeboxSongs.BLOODY_RECORD)));
     public static final DeferredHolder<Item, ? extends Item> SALTSAND = block(CABlocks.SALTSAND);
     public static final DeferredHolder<Item, ? extends Item> SKADI_SPAWN_EGG = REGISTRY.register("skadi_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SKADI, -13289929, -4141862, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> SEA_TRAIL_BURNT = block(CABlocks.SEA_TRAIL_BURNT);
@@ -574,7 +573,7 @@ public class CAItems {
             () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationModifier(0.2f).build())), 1);
     public static final DeferredHolder<Item, ? extends Item> CHITIN_COOKIE_RAW = REGISTRY.register("chitin_cookie_raw",
             () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.3f).alwaysEdible().build())));
-    public static final DeferredHolder<Item, ? extends Item> CHITIN_COOKIE_DONE = REGISTRY.register("chitin_cookie_done", ChitinCookieDoneItem::new);
+    public static final DeferredHolder<Item, ? extends Item> CHITIN_COOKIE_DONE = tooltipItem("chitin_cookie_done", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.25f).alwaysEdible().effect(() -> new MobEffectInstance(CAMobEffects.ADD_DEF_TINY, 600, 5, false, false), 1.0F).build())), 1);
     public static final DeferredHolder<Item, ? extends Item> OCEAN_CRYSTAL = tooltipItem("ocean_crystal", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
     public static final DeferredHolder<Item, ? extends Item> OCEAN_CUTIN = tooltipItem("ocean_cutin", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
     public static final DeferredHolder<Item, ? extends Item> OCEAN_CHITIN = tooltipItem("ocean_chitin", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);

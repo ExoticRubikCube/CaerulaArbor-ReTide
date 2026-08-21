@@ -39,6 +39,8 @@ import java.util.function.Predicate;
 
 public class SeabornTransformManager {
 	private static final TagKey<EntityType<?>> HOMO_SAPIENS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "homo_sapiens"));
+	private static final TagKey<EntityType<?>> CANNOT_TRANSFORM = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "cannot_transform"));
+	private static final TagKey<EntityType<?>> FORGE_BOSSES = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses"));
 
 	private static final List<TransformRule> STANDARD_TRANSFORM_RULES = List.of(
 			new TransformRule(entity -> entity instanceof Villager livingEntity && !livingEntity.isBaby() || matchesEntityType(entity, "guardvillagers:guard"), 0.375,
@@ -109,7 +111,7 @@ public class SeabornTransformManager {
 		if (entity instanceof Player ||getEntityTypeId(entity).contains("touhou_little_maid:maid")) {
 			return false;
 		}
-		if (!(entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "cannot_transform"))))
+		if (!(entity.getType().is(CANNOT_TRANSFORM))
 				&& world.getLevelData().getGameRules().getBoolean(CAGameRules.OCEANIZATION_MODE) && !(entity instanceof LivingEntity livEnt5 && livEnt5.isBaby())) {
 			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CAConfigs.CLONE_NUM.get()) * 2) {
 				return false;
@@ -126,7 +128,7 @@ public class SeabornTransformManager {
 				if ((entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) > h * 4) {
 					rate = 0.75;
 				}
-				if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses")))) {
+				if (entity.getType().is(FORGE_BOSSES)) {
 					rate = 1;
 				}
 				SeabornSpawnManager.summonRandomSeaborn(world, rate, x, y, z);

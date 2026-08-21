@@ -17,7 +17,6 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -77,7 +76,7 @@ public class EnderinaCoreBlock extends Block {
         boolean canSummon = false;
         double count = 0;
         BlockPos curPos = BlockPos.containing(x, y, z);
-        if (!(blockstate.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty getbp1 && blockstate.getValue(getbp1))) {
+        if (!blockstate.getValue(CAN_SUMMON)) {
             if(world.getEntitiesOfClass(OceanizedEnderinaEntity.class,
                     AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> e.isAlive()).isEmpty()) {
                 {
@@ -92,14 +91,9 @@ public class EnderinaCoreBlock extends Block {
                     }
                 }
                 if (count >= 4) {
-                    {
-                        BlockPos blockPos = curPos;
-                        BlockState bs = blockstate;
-                        if (bs.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty booleanProp)
-                            world.setBlock(pos, bs.setValue(booleanProp, true), 3);
-                    }
+                    world.setBlock(pos, blockstate.setValue(CAN_SUMMON, true), 3);
                     if (world instanceof Level level) {
-                            level.playSound(null, curPos, SoundEvents.ENDER_DRAGON_GROWL, SoundSource.BLOCKS, 2, 1);
+                        level.playSound(null, curPos, SoundEvents.ENDER_DRAGON_GROWL, SoundSource.BLOCKS, 2, 1);
                     }
                 }
             }
@@ -137,12 +131,7 @@ public class EnderinaCoreBlock extends Block {
                 }
                 world.destroyBlock(curPos, false);
             } else {
-                {
-                    BlockPos blockPos = curPos;
-                    BlockState bs = blockstate;
-                    if (bs.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty booleanProp)
-                        world.setBlock(pos, bs.setValue(booleanProp, false), 3);
-                }
+                world.setBlock(pos, blockstate.setValue(CAN_SUMMON, false), 3);
             }
         }
         world.scheduleTick(pos, this, 40);

@@ -15,7 +15,6 @@ public class OceanizedShulkerModel extends GeoModel<OceanizedShulkerEntity> {
 	private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_shulker.png");
 	private static final ResourceLocation WHITE_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_shulker_white.png");
 	private static final ResourceLocation COMPLEX_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_shulker_complex.png");
-	private static final ResourceLocation BEDROCK_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_shulker_bedrock.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedShulkerEntity entity) {
@@ -32,7 +31,6 @@ public class OceanizedShulkerModel extends GeoModel<OceanizedShulkerEntity> {
 		return switch (entity.getEntityData().get(OceanizedShulkerEntity.DATA_VARIANT)) {
 			case 1 -> WHITE_TEXTURE;
 			case 2 -> COMPLEX_TEXTURE;
-			case 3 -> BEDROCK_TEXTURE;
 			default -> DEFAULT_TEXTURE;
 		};
 	}

@@ -1,9 +1,7 @@
 package com.susen36.caerulaarbor.entity;
 
-import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
 import com.susen36.caerulaarbor.init.CAEntities;
-import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -17,8 +15,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -43,7 +39,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_SWALLOW_P = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -64,7 +59,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
         builder.define(DATA_SHOOT, false);
         builder.define(DATA_ANIMATION, "undefined");
         builder.define(DATA_VARIANT, 0);
-        builder.define(DATA_SWALLOW_P, 40);
     }
 
     @Override
@@ -146,7 +140,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Variant", this.entityData.get(DATA_VARIANT));
-        compound.putInt("SwallowP", this.entityData.get(DATA_SWALLOW_P));
     }
 
     @Override
@@ -154,9 +147,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Variant")) {
             this.entityData.set(DATA_VARIANT, compound.getInt("Variant"));
-        }
-        if (compound.contains("SwallowP")) {
-            this.entityData.set(DATA_SWALLOW_P, compound.getInt("SwallowP"));
         }
     }
 
@@ -169,38 +159,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        Entity target;
-        double sklp1;
-        if (!(((Entity) this instanceof OceanizeRabbitEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0) < 4.5)) {
-            if (this.isAlive()) {
-                sklp1 = (Entity) this instanceof OceanizeRabbitEntity datEntI ? datEntI.getEntityData().get(DATA_SWALLOW_P) : 0;
-                target = this.getTarget();
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof OceanizeRabbitEntity datEntSetI)
-                        datEntSetI.getEntityData().set(DATA_SWALLOW_P, (int) (sklp1 - 1));
-                } else {
-                    if (!(target == null) && target.isAlive() && distanceTo(target) <= 5) {
-                        if (this instanceof OceanizeRabbitEntity) {
-                            this.setAnimation("animation.oceanized_rabbit.swallow");
-                        }
-                        if ((Entity) this instanceof OceanizeRabbitEntity datEntSetI)
-                            datEntSetI.getEntityData().set(DATA_SWALLOW_P, 200);
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 9, false, false));
-                        CaerulaArbor.queueServerWork(8, () -> {
-                            if (this.isAlive()) {
-                                if (this.getTarget() != null) {
-                                    if (this.getTarget().isAlive()) {
-                                        this.getTarget().hurt(this.damageSources().outOfBorder(),
-                                                (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 7.99));
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        }
         this.refreshDimensions();
     }
 
@@ -284,8 +242,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
                     coral = new ItemStack(Blocks.FIRE_CORAL_FAN).copy();
                 } else if (vvv == 4) {
                     coral = new ItemStack(Blocks.TUBE_CORAL_FAN).copy();
-                } else if (vvv == 5) {
-                    coral = new ItemStack(CAItems.BLOODY_RECORD.get()).copy();
                 }
                 if (world instanceof ServerLevel level) {
                     ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), coral);

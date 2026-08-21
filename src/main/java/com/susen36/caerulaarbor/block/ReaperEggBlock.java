@@ -192,8 +192,8 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
             int value = blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty getip20 ? blockstate.getValue(getip20) : -1;
             BlockPos blockPos = BlockPos.containing(x, y, z);
             BlockState bs = world.getBlockState(pos);
-            if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                world.setBlock(pos, bs.setValue(integerProp, value), 3);
+            if (BLOCKSTATE.getPossibleValues().contains(value))
+                world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
         }
         world.scheduleTick(pos, this, 20);
 	}

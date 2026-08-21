@@ -133,13 +133,13 @@ public class TidewayCradleBlock extends BaseEntityBlock implements SimpleWaterlo
         if (entity != null) {
             ItemStack axe;
             axe = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-            if (axe.getItem() == CAItems.PATH_INAUGURATOR.get() && (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1) == 1) {
+            if (axe.getItem() == CAItems.PATH_INAUGURATOR.get() && (blockstate.getValue(BLOCKSTATE)) == 1) {
                 {
                     int value = 0;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                    if (BLOCKSTATE.getPossibleValues().contains(value))
+                        world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                 }
                 for (int index0 = 0; index0 < 16; index0++) {
                     {

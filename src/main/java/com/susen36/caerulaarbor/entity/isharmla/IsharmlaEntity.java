@@ -930,8 +930,9 @@ public class IsharmlaEntity extends SeaMonsterBoss {
 		List<IsharmlaTearEntity> nearbyEntities = world.getEntitiesOfClass(IsharmlaTearEntity.class, new AABB(center, center).inflate(32), e -> true);
 
 		for (IsharmlaTearEntity entityiterator : nearbyEntities) {
+			// 秒杀处理：按目标生命上限翻倍再留缓冲，抵消伤害减免后仍必死
 			entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE),
-					114514);//TODO 好臭的伤害
+					entityiterator.getMaxHealth() * 2 + 100);
 		}
 	}
 

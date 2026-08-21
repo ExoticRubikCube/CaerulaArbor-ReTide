@@ -94,8 +94,8 @@ public class AegirGlassBarBlock extends Block {
 			value = 0;
 		}
 		BlockState state = world.getBlockState(pos);
-		if (state.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-			world.setBlock(pos, state.setValue(integerProp, value), 3);
+		if (BLOCKSTATE.getPossibleValues().contains(value))
+			world.setBlock(pos, state.setValue(BLOCKSTATE, value), 3);
 	}
 
 	@Override

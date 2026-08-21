@@ -17,8 +17,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -26,7 +26,6 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -147,25 +146,22 @@ public class PlayerTickEventHandler {
     }
 
     private static void handleHandSpeed(Player entity, LevelAccessor world, double x, double y, double z) {
-        ItemStack mainHandItem = (entity.getMainHandItem()).copy();
-        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_SPEED)) {
-            if (mainHandItem.getItem() instanceof PickaxeItem || mainHandItem.is(ItemTags.create(ResourceLocation.parse("minecraft:pickaxes")))) {
-                boolean valid = true;
-                final Vec3 center = new Vec3(x, y, z);
-                List<Entity> entfound = world.getEntities(entity, new AABB(center, center).inflate(8 / 2d));
-                for (Entity entityiterator : entfound) {
-                    if (entityiterator == entity) continue;
-                    if (entityiterator instanceof Player || entityiterator instanceof Animal) {
-                        valid = false;
-                        break;
-                    }
+        if (entity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.HAND_SPEED)
+                && entity.getMainHandItem().is(ItemTags.PICKAXES) && !entity.level().isClientSide()) {
+            boolean valid = true;
+            AABB area = AABB.ofSize(new Vec3(x, y, z), 8, 8, 8);
+            for (LivingEntity nearby : world.getEntitiesOfClass(LivingEntity.class, area)) {
+                if (nearby != entity && (nearby instanceof Player || nearby instanceof Animal)) {
+                    valid = false;
+                    break;
                 }
-                if (valid && !entity.level().isClientSide()) {
-                    if ((entity.hasEffect(MobEffects.DIG_SPEED) ? entity.getEffect(MobEffects.DIG_SPEED).getAmplifier() : 0) < 2) {
-                        entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 2));
-                    }
-                    entity.addEffect(new MobEffectInstance(CAMobEffects.HANDS_SPEED, 20, 2));
+            }
+            if (valid) {
+                MobEffectInstance haste = entity.getEffect(MobEffects.DIG_SPEED);
+                if (haste == null || haste.getAmplifier() < 2) {
+                    entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 20, 2));
                 }
+                entity.addEffect(new MobEffectInstance(CAMobEffects.HANDS_SPEED, 20, 2));
             }
         }
     }

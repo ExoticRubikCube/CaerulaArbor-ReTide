@@ -124,7 +124,7 @@ public class EmergencyAidBuildingSalvientoBlock extends Block implements SimpleW
 			List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d), entity -> true).stream()
 					.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center))).toList();
 			for (LivingEntity livingEntity : nearbyEntities) {
-				if (center.distanceTo(new Vec3(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ())) > 16) {
+				if (center.distanceToSqr(livingEntity.position()) > 256.0) {
 					continue;
 				}
 				if (livingEntity instanceof Player) {
@@ -134,7 +134,7 @@ public class EmergencyAidBuildingSalvientoBlock extends Block implements SimpleW
 				}
 			}
 			for (int index0 = 0; index0 < 120; index0++) {
-				dist = Mth.nextDouble(RandomSource.create(), 13, 16);
+				dist = Mth.nextDouble(world.getRandom(), 13, 16);
 				tx = pos.getX() + 0.5 + dist * Math.cos(Math.toRadians(index0 * 3));
 				tz = pos.getZ() + 0.5 + dist * Math.sin(Math.toRadians(index0 * 3));
 				world.sendParticles(ParticleTypes.GLOW, tx, pos.getY() + 0.25, tz, 2, 0.1, 0.1, 0.1, 0);

@@ -19,7 +19,12 @@ import java.util.List;
 
 public class NourishedApplePieItem extends Item {
 	public NourishedApplePieItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food((new FoodProperties.Builder()).nutrition(8).saturationModifier(0.8f).alwaysEdible().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON).food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.8f).alwaysEdible()
+				.effect(() -> new MobEffectInstance(MobEffects.LEVITATION, 30, 0), 1.0F)
+				.effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 800, 2), 1.0F)
+				.effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 100, 2), 1.0F)
+				.effect(() -> new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 3600, 0), 1.0F)
+				.build()));
 	}
 
 	@Override
@@ -37,14 +42,7 @@ public class NourishedApplePieItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		//TODO 修改为使用.effect()
-		if (!entity.level().isClientSide()) {
-			entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 30, 0));
-			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 800, 2));
-			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 2));
-			entity.addEffect(new MobEffectInstance(BabelMobEffects.ESSENCE_RESISTANCE, 3600, 0));
-		}
-		entity.setHealth((float) (entity.getHealth() + entity.getMaxHealth() * 0.15));
+		entity.setHealth((float) (entity.getMaxHealth() * 0.15));
 		EPUtils.causeSanityInjury(entity, 4);
 		return retval;
 	}

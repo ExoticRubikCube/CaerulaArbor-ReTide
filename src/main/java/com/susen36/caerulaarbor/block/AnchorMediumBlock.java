@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -38,6 +39,7 @@ public class AnchorMediumBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty ACTIVATED = BooleanProperty.create("activated");
 	public static final IntegerProperty DETECT_Y = IntegerProperty.create("detect_y", 0, 43);
+	private static final TagKey<Block> TRAIL = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail"));
 
 	public AnchorMediumBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.NETHERITE_BLOCK).strength(12f, 300f).lightLevel(s -> (new Object() {
@@ -105,7 +107,7 @@ public class AnchorMediumBlock extends Block {
             double x = pos.getX();
             double y = pos.getY();
             double z = pos.getZ();
-            if (!(blockstate.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty getbp1 && blockstate.getValue(getbp1))) {
+            if (!blockstate.getValue(ACTIVATED)) {
                 if ((world.getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
                     public Direction getDirection(BlockPos pos1) {
                         BlockState bs = world.getBlockState(pos1);
@@ -154,8 +156,8 @@ public class AnchorMediumBlock extends Block {
                         int value = 1;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
                         BlockState bs = world.getBlockState(blockPos);
-                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                        if (BLOCKSTATE.getPossibleValues().contains(value))
+                            world.setBlock(blockPos, bs.setValue(BLOCKSTATE, value), 3);
                     }
                     {
                         BlockPos blockPos = BlockPos.containing(x, y, z);
@@ -179,13 +181,13 @@ public class AnchorMediumBlock extends Block {
         double dz;
         double attr;
         BlockState target;
-        if (blockstate.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty getbp1 && blockstate.getValue(getbp1)) {
+        if (blockstate.getValue(ACTIVATED)) {
             {
                 int value = 1;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
                 BlockState bs = world.getBlockState(blockPos);
-                if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                if (BLOCKSTATE.getPossibleValues().contains(value))
+                    world.setBlock(blockPos, bs.setValue(BLOCKSTATE, value), 3);
             }
             if (!((world.getBlockState(BlockPos.containing(x, (double) y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
                 public Direction getDirection(BlockPos pos1) {
@@ -232,8 +234,8 @@ public class AnchorMediumBlock extends Block {
                     int value = 0;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(blockPos);
-                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                    if (BLOCKSTATE.getPossibleValues().contains(value))
+                        world.setBlock(blockPos, bs.setValue(BLOCKSTATE, value), 3);
                 }
                 {
                     BlockPos blockPos = BlockPos.containing(x, y, z);
@@ -247,21 +249,21 @@ public class AnchorMediumBlock extends Block {
             }
             for (int index0 = 0; index0 < 24; index0++) {
                 if (world instanceof ServerLevel level)
-                    level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + Mth.nextDouble(RandomSource.create(), -36, 37)), y, ((double) z + -36), 4, 0.5, 4, 0.5, 0.1);
+                    level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + Mth.nextDouble(world.getRandom(), -36, 37)), y, ((double) z + -36), 4, 0.5, 4, 0.5, 0.1);
                 if (world instanceof ServerLevel level)
-                    level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + Mth.nextDouble(RandomSource.create(), -36, 37)), y, ((double) z + 37), 4, 0.5, 4, 0.5, 0.1);
+                    level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + Mth.nextDouble(world.getRandom(), -36, 37)), y, ((double) z + 37), 4, 0.5, 4, 0.5, 0.1);
                 if (world instanceof ServerLevel level)
-                    level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + -36), y, ((double) z + Mth.nextDouble(RandomSource.create(), -36, 25)), 4, 0.5, 4, 0.5, 0.1);
+                    level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + -36), y, ((double) z + Mth.nextDouble(world.getRandom(), -36, 25)), 4, 0.5, 4, 0.5, 0.1);
                 if (world instanceof ServerLevel level)
-                    level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + 37), y, ((double) z + Mth.nextDouble(RandomSource.create(), -36, 37)), 4, 0.5, 4, 0.5, 0.1);
+                    level.sendParticles(ParticleTypes.NAUTILUS, ((double) x + 37), y, ((double) z + Mth.nextDouble(world.getRandom(), -36, 37)), 4, 0.5, 4, 0.5, 0.1);
             }
-            dy = -21 + (blockstate.getBlock().getStateDefinition().getProperty("detect_y") instanceof IntegerProperty getip27 ? blockstate.getValue(getip27) : -1);
+            dy = -21 + blockstate.getValue(DETECT_Y);
             dx = -36;
             for (int index1 = 0; index1 < 73; index1++) {
                 dz = -36;
                 for (int index2 = 0; index2 < 73; index2++) {
                     target = (world.getBlockState(BlockPos.containing((double) x + dx, (double) y + dy, (double) z + dz)));
-                    if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "trail")))) {
+                    if (target.is(TRAIL)) {
                         attr = target.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty getip30 ? target.getValue(getip30) : -1;
                         if (attr < 61) {
                             for (int index3 = 0; index3 < 11; index3++) {
@@ -272,7 +274,7 @@ public class AnchorMediumBlock extends Block {
                                 BlockPos blockPos = BlockPos.containing((double) x + dx, (double) y + dy, (double) z + dz);
                                 BlockState bs = world.getBlockState(blockPos);
                                 if (bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                                    world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                                    world.setBlock(blockPos, bs.setValue(BLOCKSTATE, value), 3);
                             }
                         }
                     }
@@ -287,8 +289,8 @@ public class AnchorMediumBlock extends Block {
                 int value = (int) (dy + 22);
                 BlockPos blockPos = BlockPos.containing(x, y, z);
                 BlockState bs = world.getBlockState(blockPos);
-                if (bs.getBlock().getStateDefinition().getProperty("detect_y") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                if (DETECT_Y.getPossibleValues().contains(value))
+                    world.setBlock(blockPos, bs.setValue(DETECT_Y, value), 3);
             }
             for (Entity entityiterator : world.getEntities(null, new AABB(((double) x + 37), ((double) y + 22), ((double) z + 37), ((double) x - 36), ((double) y - 21), ((double) z - 36)))) {
                 if (!(entityiterator instanceof LivingEntity livEnt33 && livEnt33.hasEffect(CAMobEffects.POWER_OF_ANCHOR))) {
@@ -301,8 +303,8 @@ public class AnchorMediumBlock extends Block {
                 int value = 0;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
                 BlockState bs = world.getBlockState(blockPos);
-                if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                if (BLOCKSTATE.getPossibleValues().contains(value))
+                    world.setBlock(blockPos, bs.setValue(BLOCKSTATE, value), 3);
             }
         }
         world.scheduleTick(pos, this, 5);
@@ -335,7 +337,7 @@ public class AnchorMediumBlock extends Block {
                             : Direction.NORTH;
                 }
             }.getDirection(blockstate))) {
-                if (blockstate.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty getbp5 && blockstate.getValue(getbp5)) {
+                if (blockstate.getValue(ACTIVATED)) {
                     if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_DEACTIVATE, SoundSource.NEUTRAL, 2, 1);
                     }
@@ -343,8 +345,8 @@ public class AnchorMediumBlock extends Block {
                         int value = 0;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
                         BlockState bs = world.getBlockState(blockPos);
-                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                        if (BLOCKSTATE.getPossibleValues().contains(value))
+                            world.setBlock(blockPos, bs.setValue(BLOCKSTATE, value), 3);
                     }
                     {
                         BlockPos blockPos = BlockPos.containing(x, y, z);
@@ -405,8 +407,8 @@ public class AnchorMediumBlock extends Block {
                         int value = 1;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
                         BlockState bs = world.getBlockState(blockPos);
-                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            world.setBlock(blockPos, bs.setValue(integerProp, value), 3);
+                        if (BLOCKSTATE.getPossibleValues().contains(value))
+                            world.setBlock(blockPos, bs.setValue(BLOCKSTATE, value), 3);
                     }
                     {
                         BlockPos blockPos = BlockPos.containing(x, y, z);

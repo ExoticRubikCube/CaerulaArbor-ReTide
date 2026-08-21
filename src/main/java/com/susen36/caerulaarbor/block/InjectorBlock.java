@@ -131,7 +131,7 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
         ItemStack input;
         double stats;
         input = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-        stats = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip2 ? blockstate.getValue(getip2) : -1;
+        stats = blockstate.getValue(BLOCKSTATE);
         if (stats == 0) {
             if (input.getItem() == CAItems.TARGETED_BASE.get()) {
                 ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
@@ -142,8 +142,8 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                     int value = 1;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                    if (BLOCKSTATE.getPossibleValues().contains(value))
+                        world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                 }
                 result = ItemInteractionResult.SUCCESS;
             } else if (input.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "gene")))) {
@@ -169,8 +169,8 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                     int value = 0;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                    if (BLOCKSTATE.getPossibleValues().contains(value))
+                        world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                 }
                 if (world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 2, 1);

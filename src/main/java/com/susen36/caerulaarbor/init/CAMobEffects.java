@@ -61,7 +61,6 @@ public class CAMobEffects {
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ADD_HEALTH_PERCLY = REGISTRY.register("add_health_percly", AddHealthPerclyMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ISHARMLA_CURSE = REGISTRY.register("isharmla_curse", IsharmlaCurseMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> REGENERATION_PERCLY = REGISTRY.register("regeneration_percly", RegenerationPerclyMobEffect::new);
-    public static final DeferredHolder<MobEffect, ? extends MobEffect> SHULKER_BUFF = REGISTRY.register("shulker_buff", ShulkerBuffMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> MORE_FALL_DAMAGE = REGISTRY.register("more_fall_damage", MoreFallDamageMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ADD_DEF_TINY = REGISTRY.register("add_def_tiny", AddDefTinyMobEffect::new);
     public static final DeferredHolder<MobEffect, ? extends MobEffect> ADD_DEF_PERCLY_TINY = REGISTRY.register("add_def_percly_tiny", AddDefPerclyTinyMobEffect::new);

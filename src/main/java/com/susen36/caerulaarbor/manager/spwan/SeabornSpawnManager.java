@@ -7,13 +7,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class SeabornSpawnManager {
@@ -93,8 +92,8 @@ public class SeabornSpawnManager {
 		if (Math.random() < eliteChance) {
 			summonEliteSeaborn(world, x, y, z);
 		} else {
-			if ((world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER) {
-				int rand = Mth.nextInt(RandomSource.create(), 0, WATER_NORMAL_POOL.length - 1);
+			if ((world.getFluidState(BlockPos.containing(x, y, z))).is(Fluids.WATER)) {
+				int rand = Mth.nextInt(world.getRandom(), 0, WATER_NORMAL_POOL.length - 1);
 				if (world instanceof ServerLevel level) {
 					Entity entityToSpawn = ((EntityType<?>) WATER_NORMAL_POOL[rand].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {
@@ -102,7 +101,7 @@ public class SeabornSpawnManager {
 					}
 				}
 			} else {
-				int rand = Mth.nextInt(RandomSource.create(), 0, 8);
+				int rand = Mth.nextInt(world.getRandom(), 0, 8);
 				if (rand < LAND_NORMAL_POOL.length) {
 					if (world instanceof ServerLevel level) {
 						Entity entityToSpawn = ((EntityType<?>) LAND_NORMAL_POOL[rand].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
@@ -111,7 +110,7 @@ public class SeabornSpawnManager {
 						}
 					}
 				} else {
-					int rand1 = Mth.nextInt(RandomSource.create(), 0, OCEANIZED_ANIMAL_POOL.length - 1);
+					int rand1 = Mth.nextInt(world.getRandom(), 0, OCEANIZED_ANIMAL_POOL.length - 1);
 					if (world instanceof ServerLevel level) {
 						Entity entityToSpawn = ((EntityType<?>) OCEANIZED_ANIMAL_POOL[rand1].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 						if (entityToSpawn != null) {
@@ -124,8 +123,8 @@ public class SeabornSpawnManager {
 	}
 
 	public static void summonEliteSeaborn(LevelAccessor world, double x, double y, double z) {
-		if ((world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER) {
-			int rand = Mth.nextInt(RandomSource.create(), 0, WATER_ELITE_POOL.length - 1);
+		if ((world.getFluidState(BlockPos.containing(x, y, z))).is(Fluids.WATER)) {
+			int rand = Mth.nextInt(world.getRandom(), 0, WATER_ELITE_POOL.length - 1);
 			if (world instanceof ServerLevel level) {
 				Entity entityToSpawn = ((EntityType<?>) WATER_ELITE_POOL[rand].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
@@ -133,7 +132,7 @@ public class SeabornSpawnManager {
 				}
 			}
 		} else {
-			int rand = Mth.nextInt(RandomSource.create(), 0, 8);
+			int rand = Mth.nextInt(world.getRandom(), 0, 8);
 			if (Math.random() < 0.04) {
 				rand = 9;
 			}
@@ -145,7 +144,7 @@ public class SeabornSpawnManager {
 					}
 				}
 			} else {
-				int rand1 = Mth.nextInt(RandomSource.create(), 0, OCEANIZED_ELITE_POOL.length - 1);
+				int rand1 = Mth.nextInt(world.getRandom(), 0, OCEANIZED_ELITE_POOL.length - 1);
 				if (world instanceof ServerLevel level) {
 					Entity entityToSpawn = ((EntityType<?>) OCEANIZED_ELITE_POOL[rand1].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {

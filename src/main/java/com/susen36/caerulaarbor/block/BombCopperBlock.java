@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -30,6 +31,9 @@ import java.util.List;
 
 public class BombCopperBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+	private static final TagKey<Block> BLOW_UP = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "blow_up"));
+	private static final TagKey<EntityType<?>> SEABORN = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn"));
+	private static final TagKey<EntityType<?>> SEABORN_PET = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_pet"));
 
 	public BombCopperBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(4f, 32f).requiresCorrectToolForDrops());
@@ -89,8 +93,8 @@ public class BombCopperBlock extends Block {
                     dy = -7;
                     for (int index3 = 0; index3 < 15; index3++) {
                         target = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
-                        if (new Vec3(dx, dy, dz).distanceTo(new Vec3(0, 0, 0)) <= 24) {
-                            if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "blow_up")))) {
+                        if (dx * dx + dy * dy + dz * dz <= 576.0) {
+                            if (target.is(BLOW_UP)) {
                                 world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
                             }
                             dy = dy + 1;
@@ -105,9 +109,9 @@ public class BombCopperBlock extends Block {
                 final Vec3 center = new Vec3((x + 0.5), (y + 0.5), (z + 0.5));
                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                 for (Entity entityiterator : entfound) {
-                    if (new Vec3((x + 0.5), (y + 0.5), (z + 0.5)).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) <= 24) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))
-                                && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn_pet")))) {
+                    if (center.distanceToSqr(entityiterator.position()) <= 576.0) {
+                        if (entityiterator.getType().is(SEABORN)
+                                && !entityiterator.getType().is(SEABORN_PET)) {
                             entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.BRAND_BOMB),
                                     (float) Math.clamp((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.1, 8, 48));
                         }

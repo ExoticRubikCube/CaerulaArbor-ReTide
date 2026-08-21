@@ -151,13 +151,13 @@ public class TrailCakeBlock extends Block implements SimpleWaterloggedBlock {
         if (entity == null) {
             result = InteractionResult.PASS;
         } else {
-            if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip2 ? blockstate.getValue(getip2) : -1) < 3) {
+            if ((blockstate.getValue(BLOCKSTATE)) < 3) {
                 {
-                    int value = (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip4 ? blockstate.getValue(getip4) : -1) + 1;
+                    int value = (blockstate.getValue(BLOCKSTATE)) + 1;
                     BlockPos blockPos = BlockPos.containing(x, y, z);
                     BlockState bs = world.getBlockState(pos);
-                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                    if (BLOCKSTATE.getPossibleValues().contains(value))
+                        world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                 }
             } else {
                 world.setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
@@ -184,7 +184,7 @@ public class TrailCakeBlock extends Block implements SimpleWaterloggedBlock {
                 || ((Entity) entity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
                 || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/knives")))
                 || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/knives")))) {
-            for (int index0 = 0; index0 < (4 - (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip13 ? blockstate.getValue(getip13) : -1)); index0++) {
+            for (int index0 = 0; index0 < (4 - (blockstate.getValue(BLOCKSTATE))); index0++) {
                 if (world instanceof ServerLevel level) {
                     ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), new ItemStack(CAItems.TRAIL_CAKE_PIECE.get()));
                     entityToSpawn.setPickUpDelay(10);

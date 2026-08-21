@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -106,11 +105,7 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
-        int bs = -1;
-        IntegerProperty blockstateProp = (IntegerProperty) blockstate.getBlock().getStateDefinition().getProperty("blockstate");
-        if (blockstateProp != null) {
-            bs = blockstate.getValue(blockstateProp);
-        }
+        int bs = blockstate.getValue(BLOCKSTATE);
         if (!player.getAbilities().instabuild) {
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
                 if (bs == 0) {
@@ -120,7 +115,7 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
                         level.addFreshEntity(entityToSpawn);
                     }
                 } else if (bs == 1) {
-                    for (int i = 0; i < Mth.nextInt(RandomSource.create(), 3, 4); ++i) {
+                    for (int i = 0; i < Mth.nextInt(world.getRandom(), 3, 4); ++i) {
                         if (!(world instanceof ServerLevel level)) {
                             continue;
                         }
@@ -128,7 +123,7 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
                         entityToSpawn.setPickUpDelay(5);
                         level.addFreshEntity(entityToSpawn);
                     }
-                    for (int i = 0; i < Mth.nextInt(RandomSource.create(), 2, 4); ++i) {
+                    for (int i = 0; i < Mth.nextInt(world.getRandom(), 2, 4); ++i) {
                         if (!(world instanceof ServerLevel level)) {
                             continue;
                         }
@@ -137,7 +132,7 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
                         level.addFreshEntity(entityToSpawn);
                     }
                 } else if (bs == 2) {
-                    for (int i = 0; i < Mth.nextInt(RandomSource.create(), 2, 4); ++i) {
+                    for (int i = 0; i < Mth.nextInt(world.getRandom(), 2, 4); ++i) {
                         if (!(world instanceof ServerLevel level)) {
                             continue;
                         }
@@ -157,17 +152,13 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
-        int bs = -1;
-		IntegerProperty blockstateProp = (IntegerProperty) blockstate.getBlock().getStateDefinition().getProperty("blockstate");
-		if (blockstateProp != null) {
-			bs = blockstate.getValue(blockstateProp);
-		}
+        int bs = blockstate.getValue(BLOCKSTATE);
 		ItemStack mainHand = (Entity) entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY;
 		if (mainHand.getItem() == Blocks.AIR.asItem()) {
 			ItemStack offHand = (Entity) entity instanceof LivingEntity living ? living.getOffhandItem() : ItemStack.EMPTY;
 			if (offHand.getItem() == Blocks.AIR.asItem()) {
 				if (bs == 0) {
-					for (int i = 0; i < Mth.nextInt(RandomSource.create(), 3, 4); ++i) {
+					for (int i = 0; i < Mth.nextInt(world.getRandom(), 3, 4); ++i) {
 						if (!(world instanceof ServerLevel level)) {
 							continue;
 						}
@@ -177,12 +168,11 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
 					}
 					BlockPos pos1 = BlockPos.containing(x, y, z);
 					BlockState currentState = world.getBlockState(pos1);
-					IntegerProperty prop = (IntegerProperty) currentState.getBlock().getStateDefinition().getProperty("blockstate");
-					if (prop != null && prop.getPossibleValues().contains(1)) {
-						world.setBlock(pos1, currentState.setValue(prop, 1), 3);
+					if (BLOCKSTATE.getPossibleValues().contains(1)) {
+						world.setBlock(pos1, currentState.setValue(BLOCKSTATE, 1), 3);
 					}
 				} else if (bs == 1) {
-					for (int i = 0; i < Mth.nextInt(RandomSource.create(), 3, 4); ++i) {
+					for (int i = 0; i < Mth.nextInt(world.getRandom(), 3, 4); ++i) {
 						if (!(world instanceof ServerLevel level)) {
 							continue;
 						}
@@ -192,12 +182,11 @@ public class ChestFishFoodBlock extends Block implements SimpleWaterloggedBlock 
 					}
 					BlockPos pos1 = BlockPos.containing(x, y, z);
 					BlockState currentState = world.getBlockState(pos1);
-					IntegerProperty prop = (IntegerProperty) currentState.getBlock().getStateDefinition().getProperty("blockstate");
-					if (prop != null && prop.getPossibleValues().contains(2)) {
-						world.setBlock(pos1, currentState.setValue(prop, 2), 3);
+					if (BLOCKSTATE.getPossibleValues().contains(2)) {
+						world.setBlock(pos1, currentState.setValue(BLOCKSTATE, 2), 3);
 					}
 				} else if (bs == 2) {
-					for (int i = 0; i < Mth.nextInt(RandomSource.create(), 2, 4); ++i) {
+					for (int i = 0; i < Mth.nextInt(world.getRandom(), 2, 4); ++i) {
 						if (!(world instanceof ServerLevel level)) {
 							continue;
 						}

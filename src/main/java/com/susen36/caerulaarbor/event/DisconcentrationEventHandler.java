@@ -307,19 +307,20 @@ public class DisconcentrationEventHandler {
         }
 
         double playerLight = playerVariables.player_light;
-        if (playerLight >= 85 || playerVariables.disoclusion != NO_REJECTION_STAGE) {
+        boolean hasCurseArmor = hasRejectionCurseArmor(player);
+        // 附有排异诅咒护甲时灯火门槛降至暗淡(1<=灯火<75)即可患上排异；无护甲时维持寂灭(灯火<50)才可能患上
+        boolean lightAllowed = hasCurseArmor ? playerLight < 75 : playerLight < 50;
+        if (!lightAllowed || playerVariables.disoclusion != NO_REJECTION_STAGE) {
             return;
         }
 
         double damagePercent = Math.min(event.getNewDamage() / player.getMaxHealth(), 1.0);
         double rejectionChance = 0.02 * damagePercent;
-        if (playerLight < 1) {
+        if (hasCurseArmor) {
             rejectionChance = rejectionChance * 2;
-        } else if (playerLight >= 50) {
-            rejectionChance = rejectionChance * 0.5;
         }
-        if (hasRejectionCurseArmor(player)) {
-            rejectionChance = rejectionChance * 2;
+        if (playerLight < 1) {
+            rejectionChance = rejectionChance * 1.15;
         }
         if (Math.random() >= rejectionChance) {
             return;

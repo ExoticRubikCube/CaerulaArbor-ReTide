@@ -129,32 +129,30 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 0) {
+        if (blockstate.getValue(BLOCKSTATE) == 0) {
             {
                 int value = 1;
                 BlockPos blockPos = BlockPos.containing(x, y, z);
                 BlockState bs = world.getBlockState(pos);
-                if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                    world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                if (DATA_ANIMATION.getPossibleValues().contains(value))
+                    world.setBlock(pos, bs.setValue(DATA_ANIMATION, value), 3);
             }
             CaerulaArbor.queueServerWork(40, () -> {
                 if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.HIGHMORE_SPAWNING_BLOCK.get()
-                        && ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip6
-                                ? (world.getBlockState(BlockPos.containing(x, y, z))).getValue(getip6)
-                                : -1) == 0) {
+                        && (world.getBlockState(BlockPos.containing(x, y, z))).getValue(BLOCKSTATE) == 0) {
                     {
                         int value = 1;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
                         BlockState bs = world.getBlockState(pos);
-                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                        if (BLOCKSTATE.getPossibleValues().contains(value))
+                            world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                     }
                     {
                         int value = 0;
                         BlockPos blockPos = BlockPos.containing(x, y, z);
                         BlockState bs = world.getBlockState(pos);
-                        if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                        if (DATA_ANIMATION.getPossibleValues().contains(value))
+                            world.setBlock(pos, bs.setValue(DATA_ANIMATION, value), 3);
                     }
                     if (world instanceof ServerLevel level) {
                         Entity entityToSpawn = CAEntities.HIGHMORE.get().spawn(level, BlockPos.containing(x + 0.5, y + 1, z + 0.5), MobSpawnType.MOB_SUMMONED);
@@ -179,7 +177,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
 		Direction direction = hit.getDirection();
         ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         if (entity != null) {
-            if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 1) {
+            if (blockstate.getValue(BLOCKSTATE) == 1) {
                 if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()) {
                     world.setBlock(BlockPos.containing(x, y, z), CABlocks.HIGHMORE_SPAWNBLOCK.get().defaultBlockState(), 3);
                     if (world instanceof Level level) {

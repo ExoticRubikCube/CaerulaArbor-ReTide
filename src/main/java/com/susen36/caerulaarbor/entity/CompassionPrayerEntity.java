@@ -33,7 +33,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -78,21 +77,6 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        // TODO: 子类专属匿名 override 版 HurtByTargetGoal（需 FAKE_DEATH 效果激活），覆盖基类同优先级目标
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
-            @Override
-            public boolean canUse() {
-                //TODO 需要清理mcr残留 :更改为 return super.canUse() && hasEffect(CAMobEffects.FAKE_DEATH);
-                if (!super.canUse()) return false;
-                return hasEffect(CAMobEffects.FAKE_DEATH);
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                if (!super.canContinueToUse()) return false;
-                return hasEffect(CAMobEffects.FAKE_DEATH);
-            }
-        });
         this.goalSelector.addGoal(13, new RandomStrollGoal(this, 0.8) {
             @Override
             public boolean canUse() {
@@ -121,13 +105,7 @@ public class CompassionPrayerEntity extends SeaMonsterBoss implements RangedAtta
         });
 
         this.goalSelector.addGoal(15, new FloatGoal(this));
-        // TODO: 子类专属 goalSelector 行为（远程攻击祈祷弹），与基类 targetSelector 统一目标不冲突
-        this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 80, 5f) {
-            @Override
-            public boolean canContinueToUse() {
-                return this.canUse();
-            }
-        });
+        this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 80, 5f));
     }
 
     public class RangedAttackGoal extends Goal {

@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.JukeboxSong;
 
 public final class CAJukeboxSongs {
-    public static final ResourceKey<JukeboxSong> BLOODY_RECORD = key("bloody_record");
     public static final ResourceKey<JukeboxSong> RECORD_WHISPER = key("record_whisper");
     public static final ResourceKey<JukeboxSong> RECORD_ENDOSPORE = key("record_endospore");
     public static final ResourceKey<JukeboxSong> RECORD_PATH_AHEAD = key("record_path_ahead");
@@ -17,7 +16,6 @@ public final class CAJukeboxSongs {
     public static final ResourceKey<JukeboxSong> RECORD_OCEANWISH = key("record_oceanwish");
     public static final ResourceKey<JukeboxSong> RECORD_UNDERDAWN = key("record_underdawn");
     public static final ResourceKey<JukeboxSong> RECORD_MARE_NATUS = key("record_mare_natus");
-    public static final ResourceKey<JukeboxSong> SCORE = key("score");
 
     private static ResourceKey<JukeboxSong> key(String id) {
         return ResourceKey.create(

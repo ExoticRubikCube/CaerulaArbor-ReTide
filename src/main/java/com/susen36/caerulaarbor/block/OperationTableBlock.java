@@ -25,7 +25,6 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -126,7 +125,7 @@ public class OperationTableBlock extends Block {
             String res = "";
             ItemStack item;
             ItemStack output;
-            stats = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1;
+            stats = blockstate.getValue(BLOCKSTATE);
             item = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (!(Math.abs((double) x - hitX) > 1)) {
                 if (!(Math.abs((double) y - hitY) > 1)) {
@@ -138,8 +137,8 @@ public class OperationTableBlock extends Block {
                                         int value = 1;
                                         BlockPos blockPos = BlockPos.containing(x, y, z);
                                         BlockState bs = world.getBlockState(pos);
-                                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                                        if (BLOCKSTATE.getPossibleValues().contains(value))
+                                            world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                                     }
                                     ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                     if (world instanceof Level level) {
@@ -185,8 +184,8 @@ public class OperationTableBlock extends Block {
                                 {
                                     int value = 0;
                                     BlockState bs = world.getBlockState(pos);
-                                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                                        world.setBlock(pos, bs.setValue(integerProp, value), 3);
+                                    if (BLOCKSTATE.getPossibleValues().contains(value))
+                                        world.setBlock(pos, bs.setValue(BLOCKSTATE, value), 3);
                                 }
                                 if (world instanceof ServerLevel level) {
                                     ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), output);

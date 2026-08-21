@@ -354,7 +354,7 @@ public class LivingHurtEventHandler {
             if (entity.distanceTo(skadiCorrupted) > 16) return;
             if (skadiCorrupted == entity) return;
             if (skadiCorrupted == sourceentity) return;
-            if (entity == (skadiCorrupted instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null)) return;
+            if (entity == (skadiCorrupted instanceof Mob mobEnt ?  mobEnt.getTarget() : null)) return;
 
             if ((skadiCorrupted instanceof SkadiCorruptedEntity datEntI ? datEntI.getEntityData().get(SkadiCorruptedEntity.DATA_PHASE) : 0) < 0.5) {
                 event.setNewDamage((float) (amount * 0.5));
