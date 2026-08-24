@@ -271,7 +271,7 @@ public class CATabs {
 
     public static final DeferredHolder<CreativeModeTab, ? extends CreativeModeTab> CAERULA_LIVINGS = REGISTRY.register("caerula_livings",
             () -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caerula_livings")).icon(() -> new ItemStack(CAItems.BUCKET_FLOATER.get())).displayItems((parameters, tabData) -> {
-                tabData.accept(CAItems.RUN_FISH_SPAWN_EGG.get());
+                tabData.accept(CAItems.SHELL_SEA_RUNNER_SPAWN_EGG.get());
                 tabData.accept(CAItems.SLIDER_FISH_SPAWN_EGG.get());
                 tabData.accept(CAItems.SHOOTER_FISH_SPAWN_EGG.get());
                 tabData.accept(CAItems.FLOATING_SEA_DRIFTER_SPAWN_EGG.get());
@@ -556,7 +556,7 @@ public class CATabs {
             tabData.accept(CAItems.RECORD_OCEANWISH.get());
             tabData.accept(CAItems.RECORD_UNDERDAWN.get());
             tabData.accept(CAItems.RECORD_MARE_NATUS.get());
-            tabData.accept(CAItems.BUCKET_RUNFISH.get());
+            tabData.accept(CAItems.BUCKET_SHELL_SEA_RUNNER.get());
             tabData.accept(CAItems.BUCKET_SLIDER.get());
             tabData.accept(CAItems.BUCKET_OCEAN_STONECUTTE.get());
             tabData.accept(CAItems.BUCKET_FLOATER.get());
@@ -586,7 +586,6 @@ public class CATabs {
                 tabData.accept(CAItems.XANTIS_SPAWN_EGG.get());
                 tabData.accept(CAItems.QUNYOU_WANTED_ISHARMLA_SPAWN_EGG.get());
                 tabData.accept(CAItems.BANNED_ITEM.get());
-                tabData.accept(CAItems.GOODSQUIDS_SERVERER.get());
                 tabData.accept(CAItems.THERMOGRAPH.get());
                 tabData.accept(CAItems.RULER.get());
                 tabData.accept(CAItems.APOCATA_SWORD.get());

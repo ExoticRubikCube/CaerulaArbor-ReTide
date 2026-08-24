@@ -16,7 +16,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -30,7 +33,6 @@ import net.minecraft.world.level.block.Blocks;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
@@ -117,16 +119,6 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
             }
         }
         name = sourceentity.getDisplayName().getString();
-        if (name.contains("goodsquid") || name.contains("Goodsquid")) {
-            if (!level().isClientSide())
-                discard();
-            if (world instanceof ServerLevel level) {
-                Entity entityToSpawn = CAEntities.TIDE_CHIMERA.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-                if (entityToSpawn != null) {
-                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                }
-            }
-        }
     }
 
 	@Override

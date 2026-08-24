@@ -22,8 +22,6 @@ public class HandOfBarrenItem extends CollectibleItem.CustomCollectibleItem {
 						.build());
 	}
 
-	
-
 	@Override
 	public void onUse(ItemStack stack, Level level, Player player, CollectibleItem.CustomCollectibleItem self) {
 	}

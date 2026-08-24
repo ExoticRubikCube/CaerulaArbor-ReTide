@@ -174,7 +174,7 @@ public class LivingDeathEventHandler {
     }
 
     private static void handleGeneSampleDrop(LivingDeathEvent event) {
-        LevelAccessor world = event.getEntity().level();
+        Level world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
@@ -186,8 +186,7 @@ public class LivingDeathEventHandler {
 
         if (sourceentity instanceof Player) {
             boolean result;
-            result = (ModCapabilities.getPlayerVariables(sourceentity)).can_player_evo
-                    && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization >= 3);
+            result = (ModCapabilities.getPlayerVariables(sourceentity)).can_player_evo && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization >= 3);
             if (result) {
                 double r0 = 0, r1 = 0, r2 = 0;
                 if (entity.getType().is(CAEntityTypeTags.SEABORN_BOSS)) {
@@ -230,7 +229,7 @@ public class LivingDeathEventHandler {
     }
 
     private static void handleKillFunc(LivingDeathEvent event) {
-        LevelAccessor world = event.getEntity().level();
+        Level world = event.getEntity().level();
         double x = event.getEntity().getX();
         double y = event.getEntity().getY();
         double z = event.getEntity().getZ();
@@ -256,9 +255,7 @@ public class LivingDeathEventHandler {
         if (entity.getType().is(CAEntityTypeTags.OCEAN_ELITE)) {
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (Math.random() < 0.1) {
-                    if (world instanceof Level level) {
-                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.AMBIENT, 1, 1);
-                    }
+                    world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.AMBIENT, 1, 1);
                     if (world instanceof ServerLevel level) {
                         ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack((BuiltInRegistries.ITEM.getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "common_relics"))).flatMap(tag -> tag.getRandomElement(RandomSource.create())).map(Holder::value).orElse(Items.AIR))));
                         entityToSpawn.setPickUpDelay(10);

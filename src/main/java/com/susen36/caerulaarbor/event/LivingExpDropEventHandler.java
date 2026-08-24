@@ -12,13 +12,9 @@ import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 public class LivingExpDropEventHandler {
 	@SubscribeEvent
 	public static void onLivingDropXp(LivingExperienceDropEvent event) {
-		if (event == null) return;
-
-		Player sourceentity = event.getAttackingPlayer();
-		if (sourceentity == null)
-			return;
-		if (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_EXTENSION)) {
-			if (LifePointUtils.getLifePoint(sourceentity) <= 1) {
+		Player sourceEntity = event.getAttackingPlayer();
+		if (sourceEntity != null && sourceEntity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.KING_EXTENSION)) {
+			if (LifePointUtils.getLifePoint(sourceEntity) <= 1) {
 				event.setDroppedExperience((int) (event.getDroppedExperience() * 1.5));
 			}
 		}

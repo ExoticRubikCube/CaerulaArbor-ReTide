@@ -1897,14 +1897,6 @@ public class RecipesProvider extends RecipeProvider {
                 ),
                 key('a', item("caerula_arbor:ocean_phloem"))
         );
-        shapeless(
-                writer,
-                "craft_meat_can",
-                "misc",
-                null,
-                result("caerula_arbor:meat_can", 1),
-                ingredients(tag("forge:meats"), tag("forge:meats"), item("caerula_arbor:empty_can"))
-        );
         shaped(
                 writer,
                 "craft_moist_bag",
@@ -2163,7 +2155,7 @@ public class RecipesProvider extends RecipeProvider {
                         " b ",
                         "b  "
                 ),
-                key('a', item("caerula_arbor:kings_spear")),
+                key('a', item("caerula_arbor:king_spear")),
                 key('b', item("minecraft:bone"))
         );
         shapeless(
@@ -3119,7 +3111,7 @@ public class RecipesProvider extends RecipeProvider {
                 "reverse_emelight",
                 "building",
                 null,
-                result("caerula_arbor:relic_curse_emelight", 1),
+                result("caerula_arbor:cursed_emelight", 1),
                 ingredients(item("caerula_arbor:emergency_light"))
         );
         shaped(

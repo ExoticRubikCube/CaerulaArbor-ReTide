@@ -40,9 +40,9 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import software.bernie.geckolib.animation.*;
 
-public class RunFishEntity extends SeaMonster implements Bucketable {
-    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(RunFishEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(RunFishEntity.class, EntityDataSerializers.STRING);
+public class ShellSeaRunnerEntity extends SeaMonster implements Bucketable {
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ShellSeaRunnerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ShellSeaRunnerEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
     private long lastSwing;
     private boolean fromBucket;
@@ -52,11 +52,11 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
     private final MoveControl landControl;
     private final ApostleProkaryoteEntity.SeabornSwimControl swimControl;
 
-    public RunFishEntity(Level world) {
-        this(CAEntities.RUN_FISH.get(), world);
+    public ShellSeaRunnerEntity(Level world) {
+        this(CAEntities.SHELL_SEA_RUNNER.get(), world);
     }
 
-    public RunFishEntity(EntityType<RunFishEntity> type, Level world) {
+    public ShellSeaRunnerEntity(EntityType<ShellSeaRunnerEntity> type, Level world) {
         super(type, world);
         xpReward = 3;
         setNoAi(false);
@@ -78,7 +78,7 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, true));
-        this.goalSelector.addGoal(11, new RandomSwimmingGoal(this, 1, 40));
+        this.goalSelector.addGoal(10, new RandomSwimmingGoal(this, 1, 40));
         this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
     }
@@ -157,7 +157,7 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
 
     @Override
     public ItemStack getBucketItemStack() {
-        return new ItemStack(CAItems.BUCKET_RUNFISH.get());
+        return new ItemStack(CAItems.BUCKET_SHELL_SEA_RUNNER.get());
     }
 
     @Override
@@ -187,7 +187,7 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
     }
 
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
-        event.register(CAEntities.RUN_FISH.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+        event.register(CAEntities.SHELL_SEA_RUNNER.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
             int x = pos.getX();
             int y = pos.getY();
             int z = pos.getZ();

@@ -33,7 +33,7 @@ public class SeabornSpawnManager {
 		CAEntities.PREDATOR_ABYSSAL,
 		CAEntities.FAKE_OFFSPRING,
 		CAEntities.SLIDER_FISH,
-		CAEntities.RUN_FISH,
+		CAEntities.SHELL_SEA_RUNNER,
 		CAEntities.SHOOTER_FISH,
 		CAEntities.SPLASHER_ABYSSAL
 	};

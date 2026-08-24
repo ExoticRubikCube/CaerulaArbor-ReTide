@@ -1,13 +1,18 @@
 package com.susen36.caerulaarbor.entity;
 
+import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAMobEffects;
+import com.susen36.caerulaarbor.util.PlayerStateUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -16,6 +21,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -23,13 +30,15 @@ import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import software.bernie.geckolib.animation.*;
 
 public class OceanizedHorseEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_LAY_LIMIT = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.INT);
+    private static final ResourceLocation OCEANIZED_HORSE_GUIDE_ARMOR_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanized_horse_guide_armor");
+    private static final ResourceLocation OCEANIZED_HORSE_GUIDE_ARMOR_TOUGHNESS_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "oceanized_horse_guide_armor_toughness");
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -93,13 +102,37 @@ public class OceanizedHorseEntity extends SeaMonster {
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         Entity rider;
-        if (WorldUtils.canGrief(world) && ((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
-            if (!((Entity) this instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.MUTE))) {
-                if (!((Entity) this instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.GUIDE_PATH_AHEAD))) {
-                    if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CAMobEffects.GUIDE_PATH_AHEAD, 20, 0));
+        // 低血量且未被沉默、且允许篡改地形时：附加护甲并不断生成溟痕（耗尽 LAY_LIMIT 即停）
+        boolean active = WorldUtils.canGrief(world) && this.getHealth() < this.getMaxHealth() * 0.5F && !this.hasEffect(CAMobEffects.MUTE);
+        if (!this.level().isClientSide()) {
+            AttributeInstance armorAttr = this.getAttribute(Attributes.ARMOR);
+            if (active) {
+                if (armorAttr.getModifier(OCEANIZED_HORSE_GUIDE_ARMOR_ID) == null) {
+                    armorAttr.addTransientModifier(new AttributeModifier(OCEANIZED_HORSE_GUIDE_ARMOR_ID, 12, AttributeModifier.Operation.ADD_VALUE));
+                }
+                if (armorAttr.getModifier(OCEANIZED_HORSE_GUIDE_ARMOR_TOUGHNESS_ID) == null) {
+                    armorAttr.addTransientModifier(new AttributeModifier(OCEANIZED_HORSE_GUIDE_ARMOR_TOUGHNESS_ID, 9, AttributeModifier.Operation.ADD_VALUE));
+                }
+                int layLimit = this.entityData.get(DATA_LAY_LIMIT);
+                if (layLimit > 0) {
+                    double x = this.getX();
+                    double y = this.getY();
+                    double z = this.getZ();
+                    BlockPos pos = BlockPos.containing(x, y, z);
+                    if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, pos) && world.getBlockFloorHeight(pos) <= 0) {
+                        PlayerStateUtils.replaceTrail(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(),
+                                (world.getFluidState(pos).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
+                        this.entityData.set(DATA_LAY_LIMIT, layLimit - 1);
+                    }
+                }
+            } else {
+                if (armorAttr.getModifier(OCEANIZED_HORSE_GUIDE_ARMOR_ID) != null) {
+                    armorAttr.removeModifier(OCEANIZED_HORSE_GUIDE_ARMOR_ID);
+                }
+                if (armorAttr.getModifier(OCEANIZED_HORSE_GUIDE_ARMOR_TOUGHNESS_ID) != null) {
+                    armorAttr.removeModifier(OCEANIZED_HORSE_GUIDE_ARMOR_TOUGHNESS_ID);
                 }
             }
         }

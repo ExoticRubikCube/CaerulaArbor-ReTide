@@ -1,4 +1,4 @@
-package com.susen36.caerulaarbor.event;
+package com.susen36.caerulaarbor.recipe;
 
 import com.susen36.caerulaarbor.init.CAItems;
 import net.minecraft.core.component.DataComponents;
@@ -13,7 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 @EventBusSubscriber
-public class SyncNetherseaSwordEventHandler {
+public class SyncNetherseaSwordHandler {
 	@SubscribeEvent
 	public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
 		ItemStack craftedItem = event.getCrafting();

@@ -6,7 +6,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.Level;
 
 public class TideOfChitinMobEffect extends MobEffect {
     public TideOfChitinMobEffect() {
@@ -15,7 +15,7 @@ public class TideOfChitinMobEffect extends MobEffect {
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        LevelAccessor world = entity.level();
+        Level world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();

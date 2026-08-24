@@ -34,7 +34,7 @@ public class PlayerStateUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	// 光芒值
+	// 灯火值
 	public static double getPlayerLight(Entity entity) {
 		return ModCapabilities.getPlayerVariables(entity).player_light;
 	}

@@ -105,27 +105,25 @@ public class AnvilRecipeHandler {
 	@SubscribeEvent
 	public static void refundSharpnessSourceItemOnTake(AnvilRepairEvent event) {
 		Player player = event.getEntity();
-		if (player.level().isClientSide()) return;
+		if (!player.level().isClientSide()) {
+			ItemStack leftItem = event.getLeft();
+			ItemStack rightItem = event.getRight();
 
-		ItemStack leftItem = event.getLeft();
-		ItemStack rightItem = event.getRight();
+			boolean isTargetWeapon = leftItem.is(CAItems.LEGENDARY_SPEAR.get()) || leftItem.is(CAItems.HIGHMORE_SCYTHE.get());
+			if (isTargetWeapon) {
+				var registryAccess = player.level().registryAccess();
+				Holder<Enchantment> sharpness = CAEnchantments.getHolder(registryAccess, Enchantments.SHARPNESS);
+				Holder<Enchantment> synesthesia = CAEnchantments.getHolder(registryAccess, CAEnchantments.SYNESTHESIA);
+				int sharpLevel = EnchantmentHelper.getItemEnchantmentLevel(sharpness, rightItem);
+				int synLevel = EnchantmentHelper.getItemEnchantmentLevel(synesthesia, leftItem);
 
-		boolean isTargetWeapon = leftItem.is(CAItems.LEGENDARY_SPEAR.get()) || leftItem.is(CAItems.HIGHMORE_SCYTHE.get());
-		if (isTargetWeapon) {
-			var registryAccess = player.level().registryAccess();
-			Holder<Enchantment> sharpness = CAEnchantments.getHolder(registryAccess, Enchantments.SHARPNESS);
-			Holder<Enchantment> synesthesia = CAEnchantments.getHolder(registryAccess, CAEnchantments.SYNESTHESIA);
+				if (sharpLevel > synLevel) {
+					ItemStack returnedItem = rightItem.copy();
+					returnedItem.setCount(1);
+					EnchantmentHelper.updateEnchantments(returnedItem, mutable -> mutable.removeIf(holder -> holder.equals(sharpness)));
 
-			int sharpLevel = EnchantmentHelper.getItemEnchantmentLevel(sharpness, rightItem);
-			int synLevel = EnchantmentHelper.getItemEnchantmentLevel(synesthesia, leftItem);
-
-			if (sharpLevel > synLevel) {
-				ItemStack returnedItem = rightItem.copy();
-				returnedItem.setCount(1);
-
-				EnchantmentHelper.updateEnchantments(returnedItem, mutable -> mutable.removeIf(holder -> holder.equals(sharpness)));
-
-				ItemHandlerHelper.giveItemToPlayer(player, returnedItem);
+					ItemHandlerHelper.giveItemToPlayer(player, returnedItem);
+				}
 			}
 		}
 	}

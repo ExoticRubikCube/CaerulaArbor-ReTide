@@ -35,7 +35,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -586,13 +585,6 @@ public class LivingHurtEventHandler {
         Entity entity = event.getEntity();
         double amount = event.getNewDamage();
 
-        Entity bullet = damagesource.getDirectEntity();
-        if (bullet instanceof ShulkerBullet && bullet.getPersistentData().getBoolean("oceanized")) {
-            if (entity instanceof LivingEntity living)
-                LessArmorMobEffect.apply(living);
-            if (entity instanceof LivingEntity living && !living.level().isClientSide())
-                living.addEffect(new MobEffectInstance(CAMobEffects.MORE_FALL_DAMAGE, 300, 0));
-        }
         if (damagesource.is(DamageTypes.FALL) && entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(CAMobEffects.MORE_FALL_DAMAGE)) {
             double level = livingEntity.getEffect(CAMobEffects.MORE_FALL_DAMAGE).getAmplifier() + 1;
             event.setNewDamage((float) (amount * (1 + 0.25 * level)));

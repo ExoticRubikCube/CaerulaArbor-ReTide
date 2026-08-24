@@ -58,8 +58,9 @@ public class CAEntities {
     public static final List<DeferredHolder<EntityType<?>, ? extends EntityType<?>>> SEA_MONSTERS = new ArrayList<>();
     public static final List<DeferredHolder<EntityType<?>, ? extends EntityType<?>>> SEA_MONSTER_BOSSES = new ArrayList<>();
     private static final LinkedHashMap<DeferredHolder<? extends EntityType<?>, ? extends EntityType<?>>, EntityRegistrationData> ENTITY_REGISTRATIONS = new LinkedHashMap<>();
-    public static final DeferredHolder<EntityType<?>, EntityType<RunFishEntity>> RUN_FISH = register("run_fish", RunFishEntity.class,
-            EntityType.Builder.<RunFishEntity>of(RunFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ShellSeaRunnerEntity>> SHELL_SEA_RUNNER = register("shell_sea_runner", ShellSeaRunnerEntity.class,
+            EntityType.Builder.<ShellSeaRunnerEntity>of(ShellSeaRunnerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
                     .sized(0.4f, 0.5f));
     public static final DeferredHolder<EntityType<?>, EntityType<SliderFishEntity>> SLIDER_FISH = register("slider_fish", SliderFishEntity.class,
             EntityType.Builder.<SliderFishEntity>of(SliderFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3)
@@ -433,7 +434,7 @@ public class CAEntities {
     private static final List<DeferredHolder<EntityType<?>, ? extends EntityType<? extends LivingEntity>>> SUMMONABLE_ENTITY_TYPES;
 
     static {
-        addAttributeRegistration(RUN_FISH, RunFishEntity::createAttributes);
+        addAttributeRegistration(SHELL_SEA_RUNNER, ShellSeaRunnerEntity::createAttributes);
         addAttributeRegistration(SLIDER_FISH, SliderFishEntity::createAttributes);
         addAttributeRegistration(SUPER_SLIDER, SuperSliderEntity::createAttributes);
         addAttributeRegistration(SHOOTER_FISH, ShooterFishEntity::createAttributes);
@@ -554,7 +555,7 @@ public class CAEntities {
         addAttributeRegistration(FISSION_PROKARYOTE_SLIME, FissionProkaryoteSlimeEntity::createAttributes);
         addAttributeRegistration(OCEANIZED_SHULKER, OceanizedShulkerEntity::createAttributes);
 
-        markSummonable(RUN_FISH);
+        markSummonable(SHELL_SEA_RUNNER);
         markSummonable(SLIDER_FISH);
         markSummonable(SUPER_SLIDER);
         markSummonable(SHOOTER_FISH);
@@ -628,7 +629,7 @@ public class CAEntities {
         markSummonable(OCEANIZED_WARDENIS);
         markSummonable(NUCLEIC_MALEFICENT);
 
-        addSpawnPlacementRegistration(RUN_FISH, RunFishEntity::registerSpawnPlacements);
+        addSpawnPlacementRegistration(SHELL_SEA_RUNNER, ShellSeaRunnerEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(SLIDER_FISH, SliderFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(SHOOTER_FISH, ShooterFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(FLOATING_SEA_DRIFTER, FloatingSeaDrifterEntity::registerSpawnPlacements);
@@ -758,7 +759,7 @@ public class CAEntities {
         private static final LinkedHashMap<DeferredHolder<? extends EntityType<?>, ? extends EntityType<?>>, Consumer<EntityRenderersEvent.RegisterRenderers>> RENDERER_REGISTRATIONS = new LinkedHashMap<>();
 
         static {
-            addRenderer(CAEntities.RUN_FISH, RunFishRenderer::new);
+            addRenderer(CAEntities.SHELL_SEA_RUNNER, ShellSeaRunnerRenderer::new);
             addRenderer(CAEntities.SLIDER_FISH, SliderFishRenderer::new);
             addRenderer(CAEntities.SUPER_SLIDER, SuperSliderRenderer::new);
             addRenderer(CAEntities.SHOOTER_FISH, ShooterFishRenderer::new);

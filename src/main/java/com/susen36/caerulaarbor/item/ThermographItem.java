@@ -43,11 +43,11 @@ public class ThermographItem extends Item {
         snt = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE)
                 ? livingEntity4.getAttribute(CAAttributes.SANITY_RESISTANCE).getValue()
                 : 0)) / Math.pow(10, 2);
-        if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+        if (sourceentity instanceof Player player && !player.level().isClientSide())
             player.displayClientMessage(Component.literal(("Defense: " + def)), false);
-        if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+        if (sourceentity instanceof Player player && !player.level().isClientSide())
             player.displayClientMessage(Component.literal(("Magic Resiatance: " + mgc)), false);
-        if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+        if (sourceentity instanceof Player player && !player.level().isClientSide())
             player.displayClientMessage(Component.literal(("Sanity Resistance: " + snt)), false);
         return retval;
 	}

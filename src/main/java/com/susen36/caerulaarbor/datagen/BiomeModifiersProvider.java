@@ -67,7 +67,7 @@ public class BiomeModifiersProvider implements DataProvider {
         addSpawn(modifiers, "puncture_fish_biome_modifier", anyBiome(), "caerula_arbor:puncture_fish", 40, 1, 1);
         addSpawn(modifiers, "reaper_fish_biome_modifier", anyBiome(), "caerula_arbor:reaper_fish", 50, 1, 2);
         addFeature(modifiers, "originium_iris_seeding_biome_modifier", biomes("snowy_plains", "plains", "flower_forest"), features("caerula_arbor:originium_iris_seeding"), "vegetal_decoration");
-        addSpawn(modifiers, "run_fish_biome_modifier", anyBiome(), "caerula_arbor:run_fish", 50, 2, 4);
+        addSpawn(modifiers, "shell_sea_runner_biome_modifier", anyBiome(), "caerula_arbor:shell_sea_runner", 50, 2, 4);
         addSpawn(modifiers, "shooter_fish_biome_modifier", anyBiome(), "caerula_arbor:shooter_fish", 50, 2, 3);
         addSpawn(modifiers, "slider_fish_biome_modifier", anyBiome(), "caerula_arbor:slider_fish", 50, 2, 5);
         addFeature(modifiers, "slider_flower_biome_modifier", biomes("caerula_arbor:branded_land"), features("caerula_arbor:slider_flower"), "surface_structures");

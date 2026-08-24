@@ -31,6 +31,8 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -62,6 +64,8 @@ public class TideChimeraEntity extends SeaMonsterBoss {
     String prevAnim = "empty";
     private boolean swinging;
     private long lastSwing;
+    private static final ResourceLocation TIDECHIMERA_GUIDE_ARMOR_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "tidechimera_guide_armor");
+    private static final ResourceLocation TIDECHIMERA_GUIDE_ARMOR_TOUGHNESS_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "tidechimera_guide_armor_toughness");
 
     public TideChimeraEntity(Level world) {
         this(CAEntities.TIDE_CHIMERA.get(), world);
@@ -319,6 +323,31 @@ public class TideChimeraEntity extends SeaMonsterBoss {
     }
 
     @Override
+    public void aiStep() {
+        super.aiStep();
+        // 低血量且未被沉默时：附加护甲与韧性（补充已移除的引痕药水加成）
+        if (!this.level().isClientSide()) {
+            boolean active = this.getHealth() < this.getMaxHealth() * 0.5F && !this.hasEffect(CAMobEffects.MUTE);
+            AttributeInstance armorAttr = this.getAttribute(Attributes.ARMOR);
+            if (active) {
+                if (armorAttr.getModifier(TIDECHIMERA_GUIDE_ARMOR_ID) == null) {
+                    armorAttr.addTransientModifier(new AttributeModifier(TIDECHIMERA_GUIDE_ARMOR_ID, 12, AttributeModifier.Operation.ADD_VALUE));
+                }
+                if (armorAttr.getModifier(TIDECHIMERA_GUIDE_ARMOR_TOUGHNESS_ID) == null) {
+                    armorAttr.addTransientModifier(new AttributeModifier(TIDECHIMERA_GUIDE_ARMOR_TOUGHNESS_ID, 9, AttributeModifier.Operation.ADD_VALUE));
+                }
+            } else {
+                if (armorAttr.getModifier(TIDECHIMERA_GUIDE_ARMOR_ID) != null) {
+                    armorAttr.removeModifier(TIDECHIMERA_GUIDE_ARMOR_ID);
+                }
+                if (armorAttr.getModifier(TIDECHIMERA_GUIDE_ARMOR_TOUGHNESS_ID) != null) {
+                    armorAttr.removeModifier(TIDECHIMERA_GUIDE_ARMOR_TOUGHNESS_ID);
+                }
+            }
+        }
+    }
+
+    @Override
     public void baseTick() {
         super.baseTick();
         LevelAccessor world = this.level();
@@ -482,7 +511,6 @@ public class TideChimeraEntity extends SeaMonsterBoss {
                     }
                 }
             }
-            EntityUtils.giveGuideLay(this);
             double angle;
             double d;
             double daam = 0;

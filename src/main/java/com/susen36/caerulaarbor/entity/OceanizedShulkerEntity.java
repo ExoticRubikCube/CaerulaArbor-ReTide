@@ -3,6 +3,7 @@ package com.susen36.caerulaarbor.entity;
 import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.entity.bullets.OceanizedShulkerBullet;
 import com.susen36.caerulaarbor.init.CAAttributes;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
@@ -41,7 +42,6 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -467,8 +467,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
             return;
         Direction dire = this.getAttachDirection();
         Direction.Axis axis = dire != null ? dire.getAxis() : Direction.Axis.Y;
-        ShulkerBullet sBullet = new ShulkerBullet(level, this, target, axis);
-        sBullet.getPersistentData().putBoolean("oceanized", true);
+        OceanizedShulkerBullet sBullet = new OceanizedShulkerBullet(level, this, target, axis);
         level.addFreshEntity(sBullet);
         if (!this.level().isClientSide()) {
             this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.SHULKER_SHOOT, SoundSource.HOSTILE, 1, 1);

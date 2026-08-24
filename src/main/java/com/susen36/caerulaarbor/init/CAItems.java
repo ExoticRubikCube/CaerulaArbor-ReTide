@@ -82,7 +82,7 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> ORIGINIUM_IRIS_SEEDING = block(CABlocks.ORIGINIUM_IRIS_SEEDING);
     public static final DeferredHolder<Item, ? extends Item> THERMOGRAPH = REGISTRY.register("thermograph", ThermographItem::new);
     
-    public static final DeferredHolder<Item, ? extends Item> RUN_FISH_SPAWN_EGG = REGISTRY.register("run_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.RUN_FISH, -16777012, -3355444, new Item.Properties()));
+    public static final DeferredHolder<Item, ? extends Item> SHELL_SEA_RUNNER_SPAWN_EGG = REGISTRY.register("shell_sea_runner_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SHELL_SEA_RUNNER, -16777012, -3355444, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> SLIDER_FISH_SPAWN_EGG = REGISTRY.register("slider_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SLIDER_FISH, -13421569, -3355444, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> SUPER_SLIDER_SPAWN_EGG = REGISTRY.register("super_slider_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SUPER_SLIDER, -1, -1, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> SHOOTER_FISH_SPAWN_EGG = REGISTRY.register("shooter_fish_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.SHOOTER_FISH, -13434676, -3355444, new Item.Properties()));
@@ -231,8 +231,8 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> TRAIL_PUMPKING = block(CABlocks.TRAIL_PUMPKING);
     public static final DeferredHolder<Item, ? extends Item> MEGA_CHEST_SPAWN_EGG = REGISTRY.register("mega_chest_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.MEGA_CHEST, -1, -1, new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> TRAILRITE_AXE = REGISTRY.register("trailrite_axe", TrailriteAxeItem::new);
-    public static final DeferredHolder<Item, ? extends Item> BUCKET_RUNFISH = REGISTRY.register("bucket_runfish",
-            () -> new MobBucketItem(CAEntities.RUN_FISH.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+    public static final DeferredHolder<Item, ? extends Item> BUCKET_SHELL_SEA_RUNNER = REGISTRY.register("bucket_shell_sea_runner",
+            () -> new MobBucketItem(CAEntities.SHELL_SEA_RUNNER.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
     public static final DeferredHolder<Item, ? extends Item> TRAILRITE_SWORD = REGISTRY.register("trailrite_sword", TrailriteSwordItem::new);
     public static final DeferredHolder<Item, ? extends Item> BUCKET_SLIDER = REGISTRY.register("bucket_slider",
             () -> new MobBucketItem(CAEntities.SLIDER_FISH.get(), Fluids.WATER, SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
@@ -423,7 +423,6 @@ public class CAItems {
     public static final DeferredHolder<Item, ? extends Item> ABANDONED_SULPTURE = REGISTRY.register(Objects.requireNonNull(CABlocks.ABANDONED_SULPTURE.getId()).getPath(),
             () -> new AbandonedSulptureDisplayItem(CABlocks.ABANDONED_SULPTURE.get(), new Item.Properties()));
     public static final DeferredHolder<Item, ? extends Item> NETHERSEA_ICECREAM = REGISTRY.register("nethersea_icecream", NetherseaIcecreamItem::new);
-    public static final DeferredHolder<Item, ? extends Item> GOODSQUIDS_SERVERER = REGISTRY.register("goodsquids_serverer", GoodsquidsServererItem::new);
     public static final DeferredHolder<Item, ? extends Item> NOURISHED_APPLE_PIE = REGISTRY.register("nourished_apple_pie", NourishedApplePieItem::new);
     public static final DeferredHolder<Item, ? extends Item> LAST_KNIGHT_SPAWNER = REGISTRY.register("last_knight_spawner", LastKnightSpawnerItem::new);
     public static final DeferredHolder<Item, ? extends Item> ROCINANTE_SPAWN_EGG = REGISTRY.register("rocinante_spawn_egg", () -> new DeferredSpawnEggItem(CAEntities.ROCINANTE, -13027013, -9471010, new Item.Properties()));

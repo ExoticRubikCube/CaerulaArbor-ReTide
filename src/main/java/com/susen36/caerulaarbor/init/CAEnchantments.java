@@ -1,5 +1,6 @@
 package com.susen36.caerulaarbor.init;
 
+import com.susen36.babel.init.BabelAttributes;
 import com.susen36.caerulaarbor.CaerulaArbor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -11,15 +12,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
 
-/**
- * 1.21.1 附魔注册：Enchantment 已改为 record，通过 BootstrapContext + Enchantment.definition 注册。
- * <p>原 13 个 extends Enchantment 的类已删除，属性全部迁移至此 bootstrap 方法。</p>
- * <p>cost 公式统一为 getMinCost=1+level*10, getMaxCost=6+level*10，映射为 dynamicCost(11,10) / dynamicCost(16,10)。</p>
- */
 public class CAEnchantments {
     public static final ResourceKey<Enchantment> OCEANOSPR_KILLER = key("oceanospr_killer");
     public static final ResourceKey<Enchantment> SANITY_REAPER = key("sanity_reaper");
@@ -179,6 +179,7 @@ public class CAEnchantments {
         );
 
         // MAGIC_TOLERANCE — COMMON(10), maxLevel 4, ARMOR, tag: enchantable/sanity_defend, 互斥 FLEXIBILITY
+        // 穿戴时由 attributes 效果挂 Babel 魔法抗性属性修饰符（原版 SwiftSneak 同款），卸下自动移除，无需每 tick 施放 buff
         register(context, MAGIC_TOLERANCE,
                 Enchantment.enchantment(
                         Enchantment.definition(
@@ -190,6 +191,13 @@ public class CAEnchantments {
                                 EquipmentSlotGroup.ARMOR
                         )
                 )
+                        .withEffect(EnchantmentEffectComponents.ATTRIBUTES,
+                                new EnchantmentAttributeEffect(
+                                        ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "magic_tolerance_magic_resistance"),
+                                        BabelAttributes.MAGIC_RESISTANCE,
+                                        LevelBasedValue.perLevel(4.0F),
+                                        AttributeModifier.Operation.ADD_VALUE
+                                ))
                         .exclusiveWith(HolderSet.direct(enchGetter.getOrThrow(FLEXIBILITY)))
         );
 

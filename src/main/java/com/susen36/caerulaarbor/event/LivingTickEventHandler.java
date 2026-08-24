@@ -5,13 +5,9 @@ import com.susen36.babel.util.EPUtils;
 import com.susen36.caerulaarbor.capability.map.MapVariables;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler;
 import com.susen36.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
-import com.susen36.caerulaarbor.entity.*;
+import com.susen36.caerulaarbor.entity.AbsorberLimbEntity;
 import com.susen36.caerulaarbor.entity.ai.SeabornAggressiveTargetGoal;
 import com.susen36.caerulaarbor.entity.ai.SeabornCounterTargetGoal;
-import com.susen36.caerulaarbor.entity.enderdragon.MoistEnderCrystalEntity;
-import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
-import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedBishopEntity;
-import com.susen36.caerulaarbor.entity.tidelinked.TidelinkedImmortalEntity;
 import com.susen36.caerulaarbor.init.CAEnchantments;
 import com.susen36.caerulaarbor.init.CAEntityTypeTags;
 import com.susen36.caerulaarbor.init.CAGameRules;
@@ -33,7 +29,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
@@ -45,147 +40,45 @@ public class LivingTickEventHandler {
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Post event) {
         handleModeGoals(event);
-        handleChangeAttackGoal(event);
         handleMobTick(event);
         handleArmorEnchantFunc(event);
     }
 
     private static void handleModeGoals(EntityTickEvent.Post event) {
         Entity entity = event.getEntity();
-        if (entity.level().isClientSide()) {
-            return;
-        }
-        if (!(entity instanceof Mob mob)) {
-            return;
-        }
-        if (entity.tickCount % 20 != 0) {
-            return;
-        }
-        boolean isSeaborn = entity.getType().is(SEABORN);
-        boolean isSeabornPet = entity.getType().is(CAEntityTypeTags.SEABORN_PET);
-        boolean isSeaFriend = entity.getType().is(CAEntityTypeTags.SEA_FRIEND);
-        if (isSeaborn && !isSeabornPet && entity.level().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)) {
-            boolean alreadyAdded = false;
-            for (WrappedGoal goal : mob.targetSelector.getAvailableGoals()) {
-                if (goal.getGoal() instanceof SeabornAggressiveTargetGoal) {
-                    alreadyAdded = true;
-                    break;
-                }
-            }
-            if (!alreadyAdded) {
-                mob.targetSelector.addGoal(8, new SeabornAggressiveTargetGoal(mob));
-            }
-        }
-        if (!isSeaborn && !isSeaFriend && entity.level().getGameRules().getBoolean(CAGameRules.DEFENSIVE_MODE)) {
-            boolean alreadyAdded = false;
-            for (WrappedGoal goal : mob.targetSelector.getAvailableGoals()) {
-                if (goal.getGoal() instanceof SeabornCounterTargetGoal) {
-                    alreadyAdded = true;
-                    break;
-                }
-            }
-            if (!alreadyAdded) {
-                mob.targetSelector.addGoal(9, new SeabornCounterTargetGoal(mob));
-            }
-        }
-    }
-
-    //TODO:可能需要下放
-    private static void handleChangeAttackGoal(EntityTickEvent.Post event) {
-        if (event.getEntity() instanceof Mob mob && mob.tickCount % 30 == 0) {
-            LivingEntity enemy = mob.getTarget();
-            if (enemy == null) {
+        if (!entity.level().isClientSide()) {
+            if (!(entity instanceof Mob mob)) {
                 return;
             }
-
-            Level world = mob.level();
-            Vec3 mobPos = mob.position();
-            Entity newTarget = null;
-
-            switch (enemy) {
-                case TidelinkedImmortalEntity immortal when immortal.hasEffect(CAMobEffects.FAKE_DEATH) -> {
-                    double minSqrDist = Double.MAX_VALUE;
-                    for (TidelinkedBishopEntity candidate : world.getEntitiesOfClass(TidelinkedBishopEntity.class, mob.getBoundingBox().inflate(32.0))) {
-                        double sqrDist = candidate.distanceToSqr(mobPos);
-                        if (sqrDist < minSqrDist) {
-                            minSqrDist = sqrDist;
-                            newTarget = candidate;
-                        }
+            if (entity.tickCount % 20 != 0) {
+                return;
+            }
+            boolean isSeaborn = entity.getType().is(SEABORN);
+            boolean isSeabornPet = entity.getType().is(CAEntityTypeTags.SEABORN_PET);
+            boolean isSeaFriend = entity.getType().is(CAEntityTypeTags.SEA_FRIEND);
+            if (isSeaborn && !isSeabornPet && entity.level().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)) {
+                boolean alreadyAdded = false;
+                for (WrappedGoal goal : mob.targetSelector.getAvailableGoals()) {
+                    if (goal.getGoal() instanceof SeabornAggressiveTargetGoal) {
+                        alreadyAdded = true;
+                        break;
                     }
                 }
-                case TidelinkedBishopEntity bishop when bishop.hasEffect(CAMobEffects.FAKE_DEATH) -> {
-                    double minSqrDist = Double.MAX_VALUE;
-                    for (TidelinkedImmortalEntity candidate : world.getEntitiesOfClass(TidelinkedImmortalEntity.class, mob.getBoundingBox().inflate(32.0))) {
-                        double sqrDist = candidate.distanceToSqr(mobPos);
-                        if (sqrDist < minSqrDist) {
-                            minSqrDist = sqrDist;
-                            newTarget = candidate;
-                        }
-                    }
-                }
-                case MartusEntity martus when martus.hasEffect(CAMobEffects.INVULNERABLE) -> {
-                    Mob closestBlessed = null;
-                    double minBlessedDist = Double.MAX_VALUE;
-                    Mob closestNormal = null;
-                    double minNormalDist = Double.MAX_VALUE;
-
-                    for (Mob candidate : world.getEntitiesOfClass(Mob.class, mob.getBoundingBox().inflate(32.0))) {
-                        if (candidate instanceof MartusEntity || !candidate.getType().is(SEABORN)) {
-                            continue;
-                        }
-                        double sqrDist = mob.distanceToSqr(candidate);
-                        if (candidate.getPersistentData().getBoolean("blessed")) {
-                            if (sqrDist < minBlessedDist) {
-                                minBlessedDist = sqrDist;
-                                closestBlessed = candidate;
-                            }
-                        } else if (closestBlessed == null && sqrDist < minNormalDist) {
-                            minNormalDist = sqrDist;
-                            closestNormal = candidate;
-                        }
-                    }
-                    newTarget = closestBlessed != null ? closestBlessed : closestNormal;
-                }
-                case EndspeakerEntity endspeaker when endspeaker.getPhase() < 3 && endspeaker.hasEffect(CAMobEffects.INVULNERABLE) -> {
-                    double minSqrDist = Double.MAX_VALUE;
-                    Vec3 bossPos = endspeaker.position();
-                    for (LivingEntity candidate : world.getEntitiesOfClass(LivingEntity.class, mob.getBoundingBox().inflate(32.0))) {
-                        if (!candidate.getType().is(SEABORN)) {
-                            continue;
-                        }
-                        double sqrDist = candidate.distanceToSqr(bossPos);
-                        if (sqrDist < minSqrDist) {
-                            minSqrDist = sqrDist;
-                            newTarget = candidate;
-                        }
-                    }
-                }
-                case OceanizedIllusionerEntity ignored -> {
-                    double minSqrDist = Double.MAX_VALUE;
-                    for (OceanIllusionEntity candidate : world.getEntitiesOfClass(OceanIllusionEntity.class, mob.getBoundingBox().inflate(24.0))) {
-                        double sqrDist = candidate.distanceToSqr(mobPos);
-                        if (sqrDist < minSqrDist) {
-                            minSqrDist = sqrDist;
-                            newTarget = candidate;
-                        }
-                    }
-                }
-                case OceanizedEnderinaEntity enderina when !enderina.isEnderinaDurative() -> {
-                    double minSqrDist = Double.MAX_VALUE;
-                    for (MoistEnderCrystalEntity candidate : world.getEntitiesOfClass(MoistEnderCrystalEntity.class, mob.getBoundingBox().inflate(24.0))) {
-                        double sqrDist = candidate.distanceToSqr(mobPos);
-                        if (sqrDist < minSqrDist) {
-                            minSqrDist = sqrDist;
-                            newTarget = candidate;
-                        }
-                    }
-                }
-                default -> {
+                if (!alreadyAdded) {
+                    mob.targetSelector.addGoal(8, new SeabornAggressiveTargetGoal(mob));
                 }
             }
-
-            if (newTarget instanceof LivingEntity targetLiving) {
-                mob.setTarget(targetLiving);
+            if (!isSeaborn && !isSeaFriend && entity.level().getGameRules().getBoolean(CAGameRules.DEFENSIVE_MODE)) {
+                boolean alreadyAdded = false;
+                for (WrappedGoal goal : mob.targetSelector.getAvailableGoals()) {
+                    if (goal.getGoal() instanceof SeabornCounterTargetGoal) {
+                        alreadyAdded = true;
+                        break;
+                    }
+                }
+                if (!alreadyAdded) {
+                    mob.targetSelector.addGoal(9, new SeabornCounterTargetGoal(mob));
+                }
             }
         }
     }
@@ -272,7 +165,6 @@ public class LivingTickEventHandler {
         if (entity.tickCount % 10 != 0) return;
         if (entity.getType().is(SEABORN_PET)) return;
 
-        // 用廉价的半径判定替代96格方体全量实体扫描，避免每次分配Vec3与AABB并扫描加载实体
         if (Math.random() < 0.16 && world.hasNearbyAlivePlayer(x, y, z, 83.0)) {
             double pnt = Mth.nextDouble(RandomSource.create(), 0, 0.005);
             MapVariablesHandler.addEvoPoint(world, StrategyType.MIGRATION,
@@ -294,20 +186,12 @@ public class LivingTickEventHandler {
             if (!helm.isEmpty() || !chest.isEmpty() || !legg.isEmpty() || !boot.isEmpty()) {
                 if (living.tickCount % 5 == 0) {
                     Holder<Enchantment> flexibility = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.FLEXIBILITY);
-                    Holder<Enchantment> magicTolerance = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.MAGIC_TOLERANCE);
                     Holder<Enchantment> sanityInjury = CAEnchantments.getHolder(living.level().registryAccess(), CAEnchantments.SANITY_INJURY_CURSE);
                     double lvl = EnchantmentHelper.getItemEnchantmentLevel(flexibility, helm) + EnchantmentHelper.getItemEnchantmentLevel(flexibility, chest)
                             + EnchantmentHelper.getItemEnchantmentLevel(flexibility, legg) + EnchantmentHelper.getItemEnchantmentLevel(flexibility, boot);
                     if (lvl > 0) {
                         if (!living.level().isClientSide()) {
                             living.addEffect(new MobEffectInstance(CAMobEffects.FLEXIBILITY_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
-                        }
-                    }
-                    lvl = EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, helm) + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, chest)
-                            + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, legg) + EnchantmentHelper.getItemEnchantmentLevel(magicTolerance, boot);
-                    if (lvl > 0) {
-                        if (!living.level().isClientSide()) {
-                            living.addEffect(new MobEffectInstance(CAMobEffects.MAGIC_RESIS_BUFF, 10, (int) Math.min(lvl - 1, 16), false, false));
                         }
                     }
                     lvl = EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, helm) + EnchantmentHelper.getItemEnchantmentLevel(sanityInjury, chest)

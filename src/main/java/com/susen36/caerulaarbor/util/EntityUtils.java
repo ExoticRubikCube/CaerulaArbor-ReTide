@@ -165,19 +165,6 @@ public class EntityUtils {
 		}
 	}
 
-	public static void giveGuideLay(Entity entity) {
-		if (entity == null)
-			return;
-		if ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
-			if (!(entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.MUTE))) {
-				if (!(entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.GUIDE_PATH_AHEAD))) {
-					if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-						livingEntity.addEffect(new MobEffectInstance(CAMobEffects.GUIDE_PATH_AHEAD, 20, 0));
-				}
-			}
-		}
-	}
-
 	public static String getLives(Entity entity) {
 		if (entity == null)
 			return "";

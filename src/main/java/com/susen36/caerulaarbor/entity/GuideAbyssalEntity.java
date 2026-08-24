@@ -1,21 +1,27 @@
 package com.susen36.caerulaarbor.entity;
 
 
+import com.susen36.caerulaarbor.CaerulaArbor;
+import com.susen36.caerulaarbor.block.SeaTrailGrownBlock;
 import com.susen36.caerulaarbor.entity.base.SeaMonster;
+import com.susen36.caerulaarbor.init.CABlocks;
 import com.susen36.caerulaarbor.init.CAEntities;
+import com.susen36.caerulaarbor.init.CAMobEffects;
 import com.susen36.caerulaarbor.init.CASounds;
-import com.susen36.caerulaarbor.util.EntityUtils;
 import com.susen36.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -29,7 +35,9 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import software.bernie.geckolib.animation.*;
@@ -40,6 +48,7 @@ public class GuideAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_DELAY = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_LAYLIMIT = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.INT);
+	private static final ResourceLocation BRANDGUIDER_ARMOR_ID = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "brandguider_lowhp_armor");
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -130,7 +139,30 @@ public class GuideAbyssalEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		EntityUtils.giveGuideLay(this);
+		Level world = this.level();
+		if (!this.level().isClientSide()) {
+			// 低血量且未被沉默时：附加护甲 +8 并在脚下不断生成溟痕（耗尽 LAYLIMIT 即停）
+			boolean active = this.getHealth() < this.getMaxHealth() * 0.5 && !this.hasEffect(CAMobEffects.MUTE);
+			AttributeInstance armorAttr = this.getAttribute(Attributes.ARMOR);
+			if (active) {
+				if (armorAttr.getModifier(BRANDGUIDER_ARMOR_ID) == null) {
+					armorAttr.addTransientModifier(new AttributeModifier(BRANDGUIDER_ARMOR_ID, 8, AttributeModifier.Operation.ADD_VALUE));
+				}
+				int layLimit = this.entityData.get(DATA_LAYLIMIT);
+				if (WorldUtils.canGrief(world) && layLimit > 0) {
+					BlockPos pos = BlockPos.containing(this.getX(), this.getY(), this.getZ());
+					BlockState toPlace = CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState();
+					if (toPlace.canSurvive(world, pos) && (world.getBlockState(pos).isAir() || world.getFluidState(pos).createLegacyBlock().getBlock() == Blocks.WATER)) {
+						boolean onWater = world.getFluidState(pos).createLegacyBlock().getBlock() == Blocks.WATER;
+						world.setBlockAndUpdate(pos, toPlace.setValue(SeaTrailGrownBlock.WATERLOGGED, onWater));
+						world.gameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Context.of(this, toPlace));
+						this.entityData.set(DATA_LAYLIMIT, layLimit - 1);
+					}
+				}
+			} else if (armorAttr.getModifier(BRANDGUIDER_ARMOR_ID) != null) {
+				armorAttr.removeModifier(BRANDGUIDER_ARMOR_ID);
+			}
+		}
 		this.refreshDimensions();
 	}
 

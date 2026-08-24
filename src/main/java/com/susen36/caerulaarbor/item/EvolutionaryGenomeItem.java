@@ -34,12 +34,10 @@ public class EvolutionaryGenomeItem extends Item {
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
 		PlayerVariable capability = ModCapabilities.getPlayerVariables(entity);
 		if (!capability.permanent_evo) {
-			// 永久进化时同时开启临时进化
 			capability.permanent_evo = true;
 			capability.can_player_evo = true;
 			capability.syncPlayerVariables(entity);
 			world.playSound(null, entity.blockPosition(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0F, 1.0F);
-			// 永久进化提示，金色以区别于紫色排异消息
 			if (!world.isClientSide()) {
 				entity.displayClientMessage(Component.translatable("item.caerula_arbor.evo_message_permanent"), false);
 			}
