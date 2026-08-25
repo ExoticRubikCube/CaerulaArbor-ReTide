@@ -70,19 +70,6 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.45);
-        builder = builder.add(Attributes.MAX_HEALTH, 40);
-        builder = builder.add(Attributes.ARMOR, 0);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 32);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(Attributes.FLYING_SPEED, 0.45);
-        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
-        return builder;
-    }
-
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
@@ -261,7 +248,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
                     }
                 }
             }
-            enderina = world.getEntitiesOfClass(OceanizedEnderinaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
+            enderina = world.getEntitiesOfClass(AbstractOceanizedEnderDragonEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
                 Comparator<Entity> compareDistOf(double x, double y, double z) {
                     return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
                 }
@@ -269,7 +256,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
             if (enderina == null) {
                 return;
             }
-            if ((enderina instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(OceanizedEnderinaEntity.DATA_REVIVE_TICK) : 0) > 0) {
+            if ((enderina instanceof AbstractOceanizedEnderDragonEntity datEntI ? datEntI.getEntityData().get(AbstractOceanizedEnderDragonEntity.DATA_REVIVE_TICK) : 0) > 0) {
                 enderina.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER),
                         (float) ((enderina instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.25));
             } else {
@@ -290,6 +277,19 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 
     @Override
     protected void pushEntities() {
+    }
+
+     public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.45);
+        builder = builder.add(Attributes.MAX_HEALTH, 40);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 32);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(Attributes.FLYING_SPEED, 0.45);
+        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
+        return builder;
     }
 
     public String getSyncedAnimation() {

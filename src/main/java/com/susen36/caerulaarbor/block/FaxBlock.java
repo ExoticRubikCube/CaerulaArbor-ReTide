@@ -4,23 +4,17 @@ package com.susen36.caerulaarbor.block;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CAItems;
 import com.susen36.caerulaarbor.init.CAParticles;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,122 +57,53 @@ public class FaxBlock extends Block {
 	@Override
 	public ItemInteractionResult useItemOn(ItemStack itemstack, BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
 		super.useItemOn(itemstack, blockstate, world, pos, entity, hand, hit);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
+		if (!(world instanceof ServerLevel level)) {
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		}
 		Direction direction = hit.getDirection();
-        ItemInteractionResult result = ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        ItemStack treaty;
-        boolean isCreative;
-        treaty = (entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-        isCreative = new Object() {
-            public boolean checkGamemode(Entity ent) {
-                if (ent instanceof ServerPlayer serverPlayer) {
-                    return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                }
-                return false;
-            }
-        }.checkGamemode((Entity) entity);
-        if (treaty.getItem() == CAItems.TREATY_COPPER.get()) {
-            if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 5 || isCreative) {
-                if (!isCreative) {
-                    if ((Entity) entity instanceof Player player)
-                        player.giveExperienceLevels(-(5));
-                }
-                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if (world instanceof ServerLevel level) {
-                    Entity entityToSpawn = CAEntities.JUNIOR_WARRIOR_PRIEST.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                }
-                result = ItemInteractionResult.SUCCESS;
-            }
-        } else if (treaty.getItem() == CAItems.TREATY_IRON.get()) {
-            if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 7 || isCreative) {
-                if (!isCreative) {
-                    if ((Entity) entity instanceof Player player)
-                        player.giveExperienceLevels(-(7));
-                }
-                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if (world instanceof ServerLevel level) {
-                    Entity entityToSpawn = CAEntities.WARRIOR_PRIEST.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                }
-                result = ItemInteractionResult.SUCCESS;
-            }
-        } else if (treaty.getItem() == CAItems.TREATY_GOLD.get()) {
-            if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 9 || isCreative) {
-                if (!isCreative) {
-                    if ((Entity) entity instanceof Player player)
-                        player.giveExperienceLevels(-(9));
-                }
-                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if (Math.random() < 0.5) {
-                    if (world instanceof ServerLevel level) {
-                        Entity entityToSpawn = CAEntities.CORRECTIONAL_PHALAX_VANGUARD.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5),
-                                MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
-                    }
-                } else {
-                    if (world instanceof ServerLevel level) {
-                        Entity entityToSpawn = CAEntities.CORRECTIONAL_PHALANXY_INFANTRY.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5),
-                                MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
-                    }
-                }
-                result = ItemInteractionResult.SUCCESS;
-            }
-        } else if (treaty.getItem() == CAItems.EMERALD_TREATY.get()) {
-            if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 9 || isCreative) {
-                if (!isCreative) {
-                    if ((Entity) entity instanceof Player player)
-                        player.giveExperienceLevels(-(9));
-                }
-                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if (Math.random() < 0.5) {
-                    if (world instanceof ServerLevel level) {
-                        Entity entityToSpawn = CAEntities.TRIBUNAL_HEALER.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
-                    }
-                } else {
-                    if (world instanceof ServerLevel level) {
-                        Entity entityToSpawn = CAEntities.TRIBUNAL_HEALER.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
-                    }
-                }
-                result = ItemInteractionResult.SUCCESS;
-            }
-        } else if (treaty.getItem() == CAItems.TREATY_DIAMOND.get()) {
-            if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 11 || isCreative) {
-                if (!isCreative) {
-                    if ((Entity) entity instanceof Player player)
-                        player.giveExperienceLevels(-(11));
-                }
-                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if (world instanceof ServerLevel level)
-                    level.sendParticles(CAParticles.PURPLE_FLAME.get(), ((double) x + 0.5), ((double) y + 1.5), ((double) z + 0.5), 32, 0.75, 0.75, 0.75, 0.1);
-                if (world instanceof ServerLevel level) {
-                    Entity entityToSpawn = CAEntities.IRENE.get().spawn(level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                }
-                result = ItemInteractionResult.SUCCESS;
-            }
-        }
-        return result;
+		double spawnX = pos.getX() + direction.getStepX() + 0.5;
+		double spawnY = pos.getY() + direction.getStepY();
+		double spawnZ = pos.getZ() + direction.getStepZ() + 0.5;
+		ItemStack treaty = entity.getMainHandItem();
+		boolean isCreative = entity.getAbilities().instabuild;
+
+		int expCost = 0;
+		if (treaty.is(CAItems.TREATY_COPPER.get())) {
+			expCost = 5;
+		} else if (treaty.is(CAItems.TREATY_IRON.get())) {
+			expCost = 7;
+		} else if (treaty.is(CAItems.TREATY_GOLD.get()) || treaty.is(CAItems.EMERALD_TREATY.get())) {
+			expCost = 9;
+		} else if (treaty.is(CAItems.TREATY_DIAMOND.get())) {
+			expCost = 11;
+		}
+		if (expCost == 0) {
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		}
+		if (!isCreative && entity.experienceLevel < expCost) {
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		}
+		if (!isCreative) {
+			entity.giveExperienceLevels(-expCost);
+		}
+		treaty.shrink(1);
+
+		if (treaty.is(CAItems.TREATY_COPPER.get())) {
+			CAEntities.JUNIOR_WARRIOR_PRIEST.get().spawn(level, BlockPos.containing(spawnX, spawnY, spawnZ), MobSpawnType.MOB_SUMMONED);
+		} else if (treaty.is(CAItems.TREATY_IRON.get())) {
+			CAEntities.WARRIOR_PRIEST.get().spawn(level, BlockPos.containing(spawnX, spawnY, spawnZ), MobSpawnType.MOB_SUMMONED);
+		} else if (treaty.is(CAItems.TREATY_GOLD.get())) {
+			if (level.getRandom().nextFloat() < 0.5f) {
+				CAEntities.CORRECTIONAL_PHALAX_VANGUARD.get().spawn(level, BlockPos.containing(spawnX, spawnY, spawnZ), MobSpawnType.MOB_SUMMONED);
+			} else {
+				CAEntities.CORRECTIONAL_PHALANXY_INFANTRY.get().spawn(level, BlockPos.containing(spawnX, spawnY, spawnZ), MobSpawnType.MOB_SUMMONED);
+			}
+		} else if (treaty.is(CAItems.EMERALD_TREATY.get())) {
+			CAEntities.TRIBUNAL_HEALER.get().spawn(level, BlockPos.containing(spawnX, spawnY, spawnZ), MobSpawnType.MOB_SUMMONED);
+		} else if (treaty.is(CAItems.TREATY_DIAMOND.get())) {
+			level.sendParticles(CAParticles.PURPLE_FLAME.get(), pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 32, 0.75, 0.75, 0.75, 0.1);
+			CAEntities.IRENE.get().spawn(level, BlockPos.containing(spawnX, spawnY, spawnZ), MobSpawnType.MOB_SUMMONED);
+		}
+		return ItemInteractionResult.SUCCESS;
 	}
 }

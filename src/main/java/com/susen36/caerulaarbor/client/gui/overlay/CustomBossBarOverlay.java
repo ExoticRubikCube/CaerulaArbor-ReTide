@@ -57,7 +57,7 @@ public class CustomBossBarOverlay {
     public static final ResourceLocation ENDSPEAKER = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/endspeaker_bossbar.png");
     public static final ResourceLocation WITHER_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/wither_bossstyle.png");
     public static final ResourceLocation WARDEN_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/warden_bossstyle.png");
-    public static final ResourceLocation ENDERINA_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/enderina_style.png");
+    public static final ResourceLocation ENDER_DRAGON_STYLE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/gui/overlay/bossbar/ender_dragon_style.png");
 
     public static final BossBarRenderContext CONTEXT_GENERIC = BossBarRenderContext.of(GENERIC).frame(158,26).bar(156,3,1,11).offset(-9, 5);
     public static final BossBarRenderContext CONTEXT_PATHSHAPER = BossBarRenderContext.of(PATHSHAPER).frame(182,13).bar(180,7,1,4).offset(-1, -5).color(0x628CFE);
@@ -82,13 +82,12 @@ public class CustomBossBarOverlay {
     public static final BossBarRenderContext CONTEXT_WITHERIA = BossBarRenderContext.of(WITHERIA).frame(182,23).bar(180,3,1,13).offset(-12, 7).color(0x77B2DB).withStyle(WITHER_STYLE, 16);
     public static final BossBarRenderContext CONTEXT_WARDEN = BossBarRenderContext.of(WARDEN).frame(182,21).bar(180,3,1,8).offset(-10, 7).color(0x3FD2FA).withStyle(WARDEN_STYLE, 32);
     public static final BossBarRenderContext CONTEXT_WARDENIS = BossBarRenderContext.of(WARDENIS).frame(182,21).bar(180,3,1,8).offset(-10, 7).color(0x3FD2FA).withStyle(WARDEN_STYLE, 32);
-    public static final BossBarRenderContext CONTEXT_ENDERINA = BossBarRenderContext.of(ENDERINA).frame(182,23).bar(180,3,1,13).offset(-12, 6).color(0x7B75D7);
-    public static final BossBarRenderContext CONTEXT_ENDER_DRAGON = BossBarRenderContext.of(ENDER_DRAGON).frame(182,23).bar(180,3,1,13).offset(-12, 6).color(0x7B75D7);
+    public static final BossBarRenderContext CONTEXT_ENDERINA = BossBarRenderContext.of(ENDERINA).frame(182,23).bar(180,3,1,13).offset(-12, 6).color(0x7B75D7).withStyle(ENDER_DRAGON_STYLE, 32);
+    public static final BossBarRenderContext CONTEXT_ENDER_DRAGON = BossBarRenderContext.of(ENDER_DRAGON).frame(182,23).bar(180,3,1,13).offset(-12, 6).color(0x7B75D7).withStyle(ENDER_DRAGON_STYLE, 32);
     public static final BossBarRenderContext CONTEXT_ENDSPEAKER = BossBarRenderContext.of(ENDSPEAKER).frame(182,24).bar(180,3,1,11).offset(-10, 6).color(0xD6E0F2);
 
 	public static final Map<BossEvent, Integer> CYCLE_MAP = new HashMap<>();
 
-    /** 原版 Boss 血条渲染前：取消自定义血条的原版绘制，避免重复渲染 */
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void customBossBarCancel(CustomizeGuiOverlayEvent.BossEventProgress event){
@@ -99,10 +98,7 @@ public class CustomBossBarOverlay {
         }
     }
 
-    /**
-     * 与参考项目一致：在 BOSS_OVERLAY 层渲染完成之后，直接遍历原版血条列表绘制自定义血条。
-     * 不占用原版 Boss 层的高 Z 层级，从而不会遮挡 Jade 等后续渲染的 GUI。
-     */
+
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void renderCustomBossBars(RenderGuiLayerEvent.Post event){
@@ -150,10 +146,10 @@ public class CustomBossBarOverlay {
         } else if (context.equals(CONTEXT_ENDERINA)||context.equals(CONTEXT_ENDER_DRAGON)){
             int uOffset = (cycle_progress * 5 / 16) % 218;
             int remain_len = real_px - 90;
-            gui.blit(ENDERINA_STYLE, bx, by,
+            gui.blit(ENDER_DRAGON_STYLE, bx, by,
                     uOffset, 0, Math.min(90, real_px), context.bar_y, 308, 134);
             if (remain_len > 0){
-	            gui.blit(ENDERINA_STYLE, bx + 90, by,
+	            gui.blit(ENDER_DRAGON_STYLE, bx + 90, by,
 	            			uOffset, 67, remain_len, context.bar_y, 308, 134);
             }
         }

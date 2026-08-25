@@ -1,7 +1,7 @@
 package com.susen36.caerulaarbor.block;
 
+import com.susen36.caerulaarbor.entity.enderdragon.AbstractOceanizedEnderDragonEntity;
 import com.susen36.caerulaarbor.entity.enderdragon.MoistEnderCrystalEntity;
-import com.susen36.caerulaarbor.entity.enderdragon.OceanizedEnderinaEntity;
 import com.susen36.caerulaarbor.init.CAEntities;
 import com.susen36.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
@@ -77,7 +77,7 @@ public class EnderinaCoreBlock extends Block {
         double count = 0;
         BlockPos curPos = BlockPos.containing(x, y, z);
         if (!blockstate.getValue(CAN_SUMMON)) {
-            if(world.getEntitiesOfClass(OceanizedEnderinaEntity.class,
+            if(world.getEntitiesOfClass(AbstractOceanizedEnderDragonEntity.class,
                     AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> e.isAlive()).isEmpty()) {
                 {
                     final Vec3 center = new Vec3(x, y, z);
@@ -87,7 +87,7 @@ public class EnderinaCoreBlock extends Block {
                             });
                     for (MoistEnderCrystalEntity entityiterator : entfound) {
                         count++;
-                        OceanizedEnderinaEntity.spawnLinkParticles(world, entityiterator.getX(), entityiterator.getY() + 1, entityiterator.getZ(), (double) x + 0.5, (double) y + 1, (double) z + 0.5);
+                        AbstractOceanizedEnderDragonEntity.spawnLinkParticles(world, entityiterator.getX(), entityiterator.getY() + 1, entityiterator.getZ(), (double) x + 0.5, (double) y + 1, (double) z + 0.5);
                     }
                 }
                 if (count >= 4) {

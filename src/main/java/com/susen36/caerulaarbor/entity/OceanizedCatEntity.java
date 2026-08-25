@@ -117,8 +117,7 @@ public class OceanizedCatEntity extends SeaMonster {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         setShiftKeyDown(false);
-        if ((Entity) this instanceof OceanizedCatEntity datEntSetL)
-            datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, false);
+        this.getEntityData().set(DATA_STATE_SNEAKING, false);
         if (source.is(DamageTypes.FALL))
             return false;
         if (source.is(DamageTypes.DROWN))

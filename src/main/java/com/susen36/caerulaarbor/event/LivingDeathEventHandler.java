@@ -2,6 +2,7 @@ package com.susen36.caerulaarbor.event;
 
 import com.susen36.babel.api.event.HealthConsumeEvent;
 import com.susen36.babel.collectible.Collectibles;
+import com.susen36.babel.difficulty.NDifficulty;
 import com.susen36.babel.elemental.base.AbstractEPCapability;
 import com.susen36.babel.init.BabelGameRules;
 import com.susen36.babel.init.BabelItems;
@@ -185,20 +186,32 @@ public class LivingDeathEventHandler {
         if (!world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) return;
 
         if (sourceentity instanceof Player) {
+            PlayerVariable capability = ModCapabilities.getPlayerVariables(sourceentity);
             boolean result;
-            result = (ModCapabilities.getPlayerVariables(sourceentity)).can_player_evo && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO) || (ModCapabilities.getPlayerVariables(sourceentity)).player_oceanization >= 3);
+            result = capability.can_player_evo && (sourceentity.getData(Collectibles.ATTACHMENT_COLLECTIBLE.get()).isUsed(CACollectible.DISO) || capability.player_oceanization >= 3);
             if (result) {
                 double r0 = 0, r1 = 0, r2 = 0;
                 if (entity.getType().is(CAEntityTypeTags.SEABORN_BOSS)) {
-                    r0 = 0.5;
-                    r1 = 0.25;
-                    r2 = 0.125;
+                    r0 = 0.25;
+                    r1 = 0.05;
+                    r2 = 0.375;
                 } else if (entity.getType().is(CAEntityTypeTags.OCEAN_ELITE)) {
-                    r0 = 0.3;
-                    r1 = 0.075;
-                    r2 = 0.0075;
+                    r0 = 0.067;
+                    r1 = 0.013;
+                    r2 = 0.1;
                 } else if (entity.getType().is(CAEntityTypeTags.SEABORN)) {
-                    r0 = 0.15;
+                    r0 = 0.033;
+                    r1 = 0.007;
+                    r2 = 0.05;
+                }
+                // 永久进化后不再掉落任何基因样本；进化基因与进化基因组仅难度16及以上才掉落
+                if (capability.permanent_evo) {
+                    r0 = 0;
+                    r1 = 0;
+                    r2 = 0;
+                } else if (NDifficulty.difficultyLevel(world).value() < 16) {
+                    r0 = 0;
+                    r1 = 0;
                 }
                 if (Math.random() < r0) {
                     if (world instanceof ServerLevel level) {

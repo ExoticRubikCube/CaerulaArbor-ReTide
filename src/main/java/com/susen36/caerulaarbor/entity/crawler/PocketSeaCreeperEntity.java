@@ -31,7 +31,6 @@ public class PocketSeaCreeperEntity extends AbstractPocketSeaCrawlerEntity {
 
 	public PocketSeaCreeperEntity(EntityType<PocketSeaCreeperEntity> type, Level world) {
 		super(type, world);
-
 	}
 
 	@Override

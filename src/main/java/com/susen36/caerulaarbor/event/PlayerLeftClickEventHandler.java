@@ -20,15 +20,11 @@ public class PlayerLeftClickEventHandler {
 
     @SubscribeEvent
     public static void onLeftClickEmpty(PlayerInteractEvent.LeftClickEmpty event) {
-        handleHelperLeftClick(event);
-    }
-
-    private static void handleHelperLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
         PacketDistributor.sendToServer(new HelperLeftClickMessage());
-        executeHelperLeftClick(event.getEntity());
+        leftClick(event.getEntity());
     }
 
-    public static void executeHelperLeftClick(Entity entity) {
+    public static void leftClick(Entity entity) {
         if (entity instanceof Player player && player.isPassenger() && player.getVehicle() instanceof LittleHelperEntity helper) {
             helper.playPassengerLeftClickSound(player);
             helper.clearNetherseaAround();
@@ -52,7 +48,7 @@ public class PlayerLeftClickEventHandler {
                 if (!sender.level().hasChunkAt(sender.blockPosition())) {
                     return;
                 }
-                executeHelperLeftClick(sender);
+                leftClick(sender);
             });
         }
 

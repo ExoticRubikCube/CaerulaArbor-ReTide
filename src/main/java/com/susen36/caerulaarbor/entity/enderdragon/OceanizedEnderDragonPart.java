@@ -4,7 +4,7 @@ import com.susen36.caerulaarbor.entity.base.CAPartEntity;
 import net.minecraft.world.damagesource.DamageSource;
 import org.jetbrains.annotations.NotNull;
 
-public class OceanizedEnderDragonPart  extends CAPartEntity<OceanizedEnderDragonEntity> {
+public class OceanizedEnderDragonPart extends CAPartEntity<OceanizedEnderDragonEntity> {
 
     public OceanizedEnderDragonPart(OceanizedEnderDragonEntity parentMob, String name, float width, float height) {
         super(parentMob, name, width, height);

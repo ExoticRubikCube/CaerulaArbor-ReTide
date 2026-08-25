@@ -32,9 +32,7 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.projectile.DragonFireball;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -65,19 +63,19 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         super(type, world);
         xpReward = 0;
         setNoAi(false);
+        noPhysics = true;
+        setNoGravity(true);
         this.moveControl = new FlyingMoveControl(this, 10, true);
     }
 
-    public static void spawn(LevelAccessor world, double x, double y, double z, Entity owner, Entity target, double type) {
+    public static void spawn(Level world, double x, double y, double z, Entity owner, Entity target, double type) {
         if (owner == null || !(world instanceof ServerLevel level)) {
             return;
         }
-        Entity entityToSpawn = CAEntities.MOIST_DRAGON_BREATH.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-        if (!(entityToSpawn instanceof MoistDragonBreathEntity dragonBreath)) {
-            return;
-        }
+        MoistDragonBreathEntity dragonBreath = CAEntities.MOIST_DRAGON_BREATH.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+        dragonBreath.setPos(x,y,z);
         RandomSource random = world.getRandom();
-        entityToSpawn.setDeltaMovement(owner.getLookAngle().scale(0.25).add(
+        dragonBreath.setDeltaMovement(owner.getLookAngle().scale(0.25).add(
                 Mth.nextDouble(random, -0.15, 0.15),
                 Mth.nextDouble(random, -0.15, 0.15),
                 Mth.nextDouble(random, -0.15, 0.15)));
@@ -89,6 +87,16 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
             data.set(DATA_TARGET, target.getStringUUID());
         }
         data.set(DATA_TYPE, (int) type);
+        if (owner instanceof LivingEntity livingOwner && livingOwner.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+            AttributeInstance attackDamageAttribute = dragonBreath.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (attackDamageAttribute != null) {
+                attackDamageAttribute.setBaseValue(livingOwner.getAttributeValue(Attributes.ATTACK_DAMAGE));
+            }
+            AttributeInstance maxHealthAttribute = dragonBreath.getAttribute(Attributes.MAX_HEALTH);
+            if (maxHealthAttribute != null) {
+                maxHealthAttribute.setBaseValue(livingOwner.getAttributeValue(Attributes.MAX_HEALTH));
+            }
+        }
         if (type > 0.5) {
             AttributeInstance maxHealthAttribute = dragonBreath.getAttribute(Attributes.MAX_HEALTH);
             if (maxHealthAttribute != null) {
@@ -153,7 +161,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
     @Override
     public void baseTick() {
         super.baseTick();
-        LevelAccessor world = this.level();
+        Level world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -201,14 +209,6 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
     }
 
     @Override
-    public void tick() {
-        this.noPhysics = true;
-        super.tick();
-        this.noPhysics = false;
-        this.setNoGravity(true);
-    }
-
-    @Override
     public void move(MoverType pType, Vec3 pPos) {
         super.move(pType, pPos);
         this.checkInsideBlocks();
@@ -223,23 +223,15 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         super.setNoGravity(true);
     }
 
-    @Override
-    public void aiStep() {
-        super.aiStep();
-        this.updateSwingTime();
-        this.setNoGravity(true);
-    }
-
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
-        builder = builder.add(Attributes.MAX_HEALTH, 12);
+        builder = builder.add(Attributes.MAX_HEALTH, 10);
         builder = builder.add(Attributes.ARMOR, 0);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 14);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 36);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.3);
-        builder = builder.add(Attributes.STEP_HEIGHT, 0.6f);
         return builder;
     }
 
@@ -272,9 +264,8 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
     @Override
     protected void tickDeath() {
         ++this.deathTime;
-        if (this.deathTime == 5) {
+        if (this.deathTime == 5 && !this.level().isClientSide() && !this.isRemoved()) {
             this.remove(RemovalReason.KILLED);
-            this.dropExperience(this.getKillCredit());
         }
     }
 
@@ -327,27 +318,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         return this.cache;
     }
 
-    public static void dragonBreathRain(LevelAccessor world, double x, double y, double z, Entity entity) {
-        if (entity == null)
-            return;
-        double r;
-        double d;
-        double tx;
-        double tz;
-        r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-        d = Mth.nextDouble(RandomSource.create(), 3, 8);
-        tx = x + d * Math.cos(r);
-        tz = z + d * Math.sin(r);
-        if (world instanceof ServerLevel projectileLevel) {
-            DragonFireball fireball = new DragonFireball(EntityType.DRAGON_FIREBALL, projectileLevel);
-            fireball.setOwner(entity);
-            fireball.setPos(tx, (y + Mth.nextInt(RandomSource.create(), 6, 9)), tz);
-            fireball.shoot(0, 1, 0, (float) (-0.5), 0);
-            projectileLevel.addFreshEntity(fireball);
-        }
-    }
-
-    private void dragonBreathExplode(LevelAccessor world, double x, double y, double z, Entity entity) {
+    private void dragonBreathExplode(Level world, double x, double y, double z, Entity entity) {
         if (entity == null)
             return;
         Entity owner;
@@ -391,7 +362,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                 } else {
                     Entity recentVictim;
                     Entity recentAttacker;
-                    if (owner instanceof OceanizedEnderinaEntity) {
+                    if (owner instanceof AbstractOceanizedEnderDragonEntity) {
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "seaborn")))) {
                             if (!(entityiterator == target)) {
                                 result = false;
@@ -418,9 +389,9 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                                 (float) d);
                         if (entityiterator instanceof LivingEntity livingTarget) {
                             if (owner instanceof LivingEntity attacker) {
-                                EPUtils.causeSanityInjury(livingTarget, attacker, d * 1.0);
+                                EPUtils.causeSanityInjury(livingTarget, attacker, d);
                             } else {
-                                EPUtils.causeSanityInjury(livingTarget, d * 1.0);
+                                EPUtils.causeSanityInjury(livingTarget, d);
                             }
                         }
                     }
@@ -435,7 +406,6 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         if (!entity.level().isClientSide())
             entity.discard();
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

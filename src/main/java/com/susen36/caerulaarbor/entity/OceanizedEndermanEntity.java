@@ -312,9 +312,9 @@ public class OceanizedEndermanEntity extends SeaMonster {
         double sklp;
         double cool;
         if (this.isAlive()) {
-            sklp = (Entity) this instanceof OceanizedEndermanEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
-            cool = (Entity) this instanceof OceanizedEndermanEntity datEntI ? datEntI.getEntityData().get(DATA_COOLDOWN) : 0;
-            target = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+            sklp = this instanceof OceanizedEndermanEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            cool = this instanceof OceanizedEndermanEntity datEntI ? datEntI.getEntityData().get(DATA_COOLDOWN) : 0;
+            target = this.getTarget();
             if (!(target == null)) {
                 if (sklp <= 0) {
                     if ((Entity) this instanceof OceanizedEndermanEntity datEntSetI)
@@ -328,8 +328,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDERMAN_STARE, SoundSource.HOSTILE, 1, 1);
                     }
                     CaerulaArbor.queueServerWork(13, () -> {
-                        Entity enemy1;
-                        enemy1 = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+                        Entity enemy1 = this.getTarget();
                         if (!(enemy1 == null)) {
                             this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy1.getX()), (enemy1.getY()), (enemy1.getZ())));
                         }

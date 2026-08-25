@@ -425,7 +425,7 @@ public class LivingHurtEventHandler {
     }
 
     private static void handleExtraMagicdamage(LivingDamageEvent.Pre event) {
-        LevelAccessor world = event.getEntity().level();
+        Level world = event.getEntity().level();
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();

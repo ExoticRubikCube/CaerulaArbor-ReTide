@@ -14,7 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import org.joml.Matrix4f;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class MoistEnderCrystalRenderer extends GeoEntityRenderer<MoistEnderCrystalEntity> {
@@ -34,14 +33,6 @@ public class MoistEnderCrystalRenderer extends GeoEntityRenderer<MoistEnderCryst
     @Override
     public int getPackedOverlay(MoistEnderCrystalEntity animatable, float u, float partialTick) {
         return OverlayTexture.pack(OverlayTexture.u(animatable.hurtTime > 0 || animatable.deathTime > 0 ? 0.35F : u), OverlayTexture.v(false));
-    }
-
-    @Override
-    public void preRender(PoseStack poseStack, MoistEnderCrystalEntity entity, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
-        float scale = 1f;
-        this.scaleHeight = scale;
-        this.scaleWidth = scale;
-        super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
     }
 
     @Override
@@ -66,7 +57,6 @@ public class MoistEnderCrystalRenderer extends GeoEntityRenderer<MoistEnderCryst
         poseStack.pushPose();
         Entity owner = entity.getOwner();
         if (owner != null && owner.isAlive()) {
-            //水晶光束
             float pX = (float) (this.lerpX(owner, partialTick) - this.lerpX(entity, partialTick));
             float pY = (float) (this.lerpY(owner, partialTick) - this.lerpY(entity, partialTick));
             float pZ = (float) (this.lerpZ(owner, partialTick) - this.lerpZ(entity, partialTick));

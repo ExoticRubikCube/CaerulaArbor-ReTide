@@ -22,7 +22,7 @@ import java.util.List;
 
 public class OceanizedEnderDragonSpawneggItem extends DeferredSpawnEggItem {
 	public OceanizedEnderDragonSpawneggItem() {
-		super(CAEntities.OCEANIZED_ENDER_DRAGON, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC));
+		super(CAEntities.OCEANIZED_ENDERINA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC));
 	}
 
 	@Override
@@ -45,13 +45,6 @@ public class OceanizedEnderDragonSpawneggItem extends DeferredSpawnEggItem {
         if (entity == null)
             return InteractionResult.PASS;
         if (entity.isShiftKeyDown()) {
-            if (world instanceof ServerLevel level) {
-                Entity entityToSpawn = CAEntities.OCEANIZED_ENDERINA.get().spawn(level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
-                if (entityToSpawn != null) {
-                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                }
-            }
-        } else {
             if (world instanceof ServerLevel level) {
                 Entity entityToSpawn = CAEntities.OCEANIZED_ENDER_DRAGON.get().spawn(level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {

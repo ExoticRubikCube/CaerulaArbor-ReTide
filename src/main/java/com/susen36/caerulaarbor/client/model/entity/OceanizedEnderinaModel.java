@@ -17,7 +17,6 @@ public class OceanizedEnderinaModel extends GeoModel<OceanizedEnderinaEntity> {
 	private static final ResourceLocation TEXTURE_PHASE_3 = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_enderina_3.png");
 	private static final ResourceLocation TEXTURE_PHASE_4 = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_enderina_4.png");
 	private static final ResourceLocation TEXTURE_PHASE_5 = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_enderina_5.png");
-	private static final ResourceLocation TEXTURE_NOISE = ResourceLocation.fromNamespaceAndPath(CaerulaArbor.MODID, "textures/entities/oceanized_enderina_noise.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedEnderinaEntity entity) {
@@ -31,18 +30,20 @@ public class OceanizedEnderinaModel extends GeoModel<OceanizedEnderinaEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedEnderinaEntity entity) {
-		if (entity.getDeathTextureTick() > 0) {
-			return TEXTURE_NOISE;
+		int tick = entity.getDeathTextureTick();
+		if (tick > 0) {
+			float pct = tick / 40.0F;
+			int phase = Mth.clamp((int) Math.ceil(pct * 5.0F), 1, 5);
+			return switch (phase) {
+				case 1 -> TEXTURE_PHASE_1;
+				case 2 -> TEXTURE_PHASE_2;
+				case 3 -> TEXTURE_PHASE_3;
+				case 4 -> TEXTURE_PHASE_4;
+				case 5 -> TEXTURE_PHASE_5;
+				default -> TEXTURE_DEFAULT;
+			};
 		}
-		int phase = entity.getEntityData().get(OceanizedEnderinaEntity.DATA_PHASE);
-		return switch (phase) {
-			case 1 -> TEXTURE_PHASE_1;
-			case 2 -> TEXTURE_PHASE_2;
-			case 3 -> TEXTURE_PHASE_3;
-			case 4 -> TEXTURE_PHASE_4;
-			case 5 -> TEXTURE_PHASE_5;
-			default -> TEXTURE_DEFAULT;
-		};
+		return TEXTURE_DEFAULT;
 	}
 
 	@Override

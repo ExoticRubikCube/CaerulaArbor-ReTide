@@ -180,9 +180,9 @@ public class SeabornTransformManager {
 				converted.setYBodyRot(originalEntity.getYRot());
 				converted.setYHeadRot(originalEntity.getYRot());
 				converted.setXRot(originalEntity.getXRot());
-				if (damageSource != null && originalEntity instanceof LivingEntity living) {
-					converted.hurt(damageSource, living.getHealth());
-				}
+				if (damageSource != null) {
+                    converted.hurt(damageSource, mob.getHealth());
+                }
 			}
 			return converted;
 		}

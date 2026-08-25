@@ -104,7 +104,7 @@ public class OceanizedHorseEntity extends SeaMonster {
         super.baseTick();
         Level world = this.level();
         Entity rider;
-        // 低血量且未被沉默、且允许篡改地形时：附加护甲并不断生成溟痕（耗尽 LAY_LIMIT 即停）
+
         boolean active = WorldUtils.canGrief(world) && this.getHealth() < this.getMaxHealth() * 0.5F && !this.hasEffect(CAMobEffects.MUTE);
         if (!this.level().isClientSide()) {
             AttributeInstance armorAttr = this.getAttribute(Attributes.ARMOR);
@@ -139,7 +139,7 @@ public class OceanizedHorseEntity extends SeaMonster {
         if ((tickCount - ((Entity) this instanceof LivingEntity livEnt ? livEnt.getLastHurtMobTimestamp() : 0)) % 10 == 0) {
             rider = getFirstPassenger();
             if (!(rider == null) && rider.isAlive()) {
-                if (rider instanceof LivingEntity entity && !this.level().isClientSide())
+                if (rider instanceof LivingEntity && !this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY, 40, 1, false, true));
             }
         }
